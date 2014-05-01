@@ -2,10 +2,11 @@ DEPENDENCIES
 ------------
 
 1. Nodejs - install nodejs
-2. Bower -  sudo npm install -g bower
-3. grunt - sudo npm install -g grunt-cli
-4. Node deps - npm install
-5. Bower deps - bower install
+2. npm - install npm
+3. Bower -  sudo npm install -g bower
+4. grunt - sudo npm install -g grunt-cli
+5. Node deps - npm install
+6. Bower deps - bower install
 
 UDATING LOCAL DEPS
 ------------------
