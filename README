@@ -1,0 +1,19 @@
+DEPENDENCIES
+------------
+
+1. Nodejs - install nodejs
+2. Bower -  sudo npm install -g bower
+3. Node deps - npm install
+4. Bower deps - bower install
+
+UDATING LOCAL DEPS
+------------------
+
+1. npm update 
+2. bower update
+
+RUNNING
+-------
+
+node server.js&
+
