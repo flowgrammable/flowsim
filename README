@@ -18,6 +18,7 @@ UDATING LOCAL DEPS
   cd bower_components/ui-bootstrap
   npm install
   grunt
+  cd ../..
 
 RUNNING
 -------
