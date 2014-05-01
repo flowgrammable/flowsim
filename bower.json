@@ -1,0 +1,19 @@
+{
+  "name": "flowsim.git",
+  "version": "0.0.1",
+  "homepage": "https://github.com/flowgrammable/flowsim",
+  "authors": [
+    "Jasson Casey <jasson@flowgrammable.com>"
+  ],
+  "license": "Apache 2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "git://github.com/twitter/bootstrap.git#~3.1.1"
+  }
+}
