@@ -1,24 +1,52 @@
-DEPENDENCIES
-------------
+GLOBAL DEPENDENCIES
+--------------------
 
-1. Nodejs - install nodejs
-2. npm - install npm
-3. Bower -  sudo npm install -g bower
-4. grunt - sudo npm install -g grunt-cli
-5. Node deps - npm install
-6. Bower deps - bower install
+  Base dependencies
+  
+  1) Nodejs - the core Nodejs framework
 
-UDATING LOCAL DEPS
+    <install nodejs using your package manager dejour>
+
+  2) NPM - Node Package Manager
+
+    <install npm using your package manager dejour>
+
+  Dependencies we can install with npm
+
+  1) Bower - this is a 'front-end' package manager
+  
+    sudo npm install -g bower
+
+  2) grunt - this is a script runner and build system
+
+    sudo npm install -g grunt-cli
+
+LCOAL DEPENDENCIES
 ------------------
 
-1. Update the local deps
-  npm update 
-  bower update
-2. Build ui-bootstrap
-  cd bower_components/ui-bootstrap
-  npm install
-  grunt
-  cd ../..
+  1) Install local nodejs and bower dependencies
+
+    npm install
+    bower install
+
+  2) Build the ui-bootstrap bower package
+
+    cd bower_components/ui-bootstrap
+    npm install
+    grunt
+    cd ../..
+
+UDATING DEPENDENCIES
+------------------
+
+  GLOBAL UPDATES
+
+    sudo npm -g update
+
+  LOCAL UPDATES
+
+    npm update
+    bower update
 
 RUNNING
 -------
