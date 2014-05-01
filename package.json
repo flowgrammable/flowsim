@@ -1,0 +1,12 @@
+{
+  "name": "flowsim",
+  "version": "0.0.1",
+  "description": "Web based OpenFlow switch simulator",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/flowgrammable/flowsim"
+  },
+  "dependencies": {
+    "connect": "^2.14.5"
+  }
+}
