@@ -3,14 +3,20 @@ DEPENDENCIES
 
 1. Nodejs - install nodejs
 2. Bower -  sudo npm install -g bower
-3. Node deps - npm install
-4. Bower deps - bower install
+3. grunt - sudo npm install -g grunt-cli
+4. Node deps - npm install
+5. Bower deps - bower install
 
 UDATING LOCAL DEPS
 ------------------
 
-1. npm update 
-2. bower update
+1. Update the local deps
+  npm update 
+  bower update
+2. Build ui-bootstrap
+  cd bower_components/ui-bootstrap
+  npm install
+  grunt
 
 RUNNING
 -------

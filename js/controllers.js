@@ -24,8 +24,11 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     templateUrl: 'signup.html',
     controller: 'signupCtlr'
   }).
-  otherwise({
+  when('/', {
     templateURL: 'main.html',
     controller: 'mainCtrlr'
+  }).
+  otherwise({
+    redirectTo : '/'
   });
 }]);
