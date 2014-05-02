@@ -32,3 +32,9 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     controller: 'mainController'
   });
 }]);
+
+flowsim.directive('fsMenu', function() {
+  return {
+    templateUrl: 'menu.html'
+  };
+});
