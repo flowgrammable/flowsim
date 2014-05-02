@@ -1,34 +1,30 @@
 
 var flowsim = angular.module('flowsim', ['ngRoute', 'ui.bootstrap']);
 
-flowsim.controller('signinCtrlr', function($scope) {
+flowsim.controller('signinController', function($scope) {
   console.log('singin-controller');
 });
 
-flowsim.controller('signupCtrlr', function($scope) {
+flowsim.controller('signupController', function($scope) {
   console.log('singup-controller');
 });
 
-flowsim.controller('mainCtrlr', function($scope) {
+flowsim.controller('mainController', function($scope) {
   console.log('main-controller');
 });
 
 flowsim.config(['$routeProvider', function($routeProvider) {
-  console.log('config');
-  $routeProvider.
-  when('/signin', {
+  $routeProvider
+  .when('/signin', {
     templateUrl: 'signin.html',
-    controller: 'signinCtrlr'
-  }).
-  when('/signup', {
+    controller: 'signinController'
+  })
+  .when('/signup', {
     templateUrl: 'signup.html',
-    controller: 'signupCtlr'
-  }).
-  when('/', {
-    templateURL: 'main.html',
-    controller: 'mainCtrlr'
-  }).
-  otherwise({
-    redirectTo : '/'
+    controller: 'signupController'
+  })
+  .otherwise({
+    templateUrl: 'main.html',
+    controller: 'mainController'
   });
 }]);
