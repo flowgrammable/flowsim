@@ -47,3 +47,10 @@ flowsim.directive('fsJumbo', function() {
     transclude: true
   };
 });
+
+flowsim.directive('fsSignup', function() {
+  return {
+    templateUrl: 'signup.html',
+    restrict: 'E'
+  }
+});
