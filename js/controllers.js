@@ -23,6 +23,10 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     templateUrl: 'signup.html',
     controller: 'signupController'
   })
+  .when('/register', {
+    templateUrl: 'register.html',
+    controller: 'registerController'
+  })
   .otherwise({
     templateUrl: 'main.html',
     controller: 'mainController'
