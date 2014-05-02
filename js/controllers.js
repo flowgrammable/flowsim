@@ -35,6 +35,7 @@ flowsim.config(['$routeProvider', function($routeProvider) {
 
 flowsim.directive('fsMenu', function() {
   return {
+    restrict: 'E',
     templateUrl: 'menu.html'
   };
 });
