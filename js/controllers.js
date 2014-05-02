@@ -39,3 +39,11 @@ flowsim.directive('fsMenu', function() {
     templateUrl: 'menu.html'
   };
 });
+
+flowsim.directive('fsJumbo', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'jumbo.html',
+    transclude: true
+  };
+});
