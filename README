@@ -13,7 +13,11 @@ GLOBAL DEPENDENCIES
 
   3) cURL - command line http client
 
-    <install npm using your package manager dejour>
+    <install curl using your package manager dejour>
+
+  4) PostgreSQL - sql database, server, and utilities
+
+    <install postgresql using your package manager dejour>
 
   Dependencies we can install with npm
 
@@ -41,7 +45,7 @@ LCOAL DEPENDENCIES
     cd ../..
 
 UDATING DEPENDENCIES
-------------------
+---------------------
 
   GLOBAL UPDATES
 
@@ -51,6 +55,21 @@ UDATING DEPENDENCIES
 
     npm update
     bower update
+
+DATABASE SETUP
+---------------
+
+  1. Create the database
+
+    createdb flowsim
+
+  2. Populate the database
+
+    psql -f sql/init_flowsim.sql
+
+  * Delete the database
+
+    psql -f sql/fini_flowsim.sql
 
 RUNNING
 -------

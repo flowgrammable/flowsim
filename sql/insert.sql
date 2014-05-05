@@ -1,6 +1,5 @@
-INSERT INTO switch
-  VALUES ('noviflow-1020', '1_4');
 
-INSERT INTO datapath
-  VALUES ('noviflow-1020', 'aabbccddeeff');
+\g flowsim
+INSERT INTO subscriber
+  VALUES ('jasson@flowgrammable.com', '123456');
 
