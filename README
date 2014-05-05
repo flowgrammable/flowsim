@@ -44,6 +44,10 @@ LCOAL DEPENDENCIES
     grunt
     cd ../..
 
+  3) Initialize the postreSQL database
+
+    * put instructions here
+
 UDATING DEPENDENCIES
 ---------------------
 
@@ -55,21 +59,6 @@ UDATING DEPENDENCIES
 
     npm update
     bower update
-
-DATABASE SETUP
----------------
-
-  1. Create the database
-
-    createdb flowsim
-
-  2. Populate the database
-
-    psql -f sql/init_flowsim.sql
-
-  * Delete the database
-
-    psql -f sql/fini_flowsim.sql
 
 RUNNING
 -------

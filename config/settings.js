@@ -2,11 +2,11 @@
 var settings = {
   port : process.env.NODE_PORT || 3000,
   database : {
-    database : 'flowsim',
-    protocol : 'pg',
-    host : 'localhost',
-    user : 'jasson',
-    password : '1234'
+    database : 'flowsim',   // Database name in DB server
+    protocol : 'pg',        // pg = PostgreSQL protocol
+    host : 'localhost',     // name of database server
+    user : 'jasson',        // database username to connect as
+    password : '1234'       // database password
   }
 };
 

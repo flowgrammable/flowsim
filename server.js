@@ -1,5 +1,6 @@
 
 var connect = require('connect');
+var settings = require('./config/settings');
 var dispatcher = require('./dispatcher');
 
 function giveup(req, res, next) {
@@ -20,5 +21,5 @@ connect()
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
   .use(giveup)
-  .listen(8080);
+  .listen(settings.port);
 
