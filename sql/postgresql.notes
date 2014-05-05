@@ -109,21 +109,22 @@ psql
   Command SQL Statements
   ======================
 
-  CREATE ROLE <ROLE> <OPTIONS> - creates a role with specified permissions
-  CREATE USER <ROLE> <OPTIONS> - alias for CREATE ROLE but with LOGIN option
+  CREATE ROLE <ROLE> <OPTIONS> ; - creates a role with specified permissions
+  CREATE USER <ROLE> <OPTIONS> ; - alias for CREATE ROLE but with LOGIN option
 
     OPTIONS ::= SUPERUSER | CREATEDB | CREATEROLE | REPLICATION
               | PASSWORD '<password>' | LOGIN
 
-  DROP ROLE <ROLE> - delete a role
+  DROP ROLE <ROLE> ;            - delete a role
 
-  ALTER ROLE
-  GRANT <ROLE> to <TARGET>
-  REVOKE <ROLE> from <TARGET>
-  RESET ROLE <ROLE>
+  ALTER ROLE <OPTIONS> ;        - change the base role's options
+  GRANT <ROLE> to <TARGET> ;    - grant privledges of ROLE to TARGET
+  REVOKE <ROLE> from <TARGET> ; - revoke privledges of ROLE from TARGET
+  SET ROLE <ROLE> ;             - set role to specified role, must be in heirarchy
+  RESET ROLE <ROLE> ;           - reset role to base role
 
-  CREATE DATABASE <DBNAME> ;  - creates a database
-  DROP DATABASE <DBNAME> ;    - deletes a database
+  CREATE DATABASE <DBNAME> ;    - creates a database
+  DROP DATABASE <DBNAME> ;      - deletes a database
 
   Further Help
   ------------
@@ -146,4 +147,6 @@ General Utilities
   ------------
   * man <utility>
   * check the online reference
+
+
 
