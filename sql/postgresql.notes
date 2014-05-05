@@ -84,9 +84,66 @@ pg_ctl
   * man pg_ctl
   * http://www.postgresql.org/docs/9.3/static/app-pg-ctl.html
 
-pg_dump/pg_dumpall
-
-createdb
-dropdb
 psql
+====
+
+  This is the postgres CLI provided to interact with the databases housed by any
+  particular postgres server.
+
+  Usage - psql -U <ROLE> -d <DBNAME> -h <HOSTNAME> [-f <SQL SCRIPT>]
+
+  ROLE - role to use to connect with the database
+  DBNAME - database name to connect to
+  HOSTNAME - hostname of the postgres server
+  SQL SCRIPT - an SQL file to execute; omit for interactive mode
+
+  Common Commands
+  ===============
+
+  \l - list all databases hosted by this server
+  \c <DBNAME> - connect to the named database
+  \dt - list all tables of the currently connected database
+  \du - list the database's roles
+  \q - quit the interactive shell
+
+  Command SQL Statements
+  ======================
+
+  CREATE ROLE <ROLE> <OPTIONS> - creates a role with specified permissions
+  CREATE USER <ROLE> <OPTIONS> - alias for CREATE ROLE but with LOGIN option
+
+    OPTIONS ::= SUPERUSER | CREATEDB | CREATEROLE | REPLICATION
+              | PASSWORD '<password>' | LOGIN
+
+  DROP ROLE <ROLE> - delete a role
+
+  ALTER ROLE
+  GRANT <ROLE> to <TARGET>
+  REVOKE <ROLE> from <TARGET>
+  RESET ROLE <ROLE>
+
+  CREATE DATABASE <DBNAME> ;  - creates a database
+  DROP DATABASE <DBNAME> ;    - deletes a database
+
+  Further Help
+  ------------
+  * man psql
+  * http://www.postgresql.org/docs/9.3/static/app-psql.html
+
+General Utilities
+=================
+
+  The following are small utilities that wrap common SQL statements and allow
+  for exectuion from outside the psql shell.
+
+  pg_dump/pg_dumpall - dump the state of a database
+  createdb <DBNAME> [-o <ROLE>] - create a database
+  dropdb <DBNAME> - delete a database
+  createuser <ROLE> - create a role
+  dropuser <ROLE> - delete a role
+
+  Further Help
+  ------------
+  * man <utility>
+  * check the online reference
 
