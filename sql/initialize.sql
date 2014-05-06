@@ -16,7 +16,8 @@ CREATE TABLE subscriber
   reg_date TIMESTAMP WITH TIME ZONE NOT NULL,     -- date/time of registration
   reg_ip INET NOT NULL,                           -- ip used for registration
   status SUBSCRIBER_STATUS NOT NULL,              -- current sub disposition
-  status_date TIMESTAMP WITH TIME ZONE NOT NULL   -- date of last change in disp
+  status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
+  reg_key CHAR(64) NOT NULL                       -- verification key
 );
 
 CREATE TYPE SESSION_STATUS AS ENUM (
