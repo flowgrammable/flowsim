@@ -27,31 +27,61 @@ function register(sub, models, callback) {
 }
 
 function verify(sub, models, callback) {
-  models.subscriber.find(
-    { and: [
-      { email: sub.email },
-      { status: 'REGISTERED' },
-      { reg_key: sub.req_key }
-    ]}, callback);
-}
-
-function reset(email) {
-}
-
-function deactivate(email, session_key) {
   var date = new Date();
+  models.subscriber.find(
+    { 
+      email: sub.email,
+      status: 'REGISTERED',
+      reg_key: sub.reg_key
+    }, function(err, results){
+      if(err) throw err;
+      if(results.length == 1) {
+        results[0].status = 'VERIFIED';
+        results[0].status_date = date;
+        results[0].save(function(err) {
+          if(err) throw err;
+        });
+      }
+    });
 }
 
-function login(sub) {
+function reset(sub, models) {
+  var date = new Date();
+  sub.password = crypto.randomBytes(30).toString('hex');
+  models.subscriber.find({ email: sub.email },
+    function(err, results) {
+      if(results.length == 1) {
+        results[0].status_date = date;
+        results[0].password = sub.password;
+        results[0].save(function(err) {
+          if(err) throw err;
+        });
+        // smtp email with password reset link
+      }
+    });
+}
+
+function login(sub, models) {
   var date = new Date();
   sub.session_key = crypto.randomBytes(64).toString('hex');
-  bcrypt.compare(sub.password, hash, function(err, res) {
-  });
-  // sub { email, password, ip }
+  models.subscriber.find({ email: sub.email},
+    function(err, results) {
+      if(results.length == 1) {
+        bcrypt.compare(
+          sub.password, 
+          results[0].password, 
+          function(err, res) {
+            if(res) {
+            }
+          });
+      }
+    });
 }
 
-function logout(email, session_key) {
+function logout(sub, models) {
   var date = new Date();
+  models.session.find({ key: sub.session_key }, function(err, results){
+  });
 }
 
 orm.connect(settings.database, function(err, db) {
@@ -72,13 +102,16 @@ orm.connect(settings.database, function(err, db) {
 
   var ver = {
     email: 'jasson@flowgrammable.com',
-    reg_key: registration_key + '1'
+    reg_key: registration_key
   };
+
+  console.log('global: %s', registration_key);
 
   verify(ver, models, function(err, results) {
     if(err) throw err;
-    for (var result in results) {
-      console.log(result);
+    for (var i=0; i< results.length; ++i) {
+      console.log(results[i].email);
+      console.log(results[i].reg_key);
     }
   });
 

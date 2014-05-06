@@ -10,7 +10,7 @@ exports.setup = function(db) {
     reg_ip : { type: 'text', size: 128 },
     status : { 
       type: 'enum', 
-      values : [ 'REGISTERED', 'VERIFIED' ], 
+      values : [ 'REGISTERED', 'VERIFIED'], 
       defaultValue: 'REGISTERED' 
     },
     status_date : { type: 'date', time: true },

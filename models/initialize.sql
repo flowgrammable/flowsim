@@ -5,7 +5,7 @@ CREATE DATABASE flowsim;
 
 CREATE TYPE SUBSCRIBER_STATUS AS ENUM (
   'REGISTERED',   -- a sub has registered but not confirmed they own their email
-  'VERIFIED'      -- a sub has confirmed they own their email
+  'VERIFIED'     -- a sub has confirmed they own their email
 );
 
 CREATE TABLE subscriber
