@@ -1,13 +1,21 @@
 
-var orm = require('orm');
-var crypto = require('crypto');
-var bcrypt = require('bcrypt');
-var settings = require('./config/settings');
-var subscriber = require('./models/sub');
+var crypto = require('crypto');   // use crypto for generating random strings
+var bcrypt = require('bcrypt');   // use to provide password (salt+hashing)
 
-var registration_key = '';
+/* Basic signature for exposing a logic function
+ *
+ * exports.<name> = function(<dict>, subscribers, callback) {
+ *   ...
+ * }
+ *
+ * exports.<name> - ensures this function can be used externally
+ * <dict>         - dictionary of function parameters
+ * subscribers    - orm database connection defining subscribers model
+ * callback       - function to handle success/failure of operation
+ *
+ */
 
-function register(sub, models, callback) {
+exports.register = function(sub, models, callback) {
   var date = new Date();
   sub.reg_key = crypto.randomBytes(64).toString('hex');
   registration_key = sub.reg_key;
@@ -26,7 +34,7 @@ function register(sub, models, callback) {
   });
 }
 
-function verify(sub, models, callback) {
+exports.verify = function(sub, models, callback) {
   var date = new Date();
   models.subscriber.find(
     { 
@@ -45,7 +53,7 @@ function verify(sub, models, callback) {
     });
 }
 
-function reset(sub, models) {
+exports.reset = function(sub, models) {
   var date = new Date();
   sub.password = crypto.randomBytes(30).toString('hex');
   models.subscriber.find({ email: sub.email },
@@ -61,7 +69,7 @@ function reset(sub, models) {
     });
 }
 
-function login(sub, models) {
+exports.login = function(sub, models) {
   var date = new Date();
   sub.session_key = crypto.randomBytes(64).toString('hex');
   models.subscriber.find({ email: sub.email},
@@ -78,41 +86,9 @@ function login(sub, models) {
     });
 }
 
-function logout(sub, models) {
+exports.logout = function(sub, models) {
   var date = new Date();
   models.session.find({ key: sub.session_key }, function(err, results){
   });
 }
 
-orm.connect(settings.database, function(err, db) {
-  if(err) throw err;
-  console.log('connected to db');
-  var models = subscriber.setup(db);
-
-  var sub = {
-    email: 'jasson@flowgrammable.com',
-    password: '123',
-    ip: '1.2.3.4'
-  };
-
-  register(sub, models, function(err, results) {
-    if(err) throw err;
-    console.log('success\n' + results);
-  });
-
-  var ver = {
-    email: 'jasson@flowgrammable.com',
-    reg_key: registration_key
-  };
-
-  console.log('global: %s', registration_key);
-
-  verify(ver, models, function(err, results) {
-    if(err) throw err;
-    for (var i=0; i< results.length; ++i) {
-      console.log(results[i].email);
-      console.log(results[i].reg_key);
-    }
-  });
-
-});

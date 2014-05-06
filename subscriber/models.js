@@ -1,5 +1,5 @@
 
-exports.setup = function(db) {
+exports.define = function(db) {
   var models = {};
 
   var Subscriber = db.define('subscriber', {
