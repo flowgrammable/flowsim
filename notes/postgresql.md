@@ -84,6 +84,13 @@ pg_ctl
   * man pg_ctl
   * http://www.postgresql.org/docs/9.3/static/app-pg-ctl.html
 
+pg_dump
+=======
+
+  Dump the entire contents of a database; similar to a snapshot.
+
+  Usage - pg_dump <DB NAME> > <OUTPUT FILE>
+
 psql
 ====
 
