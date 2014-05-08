@@ -1,67 +1,75 @@
-GLOBAL DEPENDENCIES
---------------------
 
-  Base dependencies
-  
-  1) Nodejs - the core Nodejs framework
+DEPENDENCIES
+============
 
-    <install nodejs using your package manager dejour>
+  Please see the dependencies file for information on establishing your
+  development environment.
 
-  2) NPM - Node Package Manager
+SETUP
+=====
 
-    <install npm using your package manager dejour>
+  1) Setup the database
 
-  3) cURL - command line http client
+    a. Create the database and user
 
-    <install curl using your package manager dejour>
+      > psql
+      
+      Create the database
 
-  4) PostgreSQL - sql database, server, and utilities
+        CREATE DATABASE <database name>;
 
-    <install postgresql using your package manager dejour>
+      where
+        <database name> = flowsim
 
-  Dependencies we can install with npm
+      Create the database user
 
-  1) Bower - this is a 'front-end' package manager
-  
-    sudo npm install -g bower
+        CREATE USER <username> PASSWORD <password>;
 
-  2) grunt - this is a script runner and build system
+      where
+        <username> = flogdev
+        <password> = flogdev
+      
+      Quit psql
 
-    sudo npm install -g grunt-cli
+        \q
 
-LCOAL DEPENDENCIES
-------------------
+    b. Modify the database server authorization file
 
-  1) Install local nodejs and bower dependencies
+      > <editor> <database server cluster>/pg_hba.conf
 
-    npm install
-    bower install
+      Add the following line
 
-  2) Build the ui-bootstrap bower package
+        host <database name> <node username> 127.0.0.1/32 password
 
-    cd bower_components/ui-bootstrap
-    npm install
-    grunt
-    cd ../..
+      where
+        <database name> = flowsim
+        <node username> = flogdev
 
-  3) Initialize the postreSQL database
+      Quit psql
 
-    * put instructions here
+        \q
 
-UDATING DEPENDENCIES
----------------------
+    c. Restart the database server
 
-  GLOBAL UPDATES
+      > pg_ctl restart -D <database server cluster>
 
-    sudo npm -g update
+  3) Source the environment
 
-  LOCAL UPDATES
+    > source environment
 
-    npm update
-    bower update
+  4) Run the migrations
+
+    > flyway migrate
 
 RUNNING
--------
+=======
 
-node server.js&
+  1) Start the server
+    > node server.js&
+
+NOTES
+=====
+
+  Pleaes see the notes/ directory for a set of notes on the various technologies
+  used in this project.
 
