@@ -1,13 +1,17 @@
 
+-- create the flowsim database
 CREATE DATABASE flowsim;
 
+-- connect to the flowsim database
 \c flowsim;
 
+-- create an enumerated type for the account status
 CREATE TYPE SUBSCRIBER_STATUS AS ENUM (
   'REGISTERED',   -- a sub has registered but not confirmed they own their email
   'VERIFIED'     -- a sub has confirmed they own their email
 );
 
+-- create the primary subscriber table
 CREATE TABLE subscriber
 (
   id SERIAL PRIMARY KEY,                          -- internal id uses for sub
@@ -20,12 +24,14 @@ CREATE TABLE subscriber
   reg_key CHAR(128) NOT NULL                       -- verification key
 );
 
+-- create an enumerated type for the session status
 CREATE TYPE SESSION_STATUS AS ENUM (
   'ACTIVE',       -- a session is currently active
   'TIMEDOUT',     -- a session ended by timing out
   'LOGGEDOUT'     -- a session ended by explicit logout
 );
 
+-- create a session table
 CREATE TABLE session
 (
   id SERIAL PRIMARY KEY,                              -- internal sesison id
