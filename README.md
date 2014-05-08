@@ -28,7 +28,7 @@ SETUP
 
       Create the database user
 
-        CREATE USER <username> PASSWORD <password>;
+        CREATE USER <username> PASSWORD '<password>';
 
       where
         <username> = flogdev

@@ -1,10 +1,4 @@
 
--- create the flowsim database
-CREATE DATABASE flowsim;
-
--- connect to the flowsim database
-\c flowsim;
-
 -- create an enumerated type for the account status
 CREATE TYPE SUBSCRIBER_STATUS AS ENUM (
   'REGISTERED',   -- a sub has registered but not confirmed they own their email
