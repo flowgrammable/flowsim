@@ -34,4 +34,6 @@ TLS/SSL Options
 Cookie Options
 --------------
 
--b 'p1=1;p2=2'
+-b 'p1=1;p2=2'  -- use cookies from param list in request
+-b <file>       -- write response cookies to file
+-c <file>       -- use cookies from file in request
