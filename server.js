@@ -1,5 +1,13 @@
 
 var connect = require('connect');
+var orm = require('orm');
+var settigns = require('conf/settings');
+
+orm.connect(settings.database, 
+  function(err, db){
+  })
+  .use(giveup)
+  .listen(settings.port);
 
 function giveup(req, res, next) {
   var session = req.session;
