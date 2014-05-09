@@ -1,16 +1,47 @@
 {
   "name": "flowsim",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Web based OpenFlow switch simulator",
   "repository": {
     "type": "git",
     "url": "https://github.com/flowgrammable/flowsim"
   },
+  "license": {
+    "license": "Apache-2.0"
+  },
+  "keywords": [
+    "OpenFlow",
+    "SDN",
+    "Software Defined Networks",
+    "Network",
+    "Dataplane",
+    "Simulator",
+    "Switch"
+  ],
+  "homepage": "http://flowgrammable.org/flowsim",
   "dependencies": {
     "bcrypt": "^0.7.8",
+    "commander": "^2.2.0",
     "connect": "^2.14.5",
     "nodemailer": "^0.6.3",
     "orm": "^2.1.8",
-    "pg": "^3.0.3"
-  }
+    "pg": "^3.0.3",
+    "underscore": "^1.6.0"
+  },
+  "contributors": [
+    {
+      "name": "Colton Chojnacki",
+      "email": "colton@flowgrammable.com"
+    },
+    {
+      "name": "Jasson Casey",
+      "email": "jasson@flowgrammable.com"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/flowgrammable/flowsim/issues",
+    "email": ""
+  },
+  "files": [],
+  "man": []
 }
