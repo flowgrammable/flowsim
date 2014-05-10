@@ -13,7 +13,11 @@ var port = program.port || process.env.PORT || 3000;
 var ip = program.address | process.env.ADDRESS || '127.0.0.1';
 
 connect()
+  .use(connect.logger())
   .use(function(req, res, next) {
-    res.end('lbah');
+    var addr = req.connection.remoteAddress;
+    res.end(addr);
   })
   .listen(port, ip);
+
+console.log('Server started on: %s:%d', ip, port);
