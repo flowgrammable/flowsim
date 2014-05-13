@@ -1,10 +1,13 @@
 module.exports = function (db) {
 	
 	db.define('profile', {
-		name           : {type:"text"},
-		switch_version : {type:"text"},
-		no_ports       : {type:"number"},
-		no_tables      : {type:"number"},
-		table_size     : {type:"number"}
+		id	        : Number, 
+		name	        : String,
+		switch_version  : String,
+		no_ports        : Number,
+		no_tables       : Number,
+		table_size      : Number,
+	        match_caps      : Object,
+		action_caps     : Object	
 	});
 }
