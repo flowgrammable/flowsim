@@ -22,7 +22,6 @@ function create_profile(req, res, db){
 	});
 	req.on('end', function (chunk) {
 		var obj = JSON.parse(data);
-		console.log(tmp);
 		db.models.profile.create([
 		{ id                : obj.id,
 		  switch_version    : obj.switch_version, 
