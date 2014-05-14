@@ -9,6 +9,8 @@ function retrieve_profile(req,res, db){
 		if(err) throw err;
 		console.log(tables[0].table_id);
 		console.log(tables[0].flow_capacity);
+		console.log(tables[1].table_id);
+		console.log(tables[1].flow_capacity);
 	});
 }
 
@@ -25,12 +27,17 @@ function create_profile(req, res, db){
 		  no_ports	    : obj.no_ports
 		}, function (err, profile) {
 		    if (err) throw err;
-                    db.models.flow_table_caps.create(
+                    db.models.flow_table_caps.create([
 			{ id : 1,
                  	  profile_id : profile.id,
                   	  table_id : 1,
                   	  flow_capacity: 64
-		        }, function(err){
+		        },
+			{ id : 2,
+			  profile_id : profile.id,
+			  table_id : 2,
+			  flow_capacity: 128
+			}], function(err){
 			   if(err)throw err;
                     });
 		});
