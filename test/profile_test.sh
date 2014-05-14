@@ -1,2 +1,2 @@
 #!/bin/sh
-curl -H "Content-Type: application/json" -d '{"id":101, "name":"test profile","no_ports":30, "table_size":64, "flow_stats":true, "table_stats":true, "port_stats":false, "stp":true, "reserved":true,"ip_reasm":true,"queue_stats":false,"arp_match_ip":true,"output":true,"set_vlan_vid":true,"set_vlan_pcp":true,"strip_vlan": true,"set_dl_src": false,"set_dl_dst": false,"set_nw_src": true,"set_nw_dst": true,"set_nw_tos": true,"set_tp_src": true,"set_tp_dst": true,"enqueue":true  }'  localhost:3000/api/profile
+curl -H "Content-Type: application/json" -d '{"id":101, "name":"test profile","no_ports":30}'  localhost:3000/api/profile

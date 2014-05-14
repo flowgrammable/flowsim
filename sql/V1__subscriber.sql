@@ -40,35 +40,31 @@ CREATE TABLE session
 
 
 -- create a profile
-CREATE TABLE profile_v100          -- table for openflow switch version 1.0
+CREATE TABLE profile -- table for openflow switch version 1.0
 (
   id SERIAL PRIMARY KEY,
-  name CHAR(20) NOT NULL ,        -- profile name
-  no_ports INTEGER NOT NULL,       -- switch no_ports
-  table_size INTEGER NOT NULL,     -- table_size
-  
-  flow_stats BOOLEAN NOT NULL,     -- Switch capabilities from feature_res      
-  table_stats BOOLEAN NOT NULL,
-  port_stats BOOLEAN NOT NULL,
-  stp BOOLEAN NOT NULL,
-  reserved BOOLEAN NOT NULL, 
-  ip_reasm BOOLEAN NOT NULL,
-  queue_stats BOOLEAN NOT NULL,               
-  arp_match_ip BOOLEAN NOT NULL,   -- arp match optional in 1.0
+  name CHAR(60) NOT NULL ,        -- profile name
+  no_ports INTEGER NOT NULL       -- switch no_ports
+     
+);
 
-  output BOOLEAN NOT NULL,         -- Switch supported actions from feature_res
-  set_vlan_vid BOOLEAN NOT NULL,
-  set_vlan_pcp BOOLEAN NOT NULL,
-  strip_vlan BOOLEAN NOT NULL,
-  set_dl_src BOOLEAN NOT NULL,
-  set_dl_dst BOOLEAN NOT NULL,
-  set_nw_src BOOLEAN NOT NULL,
-  set_nw_dst BOOLEAN NOT NULL,
-  set_nw_tos BOOLEAN NOT NULL,
-  set_tp_src BOOLEAN NOT NULL,
-  set_tp_dst BOOLEAN NOT NULL,
-  enqueue    BOOLEAN NOT NULL
-   
+CREATE TABLE flow_table_caps
+(
+  id SERIAL PRIMARY KEY,
+  profile_id INTEGER references profile(id) NOT NULL,  -- reference to switch profile
+  table_id INTEGER NOT NULL,                           -- flowtable id
+  flow_capacity INTEGER NOT NULL
+);
+
+CREATE TABLE supported_match
+(
+  id SERIAL PRIMARY KEY,
+  table_id INTEGER references flow_table_caps(id) NOT NULL, -- reference to individual flow table
+  protocol CHAR(20) NOT NULL,
+  field CHAR(20) NOT NULL,
+  maskable BOOLEAN NOT NULL,
+  bits INTEGER NOT NULL
 );
   
+
 
