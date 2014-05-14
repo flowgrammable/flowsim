@@ -2,11 +2,11 @@
 var connect = require('connect');
 var settings = require('./conf/settings');
 var database = require('./database');
-var profile = require('./profile');
+var profile = require('./profile/logic');
 
 
 database.connect(settings.database, function(db) {
-  db.load("./profile_models", function(err) {
+  db.load("./profile/profile_models", function(err) {
 	if(err) throw err;
 	});
   connect()
