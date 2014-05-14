@@ -38,19 +38,37 @@ CREATE TABLE session
 );
 
 
-CREATE TYPE version AS ENUM ('1.0', '1.1');
 
 -- create a profile
-CREATE TABLE profile
+CREATE TABLE profile_v100          -- table for openflow switch version 1.0
 (
   id SERIAL PRIMARY KEY,
-  name            CHAR(128) NOT NULL ,
-  switch_version  version, 
-  no_ports        INTEGER NOT NULL,
-  no_tables       INTEGER NOT NULL,
-  table_size      INTEGER NOT NULL,
-  match_caps      JSON NOT NULL,
-  action_caps     JSON NOT NULL
+  name CHAR(20) NOT NULL ,        -- profile name
+  no_ports INTEGER NOT NULL,       -- switch no_ports
+  table_size INTEGER NOT NULL,     -- table_size
+  
+  flow_stats BOOLEAN NOT NULL,     -- Switch capabilities from feature_res      
+  table_stats BOOLEAN NOT NULL,
+  port_stats BOOLEAN NOT NULL,
+  stp BOOLEAN NOT NULL,
+  reserved BOOLEAN NOT NULL, 
+  ip_reasm BOOLEAN NOT NULL,
+  queue_stats BOOLEAN NOT NULL,               
+  arp_match_ip BOOLEAN NOT NULL,   -- arp match optional in 1.0
+
+  output BOOLEAN NOT NULL,         -- Switch supported actions from feature_res
+  set_vlan_vid BOOLEAN NOT NULL,
+  set_vlan_pcp BOOLEAN NOT NULL,
+  strip_vlan BOOLEAN NOT NULL,
+  set_dl_src BOOLEAN NOT NULL,
+  set_dl_dst BOOLEAN NOT NULL,
+  set_nw_src BOOLEAN NOT NULL,
+  set_nw_dst BOOLEAN NOT NULL,
+  set_nw_tos BOOLEAN NOT NULL,
+  set_tp_src BOOLEAN NOT NULL,
+  set_tp_dst BOOLEAN NOT NULL,
+  enqueue    BOOLEAN NOT NULL
+   
 );
   
 

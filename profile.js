@@ -21,17 +21,35 @@ function create_profile(req, res, db){
 		data += chunk;
 	});
 	req.on('end', function (chunk) {
+                console.log(data);
 		var obj = JSON.parse(data);
-		db.models.profile.create([
+		console.log(obj);
+		db.models.profile_v100.create([
 		{ id                : obj.id,
-		  switch_version    : obj.switch_version, 
 		  name              : obj.name,
-		  no_ports          : obj.no_ports,
-		  no_tables         : obj.no_tables,
+		  no_ports	    : obj.no_ports,
 		  table_size        : obj.table_size,
-		  match_caps        : obj.match_caps,
-		  action_caps       : obj.action_caps
-		} ], function (err) {
+                  flow_stats        : obj.flow_stats,
+                  table_stats       : obj.table_stats,
+                  port_stats        : obj.port_stats,
+                  stp               : obj.stp,
+                  reserved          : obj.reserved,
+                  ip_reasm          : obj.ip_reasm,
+                  queue_stats       : obj.queue_stats,
+                  arp_match_ip      : obj.arp_match_ip,
+                  output            : obj.output,
+                  set_vlan_vid      : obj.set_vlan_vid,
+                  set_vlan_pcp      : obj.set_vlan_pcp,
+                  strip_vlan        : obj.strip_vlan,
+                  set_dl_src        : obj.set_dl_src,
+                  set_dl_dst        : obj.set_dl_dst,
+                  set_nw_src        : obj.set_nw_src,
+                  set_nw_dst        : obj.set_nw_dst,
+                  set_nw_tos        : obj.set_nw_tos,
+                  set_tp_src        : obj.set_tp_src,
+                  set_tp_dst        : obj.set_tp_dst,
+                  enqueue           : obj.enqueue
+		}], function (err) {
 		    if (err){
 		    res.end('could not post to db\n');
 		    throw err;

@@ -7,7 +7,7 @@ var profile = require('./profile');
 
 database.connect(settings.database, function(db) {
   db.load("./profile_models", function(err) {
-	var Profile = db.models.profile;
+	if(err) throw err;
 	});
   connect()
     .use('/api/profile',profile(db)) 
