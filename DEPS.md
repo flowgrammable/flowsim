@@ -1,6 +1,9 @@
 GLOBAL DEPENDENCIES
 --------------------
 
+  Note: If you are using the Flowgrammable development appliance you can skip 
+  the global dependencies step. 
+
   Base dependencies
   
   1) Nodejs - the core Nodejs framework
@@ -35,7 +38,7 @@ GLOBAL DEPENDENCIES
 
     sudo npm -g install yuidocjs
 
-LCOAL DEPENDENCIES
+LOCAL DEPENDENCIES
 ------------------
 
   1) Install local nodejs and bower dependencies

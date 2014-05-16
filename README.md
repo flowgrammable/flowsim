@@ -15,7 +15,11 @@ SETUP
 
   1) Setup the database
 
-    a. Create the database and user
+    a. Login to the postgres user
+      
+      > sudo su - postgres
+    
+    b. Create the database and user
 
       > psql
       
@@ -38,7 +42,7 @@ SETUP
 
         \q
 
-    b. Modify the database server authorization file
+    c. Modify the database server authorization file
 
       > <editor> <database server cluster>/pg_hba.conf
 
@@ -54,9 +58,13 @@ SETUP
 
         \q
 
-    c. Restart the database server
+    d. Restart the database server
 
       > pg_ctl restart -D <database server cluster>
+
+    e. Log back into dev user
+
+      > su - dev
 
   3) Source the environment
 

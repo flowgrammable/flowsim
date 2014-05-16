@@ -37,3 +37,34 @@ CREATE TABLE session
   status SESSION_STATUS NOT NULL                      -- current session status
 );
 
+
+
+-- create a profile
+CREATE TABLE profile -- table for openflow switch version 1.0
+(
+  id SERIAL PRIMARY KEY,
+  name CHAR(60) NOT NULL ,        -- profile name
+  no_ports INTEGER NOT NULL       -- switch no_ports
+     
+);
+
+CREATE TABLE flow_table_caps
+(
+  id SERIAL PRIMARY KEY,
+  profile_id INTEGER references profile(id) NOT NULL,  -- reference to switch profile
+  table_id INTEGER NOT NULL,                           -- flowtable id
+  flow_capacity INTEGER NOT NULL
+);
+
+CREATE TABLE supported_match
+(
+  id SERIAL PRIMARY KEY,
+  table_id INTEGER references flow_table_caps(id) NOT NULL, -- reference to individual flow table
+  protocol CHAR(20) NOT NULL,
+  field CHAR(20) NOT NULL,
+  maskable BOOLEAN NOT NULL,
+  bits INTEGER NOT NULL
+);
+  
+
+
