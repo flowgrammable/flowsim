@@ -1,5 +1,17 @@
 
+/*
+ * @module Database
+ */
+
 var orm = require('orm');
+  
+/* Establishes connection to the database
+ *
+ * @method connect
+ * @param {Object} config configuration for the database connection
+ * @param {Function} next callback on success
+ */
+  orm.connect(config, function(err, db) {
 
 exports.connect = function(config, next) {
   orm.connect(config, function(err, db) {

@@ -31,6 +31,10 @@ GLOBAL DEPENDENCIES
 
     sudo npm install -g grunt-cli
 
+  3) yuijs - this is a javascript documentation generator
+
+    sudo npm -g install yuidocjs
+
 LCOAL DEPENDENCIES
 ------------------
 
