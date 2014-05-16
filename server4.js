@@ -6,7 +6,7 @@ var profile = require('./profile/logic');
 
 
 database.connect(settings.database, function(db) {
-  db.load("./profile/profile_models", function(err) {
+  db.load("./profile/models", function(err) {
 	if(err) throw err;
 	});
   connect()
