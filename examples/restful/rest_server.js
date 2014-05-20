@@ -8,22 +8,19 @@ function addUser(req, res, next){
 	var user = req.params;
 	user.id = next_user_id++;
 	users[user.id] = user;
-	res.send(user.name + ' has been added');
-	next();
+	res.end(user.name + ' has been added');
 }
 
 function getAllUsers(req, res, next){
 	console.log("Someone GETed /users/ to retrieve a list of users");
 	res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
 	res.end(JSON.stringify(users));
-	next();
 }
 
 function getUser(req, res, next){
 	console.log("Someone GETed /users/"+req.params.id);
 	res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
 	res.end(JSON.stringify(users[parseInt(req.params.id)]));
-	next();
 }
 
 function editUser(req, res, next){
@@ -37,14 +34,12 @@ function editUser(req, res, next){
 	}
 	res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
 	res.end(JSON.stringify(user));
-	next();
 }
 
 function deleteUser(req, res, next){
 	console.log("Someone DELETEd /users/"+req.params.id);
 	delete users[parseInt(req.params.id)];
 	res.end("User: " + req.params.id + " has been deleted");
-	next();
 }
 
 
