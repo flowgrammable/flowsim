@@ -1,5 +1,6 @@
-												PostgreSQL v/s MySQL
-												--------------------
+PostgreSQL v/s MySQL
+--------------------
+--------------------
 
 In Postgresql:
 --------------
