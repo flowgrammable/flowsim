@@ -1,6 +1,18 @@
 var nodemailer = require("nodemailer");
 
-module.exports = function(config,mailOptions, next){
+/*
+ * @module Mailer
+ */
+
+/*  Sends an email message
+ *
+ *  @method sendMessage
+ *  @param {Object} config SMTP transport configuration Service, Username, Password
+ *                  config = { service: 'Gmail', auth: { user: 'Gmail Username', pass: 'Gmail Password'}}
+ *  @param {Object} messageOptions - from, to, subject, text
+ */
+
+exports.sendMessage = function(config, messageOptions, next){
 	var smtpTransport = nodemailer.createTransport("SMTP", config);
 
 	smtpTransport.sendMail(mailOptions, function(err, response){
