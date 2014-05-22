@@ -2,6 +2,8 @@ PostgreSQL v/s MySQL
 --------------------
 --------------------
 
+++Open this file either in raw or code mode++
+
 In Postgresql:
 --------------
 postgres=# CREATE TABLE testTable(id int not null,text1 VARCHAR(50) NOT NULL, text2 VARCHAR(50) NOT NULL default 'rob');
