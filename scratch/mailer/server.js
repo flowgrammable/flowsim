@@ -15,10 +15,9 @@ var mailerConfig = {
 	auth: {
 		user: program.user,
 		pass: program.pass
-	}
+	      }
 	}
 
-console.log(mailerConfig);
 var mailOptions = {
 	from: "flog mailer", 
 	to: "coltonchojnacki@gmail.com",
@@ -26,5 +25,7 @@ var mailOptions = {
 	text: "This is a test message from mailer.js"
 	}
 
-sendMail(mailerConfig, mailOptions);
+sendMail(mailerConfig, mailOptions, function(err){
+	console.log(err);
+});
 
