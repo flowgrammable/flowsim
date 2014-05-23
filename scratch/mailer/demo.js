@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var sendMail = require('./mailer');
+var mailer = require('./mailer');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -15,16 +15,17 @@ var mailerConfig = {
 	auth: {
 		user: program.user,
 		pass: program.pass
-	}
+	      }
 	}
 
-console.log(mailerConfig);
-var mailOptions = {
+var messageOptions = {
 	from: "flog mailer", 
 	to: "coltonchojnacki@gmail.com",
 	subject: "test message",
 	text: "This is a test message from mailer.js"
 	}
 
-sendMail(mailerConfig, mailOptions);
+mailer.sendMessage(mailerConfig, messageOptions, function(err){
+	console.log(err);
+});
 
