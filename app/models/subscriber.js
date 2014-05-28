@@ -1,3 +1,5 @@
+var validator = require('validator');
+
 module.exports = function (orm, db) {
   var Subscriber = db.define('subscriber', {
 	id : { type: 'integer', unique: true, defaultValue: undefined },
@@ -16,6 +18,15 @@ module.exports = function (orm, db) {
 	}, {
 	    validations : {
 		password: orm.enforce.ranges.length(8,16)
+	    },
+	    hooks : {
+		beforeSave: function (next) {
+		   if (validator.isEmail(this.email)) {
+			return next();
+		   } else {
+		        return next(new Error("invalid email"));
+		   }
+		}
 	    }
 	});
 
