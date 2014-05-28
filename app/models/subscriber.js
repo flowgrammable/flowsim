@@ -9,9 +9,14 @@ module.exports = function (orm, db) {
 		type: 'enum',
 		values : [ 'REGISTERED', 'VERIFIED'],
 		defaultValue: 'REGISTERED'
-	},
-	status_date : { type: 'date', time: true },
+	}
+/*	status_date : { type: 'date', time: true },
 	reg_key : { type: 'text', size: 64 }
+*/
+	}, {
+	    validations : {
+		password: orm.enforce.ranges.length(8,16)
+	    }
 	});
 
 }
