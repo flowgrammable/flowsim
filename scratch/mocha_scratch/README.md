@@ -1,4 +1,4 @@
-MOCHA UNIT TESTING FRAMEWORK
+MOCHA TEST FRAMEWORK
 ----------------------------
 * It is a feature-rich JS test framework running on node.js and the browser, making asynchronous testing simple and fun.
 * It has many features, which is listed on their site.
