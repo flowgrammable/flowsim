@@ -1,8 +1,7 @@
 var mailer = require('../mailer');
 var assert = require('assert');
 
-describe('flowsim mailer', function(){
-	it('should return AuthError when invalid credentials are specified', function(){
+
 	var mailerConfig = {
 		service: 'gmail',
 		auth: {
@@ -15,9 +14,12 @@ describe('flowsim mailer', function(){
 		to: 'coltonchojnacki@gmail.com',
 		text: 'test message from flowsim mailer'
 	}
-	mailer.sendMessage(mailerConfig, messageOptions, function(err,done){
+	
+	describe('flowsim mailer', function(){
+	it('should return AuthError when invalid credentials are specified', function(done){
+	mailer.sendMessage(mailerConfig, messageOptions, function(err){
 		assert.equal('Authasdfaf', err);
-		done();
+        done();
 	});
 	});
 });	
