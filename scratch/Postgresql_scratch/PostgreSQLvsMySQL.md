@@ -2,7 +2,7 @@ PostgreSQL v/s MySQL
 --------------------
 --------------------
 
-++Open this file either in raw mode++
+++Open this file in raw mode++
 
 In Postgresql:
 --------------

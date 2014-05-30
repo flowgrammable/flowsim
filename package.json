@@ -28,7 +28,8 @@
     "orm": "^2.1.8",
     "pg": "^3.0.3",
     "restify": "^1.3.10",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "validator": "^3.12.0",
     "yuidocjs": "^0.3.5"
   },
   "contributors": [
