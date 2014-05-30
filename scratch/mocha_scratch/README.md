@@ -41,7 +41,7 @@ afterEach()
 ===========
 Run once after each test-case/test-suite
 
-How to Run mocho
+How to Run mocha
 ================
 * By default mocha will use the pattern './test/*.js' if no parameter is given to it.
 * By giving filename as parameter to mocha, then mocha will run on the file
