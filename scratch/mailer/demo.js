@@ -3,18 +3,18 @@
 var program = require('commander');
 var mailer = require('./mailer');
 
-program
-  .version(process.env.SERVER_VERSION)
-  .option('-s, --service [email service]', 'Specify an email service')
-  .option('-u, --user [email user]', 'Specify an email username')
-  .option('-p, --pass [email pass]', 'Specify an email password')
-  .parse(process.argv);
+//program
+//  .version(process.env.SERVER_VERSION)
+//  .option('-s, --service [email service]', 'Specify an email service')
+//  .option('-u, --user [email user]', 'Specify an email username')
+//  .option('-p, --pass [email pass]', 'Specify an email password')
+//  .parse(process.argv);
 
 var mailerConfig = { 
-	service: program.service,
+	service: 'gmail',
 	auth: {
-		user: program.user,
-		pass: program.pass
+		user: 'flowgrammablemailer@gmail.com',
+		pass: 'ddflogtester2014'
 	      }
 	}
 
@@ -26,6 +26,7 @@ var messageOptions = {
 	}
 
 mailer.sendMessage(mailerConfig, messageOptions, function(err){
-	console.log(err);
+	console.log('in callback after message');
+	console.log(err);	
 });
 
