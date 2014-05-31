@@ -9,12 +9,13 @@ orm.connect(settings.database,
   .use(giveup)
   .listen(settings.port);
 
-function giveup(req, res, next) {
+var givenup = function(req, res, next) {
   var session = req.session;
-  for(var cookie in req.cookies) {
+  var cookie;
+  for(cookie in req.cookies) {
     console.log('cookie: %s = %s', cookie, req.cookies[cookie]);
   }
-  for(var cookie in req.signedCookies) {
+  for(cookie in req.signedCookies) {
     console.log('scookie: %s = %s', cookie, req.signedCookies[cookie]);
   }
   if(session.uid) {
@@ -24,7 +25,8 @@ function giveup(req, res, next) {
     console.log("first seen");
   }
   res.end('mookie likes to wag her tail');
-}
+};
+
 connect()
   .use(connect.favicon('img/favicon.png'))
   .use(connect.cookieParser('keybaord cat'))

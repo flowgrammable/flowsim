@@ -80,6 +80,9 @@ RUNNING
   1) Start the server
     > node server.js&
 
+  2) Run the unit tests
+    > nodeunit
+
   2) Generate documentation from the code base
     > yuidoc .
 

@@ -24,6 +24,10 @@ GLOBAL DEPENDENCIES
 
   5) Java 1.6 or higher
 
+  6) jslint
+
+    <install jslint using your package manager dejour>
+
   Dependencies we can install with npm
 
   1) Bower - this is a 'front-end' package manager
