@@ -11,7 +11,6 @@ var orm = require('orm');
  * @param {Object} config configuration for the database connection
  * @param {Function} next callback on success
  */
-  orm.connect(config, function(err, db) {
 
 exports.connect = function(config, next) {
   orm.connect(config, function(err, db) {

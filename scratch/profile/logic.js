@@ -12,6 +12,49 @@ function retrieve_profile(req,res, db){
 		console.log(tables[1].table_id);
 		console.log(tables[1].flow_capacity);
 	});
+
+        db.models.flow_table_caps.get(1, function(err, caps){
+		console.log(caps);
+	});
+
+	db.models.supported_match.get(1, function(err, match){
+		console.log(match.id);
+	//	console.log(match[0].protocol);
+	//	console.log(match[0].field);
+	//	console.log(match[0].maskable);
+	//	console.log(match[0].bits);
+	});
+}
+
+
+function create_flow_table_caps( db, profile){
+	db.models.flow_table_caps.create([
+	{ id : 1,
+	  profile_id : profile.id,
+	  table_id : 1,
+	  flow_capacity : 64,
+	},
+	{ id : 2,
+	  profile_id : profile.id,
+	  table_id : 2,
+	  flow_capacity : 32
+	}], function(err, table_caps){
+		if(err){
+		throw err;
+		}
+		else{
+		db.models.supported_match.create(
+		{ id: 1,
+	          flow_table_caps_id: table_caps[0].id,
+		  protocol: "ipv4",
+		  field: "src",
+		  maskable: true,
+		  bits: 32
+		}, function(err) {
+		   if (err) throw err;
+		});
+		}
+	});
 }
 
 function create_profile(req, res, db){
@@ -26,20 +69,11 @@ function create_profile(req, res, db){
 		  name              : obj.name,
 		  no_ports	    : obj.no_ports
 		}, function (err, profile) {
-		    if (err) throw err;
-                    db.models.flow_table_caps.create([
-			{ id : 1,
-                 	  profile_id : profile.id,
-                  	  table_id : 1,
-                  	  flow_capacity: 64
-		        },
-			{ id : 2,
-			  profile_id : profile.id,
-			  table_id : 2,
-			  flow_capacity: 128
-			}], function(err){
-			   if(err)throw err;
-                    });
+		    if (err){
+			 throw err;
+	 	    } else {
+			create_flow_table_caps(db, profile);
+		    }
 		});
 
 		  

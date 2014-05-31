@@ -1,20 +1,20 @@
-var restify = require('restify');
+
+var connect = require('connect');
 var orm = require('orm');
-var environment = require('./conf/environment.js');
-var routes = require('./conf/routes');
+var settigns = require('conf/settings');
 
-var server = restify.createServer();
+orm.connect(settings.database, 
+  function(err, db){
+  })
+  .use(giveup)
+  .listen(settings.port);
 
-environment(server);
-routes(server);
-
-var givenup = function(req, res, next) {
+function giveup(req, res, next) {
   var session = req.session;
-  var cookie;
-  for(cookie in req.cookies) {
+  for(var cookie in req.cookies) {
     console.log('cookie: %s = %s', cookie, req.cookies[cookie]);
   }
-  for(cookie in req.signedCookies) {
+  for(var cookie in req.signedCookies) {
     console.log('scookie: %s = %s', cookie, req.signedCookies[cookie]);
   }
   if(session.uid) {
@@ -24,8 +24,7 @@ var givenup = function(req, res, next) {
     console.log("first seen");
   }
   res.end('mookie likes to wag her tail');
-};
-
+}
 connect()
   .use(connect.favicon('img/favicon.png'))
   .use(connect.cookieParser('keybaord cat'))
@@ -47,4 +46,3 @@ connect()
   .use(giveup)
   .listen(3000);
 
-server.listen(8000);
