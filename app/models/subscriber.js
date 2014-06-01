@@ -16,11 +16,12 @@ module.exports = function (orm, db) {
 	reg_key : { type: 'text', size: 64 }
 */
 	}, {
-	    validations : {
-		password: orm.enforce.ranges.length(8,16)
-	    },
+	    
+	
+	   
 	    hooks : {
 		beforeSave: function (next) {
+			console.log(this.email);
 		   if (validator.isEmail(this.email)) {
 			return next();
 		   } else {

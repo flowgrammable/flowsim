@@ -8,7 +8,9 @@ var server = restify.createServer();
 environment(server);
 routes(server);
 
+
 server.get('/', function(req, res, next){
+	console.log(req);
 	res.end('my response');
 	});
 

@@ -26,7 +26,6 @@ var messageOptions = {
 	}
 
 mailer.sendMessage(mailerConfig, messageOptions, function(err){
-	console.log('in callback after message');
 	console.log(err);	
 });
 

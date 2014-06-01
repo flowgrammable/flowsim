@@ -5,7 +5,6 @@ var connection = null;
 
 module.exports = function (cb) {
 	if (connection) return cb(null, connection);
-	console.log('in models index');
 
 	orm.connect(settings.database, function (err, db) {
 		if (err) return cb(err);
