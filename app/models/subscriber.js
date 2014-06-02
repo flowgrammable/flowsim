@@ -1,3 +1,4 @@
+var bcrypt = require('bcrypt');
 var validator = require('validator');
 
 module.exports = function (orm, db) {
@@ -16,14 +17,25 @@ module.exports = function (orm, db) {
 	reg_key : { type: 'text', size: 64 }
 */
 	}, {
-	    
-	
 	   
-	    hooks : {
+	validations : {
+		password : orm.enforce.ranges.length(8,16, "invalid length")
+	}, 
+	
+	hooks : {
 		beforeSave: function (next) {
-			console.log(this.email);
-		   if (validator.isEmail(this.email)) {
-			return next();
+		   var user = this;
+		   if (validator.isEmail(user.email)) {
+			bcrypt.genSalt(10, function(err, salt) {
+			if(err) throw err;
+			    console.log(user.password);
+			    bcrypt.hash(user.password, salt, function(err, hash){
+				if(err) return next(err);
+				user.password = hash;
+				next();
+			    });
+			});
+			
 		   } else {
 		        return next(new Error("invalid email"));
 		   }
