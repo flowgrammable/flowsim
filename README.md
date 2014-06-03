@@ -60,7 +60,7 @@ SETUP
 
     d. Restart the database server
 
-      > pg_ctl restart -D <database server cluster>
+      > pg_ctlcluster 9.3 main restart
 
     e. Log back into dev user
 
