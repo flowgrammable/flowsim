@@ -10,8 +10,9 @@ module.exports = function (cb) {
 		if (err) return cb(err);
 
 		connection = db;
-		
-		require('./subscriber')(orm, db);
+	
+		// define models
+		require('./subscriber')(db,orm);
 		return cb(null, db);
 	});
 }
