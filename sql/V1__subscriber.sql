@@ -1,9 +1,3 @@
-CREATE TABLE test_user
-(
-  id SERIAL PRIMARY KEY,
-  name CHAR(128) NOT NULL
-);
-
 
 -- create an enumerated type for the account status
 CREATE TYPE SUBSCRIBER_STATUS AS ENUM (
@@ -21,7 +15,6 @@ CREATE TABLE subscriber
   reg_ip INET NOT NULL,                           -- ip used for registration
   status SUBSCRIBER_STATUS NOT NULL              -- current sub disposition
 --  status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
---  reg_key CHAR(128) NOT NULL                       -- verification key
 );
 
 -- create an enumerated type for the session status

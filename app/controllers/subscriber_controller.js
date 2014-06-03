@@ -11,7 +11,6 @@ module.exports = {
         var date = new Date();           // Set registration date when 
 	var tmp = date.toISOString();    // posts to resource
 
-        ///need to add password validation here
 
 	req.models.subscriber.create({
 	    email: req.body.email, // validated in app/models/subscriber.js
@@ -34,5 +33,6 @@ module.exports = {
 		res.send('user registered sucessfully');
 	    }
 	});
+	
     }	
 }
