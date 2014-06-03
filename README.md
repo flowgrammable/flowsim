@@ -68,7 +68,7 @@ SETUP
 
   3) Source the environment
 
-    > source environment
+    > source flowsim/environment
 
   4) Run the migrations
 
