@@ -13,29 +13,26 @@ module.exports = {
 
         ///need to add password validation here
 
-	bcrypt.genSalt(10, function(err, salt ) {   // generate salt
-	    if(err) throw err;
-	    bcrypt.hash(req.body.password , salt, function(err, hash) {  // hash password
-		if(err) throw err;
-		req.models.subscriber.create({
-		    email: req.body.email, // validated in user model
-		    password: hash,
-		    reg_date: tmp,
-		    reg_ip: req.body.ip
-		}, function(err,subscriber){
-		    if(err){
-		        switch(err.code){
-			    case '23505': // orm error code for duplicate unique
-			    res.send('this email already registered\n');
-			    break;
-			default:
-			    res.send('dont know what went wrong');
-			}
-		    } else {
-		        res.send('user registered sucessfully');
-		    }
-		    });
-	    });
+	req.models.subscriber.create({
+	    email: req.body.email, // validated in app/models/subscriber.js
+	    password: req.body.password, // validated in app/models/subscriber.js
+	    reg_date: tmp,
+	    reg_ip: req.body.ip
+	}, function(err,subscriber){
+	    if(err){
+		console.log(err);
+		switch(err.code){
+		    case '23505': // orm error code for duplicate unique
+			res.send('this email already registered\n');
+			break;
+		    default:
+			if(err.msg){
+			res.send(err.msg);
+			} else { res.send('dont know what went wrong'); }
+		}
+	    } else {
+		res.send('user registered sucessfully');
+	    }
 	});
     }	
 }
