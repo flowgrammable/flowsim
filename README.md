@@ -44,7 +44,7 @@ SETUP
 
     c. Modify the database server authorization file
 
-      > <editor> <database server cluster>/pg_hba.conf
+      > <editor> /etc/postgresql/9.3/main/pg_hba.conf
 
       Add the following line
 
