@@ -1,6 +1,6 @@
 var restify = require('restify');
 var orm = require('orm');
-var environment = require('./conf/environment.js');
+var environment = require('./conf/environment');
 var routes = require('./conf/routes');
 var request =  require('request');//For making HTTP requests in node JS
 
@@ -16,6 +16,7 @@ server.get('/', function(req, res, next){
 	});
 
 server.listen(8000);
+
 //Invalid Email address
 request({
   url: "http://localhost:8000/subscribers",
@@ -27,6 +28,7 @@ request({
 //  console.log("Headers", JSON.stringify(response.headers));
   console.log("Response received : ", body);
 });
+
 //Email already exists
 request({
   url: "http://localhost:8000/subscribers",
@@ -38,6 +40,7 @@ request({
 //  console.log("Headers", JSON.stringify(response.headers));
   console.log("Response received : ", body);
 });
+
 //Password length error
 request({
   url: "http://localhost:8000/subscribers",
