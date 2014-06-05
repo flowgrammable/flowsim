@@ -22,19 +22,19 @@ module.exports =
 	        if(err){
 		        switch(err.code){
 		            case '23505': // orm error code for duplicate unique
-                        res.status("409");
+                        	    res.status("409");
 			            res.send({message:"User with that email is already registered"});
 			            break;
 		            default:
 			            if(err.type=="validation"){
 			                res.status("400");
-                            res.send({error:err.msg});
+                                        res.send({error:err.msg});
 			            } else { 
-                            res.send('dont know what went wrong'); 
-                        }
+                        	        res.send('dont know what went wrong'); 
+                        	    }
 		        }
 	        } else {
-                res.status("201");
+                        res.status("201");
 		        res.send({message:'user registered sucessfully'});
 	        }
 	    });
