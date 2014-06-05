@@ -2,6 +2,10 @@ var restify = require('restify');
 var orm = require('orm');
 var environment = require('./conf/environment');
 var routes = require('./conf/routes');
+
+// I dont think this belongs here ... the test code should be in a test
+// folder for whatever module is being tested. This is the root entry point
+// or our server. -Jasson
 var request =  require('request');//For making HTTP requests in node JS
 
 var server = restify.createServer();
