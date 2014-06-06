@@ -2,6 +2,20 @@ var request = require('request');
 var assert = require('assert');
 
 describe('Testing client requests:',function() {
+    it('User registered successfully',function(done) {
+            request({
+                url: "http://localhost:8000/subscribers",
+                body: "{ \"email\": \"user111@user3.com\", \"password1\": \"my password\", \"password2\":\"my password\" }",
+                headers: {"Content-Type": "application/json"},
+                method: "POST"
+            }, function (error, response, body) {
+                console.log("\n\tStatus : "+ response.statusCode);
+                assert.equal(response.statusCode,201);
+                console.log("\tResponse received : ", body);
+                done();
+            });
+    });
+
     it('Invalid e-mail address',function(done) {
             request({
                 url: "http://localhost:8000/subscribers",
