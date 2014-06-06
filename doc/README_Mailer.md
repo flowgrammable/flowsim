@@ -4,6 +4,7 @@
 var mailer = require('./mailer');
 
 ## 2. Configure SMTP service credentials 
+
 '''
 var mailerConfig = { 
 	service: 'gmail',
@@ -13,7 +14,9 @@ var mailerConfig = {
 	      }
 	}
 '''
+
 ## 3. Configure email message options
+
 '''
 var messageOptions = {
 	from: "flog mailer", 
@@ -24,7 +27,9 @@ var messageOptions = {
 	}
 
 '''
+
 ## 4. Send message with following:
+
 '''
 mailer.sendMessage(mailerConfig, messageOptions, function(err){
 	console.log(err);	
