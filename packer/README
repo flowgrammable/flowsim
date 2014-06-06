@@ -1,11 +1,13 @@
+
 Packer.io automates the creation of any type of machine image.
-You feed it a config file, it will create virtual machines for virtualbox and AWS AMI platform.
-The only reason to use this directory flowsim/packer is if you need to add more packages
-to the current development appliance.
+You feed it a config file, it will create virtual machines for virtualbox and 
+AWS AMI platform. The only reason to use this directory flowsim/packer is if you
+need to add more packages to the current development appliance.
 
 1. Download and install packer from packer.io
 2. ./packer build flowgrammable_dev_appliance.json
 3. A AWS ami will be created and a VirtualBox image will be created...
 
-Note: To build a virtualbox image you must have a barebones virtualbox.ovf image. Packer provisions the barebones virtualbox
+Note: To build a virtualbox image you must have a barebones virtualbox.ovf 
+image. Packer provisions the barebones virtualbox
 
