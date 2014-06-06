@@ -58,7 +58,7 @@ describe('Testing client requests:',function() {
     it("E-mail Address is already registered",function(done) {
             request({
                 url: "http://localhost:8000/subscribers",
-                body: "{ \"email\": \"user1@user3.com\", \"password1\": \"my password\", \"password2\":\"my password\" }",
+                body: "{ \"email\": \"user111@user3.com\", \"password1\": \"my password\", \"password2\":\"my password\" }",
                 headers: {"Content-Type": "application/json"},
                 method: "POST"
             }, function (error, response, body) {
