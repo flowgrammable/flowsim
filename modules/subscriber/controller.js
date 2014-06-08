@@ -1,10 +1,8 @@
 var bcrypt = require('bcrypt');
-
 module.exports = 
 {
     read: function(req, res, next) {
-	res.send('a list of subscribers... if we had any');
-
+	res.send('a list of subscribers');
     },
 
     create: function(req, res, next) {
@@ -37,9 +35,21 @@ module.exports =
 		            }
 	            } else {
                     res.status("201");
-		            res.send({message:'user registered sucessfully'});
+		    res.send({message:'user registered sucessfully'});
+		    // 1. generate token
+		    // 2. store token in verification_token table
+                    // 2a. associated token with registered user
+                    // 2b. store token creation date
+		    //send email containing token link
 	            }
 	        });
         }
+    },
+
+    verify: function(req, res, next) {
+            // 1. get token from url
+            // 2. find token in database
+            // 3. set user associated with token to VERIFIED STATUS
+            // 4. respond with 'email verified' or 404 for invalid token
     }	
 }

@@ -42,4 +42,12 @@ module.exports = function (db,orm) {
         }
     });
 
+  var Token = db.define('verification_token', {
+    id : { type: 'integer', unique: true, defaultValue: undefined },
+    sub_id : { type: 'integer', unique: true },
+    token : { type: 'text', size: 36,  unique: true },
+    created_at : { type: 'date', time: true }
+	});
+  
+  Token.hasOne('subscriber', Subscriber);  
 }
