@@ -5,9 +5,9 @@ var settings = require('./settings');
 
 module.exports = function(server) {
 	server.use(require('connect').bodyParser());
-	server.get('/js',  restify.serveStatic({directory: 'public/js'}));
-	server.get('/img', restify.serveStatic({directory: 'public/img'}));
-	server.get('/css', restify.serveStatic({directory: 'public', default: 'css/style.css'}));
+	server.get('/js/:filename',  restify.serveStatic({directory: 'public'}));
+	server.get('/img/:filename', restify.serveStatic({directory: 'public'}));
+	server.get('/css/:filename', restify.serveStatic({directory: 'public'}));
 	server.get('/', restify.serveStatic({directory: 'public',
 				default: 'html/index.html'}));
 	server.use(function(req, res, next){
