@@ -8,6 +8,7 @@ module.exports = function(server) {
 	server.get('/js/:filename',  restify.serveStatic({directory: 'public'}));
 	server.get('/img/:filename', restify.serveStatic({directory: 'public'}));
 	server.get('/css/:filename', restify.serveStatic({directory: 'public'}));
+	server.get('/html/:filename', restify.serveStatic({directory: 'public'}));
 	server.get('/', restify.serveStatic({directory: 'public',
 				default: 'html/index.html'}));
 	server.use(function(req, res, next){

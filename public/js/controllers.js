@@ -16,19 +16,19 @@ flowsim.controller('mainController', function($scope) {
 flowsim.config(['$routeProvider', function($routeProvider) {
   $routeProvider
   .when('/signin', {
-    templateUrl: 'signin.html',
+    templateUrl: 'html/signin.html',
     controller: 'signinController'
   })
   .when('/signup', {
-    templateUrl: 'signup.html',
+    templateUrl: 'html/signup.html',
     controller: 'signupController'
   })
   .when('/register', {
-    templateUrl: 'register.html',
+    templateUrl: 'html/register.html',
     controller: 'registerController'
   })
   .otherwise({
-    templateUrl: 'main.html',
+    templateUrl: 'html/main.html',
     controller: 'mainController'
   });
 }]);
@@ -36,14 +36,14 @@ flowsim.config(['$routeProvider', function($routeProvider) {
 flowsim.directive('fsMenu', function() {
   return {
     restrict: 'E',
-    templateUrl: 'menu.html'
+    templateUrl: 'html/menu.html'
   };
 });
 
 flowsim.directive('fsJumbo', function() {
   return {
     restrict: 'E',
-    templateUrl: 'jumbo.html',
+    templateUrl: 'html/jumbo.html',
     transclude: true
   };
 });
