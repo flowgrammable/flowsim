@@ -6,11 +6,12 @@ module.exports =
     },
 
     create: function(req, res, next) {
-        var date = new Date();           // Set registration date when 
+      var date = new Date();           // Set registration date when 
 	    var tmp = date.toISOString();    // posts to resource
         if(req.body.password1 != req.body.password2) {
-            res.status("400");
-            res.send({error:"Password Mismatch"});
+
+            res.writeHead("400", {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({error:"Password Mismatch"}));
         }
         else {
 	        req.models.subscriber.create({
@@ -22,20 +23,20 @@ module.exports =
 	            if(err){
 		            switch(err.code){
 		                case '23505': // orm error code for duplicate unique
-                            res.status("409");
-			                res.send({message:"User with that email is already registered"});
+                      res.writeHead("409", {'Content-Type': 'application/json'});
+			                res.end(JSON.stringify({message:"User with that email is already registered"}));
 			                break;
 		                default:
 			                if(err.type=="validation"){
-			                    res.status("400");
-                                res.send({error:err.msg});
+			                    res.writeHead("400", {'Content-Type': 'application/json'});
+                          res.end(JSON.stringify({error:err.msg}));
 			                } else { 
-                                res.send('dont know what went wrong'); 
+                                res.end('dont know what went wrong'); 
                             }
 		            }
 	            } else {
-                    res.status("201");
-		    res.send({message:'user registered sucessfully'});
+                  res.writeHead("201", {'Content-Type': 'application/json'});
+		    					res.end(JSON.stringify({message:'user registered sucessfully'}));
 		    // 1. generate token
 		    // 2. store token in verification_token table
                     // 2a. associated token with registered user
