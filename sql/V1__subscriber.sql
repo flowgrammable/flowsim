@@ -17,6 +17,14 @@ CREATE TABLE subscriber
 --  status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
 );
 
+CREATE TABLE verification_token
+(
+  id SERIAL PRIMARY KEY,                             -- internal token id
+  sub_id INTEGER references subscriber(id) NOT NULL, -- reference to sub
+  token CHAR(36) NOT NULL,                           -- token string
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL      -- date token is created
+);
+
 -- create an enumerated type for the session status
 CREATE TYPE SESSION_STATUS AS ENUM (
   'ACTIVE',       -- a session is currently active
@@ -35,34 +43,4 @@ CREATE TABLE session
   ip INET NOT NULL,                                   -- ip used for session
   status SESSION_STATUS NOT NULL                      -- current session status
 );
-
-
--- create a profile
-CREATE TABLE caps_profile -- table for openflow switch version 1.0
-(
-  id SERIAL PRIMARY KEY,
-  name CHAR(60) NOT NULL ,        -- profile name
-  no_ports INTEGER NOT NULL       -- switch no_ports
-     
-);
-
-CREATE TABLE caps_flowtable
-(
-  id SERIAL PRIMARY KEY,
-  caps_profile_id INTEGER references caps_profile(id) NOT NULL,  -- reference to switch profile
-  table_id INTEGER NOT NULL,                                     -- flowtable id
-  flow_capacity INTEGER NOT NULL				 -- flowtable capacity
-);
-
-CREATE TABLE caps_match
-(
-  id SERIAL PRIMARY KEY,
-  caps_flowtable_id INTEGER references caps_flowtable(id) NOT NULL, -- reference to individual flow table
-  protocol CHAR(20) NOT NULL,					    -- protocol to match on
-  field CHAR(20) NOT NULL,					    -- field of protocol to match on
-  maskable BOOLEAN NOT NULL,					    -- is the field maskable ?
-  bits INTEGER NOT NULL                                             -- length of the field in bits
-);
-  
-
 

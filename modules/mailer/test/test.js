@@ -1,4 +1,4 @@
-var mailer = require('../mailer');
+var mailer = require('../index.js');
 var assert = require('assert');
 
 
