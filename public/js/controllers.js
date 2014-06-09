@@ -8,15 +8,34 @@ flowsim.controller('signinController', function($scope) {
 flowsim.controller('signupController', function($scope, $http) {
   console.log('singup-controller');
   $scope.subscriber = {};
+  $scope.showUserError = false;
+  $scope.registerSuccess = false;
+  $scope.showCheckEmail = false;
+  $scope.showDuplicateUser = false;
   $scope.createSubscriber = function() {
+    $scope.showUserError = false;
+    $scope.showDuplicateUser = false;
 		$http({
 			method: 'POST',
 			url : '/subscribers',
       data: $scope.subscriber
 			}).success(function(data, status, headers, config){
          $scope.data = data;
-				console.log(data);
+				  console.log(status); 
+          $scope.showCheckEmail = true; 
+					$scope.registerSuccess = true;
+		}).error(function(data, status, headers, config){
+				switch(status){
+					case 400:
+						$scope.showUserError = true;
+						break;
+					case 409:
+						$scope.showDuplicateUser = true;
+						break;
+					default:
+				}
 		})
+		
 	}
 
 });
