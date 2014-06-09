@@ -5,8 +5,20 @@ flowsim.controller('signinController', function($scope) {
   console.log('singin-controller');
 });
 
-flowsim.controller('signupController', function($scope) {
+flowsim.controller('signupController', function($scope, $http) {
   console.log('singup-controller');
+  $scope.subscriber = {};
+  $scope.createSubscriber = function() {
+		$http({
+			method: 'POST',
+			url : '/subscribers',
+      data: $scope.subscriber
+			}).success(function(data, status, headers, config){
+         $scope.data = data;
+				console.log(data);
+		})
+	}
+
 });
 
 flowsim.controller('mainController', function($scope) {
