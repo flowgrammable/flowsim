@@ -21,7 +21,7 @@ FLYWAY_CFG=$(FLYWAY_USER) $(FLYWAY_PASSWORD) $(FLYWAY_JAR) $(FLYWAY_URL) $(FLYWA
 
 flyway=$(FLYWAY)/flyway $(FLYWAY_CFG)
 
-# looking for files present in "test" folder throughout the repo excluding scratch and node_modules folders
+# looking for files present in "test" folder throughout the repo excluding "scratch" and "node_modules" folders
 TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -not -path "*/scratch/*")
 
 test:
