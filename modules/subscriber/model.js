@@ -18,15 +18,8 @@ module.exports = function (db,orm) {
 */
     }, {
 
-    // validations for model       
-    validations : {
-        password : orm.enforce.ranges.length(8,16, "Password is not between 8-16 chars"),
-        email : orm.enforce.patterns.email("Invalid Email")
-      
-    }, 
-
     hooks : {
-        beforeSave: function (next) {
+        beforeCreate: function (next) {
            var user = this;
             // hash password
             bcrypt.genSalt(10, function(err, salt) {
@@ -39,7 +32,7 @@ module.exports = function (db,orm) {
             });
 
         }
-        }
+    }
     });
 
   var Token = db.define('verification_token', {
@@ -48,6 +41,4 @@ module.exports = function (db,orm) {
     token : { type: 'text', size: 36,  unique: true },
     created_at : { type: 'date', time: true }
 	});
-  
-  Token.hasOne('subscriber', Subscriber);  
 }
