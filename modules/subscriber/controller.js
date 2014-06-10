@@ -59,7 +59,7 @@ module.exports =
                                 console.log(err); 
                             }
                             else
-                                console.log(ver_token);
+                                console.log("Token created successfully");
                         });
 		                //send email containing token link
                         var mailerConfig = {
@@ -82,18 +82,26 @@ module.exports =
         // 2. find token in database
         req.models.verification_token.find({
             token:token
-        }, function(err, user){
+        }, 1, function(err, user){
             // 3. set user associated with token to VERIFIED STATUS
             // 4. respond with 'email verified' or 404 for invalid token
             if(err)
+            {
                 console.log("http 404");
+                res.writeHead("404", {'Content-Type': 'application/json'});
+                res.end(JSON.stringify({error:'Invalid token'}));
+            }
             else        
             {
-                //console.log("Total Number:", user.length);--> if more than 1 =  error!!(Might be hash collision)
-                var id = user[0].sub_id;
+                //console.log("Total Number:", user.length, typeof(user));//--> if more than 1 =  error!!(Might be hash collision)
+                var id = user.sub_id;
                 req.models.subscriber.get(id,function(err,subscriber){
                     if(err)
+                    {
                         console.log("No user of this id has registerd");
+                        res.writeHead("404", {'Content-Type': 'application/json'});
+                        res.end(JSON.stringify({error:'Invalid token'}));
+                    }
                     else
                     {
                         subscriber.status = 'VERIFIED';
@@ -101,13 +109,15 @@ module.exports =
                             if(err)
                                 console.log(err);
                             else 
+                            {
                                 console.log("Saved successfully");
+                                res.writeHead("200", {'Content-Type': 'application/json'});
+                                res.end(JSON.stringify({message:'email verification successful'}));
+                            }
                         });
                     }
                 });
             }
         });
-        res.writeHead("200", {'Content-Type': 'application/json'});
-        res.end(JSON.stringify({message:'email verification successful'}));
     }
 }   

@@ -68,4 +68,15 @@ describe('Testing client requests:',function() {
                 done();
             });
     });
+    it("Invalid token",function(done) {
+            request({
+                url: "http://localhost:8000/subscribers/verify/110ec58a-a0f2-4ac4-8393-c866d8138d",
+                method: "GET"
+            }, function (error, response, body) {
+                console.log("\n\tStatus : "+ response.statusCode);
+                assert.equal(response.statusCode,404);
+                console.log("\tResponse received : ", body);
+                done();
+            });
+    });
 });
