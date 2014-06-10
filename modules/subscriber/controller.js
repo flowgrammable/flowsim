@@ -63,7 +63,7 @@ module.exports =
                         });
 		                //send email containing token link
                         var mailerConfig = {
-                            service:'gmail',auth:{user: 'ashxjain@gmail.com', pass: 'hpcorei5@consigliere'}
+                            service:'gmail',auth:{user: 'flowgrammablemailer@gmail.com', pass: 'dfafaflogtester2014'}
                         }   
 
                         var messageOptions = {
