@@ -11,7 +11,7 @@ module.exports =
 
     create: function(req, res, next) {
         var date = new Date();           // Set registration date when 
-	    var tmp = date.toISOString();    // posts to resource
+	var tmp = date.toISOString();    // posts to resource
         var checks  = new enforce.Enforce();
         checks.add("password1",enforce.ranges.length(8,16, "Password is not between 8-16 chars"));
         checks.add("password2",enforce.sameAs("password1", "Passwords do not match"));
@@ -45,9 +45,9 @@ module.exports =
 	                } else {
                         res.writeHead("201", {'Content-Type': 'application/json'});
 		    	res.end(JSON.stringify({message:'user registered sucessfully'}));
-		                // 1. generate token
+	                // 1. generate token
                         var token = uuid.v1();
-		                // 2. store token in verification_token table
+	               // 2. store token in verification_token table
                             // 2a. associated token with registered user
                             // 2b. store token creation date
                         req.models.verification_token.create({
