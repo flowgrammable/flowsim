@@ -5,13 +5,13 @@ var mailer = require("../mailer");
 
 module.exports = 
 {
-    read: function(req, res, next) {
+		read: function(req, res, next) {
 	    res.send('a list of subscribers');
     },
 
     create: function(req, res, next) {
-        var date = new Date();           // Set registration date when 
-	var tmp = date.toISOString();    // posts to resource
+    		var date = new Date();           // Set registration date when 
+				var tmp = date.toISOString();    // posts to resource
         var checks  = new enforce.Enforce();
         checks.add("password1",enforce.ranges.length(8,16, "Password is not between 8-16 chars"));
         checks.add("password2",enforce.sameAs("password1", "Passwords do not match"));
@@ -105,6 +105,7 @@ module.exports =
                         subscriber.save(function(err) {
                             if(err) {
                             	//Error saving to the database
+															//Respond with HTTP 500 Internal Service Error
                                 console.log(err);
                             }
                             else {
