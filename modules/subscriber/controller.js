@@ -64,11 +64,11 @@ module.exports =
                         });
 		        //send email containing token link
                         var mailerConfig = {
-                            service:'gmail',auth:{user: 'flowgrammablemailer@gmail.com', pass: 'dfafaflogtester2014'}
+                            service:'gmail',auth:{user: '', pass: ''}
                         }   
 
                         var messageOptions = {
-                            from: "flog mailer", to: subscriber.email, subject: "Verification Email", text: "Please verify you email-address by clicking at the below link:", html:"<html><title>Thank you for signing up for Flowsim</title><body>Thank you for signing up for Flowsim.<br/>Click the link below to confirm your account<br/><br/><a href=\"https://localhost/subscibers/verify/"+token+"\">https://www.flowgrammable.org/subscribers/verify/"+token+"</a><br/><br/><h1>The Flowsim Team!</h1></body></html>"
+                            from: "flog mailer", to: subscriber.email, subject: "Verification Email", text: "Please verify you email-address by clicking at the below link:", html:"<html><title>Thank you for signing up for Flowsim</title><body>Thank you for signing up for Flowsim.<br/>Click the link below to confirm your account<br/><br/><a href=\"https://localhost:8000/subscribers/verify/"+token+"\">https://www.flowgrammable.org/subscribers/verify/"+token+"</a><br/><br/><h1>The Flowsim Team!</h1></body></html>"
                         }
                         mailer.sendMessage(mailerConfig, messageOptions, function(err){ console.log(err);}); 
 	                }
@@ -79,23 +79,26 @@ module.exports =
 
     verify: function(req, res, next) {
         // 1. get token from url
-        var token = req.params.token;        
-        // 2. find token in database
+        var token_id = req.params.token;        
+				// 2. find token in database
         req.models.verification_token.find({
-            token:token
-        }, 1, function(err, user){
-            // 3. set user associated with token to VERIFIED STATUS
+            token:token_id
+        }, 1, function(err, token){
+            // MUST USE token[0].sub_id
+						// 3. set user associated with token to VERIFIED STATUS
             // 4. respond with 'email verified' or 404 for invalid token
             if(err) {
+								console.log(err);
                 //HTTP 404
                 res.writeHead("404", {'Content-Type': 'application/json'});
                 res.end(JSON.stringify({error:'Invalid token'}));
             }
             else {
                 //console.log("Total Number:", user.length, typeof(user));//--> if more than 1 =  error!!(Might be hash collision)
-                var id = user.sub_id;
+                var id = token[0].sub_id;
                 req.models.subscriber.get(id,function(err,subscriber){
                     if(err) {
+												console.log(err);
                         //No user of this id has registerd
                         res.writeHead("404", {'Content-Type': 'application/json'});
                         res.end(JSON.stringify({error:'Invalid token'}));
@@ -110,7 +113,7 @@ module.exports =
                             }
                             else {
                                 console.log("Saved successfully");
-                                res.writeHead("200", {'Content-Type': 'application/json'});
+                                res.writeHead("302", {'Content-Type': 'application/json', 'Location': '/#verified'});
                                 res.end(JSON.stringify({message:'email verification successful'}));
                             }
                         });

@@ -3,6 +3,8 @@ var flowsim = angular.module('flowsim', ['ngRoute', 'ui.bootstrap']);
 
 flowsim.controller('signinController', function($scope) {
   console.log('singin-controller');
+	$scope.data = data;
+  $scope.showVerified = true;
 });
 
 flowsim.controller('signupController', function($scope, $http) {
@@ -44,6 +46,11 @@ flowsim.controller('mainController', function($scope) {
   console.log('main-controller');
 });
 
+flowsim.controller('verifiedController', function($scope) {
+	console.log('verified-controller');
+  $scope.data = data;
+});
+
 flowsim.config(['$routeProvider', function($routeProvider) {
   $routeProvider
   .when('/signin', {
@@ -54,6 +61,10 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     templateUrl: 'html/signup.html',
     controller: 'signupController'
   })
+  .when('/verified', {
+		templateUrl: 'html/verified.html',
+		controller: 'verifiedController'
+	})
   .when('/register', {
     templateUrl: 'html/register.html',
     controller: 'registerController'
