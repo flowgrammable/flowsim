@@ -64,7 +64,7 @@ module.exports =
                         });
 		        //send email containing token link
                         var mailerConfig = {
-                            service:'gmail',auth:{user: '', pass: ''}
+                            service:'gmail',auth:{user: 'flowgrammablemailer@gmail.com', pass: 'flowtester'}
                         }   
 
                         var messageOptions = {
@@ -113,7 +113,7 @@ module.exports =
                             }
                             else {
                                 console.log("Saved successfully");
-                                res.writeHead("302", {'Content-Type': 'application/json', 'Location': '/#verified'});
+                                res.writeHead("302", {'Content-Type': 'application/json', 'Location': '/#signin'});
                                 res.end(JSON.stringify({message:'email verification successful'}));
                             }
                         });
