@@ -33,7 +33,8 @@
     "underscore": "^1.6.0",
     "validator": "^3.12.0",
     "yuidocjs": "^0.3.5",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "enforce": "~0.1.5"
   },
   "contributors": [
     {
