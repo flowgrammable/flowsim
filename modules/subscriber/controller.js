@@ -125,14 +125,16 @@ module.exports =
             }
             
             mailer.sendMessage(mailerConfig, messageOptions, function(err) { 
-            
-              /* 
-               *  TODO:
-               *    HTTP error code??? 
-               *      + Some problem with sending email?
-               *        -->Either invalid inactive email address or not Internet connection available?
-               */
-              console.log(err);
+              
+              // Some problem with sending email
+              if(err) {
+                res.writeHead('500', {
+                  'Content-Type': 'application/json'
+                });
+                res.end(JSON.stringify( {
+                  error:'Internal Service Error'
+                }));
+              }
             }); 
           }
         });
