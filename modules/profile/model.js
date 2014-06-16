@@ -44,16 +44,20 @@ module.exports = function (db,orm) {
 			defaultValue: 'true'
 		},
 		vp_any : {
-			type: 'boolean'
+			type: 'boolean',
+      defaultValue: 'false'
 		},
 		vp_local : {
-			type: 'boolean'
+			type: 'boolean',
+	    defaultValue: 'false'
 		},
 		vp_normal : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		},
 		vp_flood : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		}
   });
 
@@ -86,19 +90,24 @@ module.exports = function (db,orm) {
 			type: 'integer'
 		},
 		ofpxmt_ofb_in_port : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		},
 		ofpxmt_ofb_in_phy_port : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		},
 		ofpxmt_ofb_eth_dst : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		},
     ofpxmt_ofb_eth_src : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		},
 		ofpxmt_ofb_eth_type : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		}
 	});
 
@@ -127,13 +136,16 @@ module.exports = function (db,orm) {
 			type: 'integer'
 		},
 		ofpat_output : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'true'
 		},
 		ofpat_set_field_eth_dst : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		},
 		ofpat_set_field_eth_src : {
-			type: 'boolean'
+			type: 'boolean',
+			defaultValue: 'false'
 		}
 	});
 
