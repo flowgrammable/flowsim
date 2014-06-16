@@ -6,13 +6,13 @@ var mailer = require("../mailer");
 module.exports = 
 {
   read: function(req, res, next) {
-	  res.send('a list of subscribers');
+    res.send('a list of subscribers');
   },
 
   create: function(req, res, next) {
     var date = new Date(),            
-		tmp = date.toISOString(),    
-    checks  = new enforce.Enforce();
+        tmp = date.toISOString(),    
+        checks  = new enforce.Enforce();
     checks.add('password1',enforce.ranges.length(8,16, 'Password is not between 8-16 chars'));
     checks.add("password2",enforce.sameAs('password1', 'Passwords do not match'));
     checks.add('email',enforce.patterns.email('Invalid Email'));
@@ -30,6 +30,7 @@ module.exports =
         }));
       }
       else {
+      	
         // validated in modules/subscriber/model.js
 	      req.models.subscriber.create( {
 	        email: req.body.email, 
