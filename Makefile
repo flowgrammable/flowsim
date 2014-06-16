@@ -27,6 +27,6 @@ TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -not -pa
 test:
 	$(flyway) clean && $(flyway) migrate
 	clear
-	$(MOCHA) -R spec $(TESTS)
+	$(MOCHA) -t 4000 -R spec $(TESTS)
 
 .PHONY: test
