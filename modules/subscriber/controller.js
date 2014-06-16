@@ -117,7 +117,7 @@ module.exports =
               html:'<html><title>Thank you for signing up for Flowsim</title><body>' + 
               'Thank you for signing up for Flowsim.<br/>Click the link below to confirm ' + 
               'your account<br/><br/><a href=\"https://localhost:8000/subscribers/verify/'+
-              token+'\">https://www.flowgrammable.org/subscribers/verify/"+token+"</a><br/>' + 
+              token+'\">https://www.flowgrammable.org/subscribers/verify/'+token+'</a><br/>' + 
               '<br/><h1>The Flowsim Team!</h1></body></html>'
             }
             
