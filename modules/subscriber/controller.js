@@ -128,7 +128,8 @@ module.exports =
             
               /* 
                *  TODO:
-               *    HTTP error code??? 
+               *    HTTP error code???     
+               *      HTTP 500 (Internal Service Error) 
                *      + Some problem with sending email?
                *        -->Either invalid inactive email address or not Internet connection available?
                */
