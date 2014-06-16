@@ -9,6 +9,18 @@ module.exports =
     res.send('a list of subscribers');
   },
 
+  /*
+   * When client fills and submits the Sign-Up Page for Registration
+   * this function is invoked, which is a two part process where a potential 
+   * user registers a username and password. The system will email their 
+   * username with a unique url to use for verification of the  ownership 
+   * of the email address.
+   * 
+   * @method create
+   * @param req
+   * @param res
+   * 
+   */
   create: function(req, res, next) {
     var date = new Date(),            
         tmp = date.toISOString(),    
@@ -68,7 +80,7 @@ module.exports =
              *  Store token in verification_token table
              *    + Associate token with registered user
              *    + Store token creation date
-            */
+             */
             req.models.verification_token.create( {
               sub_id: subscriber.id,
               token: token,
@@ -116,7 +128,7 @@ module.exports =
                *    HTTP error code??? 
                *      + Some problem with sending email?
                *        -->Either invalid inactive email address or not Internet connection available?
-              */
+               */
               console.log(err);
             }); 
           }
@@ -125,6 +137,12 @@ module.exports =
     });
   },
 
+  /*
+   *
+   * 
+   *
+   *
+   */
   verify: function(req, res, next) {
       
     // Get token from url
@@ -138,7 +156,7 @@ module.exports =
       /*
        *  Set user associated with token to VERIFIED STATUS
        *  Respond with 'email verified' or 404 for invalid token
-      */
+       */
       if(err || !token.length) {
         res.writeHead('404', {
           'Content-Type': 'application/json'
@@ -200,3 +218,4 @@ module.exports =
     });
   }
 }
+
