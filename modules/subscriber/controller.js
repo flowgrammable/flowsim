@@ -14,15 +14,15 @@ module.exports =
   },
 
   /*
-   * When client fills and submits the Sign-Up Page for Registration
-   * this function is invoked, which is a two part process where a potential 
-   * user registers a username and password. The system will email their 
+   * When a potential subscriber fills and submits the Sign-Up Page for Registration
+   * this function is invoked, which is a two phase process where a potential 
+   * subscriber registers a username and password. The system will email their 
    * username with a unique url to use for verification of the  ownership 
    * of the email address.
    * 
    * @method create
-   * @param req
-   * @param res
+   * @param req - HTTP POST request object sent by potential subscriber
+   * @param res - HTTP response object which will be sent to the potential subscriber
    * 
    */
   create: function(req, res, next) {
@@ -145,8 +145,8 @@ module.exports =
    * Verification of E-mail address sent to the registered user
    * 
    * @method verify
-   * @param req
-   * @param res
+   * @param req : HTTP GET request object sent by registered user
+   * @param res : HTTP response object sent to the registered user
    *
    */
   verify: function(req, res, next) {
