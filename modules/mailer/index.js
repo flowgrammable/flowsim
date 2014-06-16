@@ -17,10 +17,11 @@ exports.sendMessage = function(config, messageOptions, next){
 
 	smtpTransport.sendMail(messageOptions, function(err, response){
 		if(err){
+            console.log("*+****"+err);
 			smtpTransport.close();
 			next(err.name);
 	  }else{
-			console.log("Message sent: " + response.message);
+			console.log("Message sent: " +  response.message);
 		}
 		smtpTransport.close();
 	});

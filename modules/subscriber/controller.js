@@ -2,6 +2,10 @@ var enforce = require('enforce');
 var bcrypt = require('bcrypt');
 var uuid = require('node-uuid');
 var mailer = require("../mailer");
+
+/*
+ * @module subscriber
+ */
   
 module.exports = 
 {
@@ -138,9 +142,11 @@ module.exports =
   },
 
   /*
-   *
+   * Verification of E-mail address sent to the registered user
    * 
-   *
+   * @method verify
+   * @param req
+   * @param res
    *
    */
   verify: function(req, res, next) {
@@ -176,7 +182,7 @@ module.exports =
             error:'Internal Service Error'
           }));
         }
-        var id = token[0][sub_id];
+        var id = token[0].sub_id;
         req.models.subscriber.get(id,function(err,subscriber) {
           if(err) {
                         
