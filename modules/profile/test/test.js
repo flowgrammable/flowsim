@@ -27,7 +27,7 @@ describe('Testing client requests:',function() {
             '\"vp_any\" : true, \"vp_local\":true, ' + // datapath_caps table
 						'\"vp_normal\":true, \"vp_flood\":true,' +
 						'\"ofpxmt_ofb_in_port\": true, \"ofpxmt_ofb_in_phy_port\":true, ' + // match_caps table
-						'\"ofpxmt_ofb_eth_dst\": true, \"ofpxmt_ofb_src_dst\":true, ' +
+						'\"ofpxmt_ofb_eth_dst\": true, \"ofpxmt_ofb_eth_src\":true, ' +
 						'\"ofpxmt_ofb_eth_type\": true , ' +
             '\"ofpat_output\":true, \"ofpat_set_field_eth_dst\":true, ' + // action_caps table
 						'\"ofpat_set_field_eth_src\":true}',
