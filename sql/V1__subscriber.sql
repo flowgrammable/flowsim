@@ -25,6 +25,15 @@ CREATE TABLE verification_token
   created_at TIMESTAMP WITH TIME ZONE NOT NULL      -- date token is created
 );
 
+CREATE TABLE access_token
+(
+  id SERIAL PRIMARY KEY,                             -- internal access token id
+  sub_id INTEGER references subscriber(id) NOT NULL, -- reference to sub
+  token CHAR NOT NULL,                               -- token string UUIDv4, need to determine length
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,      -- date token created
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL       -- date token updated
+);
+
 -- create an enumerated type for the session status
 CREATE TYPE SESSION_STATUS AS ENUM (
   'ACTIVE',       -- a session is currently active
