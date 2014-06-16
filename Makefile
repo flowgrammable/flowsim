@@ -1,4 +1,8 @@
 #!/bin/sh
+
+#Adjusting terminal window to spec reporter 
+REPORTER = 'spec'
+
 MOCHA=node_modules/.bin/mocha
 # flyway location
 FLYWAY=3rdparty/flyway-3.0
@@ -27,6 +31,6 @@ TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -not -pa
 test:
 	$(flyway) clean && $(flyway) migrate
 	clear
-	$(MOCHA) -t 4000 -R spec $(TESTS)
+	$(MOCHA) -t 4000 -R $(REPORTER) $(TESTS)
 
 .PHONY: test
