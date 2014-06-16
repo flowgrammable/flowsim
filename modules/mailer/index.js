@@ -17,7 +17,6 @@ exports.sendMessage = function(config, messageOptions, next){
 
 	smtpTransport.sendMail(messageOptions, function(err, response){
 		if(err){
-            console.log("*+****"+err);
 			smtpTransport.close();
 			next(err.name);
 	  }else{
