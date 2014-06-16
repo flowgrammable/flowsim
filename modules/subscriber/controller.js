@@ -32,39 +32,39 @@ module.exports =
       else {
       	
         // validated in modules/subscriber/model.js
-	req.models.subscriber.create( {
-	  email: req.body.email, 
-	  password: req.body.password1, 
-	  reg_date: tmp,
-	  reg_ip: req.connection.remoteAddress
-	}, function(err,subscriber) {
+        req.models.subscriber.create( {
+          email: req.body.email, 
+          password: req.body.password1, 
+          reg_date: tmp,
+          reg_ip: req.connection.remoteAddress
+        }, function(err,subscriber) {
           if(err) {
-	    switch(err.code) {
+            switch(err.code) {
 
               // orm error code for duplicate unique
               case '23505':
-		res.writeHead('409', {
+                res.writeHead('409', {
                   'Content-Type': 'application/json'
                 });
                 res.end(JSON.stringify( {
                   message:'User with that email is already registered'
                 }));
-		break; 
+                break; 
               default: res.end('dont know what went wrong'); 
-	    }
+            }
           } 
-	  else {
+          else {
             res.writeHead('201', {
               'Content-Type': 'application/json'
             });
-	    res.end(JSON.stringify( {
+            res.end(JSON.stringify( {
               message:'user registered sucessfully'
             }));
 
-	    // Generate token
+            // Generate token
             var token = uuid.v1();
 
-	    /* 
+            /* 
              *  Store token in verification_token table
              *    + Associate token with registered user
              *    + Store token creation date
@@ -89,7 +89,7 @@ module.exports =
               }
             });
 
-	    //Send email containing token link
+            //Send email containing token link
             var mailerConfig = {
               service:'gmail',
               auth:{
