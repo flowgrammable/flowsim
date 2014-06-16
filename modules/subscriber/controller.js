@@ -5,9 +5,9 @@ var mailer = require("../mailer");
 
 module.exports = 
 {
-	read: function(req, res, next) {
+    read: function(req, res, next) {
 		res.send('a list of subscribers');
-	},
+    },
 
     create: function(req, res, next) {
     	var date = new Date();           // Set registration date when 
