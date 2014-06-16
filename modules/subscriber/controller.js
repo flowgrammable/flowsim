@@ -79,7 +79,6 @@ module.exports =
 
             // Generate token
             var token = uuid.v1();
-
             /* 
              *  Store token in verification_token table
              *    + Associate token with registered user
@@ -181,45 +180,48 @@ module.exports =
           res.end(JSON.stringify( {
             error:'Internal Service Error'
           }));
+          console.log('Hash collision!!');
         }
-        var id = token[0].sub_id;
-        req.models.subscriber.get(id,function(err,subscriber) {
-          if(err) {
+        else {
+          var id = token[0].sub_id;
+          req.models.subscriber.get(id,function(err,subscriber) {
+            if(err) {
                         
-            // No user of this id has registerd
-            res.writeHead('404', {
-              'Content-Type': 'application/json'
-            });
-            res.end(JSON.stringify( {
-              error:'Invalid token'
-            }));
-          }
-          else {
-            subscriber.status = 'VERIFIED';
-            subscriber.save(function(err) {
-              if(err) {
+              // No user of this id has registerd
+              res.writeHead('404', {
+                'Content-Type': 'application/json'
+              });
+              res.end(JSON.stringify( {
+                error:'Invalid token'
+              }));
+            }
+            else {
+              subscriber.status = 'VERIFIED';
+              subscriber.save(function(err) {
+                if(err) {
 
-              	//Error saving to the database
-                res.writeHead('500', {
-                  'Content-Type': 'application/json'
-                });
-                res.end(JSON.stringify( {
-                  error:'Internal Service Error'
-                }));
-              }
-              else {
-                console.log('Saved successfully');
-                res.writeHead('302', {
-                  'Content-Type': 'application/json', 
-                  'Location': '/#signin'
-                });
-                res.end(JSON.stringify( {
-                  message:'email verification successful'
-                }));
-              }
-            });
-          }
-        });
+              	  //Error saving to the database
+                  res.writeHead('500', {
+                    'Content-Type': 'application/json'
+                  });
+                  res.end(JSON.stringify( {
+                    error:'Internal Service Error'
+                  }));
+                }
+                else {
+                  console.log('Saved successfully');
+                  res.writeHead('302', {
+                    'Content-Type': 'application/json', 
+                    'Location': '/#signin'
+                  });
+                  res.end(JSON.stringify( {
+                    message:'email verification successful'
+                  }));
+                }
+              });
+            }
+          });
+        }
       }
     });
   }
