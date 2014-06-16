@@ -45,6 +45,7 @@ How to Run mocha
 ================
 * By default mocha will use the pattern './test/*.js' if no parameter is given to it.
 * By giving filename as parameter to mocha, then mocha will run on the file
+* By adding script property to package json, now we can run mocha by using: "npm test"
 
 Reference:
 =========
