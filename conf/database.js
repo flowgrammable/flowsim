@@ -9,6 +9,7 @@ module.exports = function (cb) {
 
 		// define models
 		require('../modules/subscriber/model.js')(db, orm);
+		require('../modules/profile/model.js')(db, orm);
 		return cb(null, db);
 	});
 }
