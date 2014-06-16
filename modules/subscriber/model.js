@@ -71,5 +71,5 @@ module.exports = function (db,orm) {
       type: 'date', 
       time: true 
     }
-	});
+  });
 }
