@@ -44,7 +44,7 @@
              http://localhost:8000/subscribers
 
 
-###3.2. Verify User E-mail** 
+###3.2. Verify User E-mail###
   **Run the server code:**
 
         node server.js 
@@ -54,6 +54,7 @@
         http://localhost:8000/subscribers/verify/token
 
   *+ Hostname should be the IP-Address of the system running 'server.js', in this case it is localhost*
+  
   *+ Token should be valid token sent to the respective email used for registering user*
       
   **To use curl utility for making HTTP request, type the following in the terminal:**
