@@ -56,7 +56,10 @@ module.exports =
                             created_at: new Date() 
                         }, function(err,ver_token){
                             if(err){
-                                console.log(err); 
+                                //Error storing content in database
+                                //res.writeHead("400", {'Content-Type': 'application/json'});
+                                //res.end(JSON.stringify({error:err.msg}));
+                                console.log(err.msg);
                             }
                             else {
                                 console.log("Token created successfully");
@@ -70,7 +73,9 @@ module.exports =
                         var messageOptions = {
                             from: "flog mailer", to: subscriber.email, subject: "Verification Email", text: "Please verify you email-address by clicking at the below link:", html:"<html><title>Thank you for signing up for Flowsim</title><body>Thank you for signing up for Flowsim.<br/>Click the link below to confirm your account<br/><br/><a href=\"https://localhost:8000/subscribers/verify/"+token+"\">https://www.flowgrammable.org/subscribers/verify/"+token+"</a><br/><br/><h1>The Flowsim Team!</h1></body></html>"
                         }
-                        mailer.sendMessage(mailerConfig, messageOptions, function(err){ console.log(err);}); 
+                        mailer.sendMessage(mailerConfig, messageOptions, function(err){ 
+                            console.log(err);//--> HTTP error code??? Some problem with sending email?-->Either invalid inactive email address or not Internet connection available?
+                        }); 
 	                }
 	            });
             }
@@ -83,22 +88,23 @@ module.exports =
 				// 2. find token in database
         req.models.verification_token.find({
             token:token_id
-        }, 1, function(err, token){
-            // MUST USE token[0].sub_id
+        }, function(err, token){
 						// 3. set user associated with token to VERIFIED STATUS
             // 4. respond with 'email verified' or 404 for invalid token
-            if(err) {
-								console.log(err);
-                //HTTP 404
+            if(err || token.length==0) {
                 res.writeHead("404", {'Content-Type': 'application/json'});
                 res.end(JSON.stringify({error:'Invalid token'}));
             }
             else {
-                //console.log("Total Number:", user.length, typeof(user));//--> if more than 1 =  error!!(Might be hash collision)
+                //if more than 1 =  error!!(Might be hash collision)
+                if(token.length > 1)
+                {
+                    res.writeHead("500", {'Content-Type': 'application/json'});
+                    res.end(JSON.stringify({error:'Internal Service Error'}));
+                }
                 var id = token[0].sub_id;
                 req.models.subscriber.get(id,function(err,subscriber){
                     if(err) {
-												console.log(err);
                         //No user of this id has registerd
                         res.writeHead("404", {'Content-Type': 'application/json'});
                         res.end(JSON.stringify({error:'Invalid token'}));
@@ -108,8 +114,8 @@ module.exports =
                         subscriber.save(function(err) {
                             if(err) {
                             	//Error saving to the database
-															//Respond with HTTP 500 Internal Service Error
-                                console.log(err);
+                                res.writeHead("500", {'Content-Type': 'application/json'});
+                                res.end(JSON.stringify({error:'Internal Service Error'}));
                             }
                             else {
                                 console.log("Saved successfully");
