@@ -176,7 +176,7 @@ module.exports =
             error:'Internal Service Error'
           }));
         }
-        var id = token[0][sub_id];
+        var id = token[0].sub_id;
         req.models.subscriber.get(id,function(err,subscriber) {
           if(err) {
                         
