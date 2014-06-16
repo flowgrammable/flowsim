@@ -1,9 +1,9 @@
 
 ## 1. Import Subscriber Module
 
-      '''
+      ```
       var mailer = require('./subscriber');
-      '''
+      ```
 
 ## 2. To get the list of subsribers:
       + Run the server code:
