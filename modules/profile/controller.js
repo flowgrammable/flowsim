@@ -95,6 +95,15 @@ module.exports =
 			}
 		});
   }
-
+	
+  read: function(req, res, next) {
+			// auth user	
+		  // req.models.profile.findOne({id: req.params.id}, function(err, profile){
+      //          if(profile.sub_id == req.user_id){
+      //                 res.send(profile as json);
+      //          }else{
+      //                 res.send(unauthorized)
+      //          } 
+	} 
 }
 
