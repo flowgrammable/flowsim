@@ -53,11 +53,14 @@ flowsim.controller('profileeditController', function($scope, $http, $routeParams
       url: '/api/profile/' + $routeParams.id,  //need to get profile id
     }).success(function(data, status, headers, config){
 			$scope.profile = data;
+			console.log($scope.profile);
 		}).error(function(data, status, headers, config) {
 			$scope.data = 'could not retrieve profile'
 		});
 
     $scope.editProfile = function() {
+      console.log('putting...');
+			console.log($scope.profile);
 			$http({
 				method: 'PUT',
 				url: '/api/profile/' + $routeParams.id,

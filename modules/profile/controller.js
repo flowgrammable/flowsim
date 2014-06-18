@@ -136,6 +136,14 @@ module.exports =
 					
 				});
 			});
+ },
+
+ edit: function(req, res, next){
+  /* TODO: 
+   * Implement checks to verify that req.user_id 
+   * is actually associated with the resource ids being updated
+   */
+   res.end(req.body);
  } 
 }
 
