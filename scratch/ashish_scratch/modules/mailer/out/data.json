@@ -1,0 +1,50 @@
+{
+    "project": {},
+    "files": {
+        "index.js": {
+            "name": "index.js",
+            "modules": {
+                "Mailer": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "Mailer": {
+            "name": "Mailer",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "index.js",
+            "line": 3
+        }
+    },
+    "classes": {},
+    "classitems": [
+        {
+            "file": "index.js",
+            "line": 7,
+            "itemtype": "method",
+            "name": "sendMessage",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "SMTP transport configuration Service, Username, Password\n                  config = { service: 'Gmail', auth: { user: 'Gmail Username', pass: 'Gmail Password'}}",
+                    "type": "Object"
+                },
+                {
+                    "name": "messageOptions",
+                    "description": "- from, to, subject, text",
+                    "type": "Object"
+                }
+            ],
+            "class": "",
+            "module": "Mailer"
+        }
+    ],
+    "warnings": []
+}
