@@ -109,7 +109,7 @@ module.exports =
               service:'gmail',
               auth:{
                 user: 'flowgrammablemailer@gmail.com', 
-                pass: 'flowtester'
+                pass: 'flowtester2014'
               }
             }   
 
@@ -119,7 +119,7 @@ module.exports =
               subject: 'Verification Email', 
               html:'<html><title>Thank you for signing up for Flowsim</title><body>' + 
               'Thank you for signing up for Flowsim.<br/>Click the link below to confirm ' + 
-              'your account<br/><br/><a href=\"https://localhost:8000/subscribers/verify/'+
+              'your account<br/><br/><a href=\"http://localhost:8000/api/subscribers/verify/'+
               token+'\">https://www.flowgrammable.org/subscribers/verify/'+token+'</a><br/>' + 
               '<br/><h1>The Flowsim Team!</h1></body></html>'
             }

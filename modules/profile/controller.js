@@ -96,7 +96,7 @@ module.exports =
 		});
   }
 	
-  read: function(req, res, next) {
+//  read: function(req, res, next) {
 			// auth user	
 		  // req.models.profile.findOne({id: req.params.id}, function(err, profile){
       //          if(profile.sub_id == req.user_id){
@@ -104,6 +104,6 @@ module.exports =
       //          }else{
       //                 res.send(unauthorized)
       //          } 
-	} 
+//	} 
 }
 

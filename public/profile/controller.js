@@ -3,7 +3,7 @@ flowsim.controller('profilelistController', function($scope, $http){
     $scope.profiles = [{id:1, name:"profilea"}, {id:2, name:"profileb"}];
 	//	$http({
 	//				method: 'GET',
-	//				url : '/profiles',
+	//				url : 'api/profiles',
 	//		}).success(function(data, status, headers, config){
 	//			$scope.profiles = data;
   //     
