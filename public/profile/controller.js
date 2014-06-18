@@ -46,13 +46,13 @@ flowsim.controller('profilecreateController', function($scope, $http){
 
 flowsim.controller('profileeditController', function($scope, $http, $routeParams){
 		console.log('profileedit-controller');
-		$scope.profle = {};
+		$scope.data = {};
     $scope.hideProfile = false;
     $http({
 			method: 'GET',
       url: '/api/profile/' + $routeParams.id,  //need to get profile id
     }).success(function(data, status, headers, config){
-			$scope.profile = data;
+			$scope.data = data;
 		}).error(function(data, status, headers, config) {
 			$scope.data = 'could not retrieve profile'
 		});
