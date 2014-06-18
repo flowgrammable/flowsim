@@ -40,7 +40,8 @@ module.exports =
 						console.log(err);
 					}else{
 						req.models.ft_caps.create({
-							dp_id:dp_caps.id
+							dp_id:dp_caps.id,
+              max_entries: req.body.max_entries
 					}, function(err, ft_caps){
 						if(err){
 							console.log('unable to create ft_caps');
@@ -126,9 +127,7 @@ module.exports =
 									ft_caps[0].getActioncaps(function(err, act_caps){
 										if(err) console.log(err);
 											res.writeHeader('200', {'Content-Type':'application/json'});
-											res.end(JSON.stringify({
-												profile: profile[0]
-											}));
+											res.end(JSON.stringify(profile[0]));
 
 									});	
 							});		
