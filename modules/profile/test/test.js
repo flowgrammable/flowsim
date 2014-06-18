@@ -23,7 +23,7 @@ describe('Testing client requests:',function() {
   it('Subscriber created profile sucessfully', function(done){
 		request( {
 			url: 'http://localhost:8000/api/profile',
-			body: '{ \"sub_id\": \"1\", \"profile_name\":\"test_profile\",' + // switch_profile table
+			body: '{ \"sub_id\": \"1\", \"name\":\"test_profile\",' + // switch_profile table
             '\"vp_any\" : true, \"vp_local\":true, ' + // datapath_caps table
 						'\"vp_normal\":true, \"vp_flood\":true,' +
 						'\"ofpxmt_ofb_in_port\": true, \"ofpxmt_ofb_in_phy_port\":true, ' + // match_caps table

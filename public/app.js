@@ -10,11 +10,15 @@ flowsim.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'subscriber/signin.html',
             controller: 'signinController'
         })
-        .when('/profile',{
+        .when('/profile/',{
 						templateUrl: 'profile/list.html', //template to list all profiles
             controller: 'profilelistController'
 				})
-        .when('/profile/:id', {
+        .when('/profile/create',{
+						templateUrl: 'profile/create.html',
+						controller: 'profilecreateController'
+				})
+        .when('/profile/:id/', {
 						templateUrl: 'profile/edit.html', //template to edit profile
 						controller: 'profileeditController'
 				})

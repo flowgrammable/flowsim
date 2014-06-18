@@ -1,8 +1,8 @@
 <div class="row">
-  <div ng-controller="profilecreateController" class="col-md-8 col-md-offset-1">
+  <div ng-controller="profileeditController" class="col-md-8 col-md-offset-1">
 <b>{{data}}</b>
-<form ng-hide="hideProfile" ng-submit="createProfile()">
-  Profile Name: <input type="text" name="input" ng-model="profile.profile_name"><br/>
+<form ng-hide="hideProfile" ng-submit="editProfile()">
+  Profile Name: <input type="text" name="input" ng-model="profile.name"><br/>
   <b>Virtual Ports</b><br/> 
   Any <input type="checkbox" ng-model="profile.vp_any"><br/>
   Local <input type="checkbox" ng-model="profile.vp_local"><br/>

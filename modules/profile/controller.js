@@ -21,7 +21,7 @@ module.exports =
 
     req.models.switch_profile.create( {
     	sub_id: 1, //temp hard code sub id until auth tokens work 
-      name: req.body.profile_name
+      name: req.body.name
     }, function(err,profile) {
 			if(err){
 				console.log('unable to create switch profile');
@@ -94,9 +94,9 @@ module.exports =
 				});
 			}
 		});
-  }
+  },
 	
-//  read: function(req, res, next) {
+  list: function(req, res, next) {
 			// auth user	
 		  // req.models.profile.findOne({id: req.params.id}, function(err, profile){
       //          if(profile.sub_id == req.user_id){
@@ -104,6 +104,21 @@ module.exports =
       //          }else{
       //                 res.send(unauthorized)
       //          } 
-//	} 
+			req.models.switch_profile.find({ sub_id: /* authenticated user */ 1}, function(err, profiles){
+						if(err) console.log(err);
+						res.writeHead(200, {
+								'Content-Type' : 'application/json' });
+						res.end(JSON.stringify(profiles));
+			});
+	},
+
+  read: function(req, res, next) {
+			req.models.switch_profile.find({id: req.params.id}, function(err, profile){
+				if(err) console.log(err);
+				res.writeHead(200, {
+					'Content-Type' : 'application/json' });
+				res.end(JSON.stringify(profile[0]));
+			});
+	} 
 }
 
