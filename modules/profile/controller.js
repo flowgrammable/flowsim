@@ -29,7 +29,7 @@ module.exports =
 			}
       else{
 				req.models.dp_caps.create( {
-        	profile_id : profile.sub_id,
+        	profile_id : profile.id,
 					vp_any : req.body.vp_any,
 					vp_local : req.body.vp_local,
 					vp_normal : req.body.vp_normal,
@@ -113,12 +113,30 @@ module.exports =
 	},
 
   read: function(req, res, next) {
-			req.models.switch_profile.find({id: req.params.id}, function(err, profile){
-				if(err) console.log(err);
-				res.writeHead(200, {
-					'Content-Type' : 'application/json' });
-				res.end(JSON.stringify(profile[0]));
+				req.models.switch_profile.find({id: req.params.id}, function(err, profile){
+					if(err) console.log(err);
+			  profile[0].getDpcaps(function(err, dp_caps){
+					if(err) console.log(err);
+          dp_caps[0].getFtcaps(function(err, ft_caps){
+						if(err) console.log(err);
+						ft_caps[0].getMatchcaps(function(err, match_caps){
+							if(err) console.log(err);
+							ft_caps[0].getInstructioncaps(function(err, ins_caps){
+								if(err) console.log(err);
+									ft_caps[0].getActioncaps(function(err, act_caps){
+										if(err) console.log(err);
+											res.writeHeader('200', {'Content-Type':'application/json'});
+											res.end(JSON.stringify({
+												profile: profile[0]
+											}));
+
+									});	
+							});		
+						});
+					});
+					
+				});
 			});
-	} 
+ } 
 }
 
