@@ -6,7 +6,7 @@ flowsim.controller('signupController', function($scope, $http){
     $scope.createSubscriber = function() {
 			$http({
 					method: 'POST',
-					url : '/subscribers',
+					url : '/api/subscribers',
 					data : $scope.subscriber
 			}).success(function(data, status, headers, config){
 				$scope.data = 'Registration Succesful - Check email for verification';
