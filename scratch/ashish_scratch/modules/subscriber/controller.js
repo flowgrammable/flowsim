@@ -295,9 +295,17 @@ module.exports =
         }
       });
   },
+  
+  /**
+   * Authenticating requests
+   * 
+   * @method authReq
+   * @param req : HTTP GET request object sent by verified user to access an api
+   * @param res : HTTP response object sent to the verified user
+   *
+   */
   authReq: function(req, res, next) {
-    var token = req.params.access_token;
-    console.log(token);
+    var token = req.headers['x-access-token'];
     if (token) {
       try {
         var decoded = jwt.decode(token, 'jwtTokenSecret');
@@ -306,15 +314,37 @@ module.exports =
           res.end('Access token has expired', 400);
         }
         req.models.subscriber.find({ id: decoded.iss }, 1, function(err, user) {
-          req.user = user[0];
+          if(err) {
+            res.writeHead('500', {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              'error' : 'Internal Service Error'
+            }));
+          }
+          else {
+            req.user = user[0];
+          }
         });
-        // handle token here
-
       } catch (err) {
-        return next();
+        
+        //Invalid token
+        res.writeHead('400', {
+          'Content-Type': 'application/json',
+        });
+        res.end(JSON.stringify({
+         'error' : 'invalid token'
+        }));
       }
     } else {
-      next();
+      
+      //No token passed...Hence cannot access api!!
+      res.writeHead('401', {
+        'Content-Type': 'application/json',
+      });
+      res.end(JSON.stringify({
+        'error' : 'Not authorized'
+      }));
     }
   }
 }
