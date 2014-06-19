@@ -1,48 +1,25 @@
+#!/usr/bin/env node
 
+var program = require('commander');
 var connect = require('connect');
-var orm = require('orm');
-var settigns = require('conf/settings');
 
-orm.connect(settings.database, 
-  function(err, db){
-  })
-  .use(giveup)
-  .listen(settings.port);
+program
+  .version(process.env.SERVER_VERSION)
+  .option('-p, --port [tcp port]', 'Specify a listening port')
+  .option('-a, --address [ip address]', 'Specify a listening ip address')
+  .parse(process.argv);
 
-function giveup(req, res, next) {
-  var session = req.session;
-  for(var cookie in req.cookies) {
-    console.log('cookie: %s = %s', cookie, req.cookies[cookie]);
-  }
-  for(var cookie in req.signedCookies) {
-    console.log('scookie: %s = %s', cookie, req.signedCookies[cookie]);
-  }
-  if(session.uid) {
-    console.log("seen before");
-  } else {
-    session.uid = 1;
-    console.log("first seen");
-  }
-  res.end('mookie likes to wag her tail');
-}
+var port = program.port || process.env.PORT || 3000;
+var ip = program.address || process.env.ADDRESS || '127.0.0.1';
+
 connect()
-  .use(connect.favicon('img/favicon.png'))
-  .use(connect.cookieParser('keybaord cat'))
-  .use(connect.session(
-    {
-      maxAge: 3600000 * 8,
-      key: 'sid'
-    }))
-  .use(giveup)
-  .use('/css', connect.static('bower_components/bootstrap/dist/css'))
-  .use('/css', connect.static('bower_components/bootstrap/dist/fonts'))
-  .use('/js', connect.static('bower_components/angular'))
-  .use('/js', connect.static('bower_components/angular-route'))
-  .use('/js', connect.static('bower_components/ui-bootstrap/dist'))
-  .use('/img', connect.static('img'))
-  .use('/css', connect.static('css'))
-  .use('/js', connect.static('js'))
-  .use(connect.static('html'))
-  .use(giveup)
-  .listen(3000);
+  .use(connect.logger())
+  .use('/', connect.static('angularjs/'))
+  .use(function(req, res, next) {
+    var addr = req.connection.remoteAddress;
+    res.end(addr);
+  })
+  .listen(port, ip);
+
+console.log('Server started on: %s:%d', ip, port);
 
