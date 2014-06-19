@@ -17,7 +17,17 @@ flowsim.controller('profilelistController', function($scope, $http){
 
 flowsim.controller('profilecreateController', function($scope, $http){
 		console.log('profilecreate-controller');
-    $scope.profile = {};
+    /* Running into two issues with saving unchecks
+     *   1)  node-orm2 is not setting false default (true works though)
+     *   2)  angular-js does not post unchecked (false value) attribute
+     * Temp solution
+     *   set everything in profile object as false
+     */ 
+
+    $scope.profile = {vp_any:false, vp_local:false, vp_normal: false, vp_flood: false,
+				ofpxmt_ofb_in_port: false, ofpxmt_ofb_in_phy_port: false, ofpxmt_ofb_eth_dest: false,
+				ofpxmt_ofb_eth_src: false, ofpxmt_ofb_eth_type: false, 
+				ofpat_set_field_eth_dst: false, ofpat_set_field_eth_src: false, ofpat_output: false};
 		$scope.hideProfile = false;
 		$scope.createProfile = function(){
 			$http({
@@ -36,18 +46,21 @@ flowsim.controller('profilecreateController', function($scope, $http){
 
 flowsim.controller('profileeditController', function($scope, $http, $routeParams){
 		console.log('profileedit-controller');
-		$scope.profle = {};
+		$scope.profile = {};
     $scope.hideProfile = false;
     $http({
 			method: 'GET',
       url: '/api/profile/' + $routeParams.id,  //need to get profile id
     }).success(function(data, status, headers, config){
 			$scope.profile = data;
+			console.log($scope.profile);
 		}).error(function(data, status, headers, config) {
 			$scope.data = 'could not retrieve profile'
 		});
 
     $scope.editProfile = function() {
+      console.log('putting...');
+			console.log($scope.profile);
 			$http({
 				method: 'PUT',
 				url: '/api/profile/' + $routeParams.id,

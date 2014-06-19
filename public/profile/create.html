@@ -3,17 +3,25 @@
 <b>{{data}}</b>
 <form ng-hide="hideProfile" ng-submit="createProfile()">
   Profile Name: <input type="text" name="input" ng-model="profile.name"><br/>
-  <b>Virtual Ports</b><br/> 
-  Any <input type="checkbox" ng-model="profile.vp_any"><br/>
+  <b>Virtual Ports</b><br/>
+  All <input type="checkbox" checked="true" ng-disabled="true"><br/>
+  Controller <input type="checkbox" checked="true" ng-disabled="true"><br/>
+  Table <input type="checkbox" checked="true" ng-disabled="true"><br/>
+  In Port <input type="checkbox" checked="true" ng-disabled="true"><br/> 
+  Any <input type="checkbox" ng-model="profile.vp_any" ng-false-value="false"><br/>
   Local <input type="checkbox" ng-model="profile.vp_local"><br/>
   Normal <input type="checkbox" ng-model="profile.vp_normal"><br/>
   Flood <input type="checkbox" ng-model="profile.vp_flood"><br/>
+  <b>Table Capabilities</b><br/>
+  Max Flow Entries <input type="text" name="input" ng-model="profile.max_entries"><br/>
   <b>Supported Matches</b><br/>
   In Port <input type="checkbox" ng-model="profile.ofpxmt_ofb_in_port"><br/>
   In Physical Port <input type="checkbox" ng-model="profile.ofpxmt_ofb_in_phy_port"><br/>
   Ethernet Destination <input type="checkbox" ng-model="profile.ofpxmt_ofb_eth_dst"><br/>
   Ethernet Source <input type="checkbox" ng-model="profile.ofpxmt_ofb_eth_src"><br/>
   Ethernet Type <input type="checkbox" ng-model="profile.ofpxmt_ofb_eth_type"><br/>
+  <b>Supported Instructions</b><br/>
+  Apply Action <input type="checkbox" checked="true" ng-disabled="true"><br/>
   <b>Supported Actions</b><br/>
   Output <input type="checkbox" ng-model="profile.ofpat_output"><br/>
   Set Field Ethernet Destination <input type="checkbox" ng-model="profile.ofpat_set_field_eth_dst"><br/>
