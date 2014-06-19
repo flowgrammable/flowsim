@@ -1,8 +1,10 @@
-var enforce = require('enforce');
-var bcrypt = require('bcrypt');
-var uuid = require('node-uuid');
-var mailer = require("../mailer");
-var jwt = require('jwt-simple');
+var enforce = require('enforce'),
+    bcrypt = require('bcrypt'),
+    uuid = require('node-uuid'),
+    mailer = require("../mailer"),
+    jwt = require('jwt-simple'),
+    moment = require('moment');
+
 /**
  * @module subscriber
  */
@@ -228,36 +230,69 @@ module.exports =
       }
     });
   },
+
+  /**
+   * Verified subscriber login
+   * 
+   * @method login
+   * @param req : HTTP POST request object sent by verified user 
+                  with form data as Username and password
+   * @param res : HTTP response object sent to the verified user
+   *
+   */
   login: function(req,res,next) {
       req.models.subscriber.find({
         email: req.body.email
       },1,function(err,user) {
-        var validUser = false;
-        //bcrypt.compare(req.body.password,user[0].password,function(err,res) {
-        //    if(err || !res) validUser = false;
-        //    else validUser = true;
-        //});
-        if(err || !user[0] || !validUser) {
-          //User not found
-          //return res.send(200);//401
-        }
-        //else {
-          var expires = 36000;
-          var token = jwt.encode({
-            iss: user[0].id,
-            exp: expires
-          }, 'jwtTokenSecret');
+        if(err || !user[0]) {
 
-          res.writeHead('200', {
+          // Invalid Username
+          res.writeHead('401', {
             'Content-Type': 'application/json',
           });
-          //var expires = moment().add('days', 7).valueOf();
           res.end(JSON.stringify({
-            token : token,
-            expires: expires,
-            //user: user[0]
+            'error' : 'invalid credentials' 
           }));
-//        }
+        }
+        else {
+          if(user[0].status != 'VERIFIED') {
+
+            // User has not verified it's email address
+            res.writeHead('401', {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              'error' :'invalid credentials'
+            }));
+          }
+          else {
+            bcrypt.compare(req.body.password,user[0].password,function(err,match) {
+              if(err || !match) {
+
+                // Invalid Password
+                res.writeHead('401', {
+                  'Content-Type': 'application/json',
+                });
+                res.end(JSON.stringify({
+                  'error' : 'invalid credentials'
+                }));
+              }
+              else {
+                var expires = moment().add('days', 7).valueOf();
+                var token = jwt.encode({
+                  iss: user[0].id,
+                  exp: expires
+                }, 'jwtTokenSecret');
+                res.writeHead('200', {
+                  'Content-Type': 'application/json',
+                });
+                res.end(JSON.stringify({
+                  'jwt' : token,
+                }));
+              }
+            });
+          }
+        }
       });
   },
   authReq: function(req, res, next) {
