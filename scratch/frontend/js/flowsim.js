@@ -42,4 +42,13 @@ flowsimApp.controller('flowsimCtrl', function($scope) {
   }
 });
 
+flowsimApp.controller('registrationCtrl', function($scope) {
+  $scope.emailAddr = '';
+  $scope.password1 = '';
+  $scope.password2 = '';
+  $scope.register = function() {
+    console.log('%s %s/%s', $scope.emailAddr, $scope.password1, $scope.password2);
+  }
+});
+
 
