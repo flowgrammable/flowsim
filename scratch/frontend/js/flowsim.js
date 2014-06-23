@@ -28,11 +28,27 @@ flowsimApp.controller('passwordCntrl', function($scope) {
 
 });
 
-flowsimApp.controller('mainCtrl', function($scope) {
-  $scope.authenticated = true;
+flowsimApp.controller('mainCtrl', function($scope, $http) {
+  $scope.authenticated = false;
+  $scope.login = function() {
+    $http({
+      url: '/api/login',
+      method: 'POST',
+      data: JSON.stringify({
+        email: 'jasson.casey@gmail.com',
+        password: 'openflow'
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+  }).success(function(data) {
+    $scope.authenticated = true;
+  }).error(function(data) {
+    console.log('login fail');
+  });
   $scope.logout = function() {
     $scope.authenticated = false;
-  }
+  }};
 });
 
 flowsimApp.config(['$routeProvider', function($routeProvider) {

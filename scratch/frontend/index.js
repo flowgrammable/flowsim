@@ -22,6 +22,10 @@ var app = connect()
   .use('/css', connect.static('css'))
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
+  .use('/api', function(req, res, next){
+    console.log('%s', req.body);
+    res.end('Yeah');
+  })
   .listen(port, ip);
 
 console.log('Server started on: %s:%d', ip, port);
