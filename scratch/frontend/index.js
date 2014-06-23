@@ -1,11 +1,6 @@
 #!/usr/bin/env node
 
 var connect = require('connect');
-
-connect()
-  .use(connect.favicon('img/favicon.png'))
-  .listen(5000);
-
 var program = require('commander');
 
 program
