@@ -23,7 +23,9 @@ var app = connect()
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
   .use('/api', function(req, res, next){
-    console.log('%s', req.body);
+    for(var item in req.body) {
+      console.log('%s', item);
+    }
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify({
       token: 'onebigfuckingtoken'

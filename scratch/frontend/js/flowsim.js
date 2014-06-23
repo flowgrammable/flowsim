@@ -45,6 +45,9 @@ flowsimApp.controller('mainCtrl', function($scope, $http) {
     if(data.token) {
       $scope.authenticated = true;
       $scope.token = data.token;
+      console.log("recieved token: %s", data.token);
+    } else {
+      console.log("success but no token");
     }
   }).error(function(data) {
     console.log('login fail');
