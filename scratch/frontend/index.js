@@ -24,7 +24,10 @@ var app = connect()
   .use(connect.static('html'))
   .use('/api', function(req, res, next){
     console.log('%s', req.body);
-    res.end('Yeah');
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.end(JSON.stringify({
+      token: 'onebigfuckingtoken'
+    }));
   })
   .listen(port, ip);
 

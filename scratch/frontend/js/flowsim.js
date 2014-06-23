@@ -42,7 +42,10 @@ flowsimApp.controller('mainCtrl', function($scope, $http) {
         'Content-Type': 'application/json'
       }
   }).success(function(data) {
-    $scope.authenticated = true;
+    if(data.token) {
+      $scope.authenticated = true;
+      $scope.token = data.token;
+    }
   }).error(function(data) {
     console.log('login fail');
   });
