@@ -73,6 +73,9 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
     when('/badpassword', {
       templateUrl: 'account/badpassword.html'
     }).
+    when('/account', {
+      templateUrl: 'account/account.html'
+    }).
     otherwise({
       redirectTo: '/'
     });
