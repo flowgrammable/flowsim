@@ -2,7 +2,7 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
 
-    <h1>Registration</h1>
+    <h1>Password Reset</h1>
 
     Welcome to Flowgrammable's OpenFlow switch simulator. We're excited to share
     our latest work with you; however, before you get started you must have an
@@ -11,12 +11,7 @@
 
     <hr>
 
-    <form role="form" ng-controller="registrationCtrl">
-      <div class="form-group">
-        <label for="emailAddr">Email Address</label>
-        <input type="email" class="form-control" id="emailAddr" 
-               placeholder="Enter email" ng-model="emailAddr">
-      </div>
+    <form role="form" ng-controller="registrationCtrl" ng-hide="sent">
       <div class="form-group">
         <label for="password1">Password</label>
         <input type="password" class="form-control" id="password1" 
@@ -27,9 +22,15 @@
         <input type="password" class="form-control" id="password2" 
            placeholder="Retype Password" ng-model="password2">
       </div>
-      <a href="#verify" class="btn btn-default"
-         ng-click="register()">Register</a>
+      <a href="" class="btn btn-default"
+         ng-click="save()">Save</a>
     </form>
+
+    <div ng-show="sent">
+      <h1>Verification Step</h1>
+      An email has been sent to your email account. You must click on the link
+      enclosed in that email to complete the verification process.
+    </div>
 
   </div>
 </div>

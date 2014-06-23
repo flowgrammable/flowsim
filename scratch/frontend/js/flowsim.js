@@ -5,10 +5,11 @@ flowsimApp.controller('registrationCtrl', function($scope, $location) {
   $scope.emailAddr = '';
   $scope.password1 = '';
   $scope.password2 = '';
+  $scope.sent = false;
   $scope.register = function() {
     console.log('%s %s/%s', $scope.emailAddr, $scope.password1, 
                 $scope.password2);
-    $location.path("register.html");
+    $scope.sent = true;
   }
 });
 
@@ -46,13 +47,16 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'simulation.html'
     }).
     when('/register', {
-      templateUrl: 'register.html'
+      templateUrl: 'account/register.html'
     }).
     when('/verify', {
-      templateUrl: 'verify.html'
+      templateUrl: 'account/verify.html'
     }).
     when('/reset', {
-      templateUrl: 'reset.html'
+      templateUrl: 'account/reset.html'
+    }).
+    when('/forgot', {
+      templateUrl: 'account/forgot.html'
     }).
     otherwise({
       redirectTo: '/'
