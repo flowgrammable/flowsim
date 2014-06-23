@@ -36,7 +36,10 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
 }]);
 
 flowsimApp.controller('flowsimCtrl', function($scope) {
-  $scope.authenticated = false;
+  $scope.authenticated = true;
+  $scope.logout = function() {
+    $scope.authenticated = false;
+  }
 });
 
 
