@@ -51,6 +51,7 @@ flowsimApp.controller('mainCtrl', function($scope, $http) {
   });
   $scope.logout = function() {
     $scope.authenticated = false;
+    $scope.token = '';
   }};
 });
 
