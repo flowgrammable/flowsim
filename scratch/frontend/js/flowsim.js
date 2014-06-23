@@ -51,6 +51,9 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
     when('/verify', {
       templateUrl: 'verify.html'
     }).
+    when('/reset', {
+      templateUrl: 'reset.html'
+    }).
     otherwise({
       redirectTo: '/'
     });
