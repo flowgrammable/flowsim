@@ -1,6 +1,24 @@
 
 var flowsimApp = angular.module('flowsimApp', ['ngRoute']);
 
+flowsimApp.controller('registrationCtrl', function($scope, $location) {
+  $scope.emailAddr = '';
+  $scope.password1 = '';
+  $scope.password2 = '';
+  $scope.register = function() {
+    console.log('%s %s/%s', $scope.emailAddr, $scope.password1, 
+                $scope.password2);
+    $location.path("register.html");
+  }
+});
+
+flowsimApp.controller('mainCtrl', function($scope) {
+  $scope.authenticated = true;
+  $scope.logout = function() {
+    $scope.authenticated = false;
+  }
+});
+
 flowsimApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
     when('/', {
@@ -34,21 +52,4 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       redirectTo: '/'
     });
 }]);
-
-flowsimApp.controller('flowsimCtrl', function($scope) {
-  $scope.authenticated = true;
-  $scope.logout = function() {
-    $scope.authenticated = false;
-  }
-});
-
-flowsimApp.controller('registrationCtrl', function($scope) {
-  $scope.emailAddr = '';
-  $scope.password1 = '';
-  $scope.password2 = '';
-  $scope.register = function() {
-    console.log('%s %s/%s', $scope.emailAddr, $scope.password1, $scope.password2);
-  }
-});
-
 

@@ -11,7 +11,7 @@
 
     <hr>
 
-    <form role="form" ng-contorller="registrationCtrl">
+    <form role="form" ng-controller="registrationCtrl">
       <div class="form-group">
         <label for="emailAddr">Email Address</label>
         <input type="email" class="form-control" id="emailAddr" 
@@ -27,7 +27,8 @@
         <input type="password" class="form-control" id="password2" 
            placeholder="Retype Password" ng-model="password2">
       </div>
-      <button type="submit" class="btn btn-default" ng-click="register()">Register</button>
+      <a href="#verify" class="btn btn-default"
+         ng-click="register()">Register</a>
     </form>
 
   </div>
