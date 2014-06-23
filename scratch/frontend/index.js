@@ -14,6 +14,7 @@ var ip = program.address || process.env.ADDRESS || '127.0.0.1';
 
 var app = connect()
   .use(connect.favicon('img/favicon.png'))
+  .use('/img', connect.static('img'))
   .use('/fonts', connect.static('bower_components/bootstrap/dist/fonts'))
   .use('/css', connect.static('bower_components/bootstrap/dist/css'))
   .use('/js', connect.static('bower_components/angular'))
