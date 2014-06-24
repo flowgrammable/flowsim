@@ -1,5 +1,5 @@
 
-var flowsimApp = angular.module('flowsimApp', ['ngRoute']);
+var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap']);
 
 flowsimApp.controller('registrationCtrl', function($scope) {
   $scope.emailAddr = '';
@@ -28,8 +28,23 @@ flowsimApp.controller('passwordCntrl', function($scope) {
 
 });
 
-flowsimApp.controller('mainCtrl', function($scope, $http) {
+flowsimApp.controller('menuCtrl', function($scope, $http) {
   $scope.authenticated = false;
+  $scope.token = '';
+
+  $scope.login = function() {
+    $scope.authenticated = true;
+  }
+  $scope.logout = function() {
+    $scope.authenticated = false;
+    $scope.token = '';
+  }
+  $scope.register = function(email, password) {
+  }
+  $scope.forgot = function(email) {
+  }
+
+  /*
   $scope.login = function() {
     $http({
       url: '/api/login',
@@ -55,7 +70,7 @@ flowsimApp.controller('mainCtrl', function($scope, $http) {
   $scope.logout = function() {
     $scope.authenticated = false;
     $scope.token = '';
-  }};
+  }};*/
 });
 
 flowsimApp.config(['$routeProvider', function($routeProvider) {

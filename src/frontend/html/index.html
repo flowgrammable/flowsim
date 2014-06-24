@@ -6,14 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/flowgrammable.css" rel="stylesheet">
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
     <script src="js/angular.js"></script>
     <script src="js/angular-route.js"></script>
+    <script src="js/ui-bootstrap-0.11.0.js"></script>
     <script src="js/flowsim.js"></script>
     <title>Flowgrammable</title>
   </head>
-  <body ng-controller="mainCtrl">
+  <body ng-controller="menuCtrl">
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -35,7 +34,7 @@
               <a href="" class="dropdown-toggle" data-toggle="dropdown">
                 OpenFlow <b class="caret"></b>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu" role="menu">
                 <li><a href="">Protocol</a></li>
                 <li><a href="">Switch</a></li>
                 <li><a href="">Controller</a></li>
@@ -75,18 +74,42 @@
             <li><a href="#about">About</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li ng-show="authenticated"><a href="">Sign off</a></li>
+            <li ng-show="authenticated">
+              <a href="" ng-click="logout()">Logout</a>
+            </li>
             <li class="dropdown" ng-hide="authenticated">
               <a href="" class=dropdown-toggle" data-toggle="dropdown">
-                Sign in<b class="caret"></b>
+                Login<b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="">Sign in</a></li>
-                <li><a href="">Sign up</a></li>
+                <li><a href="" ng-click="">Login</a></li>
+                <li><a href="">Register</a></li>
                 <li><a href="">Forgot password</a></li>
               </ul>
             </li>
         </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" 
+                    aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
       </div>
     </div>
 
