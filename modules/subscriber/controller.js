@@ -1,7 +1,9 @@
-var enforce = require('enforce');
-var bcrypt = require('bcrypt');
-var uuid = require('node-uuid');
-var mailer = require("../mailer");
+var enforce = require('enforce'),
+    bcrypt = require('bcrypt'),
+    uuid = require('node-uuid'),
+    jwt = require('jwt-simple'),
+    moment = require('moment'),
+    mailer = require("../mailer");
 
 /*
  * @module subscriber
@@ -226,6 +228,123 @@ module.exports =
         }
       }
     });
+  },
+
+  /**
+   * Verified subscriber login
+   * 
+   * @method login
+   * @param req : HTTP POST request object sent by verified user 
+                  with form data as Username and password
+   * @param res : HTTP response object sent to the verified user
+   *
+   */
+  login: function(req,res,next) {
+      req.models.subscriber.find({
+        email: req.body.email
+      },1,function(err,user) {
+        if(err || !user[0]) {
+
+          // Invalid Username
+          res.writeHead('401', {
+            'Content-Type': 'application/json',
+          });
+          res.end(JSON.stringify({
+            'error' : 'invalid credentials'
+          }));
+        }
+        else {
+          if(user[0].status != 'VERIFIED') {
+
+            // User has not verified it's email address
+            res.writeHead('401', {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              'error' :'invalid credentials'
+            }));
+          }
+          else {
+            bcrypt.compare(req.body.password,user[0].password,function(err,match) {
+              if(err || !match) {
+
+                // Invalid Password
+                res.writeHead('401', {
+                  'Content-Type': 'application/json',
+                });
+                res.end(JSON.stringify({
+                  'error' : 'invalid credentials'
+                }));
+              }
+              else {
+                var expires = moment().add('days', 7).valueOf();
+                var token = jwt.encode({
+                  iss: user[0].id,
+                  exp: expires
+                }, 'jwtTokenSecret');
+                res.writeHead('200', {
+                  'Content-Type': 'application/json',
+                });
+                res.end(JSON.stringify({
+                  'jwt' : token,
+                }));
+              }
+            });
+          }
+        }
+      });
+  },
+
+  /**
+   * Authenticating requests
+   * 
+   * @method authReq
+   * @param req : HTTP GET request object sent by verified user to access an api
+   * @param res : HTTP response object sent to the verified user
+   *
+   */
+  authReq: function(req, res, next) {
+    var token = req.headers['x-access-token'];
+    if (token) {
+      try {
+        var decoded = jwt.decode(token, 'jwtTokenSecret');
+        console.log(decoded);
+        if (decoded.exp <= Date.now()) {
+          res.end('Access token has expired', 400);
+        }
+        req.models.subscriber.find({ id: decoded.iss }, 1, function(err, user) {
+          if(err) {
+            res.writeHead('500', {
+              'Content-Type': 'application/json',
+            });
+            res.end(JSON.stringify({
+              'error' : 'Internal Service Error'
+            }));
+          }
+          else {
+            req.user = user[0];
+          }
+        });
+      } catch (err) {
+
+        //Invalid token
+        res.writeHead('400', {
+          'Content-Type': 'application/json',
+        });
+        res.end(JSON.stringify({
+         'error' : 'invalid token'
+        }));
+      }
+    } else {
+
+      //No token passed...Hence cannot access api!!
+      res.writeHead('401', {
+        'Content-Type': 'application/json',
+      });
+      res.end(JSON.stringify({
+        'error' : 'Not authorized'
+      }));
+    }
   }
 }
 
