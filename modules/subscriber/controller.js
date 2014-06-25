@@ -303,8 +303,9 @@ module.exports =
    * @param res : HTTP response object sent to the verified user
    *
    */
-  authReq: function(req, res, next) {
+  jwtauth: function(req, res, next) {
     var token = req.headers['x-access-token'];
+    console.log(token);
     if (token) {
       try {
         var decoded = jwt.decode(token, 'jwtTokenSecret');
@@ -323,6 +324,7 @@ module.exports =
           }
           else {
             req.user = user[0];
+            next();
           }
         });
       } catch (err) {
