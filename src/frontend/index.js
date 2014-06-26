@@ -29,9 +29,14 @@ var app = connect()
     for(var item in req.body) {
       console.log('%s', item);
     }
-    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'X-Access-Token': 'onebigfuckingtoken'
+    });
     res.end(JSON.stringify({
-      token: 'onebigfuckingtoken'
+      success: {
+        name: "Jasson Casey"
+      }
     }));
   })
   .listen(port, ip);

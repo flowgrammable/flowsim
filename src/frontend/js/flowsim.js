@@ -43,7 +43,7 @@ flowsimApp.controller('resetCntrl', function($scope, flowgrammable) {
   }
 });
 
-flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable) {
+flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, utils) {
   $scope.emailAddr = '';
   $scope.password = '';
   $scope.login = function() {
@@ -69,14 +69,18 @@ flowsimApp.controller('verifyCntrl', function($scope, $routeParams,
   flowgrammable.verify($routeParams.token);
 });
 
-flowsimApp.controller('menuCtrl', function($scope, $http) {
+flowsimApp.controller('menuCtrl', function($scope) {
   $scope.authenticated = false;
   $scope.token = '';
 
-  $scope.logout = function() {
+  $scope.$on("authenticated", function() {
+    $scope.authenticated = true;
+  });
+  
+  $scope.$on("unauthenticated", function() {
     $scope.authenticated = false;
-    $scope.token = '';
-  }
+  });
+
 });
 
 flowsimApp.config(['$routeProvider', function($routeProvider) {

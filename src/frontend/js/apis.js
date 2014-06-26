@@ -14,7 +14,7 @@ flowAPI.factory('utils', function() {
   };
 });
 
-flowAPI.factory('flowgrammable', function($http) {
+flowAPI.factory('flowgrammable', function($http, $rootScope) {
   var accessToken = '';
   return {
     login : function(subEmail, subPwd) {
@@ -25,7 +25,13 @@ flowAPI.factory('flowgrammable', function($http) {
           email: subEmail,
           password: subPwd
         })
-      }).success(function(data) {
+      }).success(function(data, status, headers, config) {
+        accessToken = headers("X-Access-Token");
+        if(data.success && accessToken.length > 0) {
+          $rootScope.$broadcast("authenticated", {
+            subscriberId: data.success.name
+          });
+        }
       }).error(function(data) {
       });
     },
