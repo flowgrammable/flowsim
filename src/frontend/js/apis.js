@@ -1,44 +1,68 @@
 
 var flogAPI = angular.module('flogAPI', []);
 
-flogAPI.factory('flogSub', function($http) {
+flowAPI.factory('utils', function() {
   return {
-    login : function(email, password) {
+    
+  };
+});
+
+flogAPI.factory('flogSub', function($http) {
+  $scope.token = '';
+  return {
+    login : function(subEmail, subPwd) {
       $http({
         method: 'POST',
-        url: 'api/subscriber/login/' + email + '/' + password
+        url: 'api/subscriber/login'
+        data: JSON.stringify({
+          email: subEmail,
+          password: subPwd
+        })
       }).success(function(data) {
       }).error(function(data) {
       });
     },
-    logout : function(sessionId, token) {
+    logout : function() {
       $http({
         method: 'DELETE',
-        url: 'api/subscriber/logout/' + sessionId + '/' + token
+        url: 'api/subscriber/logout',
+        headers: {
+          X-access-token: $scope.token
+        }
       }).success(function(data) {
       }).error(function(data) {
       });
     },
-    register : function(email, password) {
+    register : function(subEmail, subPwd) {
       $http({
         method: 'POST',
-        url: 'api/subscriber/register/' + email + '/' + password
+        url: 'api/subscriber/register',
+        data: JSON.stringify({
+          email: subEmail,
+          password: subPwd
+        })
       }).success(function(data) {
       }).error(function(data) {
       });
     },
-    verify : function(subId, token) {
+    verify : function(verificationToken) {
       $http({
         method: 'PUT',
-        url: 'api/subscriber/verify/' + subId + '/' + token
+        url: 'api/subscriber/verify',
+        data: JSON.stringify({
+          token: verficationToken
+        })
       }).success(function(data) {
       }).error(function(data) {
       });
     },
-    reset : function(email) {
+    reset : function(subEmail) {
       $http({
         method: 'PUT',
-        url: 'api/subscriber/reset/' + email
+        url: 'api/subscriber/reset',
+        data: JSON.stringify({
+          email: subEmail
+        })
       }).success(function(data) {
       }).error(function(data) {
       });
