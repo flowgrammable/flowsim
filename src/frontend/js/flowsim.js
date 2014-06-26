@@ -1,20 +1,19 @@
 
-var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap']);
+var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap',
+    'flowAPI']);
 
-flowsimApp.controller('registrationCntrl', function($scope) {
+flowsimApp.controller('registrationCntrl', function($scope, utils) {
   $scope.emailAddr = '';
   $scope.password1 = '';
   $scope.password2 = '';
   $scope.sent = false;
   $scope.register = function() {
-    var pwdRegex = /^[a-zA-Z0-9_]{8,}$/;
-    var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(emailRegex.test($scope.emailAddr)) {
+    if(utils.validEmail($scope.emailAddr)) {
       $scope.badEmail = false;
     } else {
       $scope.badEmail = true;
     }
-    if(pwdRegex.test($scope.password1)) {
+    if(utils.validPwd($scope.password1)) {
       $scope.badPwd1 = false;
     } else {
       $scope.badPwd1 = true;
@@ -34,8 +33,7 @@ flowsimApp.controller('resetCntrl', function($scope) {
   $scope.sent = false;
   $scope.emailAddr = '';
   $scope.reset = function() {
-    var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(emailRegex.test($scope.emailAddr)) {
+    if(utils.validEmail($scope.emailAddr)) {
       $scope.sent = true;
     } else {
       $scope.badEmail = true;
@@ -47,14 +45,12 @@ flowsimApp.controller('loginCntrl', function($scope, $location) {
   $scope.emailAddr = '';
   $scope.password = '';
   $scope.login = function() {
-    var pwdRegex = /^[a-zA-Z0-9_]{8,}$/;
-    var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(!emailRegex.test($scope.emailAddr)) {
+    if(!utils.validEmail($scope.emailAddr)) {
       $scope.badEmail = true;
     } else {
       $scope.badEmail = false;
     }
-    if(loginForm.userPwd.$invalid || !pwdRegex.test($scope.password)) {
+    if(!utils.validPwd($scope.password)) {
       $scope.badPwd = true;
     } else {
       $scope.badPwd = false;

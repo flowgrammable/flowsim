@@ -1,19 +1,26 @@
 
-var flogAPI = angular.module('flogAPI', []);
+var flowAPI = angular.module('flowAPI', []);
 
 flowAPI.factory('utils', function() {
   return {
-    
+    validEmail : function(email) {
+      var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return emailRegex.test(email);
+    },
+    validPwd : function(password) {
+      var pwdRegex = /^[a-zA-Z0-9_]{8,}$/;
+      return pwdRegex.test(password);
+    }
   };
 });
 
-flogAPI.factory('flogrammable', function($http) {
+flowAPI.factory('flogrammable', function($http) {
   $scope.token = '';
   return {
     login : function(subEmail, subPwd) {
       $http({
         method: 'POST',
-        url: 'api/subscriber/login'
+        url: 'api/subscriber/login',
         data: JSON.stringify({
           email: subEmail,
           password: subPwd
@@ -27,7 +34,7 @@ flogAPI.factory('flogrammable', function($http) {
         method: 'DELETE',
         url: 'api/subscriber/logout',
         headers: {
-          X-access-token: $scope.token
+          "X-Access-Token": $scope.token
         }
       }).success(function(data) {
       }).error(function(data) {
@@ -66,13 +73,13 @@ flogAPI.factory('flogrammable', function($http) {
       }).success(function(data) {
       }).error(function(data) {
       });
-    }
+    },
     request : function(type, module, body, good, bad) {
       $http({
         method: type,
         url: 'api/' + module,
         headers: {
-          X-access-token: $scope.token
+          "X-Access-Token": $scope.token
         },
         data: body
       }).success(function(data) {
@@ -86,7 +93,7 @@ flogAPI.factory('flogrammable', function($http) {
   };
 });
 
-flogAPI.factory('flowsim', function(flowgrammable) {
+flowAPI.factory('flowsim', function(flowgrammable) {
   var flowg = flowgrammable();
   return {
     createProfile : function(body) {
