@@ -1,5 +1,16 @@
 #!/usr/bin/env node
 
+var db = {
+  subscriber: [
+    {
+      name: "Jasson Casey",
+      email: "jasson.casey@gmail.com",
+      password: "iluvflowg"
+    }
+  ],
+  session: [],
+};
+
 var connect = require('connect');
 var program = require('commander');
 
