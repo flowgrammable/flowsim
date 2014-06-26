@@ -15,6 +15,9 @@
           <label for="emailAddr">Email Address</label>
           <input type="email" class="form-control" id="emailAddr" 
                 placeholder="Enter email" ng-model="emailAddr">
+            <div class="error" ng-show="badEmail">
+              <span>Please enter a valid email address.</span>
+            </div>
         </div>
         <a href="" class="btn btn-default" ng-click="reset()">Reset</a>
       </form>

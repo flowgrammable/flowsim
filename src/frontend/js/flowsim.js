@@ -1,23 +1,68 @@
 
 var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap']);
 
-flowsimApp.controller('registrationCtrl', function($scope) {
+flowsimApp.controller('registrationCntrl', function($scope) {
   $scope.emailAddr = '';
   $scope.password1 = '';
   $scope.password2 = '';
   $scope.sent = false;
   $scope.register = function() {
-    console.log('%s %s/%s', $scope.emailAddr, $scope.password1, 
-                $scope.password2);
-    $scope.sent = true;
+    var pwdRegex = /^[a-zA-Z0-9_]{8,}$/;
+    var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(emailRegex.test($scope.emailAddr)) {
+      $scope.badEmail = false;
+    } else {
+      $scope.badEmail = true;
+    }
+    if(pwdRegex.test($scope.password1)) {
+      $scope.badPwd1 = false;
+    } else {
+      $scope.badPwd1 = true;
+    }
+    if($scope.password1 == $scope.password2) {
+      $scope.badPwd2 = false;
+    } else {
+      $scope.badPwd2 = true;
+    }
+    if(!$scope.badEmail && !$scope.badPwd1 & !$scope.badPwd2) {
+      $scope.sent = true;
+    }
   }
 });
 
 flowsimApp.controller('resetCntrl', function($scope) {
   $scope.sent = false;
+  $scope.emailAddr = '';
   $scope.reset = function() {
-    $scope.sent = true;
+    var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(emailRegex.test($scope.emailAddr)) {
+      $scope.sent = true;
+    } else {
+      $scope.badEmail = true;
+    }
   }
+});
+
+flowsimApp.controller('loginCntrl', function($scope, $location) {
+  $scope.emailAddr = '';
+  $scope.password = '';
+  $scope.login = function() {
+    var pwdRegex = /^[a-zA-Z0-9_]{8,}$/;
+    var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(!emailRegex.test($scope.emailAddr)) {
+      $scope.badEmail = true;
+    } else {
+      $scope.badEmail = false;
+    }
+    if(loginForm.userPwd.$invalid || !pwdRegex.test($scope.password)) {
+      $scope.badPwd = true;
+    } else {
+      $scope.badPwd = false;
+    }
+    if(!$scope.badEmail && !$scope.badPwd) {
+      $location.path("/");
+    }
+  };
 });
 
 flowsimApp.controller('passwordCntrl', function($scope) {
@@ -32,18 +77,10 @@ flowsimApp.controller('menuCtrl', function($scope, $http) {
   $scope.authenticated = false;
   $scope.token = '';
 
-  $scope.login = function() {
-    $scope.authenticated = true;
-  }
   $scope.logout = function() {
     $scope.authenticated = false;
     $scope.token = '';
   }
-  $scope.register = function(email, password) {
-  }
-  $scope.forgot = function(email) {
-  }
-
   /*
   $scope.login = function() {
     $http({
@@ -85,7 +122,8 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'about.html'
     }).
     when('/login', {
-      templateUrl: 'login.html'
+      templateUrl: 'login.html',
+      controller: 'loginCntrl'
     }).
     when('/profile', {
       templateUrl: 'profile.html'
@@ -103,7 +141,8 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'simulation.html'
     }).
     when('/register', {
-      templateUrl: 'register.html'
+      templateUrl: 'register.html',
+      controller: 'registrationCntrl'
     }).
     when('/reset', {
       templateUrl: 'reset.html',
