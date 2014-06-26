@@ -30,7 +30,7 @@ flowsimApp.controller('registrationCntrl', function($scope, utils, flowgrammable
   }
 });
 
-flowsimApp.controller('resetCntrl', function($scope, flowgrammable) {
+flowsimApp.controller('resetCntrl', function($scope, flowgrammable, utils) {
   $scope.sent = false;
   $scope.emailAddr = '';
   $scope.reset = function() {
