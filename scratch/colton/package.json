@@ -1,0 +1,20 @@
+{
+  "name": "colton",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "connect": "~3.0.1",
+    "bookshelf": "~0.7.5",
+    "knex": "~0.6.18",
+    "pg": "~3.3.0",
+    "express": "~4.4.4",
+    "body-parser": "~1.4.3",
+    "jwt-simple": "~0.2.0"
+  }
+}
