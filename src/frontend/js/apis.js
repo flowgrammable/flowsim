@@ -14,8 +14,8 @@ flowAPI.factory('utils', function() {
   };
 });
 
-flowAPI.factory('flogrammable', function($http) {
-  $scope.token = '';
+flowAPI.factory('flowgrammable', function($http) {
+  var accessToken = '';
   return {
     login : function(subEmail, subPwd) {
       $http({
@@ -34,7 +34,7 @@ flowAPI.factory('flogrammable', function($http) {
         method: 'DELETE',
         url: 'api/subscriber/logout',
         headers: {
-          "X-Access-Token": $scope.token
+          "X-Access-Token": accessToken
         }
       }).success(function(data) {
       }).error(function(data) {
@@ -79,7 +79,7 @@ flowAPI.factory('flogrammable', function($http) {
         method: type,
         url: 'api/' + module,
         headers: {
-          "X-Access-Token": $scope.token
+          "X-Access-Token": accessToken
         },
         data: body
       }).success(function(data) {
