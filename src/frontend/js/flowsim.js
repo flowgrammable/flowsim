@@ -43,7 +43,7 @@ flowsimApp.controller('resetCntrl', function($scope, flowgrammable, utils) {
   }
 });
 
-flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, utils) {
+flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, utils, $rootScope) {
   $scope.emailAddr = '';
   $scope.password = '';
   $scope.login = function() {
@@ -59,7 +59,8 @@ flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, u
     }
     if(!$scope.badEmail && !$scope.badPwd) {
       flowgrammable.login($scope.emailAddr, $scope.password);
-      $location.path("/");
+      $rootScope.$on("loginFailure", function() { $scope.badPwd = true; });
+      $rootScope.$on("authenticated", function() { $location.path("/"); });
     }
   };
 });

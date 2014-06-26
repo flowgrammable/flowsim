@@ -1,18 +1,8 @@
 #!/usr/bin/env node
 
-var db = {
-  subscriber: [
-    {
-      name: "Jasson Casey",
-      email: "jasson.casey@gmail.com",
-      password: "iluvflowg"
-    }
-  ],
-  session: [],
-};
-
 var connect = require('connect');
 var program = require('commander');
+var db = require('./fake_db');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -36,6 +26,8 @@ var app = connect()
   .use('/css', connect.static('css'))
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
+  .use(connect.bodyParser())
+  .use('/api/subscriber/login', db.login)
   .use('/api', function(req, res, next){
     for(var item in req.body) {
       console.log('%s', item);

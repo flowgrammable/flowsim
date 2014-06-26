@@ -33,6 +33,7 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           });
         }
       }).error(function(data) {
+        $rootScope.$broadcast("loginFailure");
       });
     },
     logout : function() {
