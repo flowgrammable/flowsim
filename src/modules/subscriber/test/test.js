@@ -106,7 +106,7 @@ describe('Testing client login:',function() {
   it('Token gen successfully',function(done) {
     request( {
       url: 'http://localhost:8000/api/login',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\":\"my password\" }',
+      body: '{ \"email\": \"'+testEmail+'\", \"my password\":\"my password\" }',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -122,7 +122,7 @@ describe('Testing client login:',function() {
   it('User with this email does not exists',function(done) {
     request( {
       url: 'http://localhost:8000/api/login',
-      body: '{ \"email\": \"Invalid@email.com\", \"password\":\"my password\" }',
+      body: '{ \"email\": \"Invalid@email.com\", \"my password\":\"my password\" }',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -149,5 +149,21 @@ describe('Testing client login:',function() {
       done();
     });
   });
+  it('Authenticated Request',function(done) {
+    request( {
+      url: 'http://localhost:8000/api/subscribers',
+      body: '{ \"email\": \"'+testEmail+'\", \"my password\":\"my password\" }',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      },
+      method: 'GET'
+    }, function (error, response, body) {
+      console.log('\n\tStatus : '+ response.statusCode);
+      assert.equal(response.statusCode,200);
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });  
 });
 
