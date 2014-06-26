@@ -119,7 +119,7 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'account/account.html'
     }).
     otherwise({
-      redirectTo: '/'
+      templateUrl: 'lost.html'
     });
 }]);
 
