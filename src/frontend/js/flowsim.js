@@ -65,12 +65,15 @@ flowsimApp.controller('loginCntrl', function($scope, $location) {
   };
 });
 
-flowsimApp.controller('passwordCntrl', function($scope) {
-  $scope.sent = false;
-  $scope.save = function() {
-    $scope.sent = true;
-  }
-
+flowsimApp.controller('verifyCntrl', function($scope, $routeParams, $http) {
+  $http({
+    url: '/api/subscriber/verify/' + $routeParams.sid + '/' + $routeParams.token,
+    method: 'PUT'
+  }).success(function(data) {
+    $scope.verified = true;
+  }).error(function(data) {
+    $scope.verified = false;
+  });
 });
 
 flowsimApp.controller('menuCtrl', function($scope, $http) {
@@ -115,30 +118,12 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
     when('/', {
       templateUrl: 'main.html'
     }).
-    when('/openflow', {
-      templateUrl: 'openflow.html'
-    }).
     when('/about', {
       templateUrl: 'about.html'
     }).
     when('/login', {
       templateUrl: 'login.html',
       controller: 'loginCntrl'
-    }).
-    when('/profile', {
-      templateUrl: 'profile.html'
-    }).
-    when('/packet', {
-      templateUrl: 'packet.html'
-    }).
-    when('/trace', {
-      templateUrl: 'trace.html'
-    }).
-    when('/switch', {
-      templateUrl: 'switch.html'
-    }).
-    when('/simulation', {
-      templateUrl: 'simulation.html'
     }).
     when('/register', {
       templateUrl: 'register.html',
@@ -148,14 +133,9 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'reset.html',
       controller: 'resetCntrl'
     }).
-    when('/password', {
-      templateUrl: 'account/password.html'
-    }).
-    when('/badpassword', {
-      templateUrl: 'account/badpassword.html'
-    }).
-    when('/account', {
-      templateUrl: 'account/account.html'
+    when('/verify/:sid/:token', {
+      templateUrl: 'verify.html',
+      controller: 'verifyCntrl'
     }).
     otherwise({
       templateUrl: 'lost.html'
