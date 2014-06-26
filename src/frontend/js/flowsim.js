@@ -84,6 +84,9 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
     when('/about', {
       templateUrl: 'about.html'
     }).
+    when('/login', {
+      templateUrl: 'login.html'
+    }).
     when('/profile', {
       templateUrl: 'profile.html'
     }).
@@ -100,10 +103,11 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'simulation.html'
     }).
     when('/register', {
-      templateUrl: 'account/register.html'
+      templateUrl: 'register.html'
     }).
     when('/reset', {
-      templateUrl: 'account/reset.html'
+      templateUrl: 'reset.html',
+      controller: 'resetCntrl'
     }).
     when('/password', {
       templateUrl: 'account/password.html'
