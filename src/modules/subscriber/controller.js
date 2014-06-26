@@ -81,6 +81,7 @@ module.exports =
 
             // Generate token
             var token = uuid.v1();
+            req.token = token;
             /* 
              *  Store token in verification_token table
              *    + Associate token with registered user
@@ -269,11 +270,18 @@ module.exports =
               if(err || !match) {
 
                 // Invalid Password
-                res.writeHead('401', {
+                /*res.writeHead('401', {
                   'Content-Type': 'application/json',
-                });
+                });*/
                 res.end(JSON.stringify({
-                  'error' : 'invalid credentials'
+                  //'error' : 'invalid credentials'
+                  'error':{
+                    'type': 'authentication',
+                    'description': 'could not authenticate user',
+                    'data':[{
+                      'code': 1005,
+                      'message': 'password is not valid'
+                    }]
                 }));
               }
               else {
@@ -282,11 +290,14 @@ module.exports =
                   iss: user[0].id,
                   exp: expires
                 }, 'jwtTokenSecret');
-                res.writeHead('200', {
+                /*res.writeHead('200', {
                   'Content-Type': 'application/json',
-                });
+                });*/
                 res.end(JSON.stringify({
-                  'jwt' : token,
+                  'data': {
+                    'token': token
+                    //'jwt' : token,
+                  }
                 }));
               }
             });
