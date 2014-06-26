@@ -69,9 +69,13 @@ flowsimApp.controller('verifyCntrl', function($scope, $routeParams,
   flowgrammable.verify($routeParams.token);
 });
 
-flowsimApp.controller('menuCtrl', function($scope) {
+flowsimApp.controller('menuCtrl', function($scope, flowgrammable) {
   $scope.authenticated = false;
   $scope.token = '';
+
+  $scope.logout = function() {
+    flowgrammable.logout();
+  }
 
   $scope.$on("authenticated", function() {
     $scope.authenticated = true;

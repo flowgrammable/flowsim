@@ -79,6 +79,10 @@
             <a href="#login" class="btn btn-success">Login</a>
             <a href="#register" class="btn btn-success">Register</a>
           </form>
+          <form class="navbar-form navbar-right" role="form"
+                ng-show="authenticated">
+            <a href="#" class="btn btn-success" ng-click="logout()">Logout</a>
+          </form>
         </div><!--/.navbar-collapse -->
       </div>
     </div>

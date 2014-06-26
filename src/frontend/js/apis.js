@@ -43,6 +43,7 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           "X-Access-Token": accessToken
         }
       }).success(function(data) {
+        $rootScope.$broadcast("unauthenticated");
       }).error(function(data) {
       });
     },
