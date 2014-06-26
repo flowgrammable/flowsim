@@ -7,7 +7,7 @@ flowAPI.factory('utils', function() {
   };
 });
 
-flogAPI.factory('flogSub', function($http) {
+flogAPI.factory('flogrammable', function($http) {
   $scope.token = '';
   return {
     login : function(subEmail, subPwd) {
@@ -66,6 +66,31 @@ flogAPI.factory('flogSub', function($http) {
       }).success(function(data) {
       }).error(function(data) {
       });
+    }
+    request : function(type, module, body, good, bad) {
+      $http({
+        method: type,
+        url: 'api/' + module,
+        headers: {
+          X-access-token: $scope.token
+        },
+        data: body
+      }).success(function(data) {
+        if(good)
+          good(data);
+      }).error(function(data) {
+        if(bad)
+          bad(data);
+      });
+    }
+  };
+});
+
+flogAPI.factory('flowsim', function(flowgrammable) {
+  var flowg = flowgrammable();
+  return {
+    createProfile : function(body) {
+      flowg.request('POST', 'profile', JSON.stringify(body));
     }
   };
 });
