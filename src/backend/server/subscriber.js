@@ -1,20 +1,21 @@
 
+var _ = require('underscore');
 var msg = require('./msg');
 var model = require('./model');
 
-function subscriberRegister(method, params, data) {
+function subscriberRegister(model, method, params, data) {
   return msg.success({});
 }
 
-function subscriberVerify(method, params, data) {
+function subscriberVerify(model, method, params, data) {
   return msg.success({});
 }
 
-function subscriberReset(method, params, data) {
+function subscriberReset(model, method, params, data) {
   return msg.success({});
 }
 
-function subscriberLogin(method, params, data) {
+function subscriberLogin(model, method, params, data) {
   var result;
   if(!data.email || !data.password) {
     return msg.error({
@@ -33,28 +34,28 @@ function subscriberLogin(method, params, data) {
   });
 }
 
-function subscriberLogout(session, method, params, data) {
+function subscriberLogout(model, session, method, params, data) {
   return msg.success({});
 }
 
 module.exports = function(db) {
-  var database = model(db);
+  var subModel = model(db);
   return {
     getSession: function(headers) {
       if(headers['X-Access-Token']) {
-        return database.lookupAccesstoken(headers['X-Access-Token']);
+        return subModel.lookupAccesstoken(headers['X-Access-Token']);
       }
       return null;
     },
     module: {
       noauth : {
-        register : subscriberRegister,
-        verify : subscriberVerify,
-        reset : subscriberRegister,
-        login : subscriberLogin
+        register : _.bind(subscriberRegister, null, subModel),
+        verify : _.bind(subscriberVerify, null, subModel),
+        reset : _.bind(subscriberRegister, null, subModel),
+        login : _.bind(subscriberLogin, null, subModel)
       },
       auth : {
-        logout : subscriberLogout
+        logout : _.bind(subscriberLogout, null, subModel)
       }
     }
   }

@@ -1,4 +1,7 @@
 
+// This is intended to be for testing purposes only. The object
+// returned by this module is a mock-database
+
 module.exports = {
   subscribers: [
     {
