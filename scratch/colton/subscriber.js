@@ -56,6 +56,15 @@ function subscriberLogin(method, params, data) {
   });
 }
 
+function subscriberRegister(method, params, data){
+   if(!data.email || !data.password){
+			return msg.error({
+				description: 'Bad email or password'
+			});
+   }
+   return msg.success({'regstatus':'success'});
+}
+
 exports.getSession = function(headers) {
   if(headers['X-Access-Token']) {
     return lookupAccesstoken(headers['X-Access-Token']);
@@ -65,13 +74,13 @@ exports.getSession = function(headers) {
 
 exports.module = {
   noauth : {
-    register : subscriberRegister,
-    verify : subscriberVerify,
-    reset : subscriberRest,
-    login : subscriberLogin
+    register : subscriberRegister
+    //verify : subscriberVerify,
+   // reset : subscriberRest,
+  //  login : subscriberLogin
   },
   auth : {
-    logout : subscriberLogout
+//    logout : subscriberLogout
   }
 }
 
