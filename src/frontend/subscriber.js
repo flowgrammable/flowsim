@@ -1,4 +1,6 @@
 
+var url = require('url');
+
 var db = {
   subscribers: [
     {
@@ -19,7 +21,7 @@ function subscriber_lookup(email) {
   return {};
 }
 
-exports.login = function(req, res, next) {
+function login(req, res, next) {
   var result;
   if(!req.body.email || !req.body.password) {
     res.writeHead(200, {
@@ -55,3 +57,14 @@ exports.login = function(req, res, next) {
 
 // login, login, register, verify, reset
 
+module.exports = function() {
+  return function(req, res, next) {
+    var accessToken = '';
+    if(req.headers['X-Access-Token']) {
+      accessToken = req.headers['X-Access-Token'];
+    }
+    var path = url.parse(req.url).pathname;
+    console.log("path: %s", path.slice(1));
+    res.end('blah');
+  }
+}

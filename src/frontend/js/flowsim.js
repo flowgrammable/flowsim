@@ -59,7 +59,9 @@ flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, u
     }
     if(!$scope.badEmail && !$scope.badPwd) {
       flowgrammable.login($scope.emailAddr, $scope.password);
-      $rootScope.$on("loginFailure", function() { $scope.badPwd = true; });
+      $rootScope.$on("loginFailure", function() { 
+        $scope.loginFail = true; 
+      });
       $rootScope.$on("authenticated", function() { $location.path("/"); });
     }
   };

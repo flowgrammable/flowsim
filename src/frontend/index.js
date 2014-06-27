@@ -2,7 +2,7 @@
 
 var connect = require('connect');
 var program = require('commander');
-var db = require('./fake_db');
+var subscriber = require('./subscriber');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -27,21 +27,7 @@ var app = connect()
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
   .use(connect.json())
-  .use('/api/subscriber/login', db.login)
-  .use('/api', function(req, res, next){
-    for(var item in req.body) {
-      console.log('%s', item);
-    }
-    res.writeHead(200, {
-      'Content-Type': 'application/json',
-      'X-Access-Token': 'onebigfuckingtoken'
-    });
-    res.end(JSON.stringify({
-      success: {
-        name: "Jasson Casey"
-      }
-    }));
-  })
+  .use('/api/subscriber', subscriber())
   .listen(port, ip);
 
 console.log('Server started on: %s:%d', ip, port);

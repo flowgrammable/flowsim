@@ -31,6 +31,8 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           $rootScope.$broadcast("authenticated", {
             subscriberId: data.success.name
           });
+        } else {
+          $rootScope.$broadcast("loginFailure");
         }
       }).error(function(data) {
         $rootScope.$broadcast("loginFailure");

@@ -8,6 +8,10 @@
     our latest work with you; however, you must be logged in to use our tools.
 
     <hr>
+        
+      <div class="error" ng-show="loginFail">
+        <span>Username and password were invalid.</span>
+      </div>
 
     <form name="loginForm" novalidate role="form">
       <div class="form-group">
