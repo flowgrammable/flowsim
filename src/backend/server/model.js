@@ -1,7 +1,7 @@
 
 var _ = require('underscore');
 
-function subscriberLookup(db, email) {
+function subGetByEmail(db, email) {
   var i;
   for(i = 0; i < db.subscribers.length; ++i) {
     if(db.subscribers[i].email == email)
@@ -10,7 +10,7 @@ function subscriberLookup(db, email) {
   return {};
 }
   
-function lookupAccessToken(db, token) {
+function sessGetByAccessToken(db, token) {
   var i;
   for(var i=0; i<db.sessions.length; ++i) {
     if(db.sessions[i].accessToken = accessToken)
@@ -21,8 +21,12 @@ function lookupAccessToken(db, token) {
 
 module.exports = function(db) {
   return {
-    subscriber_lookup: _.bind(subscriberLookup, null, db),
-    lookupAccessToken: _.bind(lookupAccessToken, null, db)
+    subscriber: {
+      getByEmail: _.bind(subGetByEmail, null, db),
+    },
+    session: {
+      getByAccessToken: _.bind(sessGetByAccessToken, null, db)
+    }
   };
 }
 
