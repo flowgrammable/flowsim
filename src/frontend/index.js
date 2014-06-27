@@ -26,7 +26,7 @@ var app = connect()
   .use('/css', connect.static('css'))
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
-  .use(connect.bodyParser())
+  .use(connect.json())
   .use('/api/subscriber/login', db.login)
   .use('/api', function(req, res, next){
     for(var item in req.body) {
