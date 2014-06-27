@@ -59,7 +59,7 @@ module.exports = function(db, userModules) {
     } else {
     
       // grab the access token if it exists
-      var session = subscriber.getSession(req.headers);
+      var session = subscribers.authenticate(req.headers);
       var authFunction = installedModules[path[0]].auth[path[1]];
       var noauthFunction = installedModules[path[0]].noauth[path[1]];
       var params = path.slice(2);
