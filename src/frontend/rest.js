@@ -12,6 +12,8 @@ function wrapRes(res, result) {
 }
 
 module.exports = function(userModules) {
+  if(userModules.subscriber)
+    throw "Someone is using the subscriber keyword";
   userModules.subscriber = sub.module;
   return function(req, res, next) {
     var result;
