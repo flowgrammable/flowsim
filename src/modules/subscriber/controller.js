@@ -31,21 +31,46 @@ module.exports =
     var date = new Date(),            
         tmp = date.toISOString(),    
         checks  = new enforce.Enforce();
-    checks.add('password1',enforce.ranges.length(8,16, 'Password is not between 8-16 chars'));
-    checks.add("password2",enforce.sameAs('password1', 'Passwords do not match'));
-    checks.add('email',enforce.patterns.email('Invalid Email'));
+    checks.add("password2",enforce.sameAs('password1', {      
+      'error': {
+        'type': 'Registration',
+        'description': 'Could not register user',
+        'data': {
+          'code': 1102,
+          'message': 'Passwords do not match'
+        }
+      }
+    }));
+    checks.add('email',enforce.patterns.email( {      
+      'error': {
+        'type': 'Registration',
+        'description': 'Could not register user',
+        'data': {
+          'code': 1103,
+          'message': 'Invalid Email'
+        }
+      }
+    }));
+    checks.add('password1',enforce.ranges.length(8,16, {
+      'error': {
+        'type': 'Registration',
+        'description': 'Could not register user',
+        'data': {
+          'code': 1104,
+          'message': 'Password is not 8-16 chars'
+        }
+      }
+    }));
     checks.check( {
       email: req.body.email,
       password1: req.body.password1,
       password2: req.body.password2
     }, function(err) {
       if(err) {
-        res.writeHead('400', {
+        res.writeHead('200', {
           'Content-Type': 'application/json'
         });
-        res.end(JSON.stringify( {
-          error:err.msg
-        }));
+        res.end(JSON.stringify(err.msg));
       }
       else {
       	
@@ -61,22 +86,32 @@ module.exports =
 
               // orm error code for duplicate unique
               case '23505':
-                res.writeHead('409', {
+                res.writeHead('200', {
                   'Content-Type': 'application/json'
                 });
                 res.end(JSON.stringify( {
-                  message:'User with that email is already registered'
+                  'error': {
+                    'type': 'Registration',
+                    'description': 'Could not register user',
+                    'data': {
+                      'code': 110X,
+                      'message': 'User with that email is already registered'
+                    }
+                  }
                 }));
                 break; 
               default: res.end('dont know what went wrong'); 
             }
           } 
           else {
-            res.writeHead('201', {
+            
+            res.writeHead('200', { 
               'Content-Type': 'application/json'
             });
             res.end(JSON.stringify( {
-              message:'user registered sucessfully'
+              'data': {
+                'result': 'success'
+              }
             }));
 
             // Generate token
@@ -94,13 +129,20 @@ module.exports =
             }, function(err,ver_token) {
                             
               // Error storing in verification_token table in Database   
-              if(err) { 
-                res.writeHead('500', {
+              if(err) {
+                res.writeHead('200', {
                   'Content-Type': 'application/json'
                 });
                 res.end(JSON.stringify( {
-                  error:'Internal Service Error'
-                }));
+                  'error': {
+                    'type': 'Registration',
+                    'description': 'Could not register user',
+                    'data': {
+                      'code': 110X,
+                      'message': 'Internal Service Error'
+                    }
+                  }
+                })); 
               }
               else {
                 console.log('Token created successfully');
@@ -131,11 +173,18 @@ module.exports =
               
               // Some problem with sending email
               if(err) {
-                res.writeHead('500', {
+                res.writeHead('200', {
                   'Content-Type': 'application/json'
                 });
                 res.end(JSON.stringify( {
-                  error:'Internal Service Error'
+                  'error': {
+                    'type': 'Registration',
+                    'description': 'Could not register user',
+                    'data': {
+                      'code': 110X,
+                      'message': 'Internal Service Error'
+                    }
+                  }
                 }));
               }
             }); 
@@ -168,22 +217,36 @@ module.exports =
        *  Respond with 'email verified' or 404 for invalid token
        */
       if(err || !token.length) {
-        res.writeHead('404', {
+        res.writeHead('200', {
           'Content-Type': 'application/json'
         });
         res.end(JSON.stringify( {
-          error:'Invalid token'
+          'error': {
+            'type': 'Verification',
+            'description': 'Could not verify user',
+            'data': {
+              'code': 110X,
+              'message': 'Invalid Token'
+            }
+          }
         }));
       }
       else {
         
         // If more than 1 =  error!!(Might be hash collision)
         if(token.length > 1) {
-          res.writeHead('500', {
+          res.writeHead('200', {
             'Content-Type': 'application/json'
           });
           res.end(JSON.stringify( {
-            error:'Internal Service Error'
+            'error': {
+              'type': 'Verification',
+              'description': 'Could not verify user',
+              'data': {
+                'code': 110X,
+                'message': 'Internal Service Error'
+              }
+            }
           }));
           console.log('Hash collision!!');
         }
@@ -193,11 +256,18 @@ module.exports =
             if(err) {
                         
               // No user of this id has registerd
-              res.writeHead('404', {
+              res.writeHead('200', {
                 'Content-Type': 'application/json'
               });
               res.end(JSON.stringify( {
-                error:'Invalid token'
+                'error': {
+                  'type': 'Verification',
+                  'description': 'Could not verify user',
+                  'data': {
+                    'code': 110X,
+                    'message': 'Invalid Token'
+                  }
+                }
               }));
             }
             else {
@@ -206,21 +276,31 @@ module.exports =
                 if(err) {
 
               	  //Error saving to the database
-                  res.writeHead('500', {
+                  res.writeHead('200', {
                     'Content-Type': 'application/json'
                   });
                   res.end(JSON.stringify( {
-                    error:'Internal Service Error'
+                    'error': {
+                      'type': 'Verification',
+                      'description': 'Could not verify user',
+                     'data': {
+                        'code': 110X,
+                        'message': 'Internal Service Error'
+                      }
+                    }
                   }));
                 }
                 else {
                   console.log('Saved successfully');
-                  res.writeHead('302', {
+                  res.writeHead('200', {
                     'Content-Type': 'application/json', 
                     'Location': '/#signin'
                   });
                   res.end(JSON.stringify( {
-                    message:'email verification successful'
+                    'data': {
+                      'result': 'success'
+                      //'message': 'email verification successful'
+                    }        
                   }));
                 }
               });
@@ -247,22 +327,37 @@ module.exports =
         if(err || !user[0]) {
 
           // Invalid Username
-          res.writeHead('401', {
+          res.writeHead('200', {
             'Content-Type': 'application/json',
           });
           res.end(JSON.stringify({
             'error' : 'invalid credentials'
+            'error':{
+              'type': 'authentication',
+              'description': 'could not authenticate user',
+              'data':{
+                'code': 100X,
+                'message': 'Username is invalid'
+              }
+            }
           }));
         }
         else {
           if(user[0].status != 'VERIFIED') {
 
             // User has not verified it's email address
-            res.writeHead('401', {
+            res.writeHead('200', {
               'Content-Type': 'application/json',
             });
             res.end(JSON.stringify({
-              'error' :'invalid credentials'
+              'error': {
+                'type': 'authentication',
+                'description': 'could not authenticate user',
+                'data':{
+                  'code': 1107,
+                  'message': 'Account has not been verified'
+                }
+              }
             }));
           }
           else {
@@ -270,18 +365,18 @@ module.exports =
               if(err || !match) {
 
                 // Invalid Password
-                /*res.writeHead('401', {
+                res.writeHead('200', {
                   'Content-Type': 'application/json',
-                });*/
+                });
                 res.end(JSON.stringify({
-                  //'error' : 'invalid credentials'
                   'error':{
                     'type': 'authentication',
                     'description': 'could not authenticate user',
-                    'data':[{
+                    'data':{
                       'code': 1005,
-                      'message': 'password is not valid'
-                    }]
+                      'message': 'Password is invalid'
+                    }
+                  }
                 }));
               }
               else {
@@ -290,13 +385,12 @@ module.exports =
                   iss: user[0].id,
                   exp: expires
                 }, 'jwtTokenSecret');
-                /*res.writeHead('200', {
+                res.writeHead('200', {
                   'Content-Type': 'application/json',
-                });*/
+                });
                 res.end(JSON.stringify({
                   'data': {
                     'token': token
-                    //'jwt' : token,
                   }
                 }));
               }
@@ -326,11 +420,18 @@ module.exports =
         }
         req.models.subscriber.find({ id: decoded.iss }, 1, function(err, user) {
           if(err) {
-            res.writeHead('500', {
+            res.writeHead('200', {
               'Content-Type': 'application/json',
             });
             res.end(JSON.stringify({
-              'error' : 'Internal Service Error'
+              'error': {
+                'type': 'authentication',
+                'description': 'could not authenticate user request',
+                'data':{
+                  'code': 1XXX,
+                  'message': 'Internal Service Error'
+                }
+              }
             }));
           }
           else {
@@ -341,21 +442,35 @@ module.exports =
       } catch (err) {
 
         //Invalid token
-        res.writeHead('400', {
+        res.writeHead('200', {
           'Content-Type': 'application/json',
         });
         res.end(JSON.stringify({
-         'error' : 'invalid token'
+          'error': {
+            'type': 'authentication',
+            'description': 'could not authenticate user request',
+            'data':{
+              'code': 1XXX,
+              'message': 'Invalid Token'
+            }
+          }
         }));
       }
     } else {
 
       //No token passed...Hence cannot access api!!
-      res.writeHead('401', {
+      res.writeHead('200', {
         'Content-Type': 'application/json',
       });
       res.end(JSON.stringify({
-        'error' : 'Not authorized'
+        'error': {
+          'type': 'authentication',
+          'description': 'could not authenticate user request',
+          'data':{
+            'code': 1XXX,
+            'message': 'Not Authorized'
+          }
+        }
       }));
     }
   }
