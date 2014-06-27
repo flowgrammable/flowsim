@@ -28,6 +28,15 @@ function subscriber_lookup(email) {
   return {};
 }
 
+function lookupAccessToken(token) {
+  var i;
+  for(var i=0; i<db.sessions.length; ++i) {
+    if(db.sessions[i].accessToken = accessToken)
+      return db.session[i];
+  }
+  return null;
+}
+
 function login(req, res, next) {
   var result;
   if(!req.body.email || !req.body.password) {
@@ -96,15 +105,6 @@ var restModules = {
       }
     }
   }
-}
-
-function lookupAccessToken(token) {
-  var i;
-  for(var i=0; i<db.sessions.length; ++i) {
-    if(db.sessions[i].accessToken = accessToken)
-      return db.session[i];
-  }
-  return null;
 }
 
 function success(result) {
