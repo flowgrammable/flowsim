@@ -1,16 +1,21 @@
 var express = require('express');
-var authware = require('./auth.js');
-var environment = require('./environment.js');
-var subscriber = require('./modules/subscriber');
-
 var server = express();
 
-environment(server);
-//login and register shouldnt pass through authware
-//server.use('/api/subscriber/login', subscriber.unauth);
-server.use('/api/subscriber/register', subscriber.register);
+var knex = require('knex')({
+		client: 'pg',
+		connection: {
+			host: '127.0.0.1',
+			user: 'flogdev',
+    	password: 'flogdev',
+    	database: 'flowsim',
+    	charset: 'utf8'
+		}
+});
+var bookshelf = require('bookshelf')(knex);
 
-server.use('/api/', authware); // auth middleware
-server.use('/api/profile/:id', function(req, res){ console.log(req.params.id); });
+var rest = require('./rest.js');
+var modules = {};
+server.use('/api', rest(modules,bookshelf));
 
 server.listen(8000);
+

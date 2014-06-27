@@ -1,6 +1,8 @@
 var bodyparser = require('body-parser');
 
 module.exports = function(server) {
+
+
 var knex = require('knex')({
 	client: 'pg',
   connection: {
@@ -13,7 +15,9 @@ var knex = require('knex')({
 });
 
 var bookshelf = require('bookshelf')(knex);
-server.set('bookshelf', bookshelf);
-server.use(bodyparser.json());
 
+
+return bookshelf;
 }
+
+
