@@ -19,10 +19,10 @@ function validateModules(userModules) {
   // Verify each module has an auth and unath section
   for(var property in userModules) {
     if(userModules.hasOwnProperty(property)) {
-      if(!userModules[property].auth)) {
+      if(!userModules[property].auth) {
         throw "Module: " + property + " is missing component: " + "auth"
       }
-      if(!userModules[property].noauth)) {
+      if(!userModules[property].noauth) {
         throw "Module: " + property + " is missing component: " + "noauth"
       }
     }
@@ -31,10 +31,12 @@ function validateModules(userModules) {
 
 module.exports = function(db, userModules) {
 
+  var subscribers = sub(db);
+
   // Validate the supplied modules and install subscriber functions
   validateModules(userModules);
   var installedModules = userModules;
-  installedModules.subscriber = sub.module(db);
+  installedModules.subscriber = subscribers.module;
 
   // construct and return the message handler
   return function(req, res, next) {
@@ -45,7 +47,7 @@ module.exports = function(db, userModules) {
     if(path.length < 2) {
       wrapRes(res, msg.error({
         description: 'Service not identified'
-      });
+      }));
       return;
     }
 
@@ -53,7 +55,7 @@ module.exports = function(db, userModules) {
     if(!installedModules[path[0]]) {
       wrapRes(res, msg.error({
         description: 'Module: ' + path[0] + ' does not exist'
-      });
+      }));
     } else {
     
       // grab the access token if it exists
@@ -72,7 +74,7 @@ module.exports = function(db, userModules) {
       } else {
         wrapRes(res, msg.error({
           description: 'Service: ' + path[1] + ' does not exist'
-        });
+        }));
       }
     } 
   }

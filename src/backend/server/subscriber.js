@@ -50,7 +50,7 @@ module.exports = function(db) {
       noauth : {
         register : subscriberRegister,
         verify : subscriberVerify,
-        reset : subscriberRest,
+        reset : subscriberRegister,
         login : subscriberLogin
       },
       auth : {
