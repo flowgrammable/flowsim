@@ -1,40 +1,17 @@
 
 var msg = require('./msg');
+var model = require('./model');
 
-var db = {
-  subscribers: [
-    {
-      subscriberId: 1,
-      name: "Jasson Casey",
-      email: "jasson.casey@gmail.com",
-      password: "iluvflowg"
-    }
-  ],
-  sessions: [
-    {
-      sessionId: '123456',
-      accessToken: 'asdfasdf',
-      subscriberId: 2
-    }
-  ]
+function subscriberRegister(method, params, data) {
+  return msg.success({});
 }
 
-function subscriber_lookup(email) {
-  var i;
-  for(i = 0; i < db.subscribers.length; ++i) {
-    if(db.subscribers[i].email == email)
-      return db.subscribers[i];
-  }
-  return {};
+function subscriberVerify(method, params, data) {
+  return msg.success({});
 }
 
-function lookupAccessToken(token) {
-  var i;
-  for(var i=0; i<db.sessions.length; ++i) {
-    if(db.sessions[i].accessToken = accessToken)
-      return db.session[i];
-  }
-  return null;
+function subscriberReset(method, params, data) {
+  return msg.success({});
 }
 
 function subscriberLogin(method, params, data) {
@@ -45,7 +22,7 @@ function subscriberLogin(method, params, data) {
     });
   }
   
-  result = subscriber_lookup(data.email);
+  result = model.subscriber_lookup(data.email);
   if(!result.password || data.password != result.password) {
     return msg.error({
       description: 'Bad password'
@@ -56,9 +33,13 @@ function subscriberLogin(method, params, data) {
   });
 }
 
+function subscriberLogout(session, method, params, data) {
+  return msg.success({});
+}
+
 exports.getSession = function(headers) {
   if(headers['X-Access-Token']) {
-    return lookupAccesstoken(headers['X-Access-Token']);
+    return model.lookupAccesstoken(headers['X-Access-Token']);
   }
   return null;
 }
