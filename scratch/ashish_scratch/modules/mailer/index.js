@@ -1,10 +1,10 @@
 var nodemailer = require("nodemailer");
 
-/**
+/*
  * @module Mailer
  */
 
-/**  Sends an email message
+/*  Sends an email message
  *
  *  @method sendMessage
  *  @param {Object} config SMTP transport configuration Service, Username, Password
