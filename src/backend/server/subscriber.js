@@ -3,19 +3,19 @@ var _ = require('underscore');
 var msg = require('./msg');
 var model = require('./model');
 
-function subscriberRegister(model, method, params, data) {
+function subRegister(dataModel, method, params, data) {
   return msg.success({});
 }
 
-function subscriberVerify(model, method, params, data) {
+function subVerify(dataModel, method, params, data) {
   return msg.success({});
 }
 
-function subscriberReset(model, method, params, data) {
+function subReset(dataModel, method, params, data) {
   return msg.success({});
 }
 
-function subscriberLogin(model, method, params, data) {
+function subLogin(dataModel, method, params, data) {
   var result;
   if(!data.email || !data.password) {
     return msg.error({
@@ -23,7 +23,7 @@ function subscriberLogin(model, method, params, data) {
     });
   }
   
-  result = model.subscriber_lookup(data.email);
+  result = dataModel.getByEmail(data.email);
   if(!result.password || data.password != result.password) {
     return msg.error({
       description: 'Bad password'
@@ -34,28 +34,30 @@ function subscriberLogin(model, method, params, data) {
   });
 }
 
-function subscriberLogout(model, session, method, params, data) {
+function subLogout(dataModel, session, method, params, data) {
   return msg.success({});
+}
+    
+function subGetSession(dataModel.headers) {
+  if(headers['X-Access-Token']) {
+    return dataModel.session.getByAccessToken(headers['X-Access-Token']);
+  }
+  return null;
 }
 
 module.exports = function(db) {
-  var subModel = model(db);
+  var dataModel = model(db);
   return {
-    getSession: function(headers) {
-      if(headers['X-Access-Token']) {
-        return subModel.lookupAccesstoken(headers['X-Access-Token']);
-      }
-      return null;
-    },
+    authenticate: _.bind(sessGetSession, null, dataModel);
     module: {
-      noauth : {
-        register : _.bind(subscriberRegister, null, subModel),
-        verify : _.bind(subscriberVerify, null, subModel),
-        reset : _.bind(subscriberRegister, null, subModel),
-        login : _.bind(subscriberLogin, null, subModel)
+      noauth: {
+        register: _.bind(subRegister, null, dataModel),
+        verify: _.bind(subVerify, null, dataModel),
+        reset: _.bind(subRegister, null, dataModel),
+        login: _.bind(subLogin, null, dataModel)
       },
-      auth : {
-        logout : _.bind(subscriberLogout, null, subModel)
+      auth: {
+        logout: _.bind(subLogout, null, dataModel)
       }
     }
   }
