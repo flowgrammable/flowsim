@@ -38,7 +38,7 @@ function subLogout(dataModel, session, method, params, data) {
   return msg.success({});
 }
     
-function subGetSession(dataModel.headers) {
+function sessAuthenticate(dataModel, headers) {
   if(headers['X-Access-Token']) {
     return dataModel.session.getByAccessToken(headers['X-Access-Token']);
   }
@@ -48,7 +48,7 @@ function subGetSession(dataModel.headers) {
 module.exports = function(db) {
   var dataModel = model(db);
   return {
-    authenticate: _.bind(sessGetSession, null, dataModel);
+    authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {
       noauth: {
         register: _.bind(subRegister, null, dataModel),
