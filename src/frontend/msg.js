@@ -1,13 +1,15 @@
 
-exports.success = function(data) {
+exports.success = function(data, other) {
   return {
-    success: data
+    success: data,
+    tunnel: other
   }
 }
 
-exports.error = function(data) {
+exports.error = function(data, other) {
   return {
-    error: data
+    error: data,
+    tunnel: other
   }
 }
 

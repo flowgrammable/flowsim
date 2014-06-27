@@ -4,9 +4,10 @@ var sub = require('./subscriber');
 var msg = require('./msg');
 
 function wrapRes(res, result) {
-  res.writeHead('200', {
-    'Content-Type': 'application/json'
-  });
+  var tunnel = result.tunnel;
+  delete result.tunnel;
+  tunnel[ 'Content-Type'] = 'application/json'; 
+  res.writeHead('200', tunnel);
   res.end(JSON.stringify(result));
 }
 
