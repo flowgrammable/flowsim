@@ -107,6 +107,18 @@ function lookupAccessToken(token) {
   return null;
 }
 
+function success(result) {
+  return {
+    success: result
+  };
+}
+
+function error(result) {
+  return {
+    error: result
+  };
+}
+
 function wrapRes(res, result) {
   res.writeHead('200', {
     'Content-Type': 'application/json'
@@ -129,10 +141,8 @@ module.exports = function(userDefinedModules) {
     // respond to a bad url pathname
     var path = url.parse(req.url).pathname.split('/');
     if(path.length < 2) {
-      wrapRes(res, {
-        error: {
-          description: 'Service not identified'
-        }
+      wrapRes(res, error({
+        description: 'Service not identified'
       });
       return;
     }
@@ -150,18 +160,14 @@ module.exports = function(userDefinedModules) {
         wrapRes(res, result);
         return;
       } else {
-        wrapRes(res, {
-          error: {
-            description: 'Service not found'
-          }
+        wrapRes(res, error({
+          description: 'Service not found'
         });
         return
       }
     } else {
-      wrapRes(res, {
-        error: {
-          description: 'Module not found'
-        }
+      wrapRes(res, error({
+        description: 'Module not found'
       });
     }
   }
