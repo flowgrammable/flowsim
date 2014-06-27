@@ -1,76 +1,93 @@
 
-var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap']);
+var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap',
+    'flowAPI']);
 
-flowsimApp.controller('registrationCtrl', function($scope) {
+flowsimApp.controller('registrationCntrl', function($scope, utils, flowgrammable) {
   $scope.emailAddr = '';
   $scope.password1 = '';
   $scope.password2 = '';
   $scope.sent = false;
   $scope.register = function() {
-    console.log('%s %s/%s', $scope.emailAddr, $scope.password1, 
-                $scope.password2);
-    $scope.sent = true;
+    if(utils.validEmail($scope.emailAddr)) {
+      $scope.badEmail = false;
+    } else {
+      $scope.badEmail = true;
+    }
+    if(utils.validPwd($scope.password1)) {
+      $scope.badPwd1 = false;
+    } else {
+      $scope.badPwd1 = true;
+    }
+    if($scope.password1 == $scope.password2) {
+      $scope.badPwd2 = false;
+    } else {
+      $scope.badPwd2 = true;
+    }
+    if(!$scope.badEmail && !$scope.badPwd1 & !$scope.badPwd2) {
+      flowgrammable.register($scope.emailAddr, $scope.password1);
+      $scope.sent = true;
+    }
   }
 });
 
-flowsimApp.controller('resetCntrl', function($scope) {
+flowsimApp.controller('resetCntrl', function($scope, flowgrammable, utils) {
   $scope.sent = false;
+  $scope.emailAddr = '';
   $scope.reset = function() {
-    $scope.sent = true;
+    if(utils.validEmail($scope.emailAddr)) {
+      flowgrammable.reset($scope.emailAddr);
+      $scope.sent = true;
+    } else {
+      $scope.badEmail = true;
+    }
   }
 });
 
-flowsimApp.controller('passwordCntrl', function($scope) {
-  $scope.sent = false;
-  $scope.save = function() {
-    $scope.sent = true;
-  }
-
+flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, utils, $rootScope) {
+  $scope.emailAddr = '';
+  $scope.password = '';
+  $scope.login = function() {
+    if(!utils.validEmail($scope.emailAddr)) {
+      $scope.badEmail = true;
+    } else {
+      $scope.badEmail = false;
+    }
+    if(!utils.validPwd($scope.password)) {
+      $scope.badPwd = true;
+    } else {
+      $scope.badPwd = false;
+    }
+    if(!$scope.badEmail && !$scope.badPwd) {
+      flowgrammable.login($scope.emailAddr, $scope.password);
+      $rootScope.$on("loginFailure", function() { 
+        $scope.loginFail = true; 
+      });
+      $rootScope.$on("authenticated", function() { $location.path("/"); });
+    }
+  };
 });
 
-flowsimApp.controller('menuCtrl', function($scope, $http) {
+flowsimApp.controller('verifyCntrl', function($scope, $routeParams, 
+                        flowgrammable) {
+  flowgrammable.verify($routeParams.token);
+});
+
+flowsimApp.controller('menuCtrl', function($scope, flowgrammable) {
   $scope.authenticated = false;
   $scope.token = '';
 
-  $scope.login = function() {
-    $scope.authenticated = true;
-  }
   $scope.logout = function() {
-    $scope.authenticated = false;
-    $scope.token = '';
-  }
-  $scope.register = function(email, password) {
-  }
-  $scope.forgot = function(email) {
+    flowgrammable.logout();
   }
 
-  /*
-  $scope.login = function() {
-    $http({
-      url: '/api/login',
-      method: 'POST',
-      data: JSON.stringify({
-        email: 'jasson.casey@gmail.com',
-        password: 'openflow'
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-  }).success(function(data) {
-    if(data.token) {
-      $scope.authenticated = true;
-      $scope.token = data.token;
-      console.log("recieved token: %s", data.token);
-    } else {
-      console.log("success but no token");
-    }
-  }).error(function(data) {
-    console.log('login fail');
+  $scope.$on("authenticated", function() {
+    $scope.authenticated = true;
   });
-  $scope.logout = function() {
+  
+  $scope.$on("unauthenticated", function() {
     $scope.authenticated = false;
-    $scope.token = '';
-  }};*/
+  });
+
 });
 
 flowsimApp.config(['$routeProvider', function($routeProvider) {
@@ -78,44 +95,27 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
     when('/', {
       templateUrl: 'main.html'
     }).
-    when('/openflow', {
-      templateUrl: 'openflow.html'
-    }).
     when('/about', {
       templateUrl: 'about.html'
     }).
-    when('/profile', {
-      templateUrl: 'profile.html'
-    }).
-    when('/packet', {
-      templateUrl: 'packet.html'
-    }).
-    when('/trace', {
-      templateUrl: 'trace.html'
-    }).
-    when('/switch', {
-      templateUrl: 'switch.html'
-    }).
-    when('/simulation', {
-      templateUrl: 'simulation.html'
+    when('/login', {
+      templateUrl: 'login.html',
+      controller: 'loginCntrl'
     }).
     when('/register', {
-      templateUrl: 'account/register.html'
+      templateUrl: 'register.html',
+      controller: 'registrationCntrl'
     }).
     when('/reset', {
-      templateUrl: 'account/reset.html'
+      templateUrl: 'reset.html',
+      controller: 'resetCntrl'
     }).
-    when('/password', {
-      templateUrl: 'account/password.html'
-    }).
-    when('/badpassword', {
-      templateUrl: 'account/badpassword.html'
-    }).
-    when('/account', {
-      templateUrl: 'account/account.html'
+    when('/verify/:sid/:token', {
+      templateUrl: 'verify.html',
+      controller: 'verifyCntrl'
     }).
     otherwise({
-      redirectTo: '/'
+      templateUrl: 'lost.html'
     });
 }]);
 

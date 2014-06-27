@@ -2,6 +2,7 @@
 
 var connect = require('connect');
 var program = require('commander');
+var rest = require('./rest');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -25,15 +26,8 @@ var app = connect()
   .use('/css', connect.static('css'))
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
-  .use('/api', function(req, res, next){
-    for(var item in req.body) {
-      console.log('%s', item);
-    }
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.end(JSON.stringify({
-      token: 'onebigfuckingtoken'
-    }));
-  })
+  .use(connect.json())
+  .use('/api', rest())
   .listen(port, ip);
 
 console.log('Server started on: %s:%d', ip, port);
