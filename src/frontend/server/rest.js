@@ -29,11 +29,12 @@ function validateModules(userModules) {
   }
 }
 
-module.exports = function(userModules) {
+module.exports = function(db, userModules) {
 
   // Validate the supplied modules and install subscriber functions
   validateModules(userModules);
-  userModules.subscriber = sub.module;
+  var installedModules = userModules;
+  installedModules.subscriber = sub.module(db);
 
   // construct and return the message handler
   return function(req, res, next) {
@@ -49,7 +50,7 @@ module.exports = function(userModules) {
     }
 
     // locate the module or return an error
-    if(!userModules[path[0]]) {
+    if(!installedModules[path[0]]) {
       wrapRes(res, msg.error({
         description: 'Module: ' + path[0] + ' does not exist'
       });
@@ -57,8 +58,8 @@ module.exports = function(userModules) {
     
       // grab the access token if it exists
       var session = subscriber.getSession(req.headers);
-      var authFunction = userModules[path[0]].auth[path[1]];
-      var noauthFunction = userModules[path[0]].noauth[path[1]];
+      var authFunction = installedModules[path[0]].auth[path[1]];
+      var noauthFunction = installedModules[path[0]].noauth[path[1]];
       var params = path.slice(2);
 
       // execute the found function or error

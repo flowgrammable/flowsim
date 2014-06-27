@@ -1,37 +1,22 @@
 
-var db = {
-  subscribers: [
-    {
-      subscriberId: 1,
-      name: "Jasson Casey",
-      email: "jasson.casey@gmail.com",
-      password: "iluvflowg"
+module.exports = function(db) {
+  var database = db;
+  function subscriber_lookup(email) {
+    var i;
+    for(i = 0; i < database.subscribers.length; ++i) {
+      if(database.subscribers[i].email == email)
+        return database.subscribers[i];
     }
-  ],
-  sessions: [
-    {
-      sessionId: '123456',
-      accessToken: 'asdfasdf',
-      subscriberId: 2
+    return {};
+  }
+
+  function lookupAccessToken(token) {
+    var i;
+    for(var i=0; i<database.sessions.length; ++i) {
+      if(database.sessions[i].accessToken = accessToken)
+        return database.session[i];
     }
-  ]
-}
-
-function subscriber_lookup(email) {
-  var i;
-  for(i = 0; i < db.subscribers.length; ++i) {
-    if(db.subscribers[i].email == email)
-      return db.subscribers[i];
+    return null;
   }
-  return {};
-}
-
-function lookupAccessToken(token) {
-  var i;
-  for(var i=0; i<db.sessions.length; ++i) {
-    if(db.sessions[i].accessToken = accessToken)
-      return db.session[i];
-  }
-  return null;
 }
 

@@ -37,22 +37,26 @@ function subscriberLogout(session, method, params, data) {
   return msg.success({});
 }
 
-exports.getSession = function(headers) {
-  if(headers['X-Access-Token']) {
-    return model.lookupAccesstoken(headers['X-Access-Token']);
-  }
-  return null;
-}
-
-exports.module = {
-  noauth : {
-    register : subscriberRegister,
-    verify : subscriberVerify,
-    reset : subscriberRest,
-    login : subscriberLogin
-  },
-  auth : {
-    logout : subscriberLogout
+module.exports = function(db) {
+  var database = model(db);
+  return {
+    getSession: function(headers) {
+      if(headers['X-Access-Token']) {
+        return database.lookupAccesstoken(headers['X-Access-Token']);
+      }
+      return null;
+    },
+    module: {
+      noauth : {
+        register : subscriberRegister,
+        verify : subscriberVerify,
+        reset : subscriberRest,
+        login : subscriberLogin
+      },
+      auth : {
+        logout : subscriberLogout
+      }
+    }
   }
 }
 
