@@ -2,7 +2,7 @@
 
 var connect = require('connect');
 var program = require('commander');
-var subscriber = require('./subscriber');
+var rest = require('./rest');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -27,7 +27,7 @@ var app = connect()
   .use('/js', connect.static('js'))
   .use(connect.static('html'))
   .use(connect.json())
-  .use('/api/subscriber', subscriber())
+  .use('/api', rest())
   .listen(port, ip);
 
 console.log('Server started on: %s:%d', ip, port);

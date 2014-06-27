@@ -57,14 +57,29 @@ function login(req, res, next) {
 
 // login, login, register, verify, reset
 
+var restModules = {
+  subscriber : {
+  },
+  flowsim : {
+  }
+}
+
 module.exports = function() {
   return function(req, res, next) {
     var accessToken = '';
     if(req.headers['X-Access-Token']) {
       accessToken = req.headers['X-Access-Token'];
     }
-    var path = url.parse(req.url).pathname;
-    console.log("path: %s", path.slice(1));
-    res.end('blah');
+    var path = url.parse(req.url).pathname.split('/');
+    if(restModules[path[0]]) {
+      var tgtModule = restModules[path[0]];
+      if(tgtModule[path[1]]) {
+        tgtModule[path[1]](req.method, path.slice(2), accessToken, req.body, res);
+      } else {
+        res.end('Object not present');
+      }
+    } else {
+      next();
+    }
   }
 }
