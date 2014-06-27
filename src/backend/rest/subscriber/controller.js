@@ -1,6 +1,6 @@
 
 var _ = require('underscore');
-var msg = require('./msg');
+var msg = require('../msg');
 var model = require('./model');
 
 function subRegister(dataModel, method, params, data) {

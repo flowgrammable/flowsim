@@ -1,7 +1,7 @@
 
 var url = require('url');
-var sub = require('./subscriber');
 var msg = require('./msg');
+var sub = require('./subscriber/controller');
 
 function wrapRes(res, result) {
   var tunnel = result.tunnel;

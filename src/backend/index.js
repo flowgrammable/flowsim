@@ -2,8 +2,8 @@
 
 var connect = require('connect');
 var program = require('commander');
-var rest = require('./server/rest');
-var db = require('./server/db');
+var rest = require('./rest/controller');
+var db = require('./db');
 
 program
   .version(process.env.SERVER_VERSION)
