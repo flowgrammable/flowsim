@@ -1,0 +1,23 @@
+REQUIREMENTS
+------------
+
+- install nodejs
+- install bower
+
+SETUP
+-----
+
+sudo npm install -g grunt-cli
+cd frontend
+bower install
+cd bower_module/bower_components/angular-ui-bootstrap
+npm install
+grunt
+cd ../../../backend
+npm install
+chmod +x index.js
+
+RUNNING
+-------
+./index.js -b <fully qualified path to frontend>
+
