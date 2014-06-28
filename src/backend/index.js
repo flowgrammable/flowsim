@@ -16,7 +16,7 @@ program
 var port = program.port || process.env.PORT || 3000;
 var ip = program.address || process.env.ADDRESS || '127.0.0.1';
 var config = program.config || process.env.CONFIG || './config';
-var database= program.database || process.env.DATABASE || './database';
+var database = program.database || process.env.DATABASE || './database';
 
 var app = connect();
 html.serve(app, connect, require(config));
@@ -24,6 +24,10 @@ html.serve(app, connect, require(config));
 app
   .use(connect.json())
   .use('/api', rest(require(database), {}))
+  .use(function(req, res) {
+    res.writeHead('404');
+    res.end('');
+  })
   .listen(port, ip);
 
 console.log('Server started on: %s:%d', ip, port);

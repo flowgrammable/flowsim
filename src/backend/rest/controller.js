@@ -6,7 +6,7 @@ var sub = require('./subscriber/controller');
 function wrapRes(res, result) {
   var tunnel = result.tunnel;
   delete result.tunnel;
-  tunnel[ 'Content-Type'] = 'application/json'; 
+  tunnel['Content-Type'] = 'application/json'; 
   res.writeHead('200', tunnel);
   res.end(JSON.stringify(result));
 }
