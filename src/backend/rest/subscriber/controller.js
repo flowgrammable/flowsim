@@ -1,41 +1,35 @@
 
 var _ = require('underscore');
-var msg = require('../msg');
+var msg = require('msg');
 var model = require('./model');
 
 function subRegister(dataModel, method, params, data) {
-  return msg.success({});
+  return msg.good();
 }
 
 function subVerify(dataModel, method, params, data) {
-  return msg.success({});
+  return msg.good();
 }
 
 function subReset(dataModel, method, params, data) {
-  return msg.success({});
+  return msg.good();
 }
 
 function subLogin(dataModel, method, params, data) {
   var result;
   if(!data.email || !data.password) {
-    return msg.error({
-      description: 'Bad email or password'
-    });
+    return msg.badPassword();
   }
   
   result = dataModel.getByEmail(data.email);
   if(!result.password || data.password != result.password) {
-    return msg.error({
-      description: 'Bad password'
-    });
+    return msg.badPassword();
   }
-  return msg.success({}, {
-    'X-Access-Token': 'onebigfuckingstringz'
-  });
+  return msg.goodLogin('onebigfuckingstringz');
 }
 
 function subLogout(dataModel, session, method, params, data) {
-  return msg.success({});
+  return msg.good();
 }
     
 function sessAuthenticate(dataModel, headers) {
