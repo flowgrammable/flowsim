@@ -10,16 +10,18 @@ program
   .option('-p, --port [tcp port]', 'Specify a listening port')
   .option('-a, --address [ip address]', 'Specify a listening ip address')
   .option('-c, --config [config file]', 'Specify a configuration file')
+  .option('-b, --base [base html dir]', 'Specify a base dir for static files')
   .option('-d, --database [database file]', 'Specify a database file')
   .parse(process.argv);
 
 var port = program.port || process.env.PORT || 3000;
 var ip = program.address || process.env.ADDRESS || '127.0.0.1';
 var config = program.config || process.env.CONFIG || './config';
+var htmlbase = program.base || process.env.BASE || __dirname;
 var database = program.database || process.env.DATABASE || './database';
 
 var app = connect();
-html.serve(app, connect, require(config));
+html.serve(app, connect, { base: htmlbase, content: require(config)});
 
 app
   .use(connect.json())
