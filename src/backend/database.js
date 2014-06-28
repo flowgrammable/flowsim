@@ -5,15 +5,14 @@
 module.exports = {
   subscribers: [
     {
-      subscriberId: 1,
-      name: "Jasson Casey",
       email: "jasson.casey@gmail.com",
-      password: "iluvflowg"
+      password: "iluvflowg",
+      state: "",                        // CREATED | ACTIVE | RESET | CLOSED,
+      token: ""                         // large random number
     }
   ],
   sessions: [
     {
-      sessionId: '123456',
       accessToken: 'asdfasdf',
       subscriberId: 2
     }
