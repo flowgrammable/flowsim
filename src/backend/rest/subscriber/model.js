@@ -2,6 +2,7 @@
 var _ = require('underscore');
 var uuid = require('node-uuid');
 var msg = require('./msg');
+var bcrypt = require('bcrypt');
 
 // Start subscriber ids from some random 5 digit prime
 var base = 19543;
@@ -33,12 +34,16 @@ function _subCreate(db, row) {
 }
 
 function subCreate(db, em, pwd) {
+  bcrypt.hash('password', 5, function( err, bcryptedPassword) {
   msg.unwrap(_subCreate(db, {
     email: em, 
-    password: pwd,
     state: "CREATED",
     verification: uuid.v4()
   }), function(row) {
+    bcrypt.hash(pwd, 5, function(err, bcryptedPwd) {
+      if(err) throw err;
+      row.password = bcryptedPwd;
+    });
     return msg.success(row.verification);
   });
 }
@@ -49,24 +54,6 @@ function subVerify(db, token) {
   if(exists.state != 'CREATED') return msg.badVerificationState();
   exists.state = 'ACTIVE';
   return msg.success();
-}
-
-function subReadById(db, id) {
-  var table = db.subscribers;
-  id -= base;
-  if(id < 0 || id >= table.length)
-    return "badId";
-  return table[id];
-}
-
-function subReadByEmail(db, email) {
-  var table = db.subscribers;
-  var row = _.find(table, function(_row) {
-    if(email == _row.email) return true;
-    else return false;
-  });
-  if(!row) return "badEmail";
-  return row;
 }
 
 function subUpdate(db, id, row) {
@@ -101,8 +88,6 @@ module.exports = function(db) {
       create: _.bind(subCreate, null, db),
       verify: _.bind(subVerify, null, db),
 
-      readById: _.bind(subReadById, null, db),
-      readByEmail: _.bind(subReadByEmail, null, db),
       update: _.bind(subUpdate, null, db),
       destroy: _.bind(subDestroy, null, db)
     },

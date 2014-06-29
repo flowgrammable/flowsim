@@ -19,12 +19,8 @@ function subRegister(dataModel, method, params, data) {
 }
 
 function subVerify(dataModel, method, params, data) {
-  if(!data.token)
-    return msg.missingToken();
-  var result = dataModel.subscriber.verify(data.token);
-  if(result == "badToken") return msg.badToken();
-  if(result == "badState") return msg.badState();
-  return msg.success();
+  if(!data.token) return msg.missingToken();
+  return dataModel.subscriber.verify(data.token);
 }
 
 function subReset(dataModel, method, params, data) {

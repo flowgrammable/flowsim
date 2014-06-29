@@ -64,6 +64,12 @@ exports.missingToken = function() {
   });
 }
 
+exports.badVerificationToken = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "badVerificationToken"
+  });
+}
 
 /*
 exports.goodLogin = function(accessToken) {

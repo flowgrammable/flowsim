@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^0.7.8",
     "commander": "^2.2.0",
     "connect": "^2.14.5",
     "node-uuid": "^1.4.1",
