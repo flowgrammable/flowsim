@@ -49,11 +49,17 @@ function subCreate(db, em, pwd) {
 }
 
 function subVerify(db, token) {
-  var exists = subGetByField(db, "verfication", token);
-  if(!exists) return msg.badToken();
-  if(exists.state != 'CREATED') return msg.badVerificationState();
-  exists.state = 'ACTIVE';
+  var result = subGetByField(db, "verfication", token);
+  if(!result) return msg.badToken();
+  if(result.state != 'CREATED') return msg.badVerificationState();
+  result.state = 'ACTIVE';
   return msg.success();
+}
+
+function subReset(db, email) {
+  var result = subGetByField(db, "email", email);
+  if(!result) return msg.badEmailReset();
+
 }
 
 function subUpdate(db, id, row) {
