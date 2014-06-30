@@ -41,7 +41,7 @@ exports.badPwd = function() {
   });
 }
 
-exports.missingToken = function() {
+exports.missingVerificationToken = function() {
   return msg.error({
     system: "subscriber/controller",
     type: "missingVerificationToken"
@@ -52,6 +52,20 @@ exports.badVerificationToken = function() {
   return msg.error({
     system: "subscriber/controller",
     type: "badVerificationToken"
+  });
+}
+
+exports.missingAccessToken = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "missingAccessToken"
+  });
+}
+
+exports.badAccessToken = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "badAccessToken"
   });
 }
 

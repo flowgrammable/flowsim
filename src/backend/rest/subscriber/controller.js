@@ -13,35 +13,44 @@ function subRegister(dataModel, method, params, data) {
   // Attempt to create the user
   msg.test(dataModel.subscriber.create(data.email, data.password),
     function(succ) {
-      // generate email with url to result
+      // generate email with url to present
       // dataModel.subscriber.sendVerification(token);
       return msg.success();
     });
 }
 
 function subVerify(dataModel, method, params, data) {
+  // Ensure a verification token is present
   if(!data.token) return msg.missingToken();
+  // Return the result of verification
   return dataModel.subscriber.verify(data.token);
 }
 
 function subReset(dataModel, method, params, data) {
+  // Ensure email is present and valid
+  if(!data.email) return msg.missingEmail();
+  if(badEmail(data.email)) return msg.badEmail(data.email);
+  // Return the result of password reset
+  msg.test(dataModel.subscriber.reset(data.email),
+    function(succ) {
+      // generate email with the url to present
+      return msg.success();
+    });
 }
 
 function subLogin(dataModel, method, params, data) {
-  var result;
-  if(!data.email || !data.password) {
-    return msg.badPassword();
-  }
-  
-  result = dataModel.getByEmail(data.email);
-  if(!result.password || data.password != result.password) {
-    return msg.badPassword();
-  }
-  return msg.goodLogin('onebigfuckingstringz');
+  if(!data.email) return msg.missingEmail();
+  if(badEmail(data.email)) return msg.badEmail(data.email);
+  if(!data.
+  msg.test(dataModel.login(data.email, data.password),
+    function(succ) {
+      // pass back the X-Access-Token 
+      return msg.success();
+    });
 }
 
 function subLogout(dataModel, session, method, params, data) {
-  return msg.good();
+  return msg.success();
 }
     
 function sessAuthenticate(dataModel, headers) {
