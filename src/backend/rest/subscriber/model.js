@@ -3,6 +3,7 @@ var _ = require('underscore');
 var uuid = require('node-uuid');
 var msg = require('./msg');
 var bcrypt = require('bcrypt');
+var mailer = require('../../mailer');
 
 // Start subscriber ids from some random 5 digit prime
 var base = 19543;
@@ -87,6 +88,10 @@ function sessGetByAccessToken(db, token) {
   return null;
 }
 
+function sendVerification(token) {
+    //   
+    //  mailer.sendMail(mailer.verificationMessage(token));
+}
 
 module.exports = function(db) {
   return {

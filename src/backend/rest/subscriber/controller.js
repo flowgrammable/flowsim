@@ -14,6 +14,7 @@ function subRegister(dataModel, method, params, data) {
   msg.unwrap(dataModel.subscriber.create(data.email, data.password),
     function(succ) {
       // generate email with url to result
+      // dataModel.subscriber.sendVerification(token);
       return msg.success();
     });
 }
