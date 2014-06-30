@@ -1,25 +1,9 @@
 
 msg = require('../msg');
 
-exports.unwrap = function(result, succ, err) {
-  if(result.success) {
-    return succ(result.success.result);
-  } else if(result.error) {
-    if(typeof(err) != 'undefined')) {
-      return err(result.error);
-    } else {
-      return result;
-    }
-  } else {
-    throw "Undefined success and error objects";
-  }
-}
-
-exports.success = function(data) {
-  return msg.success({
-    result: data
-  });
-}
+exports.success = msg.success;
+exports.error = msg.error;
+exports.test = msg.test;
 
 exports.emailInUse = function() {
   return msg.error({
@@ -71,10 +55,3 @@ exports.badVerificationToken = function() {
   });
 }
 
-/*
-exports.goodLogin = function(accessToken) {
-  return msg.success({}, {
-    'X-Access-Token': accessToken
-  });
-}
-*/

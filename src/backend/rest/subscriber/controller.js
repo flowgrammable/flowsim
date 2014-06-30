@@ -11,7 +11,7 @@ function subRegister(dataModel, method, params, data) {
   if(badPassword(data.password)) return msg.badPwd();
 
   // Attempt to create the user
-  msg.unwrap(dataModel.subscriber.create(data.email, data.password),
+  msg.test(dataModel.subscriber.create(data.email, data.password),
     function(succ) {
       // generate email with url to result
       // dataModel.subscriber.sendVerification(token);

@@ -13,3 +13,17 @@ exports.error = function(data, other) {
   }
 }
 
+exports.unwrap = function(result, succ, err) {
+  if(result.success) {
+    return succ(result.success.result);
+  } else if(result.error) {
+    if(typeof(err) != 'undefined')) {
+      return err(result.error);
+    } else {
+      return result;
+    }
+  } else {
+    throw "Undefined success and error objects";
+  }
+}
+

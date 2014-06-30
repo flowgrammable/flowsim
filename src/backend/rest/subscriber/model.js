@@ -1,8 +1,9 @@
 
 var _ = require('underscore');
 var uuid = require('node-uuid');
-var msg = require('./msg');
 var bcrypt = require('bcrypt');
+
+var msg = require('./msg');
 var mailer = require('../../mailer');
 
 // Start subscriber ids from some random 5 digit prime
@@ -36,7 +37,7 @@ function _subCreate(db, row) {
 
 function subCreate(db, em, pwd) {
   bcrypt.hash('password', 5, function( err, bcryptedPassword) {
-  msg.unwrap(_subCreate(db, {
+  msg.test(_subCreate(db, {
     email: em, 
     state: "CREATED",
     verification: uuid.v4()
@@ -60,7 +61,6 @@ function subVerify(db, token) {
 function subReset(db, email) {
   var result = subGetByField(db, "email", email);
   if(!result) return msg.badEmailReset();
-
 }
 
 function subUpdate(db, id, row) {
