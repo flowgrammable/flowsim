@@ -12,7 +12,8 @@ var app = connect();
 app.use('/api/', function(req, res, next)
 	{ 
 		var path = url.parse(req.url).pathname.split('/');
-		eventEmitter.emit(path[1], req, res, next);
+		var data = 'test data';
+		eventEmitter.emit(path[1], req, res, next, data);
 
 });
  
