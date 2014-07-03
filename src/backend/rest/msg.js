@@ -13,7 +13,7 @@ exports.error = function(data, other) {
   }
 }
 
-exports.unwrap = function(result, succ, err) {
+exports.test = function(result, succ, err) {
   if(result.success) {
     return succ(result.success.result);
   } else if(result.error) {
