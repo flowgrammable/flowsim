@@ -19,11 +19,18 @@ exports.missingEmail = function() {
   });
 }
 
-exports.badEmail = function(em) {
+exports.badEmail = function(email) {
   return msg.error({
     system: "subscriber/controller",
     type: "badEmail",
-    email: em
+    email: email
+  });
+}
+
+exports.incorrectPwd = function() {
+  return msg.error({
+    system: "subscriber/model",
+    type: "incorrectPwd"
   });
 }
 
@@ -66,6 +73,20 @@ exports.badAccessToken = function() {
   return msg.error({
     system: "subscriber/controller",
     type: "badAccessToken"
+  });
+}
+
+exports.accessTokenExpired = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "accessTokenExpired"
+  });
+}
+
+exports.unverifiedUser = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "unverifiedUser"
   });
 }
 
