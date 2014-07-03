@@ -41,8 +41,10 @@ function subReset(dataModel, method, params, data) {
 function subLogin(dataModel, method, params, data) {
   if(!data.email) return msg.missingEmail();
   if(badEmail(data.email)) return msg.badEmail(data.email);
-  if(!data.
+  //if(!data.
   msg.test(dataModel.login(data.email, data.password),
+    //Incorrect Password??
+    //User is registered but not verified??
     function(succ) {
       // pass back the X-Access-Token 
       return msg.success();
