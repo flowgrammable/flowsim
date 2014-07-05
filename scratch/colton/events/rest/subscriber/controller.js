@@ -2,15 +2,13 @@ var eventEmitter = require('../../event.js');
 var url = require('url');
 var count = 10;
 
-var subscriberHandler = function subscriberHandler(req, res, next, data)
+var subscriberHandler = function subscriberHandler(method, params, data, next)
 {
-  var path = url.parse(req.url).pathname.split('/');
-  console.log('path from subscriber', path);
   console.log('ring ring ring');
-  
-  switch(path[2]){
+  console.log('params: ', params);
+  switch(params[0]){
   	case 'register':
-  		registerSub(req, res);
+  		registerSub(data, next);
   		break;
     case 'login':
       break;
@@ -19,19 +17,20 @@ var subscriberHandler = function subscriberHandler(req, res, next, data)
     case 'verify':
       break;
   	default:
+      next('service doesnt exist');
   }
 }
 eventEmitter.on('subscriber', subscriberHandler);
 
-function registerSub(req, res){
+function registerSub(data, next){
 	console.log('called register sub');
     setTimeout(function() {
       var result = 'successfully register';
-      eventEmitter.emit('result', result);
-      res.end(req.url);
+      next(result);
 
     }, count*1000);
     
     count = count /10;
 
 }
+
