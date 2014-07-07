@@ -2,9 +2,8 @@ var nodemailer = require("nodemailer");
 
 // Testing async function return
 
-exports.handleSubscriber = function(method, params, data, cb){
-
-
+var registerSub = function(method, params, data, cb){
+  
     var smtpTransport = nodemailer.createTransport("SMTP", {
            service: "Gmail",
            auth: {
@@ -27,3 +26,15 @@ exports.handleSubscriber = function(method, params, data, cb){
     });
 
 }
+
+module.exports = function(){
+
+    return {
+      module: {
+        noauth: {
+          register : registerSub
+        }
+      }
+    }
+}
+

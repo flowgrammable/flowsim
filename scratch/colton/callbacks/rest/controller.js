@@ -2,26 +2,29 @@
 var url = require('url');
 
 //import modules
-var subscriber = require('./subscriber');
+var subscriber = require('./subscriber')();
 
-module.exports = 
-function(req, res, next){ 
-		var path = url.parse(req.url).pathname.split('/');
-        var params = path.slice(2);
+function wrapRes(res, result){
+	res.writeHead('200', {"Content-Type":"application/json"});
+	res.end(JSON.stringify(result));
+}
 
-        // dispatch module by path
-        // need to add checks to see module contains auth and noauth
-        switch(path[1]){
-            case 'subscriber':
-                 // call async subscriber module
-                 // once finished, unwrap result, and respond to client
-                 subscriber.handleSubscriber(req.method, params, req.body, 
-                    function(result){ 
-                        console.log('got a result: ', result );
-                        res.end(result);
-                    });
-            break;
-            default:
-            res.end('module does not exist');
-       }
+module.exports = function(userModules) {
+
+
+	return function(req, res, next){ 
+			var path = url.parse(req.url).pathname.split('/');
+	        var params = path.slice(2);
+	        var modules = {};
+	        modules.subscriber = subscriber.module;
+	        console.log(modules["subscriber"]);
+
+	        var noauthFunction = modules[path[1]].noauth[path[2]];
+
+	        noauthFunction(req.method, params, req.body, function(result){
+	        	console.log('got a result: ', result);
+	        	wrapRes(res, result);
+	        });
+
+	}
 }
