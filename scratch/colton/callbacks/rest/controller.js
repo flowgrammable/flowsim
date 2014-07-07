@@ -20,7 +20,7 @@ module.exports = function(userModules) {
 	        console.log(modules["subscriber"]);
 
 	        var noauthFunction = modules[path[1]].noauth[path[2]];
-
+	        
 	        noauthFunction(req.method, params, req.body, function(result){
 	        	console.log('got a result: ', result);
 	        	wrapRes(res, result);

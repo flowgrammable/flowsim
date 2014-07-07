@@ -1,38 +1,35 @@
-var nodemailer = require("nodemailer");
+var _ = require('underscore');
 
+var msg = require('./msg');
 // Testing async function return
 
-var registerSub = function(method, params, data, cb){
-  
-    var smtpTransport = nodemailer.createTransport("SMTP", {
-           service: "Gmail",
-           auth: {
-               user: "flowgrammablemailer@gmail.com",
-               pass: "" // insert password here
-           }
-    });
+var model = require('./model');
 
-    var mailOptions = { from: "flog mailer", to: "coltonchojnacki@gmail.com", subject: "this is an async test", text: "just to have text"}
+var subRegister = function(dataModel, method, params, data, cb){
+    // validate inputs
+    //if(!data.email) return cb(msg.missingEmail());
 
-    smtpTransport.sendMail(mailOptions, function(err, response){
-        if(err){
-           smtpTransport.close();
-           cb(err.name);
-        } else {
-            console.log("Message sent: " + response.message);
-            cb(response.message);
-        }
-        smtpTransport.close();
+    dataModel.subscriber.create(data.email, data.password, function(result){
+      // if result.success()
+      if(result.success){
+        dataModel.subscriber.sendVerification(data.email, function(result){
+          if(result.success){
+            cb(result);
+          }
+        });
+      } else {
+        cb(result.error); // 
+      }
     });
 
 }
 
 module.exports = function(){
-
+    var dataModel = model();
     return {
       module: {
         noauth: {
-          register : registerSub
+          register : _.bind(subRegister, null, dataModel)
         }
       }
     }
