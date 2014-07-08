@@ -1,22 +1,49 @@
-
+var events = require('../../events');
 var _ = require('underscore');
+var async = require('async');
 var msg = require('./msg');
-var model = require('./model');
+var model = require('./modeldb');
+var orm = require('../../dbbs');
 
-function subRegister(dataModel, method, params, data) {
+/*
+1. Create user
+2. check for success or error
+3. if success, sendemail
+   if error, go back to rest controller
+4. check sendmail error or success
+5. if success, send success
+   if error, send error
+*/
+
+function passback(id, result){
+  events.Emitter.emit(id, result);
+}
+
+function subRegister(dataModel, method, params, data, id) {
   // Provide some basic sanity checks
-  if(!data.email) return msg.missingEmail();
-  if(badEmail(data.email)) return msg.badEmail(data.email);
-  if(!data.password) return msg.missingPwd();
-  if(badPassword(data.password)) return msg.badPwd();
+  if(!data.email) return passback(id, msg.missingEmail());
+  //if(badEmail(data.email)) return msg.badEmail(data.email);
+  if(!data.password) return passback(id, msg.missingPwd());
+  //if(badPassword(data.password)) return msg.badPwd();
 
-  // Attempt to create the user
-  msg.test(dataModel.subscriber.create(data.email, data.password),
+
+  
+  dataModel.subscriber.create(data.email, data.password, function(result){
+      console.log('the id is: ', id);
+      events.Emitter.emit(id, result);
+  });
+
+
+
+
+/*  // Attempt to create the user
+ msg.test(dataModel.subscriber.create(data.email, data.password),
     function(succ) {
       // generate email with url to present
       // dataModel.subscriber.sendVerification(token);
       return msg.success();
     });
+*/
 }
 
 function subVerify(dataModel, method, params, data) {
@@ -64,6 +91,7 @@ function sessAuthenticate(dataModel, headers) {
 
 module.exports = function(db) {
   var dataModel = model(db);
+  var Subscriber = orm.model("subscriber"); 
   return {
     authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {

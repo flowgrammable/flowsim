@@ -1,14 +1,24 @@
-var mailer = require("nodemailer");
+var nodemailer = require("nodemailer");
 
 // function to send mail
-exports.sendMail = function (){
-  var smtpTransport = nodemailer.createTransport("SMTP", config);
+exports.sendMail = function (email, message, next){
+  var mailerConfig = {
+              service:'gmail',
+              auth:{
+                user: 'flowgrammablemailer@gmail.com',
+                pass: ''
+              }
+            }
+
+  var smtpTransport = nodemailer.createTransport("SMTP", mailerConfig);
+  var messageOptions = { from: 'flog mailer', to: email, subject: 'test', html: message}
   smtpTransport.sendMail(messageOptions, function(err, response){
     if(err){
       smtpTransport.close();
       next(err.name);
     }else{
       console.log("Message sent: " +  response.message);
+      next(response);
     }
     smtpTransport.close();
   });      
@@ -24,13 +34,7 @@ exports.verificationMessage = function(token){
   return message;
 }
 /*
-var mailerConfig = {
-              service:'gmail',
-              auth:{
-                user: 'flowgrammablemailer@gmail.com',
-                pass: 'flowtester2014'
-              }
-            }
+
 
 var messageOptions = {
               from: 'flog mailer',

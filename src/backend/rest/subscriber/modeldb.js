@@ -1,4 +1,3 @@
-
 var _ = require('underscore');
 var uuid = require('node-uuid');
 var bcrypt = require('bcrypt');
@@ -6,6 +5,8 @@ var bcrypt = require('bcrypt');
 var msg = require('./msg');
 var mailer = require('../../mailer');
 
+var orm = require('../../dbbs');
+//var Subscriber = orm.model("Subscriber");
 // Start subscriber ids from some random 5 digit prime
 var base = 19543;
 
@@ -35,8 +36,31 @@ function _subCreate(db, row) {
   }
 }
 
-function subCreate(db, em, pwd) {
-  bcrypt.hash('password', 5, function( err, bcryptedPassword) {
+function subCreate(db, em, pwd, cb) {
+  var Subscriber = orm.model("subscriber");	
+  
+  Subscriber.create({
+      email: em,
+      password: pwd,
+      reg_date: new Date(),
+      reg_ip: '127.0.0.1',
+      verification_token: 'abc123',
+      status: 'REGISTERED'
+  }).success(function(sub){
+       // send email
+       mailer.sendMail('coltonchojnacki@gmail.com', mailer.verificationMessage('token') ,function(succ){
+          console.log('done with mailer? ', succ);
+          cb(succ);
+       });
+  }).error(function(err){
+        cb(msg.error());
+  });
+    
+    
+
+//msg.test(result function(success){return msg.success()});
+
+/*  bcrypt.hash('password', 5, function( err, bcryptedPassword) {
   msg.test(_subCreate(db, {
     email: em, 
     state: "CREATED",
@@ -47,8 +71,9 @@ function subCreate(db, em, pwd) {
       row.password = bcryptedPwd;
     });
     return msg.success(row.verification);
+   });
   });
-});
+*/
 
 }
 
@@ -95,21 +120,22 @@ function sendVerification(token) {
     //  mailer.sendMail(mailer.verificationMessage(token));
 }
 
+
 module.exports = function(db) {
   return {
     subscriber: {
-      create: _.bind(subCreate, null, db),
-      verify: _.bind(subVerify, null, db),
+      create: _.bind(subCreate, null, db)
+//      verify: _.bind(subVerify, null, db),
 
-      update: _.bind(subUpdate, null, db),
-      destroy: _.bind(subDestroy, null, db)
+//      update: _.bind(subUpdate, null, db),
+//      destroy: _.bind(subDestroy, null, db)
     },
     session: {
 //      create: _.bind(sessCreate, null, db),
 //      destroy: _.bind(sessDestroy, null, db),
-//      authenticate: _.bind(sessAuthenticate, null, db),
+//      authenticate: _.bind(sessAuthenticate, null, db);
 
-      getByAccessToken: _.bind(sessGetByAccessToken, null, db)
+//      getByAccessToken: _.bind(sessGetByAccessToken, null, db)
     }
   };
 }

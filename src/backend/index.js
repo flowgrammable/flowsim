@@ -5,6 +5,8 @@ var program = require('commander');
 var html = require('./html/controller');
 var rest = require('./rest/controller');
 
+require('./dbbs').setup();
+
 program
   .version(process.env.SERVER_VERSION)
   .option('-p, --port [tcp port]', 'Specify a listening port')
@@ -18,7 +20,7 @@ var port = program.port || process.env.PORT || 3000;
 var ip = program.address || process.env.ADDRESS || '127.0.0.1';
 var config = program.config || process.env.CONFIG || './config';
 var htmlbase = program.base || process.env.BASE || __dirname;
-var database = program.database || process.env.DATABASE || './database';
+var database = program.database || process.env.DATABASE || './dbbs';
 
 var app = connect();
 html.serve(app, connect, { base: htmlbase, content: require(config)});

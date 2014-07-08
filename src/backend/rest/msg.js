@@ -14,10 +14,11 @@ exports.error = function(data, other) {
 }
 
 exports.test = function(result, succ, err) {
+  console.log('result', result);
   if(result.success) {
     return succ(result.success.result);
   } else if(result.error) {
-    if(typeof(err) != 'undefined')) {
+    if(typeof(err) != 'undefined') {
       return err(result.error);
     } else {
       return result;
