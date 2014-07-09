@@ -1,38 +1,22 @@
 var _ = require('underscore');
-var uuid = require('node-uuid');
-var bcrypt = require('bcrypt');
 var async = require('async');
 
 var msg = require('./msg');
-var mailer = require('../../mailer');
-var orm = require('../../dbbs');
 var adapter = require('./adapter');
-// Start subscriber ids from some random 5 digit prime
-var base = 19543;
 
-
-
-/*
-1. Create user
-2. check for success or error
-3. if success, sendemail
-   if error, go back to rest controller
-4. check sendmail error or success
-5. if success, send success
-   if error, send error
-*/
-function resultChecker(result, cb){
+function resultChecker(result, callback){
   if(result.success){
-    cb(null, result);
+    callback(null, result);
   } else if(result.error) {
-    cb(result, null);
+    callback(result, null);
   } else {
     throw "Undefined success and error objects";
   }
 }
 
 function subCreate(adapter, em, pwd, cb) {
-  
+  // 1. Insert User
+  // 2. Send Verification Email
   async.waterfall([
     function(callback){
       adapter.insertSubscriber(em, pwd, function(result){
