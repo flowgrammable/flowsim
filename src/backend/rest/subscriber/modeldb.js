@@ -9,6 +9,16 @@ var orm = require('../../dbbs');
 // Start subscriber ids from some random 5 digit prime
 var base = 19543;
 
+function passback(id, result){
+  // TODO: implement result check
+  // 1. if result of function is error, then return to rest module
+  // 2. if result of function is successful, then continue processing
+  // 3. if no more left to process, then return last success 
+  // message to rest module
+  
+  events.Emitter.emit(id, result);
+}
+
 function subGetById(db, id) {
   var table = db.subscribers;
   id -= base;
@@ -36,12 +46,21 @@ function _subCreate(db, row) {
 }
 
 function sendVerification(em, token, cb){
-
   var message = mailer.verificationMessage(token);
   mailer.sendMail(em, html, function(succ){
       cb(succ);
   });
 }
+
+/*
+1. Create user
+2. check for success or error
+3. if success, sendemail
+   if error, go back to rest controller
+4. check sendmail error or success
+5. if success, send success
+   if error, send error
+*/
 
 function subCreate(db, em, pwd, cb) {
   var Subscriber = orm.model("subscriber");	

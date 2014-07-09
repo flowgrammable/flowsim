@@ -6,22 +6,14 @@ var msg = require('./msg');
 var model = require('./modeldb');
 var orm = require('../../dbbs');
 
-/*
-1. Create user
-2. check for success or error
-3. if success, sendemail
-   if error, go back to rest controller
-4. check sendmail error or success
-5. if success, send success
-   if error, send error
-*/
+
 
 function passback(id, result){
   // TODO: implement result check
   // 1. if result of function is error, then return to rest module
   // 2. if result of function is successful, then continue processing
   // 3. if no more left to process, then return last success 
-  // message to rest module
+  //    message to rest module
   
   events.Emitter.emit(id, result);
 }
@@ -82,8 +74,7 @@ function sessAuthenticate(dataModel, headers) {
 }
 
 module.exports = function(db) {
-  var dataModel = model(db);
-  var Subscriber = orm.model("subscriber"); 
+  var dataModel = model(db); 
   return {
     authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {
