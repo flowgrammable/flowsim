@@ -8,12 +8,11 @@ var orm = require('../../dbbs');
 
 
 
-function passback(id, result){
+function passback(id, result, nextFunction){
   // TODO: implement result check
-  // 1. if result of function is error, then return to rest module
-  // 2. if result of function is successful, then continue processing
-  // 3. if no more left to process, then return last success 
-  //    message to rest module
+  // 1. if result is error, then return to rest module
+  // 2. if result is successful, then call nextFunction
+  // 3. if nextFunction is null, then return success message to rest module
   
   events.Emitter.emit(id, result);
 }

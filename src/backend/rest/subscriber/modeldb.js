@@ -19,6 +19,45 @@ function passback(id, result){
   events.Emitter.emit(id, result);
 }
 
+/*
+1. Create user
+2. check for success or error
+3. if success, sendemail
+   if error, go back to rest controller
+4. check sendmail error or success
+5. if success, send success
+   if error, send error
+*/
+
+var sendVerification = function(em, token, cb){
+  var message = mailer.verificationMessage(token);
+  mailer.sendMail(em, html, function(succ){
+      cb(succ);
+  });
+}
+
+function subCreate(db, em, pwd, cb) {
+  var Subscriber = orm.model("subscriber"); 
+  var token = uuid.v4();
+
+  Subscriber.create({
+      email: em,
+      password: pwd,
+      reg_date: new Date(),
+      reg_ip: '127.0.0.1',
+      verification_token: token,
+      status: 'REGISTERED'
+  }).success(function(sub){
+      passback(id, msg.success('user inserted'), )
+      sendVerification(em, token, function(succ){
+        cb(succ);
+      });
+  }).error(function(err){
+        cb(msg.error());
+  });
+    
+}
+
 function subGetById(db, id) {
   var table = db.subscribers;
   id -= base;
@@ -45,43 +84,9 @@ function _subCreate(db, row) {
   }
 }
 
-function sendVerification(em, token, cb){
-  var message = mailer.verificationMessage(token);
-  mailer.sendMail(em, html, function(succ){
-      cb(succ);
-  });
-}
 
-/*
-1. Create user
-2. check for success or error
-3. if success, sendemail
-   if error, go back to rest controller
-4. check sendmail error or success
-5. if success, send success
-   if error, send error
-*/
 
-function subCreate(db, em, pwd, cb) {
-  var Subscriber = orm.model("subscriber");	
-  var token = uuid.v4();
 
-  Subscriber.create({
-      email: em,
-      password: pwd,
-      reg_date: new Date(),
-      reg_ip: '127.0.0.1',
-      verification_token: token,
-      status: 'REGISTERED'
-  }).success(function(sub){
-      sendVerification(em, token, function(succ){
-        cb(succ);
-      });
-  }).error(function(err){
-        cb(msg.error());
-  });
-    
-}
 
 function subVerify(db, token) {
   var result = subGetByField(db, "verfication", token);
