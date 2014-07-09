@@ -17,6 +17,7 @@ function resultChecker(result, callback){
 function subCreate(adapter, em, pwd, cb) {
   // 1. Insert User
   // 2. Send Verification Email
+
   async.waterfall([
     function(callback){
       adapter.insertSubscriber(em, pwd, function(result){
@@ -35,12 +36,25 @@ function subCreate(adapter, em, pwd, cb) {
 
 }
 
-function subVerify(db, token) {
-  var result = subGetByField(db, "verfication", token);
-  if(!result) return msg.badToken();
-  if(result.state != 'CREATED') return msg.badVerificationState();
-  result.state = 'ACTIVE';
-  return msg.success();
+function subVerify(adapter, token, cb) {
+  // 1. Fetch user by verificationToken
+  // 2. Set user to verified
+
+  async.waterfall([
+    function(callback){
+      adapter.fetchSubscriber(token, function(sub){
+        resultChecker(result, callback);
+      });
+    },
+    function(sub, callback){
+      adapter.verifySubscriber(sub, function(result){
+        resultChecker(result, callback);
+      });
+     }
+    ], function(err, result){
+        if(err) { cb(err); }
+        else    { cb(result); }
+    });
 }
 
 function subReset(db, email) {
@@ -76,8 +90,8 @@ function sessGetByAccessToken(db, token) {
 module.exports = function(db) {
   return {
     subscriber: {
-      create: _.bind(subCreate, null, adapter)
-//      verify: _.bind(subVerify, null, db),
+      create: _.bind(subCreate, null, adapter),
+      verify: _.bind(subVerify, null, adapter),
 
 //      update: _.bind(subUpdate, null, db),
 //      destroy: _.bind(subDestroy, null, db)

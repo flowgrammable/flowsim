@@ -21,10 +21,16 @@ function subRegister(dataModel, method, params, data, id) {
 }
 
 function subVerify(dataModel, method, params, data) {
-  // Ensure a verification token is present
-  if(!data.token) return msg.missingToken();
-  // Return the result of verification
-  return dataModel.subscriber.verify(data.token);
+
+  var token = params[1];
+  // Ensure a verification token is present and valid
+  if(!token) return passback(id, msg.missingToken());
+  // if(!validToken(params[1])) return passback(id, msg.missingToken());
+
+  dataModel.subscriber.verify(token, function(result){
+      passback(id, result);
+  });
+
 }
 
 function subReset(dataModel, method, params, data) {
