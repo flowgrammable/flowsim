@@ -18,24 +18,27 @@ var Subscriber = orm.model("Subscriber");
 
 //Login
 // 1. fetch subscriber
-// 2. 
+// 2. send back authToken
 
-function insertSubscriber(em, password, cb){
-  
-  Subscriber.create({
+function insertSubscriber(em, pwd, cb){
+	var token = 'testtoken';
+    Subscriber.create({
       email: em,
       password: pwd,
       reg_date: new Date(),
       reg_ip: '127.0.0.1',
       verification_token: token,
       status: 'REGISTERED'
-  }).success(function(result){
+    }).success(function(result){
    		cb(result);
-  }).error(function(err){
+    }).error(function(err){
         cb(msg.error());
-  });
-
+    });
 }
+
+insertSubscriber('test@test.com', 'thepassword', function(result){
+	console.log(result);
+});
 
 function updateSubscriber(authToken,cb){
 	
@@ -43,9 +46,6 @@ function updateSubscriber(authToken,cb){
 }
 
 function fetchSubscriber(authToken,cb){
-	
 }
 
-function sendVerficationEmail(em, verificationToken, function(result){
-
-});
+function sendVerficationEmail(em, verificationToken){}
