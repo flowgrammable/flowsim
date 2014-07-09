@@ -33,17 +33,4 @@ exports.verificationMessage = function(token){
                  '</a><br/><br/><h1>The Flowsim Team!</h1></body></html>'
   return message;
 }
-/*
 
-
-var messageOptions = {
-              from: 'flog mailer',
-              to: subscriber.email,
-              subject: 'Verification Email',
-              html:'<html><title>Thank you for signing up for Flowsim</title><body>' +
-              'Thank you for signing up for Flowsim.<br/>Click the link below to confirm ' +
-              'your account<br/><br/><a href=\"http://localhost:8000/api/subscribers/verify/'+
-              token+'\">https://www.flowgrammable.org/subscribers/verify/'+token+'</a><br/>' +
-              '<br/><h1>The Flowsim Team!</h1></body></html>'
-            }
-*/
