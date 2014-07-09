@@ -1,6 +1,7 @@
 // adapter.js
 // adapter for using DB, or email
 
+msg = require('./msg');
 require('../../dbbs').setup();
 
 var orm = require('../../dbbs');
@@ -29,18 +30,24 @@ function insertSubscriber(em, pwd, cb){
       password: pwd,
       reg_date: new Date(),
       reg_ip: '127.0.0.1',
-      verification_token: token,
       status: 'REGISTERED'
     }).success(function(result){
-   		cb(result);
+   		cb(msg.success());
     }).error(function(err){
-        cb(msg.error());
+      if (err.detail == 'Key (email)=(' + em + ') already exists.')
+        cb(msg.emailInUse());
+      // TODO: check if the issue is the database connection
+      else
+        cb(msg.noDatabaseConnection());
     });
 }
 
-insertSubscriber('test@test.com', 'thepassword', function(result){
-	console.log(result);
-});
+setTimeout(function(){ 
+  insertSubscriber('test@test.com', 'thepassword', function(result){
+    console.log(result);
+  });
+}, 3000);
+
 
 function updateSubscriber(authToken,cb){
 	

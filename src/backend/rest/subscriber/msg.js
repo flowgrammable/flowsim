@@ -5,6 +5,13 @@ exports.success = msg.success;
 exports.error = msg.error;
 exports.test = msg.test;
 
+exports.noDatabaseConnection = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "noDatabaseConnection"
+  });
+}
+
 exports.emailInUse = function() {
   return msg.error({
     system: "subscriber/model",
