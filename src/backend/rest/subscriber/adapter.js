@@ -4,7 +4,7 @@ var insertSubscriber = function(email, password, cb){
 	console.log('hit insertSubscriber');
 	setTimeout(function(){
 		console.log('sub timer');
-		cb(msg.success('could not insert'));
+		cb(msg.success('insert successful'));
 	}, 3000);
 }
 

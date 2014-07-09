@@ -1,19 +1,10 @@
 var _ = require('underscore');
-var async = require('async');
 
 var events = require('../../events');
 var msg = require('./msg');
-var model = require('./modeldb');
-var orm = require('../../dbbs');
+var model = require('./model');
 
-
-
-function passback(id, result, nextFunction){
-  // TODO: implement result check
-  // 1. if result is error, then return to rest module
-  // 2. if result is successful, then call nextFunction
-  // 3. if nextFunction is null, then return success message to rest module
-  
+function passback(id, result, nextFunction){  
   events.Emitter.emit(id, result);
 }
 
