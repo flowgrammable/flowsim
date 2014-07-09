@@ -5,7 +5,7 @@ var msg = require('./msg');
 var adapter = require('./adapter');
 
 function resultChecker(result, callback){
-  if(result.success){
+  if(result.value){
     callback(null, result);
   } else if(result.error) {
     callback(result, null);

@@ -1,15 +1,13 @@
 
 exports.success = function(data, other) {
   return {
-    success: data,
-    tunnel: other || {}
+    value: data || {}
   }
 }
 
 exports.error = function(data, other) {
   return {
-    error: data,
-    tunnel: other || {}
+    error: data
   }
 }
 

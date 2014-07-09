@@ -1,17 +1,14 @@
 var msg = require('./msg');
 
-var insertSubscriber = function(email, password, cb){
-	console.log('hit insertSubscriber');
+function insertSubscriber(email, password, cb){
 	setTimeout(function(){
-		console.log('sub timer');
-		cb(msg.success('insert successful'));
+		cb(msg.emailInUse());
 	}, 3000);
 }
 
 function sendEmail(email, cb){
 	setTimeout(function(){
-		console.log('email timer');
-		cb(msg.success('sent email'))
+		cb(msg.error('Cant send Email'));
 	}, 3000);
 }
 

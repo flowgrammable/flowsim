@@ -76,13 +76,9 @@ module.exports = function(db, userModules) {
       // execute the found function or error
       if(noauthFunction) {
         events.Emitter.once(id, function(result){
-          console.log('back at rest');
-          console.log('result is: ', result);
           wrapRes(res, result);
         });
-        noauthFunction(req.method, params, req.body, id, function(result){
-
-        });
+        noauthFunction(req.method, params, req.body, id);
       } else if(authFunction && session) {
         result = authFunction(session, req.method, params, req.body);
         wrapRes(res, result);
