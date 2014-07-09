@@ -9,15 +9,7 @@ var orm = require('../../dbbs');
 // Start subscriber ids from some random 5 digit prime
 var base = 19543;
 
-function passback(id, result){
-  // TODO: implement result check
-  // 1. if result of function is error, then return to rest module
-  // 2. if result of function is successful, then continue processing
-  // 3. if no more left to process, then return last success 
-  // message to rest module
-  
-  events.Emitter.emit(id, result);
-}
+
 
 /*
 1. Create user
@@ -48,7 +40,6 @@ function subCreate(db, em, pwd, cb) {
       verification_token: token,
       status: 'REGISTERED'
   }).success(function(sub){
-      passback(id, msg.success('user inserted'), )
       sendVerification(em, token, function(succ){
         cb(succ);
       });
