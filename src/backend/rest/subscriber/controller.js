@@ -16,6 +16,12 @@ var orm = require('../../dbbs');
 */
 
 function passback(id, result){
+  // TODO: implement result check
+  // 1. if result of function is error, then return to rest module
+  // 2. if result of function is successful, then continue processing
+  // 3. if no more left to process, then return last success 
+  // message to rest module
+  
   events.Emitter.emit(id, result);
 }
 
@@ -25,25 +31,10 @@ function subRegister(dataModel, method, params, data, id) {
   //if(badEmail(data.email)) return msg.badEmail(data.email);
   if(!data.password) return passback(id, msg.missingPwd());
   //if(badPassword(data.password)) return msg.badPwd();
-
-
-  
+ 
   dataModel.subscriber.create(data.email, data.password, function(result){
-      console.log('the id is: ', id);
-      events.Emitter.emit(id, result);
+      passback(id, result);
   });
-
-
-
-
-/*  // Attempt to create the user
- msg.test(dataModel.subscriber.create(data.email, data.password),
-    function(succ) {
-      // generate email with url to present
-      // dataModel.subscriber.sendVerification(token);
-      return msg.success();
-    });
-*/
 }
 
 function subVerify(dataModel, method, params, data) {

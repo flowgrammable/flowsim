@@ -4,9 +4,8 @@ var bcrypt = require('bcrypt');
 
 var msg = require('./msg');
 var mailer = require('../../mailer');
-
 var orm = require('../../dbbs');
-//var Subscriber = orm.model("Subscriber");
+
 // Start subscriber ids from some random 5 digit prime
 var base = 19543;
 
@@ -36,20 +35,29 @@ function _subCreate(db, row) {
   }
 }
 
+function sendVerification(em, token, cb){
+
+  var message = mailer.verificationMessage(token);
+  mailer.sendMail(em, html, function(succ){
+      cb(succ);
+  });
+}
+
 function subCreate(db, em, pwd, cb) {
   var Subscriber = orm.model("subscriber");	
-  
+  var token = uuid.v4();
+
   Subscriber.create({
       email: em,
       password: pwd,
       reg_date: new Date(),
       reg_ip: '127.0.0.1',
-      verification_token: 'abc123',
+      verification_token: token,
       status: 'REGISTERED'
   }).success(function(sub){
-       mailer.sendMail('coltonchojnacki@gmail.com', mailer.verificationMessage('token') ,function(succ){
-          cb(succ);
-       });
+      sendVerification(em, token, function(succ){
+        cb(succ);
+      });
   }).error(function(err){
         cb(msg.error());
   });
@@ -93,12 +101,6 @@ function sessGetByAccessToken(db, token) {
   }
   return null;
 }
-
-function sendVerification(token) {
-    //   
-    //  mailer.sendMail(mailer.verificationMessage(token));
-}
-
 
 module.exports = function(db) {
   return {
