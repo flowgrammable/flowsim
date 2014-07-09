@@ -7,7 +7,7 @@ module.exports = {
     password: Seq.STRING,
     reg_date: Seq.DATE,
     reg_ip: Seq.STRING,
+    ver_token: Seq.UUIDV4,
     status: Seq.STRING,
-	verification_token: Seq.UUIDV4,
 	}
 }

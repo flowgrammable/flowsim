@@ -30,6 +30,7 @@ function insertSubscriber(em, pwd, cb){
       password: pwd,
       reg_date: new Date(),
       reg_ip: '127.0.0.1',
+      ver_token: token,
       status: 'REGISTERED'
     }).success(function(result){
    		cb(msg.success());
@@ -42,11 +43,7 @@ function insertSubscriber(em, pwd, cb){
     });
 }
 
-setTimeout(function(){ 
-  insertSubscriber('test@test.com', 'thepassword', function(result){
-    console.log(result);
-  });
-}, 3000);
+
 
 
 function updateSubscriber(authToken,cb){
