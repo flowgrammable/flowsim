@@ -4,7 +4,7 @@ var insertSubscriber = function(email, password, cb){
 	console.log('hit insertSubscriber');
 	setTimeout(function(){
 		console.log('sub timer');
-		cb(msg.error('could not insert'));
+		cb(msg.success('could not insert'));
 	}, 3000);
 }
 
@@ -15,4 +15,5 @@ function sendEmail(email, cb){
 	}, 3000);
 }
 
+exports.sendEmail = sendEmail;
 exports.insertSubscriber = insertSubscriber;

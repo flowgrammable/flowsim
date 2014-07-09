@@ -22,28 +22,31 @@ var base = 19543;
    if error, send error
 */
 function resultChecker(result, cb){
-  console.log('hit result checker: ', result);
-  if(result.error) return cb(result.error);
+  if(result.success){
+    cb(null, result);
+  } else if(result.error) {
+    cb(result, null);
+  } else {
+    throw "Undefined success and error objects";
+  }
 }
 
 function subCreate(adapter, em, pwd, cb) {
-  var Subscriber = orm.model("subscriber"); 
-  var token = uuid.v4();
   
-  async.series([
+  async.waterfall([
     function(callback){
       adapter.insertSubscriber(em, pwd, function(result){
         resultChecker(result, callback);
       });
     },
-    function(callback){
+    function(result, callback){
       adapter.sendEmail(em, function(result){
         resultChecker(result, callback);
       });
     }
-  ], function(err){
-      console.log('hit async callback');
-      if(err) cb(err);
+  ], function(err, result){
+      if(err) { cb(err);    } 
+      else    { cb(result); }
   });
 
 }
