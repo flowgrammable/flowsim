@@ -47,34 +47,13 @@ function subCreate(db, em, pwd, cb) {
       verification_token: 'abc123',
       status: 'REGISTERED'
   }).success(function(sub){
-       // send email
        mailer.sendMail('coltonchojnacki@gmail.com', mailer.verificationMessage('token') ,function(succ){
-          console.log('done with mailer? ', succ);
           cb(succ);
        });
   }).error(function(err){
         cb(msg.error());
   });
     
-    
-
-//msg.test(result function(success){return msg.success()});
-
-/*  bcrypt.hash('password', 5, function( err, bcryptedPassword) {
-  msg.test(_subCreate(db, {
-    email: em, 
-    state: "CREATED",
-    verification: uuid.v4()
-  }), function(row) {
-    bcrypt.hash(pwd, 5, function(err, bcryptedPwd) {
-      if(err) throw err;
-      row.password = bcryptedPwd;
-    });
-    return msg.success(row.verification);
-   });
-  });
-*/
-
 }
 
 function subVerify(db, token) {
