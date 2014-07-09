@@ -1,8 +1,10 @@
 // adapter.js
 // adapter for using DB, or email
 
+require('../../dbbs').setup();
+
 var orm = require('../../dbbs');
-var Subscriber = orm.model("Subscriber");
+var Subscriber = orm.model("subscriber");
 
 //Register
 // 1. insert subscriber
