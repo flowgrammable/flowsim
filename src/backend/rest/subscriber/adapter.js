@@ -1,5 +1,4 @@
 var msg = require('./msg');
-require('../../dbbs').setup();
 
 var orm = require('../../dbbs');
 var Subscriber = orm.model("subscriber");
@@ -11,7 +10,6 @@ var Subscriber = orm.model("subscriber");
 // }
 
 function insertSubscriber(em, pwd, cb){
-  setTimeout(function(){
     var token = 'testtoken';
     Subscriber.create({
       email: em,
@@ -23,18 +21,16 @@ function insertSubscriber(em, pwd, cb){
     }).success(function(result){
       cb(msg.success());
     }).error(function(err){
-      if (err.detail == 'Key (email)=(' + em + ') already exists.')
+ console.log(err); 
+	    if (err.detail == 'Key (email)=(' + em + ') already exists.')
         cb(msg.emailInUse());
       // TODO: check if the issue is the database connection
-      else
-        cb(msg.noDatabaseConnection());
+ //     else
+//        cb(msg.noDatabaseConnection());
     });
-  }, 3000);
+
 }
 
-insertSubscriber('test@test.com', 'thepassword', function(result){
-  console.log(result);
-});
 
 function sendEmail(email, cb){
 	setTimeout(function(){

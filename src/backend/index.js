@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
+
+require('./dbbs').setup();
 var connect = require('connect');
 var program = require('commander');
 var html = require('./html/controller');
 var rest = require('./rest/controller');
 
-require('./dbbs').setup();
 
 program
   .version(process.env.SERVER_VERSION)

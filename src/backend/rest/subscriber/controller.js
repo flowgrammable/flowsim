@@ -38,11 +38,9 @@ function subReset(dataModel, method, params, data) {
   if(!data.email) return msg.missingEmail();
   if(badEmail(data.email)) return msg.badEmail(data.email);
   // Return the result of password reset
-  msg.test(dataModel.subscriber.reset(data.email),
-    function(succ) {
-      // generate email with the url to present
-      return msg.success();
-    });
+  dataModel.subscriber.reset(data.email, function(result){
+    passback(id, result);
+  })
 }
 
 function subLogin(dataModel, method, params, data) {
