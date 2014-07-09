@@ -78,7 +78,7 @@ module.exports = function(db, userModules) {
         events.Emitter.once(id, function(result){
           console.log('back at rest');
           console.log('result is: ', result);
-          wrap(res, result);
+          wrapRes(res, result);
         });
         noauthFunction(req.method, params, req.body, id, function(result){
 

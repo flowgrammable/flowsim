@@ -1,11 +1,12 @@
 var _ = require('underscore');
 var uuid = require('node-uuid');
 var bcrypt = require('bcrypt');
+var async = require('async');
 
 var msg = require('./msg');
 var mailer = require('../../mailer');
 var orm = require('../../dbbs');
-
+var adapter = require('./adapter');
 // Start subscriber ids from some random 5 digit prime
 var base = 19543;
 
@@ -20,64 +21,32 @@ var base = 19543;
 5. if success, send success
    if error, send error
 */
-
-var sendVerification = function(em, token, cb){
-  var message = mailer.verificationMessage(token);
-  mailer.sendMail(em, html, function(succ){
-      cb(succ);
-  });
+function resultChecker(result, cb){
+  console.log('hit result checker: ', result);
+  if(result.error) return cb(result.error);
 }
 
-function subCreate(db, em, pwd, cb) {
+function subCreate(adapter, em, pwd, cb) {
   var Subscriber = orm.model("subscriber"); 
   var token = uuid.v4();
-
-  Subscriber.create({
-      email: em,
-      password: pwd,
-      reg_date: new Date(),
-      reg_ip: '127.0.0.1',
-      verification_token: token,
-      status: 'REGISTERED'
-  }).success(function(sub){
-      sendVerification(em, token, function(succ){
-        cb(succ);
+  
+  async.series([
+    function(callback){
+      adapter.insertSubscriber(em, pwd, function(result){
+        resultChecker(result, callback);
       });
-  }).error(function(err){
-        cb(msg.error());
+    },
+    function(callback){
+      adapter.sendEmail(em, function(result){
+        resultChecker(result, callback);
+      });
+    }
+  ], function(err){
+      console.log('hit async callback');
+      if(err) cb(err);
   });
-    
+
 }
-
-function subGetById(db, id) {
-  var table = db.subscribers;
-  id -= base;
-  if(id < 0 || id >= table.length)
-    return null;
-  return table[id];
-}
-
-function subGetByField(db, key, value) {
-  var table = db.subscribers;
-  var result = _.find(table, function(_row) {
-    return _row[key] == value;
-  });
-  if(typeof(result) == 'undefined') return null;
-  else return result;
-}
-
-function _subCreate(db, row) {
-  if(subGetByField(db, "email", row.email)) {
-    return msg.emailInUse();
-  } else {
-    table.push(row);
-    return msg.success(row);
-  }
-}
-
-
-
-
 
 function subVerify(db, token) {
   var result = subGetByField(db, "verfication", token);
@@ -120,7 +89,7 @@ function sessGetByAccessToken(db, token) {
 module.exports = function(db) {
   return {
     subscriber: {
-      create: _.bind(subCreate, null, db)
+      create: _.bind(subCreate, null, adapter)
 //      verify: _.bind(subVerify, null, db),
 
 //      update: _.bind(subUpdate, null, db),
