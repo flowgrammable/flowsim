@@ -10,13 +10,13 @@
  */
 
 module.exports = {
-  favicon: 'img/favicon.png',
+  favicon: '../frontend/img/favicon.png',
   html: [ 'html' ],
   css: [ 'css',
     'bower_components/bootstrap/dist/css'
   ],
   fonts: [ 'bower_components/bootstrap/dist/fonts' ],
-  img: [ 'img' ],
+  img: [ '../frontend/img' ],
   js: [ 'js',
     'bower_components/bootstrap/dist/js', 
     'bower_components/jquery/dist', 

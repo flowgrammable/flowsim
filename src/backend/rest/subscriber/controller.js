@@ -20,11 +20,11 @@ function subRegister(dataModel, method, params, data, id) {
   });
 }
 
-function subVerify(dataModel, method, params, data) {
+function subVerify(dataModel, method, params, data, id) {
 
   var token = params[1];
   // Ensure a verification token is present and valid
-  if(!token) return passback(id, msg.missingToken());
+  if(!token) return passback(id, msg.missingVerificationToken());
   // if(!validToken(params[1])) return passback(id, msg.missingToken());
 
   dataModel.subscriber.verify(token, function(result){
@@ -33,7 +33,7 @@ function subVerify(dataModel, method, params, data) {
 
 }
 
-function subReset(dataModel, method, params, data) {
+function subReset(dataModel, method, params, data, id) {
   // Ensure email is present and valid
   if(!data.email) return msg.missingEmail();
   if(badEmail(data.email)) return msg.badEmail(data.email);
@@ -43,7 +43,7 @@ function subReset(dataModel, method, params, data) {
   })
 }
 
-function subLogin(dataModel, method, params, data) {
+function subLogin(dataModel, method, params, data, id) {
   if(!data.email) return msg.missingEmail();
   if(badEmail(data.email)) return msg.badEmail(data.email);
   //if(!data.
@@ -56,7 +56,7 @@ function subLogin(dataModel, method, params, data) {
     });
 }
 
-function subLogout(dataModel, session, method, params, data) {
+function subLogout(dataModel, session, method, params, data, id) {
   return msg.success();
 }
     

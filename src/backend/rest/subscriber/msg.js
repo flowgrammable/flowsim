@@ -12,6 +12,13 @@ exports.noDatabaseConnection = function() {
   });
 }
 
+exports.subscriberNotFound = function() {
+  return msg.error({
+    system: "subscriber/model",
+    type: "subscriberNotFound"
+  });
+}
+
 exports.emailInUse = function() {
   return msg.error({
     system: "subscriber/model",

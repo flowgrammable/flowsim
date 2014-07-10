@@ -33,6 +33,14 @@ function insertSubscriber(em, pwd, cb){
 
 }
 
+function fetchSubscriber(sub, cb){
+  Subscriber.find({ where: sub })
+  .success(function(result) {
+    cb(msg.success(result));
+  }).error(function(record) {
+    cb(msg.subscriberNotFound());
+  })
+}
 
 /*
 function sendVerificationEmail(email, cb){
@@ -45,7 +53,7 @@ function sendVerificationEmail(email, cb){
 function sendVerificationEmail(subscriber, cb){
     console.log(subscriber.values); 
     var email = subscriber.values.email;
-    var verificationToken = subscriber.values.verificationToken;
+    var token = subscriber.values.ver_token;
     mailer.sendMail(email, mailer.verificationMessage(token), function(result){
       cb(msg.success());
     });
