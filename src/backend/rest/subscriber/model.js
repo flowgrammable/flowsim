@@ -43,7 +43,7 @@ function subVerify(adapter, token, cb) {
 
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriber({verification_token: token}, function(result){
+      adapter.fetchSubscriber({verificationToken: token}, function(result){
         resultChecker(result, callback);
       });
     },
@@ -67,7 +67,7 @@ function sessAuthenticate(adapter, email, password, cb){
         resultChecker(result, callback);
       });
     },
-    function(result, subscriber){
+    function(result, callback){
       adapter.comparePassword(result.value, function(result){
         resultChecker(result, callback);
       });

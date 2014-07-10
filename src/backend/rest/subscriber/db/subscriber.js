@@ -1,4 +1,4 @@
-var orm = require('../../dbbs'),
+var orm = require('../../../dbbs'),
     Seq = orm.Seq();
 
 module.exports = {
@@ -9,5 +9,8 @@ module.exports = {
     reg_ip: Seq.STRING,
     verification_token: Seq.UUIDV4,
     status: Seq.STRING,
+	},
+  relations:{
+		hasOne:"authtoken"
 	}
 }
