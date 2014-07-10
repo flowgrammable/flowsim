@@ -75,7 +75,14 @@ function sendVerificationEmail(subscriber, cb){
     });
 }
 
+function comparePassword(subscriber, cb){
+  console.log(subscriber);
+
+
+}
+
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
 exports.verifySubscriber = verifySubscriber;
+exports.comparePassword = comparePassword;
