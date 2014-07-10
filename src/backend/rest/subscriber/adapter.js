@@ -21,35 +21,41 @@ function insertSubscriber(em, pwd, cb){
     verification_token: token,
     status: 'REGISTERED'
   }).success(function(result){
-    console.log(result);
+    // console.log(result);
     cb(msg.success(result));
   }).error(function(err){
-    console.log(err);
+    // console.log(err);
     if (err.detail == 'Key (email)=(' + em + ') already exists.')
       cb(msg.emailInUse());
-    // TODO: check if the issue is the database connection
-    // else
-    //  cb(msg.noDatabaseConnection());
+    else
+     cb(msg.unknownError(err));
   });
 
 }
 
 function fetchSubscriber(sub, cb){
   Subscriber.find({ where: sub })
-  .success(function(result) {
-    cb(msg.success(result));
-  }).error(function(result) {
-    cb(msg.subscriberNotFound());
-  });
+    .success(function(result) {
+      if (result == null) cb(msg.subscriberNotFound());
+      else cb(msg.success(result));
+    }).error(function(err) {
+      cb(msg.unknownError(err)); // probably db connection error
+    });
 }
 
+
 function verifySubscriber(sub, cb){
-  Subscriber.update({ status: 'VERIFIED' }, { where: sub })
-  .success(function(result) {
-    cb(msg.success(result));
-  }).error(function(result) {
+  if (sub.status == 'VERIFIED') 
     cb(msg.subscriberAlreadyVerified());
-  });
+  else {
+    sub.status = 'VERIFIED';
+    sub.save()
+      .success(function(result) {
+        cb(msg.success(result));
+      }).error(function(err) {
+        cb(msg.unknownError(err)); // probably db connection error
+      });
+  }
 }
 
 /*

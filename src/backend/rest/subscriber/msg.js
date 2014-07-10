@@ -12,6 +12,13 @@ exports.noDatabaseConnection = function() {
   });
 }
 
+exports.unknownError = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "unknownError"
+  });
+}
+
 exports.subscriberNotFound = function() {
   return msg.error({
     system: "subscriber/model",
