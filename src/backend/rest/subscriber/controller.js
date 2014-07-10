@@ -5,6 +5,7 @@ var msg = require('./msg');
 var model = require('./model');
 
 function passback(id, result, nextFunction){  
+  // if result is 
   events.Emitter.emit(id, result);
 }
 
@@ -46,7 +47,7 @@ function subReset(dataModel, method, params, data, id) {
 function subLogin(dataModel, method, params, data, id) {
   if(!data.email) return msg.missingEmail();
   if(badEmail(data.email)) return msg.badEmail(data.email);
-  dataModel.subscriber.login(data.email, data.password, function(result){
+  dataModel.session.authenticate(data.email, data.password, function(result){
     passback(id, result);
   });
 }
