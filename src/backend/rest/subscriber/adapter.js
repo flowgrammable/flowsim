@@ -5,12 +5,14 @@ var msg = require('./msg');
 var orm = require('../../dbbs');
 var Subscriber = orm.model("subscriber");
 var mailer = require('../../mailer');
-// function insertSubscriber(email, password, cb){
-// 	setTimeout(function(){
-// 		cb(msg.emailInUse());
-// 	}, 3000);
-// }
 
+
+// The insertSubscriber function creates a table entry for a 
+// subscriber with the provided email address and password. Upon 
+// successful completion, a success message is sent containing the 
+// resulting subscriber. Failure due to the email address already 
+// existing in the database results in an  emailInUse() message 
+// being sent to the callback function.
 function insertSubscriber(em, pwd, cb){
   var token = uuid.v4();
   Subscriber.create({
@@ -33,8 +35,14 @@ function insertSubscriber(em, pwd, cb){
 
 }
 
-function fetchSubscriber(sub, cb){
-  Subscriber.find({ where: sub })
+// The fetchSubscriber function retrieves a table entry from the 
+// subscribers table based on the provided information. Upon 
+// successful completion, a success message is sent containing
+// the retrieved subscriber. Failure due to no subscriber being
+// found results in a subscriberNotFound() message being sent
+// to the callback function.
+function fetchSubscriber(subInfo, cb){
+  Subscriber.find({ where: subInfo })
     .success(function(result) {
       if (result == null) cb(msg.subscriberNotFound());
       else cb(msg.success(result));
@@ -43,7 +51,16 @@ function fetchSubscriber(sub, cb){
     });
 }
 
-
+// The verifySubscriber method changes the 'status' attribute of a
+// subscriber from 'REGISTERED' to 'VERIFIED'. Upon successful
+// completion, a success message is sent containing the updated
+// subscriber. Failure as a result of the subscriber having already 
+// been verified results in a subscriberAlreadyVerified() message 
+// being sent to the callback function.
+//
+// Note: in this function 'sub' must be an instance of the dbmodel. 
+// This allows us to modify and save it, updating the corresponding 
+// entry in the database's subscribers table.
 function verifySubscriber(sub, cb){
   if (sub.status == 'VERIFIED') 
     cb(msg.subscriberAlreadyVerified());
@@ -56,6 +73,16 @@ function verifySubscriber(sub, cb){
         cb(msg.unknownError(err)); // probably db connection error
       });
   }
+}
+
+function deleteSubscriber(sub, cb){
+  Subscriber.find({ where: sub })
+    .success(function(result) {
+      if (result == null) cb(msg.subscriberNotFound());
+      else cb(msg.success(result));
+    }).error(function(err) {
+      cb(msg.unknownError(err)); // probably db connection error
+    });
 }
 
 /*
