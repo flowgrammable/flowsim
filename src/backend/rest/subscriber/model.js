@@ -58,6 +58,26 @@ function subVerify(adapter, token, cb) {
     });
 }
 
+function sessAuthenticate(adapter, email, password, cb){
+  // 1. Fetch user by email
+  // 2. Check credentials
+  async.waterfall([
+    function(callback){
+      adapter.fetchSubscriber({email: email}, function(result){
+        resultChecker(result, callback);
+      });
+    },
+    function(result, subscriber){
+      adapter.comparePassword(result.value, function(result){
+        resultChecker(result, callback);
+      });
+    }],
+    function(err, result){
+      if(err) { cb(err); }
+      else    { cb(result); }
+    });
+}
+
 function subReset(adapter, email, cb) {
   // 1. Generate password reset token
   // 2. associate it with user
@@ -111,7 +131,7 @@ module.exports = function(db) {
     session: {
 //      create: _.bind(sessCreate, null, db),
 //      destroy: _.bind(sessDestroy, null, db),
-//      authenticate: _.bind(sessAuthenticate, null, db);
+      authenticate: _.bind(sessAuthenticate, null, adapter)
 
 //      getByAccessToken: _.bind(sessGetByAccessToken, null, db)
     }
