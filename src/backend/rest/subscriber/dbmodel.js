@@ -5,9 +5,9 @@ module.exports = {
 	model:{
     email: Seq.STRING,
     password: Seq.STRING,
-    regDate: Seq.DATE,
-    regIp: Seq.STRING,
-    verificationToken: Seq.UUIDV4,
+    reg_date: Seq.DATE,
+    reg_ip: Seq.STRING,
+    verification_token: Seq.UUIDV4,
     status: Seq.STRING,
 	}
 }

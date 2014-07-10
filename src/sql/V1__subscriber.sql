@@ -11,9 +11,9 @@ CREATE TABLE subscribers
   id SERIAL PRIMARY KEY,                          -- internal id uses for sub
   email VARCHAR(128) NOT NULL,             -- email owned by sub
   password CHAR(60) NOT NULL,                     -- hashed pwd of sub
-  regDate TIMESTAMP WITH TIME ZONE NOT NULL,    -- date/time of registration
-  regIp INET NOT NULL,                           -- ip used for registration
-  verificationToken CHAR(36) NOT NULL,                    -- verification token
+  reg_date TIMESTAMP WITH TIME ZONE NOT NULL,    -- date/time of registration
+  reg_ip INET NOT NULL,                           -- ip used for registration
+  verification_token CHAR(36) NOT NULL,                    -- verification token
   status SUBSCRIBERS_STATUS NOT NULL              -- current sub disposition
 --  status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
 );
