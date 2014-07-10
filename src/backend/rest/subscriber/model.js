@@ -25,7 +25,7 @@ function subCreate(adapter, em, pwd, cb) {
       });
     },
     function(result, callback){
-      adapter.sendEmail(em, function(result){
+      adapter.sendVerificationEmail(em, function(result){
         resultChecker(result, callback);
       });
     }
@@ -42,12 +42,12 @@ function subVerify(adapter, token, cb) {
 
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriber(token, function(sub){
+      adapter.fetchSubscriber(token, function(result){
         resultChecker(result, callback);
       });
     },
-    function(sub, callback){
-      adapter.verifySubscriber(sub, function(result){
+    function(result, callback){
+      adapter.verifySubscriber(result.value , function(result){
         resultChecker(result, callback);
       });
      }
@@ -57,9 +57,9 @@ function subVerify(adapter, token, cb) {
     });
 }
 
-function subReset(db, email) {
-  var result = subGetByField(db, "email", email);
-  if(!result) return msg.badEmailReset();
+function subReset(adapter, email, cb) {
+  // 1. Send User reset email
+  // 2. click link, presented with new password forms
 }
 
 function subUpdate(db, id, row) {

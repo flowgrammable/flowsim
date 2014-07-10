@@ -19,9 +19,9 @@ function insertSubscriber(em, pwd, cb){
       ver_token: token,
       status: 'REGISTERED'
     }).success(function(result){
-      cb(msg.success());
+      cb(msg.success(result));
     }).error(function(err){
- console.log(err); 
+
 	    if (err.detail == 'Key (email)=(' + em + ') already exists.')
         cb(msg.emailInUse());
       // TODO: check if the issue is the database connection
