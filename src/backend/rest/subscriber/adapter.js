@@ -38,9 +38,18 @@ function fetchSubscriber(sub, cb){
   Subscriber.find({ where: sub })
   .success(function(result) {
     cb(msg.success(result));
-  }).error(function(record) {
+  }).error(function(result) {
     cb(msg.subscriberNotFound());
-  })
+  });
+}
+
+function verifySubscriber(sub, cb){
+  Subscriber.update({ status: 'VERIFIED' }, { where: sub })
+  .success(function(result) {
+    cb(msg.success(result));
+  }).error(function(result) {
+    cb(msg.subscriberAlreadyVerified());
+  });
 }
 
 /*
@@ -62,3 +71,5 @@ function sendVerificationEmail(subscriber, cb){
 
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
+exports.fetchSubscriber = fetchSubscriber;
+exports.verifySubscriber = verifySubscriber;

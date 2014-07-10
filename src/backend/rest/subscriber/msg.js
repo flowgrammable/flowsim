@@ -97,10 +97,17 @@ exports.accessTokenExpired = function() {
   });
 }
 
-exports.unverifiedUser = function() {
+exports.unverifiedSubscriber = function() {
   return msg.error({
     system: "subscriber/controller",
-    type: "unverifiedUser"
+    type: "unverifiedSubscriber"
+  });
+}
+
+exports.subscriberAlreadyVerified = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "subscriberAlreadyVerified"
   });
 }
 
