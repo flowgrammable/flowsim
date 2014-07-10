@@ -43,7 +43,7 @@ function subVerify(adapter, token, cb) {
 
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriber(token, function(result){
+      adapter.fetchSubscriber({verificationToken: token}, function(result){
         resultChecker(result, callback);
       });
     },
@@ -62,6 +62,15 @@ function subReset(adapter, email, cb) {
   // 1. Generate password reset token
   // 2. associate it with user
   // 3. send email with token
+  async.waterfall([
+    function(callback){
+      adapter.generateResetToken()
+    }
+    ], function(err, result){
+        if(err) { cb(err); }
+        else    { cb(result);}
+
+    });
 
 }
 
