@@ -1,3 +1,5 @@
+var uuid = require('node-uuid');
+
 var msg = require('./msg');
 
 var orm = require('../../dbbs');
@@ -10,7 +12,7 @@ var mailer = require('../../mailer');
 // }
 
 function insertSubscriber(em, pwd, cb){
-    var token = 'testtoken';
+    var token = uuid.v4();
     Subscriber.create({
       email: em,
       password: pwd,
