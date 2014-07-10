@@ -1,4 +1,5 @@
 var uuid = require('node-uuid');
+var bcrypt = require('bcrypt');
 
 var msg = require('./msg');
 
@@ -15,9 +16,12 @@ var mailer = require('../../mailer');
 // being sent to the callback function.
 function insertSubscriber(em, pwd, cb){
   var token = uuid.v4();
+  var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
+  // syntax to compare the password:
+  // bcrypt.compareSync("pass input by user", subscriber.password);
   Subscriber.create({
     email: em,
-    password: pwd,
+    password: encrypted,
     reg_date: new Date(),
     reg_ip: '127.0.0.1',
     verification_token: token,
@@ -74,24 +78,6 @@ function verifySubscriber(sub, cb){
       });
   }
 }
-
-function deleteSubscriber(sub, cb){
-  Subscriber.find({ where: sub })
-    .success(function(result) {
-      if (result == null) cb(msg.subscriberNotFound());
-      else cb(msg.success(result));
-    }).error(function(err) {
-      cb(msg.unknownError(err)); // probably db connection error
-    });
-}
-
-/*
-function sendVerificationEmail(email, cb){
-	setTimeout(function(){
-		cb(msg.error('Cant send Email'));
-	}, 3000);
-}
-*/
 
 function sendVerificationEmail(subscriber, cb){
     console.log(subscriber.values); 

@@ -43,7 +43,7 @@ function subVerify(adapter, token, cb) {
 
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriber({verificationToken: token}, function(result){
+      adapter.fetchSubscriber({verification_token: token}, function(result){
         resultChecker(result, callback);
       });
     },
