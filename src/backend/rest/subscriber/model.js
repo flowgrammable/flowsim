@@ -25,7 +25,8 @@ function subCreate(adapter, em, pwd, cb) {
       });
     },
     function(result, callback){
-      adapter.sendVerificationEmail(em, function(result){
+      console.log(result);
+      adapter.sendVerificationEmail(result.value, function(result){
         resultChecker(result, callback);
       });
     }
@@ -58,8 +59,10 @@ function subVerify(adapter, token, cb) {
 }
 
 function subReset(adapter, email, cb) {
-  // 1. Send User reset email
-  // 2. click link, presented with new password forms
+  // 1. Generate password reset token
+  // 2. associate it with user
+  // 3. send email with token
+
 }
 
 function subUpdate(db, id, row) {

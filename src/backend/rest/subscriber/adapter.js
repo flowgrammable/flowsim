@@ -2,7 +2,7 @@ var msg = require('./msg');
 
 var orm = require('../../dbbs');
 var Subscriber = orm.model("subscriber");
-
+var mailer = require('../../mailer');
 // function insertSubscriber(email, password, cb){
 // 	setTimeout(function(){
 // 		cb(msg.emailInUse());
@@ -32,11 +32,22 @@ function insertSubscriber(em, pwd, cb){
 }
 
 
-function sendEmail(email, cb){
+/*
+function sendVerificationEmail(email, cb){
 	setTimeout(function(){
 		cb(msg.error('Cant send Email'));
 	}, 3000);
 }
+*/
 
-exports.sendEmail = sendEmail;
+function sendVerificationEmail(subscriber, cb){
+    console.log(subscriber.values); 
+    var email = subscriber.values.email;
+    var verificationToken = subscriber.values.verificationToken;
+    mailer.sendMail(email, mailer.verificationMessage(token), function(result){
+      cb(msg.success());
+    });
+}
+
+exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
