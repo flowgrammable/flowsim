@@ -92,7 +92,7 @@ function sendVerificationEmail(subscriber, cb){
 function generateAuthToken(subscriber, cb){
   var authToken = uuid.v4();
   Authtoken.create({
-    token: 'a token', 
+    token: authToken, 
     subscriber_id: subscriber.id
   }).success(function(result){
     cb(msg.success(result));
