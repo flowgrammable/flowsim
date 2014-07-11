@@ -4,6 +4,7 @@ var bcrypt = require('bcrypt');
 var msg = require('./msg');
 
 var orm = require('../../dbbs');
+orm.setup();
 var Subscriber = orm.model("subscriber");
 var mailer = require('../../mailer');
 
