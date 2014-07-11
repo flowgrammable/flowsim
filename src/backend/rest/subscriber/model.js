@@ -68,12 +68,12 @@ function sessAuthenticate(adapter, email, password, cb){
   // 2. Check credentials
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriberEager({email: email}, function(result){
+      adapter.fetchSubscriber({email: email}, function(result){
         resultChecker(result, callback);
       });
     },
     function(result, callback){
-      adapter.comparePassword(result.value, function(result){
+      adapter.authenticateSubscriber(password, result.value, function(result){
         resultChecker(result, callback);
       });
     }],

@@ -5,6 +5,7 @@ var msg = require('./msg');
 
 var orm = require('../../dbbs');
 var Subscriber = orm.model("subscriber");
+var Authtoken = orm.model("authtoken");
 var mailer = require('../../mailer');
 
 
@@ -55,8 +56,8 @@ function fetchSubscriber(subInfo, cb){
     });
 }
 
-// The verifySubscriber method changes the 'status' attribute of a
-// subscriber from 'REGISTERED' to 'VERIFIED'. Upon successful
+// The verifySubscriber function changes the 'status' attribute of 
+// a subscriber from 'REGISTERED' to 'VERIFIED'. Upon successful
 // completion, a success message is sent containing the updated
 // subscriber. Failure as a result of the subscriber having already 
 // been verified results in a subscriberAlreadyVerified() message 
@@ -80,22 +81,44 @@ function verifySubscriber(sub, cb){
 }
 
 function sendVerificationEmail(subscriber, cb){
-    console.log(subscriber.values); 
-    var email = subscriber.values.email;
-    var token = subscriber.values.verification_token;
-    mailer.sendMail(email, mailer.verificationMessage(token), function(result){
-      cb(msg.success());
-    });
+  console.log(subscriber.values); 
+  var email = subscriber.values.email;
+  var token = subscriber.values.verification_token;
+  mailer.sendMail(email, mailer.verificationMessage(token), function(result){
+    cb(msg.success());
+  });
 }
 
-function comparePassword(subscriber, cb){
-  console.log(subscriber);
+function generateAuthToken(subscriber, cb){
+  var authToken = uuid.v4();
+  Authtoken.create({
+    token: 'a token', 
+    subscriber_id: subscriber.id
+  }).success(function(result){
+    cb(msg.success(result));
+  }).error(function(err){
+    cb(msg.unknownError(err));
+  });
+}
 
-
+// The authenticateSubscriber function compares a password input by 
+// a user to the password that is stored in the database for them.
+// Upon successful completion, a success message is sent containing
+// the authentication token for the subscriber. Failure due to the 
+// passwords not matching results in an incorrectPwd message being
+// sent to the callback function.
+function authenticateSubscriber(pwd, subscriber, cb){
+  // password is correct
+  if (bcrypt.compareSync(pwd, subscriber.password))
+    cb(msg.success()); // TODO: make this return the auth token
+  // password is incorrect
+  else
+    cb(msg.incorrectPwd());
 }
 
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
 exports.verifySubscriber = verifySubscriber;
-exports.comparePassword = comparePassword;
+exports.authenticateSubscriber = authenticateSubscriber;
+exports.generateAuthToken = generateAuthToken;
