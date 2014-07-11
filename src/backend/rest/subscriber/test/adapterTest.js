@@ -60,4 +60,13 @@ describe('===> Testing sendVerificationEmail adapter function:\n',function() {
     });
   });
 });
-
+/*
+describe('===> Testing comparePassword adapter function:\n',function() {
+  it('Passwords Matched successfully ',function(done) {
+    adapter.comparePassword(subscriber,function (result) {
+      assert(result.value,"Passwords mismatch")
+      done();
+    });
+  });
+});
+*/
