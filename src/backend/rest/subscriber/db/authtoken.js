@@ -4,7 +4,7 @@ var orm = require('../../../dbbs'),
 module.exports = {
 	model:{
     token: Seq.UUIDV4,
-		created_at: Seq.DATE,
+	created_at: Seq.DATE,
     updated_at: Seq.DATE    
 	}
 }
