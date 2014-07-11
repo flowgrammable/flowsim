@@ -22,10 +22,10 @@ CREATE TABLE subscribers
 CREATE TABLE authtokens
 (
   id SERIAL PRIMARY KEY,                             -- internal access token id
-  sub_id INTEGER references subscribers(id) NOT NULL, -- reference to sub
-  token CHAR NOT NULL,                               -- token string UUIDv4, need to determine length
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL,      -- date token created
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL       -- date token updated
+  subscriber_id INTEGER references subscribers(id), -- reference to sub
+  token CHAR(36) NOT NULL,                               -- token string UUIDv4, need to determine length
+  created_at TIMESTAMP WITH TIME ZONE,      -- date token created
+  updated_at TIMESTAMP WITH TIME ZONE       -- date token updated
 );
 
 CREATE TABLE switch_profile

@@ -40,6 +40,7 @@ function subCreate(adapter, em, pwd, cb) {
 function subVerify(adapter, token, cb) {
   // 1. Fetch user by verificationToken
   // 2. Set user to verified
+  // 3. generate auth token
 
   async.waterfall([
     function(callback){
@@ -73,7 +74,7 @@ function sessAuthenticate(adapter, email, password, cb){
       });
     },
     function(result, callback){
-      adapter.authenticateSubscriber(password, result.value, function(result){
+      adapter.authenticateSubscriber(result.value, function(result){
         resultChecker(result, callback);
       });
     }],
