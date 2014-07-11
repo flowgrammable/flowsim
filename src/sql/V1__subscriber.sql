@@ -9,7 +9,7 @@ CREATE TYPE SUBSCRIBERS_STATUS AS ENUM (
 CREATE TABLE subscribers
 (
   id SERIAL PRIMARY KEY,                          -- internal id uses for sub
-  email VARCHAR(128) NOT NULL,             -- email owned by sub
+  email VARCHAR(128) NOT NULL UNIQUE,             -- email owned by sub
   password CHAR(60) NOT NULL,                     -- hashed pwd of sub
   reg_date TIMESTAMP WITH TIME ZONE NOT NULL,    -- date/time of registration
   reg_ip INET NOT NULL,                           -- ip used for registration
@@ -18,15 +18,8 @@ CREATE TABLE subscribers
 --  status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
 );
 
-CREATE TABLE verification_token
-(
-  id SERIAL PRIMARY KEY,                             -- internal token id
-  sub_id INTEGER references subscribers(id) NOT NULL, -- reference to sub
-  token CHAR(36) NOT NULL,                           -- token string
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL      -- date token is created
-);
 
-CREATE TABLE access_token
+CREATE TABLE authtokens
 (
   id SERIAL PRIMARY KEY,                             -- internal access token id
   sub_id INTEGER references subscribers(id) NOT NULL, -- reference to sub
