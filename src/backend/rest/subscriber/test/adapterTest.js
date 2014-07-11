@@ -14,7 +14,7 @@ describe('Testing adapter functions:',function() {
   });
   it('Email in Use',function(done) {
     adapter.insertSubscriber(testEmail,'My Password',function (result) {
-      assert.equal(result.error.type,"emailInUse","Email is not in Use")
+      assert.equal(result.error.type,"emailInUse")
       done();
     });
   });
