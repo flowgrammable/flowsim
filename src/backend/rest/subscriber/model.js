@@ -51,6 +51,11 @@ function subVerify(adapter, token, cb) {
       adapter.verifySubscriber(result.value , function(result){
         resultChecker(result, callback);
       });
+     },
+     function(result, callback){
+      adapter.generateAuthToken(result.value, function(result){
+        resultChecker(result, callback);
+      })
      }
     ], function(err, result){
         if(err) { cb(err); }
@@ -63,7 +68,7 @@ function sessAuthenticate(adapter, email, password, cb){
   // 2. Check credentials
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriber({email: email}, function(result){
+      adapter.fetchSubscriberEager({email: email}, function(result){
         resultChecker(result, callback);
       });
     },
