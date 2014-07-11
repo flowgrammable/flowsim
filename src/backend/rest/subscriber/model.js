@@ -68,7 +68,7 @@ function sessAuthenticate(adapter, email, password, cb){
       });
     },
     function(result, callback){
-      adapter.comparePassword(result.value, function(result){
+      adapter.comparePassword(password, result.value, function(result){
         resultChecker(result, callback);
       });
     }],

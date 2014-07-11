@@ -55,8 +55,8 @@ function fetchSubscriber(subInfo, cb){
     });
 }
 
-// The verifySubscriber method changes the 'status' attribute of a
-// subscriber from 'REGISTERED' to 'VERIFIED'. Upon successful
+// The verifySubscriber function changes the 'status' attribute of 
+// a subscriber from 'REGISTERED' to 'VERIFIED'. Upon successful
 // completion, a success message is sent containing the updated
 // subscriber. Failure as a result of the subscriber having already 
 // been verified results in a subscriberAlreadyVerified() message 
@@ -80,18 +80,22 @@ function verifySubscriber(sub, cb){
 }
 
 function sendVerificationEmail(subscriber, cb){
-    console.log(subscriber.values); 
-    var email = subscriber.values.email;
-    var token = subscriber.values.verification_token;
-    mailer.sendMail(email, mailer.verificationMessage(token), function(result){
-      cb(msg.success());
-    });
+  console.log(subscriber.values); 
+  var email = subscriber.values.email;
+  var token = subscriber.values.verification_token;
+  mailer.sendMail(email, mailer.verificationMessage(token), function(result){
+    cb(msg.success());
+  });
 }
 
-function comparePassword(subscriber, cb){
-  console.log(subscriber);
-
-
+function comparePassword(pwd, subscriber, cb){
+  // console.log(subscriber);
+  // password is correct
+  if (bcrypt.compareSync(pwd, subscriber.password))
+    cb(msg.success()); // TODO: make this return the auth token
+  // password is incorrect
+  else
+    cb(msg.incorrectPwd());
 }
 
 exports.sendVerificationEmail = sendVerificationEmail;
