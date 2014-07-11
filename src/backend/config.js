@@ -11,18 +11,18 @@
 
 module.exports = {
   favicon: '../frontend/img/favicon.png',
-  html: [ 'html' ],
-  css: [ 'css',
-    'bower_components/bootstrap/dist/css'
+  html: [ '../frontend/html' ],
+  css: [ '../frontend/css',
+    '../frontend/bower_components/bootstrap/dist/css'
   ],
-  fonts: [ 'bower_components/bootstrap/dist/fonts' ],
+  fonts: [ '../frontend/bower_components/bootstrap/dist/fonts' ],
   img: [ '../frontend/img' ],
-  js: [ 'js',
-    'bower_components/bootstrap/dist/js', 
-    'bower_components/jquery/dist', 
-    'bower_components/angular',
-    'bower_components/angular-route',
-    'bower_components/angular-ui-bootstrap/dist'
+  js: [ '../frontend/js',
+    '../frontend/bower_components/bootstrap/dist/js', 
+    '../frontend/bower_components/jquery/dist', 
+    '../frontend/bower_components/angular',
+    '../frontend/bower_components/angular-route',
+    '../frontend/bower_components/angular-ui-bootstrap/dist'
   ]
 };
 
