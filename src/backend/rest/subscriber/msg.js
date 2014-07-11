@@ -106,7 +106,7 @@ exports.accessTokenExpired = function() {
 
 exports.unverifiedSubscriber = function() {
   return msg.error({
-    system: "subscriber/controller",
+    system: "subscriber/model",
     type: "unverifiedSubscriber"
   });
 }

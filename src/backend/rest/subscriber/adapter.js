@@ -95,7 +95,7 @@ function generateAuthToken(subscriber, cb){
     token: authToken, 
     subscriber_id: subscriber.id
   }).success(function(result){
-    cb(msg.success(result));
+    cb(msg.success());
   }).error(function(err){
     cb(msg.unknownError(err));
   });
@@ -109,8 +109,15 @@ function generateAuthToken(subscriber, cb){
 // sent to the callback function.
 function authenticateSubscriber(pwd, subscriber, cb){
   // password is correct
-  if (bcrypt.compareSync(pwd, subscriber.password))
-    cb(msg.success()); // TODO: make this return the auth token
+  if (bcrypt.compareSync(pwd, subscriber.password)){
+    Authtoken.find({ where: {subscriber_id: subscriber.id} })
+      .success(function(result) {
+        if (result == null) cb(msg.unverifiedSubscriber());
+        else cb(msg.success(result.token));
+      }).error(function(err) {
+        cb(msg.unknownError(err)); // probably db connection error
+      });
+  }
   // password is incorrect
   else
     cb(msg.incorrectPwd());

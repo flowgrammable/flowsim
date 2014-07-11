@@ -74,7 +74,7 @@ function sessAuthenticate(adapter, email, password, cb){
       });
     },
     function(result, callback){
-      adapter.authenticateSubscriber(result.value, function(result){
+      adapter.authenticateSubscriber(password, result.value, function(result){
         resultChecker(result, callback);
       });
     }],
