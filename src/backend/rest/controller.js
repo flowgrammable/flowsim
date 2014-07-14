@@ -78,9 +78,9 @@ module.exports = function(db, userModules) {
         events.Emitter.once(id, function(result){
           wrapRes(res, result);
         });
-        noauthFunction(req.method, params, req.body, id);
+        noauthFunction(req.method, params, req.body, req.ip, id);
       } else if(authFunction && session) {
-        result = authFunction(session, req.method, params, req.body);
+        result = authFunction(session, req.method, params, req.body, req.ip, id);
         wrapRes(res, result);
       } else {
         wrapRes(res, msg.error({

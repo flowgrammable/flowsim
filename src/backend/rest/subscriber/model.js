@@ -14,13 +14,13 @@ function resultChecker(result, callback){
   }
 }
 
-function subCreate(adapter, em, pwd, cb) {
+function subCreate(adapter, em, pwd, ip, cb) {
   // 1. Insert User
   // 2. Send Verification Email
 
   async.waterfall([
     function(callback){
-      adapter.insertSubscriber(em, pwd, function(result){
+      adapter.insertSubscriber(em, pwd, ip, function(result){
         resultChecker(result, callback);
       });
     },

@@ -9,14 +9,14 @@ function passback(id, result, nextFunction){
   events.Emitter.emit(id, result);
 }
 
-function subRegister(dataModel, method, params, data, id) {
+function subRegister(dataModel, method, params, data, ip, id) {
   // Provide some basic sanity checks
   if(!data.email) return passback(id, msg.missingEmail());
   //if(badEmail(data.email)) return msg.badEmail(data.email);
   if(!data.password) return passback(id, msg.missingPwd());
   //if(badPassword(data.password)) return msg.badPwd();
 
-  dataModel.subscriber.create(data.email, data.password, function(result){
+  dataModel.subscriber.create(data.email, data.password, ip, function(result){
       passback(id, result);
   });
 }
