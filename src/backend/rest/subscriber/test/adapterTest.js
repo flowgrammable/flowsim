@@ -60,13 +60,28 @@ describe('===> Testing sendVerificationEmail adapter function:\n',function() {
     });
   });
 });
-/*
-describe('===> Testing comparePassword adapter function:\n',function() {
-  it('Passwords Matched successfully ',function(done) {
-    adapter.comparePassword(subscriber,function (result) {
-      assert(result.value,"Passwords mismatch")
+
+describe('===> Testing generateAuthToken adapter function:\n',function() {
+  it('AuthToken generated successfully',function(done) {
+    adapter.generateAuthToken(subscriber,function (result) {
+      assert(result.value,"Unable to generate authToken")
       done();
     });
   });
 });
-*/
+
+describe('===> Testing authenticateSubscriber adapter function:\n',function() {
+  it('Subscriber authenticated successfully',function(done) {
+    adapter.authenticateSubscriber('My Password',subscriber,function (result) {
+      assert(result.value,"Unable to authenticate subscriber")
+      done();
+    });
+  });
+  it('Incorrect Password',function(done) {
+    adapter.authenticateSubscriber('NOt Password',subscriber,function (result) {
+      assert.equal(result.error.type,"incorrectPwd")
+      done();
+    });
+  });
+});
+
