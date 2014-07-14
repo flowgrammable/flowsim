@@ -1,8 +1,10 @@
 
 -- create an enumerated type for the account status
 CREATE TYPE SUBSCRIBERS_STATUS AS ENUM (
-  'REGISTERED',   -- a sub has registered but not confirmed they own their email
-  'VERIFIED'     -- a sub has confirmed they own their email
+  'CREATED',  -- a sub has been created
+  'ACTIVE',   -- a sub has registered but not confirmed they own their email
+  'RESET',    -- a sub has confirmed they own their email
+  'CLOSED'    --
 );
 
 -- create the primary subscribers table

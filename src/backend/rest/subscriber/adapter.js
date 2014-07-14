@@ -15,7 +15,7 @@ var mailer = require('../../mailer');
 // resulting subscriber. Failure due to the email address already 
 // existing in the database results in an  emailInUse() message 
 // being sent to the callback function.
-function insertSubscriber(em, pwd, cb){
+function insertSubscriber(em, pwd, ip, cb){
   var token = uuid.v4();
   var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
   // syntax to compare the password:
@@ -24,15 +24,15 @@ function insertSubscriber(em, pwd, cb){
     email: em,
     password: encrypted,
     reg_date: new Date(),
-    reg_ip: '127.0.0.1',
+    reg_ip: ip, 
     verification_token: token,
     status: 'CREATED'
   }).success(function(result){
     // console.log(result);
     cb(msg.success(result));
   }).error(function(err){
-    // console.log(err);
-    if (err.detail == 'Key (email)=(' + em + ') already exists.')
+     console.log(err);
+    if(err.detail == 'Key (email)=(' + em + ') already exists.')
       cb(msg.emailInUse());
     else
      cb(msg.unknownError(err));
@@ -85,7 +85,11 @@ function sendVerificationEmail(subscriber, cb){
   var email = subscriber.values.email;
   var token = subscriber.values.verification_token;
   mailer.sendMail(email, mailer.verificationMessage(token), function(result){
-    cb(msg.success());
+    if(result.name){
+      cb(msg.error(result));
+    }else{
+      cb(msg.success(result));
+    }
   });
 }
 

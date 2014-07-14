@@ -72,15 +72,16 @@ module.exports = function(db, userModules) {
       var authFunction = installedModules[path[1]].auth[path[2]];
       var noauthFunction = installedModules[path[1]].noauth[path[2]];
       var params = path.slice(2);
+      var ip = req.connection.remoteAddress;
        
       // execute the found function or error
       if(noauthFunction) {
         events.Emitter.once(id, function(result){
           wrapRes(res, result);
         });
-        noauthFunction(req.method, params, req.body, req.ip, id);
+        noauthFunction(req.method, params, req.body, ip, id);
       } else if(authFunction && session) {
-        result = authFunction(session, req.method, params, req.body, req.ip, id);
+        result = authFunction(session, req.method, params, req.body, ip, id);
         wrapRes(res, result);
       } else {
         wrapRes(res, msg.error({
