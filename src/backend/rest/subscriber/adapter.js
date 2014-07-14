@@ -26,7 +26,7 @@ function insertSubscriber(em, pwd, cb){
     reg_date: new Date(),
     reg_ip: '127.0.0.1',
     verification_token: token,
-    status: 'REGISTERED'
+    status: 'CREATED'
   }).success(function(result){
     // console.log(result);
     cb(msg.success(result));
@@ -67,10 +67,10 @@ function fetchSubscriber(subInfo, cb){
 // This allows us to modify and save it, updating the corresponding 
 // entry in the database's subscribers table.
 function verifySubscriber(sub, cb){
-  if (sub.status == 'VERIFIED') 
+  if (sub.status == 'ACTIVE') 
     cb(msg.subscriberAlreadyVerified());
   else {
-    sub.status = 'VERIFIED';
+    sub.status = 'ACTIVE'; // set the status to active
     sub.save()
       .success(function(result) {
         cb(msg.success(result));
