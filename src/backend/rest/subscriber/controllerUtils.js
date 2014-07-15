@@ -1,5 +1,5 @@
 
-
+var enforce = require("enforce");
 
 function validEmail(email){
 	//use node-enfore library
