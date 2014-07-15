@@ -11,7 +11,7 @@ describe('Testing registration requests:',function() {
   it('User registered successfully',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\", \"ip\": \"192.162.0.8\"}',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -24,12 +24,13 @@ describe('Testing registration requests:',function() {
   it('Email Already in Use',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\", \"ip\": \"192.162.0.8\"}',
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'emailInUse');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -43,6 +44,7 @@ describe('Testing registration requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'badPwd');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -56,6 +58,7 @@ describe('Testing registration requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'badEmail');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -69,6 +72,7 @@ describe('Testing registration requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'missingPwd');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -82,6 +86,7 @@ describe('Testing registration requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'missingEmail');
       console.log('\tResponse received : ', body);
       done();
     });
