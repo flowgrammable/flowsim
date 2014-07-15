@@ -1,8 +1,8 @@
-var express = require('express');
+var connect = require('connect');
 var cookieParser = require('cookie-parser'); 
 var cookieSession = require('cookie-session');
 
-express()
+connect()
   .use(cookieParser())
   .use(cookieSession({ secret: 'testsecret' }))
   .use(function(req, res, next){

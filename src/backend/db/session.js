@@ -3,7 +3,7 @@ var orm = require('../dbbs'),
 
 module.exports = {
 	model:{
-    key: Seq.STRING,
+    session_id: Seq.UUIDV4,
 	  begin_time: Seq.DATE,
     end_time: Seq.DATE,
     ip: Seq.STRING,

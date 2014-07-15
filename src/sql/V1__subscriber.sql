@@ -96,13 +96,13 @@ CREATE TYPE SESSION_STATUS AS ENUM (
 );
 
 -- create a session table
-CREATE TABLE session
+CREATE TABLE sessions
 (
   id SERIAL PRIMARY KEY,                              -- internal sesison id
   subscriber_id INTEGER references subscribers(id),   -- reference to sub
-  key CHAR(128) NOT NULL UNIQUE,                      -- session key for API
-  begin_time TIMESTAMP NOT NULL,                      -- date/time session began
-  end_time TIMESTAMP NOT NULL,                        -- date/time session ended
+  session_id CHAR(36) NOT NULL UNIQUE,                      -- session key for API
+  begin_time TIMESTAMP WITH TIME ZONE NOT NULL,       -- date/time session began
+  end_time TIMESTAMP WITH TIME ZONE /*NOT NULL*/,     -- date/time session ended
   ip INET NOT NULL,                                   -- ip used for session
   status SESSION_STATUS NOT NULL                      -- current session status
 );
