@@ -9,18 +9,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "~0.9.0",
     "bcrypt": "^0.7.8",
+    "bookshelf": "~0.7.6",
     "commander": "^2.2.0",
     "connect": "^2.14.5",
-    "node-uuid": "~1.4.1",
-    "underscore": "^1.6.0",
-    "knex": "~0.6.20",
-    "sequelize": "~1.7.9",
-    "bookshelf": "~0.7.6",
+    "cookie-parser": "^1.3.2",
+    "cookie-session": "^1.0.2",
+    "cookies": "^0.4.1",
     "future": "~2.3.1",
-    "async": "~0.9.0",
+    "knex": "~0.6.20",
+    "mocha": "~1.20.1",
+    "node-uuid": "~1.4.1",
     "nodemailer": "~0.7.1",
     "pg": "~3.3.0",
-    "mocha": "~1.20.1"
+    "sequelize": "~1.7.9",
+    "underscore": "^1.6.0"
   }
 }
