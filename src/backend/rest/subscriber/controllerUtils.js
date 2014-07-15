@@ -7,7 +7,7 @@ function validEmail(email){
 }
 
 function validPassword(password){
-	enforce.security.password([[ luns816, ]password ])
+	enforce.security.password([[ luns8, ]password ])
 }
 
 exports.validPassword = validPassword;
