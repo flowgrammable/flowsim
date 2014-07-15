@@ -1,10 +1,10 @@
 
 -- create an enumerated type for the account status
 CREATE TYPE SUBSCRIBERS_STATUS AS ENUM (
-  'CREATED',  -- a sub has been created
-  'ACTIVE',   -- a sub has registered but not confirmed they own their email
-  'RESET',    -- a sub has confirmed they own their email
-  'CLOSED'    --
+  'CREATED',  -- a sub has been registered but not verified, logins should not be possible
+  'ACTIVE',   -- a sub has verified and can actively login
+  'RESET',    -- a sub has had their password reset, no logins possible only pwd reset procedure
+  'CLOSED'    -- a sub has been closed, no functionality is supported against this state
 );
 
 -- create the primary subscribers table
@@ -89,17 +89,18 @@ CREATE TABLE action_caps
 
 -- create an enumerated type for the session status
 CREATE TYPE SESSION_STATUS AS ENUM (
-  'ACTIVE',       -- a session is currently active
-  'TIMEDOUT',     -- a session ended by timing out
-  'LOGGEDOUT'     -- a session ended by explicit logout
+  'UNAUTHENTICATED', -- a session is active but not authenticated
+  'AUTHENTICATED',   -- a session is currently active and authenticated
+  'LOGGEDOUT',       -- a session ended by explicit logout
+  'TIMEDOUT'         -- a session ended by timing out
 );
 
 -- create a session table
 CREATE TABLE session
 (
   id SERIAL PRIMARY KEY,                              -- internal sesison id
-  sub_id INTEGER references subscribers(id) NOT NULL,  -- reference to sub
-  key CHAR(128) NOT NULL UNIQUE,                       -- session key for API
+  subscriber_id INTEGER references subscribers(id),   -- reference to sub
+  key CHAR(128) NOT NULL UNIQUE,                      -- session key for API
   begin_time TIMESTAMP NOT NULL,                      -- date/time session began
   end_time TIMESTAMP NOT NULL,                        -- date/time session ended
   ip INET NOT NULL,                                   -- ip used for session
