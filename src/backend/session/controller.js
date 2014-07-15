@@ -1,21 +1,20 @@
 var uuid = require('node-uuid');
-var sessionAdapter = require('./adapter');
+
 var cookieParser = require('cookie-parser'); 
 var cookieSession = require('cookie-session');
+var sessionHandler = require('./model');
+
+
 
 exports.handle = function(app){
     app.use(cookieParser());
-    app.use(function(req, res, next){
-    	console.log('before cookie session: ', req.session); 
-    	next();
-    });
     app.use(cookieSession({ secret: 'testsecret' }));
-    app.use(function(req, res, next){
-    	console.log('after cookie session: ', req.session); 
-    	next();
-    });
-    app.use(function(req, res, next){
-    if (req.session.isNew == true) {
+    app.use(sessionHandler()); 
+}
+
+
+/*
+    if (req.session.isNew) {
       req.session.id = uuid.v4();
       sessionAdapter.insertSession(req.session.id, req.connection.remoteAddress,
         function(result){ 
@@ -26,5 +25,5 @@ exports.handle = function(app){
       res.end('new session');
     }
     else res.end('existing session with id: '+req.session.id);
-  }); 
-}
+
+*/

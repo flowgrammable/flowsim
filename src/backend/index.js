@@ -6,7 +6,7 @@ var connect = require('connect');
 var program = require('commander');
 var html = require('./html/controller');
 var rest = require('./rest/controller');
-var session = require('./session');
+var session = require('./session/controller');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -25,7 +25,7 @@ var database = program.database || process.env.DATABASE || './dbbs';
 
 var app = connect();
 session.handle(app);
- html.serve(app, connect, { base: htmlbase, content: require(config)});
+html.serve(app, connect, { base: htmlbase, content: require(config)});
 
 app
    .use(connect.json())

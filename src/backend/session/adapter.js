@@ -11,7 +11,7 @@ function insertSession(sess_id, ip_in, cb){
     ip: ip_in, 
     status: 'UNAUTHENTICATED'
   }).success(function(result){
-    // console.log(result);
+    console.log(result);
     cb(msg.success(result));
   }).error(function(err){
     console.log(err);
