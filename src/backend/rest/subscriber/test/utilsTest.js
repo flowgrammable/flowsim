@@ -1,2 +1,2 @@
 //utils Test
-var utils = require(../controllerUtils.js)
+var utils = require('../controllerUtils.js')
