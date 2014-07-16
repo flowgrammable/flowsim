@@ -8,14 +8,14 @@ var testEmail ='ash.1382@gmail.com';
 var subscriber;
 describe('===> Testing insertSubscriber adapter function:\n',function() {
   it('User registered successfully',function(done) {
-    adapter.insertSubscriber(testEmail,'My Password',function (result) {
+    adapter.insertSubscriber(testEmail,'My Password','192.168.0.1',function (result) {
       assert(result.value,"User not registered successfully")
       subscriber = result.value;
       done();
     });
   });
   it('Email in Use',function(done) {
-    adapter.insertSubscriber(testEmail,'My Password',function (result) {
+    adapter.insertSubscriber(testEmail,'My Password','192.168.0.1',function (result) {
       assert.equal(result.error.type,"emailInUse")
       done();
     });
@@ -71,6 +71,15 @@ describe('===> Testing generateAuthToken adapter function:\n',function() {
 });
 
 describe('===> Testing authenticateSubscriber adapter function:\n',function() {
+  it('Unverified Subscriber',function(done) {
+    adapter.insertSubscriber('unverified@gmail.com','MyooPassword','192.168.0.1',function (result) {
+      adapter.authenticateSubscriber('MyooPassword',result.value,function (nextResult) {
+        assert.equal(nextResult.error.type,"unverifiedSubscriber")
+      });
+      done();
+    });
+  });
+
   it('Subscriber authenticated successfully',function(done) {
     adapter.authenticateSubscriber('My Password',subscriber,function (result) {
       assert(result.value,"Unable to authenticate subscriber")
