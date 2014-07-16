@@ -5,9 +5,12 @@ var msg = require('./msg');
 
 var orm = require('../../dbbs');
 var Subscriber = orm.model("subscriber");
+var Session = orm.model("session");
 var Authtoken = orm.model("authtoken");
 var mailer = require('../../mailer');
 
+// ----------------------------------------------------------------------------
+// Subscriber
 
 // The insertSubscriber function creates a table entry for a 
 // subscriber with the provided email address and password. Upon 
@@ -105,31 +108,30 @@ function generateAuthToken(subscriber, cb){
   });
 }
 
-// The authenticateSubscriber function compares a password input by 
-// a user to the password that is stored in the database for them.
-// Upon successful completion, a success message is sent containing
-// the authentication token for the subscriber. Failure due to the 
-// passwords not matching results in an incorrectPwd message being
-// sent to the callback function.
-function authenticateSubscriber(pwd, subscriber, cb){
-  // password is correct
-  if (bcrypt.compareSync(pwd, subscriber.password)){
-    Authtoken.find({ where: {subscriber_id: subscriber.id} })
-      .success(function(result) {
-        if (result == null) cb(msg.unverifiedSubscriber());
-        else cb(msg.success(result.token));
-      }).error(function(err) {
-        cb(msg.unknownError(err)); // probably db connection error
-      });
-  }
-  // password is incorrect
-  else
-    cb(msg.incorrectPwd());
-}
-
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
 exports.verifySubscriber = verifySubscriber;
-exports.authenticateSubscriber = authenticateSubscriber;
 exports.generateAuthToken = generateAuthToken;
+
+// ----------------------------------------------------------------------------
+// Session
+
+function createSession(subId, cb){
+  var sessKey = uuid.v4();
+  Session.create({
+    subscriber_id: subId,
+    key: sessKey
+    // begin_time: new Date(),
+    // timeout: blah,
+    // ip: ip 
+  }).success(function(result){
+    console.log(result);
+    cb(msg.success(result));
+  }).error(function(err){
+    console.log(err);
+    cb(msg.unknownError(err));
+  });
+}
+
+exports.createSession = createSession;

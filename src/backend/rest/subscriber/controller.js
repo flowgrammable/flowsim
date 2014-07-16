@@ -9,7 +9,7 @@ function passback(id, result, nextFunction){
   events.Emitter.emit(id, result);
 }
 
-function subRegister(dataModel, method, params, data, ip, id) {
+function subRegister(dataModel, method, params, data, ip, id, sessId) {
   // Provide some basic sanity checks
   if(!data.email) return passback(id, msg.missingEmail());
   //if(badEmail(data.email)) return msg.badEmail(data.email);
@@ -21,7 +21,7 @@ function subRegister(dataModel, method, params, data, ip, id) {
   });
 }
 
-function subVerify(dataModel, method, params, data, id) {
+function subVerify(dataModel, method, params, data, ip, id, sessId) {
 
   var token = params[1];
   // Ensure a verification token is present and valid
@@ -34,7 +34,7 @@ function subVerify(dataModel, method, params, data, id) {
 
 }
 
-function subReset(dataModel, method, params, data, id) {
+function subReset(dataModel, method, params, data, ip, id, sessId) {
   // Ensure email is present and valid
   if(!data.email) return msg.missingEmail();
   //if(badEmail(data.email)) return msg.badEmail(data.email);
@@ -44,16 +44,17 @@ function subReset(dataModel, method, params, data, id) {
   })
 }
 
-function subLogin(dataModel, method, params, data, id) {
+function subLogin(dataModel, method, params, data, ip, id, sessId) {
   if(!data.email) return msg.missingEmail();
  // if(badEmail(data.email)) return msg.badEmail(data.email);
-  dataModel.session.authenticate(data.email, data.password, function(result){
+  dataModel.session.authenticate(data.email, data.password, sessId,
+  function(result){
     passback(id, result);
   });
 }
 
-function subLogout(dataModel, session, method, params, data, id) {
-  return msg.success();
+function subLogout(dataModel, method, params, data, ip, id, sessId) {
+  return msg.success(); // TODO: implement this..
 }
     
 function sessAuthenticate(dataModel, headers) {

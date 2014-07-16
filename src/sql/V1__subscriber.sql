@@ -20,16 +20,6 @@ CREATE TABLE subscribers
 --  status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
 );
 
-
-CREATE TABLE authtokens
-(
-  id SERIAL PRIMARY KEY,                             -- internal access token id
-  subscriber_id INTEGER references subscribers(id), -- reference to sub
-  token CHAR(36) NOT NULL,                               -- token string UUIDv4, need to determine length
-  created_at TIMESTAMP WITH TIME ZONE,      -- date token created
-  updated_at TIMESTAMP WITH TIME ZONE       -- date token updated
-);
-
 CREATE TABLE switch_profile
 (
 	id SERIAL PRIMARY KEY,
@@ -87,23 +77,14 @@ CREATE TABLE action_caps
   OFPAT_SET_FIELD_ETH_SRC BOOLEAN
 );
 
--- create an enumerated type for the session status
-CREATE TYPE SESSION_STATUS AS ENUM (
-  'UNAUTHENTICATED', -- a session is active but not authenticated
-  'AUTHENTICATED',   -- a session is currently active and authenticated
-  'LOGGEDOUT',       -- a session ended by explicit logout
-  'TIMEDOUT'         -- a session ended by timing out
-);
-
 -- create a session table
 CREATE TABLE sessions
 (
   id SERIAL PRIMARY KEY,                              -- internal sesison id
   subscriber_id INTEGER references subscribers(id),   -- reference to sub
-  session_id CHAR(36) NOT NULL UNIQUE,                      -- session key for API
-  begin_time TIMESTAMP WITH TIME ZONE NOT NULL,       -- date/time session began
-  end_time TIMESTAMP WITH TIME ZONE /*NOT NULL*/,     -- date/time session ended
-  ip INET NOT NULL,                                   -- ip used for session
-  status SESSION_STATUS NOT NULL                      -- current session status
+  key CHAR(36) NOT NULL UNIQUE,                       -- session key for API
+  -- begin_time TIMESTAMP WITH TIME ZONE NOT NULL,       -- date/time session began
+  timeout TIMESTAMP WITH TIME ZONE /*NOT NULL,*/     -- date/time for session to end
+  -- ip INET NOT NULL                                    -- ip used for session
 );
 

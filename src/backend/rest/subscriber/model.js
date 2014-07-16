@@ -14,6 +14,9 @@ function resultChecker(result, callback){
   }
 }
 
+// ----------------------------------------------------------------------------
+// Subscriber
+
 function subCreate(adapter, em, pwd, ip, cb) {
   // 1. Insert User
   // 2. Send Verification Email
@@ -64,7 +67,7 @@ function subVerify(adapter, token, cb) {
     });
 }
 
-function sessAuthenticate(adapter, email, password, cb){
+function sessAuthenticate(adapter, email, password, sessId, cb){
   // 1. Fetch user by email
   // 2. Check credentials
   async.waterfall([
@@ -74,7 +77,15 @@ function sessAuthenticate(adapter, email, password, cb){
       });
     },
     function(result, callback){
-      adapter.authenticateSubscriber(password, result.value, function(result){
+      // password is correct
+      if (bcrypt.compareSync(pwd, result.value.password))
+        resultChecker(msg.success(result), callback);
+      // password is incorrect
+      else
+        resultChecker(msg.incorrectPwd(), callback);
+    },
+    function(result, callback){
+      adapter.createSession(result.value.id, function(result){
         resultChecker(result, callback);
       });
     }],
@@ -100,30 +111,44 @@ function subReset(adapter, email, cb) {
 
 }
 
-function subUpdate(db, id, row) {
-  var table = db.subscribers;
-  id -= base;
-  if(id < 0 || id >= table.length) return "badId";
-  table[id] = row;
-  return "";
+// ----------------------------------------------------------------------------
+// Session
+
+function createSession(adapter, subId, cb){
+  adapter.insertSession(sessKey, subId, function(result){
+    if(result.value){
+      console.log('hit insert session success');
+      cb(msg.success());
+    }
+    //TODO: handle error
+  });
 }
 
-function subDestroy(db, id) {
-  var table = db.subscribers;
-  id -= base;
-  if(id < 0 || id >= table.length) return "badId";
-  table.splice(id, 1);
-  return "";
-}
 
-function sessGetByAccessToken(db, token) {
-  var i;
-  for(var i=0; i<db.sessions.length; ++i) {
-    if(db.sessions[i].accessToken = accessToken)
-      return db.session[i];
-  }
-  return null;
-}
+// function subUpdate(db, id, row) {
+//   var table = db.subscribers;
+//   id -= base;
+//   if(id < 0 || id >= table.length) return "badId";
+//   table[id] = row;
+//   return "";
+// }
+
+// function subDestroy(db, id) {
+//   var table = db.subscribers;
+//   id -= base;
+//   if(id < 0 || id >= table.length) return "badId";
+//   table.splice(id, 1);
+//   return "";
+// }
+
+// function sessGetByAccessToken(db, token) {
+//   var i;
+//   for(var i=0; i<db.sessions.length; ++i) {
+//     if(db.sessions[i].accessToken = accessToken)
+//       return db.session[i];
+//   }
+//   return null;
+// }
 
 module.exports = function(db) {
   return {
@@ -135,7 +160,7 @@ module.exports = function(db) {
 //      destroy: _.bind(subDestroy, null, db)
     },
     session: {
-//      create: _.bind(sessCreate, null, db),
+      create: _.bind(createSession, null, adapter),
 //      destroy: _.bind(sessDestroy, null, db),
       authenticate: _.bind(sessAuthenticate, null, adapter)
 

@@ -12,6 +12,13 @@ exports.noDatabaseConnection = function() {
   });
 }
 
+exports.sessionNotFound = function() {
+  return msg.error({
+    system: "session/adapter",
+    type: "sessionNotFound"
+  });
+}
+
 exports.unknownError = function() {
   return msg.error({
     system: "session/adapter",
