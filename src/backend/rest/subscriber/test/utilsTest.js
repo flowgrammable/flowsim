@@ -4,4 +4,9 @@ var utils = require('../controllerUtils.js')
 //email tests
 //invalid email returns false
 var badEmail = "ojh12345@gmail"
-return utils.verifyEmail(badEmail)
+if(utils.verifyEmail(badEmail)==false){
+    printk('Test Passed')
+  }
+else{
+  printk('Test failed')
+}
