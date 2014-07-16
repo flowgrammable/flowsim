@@ -86,9 +86,9 @@ function sendVerificationEmail(subscriber, cb){
   var token = subscriber.values.verification_token;
   mailer.sendMail(email, mailer.verificationMessage(token), function(result){
     if(result.name){
-      cb(msg.error(result));
+      cb(msg.error());
     }else{
-      cb(msg.success(result));
+      cb(msg.success());
     }
   });
 }
