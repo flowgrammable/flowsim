@@ -17,6 +17,7 @@ describe('Testing registration requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert(JSON.parse(body)['value'],'Unable to register user');
       console.log('\tResponse received : ', body);
       done();
     }); 
@@ -34,11 +35,11 @@ describe('Testing registration requests:',function() {
       console.log('\tResponse received : ', body);
       done();
     });
-  });
+  });/*
   it('Bad Password',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my\"}',
+      body: '{ \"email\": \"Something@gmailler.com\", \"password\": \"my\"}',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -62,7 +63,7 @@ describe('Testing registration requests:',function() {
       console.log('\tResponse received : ', body);
       done();
     });
-  });
+  });*/
   it('Missing Password',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
@@ -92,6 +93,105 @@ describe('Testing registration requests:',function() {
     });
   });
 });
+
+describe('Testing verification requests:',function() {
+  it('User verified successfully',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/verify/'+token,
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('User already verified',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/verify/'+token,
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('Missing verification token',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/verify',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('Bad verification token',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/verify/Bad-Token',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+});
+/*
+describe('Testing verification requests:',function() {
+  it('User verified successfully',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/verify',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': token
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('User already verified',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/verify',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Token': token
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('Missing verification token',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/register',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      done();
+
+
+*/
 /*
 describe('Testing fetching of subscribers:',function() {
   it('Subscriber found',function(done) {
@@ -120,65 +220,4 @@ describe('Testing fetching of subscribers:',function() {
       done();
     });
   });
-});
-*/
-//--------------------------------------------------------------------------------------
-/*
-describe('Testing verification requests:',function() {
-  it('User verified successfully',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/verify',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-        'X-Access-Token': token
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-  it('User already verified',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/verify',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-        'X-Access-Token': token
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-  it('Missing verification token',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-  it('Bad verification token',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-        'X-Access-Token': 'abscadsfadsfaz'
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-});
-*/
+});*/
