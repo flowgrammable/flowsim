@@ -7,7 +7,7 @@ function validEmail(email){
 }
 
 function validPassword(password){
-	enforce.security.password([[ luns8, ]password ])
+	enforce.range.length(8[, 16[, password ]])
 }
 
 function validToken(token){
