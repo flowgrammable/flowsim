@@ -43,7 +43,7 @@ var singleton = function singleton(){
     models["session"] = sequelize.define("session", sess.model, options);
 		models["subscriber"] = sequelize.define("subscriber", sub.model, options);
 		relationships["subscriber"] = sub.relations;
-		models["authtoken"] = sequelize.define("authtoken", token.model, options);
+		// models["authtoken"] = sequelize.define("authtoken", token.model, options);
 
 		// for(var name in relationships){
   //           var relation = relationships[name];
