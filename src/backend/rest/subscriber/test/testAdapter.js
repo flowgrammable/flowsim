@@ -44,21 +44,23 @@ function insertSubscriber(em, pwd, ip, cb){
 
 // ----------------------------------------------------------------------------
 // Testing insert subscriber
-
+console.log("inserting a test subscriber returns:\n");
 // should return success
 insertSubscriber('testemail', 'iluvflowg', '127.0.0.1', 
   function(result) {
     console.log(result);
   });
 
+console.log("\ninserting another one with the same email:\n");
 // should return emailInUse error
 insertSubscriber('testemail', 'testpassword', '127.0.0.1', 
   function(result) {
     console.log(result);
   });
-
+console.log("\nthe full subscriber array:\n");
 console.log(Subscriber);
-console.log(bcrypt.compareSync('iluvflowg', Subscriber[0].password))
+console.log("\ncomparing the encrypted password to iluvflowg:\n");
+console.log(bcrypt.compareSync('iluvflowg', Subscriber[0].password));
 // ----------------------------------------------------------------------------
 
 function sendVerificationEmail(em, cb){
@@ -67,4 +69,5 @@ cb(msg.success());
 
 exports.insertSubscriber = insertSubscriber;
 exports.sendVerificationEmail = sendVerificationEmail;
+
 
