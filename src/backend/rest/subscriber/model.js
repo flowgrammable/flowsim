@@ -28,7 +28,6 @@ function subCreate(adapter, em, pwd, ip, cb) {
       });
     },
     function(result, callback){
-      console.log(result);
       adapter.sendVerificationEmail(result.value, function(result){
         resultChecker(result, callback);
       });
@@ -150,7 +149,10 @@ function createSession(adapter, subId, cb){
 //   return null;
 // }
 
-module.exports = function(db) {
+module.exports = function(testAdapter) {
+  if(testAdapter){
+		adapter = testAdapter;
+  }
   return {
     subscriber: {
       create: _.bind(subCreate, null, adapter),
