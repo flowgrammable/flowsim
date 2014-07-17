@@ -20,25 +20,24 @@ describe('===> Testing createSubscriber: \n',function() {
 });
 
 
-/*
+
 describe('===> Testing subVerify: \n',function() {
+  var token = '';
+  var expectedResult =
+  { value: {},
+    tunnel: {code: 302,
+             headers: {'Location':'http://localhost:3000/verified.html'}}};
   // setup subscriber
   before(function(){
-  	var token;
     testAdapter.insertSubscriber('verify@test.com', '1234password', '127.0.0.1', function(result){
-    	token = result.verification_token;
-    });
-  })
-  it('Subscriber verified ',function(done) {
-  	model.subscriber.verify(token, function(result){
-  		//TODO: verify redirection url is returned
-      // result should look like
-      // { value: {},
-      //   tunnel: { code: 302,
-      //             headers: {Location: http://localhost:8000/success.html}}}
-      var expectedResult = { value: {},
-														 tunnel: { code: 302,
-																			 headers: { location: http://localhost:8000/success.html}}};
-  	});
+    token = result.value.verification_token;
+   });
   });
-});*/
+  it('Subscriber verified ',function(done) {
+    console.log('sending token: ', token);
+  	model.subscriber.verify(token, function(result){
+  	  assert.equal(JSON.stringify(result), JSON.stringify(expectedResult));
+			done();
+		});
+  });
+});

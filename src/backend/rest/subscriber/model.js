@@ -54,7 +54,13 @@ function subVerify(adapter, token, cb) {
       adapter.verifySubscriber(result.value , function(result){
         resultChecker(result, callback);
       });
-    }], 
+    },
+		function(result, callback){
+			adapter.verifyRedirect(function(result){
+				resultChecker(result, callback);
+			});
+		}
+    ], 
     function(err, result){
       if(err) { cb(err); }
       else    { cb(result); }

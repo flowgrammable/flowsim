@@ -92,6 +92,13 @@ function sendVerificationEmail(subscriber, config, cb){
   });
 }
 
+function verifyRedirect(cb){
+	var tunnel = {code:302,
+								headers: {'Location':'http://localhost:3000/verified.html'}};
+   cb(msg.success(null, tunnel));
+}
+
+exports.verifyRedirect = verifyRedirect;
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
