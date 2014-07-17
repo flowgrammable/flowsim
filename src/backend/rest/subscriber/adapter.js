@@ -96,23 +96,10 @@ function sendVerificationEmail(subscriber, cb){
   });
 }
 
-function generateAuthToken(subscriber, cb){
-  var authToken = uuid.v4();
-  Authtoken.create({
-    token: authToken, 
-    subscriber_id: subscriber.id
-  }).success(function(result){
-    cb(msg.success());
-  }).error(function(err){
-    cb(msg.unknownError(err));
-  });
-}
-
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
 exports.verifySubscriber = verifySubscriber;
-exports.generateAuthToken = generateAuthToken;
 
 // ----------------------------------------------------------------------------
 // Session

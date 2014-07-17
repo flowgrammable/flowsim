@@ -61,36 +61,28 @@ describe('===> Testing sendVerificationEmail adapter function:\n',function() {
   });
 });
 
-describe('===> Testing generateAuthToken adapter function:\n',function() {
-  it('AuthToken generated successfully',function(done) {
-    adapter.generateAuthToken(subscriber,function (result) {
-      assert(result.value,"Unable to generate authToken")
-      done();
-    });
-  });
-});
 
-describe('===> Testing authenticateSubscriber adapter function:\n',function() {
-  it('Unverified Subscriber',function(done) {
-    adapter.insertSubscriber('unverified@gmail.com','MyooPassword','192.168.0.1',function (result) {
-      adapter.authenticateSubscriber('MyooPassword',result.value,function (nextResult) {
-        assert.equal(nextResult.error.type,"unverifiedSubscriber")
-      });
-      done();
-    });
-  });
+// describe('===> Testing authenticateSubscriber adapter function:\n',function() {
+//   it('Unverified Subscriber',function(done) {
+//     adapter.insertSubscriber('unverified@gmail.com','MyooPassword','192.168.0.1',function (result) {
+//       adapter.authenticateSubscriber('MyooPassword',result.value,function (nextResult) {
+//         assert.equal(nextResult.error.type,"unverifiedSubscriber")
+//       });
+//       done();
+//     });
+//   });
 
-  it('Subscriber authenticated successfully',function(done) {
-    adapter.authenticateSubscriber('My Password',subscriber,function (result) {
-      assert(result.value,"Unable to authenticate subscriber")
-      done();
-    });
-  });
-  it('Incorrect Password',function(done) {
-    adapter.authenticateSubscriber('NOt Password',subscriber,function (result) {
-      assert.equal(result.error.type,"incorrectPwd")
-      done();
-    });
-  });
-});
+//   it('Subscriber authenticated successfully',function(done) {
+//     adapter.authenticateSubscriber('My Password',subscriber,function (result) {
+//       assert(result.value,"Unable to authenticate subscriber")
+//       done();
+//     });
+//   });
+//   it('Incorrect Password',function(done) {
+//     adapter.authenticateSubscriber('NOt Password',subscriber,function (result) {
+//       assert.equal(result.error.type,"incorrectPwd")
+//       done();
+//     });
+//   });
+// });
 

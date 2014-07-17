@@ -24,7 +24,6 @@ var htmlbase = program.base || process.env.BASE || __dirname;
 var database = program.database || process.env.DATABASE || './dbbs';
 
 var app = connect();
-session.handle(app);
 html.serve(app, connect, { base: htmlbase, content: require(config)});
 
 app

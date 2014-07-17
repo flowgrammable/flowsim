@@ -68,7 +68,7 @@ module.exports = function(db, userModules) {
       // create unique id
       var id = uuid.v1();
       // get the session id
-      var sessId = req.session.id;
+      // var sessId = req.session.id;
       // grab the access token if it exists
       var session = subscribers.authenticate(req.headers);
       var authFunction = installedModules[path[1]].auth[path[2]];
@@ -81,9 +81,9 @@ module.exports = function(db, userModules) {
         events.Emitter.once(id, function(result){
           wrapRes(res, result);
         });
-        noauthFunction(req.method, params, req.body, ip, id, sessId);
+        noauthFunction(req.method, params, req.body, ip, id);
       } else if(authFunction && session) {
-        result = authFunction(session, req.method, params, req.body, ip, id, sessId);
+        result = authFunction(session, req.method, params, req.body, ip, id);
         wrapRes(res, result);
       } else {
         wrapRes(res, msg.error({

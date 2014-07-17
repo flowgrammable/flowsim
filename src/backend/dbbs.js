@@ -34,9 +34,9 @@ var singleton = function singleton(){
 	}
 
 	function init() {
-    var sess  = require('./db/session');
+    var sess  = require('./rest/subscriber/db/session');
 		var sub   = require('./rest/subscriber/db/subscriber');
-		var token = require('./rest/subscriber/db/authtoken');
+		// var token = require('./rest/subscriber/db/authtoken');
 
     var options = {timestamps: false, underscored: true};
 

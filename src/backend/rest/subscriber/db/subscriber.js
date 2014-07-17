@@ -12,6 +12,6 @@ module.exports = {
 	},
   relations:{
         hasMany:"session",
-		hasOne:"authtoken"
+		// hasOne:"authtoken"
 	}
 }

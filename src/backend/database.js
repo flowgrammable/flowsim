@@ -5,16 +5,20 @@
 module.exports = {
   subscribers: [
     {
-      email: "jasson.casey@gmail.com",
-      password: "iluvflowg",
-      state: "",                        // CREATED | ACTIVE | RESET | CLOSED,
-      token: ""                         // large random number
+      email: 'jasson.casey@gmail.com',
+      // password is iluvflowg encrypted
+      password: '$2a$10$UE4Xn0wCQV4tQypIrRTo1.q/4en6shWn6myN8wHqpUn47qT9Nmd9G',
+      reg_date: new Date(),
+      reg_ip: '127.0.0.1',
+      verification_token: 'c2e6de55-2030-41e0-aa48-6ce5d2314a67',
+      status: 'CREATED'                        // CREATED | ACTIVE | RESET | CLOSED,
     }
   ],
   sessions: [
     {
-      accessToken: 'asdfasdf',
-      subscriberId: 2
+      subscriberId: 1,
+      key: 'f151d3c9-2452-41b2-a249-8b8cb2535097',
+      timeout: ''
     }
   ]
 }

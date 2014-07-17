@@ -67,7 +67,7 @@ function subVerify(adapter, token, cb) {
     });
 }
 
-function sessAuthenticate(adapter, email, password, sessId, cb){
+function sessAuthenticate(adapter, email, password, cb){
   // 1. Fetch user by email
   // 2. Check credentials
   async.waterfall([
