@@ -3,6 +3,8 @@ var async = require('async');
 
 var msg = require('./msg');
 var adapter = require('./adapter');
+var config = true;
+
 
 function resultChecker(result, callback){
   if(result.value){
@@ -28,7 +30,7 @@ function subCreate(adapter, em, pwd, ip, cb) {
       });
     },
     function(result, callback){
-      adapter.sendVerificationEmail(result.value, function(result){
+      adapter.sendVerificationEmail(result.value, config, function(result){
         resultChecker(result, callback);
       });
     }
@@ -54,11 +56,6 @@ function subVerify(adapter, token, cb) {
       adapter.verifySubscriber(result.value , function(result){
         resultChecker(result, callback);
       });
-     },
-     function(result, callback){
-      adapter.generateAuthToken(result.value, function(result){
-        resultChecker(result, callback);
-      })
      }
     ], function(err, result){
         if(err) { cb(err); }
