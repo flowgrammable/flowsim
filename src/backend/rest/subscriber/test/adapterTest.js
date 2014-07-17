@@ -60,6 +60,9 @@ describe('===> Testing verifySubscriber adapter function:\n', function() {
   });
 });
 
+// ----------------------------------------------------------------------------
+// Testing sendVerificationEmail
+
 describe('===> Testing sendVerificationEmail adapter function: \n', function(){
 	it('Mail sent successfully', function(done){
 		adapter.sendVerificationEmail(testEmail, config, function(result) {
@@ -74,4 +77,19 @@ describe('===> Testing sendVerificationEmail adapter function: \n', function(){
 			done();
 		});
 	});
+});
+
+// ----------------------------------------------------------------------------
+// Testing verifyRedirect
+
+describe('===> Testing verifyRedirect adapter function: \n', function(){
+  var tunnel = {code: 302, 
+			headers: {'Location':'http://localhost:3000/verified.html'}};
+
+	it('Should create redirect', function(done){
+		adapter.verifyRedirect(function(result){
+			assert.equal(JSON.stringify(result.tunnel), JSON.stringify(tunnel));
+			done();
+		});
+  }); 
 });

@@ -1,7 +1,8 @@
 
 exports.success = function(data, other) {
   return {
-    value: data || {}
+    value: data || {},
+    tunnel: other || {}
   }
 }
 

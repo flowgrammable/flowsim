@@ -19,6 +19,8 @@ describe('===> Testing createSubscriber: \n',function() {
   });
 });
 
+
+/*
 describe('===> Testing subVerify: \n',function() {
   // setup subscriber
   before(function(){
@@ -30,6 +32,13 @@ describe('===> Testing subVerify: \n',function() {
   it('Subscriber verified ',function(done) {
   	model.subscriber.verify(token, function(result){
   		//TODO: verify redirection url is returned
+      // result should look like
+      // { value: {},
+      //   tunnel: { code: 302,
+      //             headers: {Location: http://localhost:8000/success.html}}}
+      var expectedResult = { value: {},
+														 tunnel: { code: 302,
+																			 headers: { location: http://localhost:8000/success.html}}};
   	});
   });
-});
+});*/
