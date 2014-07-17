@@ -3,19 +3,17 @@ var bcrypt = require('bcrypt');
 
 var msg = require('../msg');
 
-var orm = require('../../../database.js');
-var Subscriber = orm['subscribers'];
-var Session = orm['sessions'];
+var database = require('../../../database.js');
+var Subscriber = database['subscribers'];
+var Session = database['sessions'];
 // var mailer = require('../../mailer');
 
 // ----------------------------------------------------------------------------
 // Subscriber
 
 Array.prototype.containsEmail = function(email) {
-   for (i in this) {
-       if (this[i].email == email) return true;
-   }
-   return false;
+  for (i in this) if (this[i].email == email) return true;
+  return false;
 }
 
 function insertSubscriber(em, pwd, ip, cb){
@@ -43,26 +41,7 @@ function insertSubscriber(em, pwd, ip, cb){
 }
 
 // ----------------------------------------------------------------------------
-// Testing insert subscriber
-console.log("inserting a test subscriber returns:\n");
-// should return success
-insertSubscriber('testemail', 'iluvflowg', '127.0.0.1', 
-  function(result) {
-    console.log(result);
-  });
-
-console.log("\ninserting another one with the same email:\n");
-// should return emailInUse error
-insertSubscriber('testemail', 'testpassword', '127.0.0.1', 
-  function(result) {
-    console.log(result);
-  });
-console.log("\nthe full subscriber array:\n");
-console.log(Subscriber);
-console.log("\ncomparing the encrypted password to iluvflowg:\n");
-console.log(bcrypt.compareSync('iluvflowg', Subscriber[0].password));
-// ----------------------------------------------------------------------------
-
+// Mailer
 function sendVerificationEmail(em, cb){
 cb(msg.success());
 }
