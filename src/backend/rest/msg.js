@@ -8,7 +8,8 @@ exports.success = function(data, other) {
 
 exports.error = function(data, other) {
   return {
-    error: data
+    error: data,
+		tunnel: other || {}
   }
 }
 

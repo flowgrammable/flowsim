@@ -56,6 +56,11 @@ function insertSubscriber(em, pwd, ip, cb){
   }
 }
 
+function makeSubscriber(sub, cb){
+	Subscriber.push(sub);
+	cb();
+}
+
 function fetchSubscriber(subInfo, cb){
   var sub = Subscriber.findSub(subInfo);
   if (sub == null) cb(msg.subscriberNotFound());
