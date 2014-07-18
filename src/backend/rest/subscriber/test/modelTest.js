@@ -107,3 +107,29 @@ describe('===> Testing sessionAuthenticate: \n', function(){
 		});
 	});
 });
+
+
+describe('===> Testing sessionAuthenticate: \n', function(){
+	
+  var testPassword = 'testPassword';
+  var encrypted = bcrypt.hashSync(testPassword, 10);
+  var testSubscriber3 = {email: 'testSubscriber3@test.com', 
+			password: encrypted, 
+			reg_date: new Date(),
+			reg_ip: '127.0.0.1',
+      verification_token: 'doesntmatter',
+      status: 'VERIFIED'
+			};
+	before(function(){
+	//insert a verified user into db
+  testAdapter.makeSubscriber(testSubscriber3);
+  });
+	it('Invalid password should return msg.incorrectPwd(): \n', function(done){
+		model.session.authenticate(testSubscriber3.email, 'badpass', 
+			function(result){
+			assert.equal(JSON.stringify(result), 
+				JSON.stringify(msg.incorrectPwd()));
+			done();
+		});
+	});
+});
