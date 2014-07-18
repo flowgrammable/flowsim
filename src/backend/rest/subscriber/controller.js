@@ -64,8 +64,13 @@ function sessAuthenticate(dataModel, headers) {
   return null;
 }
 
-module.exports = function(db) {
-  var dataModel = model(); 
+module.exports = function(adapter) {
+  var dataModel;
+	if(adapter){
+		dataModel = model(adapter);
+  } else {
+		dataModel = model();
+	} 
   return {
     authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {
