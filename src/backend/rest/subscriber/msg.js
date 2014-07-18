@@ -118,3 +118,10 @@ exports.subscriberAlreadyVerified = function() {
   });
 }
 
+exports.badConfig = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "badEmailConfiguration"
+  })
+}
+

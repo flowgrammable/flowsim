@@ -71,8 +71,12 @@ function verifySubscriber(sub, cb){
 
 // ----------------------------------------------------------------------------
 // Mailer
-function sendVerificationEmail(em, cb){
-cb(msg.success());
+function sendVerificationEmail(em, config, cb){
+  if(config){
+    cb(msg.success());
+  } else {
+    cb(msg.badConfig());
+  }
 }
 
 exports.insertSubscriber = insertSubscriber;
