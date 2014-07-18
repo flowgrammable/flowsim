@@ -12,7 +12,7 @@ describe('===> Testing Register subscriber controller: \n', function(){
 
   it('Register Subscriber success', function(done){
 		var testId = 'testerID';
-    var data = {email: 'test@test.com', password: 'tester'};
+    var data = {email: 'test@test.com', password: 'tester10'};
 
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result), JSON.stringify({value:{},tunnel:{}}));
