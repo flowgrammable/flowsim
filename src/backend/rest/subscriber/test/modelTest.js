@@ -68,7 +68,7 @@ describe('===> Testing sessionAuthenticate: \n', function(){
 			reg_date: new Date(),
 			reg_ip: '127.0.0.1',
       verification_token: 'doesntmatter',
-      status: 'VERIFIED'
+      status: 'ACTIVE'
 			};
 	before(function(){
 	//insert a verified user into db
@@ -87,7 +87,7 @@ describe('===> Testing sessionAuthenticate: \n', function(){
 	
   var testPassword = 'testPassword';
   var encrypted = bcrypt.hashSync(testPassword, 10);
-  var testSubscriber2 = {email: 'testSubscriber@test.com', 
+  var testSubscriber2 = {email: 'testSubscriber2@test.com', 
 			password: encrypted, 
 			reg_date: new Date(),
 			reg_ip: '127.0.0.1',
@@ -98,11 +98,11 @@ describe('===> Testing sessionAuthenticate: \n', function(){
 	//insert a verified user into db
   testAdapter.makeSubscriber(testSubscriber2);
   });
-	it('Subscriber should authenticate: \n', function(done){
+	it('Subscriber in REGISTERED state should  not authenticate: \n', function(done){
 		model.session.authenticate(testSubscriber2.email, testPassword, 
 			function(result){
 			assert.equal(JSON.stringify(result), 
-				JSON.stringify(msg.unverifiedSubscriber()));
+				JSON.stringify(msg.subscriberNotActive()));
 			done();
 		});
 	});
@@ -118,7 +118,7 @@ describe('===> Testing sessionAuthenticate: \n', function(){
 			reg_date: new Date(),
 			reg_ip: '127.0.0.1',
       verification_token: 'doesntmatter',
-      status: 'VERIFIED'
+      status: 'ACTIVE'
 			};
 	before(function(){
 	//insert a verified user into db
