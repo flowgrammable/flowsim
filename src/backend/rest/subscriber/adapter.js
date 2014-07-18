@@ -1,12 +1,11 @@
 var uuid = require('node-uuid');
-var bcrypt = require('bcrypt');
 
 var msg = require('./msg');
 
 var orm = require('../../dbbs');
 var Subscriber = orm.model("subscriber");
 var Session = orm.model("session");
-var Authtoken = orm.model("authtoken");
+// var Authtoken = orm.model("authtoken");
 var mailer = require('../../mailer');
 
 // ----------------------------------------------------------------------------
@@ -83,16 +82,13 @@ function verifySubscriber(sub, cb){
   }
 }
 
-function sendVerificationEmail(subscriber, cb){
+function sendVerificationEmail(subscriber, config, cb){
   console.log(subscriber.values); 
   var email = subscriber.values.email;
   var token = subscriber.values.verification_token;
   mailer.sendMail(email, mailer.verificationMessage(token), function(result){
-    if(result.name){
-      cb(msg.error());
-    }else{
-      cb(msg.success());
-    }
+    if (result.name) cb(msg.error());
+    else cb(msg.success());   
   });
 }
 
@@ -114,7 +110,7 @@ function createSession(subId, cb){
     // ip: ip 
   }).success(function(result){
     console.log(result);
-    cb(msg.success(result));
+    cb(msg.success(result.key));
   }).error(function(err){
     console.log(err);
     cb(msg.unknownError(err));
@@ -122,3 +118,4 @@ function createSession(subId, cb){
 }
 
 exports.createSession = createSession;
+

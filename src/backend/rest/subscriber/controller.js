@@ -9,7 +9,7 @@ function passback(id, result, nextFunction){
   events.Emitter.emit(id, result);
 }
 
-function subRegister(dataModel, method, params, data, ip, id, sessId) {
+function subRegister(dataModel, method, params, data, ip, id) {
   // Provide some basic sanity checks
   if(!data.email) return passback(id, msg.missingEmail());
   //if(badEmail(data.email)) return msg.badEmail(data.email);
@@ -21,7 +21,7 @@ function subRegister(dataModel, method, params, data, ip, id, sessId) {
   });
 }
 
-function subVerify(dataModel, method, params, data, ip, id, sessId) {
+function subVerify(dataModel, method, params, data, ip, id) {
 
   var token = params[1];
   // Ensure a verification token is present and valid
@@ -34,7 +34,7 @@ function subVerify(dataModel, method, params, data, ip, id, sessId) {
 
 }
 
-function subReset(dataModel, method, params, data, ip, id, sessId) {
+function subReset(dataModel, method, params, data, ip, id) {
   // Ensure email is present and valid
   if(!data.email) return msg.missingEmail();
   //if(badEmail(data.email)) return msg.badEmail(data.email);
@@ -44,16 +44,16 @@ function subReset(dataModel, method, params, data, ip, id, sessId) {
   })
 }
 
-function subLogin(dataModel, method, params, data, ip, id, sessId) {
+function subLogin(dataModel, method, params, data, ip, id) {
   if(!data.email) return msg.missingEmail();
  // if(badEmail(data.email)) return msg.badEmail(data.email);
-  dataModel.session.authenticate(data.email, data.password, sessId,
+  dataModel.session.authenticate(data.email, data.password,
   function(result){
     passback(id, result);
   });
 }
 
-function subLogout(dataModel, method, params, data, ip, id, sessId) {
+function subLogout(dataModel, method, params, data, ip, id) {
   return msg.success(); // TODO: implement this..
 }
     
@@ -65,7 +65,7 @@ function sessAuthenticate(dataModel, headers) {
 }
 
 module.exports = function(db) {
-  var dataModel = model(db); 
+  var dataModel = model(); 
   return {
     authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {

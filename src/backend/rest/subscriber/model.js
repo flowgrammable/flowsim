@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var async = require('async');
+var bcrypt = require('bcrypt');
 
 var msg = require('./msg');
 var adapter = require('./adapter');
@@ -22,7 +23,6 @@ function resultChecker(result, callback){
 function subCreate(adapter, em, pwd, ip, cb) {
   // 1. Insert User
   // 2. Send Verification Email
-
   async.waterfall([
     function(callback){
       adapter.insertSubscriber(em, pwd, ip, function(result){
@@ -38,14 +38,12 @@ function subCreate(adapter, em, pwd, ip, cb) {
       if(err) { cb(err);    } 
       else    { cb(result); }
   });
-
 }
 
 function subVerify(adapter, token, cb) {
   // 1. Fetch user by verificationToken
   // 2. Set user to verified
   // 3. generate auth token
-
   async.waterfall([
     function(callback){
       adapter.fetchSubscriber({verification_token: token}, function(result){
@@ -56,35 +54,7 @@ function subVerify(adapter, token, cb) {
       adapter.verifySubscriber(result.value , function(result){
         resultChecker(result, callback);
       });
-     }
-    ], function(err, result){
-        if(err) { cb(err); }
-        else    { cb(result); }
-    });
-}
-
-function sessAuthenticate(adapter, email, password, cb){
-  // 1. Fetch user by email
-  // 2. Check credentials
-  async.waterfall([
-    function(callback){
-      adapter.fetchSubscriber({email: email}, function(result){
-        resultChecker(result, callback);
-      });
-    },
-    function(result, callback){
-      // password is correct
-      if (bcrypt.compareSync(pwd, result.value.password))
-        resultChecker(msg.success(result), callback);
-      // password is incorrect
-      else
-        resultChecker(msg.incorrectPwd(), callback);
-    },
-    function(result, callback){
-      adapter.createSession(result.value.id, function(result){
-        resultChecker(result, callback);
-      });
-    }],
+    }], 
     function(err, result){
       if(err) { cb(err); }
       else    { cb(result); }
@@ -107,18 +77,33 @@ function subReset(adapter, email, cb) {
 
 }
 
+
 // ----------------------------------------------------------------------------
 // Session
 
-function createSession(adapter, subId, cb){
-  adapter.insertSession(sessKey, subId, function(result){
-    if(result.value){
-      console.log('hit insert session success');
-      cb(msg.success());
-    }
-    //TODO: handle error
-  });
+function sessAuthenticate(adapter, email, password, cb){
+  // 1. Fetch user by email
+  // 2. Check credentials
+  async.waterfall([
+    function(callback){
+      adapter.fetchSubscriber({email: email}, function(result){
+        resultChecker(result, callback);
+      });
+    },
+    function(result, callback){
+      if (!bcrypt.compareSync(password, result.value.password)) // incorrect pwd
+        resultChecker(msg.incorrectPwd(), callback);
+      else // correct pwd
+        adapter.createSession(result.value.id, function(result){
+          resultChecker(result, callback);
+        });
+    }],
+    function(err, result){
+      if(err) { cb(err); }
+      else    { cb(result); }
+    });
 }
+
 
 
 // function subUpdate(db, id, row) {
@@ -159,7 +144,7 @@ module.exports = function(testAdapter) {
 //      destroy: _.bind(subDestroy, null, db)
     },
     session: {
-      create: _.bind(createSession, null, adapter),
+//      create: _.bind(createSession, null, adapter),
 //      destroy: _.bind(sessDestroy, null, db),
       authenticate: _.bind(sessAuthenticate, null, adapter)
 

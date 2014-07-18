@@ -6,7 +6,7 @@ var connect = require('connect');
 var program = require('commander');
 var html = require('./html/controller');
 var rest = require('./rest/controller');
-var session = require('./session');
+// var session = require('./session');
 
 program
   .version(process.env.SERVER_VERSION)
