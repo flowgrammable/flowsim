@@ -74,32 +74,36 @@ module.exports = function(db, userModules) {
       // get the session id
       // var sessId = req.session.id;
       // grab the access token if it exists
-      var session = subscribers.authenticate(req.headers);
+/////      var session = subscribers.authenticate(req.headers);
       var authFunction = installedModules[path[1]].auth[path[2]];
       var noauthFunction = installedModules[path[1]].noauth[path[2]];
       var params = path.slice(2);
       var ip = req.connection.remoteAddress;
-       
-      // execute the found function or error
-      if(noauthFunction) {
-        events.Emitter.once(id, function(result){
-          wrapRes(res, result);
-        });
-        noauthFunction(req.method, params, req.body, ip, id);
-      } else if(authFunction) {	
+      
+			subscribers.authenticate(req.headers, function(session){
+
+      	// execute the found function or error
+      	if(noauthFunction) {
         	events.Emitter.once(id, function(result){
-						wrapRes(res, result);
-					});
-					if(session){
-        		authFunction(session, req.method, params, req.body, ip, id);
-					} else {
-						events.Emitter.emit(id, msg.subscriberUnauthenticated() ); 
-					}
-      } else {
-        wrapRes(res, msg.error({
-          description: 'Service: ' + path[2] + ' does not exist'
-        }));
-      }
+          	wrapRes(res, result);
+        	});
+        	noauthFunction(req.method, params, req.body, ip, id);
+      	} else if(authFunction) {	
+        		events.Emitter.once(id, function(result){
+							wrapRes(res, result);
+						});
+						if(session){
+        			authFunction(session, req.method, params, req.body, ip, id);
+						} else {
+							events.Emitter.emit(id, msg.subscriberUnauthenticated() ); 
+						}
+      	} else {
+        	wrapRes(res, msg.error({
+          	description: 'Service: ' + path[2] + ' does not exist'
+        	}));
+     		}
+
+			});
     } 
   }
 }
