@@ -2,8 +2,10 @@ var subModel = require('../model.js');
 var testAdapter = require('./testAdapter.js');
 var assert = require('assert');
 var model = subModel(testAdapter);
+var msg = require('../msg.js');
 
-
+//------------------------------------------------------------------------------
+// Registration Tests
 describe('===> Testing createSubscriber: \n',function() {
   it('User registered successfully',function(done) {
   	model.subscriber.create('test@test.com', 'mypassword', '127.0.0.1', function(result){
@@ -20,7 +22,8 @@ describe('===> Testing createSubscriber: \n',function() {
 });
 
 
-
+//------------------------------------------------------------------------------
+// Verification Tests
 describe('===> Testing subVerify: \n',function() {
   var token = '';
   var expectedResult =
@@ -34,9 +37,15 @@ describe('===> Testing subVerify: \n',function() {
    });
   });
   it('Subscriber verified ',function(done) {
-    console.log('sending token: ', token);
   	model.subscriber.verify(token, function(result){
   	  assert.equal(JSON.stringify(result), JSON.stringify(expectedResult));
+			done();
+		});
+  });
+
+  it('Subscriber already verified ',function(done) {
+  	model.subscriber.verify(token, function(result){
+  	  assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberAlreadyVerified()));
 			done();
 		});
   });

@@ -140,7 +140,6 @@ function sessAuthenticate(adapter, email, password, cb){
 module.exports = function(testAdapter) {
   if(testAdapter){
 		adapter = testAdapter;
-    console.log('we have an adapter', adapter);
   }
   return {
     subscriber: {
