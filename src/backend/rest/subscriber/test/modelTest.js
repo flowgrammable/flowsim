@@ -11,6 +11,25 @@ describe('===> Testing createSubscriber: \n',function() {
 		done();
 	});
   });
+    it('Duplicate subscriber',function(done) {
+  	model.subscriber.create('test@test.com', 'mypassword', '127.0.0.1', function(result){
+  		assert.equal(result.error.type, "emailInUse");
+		done();
+	});
+  });
 });
 
-
+describe('===> Testing subVerify: \n',function() {
+  // setup subscriber
+  before(function(){
+  	var token;
+    testAdapter.insertSubscriber('verify@test.com', '1234password', '127.0.0.1', function(result){
+    	token = result.verification_token;
+    });
+  })
+  it('Subscriber verified ',function(done) {
+  	model.subscriber.verify(token, function(result){
+  		//TODO: verify redirection url is returned
+  	});
+  });
+});
