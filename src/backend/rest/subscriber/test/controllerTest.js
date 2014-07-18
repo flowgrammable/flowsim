@@ -7,6 +7,8 @@ var events = require('../../../events.js');
 
 var controller = subController(testAdapter);
 
+//-----------------------------------------------------------------------------
+// Registration Controller Tests
 
 describe('===> Testing Register subscriber controller: \n', function(){
 
@@ -71,3 +73,5 @@ describe('===> Testing Register subscriber controller: \n', function(){
 	});
 });
 
+// ----------------------------------------------------------------------------
+// Verification Test

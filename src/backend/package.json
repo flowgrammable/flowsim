@@ -24,6 +24,7 @@
     "nodemailer": "~0.7.1",
     "pg": "~3.3.0",
     "sequelize": "~1.7.9",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "validator": "~3.16.1"
   }
 }
