@@ -8,10 +8,14 @@ var sub = require('./subscriber/controller');
 
 function wrapRes(res, result) {
   console.log('sending response: ', result);
-  var tunnel = {}; // result.tunnel;
-  //delete result.tunnel;
-  tunnel['Content-Type'] = 'application/json'; 
-  res.writeHead('200', tunnel);
+  var code = 200;
+  var headers = {'Content-Type':'application/json'};
+	if(result.tunnel.code && result.tunnel.headers){
+		code = result.tunnel.code;
+    headers = result.tunnel.headers;
+	}
+  delete result.tunnel;
+  res.writeHead(code, headers);
   res.end(JSON.stringify(result));
 }
 
@@ -38,7 +42,7 @@ function validateModules(userModules) {
 
 module.exports = function(db, userModules) {
 
-  var subscribers = sub(db);
+  var subscribers = sub();
 
   // Validate the supplied modules and install subscriber functions
   validateModules(userModules);

@@ -64,10 +64,10 @@ function sessAuthenticate(dataModel, headers) {
   return null;
 }
 
-module.exports = function(adapter) {
+module.exports = function(testAdapter) {
   var dataModel;
-	if(adapter){
-		dataModel = model(adapter);
+	if(testAdapter){
+		dataModel = model(testAdapter);
   } else {
 		dataModel = model();
 	} 

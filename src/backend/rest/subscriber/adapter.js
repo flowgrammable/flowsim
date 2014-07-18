@@ -1,5 +1,5 @@
 var uuid = require('node-uuid');
-
+var bcrypt = require('bcrypt');
 var msg = require('./msg');
 
 var orm = require('../../dbbs');
@@ -87,7 +87,10 @@ function sendVerificationEmail(subscriber, config, cb){
   var email = subscriber.values.email;
   var token = subscriber.values.verification_token;
   mailer.sendMail(email, mailer.verificationMessage(token), function(result){
-    if (result.name) cb(msg.error());
+		if (result.name){
+		 console.log(result);
+		 cb(msg.unknownError());
+		}
     else cb(msg.success());   
   });
 }

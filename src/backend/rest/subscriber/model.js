@@ -26,7 +26,7 @@ function subCreate(adapter, em, pwd, ip, cb) {
   async.waterfall([
     function(callback){
       adapter.insertSubscriber(em, pwd, ip, function(result){
-        resultChecker(result, callback);
+      resultChecker(result, callback);
       });
     },
     function(result, callback){
@@ -140,6 +140,7 @@ function sessAuthenticate(adapter, email, password, cb){
 module.exports = function(testAdapter) {
   if(testAdapter){
 		adapter = testAdapter;
+    console.log('we have an adapter', adapter);
   }
   return {
     subscriber: {
