@@ -1,3 +1,5 @@
+var bcrypt = require('bcrypt');
+
 var subModel = require('../model.js');
 var testAdapter = require('./testAdapter.js');
 var assert = require('assert');
@@ -58,8 +60,7 @@ describe('===> Testing subVerify: \n',function() {
 //------------------------------------------------------------------------------
 // Authenticate Tests
 describe('===> Testing sessionAuthenticate: \n', function(){
-	before(function(){
-	//insert a verified user into db
+	
   var testPassword = 'testPassword';
   var encrypted = bcrypt.hashSync(testPassword, 10);
   var testSubscriber = {email: 'testSubscriber@test.com', 
@@ -69,8 +70,40 @@ describe('===> Testing sessionAuthenticate: \n', function(){
       verification_token: 'doesntmatter',
       status: 'VERIFIED'
 			};
-  testAdapter.makeSubscriber(testSubscriber, function(result){
-  
-	});
+	before(function(){
+	//insert a verified user into db
+  testAdapter.makeSubscriber(testSubscriber);
   });
+	it('Subscriber should authenticate: \n', function(done){
+		model.session.authenticate(testSubscriber.email, testPassword, 
+			function(result){
+			assert(result.value, true);
+			done();
+		});
+	});
+});
+
+describe('===> Testing sessionAuthenticate: \n', function(){
+	
+  var testPassword = 'testPassword';
+  var encrypted = bcrypt.hashSync(testPassword, 10);
+  var testSubscriber2 = {email: 'testSubscriber@test.com', 
+			password: encrypted, 
+			reg_date: new Date(),
+			reg_ip: '127.0.0.1',
+      verification_token: 'doesntmatter',
+      status: 'REGISTERED'
+			};
+	before(function(){
+	//insert a verified user into db
+  testAdapter.makeSubscriber(testSubscriber2);
+  });
+	it('Subscriber should authenticate: \n', function(done){
+		model.session.authenticate(testSubscriber2.email, testPassword, 
+			function(result){
+			assert.equal(JSON.stringify(result), 
+				JSON.stringify(msg.unverifiedSubscriber()));
+			done();
+		});
+	});
 });

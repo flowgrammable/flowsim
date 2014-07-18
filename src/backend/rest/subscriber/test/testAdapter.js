@@ -57,8 +57,7 @@ function insertSubscriber(em, pwd, ip, cb){
 }
 
 function makeSubscriber(sub, cb){
-	Subscriber.push(sub);
-	cb();
+	Subscriber.push(sub);	
 }
 
 function fetchSubscriber(subInfo, cb){
@@ -78,7 +77,7 @@ function verifySubscriber(sub, cb){
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
 exports.verifySubscriber = verifySubscriber;
-
+exports.makeSubscriber = makeSubscriber;
 // ----------------------------------------------------------------------------
 // Mailer
 function sendVerificationEmail(em, config, cb){
