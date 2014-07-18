@@ -86,9 +86,15 @@ module.exports = function(db, userModules) {
           wrapRes(res, result);
         });
         noauthFunction(req.method, params, req.body, ip, id);
-      } else if(authFunction && session) {
-        result = authFunction(session, req.method, params, req.body, ip, id);
-        wrapRes(res, result);
+      } else if(authFunction) {	
+        	events.Emitter.once(id, function(result){
+						wrapRes(res, result);
+					});
+					if(session){
+        		authFunction(session, req.method, params, req.body, ip, id);
+					} else {
+						events.Emitter.emit(id, msg.subscriberUnauthenticated() ); 
+					}
       } else {
         wrapRes(res, msg.error({
           description: 'Service: ' + path[2] + ' does not exist'

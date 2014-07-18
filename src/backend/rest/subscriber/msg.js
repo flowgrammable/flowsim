@@ -133,3 +133,10 @@ exports.badConfig = function() {
   })
 }
 
+exports.subscriberUnauthenticated = function(){
+	return msg.error({
+		system: "subscriber/model",
+		type: "subscriberUnauthenticated"
+	});
+}
+
