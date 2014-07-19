@@ -26,10 +26,10 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           password: subPwd
         })
       }).success(function(data, status, headers, config) {
-        accessToken = headers("X-Access-Token");
-        if(data.success && accessToken.length > 0) {
+        accessToken = data.value;
+        if(data.value ) {
           $rootScope.$broadcast("authenticated", {
-            subscriberId: data.success.name
+            subscriberId: data.value
           });
         } else {
           $rootScope.$broadcast("loginFailure");
