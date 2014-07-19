@@ -103,8 +103,7 @@ function sendVerificationEmail(subscriber, cb) {
   });
 }
 
-function sendResetEmail(subscriber){
-
+exports.sendResetEmail = function(subscriber, cb){
 	var email = subscriber.values.email;
 	var resetToken = subscriber.values.reset_token;
 	mailer.sendMail(email, mailer.resetMessage(resetToken), function(result){
@@ -114,7 +113,15 @@ function sendResetEmail(subscriber){
 		}
 		else cb(msg.success());
 	});
+}
 
+
+// given subscriber, generate reset token
+exports.generateResetToken = function(subscriber, cb){
+	// if reset_token associated with subscriber.id exists
+  // then expire the reset_token
+  // then generate a new token associated with the subscriber id
+  // and pass the token string back with cb(msg.success(resetToken))
 }
 
 function verifyRedirect(cb) {
@@ -122,6 +129,8 @@ function verifyRedirect(cb) {
 								headers: {'Location':'http://localhost:3000/#/login'}};
    cb(msg.success(null, tunnel));
 }
+
+
 
 exports.verifyRedirect = verifyRedirect;
 exports.sendVerificationEmail = sendVerificationEmail;
