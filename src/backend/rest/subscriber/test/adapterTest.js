@@ -65,15 +65,8 @@ describe('===> Testing verifySubscriber adapter function:\n', function() {
 
 describe('===> Testing sendVerificationEmail adapter function: \n', function(){
 	it('Mail sent successfully', function(done){
-		adapter.sendVerificationEmail(testEmail, config, function(result) {
+		adapter.sendVerificationEmail(testEmail, function(result) {
 			assert(result.value, "could not sent mail")
-			done();
-		});
-	});
-	it('Bad configuration', function(done){
-		config = false;
-		adapter.sendVerificationEmail(testEmail, config, function(result) {
-			assert.equal(result.error.type, "badEmailConfiguration")
 			done();
 		});
 	});

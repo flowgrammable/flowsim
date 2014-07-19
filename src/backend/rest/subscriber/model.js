@@ -30,7 +30,7 @@ function subCreate(adapter, em, pwd, ip, cb) {
       });
     },
     function(result, callback){
-      adapter.sendVerificationEmail(result.value, config, function(result){
+      adapter.sendVerificationEmail(result.value,  function(result){
         resultChecker(result, callback);
       });
     }

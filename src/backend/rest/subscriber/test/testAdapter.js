@@ -84,12 +84,8 @@ exports.verifySubscriber = verifySubscriber;
 exports.makeSubscriber = makeSubscriber;
 // ----------------------------------------------------------------------------
 // Mailer
-function sendVerificationEmail(em, config, cb){
-  if(config){
+function sendVerificationEmail(em, cb){
     cb(msg.success());
-  } else {
-    cb(msg.badConfig());
-  }
 }
 
 exports.sendVerificationEmail = sendVerificationEmail;

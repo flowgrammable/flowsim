@@ -90,7 +90,7 @@ function verifySubscriber(sub, cb){
   }
 }
 
-function sendVerificationEmail(subscriber, config, cb){
+function sendVerificationEmail(subscriber, cb){
   console.log(subscriber.values); 
   var email = subscriber.values.email;
   var token = subscriber.values.verification_token;
