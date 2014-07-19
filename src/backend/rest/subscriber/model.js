@@ -68,13 +68,28 @@ function subVerify(adapter, token, cb) {
 }
 
 function subReset(adapter, email, cb) {
-  // 1. Generate password reset token
-  // 2. associate it with user
-  // 3. send email with token
+  // 1. Fetch subscriber
+  // 2. Generate reset token
+  //    - if one already exists, expire it
+  //    - create reset token
+  // 3. sendResetEmail(resetMessage(token))
+  
   async.waterfall([
     function(callback){
-      adapter.generateResetToken()
-    }
+      adapter.fetchSubscriber({email: email}, function(result){
+				resultChecker(result, callback);
+			});
+    },
+		function(result, callback){
+			adapter.generateResetToken(result.value, function(result){
+				resultChecker(result, callback);
+			});
+		},
+		function(result, callback){
+			adapter.sendResetEmail(result.value, function(result){
+				resultChecker(result, callback);
+			});
+		}
     ], function(err, result){
         if(err) { cb(err); }
         else    { cb(result);}
@@ -157,7 +172,7 @@ module.exports = function(testAdapter) {
     subscriber: {
       create: _.bind(subCreate, null, adapter),
       verify: _.bind(subVerify, null, adapter),
-
+      reset:  _.bind(subReset, null, adapter),
 //      update: _.bind(subUpdate, null, db),
 //      destroy: _.bind(subDestroy, null, db)
     },

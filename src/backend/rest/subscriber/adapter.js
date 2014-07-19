@@ -103,6 +103,20 @@ function sendVerificationEmail(subscriber, cb) {
   });
 }
 
+function sendResetEmail(subscriber){
+
+	var email = subscriber.values.email;
+	var resetToken = subscriber.values.reset_token;
+	mailer.sendMail(email, mailer.resetMessage(resetToken), function(result){
+		if(result.name){
+			console.log(result);
+			cb(msg.unknownError());
+		}
+		else cb(msg.success());
+	});
+
+}
+
 function verifyRedirect(cb) {
 	var tunnel = {code:302,
 								headers: {'Location':'http://localhost:3000/#/login'}};
