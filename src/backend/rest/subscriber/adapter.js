@@ -105,7 +105,7 @@ function sendVerificationEmail(subscriber, cb){
 
 function verifyRedirect(cb){
 	var tunnel = {code:302,
-								headers: {'Location':'http://localhost:3000/verified.html'}};
+								headers: {'Location':'http://localhost:3000/#/login'}};
    cb(msg.success(null, tunnel));
 }
 
