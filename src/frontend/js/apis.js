@@ -29,7 +29,7 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
         accessToken = data.value;
         if(data.value ) {
           $rootScope.$broadcast("authenticated", {
-            accessToken = data.value;
+            
           });
         } else if(data.error.type == 'subscriberNotActive') {
           $rootScope.$broadcast("subscriberNotActive");
