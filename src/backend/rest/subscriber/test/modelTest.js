@@ -133,3 +133,38 @@ describe('===> Testing sessionAuthenticate: \n', function(){
 		});
 	});
 });
+
+//------------------------------------------------------------------------------
+// Reset Password 
+describe('===> Testing resetPassword: \n', function(){
+	var testSubscriber4 = {
+		email: 'testSubscriber4@test.com',
+		password: 'doesnt matter',
+		reg_date: new Date(),
+		reg_ip: '127.0.0.1',
+		verification_token: 'doesnt matter',
+		status: 'ACTIVE'
+		};
+	before(function(){
+		testAdapter.makeSubscriber(testSubscriber4);
+	});
+  it('resetPassword(email) should return msg.success() if subsciber is ACTIVE : \n', function(done){
+		model.subscriber.subReset(email, function(result){
+			assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
+			done();
+		});
+			
+	});
+});
+
+
+describe('===> Testing resetPassword: \n', function(){
+  it('resetPassword(email) should return msg.subscriberNotFound() when trying' + 
+			'to reset a subscriber that has not been registered' : \n', function(done){
+		model.subscriber.subReset('idont@exist.com', function(result){
+			assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberNotFound()));
+			done();
+		});
+			
+	});
+});
