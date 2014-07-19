@@ -11,9 +11,10 @@ var token;
 
 describe('Testing registration requests:',function() {
   it('User registered successfully',function(done) {
+    this.timeout(5000);
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\", \"ip\": \"192.162.0.8\"}',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
       headers: {
         'Content-Type': 'application/json'
       },
