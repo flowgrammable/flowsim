@@ -94,7 +94,7 @@ module.exports = function(testAdapter) {
       noauth: {
         register: _.bind(subRegister, null, dataModel),
         verify: _.bind(subVerify, null, dataModel),
-        reset: _.bind(subRegister, null, dataModel),
+        reset: _.bind(subReset, null, dataModel),
         login: _.bind(subLogin, null, dataModel)
       },
       auth: {
