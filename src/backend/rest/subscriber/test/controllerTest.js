@@ -12,16 +12,6 @@ var controller = subController(testAdapter);
 
 describe('===> Testing Register subscriber controller: \n', function(){
 
-  it('Test if subscriber registered successfully', function(done){
-		var testId = 'testerID';
-    var data = {email: 'test@test.com', password: 'tester10'};
-
-		events.Emitter.once(testId, function(result){
-		assert.equal(JSON.stringify(result), JSON.stringify({value:{},tunnel:{}}));
-		done();
-		});
-  controller.module.noauth.register('POST', {}, data, '127.0.0.1', testId);
-	});
 
   it('Test if email not provided', function(done){
 		var testId = 'testerID1';
@@ -79,8 +69,9 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 	
 	it('Test if token provided invalid', function(done){
 		var testId = 'testerID1';
-	    	var data = {};
-	    	var params = ['doesnt_matter_only_looking_for_params1', 'an_invalid_token'];
+	  var data = {token: 'aninvalid token'};
+		var params = [];
+	
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
 		JSON.stringify(msg.badVerificationToken()))
