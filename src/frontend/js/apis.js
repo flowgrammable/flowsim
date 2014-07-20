@@ -33,7 +33,9 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           });
         } else if(data.error.type == 'subscriberNotActive') {
           $rootScope.$broadcast("subscriberNotActive");
-        }
+        } else if(data.error.type == 'subscriberNotFound'){
+					$rootScope.$broadcast("subscriberNotFound");
+				}
       }).error(function(data) {
         $rootScope.$broadcast("loginFailure");
       });

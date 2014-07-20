@@ -72,6 +72,9 @@ flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, u
         $scope.subscriberNotActive = true; 
       });
       $rootScope.$on("authenticated", function() { $location.path("/"); });
+			$rootScope.$on("subscriberNotFound", function(){
+				$scope.subscriberNotFound = true;
+			});
     }
   };
 });
