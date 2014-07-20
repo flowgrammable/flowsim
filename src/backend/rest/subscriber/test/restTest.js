@@ -22,9 +22,9 @@ describe('Testing registration requests:',function() {
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to register user');
       console.log('\tResponse received : ', body);
-      fs.exists('/home/dev/main/flowsim/src/backend/temp', function (exists) {
+      fs.exists('/home/dev/flowsim/src/backend/temp', function (exists) {
         if(exists) {
-          fs.readFile('/home/dev/main/flowsim/src/backend/temp','utf8',function (err,data) {
+          fs.readFile('/home/dev/flowsim/src/backend/temp','utf8',function (err,data) {
             if (err) console.log('Unable to read token in file for restTest');
             else{ token = data;}
           });
@@ -111,9 +111,9 @@ describe('Testing verification requests:',function() {
       url: 'http://localhost:3000/api/subscriber/verify/'+token,
       method: 'GET'
     },
-    function (error, response, body) {
-      assert(JSON.parse(body)['value'],'Unable to verify user');
+    function (error, response, body) { 
       console.log('\tResponse received : ', body);
+			assert(JSON.parse(body)['value'],'Unable to verify user');
       done();
     });
   });
