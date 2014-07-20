@@ -109,11 +109,7 @@ describe('Testing verification requests:',function() {
   it('User verified successfully',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/'+token,
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
+      method: 'GET'
     },
     function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to verify user');
@@ -124,11 +120,7 @@ describe('Testing verification requests:',function() {
   it('User already verified',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/'+token,
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
+      method: 'GET'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'subscriberAlreadyVerified');
       console.log('\tResponse received : ', body);
@@ -138,11 +130,7 @@ describe('Testing verification requests:',function() {
   it('Missing verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
+      method: 'GET'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'missingVerificationToken');
       console.log('\tResponse received : ', body);
@@ -152,11 +140,7 @@ describe('Testing verification requests:',function() {
   it('Bad verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/Bad-Token',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
+      method: 'GET'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'badVerificationToken');
       console.log('\tResponse received : ', body);
