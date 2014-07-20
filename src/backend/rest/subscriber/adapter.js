@@ -108,7 +108,7 @@ exports.generateResetToken = function(subscriber, cb){
 function verifyRedirect(cb) {
 	var tunnel = {code:302,
 								headers: {'Location':'http://localhost:3000/#/login'}};
-   cb(msg.success(null, tunnel));
+   cb(msg.success());
 }
 
 

@@ -21,8 +21,8 @@ exports.verificationMessage = function(token){
   var message = '<html><title>Thank you for signing up for Flowsim</title>'+
                  '<body>Thank you for signing up for Flowsim.<br/>Click the'+
                  ' link below to confirm your account<br/><br/><a href=\"'+
-                 'http://localhost:3000/api/subscriber/verify/'+token+'\"'+
-                 '>https://www.flowgrammable.org/subscriber/verify/'+token+
+                 'http://localhost:3000/#/verify/'+token+'\"'+
+                 '>https://www.flowgrammable.org/#/verify/'+token+
                  '</a><br/><br/><h1>The Flowsim Team!</h1></body></html>'
   return message;
 }

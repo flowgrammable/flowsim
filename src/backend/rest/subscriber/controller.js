@@ -26,7 +26,7 @@ function subRegister(dataModel, method, params, data, ip, id) {
 
 function subVerify(dataModel, method, params, data, ip, id) {
 
-  var token = params[1];
+  var token = data.token;
   // Ensure a verification token is present and valid
   if(!token) return passback(id, msg.missingVerificationToken());
   if(utils.invalidToken(token)) return passback(id, msg.badVerificationToken());
