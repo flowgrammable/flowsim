@@ -72,7 +72,7 @@ function subVerify(adapter, token, cb) {
     });
 }
 
-function subReset(adapter, email, cb) {
+function subForgotRequest(adapter, email, cb) { // PHASE ONE
   // 1. Fetch subscriber
   // 2. Generate reset token
   //    - if one already exists, expire it
@@ -103,6 +103,13 @@ function subReset(adapter, email, cb) {
 
 }
 
+function subForgotRedirect(adapter, token, cb) { // PHASE TWO
+
+}
+
+function subForgotUpdate(adapter, token, password, cb) { // PHASE THREE
+
+}
 
 // ----------------------------------------------------------------------------
 // Session
@@ -175,17 +182,17 @@ module.exports = function(testAdapter) {
   }
   return {
     subscriber: {
-      create: _.bind(subCreate, null, adapter),
-      verify: _.bind(subVerify, null, adapter),
-      reset:  _.bind(subReset, null, adapter),
-//      update: _.bind(subUpdate, null, db),
-//      destroy: _.bind(subDestroy, null, db)
+      create:           _.bind(subCreate, null, adapter),
+      verify:           _.bind(subVerify, null, adapter),
+      forgotRequest:    _.bind(subForgotRequest, null, adapter),
+      forgotRedirect:   _.bind(subForgotRedirect, null, adapter),
+      forgotUpdate:     _.bind(subForgotUpdate, null, adapter),
+      // update:           _.bind(subUpdate, null, db),
+      // destroy:          _.bind(subDestroy, null, db)
     },
     session: {
-//      create: _.bind(createSession, null, adapter),
-      destroy: _.bind(sessDestroy, null, adapter),
-      authenticate: _.bind(sessAuthenticate, null, adapter),
-
+      destroy:          _.bind(sessDestroy, null, adapter),
+      authenticate:     _.bind(sessAuthenticate, null, adapter),
       getByAccessToken: _.bind(sessGetByAccessToken, null, adapter)
     }
   };
