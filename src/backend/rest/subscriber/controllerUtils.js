@@ -4,7 +4,7 @@ var enforce = require('enforce');
 function invalidEmail(email){
 	//use node-enfore library
 	var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    	return re.test(email);
+    	return !(re.test(email));
 }
 
 function invalidPassword(password){
