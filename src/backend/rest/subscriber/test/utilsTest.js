@@ -8,9 +8,9 @@ var badEmail = "ojh12345@gmail";
 var goodEmail = "ojh12345@yahoo.com";
 //utils.validEmail(badEmail);
 //utils.validEmail(goodEmail);
-if(utils.invalidEmail(badEmail)){
-	console.log("invalid email");
-}
+console.log(utils.invalidEmail(badEmail));
+
+
 //assert.equal(utils.invalidEmail(goodEmail), false);
 
 //password test
