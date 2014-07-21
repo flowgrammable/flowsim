@@ -10,7 +10,7 @@ function invalidPassword(password){
 	var min = 8;
 	var max = 16;
 	//return !validator.isLength(password, min, max);
-	return !(password.length<=max&&password.length>=min);
+	return !(password.length <=max && password.length >= min);
 }
 //function validToken(token){
 //	checks.add("testToken", enforce.ranges.length(36, 36, "bad token"))
