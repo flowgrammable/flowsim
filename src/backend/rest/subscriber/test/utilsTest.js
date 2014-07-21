@@ -6,7 +6,7 @@ var assert = require('assert');
 //invalid email returns false
 var badEmail = "ojh12345@gmail";
 var goodEmail = "ojh12345@yahoo.com";
-console.log(utils.validEmail(badEmail));
+utils.validEmail(badEmail);
 //assert.equal(utils.validEmail(badEmail), false, ['invalid email']);
 //assert.equal(utils.validEmail(goodEmail), true, ['valid email']);
 
