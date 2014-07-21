@@ -11,7 +11,7 @@ if(!utils.invalidEmail(goodEmail)) console.log("good email");
 
 //password test
 var badPass = "1234";
-var goodPass = "password10";
+var goodPass = "password";
 if(utils.invalidEmail(badPass)) console.log("bad password");
 console.log(utils.invalidEmail(goodPass));
 if(!utils.invalidEmail(goodPass)) console.log("good password");
