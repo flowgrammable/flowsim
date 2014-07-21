@@ -25,7 +25,7 @@ function validEmail(email){
 
 function validPassword(password){
 	var checks = new enforce.Enforce();
-	checks.add("testPass", enforce.range.length(8, 16, {
+	checks.add("testPass", enforce.ranges.length(8, 16, {
 	      'error': {
 	        'type': 'Registration',
 	        'description': 'Could not register user',
@@ -45,7 +45,7 @@ function validPassword(password){
 }
 
 //function validToken(token){
-//	checks.add("testToken", enforce.range.length(36, 36, "bad token"))
+//	checks.add("testToken", enforce.ranges.length(36, 36, "bad token"))
 //	checks.check({
 //		testToken : token
 //	}, function (err) {
