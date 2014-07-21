@@ -1,5 +1,5 @@
 
-var validator = require('vallidator');
+var validator = require('validator');
 
 function invalidEmail(email){
 	//use node-enfore library
