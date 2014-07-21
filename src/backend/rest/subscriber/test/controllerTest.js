@@ -75,3 +75,27 @@ describe('===> Testing Register subscriber controller: \n', function(){
 
 // ----------------------------------------------------------------------------
 // Verification Test
+describe('===> Testing Verify subscriber controller: \n', function(){
+	
+	it('Bad Token Test', function(done){
+		var testId = 'testerID1';
+	    	var data = {token = 'not36characters'};
+		events.Emitter.once(testId, function(result){
+		assert.equal(JSON.stringify(result),
+		JSON.stringify(msg.badToken()));
+		done();
+		});
+	  controller.module.noauth.verify('POST', {}, data, '127.0.0.1', testId);
+	});
+	
+	it('Missing Token Test', function(done){
+		var testId = 'testerID1';
+	    	var data = {token = ''};
+		events.Emitter.once(testId, function(result){
+		assert.equal(JSON.stringify(result),
+		JSON.stringify(msg.missingToken()));
+		done();
+		});
+	  controller.module.noauth.verify('POST', {}, data, '127.0.0.1', testId);
+	});
+});
