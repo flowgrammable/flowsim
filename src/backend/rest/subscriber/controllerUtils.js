@@ -1,8 +1,9 @@
 
 var enforce = require('enforce');
-var checks = new enforce.Enforce();
+
 function validEmail(email){
 	//use node-enfore library
+	var checks = new enforce.Enforce();
 	checks.add("testEmail", enforce.patterns.email({      
 	      'error': {
 	        'type': 'Registration',
@@ -23,6 +24,7 @@ function validEmail(email){
 }
 
 function validPassword(password){
+	var checks = new enforce.Enforce();
 	checks.add("testPass", enforce.range.length(8, 16, {
 	      'error': {
 	        'type': 'Registration',
