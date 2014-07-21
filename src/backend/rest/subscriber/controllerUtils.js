@@ -9,11 +9,9 @@ function validEmail(email){
 		testEmail : email
 	}, function (err) {
 		if(err){
-			console.log(JSON.stringify(err.msg));
 			return true;
 		}
 		else{
-			console.log("good email");
 			return false;
 		}
 	});
@@ -26,11 +24,9 @@ function validPassword(password){
 		testPass : password
 	}, function (err) {
 		if(err){
-			console.log(JSON.stringify(err.msg));
 			return true;
 		}
 		else{
-			console.log("good password");
 			return false;
 		}
 	});
