@@ -8,8 +8,10 @@ var badEmail = "ojh12345@gmail";
 var goodEmail = "ojh12345@yahoo.com";
 //utils.validEmail(badEmail);
 //utils.validEmail(goodEmail);
-assert.equal(utils.validEmail(badEmail), true, ['invalid email']);
-assert.equal(utils.validEmail(goodEmail), false, ['valid email']);
+console.log(utils.invalidEmail(badEmail));
+
+
+//assert.equal(utils.invalidEmail(goodEmail), false);
 
 //password test
 //invalid password return false, needs to be 8-16 characters
@@ -17,8 +19,8 @@ var badPass = "1234";
 var goodPass = "1234567890";
 //utils.validPassword(badPass);
 //utils.validPassword(goodPass);
-assert.equal(utils.validPassword(badPass), true, ['invalid password']);
-assert.equal(utils.validPassword(goodPass), false, ['valid password']);
+//assert.equal(utils.invalidPassword(badPass), true);
+//assert.equal(utils.invalidPassword(goodPass), false);
 
 //token test
 //invalid token returns false, needs to be 36 characters

@@ -1,23 +1,13 @@
 
 var enforce = require('enforce');
 
-function validEmail(email){
+function invalidEmail(email){
 	//use node-enfore library
-	var checks = new enforce.Enforce();
-	checks.add("testEmail", enforce.patterns.email("bad email"));
-	checks.check({
-		testEmail : email
-	}, function (err) {
-		if(err){
-			return true;
-		}
-		else{
-			return false;
-		}
-	});
+	var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    	return !(re.test(email));
 }
 
-function validPassword(password){
+function invalidPassword(password){
 	var checks = new enforce.Enforce();
 	checks.add("testPass", enforce.ranges.length(8, 16, "bad password"));
 	checks.check({
@@ -41,6 +31,6 @@ function validPassword(password){
 //	});
 //}
 
-exports.validPassword = validPassword;
-exports.validEmail = validEmail;
+exports.invalidPassword = invalidPassword;
+exports.invalidEmail = invalidEmail;
 //exports.validToken = validToken;
