@@ -20,6 +20,9 @@ function validEmail(email){
 		if(err){
 			console.log(JSON.stringify(err.msg));
 		}
+		else{
+			console.log("good email");
+		}
 	});
 }
 
@@ -40,6 +43,9 @@ function validPassword(password){
 	}, function (err) {
 		if(err){
 			console.log(JSON.stringify(err.msg));
+		}
+		else{
+			console.log("good password");
 		}
 	});
 }
