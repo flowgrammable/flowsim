@@ -7,6 +7,7 @@ var assert = require('assert');
 var badEmail = "ojh12345@gmail";
 var goodEmail = "ojh12345@yahoo.com";
 utils.validEmail(badEmail);
+utils.validEmail(goodEmail);
 //assert.equal(utils.validEmail(badEmail), false, ['invalid email']);
 //assert.equal(utils.validEmail(goodEmail), true, ['valid email']);
 
@@ -15,6 +16,7 @@ utils.validEmail(badEmail);
 var badPass = "1234";
 var goodPass = "1234567890";
 utils.validPassword(badPass);
+utils.validPassword(goodPass);
 //assert.equal(utils.validPassword(badPass), false, ['invalid password']);
 //assert.equal(utils.validPassword(goodPass), true, ['valid password']);
 
