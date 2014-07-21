@@ -53,4 +53,4 @@ function validPassword(password){
 
 exports.validPassword = validPassword;
 exports.validEmail = validEmail;
-exports.validToken = validToken;
+//exports.validToken = validToken;
