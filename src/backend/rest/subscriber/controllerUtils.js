@@ -1,7 +1,7 @@
 
 var enforce = require('enforce');
 
-function validEmail(email){
+function invalidEmail(email){
 	//use node-enfore library
 	var checks = new enforce.Enforce();
 	checks.add("testEmail", enforce.patterns.email("bad email"));
@@ -17,7 +17,7 @@ function validEmail(email){
 	});
 }
 
-function validPassword(password){
+function invalidPassword(password){
 	var checks = new enforce.Enforce();
 	checks.add("testPass", enforce.ranges.length(8, 16, "bad password"));
 	checks.check({
@@ -41,6 +41,6 @@ function validPassword(password){
 //	});
 //}
 
-exports.validPassword = validPassword;
-exports.validEmail = validEmail;
+exports.invalidPassword = invalidPassword;
+exports.invalidEmail = invalidEmail;
 //exports.validToken = validToken;
