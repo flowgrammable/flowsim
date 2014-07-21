@@ -12,9 +12,9 @@ if(!utils.invalidEmail(goodEmail)) console.log("good email");
 //password test
 var badPass = "1234";
 var goodPass = "password";
-if(utils.invalidEmail(badPass)) console.log("bad password");
-console.log(utils.invalidEmail(goodPass));
-if(!utils.invalidEmail(goodPass)) console.log("good password");
+if(utils.invalidPassword(badPass)) console.log("bad password");
+//console.log(utils.invalidEmail(goodPass));
+if(!utils.invalidPassword(goodPass)) console.log("good password");
 
 //token test
 //invalid token returns false, needs to be 36 characters
