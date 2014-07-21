@@ -1,5 +1,5 @@
 var _ = require('underscore');
-
+var utils = require('controllerUtils.js');
 var events = require('../../events');
 var msg = require('./msg');
 var model = require('./model');
@@ -12,9 +12,9 @@ function passback(id, result, nextFunction){
 function subRegister(dataModel, method, params, data, ip, id) {
   // Provide some basic sanity checks
   if(!data.email) return passback(id, msg.missingEmail());
-  if(validEmail(data.email)) return msg.badEmail(data.email);
+  if(utils.validEmail(data.email)) return msg.badEmail(data.email);
   if(!data.password) return passback(id, msg.missingPwd());
-  if(validPassword(data.password)) return msg.badPwd();
+  if(utils.validPassword(data.password)) return msg.badPwd();
 
   dataModel.subscriber.create(data.email, data.password, ip, function(result){
       passback(id, result);
