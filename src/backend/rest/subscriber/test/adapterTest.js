@@ -93,3 +93,15 @@ describe('===> Testing verifyRedirect adapter function: \n', function(){
 		});
   }); 
 });
+
+// ----------------------------------------------------------------------------
+// Testing createSession
+
+describe('===> Testing createSession adapter function:\n', function() {
+  it('Session created successfully', function(done) {
+    adapter.createSession(subscriber.id, function (result) {
+      assert(result.value, "Unable to create session")
+      done();
+    });
+  });
+});

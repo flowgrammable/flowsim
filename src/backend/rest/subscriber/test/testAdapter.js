@@ -8,15 +8,7 @@ var Subscriber = database['subscribers'];
 var Session = database['sessions'];
 // var mailer = require('../../mailer');
 
-// ----------------------------------------------------------------------------
-// Subscriber
-
-Array.prototype.containsEmail = function(email) {
-  for (i in this) if (this[i].email == email) return true;
-  return false;
-}
-
-Array.prototype.find = function(sub) {
+Array.prototype.findSub = function(sub) {
   var hasEmail, hasVerToken, found;
   if (sub.email) hasEmail = true;
   if (sub.verification_token) hasVerToken = true;
@@ -34,6 +26,15 @@ Array.prototype.find = function(sub) {
   }
   return null;
 }
+
+// ----------------------------------------------------------------------------
+// Subscriber
+
+Array.prototype.containsEmail = function(email) {
+  for (i in this) if (this[i].email == email) return true;
+  return false;
+}
+
 
 function insertSubscriber(em, pwd, ip, cb){
   var token = uuid.v4();
@@ -56,7 +57,7 @@ function insertSubscriber(em, pwd, ip, cb){
 }
 
 function fetchSubscriber(subInfo, cb){
-  var sub = Subscriber.find(subInfo);
+  var sub = Subscriber.findSub(subInfo);
   if (sub == null) cb(msg.subscriberNotFound());
   else cb(msg.success(sub));
 }
@@ -69,6 +70,10 @@ function verifySubscriber(sub, cb){
   }
 }
 
+exports.insertSubscriber = insertSubscriber;
+exports.fetchSubscriber = fetchSubscriber;
+exports.verifySubscriber = verifySubscriber;
+
 // ----------------------------------------------------------------------------
 // Mailer
 function sendVerificationEmail(em, config, cb){
@@ -79,6 +84,7 @@ function sendVerificationEmail(em, config, cb){
   }
 }
 
+exports.sendVerificationEmail = sendVerificationEmail;
 
 // ----------------------------------------------------------------------------
 // Redirect
@@ -87,9 +93,25 @@ function verifyRedirect(cb){
 								headers: {'Location':'http://localhost:3000/verified.html'}};
    cb(msg.success(null, tunnel));
 }
-exports.insertSubscriber = insertSubscriber;
-exports.fetchSubscriber = fetchSubscriber;
-exports.verifySubscriber = verifySubscriber;
-exports.sendVerificationEmail = sendVerificationEmail;
+
 exports.verifyRedirect = verifyRedirect;
 
+// ----------------------------------------------------------------------------
+// Session
+
+function createSession(subId, cb){
+  var sessKey = uuid.v4();
+  var sessToAdd = { 
+    subscriber_id: subId,
+    key: sessKey
+    // begin_time: new Date(),
+    // timeout: blah,
+    // ip: ip  
+  };
+  Session.push(sessToAdd);
+  var newSess = Session[Session.length-1];
+  if (newSess == sessToAdd) cb(msg.success(newSess.key)); // successful insert
+  else cb(msg.unknownError(Session.pop()));
+}
+
+exports.createSession = createSession;
