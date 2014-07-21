@@ -100,13 +100,12 @@ function sessAuthenticate(adapter, email, password, cb){
       // Subscriber's account must have an active status
       if (result.value.status != 'ACTIVE') 
         resultChecker(msg.subscriberNotActive(result.value), callback);
+      else if (!bcrypt.compareSync(password, result.value.password)) // wrong pwd
+        resultChecker(msg.incorrectPwd(), callback);
       else {
-        if (!bcrypt.compareSync(password, result.value.password)) // wrong pwd
-          resultChecker(msg.incorrectPwd(), callback);
-        else // correct pwd
-          adapter.createSession(result.value.id, function(result){
-            resultChecker(result, callback);
-          });
+        adapter.createSession(result.value.id, function(result){
+          resultChecker(result, callback);
+        });
       }
     }],
     function(err, result){
@@ -133,14 +132,12 @@ function sessAuthenticate(adapter, email, password, cb){
 //   return "";
 // }
 
-// function sessGetByAccessToken(db, token) {
-//   var i;
-//   for(var i=0; i<db.sessions.length; ++i) {
-//     if(db.sessions[i].accessToken = accessToken)
-//       return db.session[i];
-//   }
-//   return null;
-// }
+function sessGetByAccessToken(adapter,sessKey, cb) {
+  adapter.fetchSession(sessKey, function(result){
+    if (result.value) { cb(result.value); }
+    else { cb(null); }
+  });
+}
 
 module.exports = function(testAdapter) {
   if(testAdapter){
@@ -157,9 +154,9 @@ module.exports = function(testAdapter) {
     session: {
 //      create: _.bind(createSession, null, adapter),
 //      destroy: _.bind(sessDestroy, null, db),
-      authenticate: _.bind(sessAuthenticate, null, adapter)
+      authenticate: _.bind(sessAuthenticate, null, adapter),
 
-//      getByAccessToken: _.bind(sessGetByAccessToken, null, db)
+      getByAccessToken: _.bind(sessGetByAccessToken, null, adapter)
     }
   };
 }

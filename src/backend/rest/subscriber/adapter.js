@@ -127,5 +127,20 @@ function createSession(subId, cb){
   });
 }
 
-exports.createSession = createSession;
+function fetchSession(sessKey, cb){
+  Session.find({ where: { key: sessKey } })
+    .success(function(result) {
+      if (result == null) cb(msg.sessionNotFound());
+      else cb(msg.success(result));
+    }).error(function(err) {
+      cb(msg.unknownError(err)); // probably db connection error
+    });
+}
 
+function removeSession(sessKey, cb){
+
+}
+
+exports.createSession = createSession;
+exports.fetchSession = fetchSession;
+exports.removeSession = removeSession;

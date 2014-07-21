@@ -57,11 +57,11 @@ function subLogout(dataModel, method, params, data, ip, id) {
   return msg.success(); // TODO: implement this..
 }
     
-function sessAuthenticate(dataModel, headers) {
-  if(headers['X-Access-Token']) {
-    return dataModel.session.getByAccessToken(headers['X-Access-Token']);
-  }
-  return null;
+function sessAuthenticate(dataModel, headers, cb) {
+  if(headers['x-access-token']) {
+    dataModel.session.getByAccessToken(headers['x-access-token'],
+    function(result){ cb(result); });
+  } else cb(null);
 }
 
 module.exports = function(testAdapter) {
