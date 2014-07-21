@@ -10,7 +10,7 @@ if(!utils.invalidEmail(goodEmail)) console.log("good email");
 
 
 //password test
-var badPass = "123456";
+var badPass = '2short';
 var goodPass = "password";
 if(utils.invalidPassword(badPass)) console.log("bad password");
 //console.log(utils.invalidEmail(goodPass));
