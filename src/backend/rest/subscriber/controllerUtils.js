@@ -7,8 +7,8 @@ function invalidEmail(email){
 }
 
 function invalidPassword(password){
-	int min = 8;
-	int max = 16;
+	var min = 8;
+	var max = 16;
 	return !validator.isLength(password, min, max);	
 }
 //function validToken(token){
