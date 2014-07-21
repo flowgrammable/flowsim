@@ -14,7 +14,7 @@ utils.validEmail(badEmail);
 //invalid password return false, needs to be 8-16 characters
 var badPass = "1234";
 var goodPass = "1234567890";
-utils.ValidPassword(badPass);
+utils.validPassword(badPass);
 //assert.equal(utils.validPassword(badPass), false, ['invalid password']);
 //assert.equal(utils.validPassword(goodPass), true, ['valid password']);
 
