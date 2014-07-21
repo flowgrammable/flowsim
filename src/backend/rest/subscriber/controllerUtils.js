@@ -7,7 +7,9 @@ function invalidEmail(email){
 }
 
 function invalidPassword(password){
-	return !validator.isLength(password, 8, 16);	
+	int min = 8;
+	int max = 16;
+	return !validator.isLength(password, min, max);	
 }
 //function validToken(token){
 //	checks.add("testToken", enforce.ranges.length(36, 36, "bad token"))
