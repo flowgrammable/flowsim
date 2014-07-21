@@ -13,6 +13,7 @@ if(!utils.invalidEmail(goodEmail)) console.log("good email");
 var badPass = "1234";
 var goodPass = "1234567890";
 if(utils.invalidEmail(badPass)) console.log("bad password");
+console.log(invalidEmail(goodPass));
 if(!utils.invalidEmail(goodPass)) console.log("good password");
 
 //token test
