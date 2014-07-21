@@ -97,12 +97,17 @@ function sessAuthenticate(adapter, email, password, cb){
       });
     },
     function(result, callback){
-      if (!bcrypt.compareSync(password, result.value.password)) // incorrect pwd
-        resultChecker(msg.incorrectPwd(), callback);
-      else // correct pwd
-        adapter.createSession(result.value.id, function(result){
-          resultChecker(result, callback);
-        });
+      // Subscriber's account must have an active status
+      if (result.value.status != 'ACTIVE') 
+        resultChecker(msg.subscriberNotActive(result.value), callback);
+      else {
+        if (!bcrypt.compareSync(password, result.value.password)) // wrong pwd
+          resultChecker(msg.incorrectPwd(), callback);
+        else // correct pwd
+          adapter.createSession(result.value.id, function(result){
+            resultChecker(result, callback);
+          });
+      }
     }],
     function(err, result){
       if(err) { cb(err); }

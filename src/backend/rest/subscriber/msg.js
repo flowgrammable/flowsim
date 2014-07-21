@@ -104,6 +104,14 @@ exports.accessTokenExpired = function() {
   });
 }
 
+exports.subscriberNotActive = function() {
+  return msg.error({
+    system: "subscriber/model",
+    type: "subscriberNotActive"
+  });
+}
+
+// replace with subscriberNotActive?
 exports.unverifiedSubscriber = function() {
   return msg.error({
     system: "subscriber/model",
