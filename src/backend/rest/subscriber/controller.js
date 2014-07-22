@@ -26,7 +26,7 @@ function subVerify(dataModel, method, params, data, ip, id) {
   var token = params[1];
   // Ensure a verification token is present and valid
   if(!token) return passback(id, msg.missingVerificationToken());
-  if(invalidToken(token)) return passback(id, msg.missingToken());
+  if(invalidToken(token)) return passback(id, msg.badVerificationToken());
 
   dataModel.subscriber.verify(token, function(result){
       passback(id, result);
