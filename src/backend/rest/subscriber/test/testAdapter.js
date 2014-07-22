@@ -27,6 +27,11 @@ Array.prototype.findSub = function(sub) {
   return null;
 }
 
+Array.prototype.findSess = function(sessKey) {
+  for (i in this) if (this[i].key == sessKey) return this[i];
+  return null;
+}
+
 // ----------------------------------------------------------------------------
 // Subscriber
 
@@ -34,7 +39,6 @@ Array.prototype.containsEmail = function(email) {
   for (i in this) if (this[i].email == email) return true;
   return false;
 }
-
 
 function insertSubscriber(em, pwd, ip, cb){
   var token = uuid.v4();
@@ -118,4 +122,17 @@ function createSession(subId, cb){
   else cb(msg.unknownError(Session.pop()));
 }
 
+function fetchSession(sessKey, cb){
+  var sess = Subscriber.findSess(sessKey);
+  if (sess == null) cb(msg.sessionNotFound());
+  else cb(msg.success(sess));
+}
+
+function removeSession(sessKey, cb){
+
+}
+
 exports.createSession = createSession;
+exports.fetchSession = fetchSession;
+exports.removeSession = removeSession;
+

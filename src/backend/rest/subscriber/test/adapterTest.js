@@ -3,7 +3,7 @@ var adapter = require('./testAdapter.js');
 var assert = require('assert');
 
 var testEmail ='test@gmail.com';
-var subscriber;
+var subscriber, session;
 // ----------------------------------------------------------------------------
 // Testing insertSubscriber
 
@@ -101,6 +101,25 @@ describe('===> Testing createSession adapter function:\n', function() {
   it('Session created successfully', function(done) {
     adapter.createSession(subscriber.id, function (result) {
       assert(result.value, "Unable to create session")
+      session = result.value;
+      done();
+    });
+  });
+});
+
+// ----------------------------------------------------------------------------
+// Testing fetchSession
+
+describe('===> Testing fetchSession adapter function:\n', function() {
+  it('Session fetched successfully', function(done) {
+    adapter.fetchSession(session.key, function (result) {
+      assert(result.value, "Unable to fetch session")
+      done();
+    });
+  });
+  it('Session not found', function(done) {
+    adapter.fetchSession("nonexistent session key", function (result) {
+      assert.equal(result.error.type, "sessionNotFound")
       done();
     });
   });

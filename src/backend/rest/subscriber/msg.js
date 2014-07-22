@@ -133,4 +133,9 @@ exports.badConfig = function() {
   })
 }
 
-
+exports.sessionNotFound = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "sessionNotFound"
+  })
+}
