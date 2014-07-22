@@ -82,18 +82,18 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 	    	var data = {token = 'not36characters'};
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
-		JSON.stringify(msg.badToken()));
+		JSON.stringify(msg.missingToken()));
 		done();
 		});
 	  controller.module.noauth.verify('POST', {}, data, '127.0.0.1', testId);
 	});
 	
 	it('Missing Token Test', function(done){
-		var testId = 'testerID1';
+		var testId = 'testerID2';
 	    	var data = {token = ''};
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
-		JSON.stringify(msg.missingToken()));
+		JSON.stringify(msg.missingVerificationToken()));
 		done();
 		});
 	  controller.module.noauth.verify('POST', {}, data, '127.0.0.1', testId);
