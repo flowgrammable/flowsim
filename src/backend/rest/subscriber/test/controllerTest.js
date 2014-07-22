@@ -83,7 +83,7 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 	    	var params = {temp: 0, token: 'not36characters'};
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
-		JSON.stringify(msg.missingToken()));
+		JSON.stringify(msg.badVerificationToken()));
 		done();
 		});
 	  controller.module.noauth.verify('POST', params, data, '127.0.0.1', testId);
