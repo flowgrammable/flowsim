@@ -80,7 +80,7 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 	it('Bad Token Test', function(done){
 		var testId = 'testerID1';
 	    	var data = {};
-	    	var params = {temp: 0, token: 'not36characters'};
+	    	var params = ['doesnt_matter_only_looking_for_params1', 'an_invalid_token'];
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
 		JSON.stringify(msg.badVerificationToken()));
@@ -92,7 +92,7 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 	it('Missing Token Test', function(done){
 		var testId = 'testerID2';
 	    	var data = {};
-	    	var params = {temp: 0, token: ''};
+	    	var params = ['doesnt_matter_only_looking_for_params1', ''];
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
 		JSON.stringify(msg.missingVerificationToken()));
