@@ -148,6 +148,7 @@ describe('Testing verification requests:',function() {
     });
   });
 });
+
 /*
 describe('Testing verification requests:',function() {
   it('User verified successfully',function(done) {
