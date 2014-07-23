@@ -2,10 +2,12 @@ var orm = require('../../../dbbs');
 var Subscriber = orm.model("subscriber");
 var request = require('request');
 var assert = require('assert');
+var fs = require('fs');
 
 orm.setup()
 
 var testEmail = 'ash.1382@gmail.com';
+var token;
 
 describe('Testing registration requests:',function() {
   it('User registered successfully',function(done) {
@@ -19,6 +21,14 @@ describe('Testing registration requests:',function() {
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to register user');
       console.log('\tResponse received : ', body);
+      fs.exists('/home/dev/main/flowsim/src/backend/temp', function (exists) {
+        if(exists) {
+          fs.readFile('/home/dev/main/flowsim/src/backend/temp','utf8',function (err,data) {
+            if (err) console.log('Unable to read token in file for restTest');
+            else{ token = data;}
+          });
+        }
+      });
       done();
     }); 
   });
@@ -35,7 +45,7 @@ describe('Testing registration requests:',function() {
       console.log('\tResponse received : ', body);
       done();
     });
-  });/*
+  });
   it('Bad Password',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
@@ -63,7 +73,7 @@ describe('Testing registration requests:',function() {
       console.log('\tResponse received : ', body);
       done();
     });
-  });*/
+  });
   it('Missing Password',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
@@ -149,76 +159,3 @@ describe('Testing verification requests:',function() {
   });
 });
 
-/*
-describe('Testing verification requests:',function() {
-  it('User verified successfully',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/verify',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Token': token
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-  it('User already verified',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/verify',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Access-Token': token
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-  it('Missing verification token',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-
-
-*/
-/*
-describe('Testing fetching of subscribers:',function() {
-  it('Subscriber found',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/fetch',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-  it('Subscriber not found',function(done) {
-    request( {
-      url: 'http://localhost:3000/api/subscriber/fetch',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
-});*/
