@@ -46,7 +46,7 @@ function subReset(dataModel, method, params, data, ip, id) {
 
 function subLogin(dataModel, method, params, data, ip, id) {
   if(!data.email) return msg.missingEmail();
-  if(badEmail(data.email)) return msg.badEmail(data.email);
+  //if(badEmail(data.email)) return msg.badEmail(data.email);
   dataModel.session.authenticate(data.email, data.password,
   function(result){
     passback(id, result);
