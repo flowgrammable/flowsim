@@ -103,7 +103,7 @@ function sessAuthenticate(adapter, email, password, cb){
       else if (!bcrypt.compareSync(password, result.value.password)) // wrong pwd
         resultChecker(msg.incorrectPwd(), callback);
       else {
-        adapter.createSession(result.value.id, function(result){
+        adapter.createSession(result.value, function(result){
           resultChecker(result, callback);
         });
       }
@@ -114,6 +114,11 @@ function sessAuthenticate(adapter, email, password, cb){
     });
 }
 
+function sessDestroy(adapter, session, cb){
+  adapter.destroySession(session, function(result){
+    cb(result);
+  });
+}
 
 
 // function subUpdate(db, id, row) {
@@ -132,10 +137,15 @@ function sessAuthenticate(adapter, email, password, cb){
 //   return "";
 // }
 
-function sessGetByAccessToken(adapter,sessKey, cb) {
+function sessGetByAccessToken(adapter, sessKey, cb) {
   adapter.fetchSession(sessKey, function(result){
-    if (result.value) { cb(result.value); }
-    else { cb(null); }
+    // console.log(result);
+    if (result.value) cb(result.value); 
+    else if (result.error.type == 'sessionNotFound') cb(null); 
+    else {
+      console.log(msg.unknownError(result));
+      cb(null);
+    } 
   });
 }
 
@@ -153,7 +163,7 @@ module.exports = function(testAdapter) {
     },
     session: {
 //      create: _.bind(createSession, null, adapter),
-//      destroy: _.bind(sessDestroy, null, db),
+      destroy: _.bind(sessDestroy, null, adapter),
       authenticate: _.bind(sessAuthenticate, null, adapter),
 
       getByAccessToken: _.bind(sessGetByAccessToken, null, adapter)

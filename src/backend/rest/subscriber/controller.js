@@ -9,6 +9,9 @@ function passback(id, result, nextFunction){
   events.Emitter.emit(id, result);
 }
 
+// ----------------------------------------------------------------------------
+// Noauth
+
 function subRegister(dataModel, method, params, data, ip, id) {
   // Provide some basic sanity checks
   if(!data.email) return passback(id, msg.missingEmail());
@@ -52,17 +55,30 @@ function subLogin(dataModel, method, params, data, ip, id) {
     passback(id, result);
   });
 }
-
-function subLogout(dataModel, method, params, data, ip, id) {
-  return msg.success(); // TODO: implement this..
-}
     
 function sessAuthenticate(dataModel, headers, cb) {
-  if(headers['x-access-token']) {
+  if(headers['x-access-token']) { // header has x-access-token
     dataModel.session.getByAccessToken(headers['x-access-token'],
-    function(result){ cb(result); });
-  } else cb(null);
+    function(result){
+      console.log(result);
+      cb(result);
+    });
+  } else cb(null); // no x-access-token in the header
 }
+
+// ----------------------------------------------------------------------------
+// Auth
+
+function subLogout(dataModel, session, method, params, data, ip, id) {
+  console.log('attempting to destroy session');
+  dataModel.session.destroy(session, 
+  function(result) { 
+    passback(id, result); 
+  });
+}
+
+// ----------------------------------------------------------------------------
+
 
 module.exports = function(testAdapter) {
   var dataModel;

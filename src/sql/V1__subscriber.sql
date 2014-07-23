@@ -81,7 +81,7 @@ CREATE TABLE action_caps
 CREATE TABLE sessions
 (
   id SERIAL PRIMARY KEY,                              -- internal sesison id
-  subscriber_id INTEGER references subscribers(id),   -- reference to sub
+  subscriber_id INTEGER references subscribers(id) NOT NULL,   -- reference to sub
   key CHAR(36) NOT NULL UNIQUE,                       -- session key for API
   -- begin_time TIMESTAMP WITH TIME ZONE NOT NULL,       -- date/time session began
   timeout TIMESTAMP WITH TIME ZONE /*NOT NULL,*/     -- date/time for session to end

@@ -71,10 +71,6 @@ module.exports = function(db, userModules) {
     } else {
       // create unique id
       var id = uuid.v1();
-      // get the session id
-      // var sessId = req.session.id;
-      // grab the access token if it exists
-/////      var session = subscribers.authenticate(req.headers);
       var authFunction = installedModules[path[1]].auth[path[2]];
       var noauthFunction = installedModules[path[1]].noauth[path[2]];
       var params = path.slice(2);
@@ -89,14 +85,14 @@ module.exports = function(db, userModules) {
         	});
         	noauthFunction(req.method, params, req.body, ip, id);
       	} else if(authFunction) {	
-        		events.Emitter.once(id, function(result){
-							wrapRes(res, result);
-						});
-						if(session){
-        			authFunction(session, req.method, params, req.body, ip, id);
-						} else {
-							events.Emitter.emit(id, msg.subscriberUnauthenticated() ); 
-						}
+      		events.Emitter.once(id, function(result){
+						wrapRes(res, result);
+					});
+					if(session){
+      			authFunction(session, req.method, params, req.body, ip, id);
+					} else {
+						events.Emitter.emit(id, msg.subscriberUnauthenticated() ); 
+					}
       	} else {
         	wrapRes(res, msg.error({
           	description: 'Service: ' + path[2] + ' does not exist'
