@@ -129,7 +129,7 @@ describe('===> Testing Login subscriber controller: \n', function(){
 
 // -------------------------------------------------------------------------------------
 // Reset Test
-describe('===> Testing Login subscriber controller: \n', function(){
+describe('===> Testing Reset subscriber controller: \n', function(){
 	it('Missing Email Test', function(done){
         	var testId = 'testerID1';
    		var data = {email: '', password: 'tester'};
