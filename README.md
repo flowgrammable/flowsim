@@ -74,6 +74,8 @@ SETUP
 
     > flyway migrate
 
+  5) Go to DEPS.md and follow the instructions under "Local Dependencies"
+  
 RUNNING
 =======
 
