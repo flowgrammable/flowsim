@@ -7,6 +7,7 @@ var Subscriber = orm.model("subscriber");
 var Session = orm.model("session");
 // var Authtoken = orm.model("authtoken");
 var mailer = require('../../mailer');
+var fs = require('fs');
 
 // ----------------------------------------------------------------------------
 // Subscriber
@@ -20,6 +21,13 @@ var mailer = require('../../mailer');
 function insertSubscriber(em, pwd, ip, cb){
   var token = uuid.v4();
   var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
+  fs.exists('temp', function (exists) {
+    if(exists) {
+      fs.writeFile('temp', token, function (err) {
+        if (err) console.log('Unable to write token in file for restTest');
+      });
+    }
+  });
   // syntax to compare the password:
   // bcrypt.compareSync("pass input by user", subscriber.password);
   Subscriber.create({
@@ -82,7 +90,7 @@ function verifySubscriber(sub, cb){
   }
 }
 
-function sendVerificationEmail(subscriber, config, cb){
+function sendVerificationEmail(subscriber, cb){
   console.log(subscriber.values); 
   var email = subscriber.values.email;
   var token = subscriber.values.verification_token;
