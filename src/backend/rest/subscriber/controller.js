@@ -37,7 +37,7 @@ function subVerify(dataModel, method, params, data, ip, id) {
 function subReset(dataModel, method, params, data, ip, id) {
   // Ensure email is present and valid
   if(!data.email) return msg.missingEmail();
-  //if(badEmail(data.email)) return msg.badEmail(data.email);
+  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
   // Return the result of password reset
   dataModel.subscriber.reset(data.email, function(result){
     passback(id, result);
