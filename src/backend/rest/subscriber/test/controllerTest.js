@@ -104,6 +104,6 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 
 // --------------------------------------------------------------------------------
 // Login Test
-describe('===> Testing Login subscriber controller: \n', function(){
+//describe('===> Testing Login subscriber controller: \n', function(){
 	
-}
+//}
