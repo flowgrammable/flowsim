@@ -125,7 +125,7 @@ describe('===> Testing Login subscriber controller: \n', function(){
  	 controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
         });
 	
-}
+});
 
 // -------------------------------------------------------------------------------------
 // Reset Test
