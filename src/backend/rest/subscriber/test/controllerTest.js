@@ -104,6 +104,25 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 
 // --------------------------------------------------------------------------------
 // Login Test
-//describe('===> Testing Login subscriber controller: \n', function(){
+describe('===> Testing Login subscriber controller: \n', function(){
+	it('Missing Email Test', function(done){
+        	var testId = 'testerID1';
+   		var data = {email: '', password: 'tester'};
+                events.Emitter.once(testId, function(result){
+               		 assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
+               		 done();
+               		 });
+ 	 controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+       	 });
+
+ 	 it('Bad Email Test', function(done){
+                var testId = 'testerID2';
+   		var data = {email: 'a_terrible_email', password: 'tester'};
+                events.Emitter.once(testId, function(result){
+                assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
+                done();
+                });
+ 	 controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+        });
 	
-//}
+}
