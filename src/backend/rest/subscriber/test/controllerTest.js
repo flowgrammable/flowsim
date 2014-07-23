@@ -79,23 +79,74 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 	
 	it('Bad Token Test', function(done){
 		var testId = 'testerID1';
-	    	var data = {token = 'not36characters'};
+	    	var data = {};
+	    	var params = ['doesnt_matter_only_looking_for_params1', 'an_invalid_token'];
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
-		JSON.stringify(msg.badToken()));
+		JSON.stringify(msg.badVerificationToken()));
 		done();
 		});
-	  controller.module.noauth.verify('POST', {}, data, '127.0.0.1', testId);
+	  controller.module.noauth.verify('POST', params, data, '127.0.0.1', testId);
 	});
 	
 	it('Missing Token Test', function(done){
-		var testId = 'testerID1';
-	    	var data = {token = ''};
+		var testId = 'testerID2';
+	    	var data = {};
+	    	var params = ['doesnt_matter_only_looking_for_params1', ''];
 		events.Emitter.once(testId, function(result){
 		assert.equal(JSON.stringify(result),
-		JSON.stringify(msg.missingToken()));
+		JSON.stringify(msg.missingVerificationToken()));
 		done();
 		});
-	  controller.module.noauth.verify('POST', {}, data, '127.0.0.1', testId);
+	  controller.module.noauth.verify('POST', params, data, '127.0.0.1', testId);
 	});
+});
+
+// --------------------------------------------------------------------------------
+// Login Test
+describe('===> Testing Login subscriber controller: \n', function(){
+	it('Missing Email Test', function(done){
+        	var testId = 'testerID1';
+   		var data = {email: '', password: 'tester'};
+                events.Emitter.once(testId, function(result){
+               		 assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
+               		 done();
+               		 });
+ 	 controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+       	 });
+
+ 	 it('Bad Email Test', function(done){
+                var testId = 'testerID2';
+   		var data = {email: 'a_terrible_email', password: 'tester'};
+                events.Emitter.once(testId, function(result){
+                assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
+                done();
+                });
+ 	 controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+        });
+	
+});
+
+// -------------------------------------------------------------------------------------
+// Reset Test
+describe('===> Testing Reset subscriber controller: \n', function(){
+	it('Missing Email Test', function(done){
+        	var testId = 'testerID1';
+   		var data = {email: '', password: 'tester'};
+                events.Emitter.once(testId, function(result){
+               		 assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
+               		 done();
+               		 });
+ 	 controller.module.noauth.reset('POST', {}, data, '127.0.0.1', testId);
+       	 });
+
+ 	 it('Bad Email Test', function(done){
+                var testId = 'testerID2';
+   		var data = {email: 'a_terrible_email', password: 'tester'};
+                events.Emitter.once(testId, function(result){
+                assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
+                done();
+                });
+ 	 controller.module.noauth.reset('POST', {}, data, '127.0.0.1', testId);
+        });
 });

@@ -118,11 +118,11 @@ exports.verifySubscriber = verifySubscriber;
 // ----------------------------------------------------------------------------
 // Session
 
-function createSession(subId, cb){
+function createSession(sub, cb){
   var sessKey = uuid.v4();
   Session.create({
-    subscriber_id: subId,
-    key: sessKey
+    key: sessKey,
+    subscriber_id: sub.id
     // begin_time: new Date(),
     // timeout: blah,
     // ip: ip 
@@ -145,10 +145,17 @@ function fetchSession(sessKey, cb){
     });
 }
 
-function removeSession(sessKey, cb){
-
+function destroySession(session, cb){
+  session.destroy()
+    .success(function(result) {
+      cb(msg.success());
+    })
+    .error(function(err) {
+      console.log(err);
+      cb(err);
+    });
 }
 
 exports.createSession = createSession;
 exports.fetchSession = fetchSession;
-exports.removeSession = removeSession;
+exports.destroySession = destroySession;

@@ -12,15 +12,11 @@ function invalidPassword(password){
 	return !validator.isLength(password, min, max);
 	// return !(password.length <= max && password.length >= min)
 }
-//function validToken(token){
-//	checks.add("testToken", enforce.ranges.length(36, 36, "bad token"))
-//	checks.check({
-//		testToken : token
-//	}, function (err) {
-//		console.log(err);
-//	});
-//}
+
+function invalidToken(token){
+	return !validator.isLength(token, 36, 36);
+}
 
 exports.invalidPassword = invalidPassword;
 exports.invalidEmail = invalidEmail;
-//exports.validToken = validToken;
+exports.invalidToken = invalidToken;

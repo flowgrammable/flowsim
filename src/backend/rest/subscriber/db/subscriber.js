@@ -11,7 +11,7 @@ module.exports = {
     status: Seq.STRING
 	},
   relations:{
-        hasMany:"session",
+        // hasMany:"session",
 		// hasOne:"authtoken"
 	}
 }

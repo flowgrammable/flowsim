@@ -36,23 +36,22 @@ var singleton = function singleton(){
 	function init() {
     var sess  = require('./rest/subscriber/db/session');
 		var sub   = require('./rest/subscriber/db/subscriber');
-		// var token = require('./rest/subscriber/db/authtoken');
 
     var options = {timestamps: false, underscored: true};
 
     models["session"] = sequelize.define("session", sess.model, options);
+    relationships["session"] = sess.relations;
 		models["subscriber"] = sequelize.define("subscriber", sub.model, options);
-		relationships["subscriber"] = sub.relations;
-		// models["authtoken"] = sequelize.define("authtoken", token.model, options);
+		relationships["subscriber"] = sub.relations; // none at the moment
 
-		// for(var name in relationships){
-  //           var relation = relationships[name];
-  //           for(var relName in relation){
-  //               var related = relation[relName];
-  //               models[name][relName](models[related]);
-  //               console.log(models[name][relName](models[related]));
-  //           }
-  //       }
+		for(var name in relationships){
+      var relation = relationships[name];
+      for(var relName in relation){
+        var related = relation[relName];
+        models[name][relName](models[related]);
+        // console.log(models[name][relName](models[related]));
+      }
+    }
 	}
 }
 
