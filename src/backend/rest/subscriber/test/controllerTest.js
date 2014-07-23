@@ -149,3 +149,4 @@ describe('===> Testing Reset subscriber controller: \n', function(){
                 });
  	 controller.module.noauth.reset('POST', {}, data, '127.0.0.1', testId);
         });
+});
