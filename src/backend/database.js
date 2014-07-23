@@ -5,6 +5,7 @@
 module.exports = {
   subscribers: [
     {
+      id: 1,
       email: 'jasson.casey@gmail.com',
       // password is iluvflowg encrypted
       password: '$2a$10$UE4Xn0wCQV4tQypIrRTo1.q/4en6shWn6myN8wHqpUn47qT9Nmd9G',
@@ -16,7 +17,7 @@ module.exports = {
   ],
   sessions: [
     {
-      subscriberId: 1,
+      subscriber_id: 1,
       key: 'f151d3c9-2452-41b2-a249-8b8cb2535097',
       timeout: ''
     }

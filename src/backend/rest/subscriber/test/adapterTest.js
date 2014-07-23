@@ -3,7 +3,7 @@ var adapter = require('./testAdapter.js');
 var assert = require('assert');
 
 var testEmail ='test@gmail.com';
-var subscriber, session;
+var subscriber, session, sessKey;
 // ----------------------------------------------------------------------------
 // Testing insertSubscriber
 
@@ -96,12 +96,15 @@ describe('===> Testing verifyRedirect adapter function: \n', function(){
 
 // ----------------------------------------------------------------------------
 // Testing createSession
+//
+// Note: This contains no negative testing since we are unable to
+// anticipate any errors that may be caused by this function.
 
 describe('===> Testing createSession adapter function:\n', function() {
   it('Session created successfully', function(done) {
     adapter.createSession(subscriber.id, function (result) {
       assert(result.value, "Unable to create session")
-      session = result.value;
+      sessKey = result.value;
       done();
     });
   });
@@ -112,14 +115,30 @@ describe('===> Testing createSession adapter function:\n', function() {
 
 describe('===> Testing fetchSession adapter function:\n', function() {
   it('Session fetched successfully', function(done) {
-    adapter.fetchSession(session.key, function (result) {
+    adapter.fetchSession(sessKey, function (result) {
       assert(result.value, "Unable to fetch session")
+      session = result.value;
       done();
     });
   });
   it('Session not found', function(done) {
     adapter.fetchSession("nonexistent session key", function (result) {
       assert.equal(result.error.type, "sessionNotFound")
+      done();
+    });
+  });
+});
+
+// ----------------------------------------------------------------------------
+// Testing destroySession
+//
+// Note: This contains no negative testing since we are unable to
+// anticipate any errors that may be caused by this function.
+
+describe('===> Testing destroySession adapter function:\n', function() {
+  it('Session destroyed successfully', function(done) {
+    adapter.destroySession(session, function (result) {
+      assert(result.value, "Unable to destroy session")
       done();
     });
   });

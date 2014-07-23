@@ -32,6 +32,16 @@ Array.prototype.findSess = function(sessKey) {
   return null;
 }
 
+Array.prototype.deleteSess = function(session) {
+  var success = false;
+  for (i in this) 
+    if (this[i] == session) {
+      this.splice(i, 1);
+      success = true;
+    }
+  return success;
+}
+
 // ----------------------------------------------------------------------------
 // Subscriber
 
@@ -40,18 +50,19 @@ Array.prototype.containsEmail = function(email) {
   return false;
 }
 
-function insertSubscriber(em, pwd, ip, cb){
+function insertSubscriber(em, pwd, ip, cb) {
   var token = uuid.v4();
   var encrypted = bcrypt.hashSync(pwd, 10); 
   if (Subscriber.containsEmail(em)) cb(msg.emailInUse());
   else {
     var subToAdd = { 
+      id: (Subscriber[Subscriber.length-1].id + 1),
       email: em, 
       password: encrypted, 
       reg_date: new Date(),
       reg_ip: ip, 
       verification_token: token, 
-      status: 'CREATED' 
+      status: 'CREATED'
     };
     Subscriber.push(subToAdd);
     var newSub = Subscriber[Subscriber.length-1];
@@ -60,17 +71,17 @@ function insertSubscriber(em, pwd, ip, cb){
   }
 }
 
-function makeSubscriber(sub, cb){
+function makeSubscriber(sub, cb) {
 	Subscriber.push(sub);	
 }
 
-function fetchSubscriber(subInfo, cb){
+function fetchSubscriber(subInfo, cb) {
   var sub = Subscriber.findSub(subInfo);
   if (sub == null) cb(msg.subscriberNotFound());
   else cb(msg.success(sub));
 }
 
-function verifySubscriber(sub, cb){
+function verifySubscriber(sub, cb) {
   if (sub.status == 'ACTIVE') cb(msg.subscriberAlreadyVerified());
   else {
     sub.status = 'ACTIVE';
@@ -84,7 +95,7 @@ exports.verifySubscriber = verifySubscriber;
 exports.makeSubscriber = makeSubscriber;
 // ----------------------------------------------------------------------------
 // Mailer
-function sendVerificationEmail(em, config, cb){
+function sendVerificationEmail(em, config, cb) {
   if(config){
     cb(msg.success());
   } else {
@@ -96,7 +107,7 @@ exports.sendVerificationEmail = sendVerificationEmail;
 
 // ----------------------------------------------------------------------------
 // Redirect
-function verifyRedirect(cb){
+function verifyRedirect(cb) {
 	var tunnel = {code:302,
 								headers: {'Location':'http://localhost:3000/verified.html'}};
    cb(msg.success(null, tunnel));
@@ -107,13 +118,13 @@ exports.verifyRedirect = verifyRedirect;
 // ----------------------------------------------------------------------------
 // Session
 
-function createSession(subId, cb){
+function createSession(subId, cb) {
   var sessKey = uuid.v4();
   var sessToAdd = { 
     subscriber_id: subId,
-    key: sessKey
+    key: sessKey,
     // begin_time: new Date(),
-    // timeout: blah,
+    timeout: ''
     // ip: ip  
   };
   Session.push(sessToAdd);
@@ -122,17 +133,20 @@ function createSession(subId, cb){
   else cb(msg.unknownError(Session.pop()));
 }
 
-function fetchSession(sessKey, cb){
-  var sess = Subscriber.findSess(sessKey);
+function fetchSession(sessKey, cb) {
+  var sess = Session.findSess(sessKey);
   if (sess == null) cb(msg.sessionNotFound());
   else cb(msg.success(sess));
 }
 
-function removeSession(sessKey, cb){
-
+// This function is only called in the case that there is a valid 
+// session found.
+function destroySession(session, cb) {
+  if (Session.deleteSess(session)) cb(msg.success());
+  else cb(msg.unknownError);
 }
 
 exports.createSession = createSession;
 exports.fetchSession = fetchSession;
-exports.removeSession = removeSession;
+exports.destroySession = destroySession;
 
