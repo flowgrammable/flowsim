@@ -29,7 +29,7 @@ function subVerify(dataModel, method, params, data, ip, id) {
   var token = params[1];
   // Ensure a verification token is present and valid
   if(!token) return passback(id, msg.missingVerificationToken());
-  // if(!validToken(params[1])) return passback(id, msg.missingToken());
+  if(utils.invalidToken(token)) return passback(id, msg.badVerificationToken());
 
   dataModel.subscriber.verify(token, function(result){
       passback(id, result);
@@ -40,7 +40,7 @@ function subVerify(dataModel, method, params, data, ip, id) {
 function subReset(dataModel, method, params, data, ip, id) {
   // Ensure email is present and valid
   if(!data.email) return msg.missingEmail();
-  //if(badEmail(data.email)) return msg.badEmail(data.email);
+  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
   // Return the result of password reset
   dataModel.subscriber.reset(data.email, function(result){
     passback(id, result);
@@ -48,8 +48,8 @@ function subReset(dataModel, method, params, data, ip, id) {
 }
 
 function subLogin(dataModel, method, params, data, ip, id) {
-  if(!data.email) return msg.missingEmail();
- // if(badEmail(data.email)) return msg.badEmail(data.email);
+  if(!data.email) return passback(id, msg.missingEmail());
+  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
   dataModel.session.authenticate(data.email, data.password,
   function(result){
     passback(id, result);
