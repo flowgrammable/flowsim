@@ -47,15 +47,19 @@ LOCAL DEPENDENCIES
 
   1) Install local nodejs and bower dependencies
 
-    npm install
+    cd src/backend
+    sudo npm install
+    cd ../frontend
     bower install
 
   2) Build the ui-bootstrap bower package
 
-    cd bower_components/ui-bootstrap
-    npm install
-    grunt
-    cd ../..
+    cd bower_components/angular-ui-bootstrap
+    sudo npm install
+    sudo npm install -g grunt-cli
+    grunt --force
+    cd ../../../backend
+    sudo npm install
 
   3) Initialize the postreSQL database
 
