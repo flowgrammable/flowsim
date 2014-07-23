@@ -19,7 +19,7 @@ module.exports = {
     {
       subscriber_id: 1,
       key: 'f151d3c9-2452-41b2-a249-8b8cb2535097',
-      timeout: ''
+      timeout: 0
     }
   ]
 }

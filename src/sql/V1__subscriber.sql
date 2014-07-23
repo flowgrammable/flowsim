@@ -84,7 +84,7 @@ CREATE TABLE sessions
   subscriber_id INTEGER references subscribers(id) NOT NULL,   -- reference to sub
   key CHAR(36) NOT NULL UNIQUE,                       -- session key for API
   -- begin_time TIMESTAMP WITH TIME ZONE NOT NULL,       -- date/time session began
-  timeout TIMESTAMP WITH TIME ZONE /*NOT NULL,*/     -- date/time for session to end
+  timeout BIGINT /*NOT NULL,*/     -- date/time for session to end
   -- ip INET NOT NULL                                    -- ip used for session
 );
 

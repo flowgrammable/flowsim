@@ -18,7 +18,7 @@ var fs = require('fs');
 // resulting subscriber. Failure due to the email address already 
 // existing in the database results in an  emailInUse() message 
 // being sent to the callback function.
-function insertSubscriber(em, pwd, ip, cb){
+function insertSubscriber(em, pwd, ip, cb) {
   var token = uuid.v4();
   var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
   fs.exists('temp', function (exists) {
@@ -37,10 +37,10 @@ function insertSubscriber(em, pwd, ip, cb){
     reg_ip: ip, 
     verification_token: token,
     status: 'CREATED'
-  }).success(function(result){
+  }).success(function(result) {
     // console.log(result);
     cb(msg.success(result));
-  }).error(function(err){
+  }).error(function(err) {
      console.log(err);
     if(err.detail == 'Key (email)=(' + em + ') already exists.')
       cb(msg.emailInUse());
@@ -56,7 +56,7 @@ function insertSubscriber(em, pwd, ip, cb){
 // the retrieved subscriber. Failure due to no subscriber being
 // found results in a subscriberNotFound() message being sent
 // to the callback function.
-function fetchSubscriber(subInfo, cb){
+function fetchSubscriber(subInfo, cb) {
   Subscriber.find({ where: subInfo })
     .success(function(result) {
       if (result == null) cb(msg.subscriberNotFound());
@@ -76,7 +76,7 @@ function fetchSubscriber(subInfo, cb){
 // Note: in this function 'sub' must be an instance of the dbmodel. 
 // This allows us to modify and save it, updating the corresponding 
 // entry in the database's subscribers table.
-function verifySubscriber(sub, cb){
+function verifySubscriber(sub, cb) {
   if (sub.status == 'ACTIVE') 
     cb(msg.subscriberAlreadyVerified());
   else {
@@ -90,12 +90,12 @@ function verifySubscriber(sub, cb){
   }
 }
 
-function sendVerificationEmail(subscriber, cb){
+function sendVerificationEmail(subscriber, cb) {
   console.log(subscriber.values); 
   var email = subscriber.values.email;
   var token = subscriber.values.verification_token;
-  mailer.sendMail(email, mailer.verificationMessage(token), function(result){
-		if (result.name){
+  mailer.sendMail(email, mailer.verificationMessage(token), function(result) {
+		if (result.name) {
 		 console.log(result);
 		 cb(msg.unknownError());
 		}
@@ -103,7 +103,7 @@ function sendVerificationEmail(subscriber, cb){
   });
 }
 
-function verifyRedirect(cb){
+function verifyRedirect(cb) {
 	var tunnel = {code:302,
 								headers: {'Location':'http://localhost:3000/#/login'}};
    cb(msg.success(null, tunnel));
@@ -118,24 +118,24 @@ exports.verifySubscriber = verifySubscriber;
 // ----------------------------------------------------------------------------
 // Session
 
-function createSession(sub, cb){
+function createSession(sub, cb) {
   var sessKey = uuid.v4();
   var newTimeout = new Date();
   newTimeout.setDate(newTimeout.getDate() + 1);
   Session.create({
     key: sessKey,
     subscriber_id: sub.id,
-    timeout: newTimeout
-  }).success(function(result){
+    timeout: newTimeout.valueOf()
+  }).success(function(result) {
     console.log(result);
     cb(msg.success(result.key));
-  }).error(function(err){
+  }).error(function(err) {
     console.log(err);
     cb(msg.unknownError(err));
   });
 }
 
-function fetchSession(sessKey, cb){
+function fetchSession(sessKey, cb) {
   Session.find({ where: { key: sessKey } })
     .success(function(result) {
       if (result == null) cb(msg.sessionNotFound());
@@ -145,17 +145,25 @@ function fetchSession(sessKey, cb){
     });
 }
 
-function destroySession(session, cb){
+function destroySession(session, cb) {
   session.destroy()
     .success(function(result) {
       cb(msg.success());
     })
     .error(function(err) {
       console.log(err);
-      cb(err);
+      cb(msg.unknownError(err));
     });
+}
+
+function clearSessions() {
+  var currTime = new Date().valueOf();
+  Session.destroy({ timeout: { lt: currTime } })
+    .success(function(result) { console.log("Rows deleted: " + result); })
+    .error  (function(err)    { console.log(err); });
 }
 
 exports.createSession = createSession;
 exports.fetchSession = fetchSession;
 exports.destroySession = destroySession;
+exports.clearSessions = clearSessions;
