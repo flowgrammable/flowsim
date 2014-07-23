@@ -101,3 +101,9 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 	  controller.module.noauth.verify('POST', params, data, '127.0.0.1', testId);
 	});
 });
+
+// --------------------------------------------------------------------------------
+// Login Test
+describe('===> Testing Login subscriber controller: \n', function(){
+	
+}
