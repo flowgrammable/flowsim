@@ -1,21 +1,14 @@
 var nodemailer = require("nodemailer");
-
+var config = require('./config.js');
 // function to send mail
 exports.sendMail = function (email, message, next){
-  var mailerConfig = {
-              service:'gmail',
-              auth:{
-                user: 'flowgrammablemailer@gmail.com',
-                pass: ''
-              }
-            }
 
-  var smtpTransport = nodemailer.createTransport("SMTP", mailerConfig);
+  var smtpTransport = nodemailer.createTransport("SMTP", config);
   var messageOptions = { from: 'flog mailer', to: email, subject: 'test', html: message}
   smtpTransport.sendMail(messageOptions, function(err, response){
     if(err){
       smtpTransport.close();
-      next(err.name);
+      next(err);
     }else{
       console.log("Message sent: " +  response.message);
       next(response);

@@ -6,7 +6,7 @@ flowsimApp.controller('registrationCntrl', function($scope, utils, flowgrammable
   $scope.emailAddr = '';
   $scope.password1 = '';
   $scope.password2 = '';
-  $scope.sent = false;
+  $scope.registrationSuccess = false;
   $scope.register = function() {
     if(utils.validEmail($scope.emailAddr)) {
       $scope.badEmail = false;
@@ -25,7 +25,13 @@ flowsimApp.controller('registrationCntrl', function($scope, utils, flowgrammable
     }
     if(!$scope.badEmail && !$scope.badPwd1 & !$scope.badPwd2) {
       flowgrammable.register($scope.emailAddr, $scope.password1);
-      $scope.sent = true;
+        $scope.$on("registrationSuccess", function() { 
+          $scope.registrationSuccess = true; 
+        });
+
+        $scope.$on("emailInUse", function() { 
+          $scope.emailInUse = true; 
+        });
     }
   }
 });
@@ -61,6 +67,9 @@ flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, u
       flowgrammable.login($scope.emailAddr, $scope.password);
       $rootScope.$on("loginFailure", function() { 
         $scope.loginFail = true; 
+      });
+      $rootScope.$on("subscriberNotActive", function() { 
+        $scope.subscriberNotActive = true; 
       });
       $rootScope.$on("authenticated", function() { $location.path("/"); });
     }

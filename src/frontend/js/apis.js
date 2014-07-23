@@ -29,10 +29,10 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
         accessToken = data.value;
         if(data.value ) {
           $rootScope.$broadcast("authenticated", {
-            subscriberId: data.value
+            accessToken = data.value;
           });
-        } else {
-          $rootScope.$broadcast("loginFailure");
+        } else if(data.error.type == 'subscriberNotActive') {
+          $rootScope.$broadcast("subscriberNotActive");
         }
       }).error(function(data) {
         $rootScope.$broadcast("loginFailure");
@@ -59,6 +59,12 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           password: subPwd
         })
       }).success(function(data) {
+				if(data.value) {
+          console.log('successfully registered');
+          $rootScope.$broadcast("registrationSuccess");  
+        } else if(data.error.type == 'emailInUse'){
+          $rootScope.$broadcast("emailInUse");
+        }
       }).error(function(data) {
       });
     },
