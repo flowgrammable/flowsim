@@ -117,12 +117,12 @@ exports.verifyRedirect = verifyRedirect;
 
 function createSession(subId, cb) {
   var sessKey = uuid.v4();
+  var newTimeout = new Date();
+  newTimeout.setDate(newTimeout.getDate() + 1);
   var sessToAdd = { 
     subscriber_id: subId,
     key: sessKey,
-    // begin_time: new Date(),
-    timeout: ''
-    // ip: ip  
+    timeout: newTimeout
   };
   Session.push(sessToAdd);
   var newSess = Session[Session.length-1];

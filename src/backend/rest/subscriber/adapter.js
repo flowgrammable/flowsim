@@ -120,12 +120,12 @@ exports.verifySubscriber = verifySubscriber;
 
 function createSession(sub, cb){
   var sessKey = uuid.v4();
+  var newTimeout = new Date();
+  newTimeout.setDate(newTimeout.getDate() + 1);
   Session.create({
     key: sessKey,
-    subscriber_id: sub.id
-    // begin_time: new Date(),
-    // timeout: blah,
-    // ip: ip 
+    subscriber_id: sub.id,
+    timeout: newTimeout
   }).success(function(result){
     console.log(result);
     cb(msg.success(result.key));
