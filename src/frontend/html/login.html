@@ -9,9 +9,13 @@
 
     <hr>
         
-      <div class="error" ng-show="loginFail">
+    <div class="error" ng-show="loginFail">
         <span>Username and password were invalid.</span>
-      </div>
+    </div>
+
+    <div class="error" ng-show="subscriberNotActive">
+        <span>Email has not been verified, please click link in verification email.</span>
+    </div>
 
     <form name="loginForm" novalidate role="form">
       <div class="form-group">

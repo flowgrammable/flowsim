@@ -10,19 +10,19 @@
  */
 
 module.exports = {
-  favicon: 'img/favicon.png',
-  html: [ 'html' ],
-  css: [ 'css',
-    'bower_components/bootstrap/dist/css'
+  favicon: '../frontend/img/favicon.png',
+  html: [ '../frontend/html' ],
+  css: [ '../frontend/css',
+    '../frontend/bower_components/bootstrap/dist/css'
   ],
-  fonts: [ 'bower_components/bootstrap/dist/fonts' ],
-  img: [ 'img' ],
-  js: [ 'js',
-    'bower_components/bootstrap/dist/js', 
-    'bower_components/jquery/dist', 
-    'bower_components/angular',
-    'bower_components/angular-route',
-    'bower_components/angular-ui-bootstrap/dist'
+  fonts: [ '../frontend/bower_components/bootstrap/dist/fonts' ],
+  img: [ '../frontend/img' ],
+  js: [ '../frontend/js',
+    '../frontend/bower_components/bootstrap/dist/js', 
+    '../frontend/bower_components/jquery/dist', 
+    '../frontend/bower_components/angular',
+    '../frontend/bower_components/angular-route',
+    '../frontend/bower_components/angular-ui-bootstrap/dist'
   ]
 };
 

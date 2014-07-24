@@ -1,13 +1,21 @@
+var events = require('../events');
+var uuid = require('node-uuid');
+
 
 var url = require('url');
 var msg = require('./msg');
 var sub = require('./subscriber/controller');
 
 function wrapRes(res, result) {
-  var tunnel = result.tunnel;
+  console.log('sending response: ', result);
+  var code = 200;
+  var headers = {'Content-Type':'application/json'};
+	if(result.tunnel.code && result.tunnel.headers){
+		code = result.tunnel.code;
+    headers = result.tunnel.headers;
+	}
   delete result.tunnel;
-  tunnel['Content-Type'] = 'application/json'; 
-  res.writeHead('200', tunnel);
+  res.writeHead(code, headers);
   res.end(JSON.stringify(result));
 }
 
@@ -29,9 +37,12 @@ function validateModules(userModules) {
   }
 }
 
+// 
+
+
 module.exports = function(db, userModules) {
 
-  var subscribers = sub(db);
+  var subscribers = sub();
 
   // Validate the supplied modules and install subscriber functions
   validateModules(userModules);
@@ -44,6 +55,7 @@ module.exports = function(db, userModules) {
 
     // a request must name a module and service
     var path = url.parse(req.url).pathname.split('/');
+	  console.log(path);	
     if(path.length < 2) {
       wrapRes(res, msg.error({
         description: 'Service not identified'
@@ -52,30 +64,42 @@ module.exports = function(db, userModules) {
     }
 
     // locate the module or return an error
-    if(!installedModules[path[0]]) {
+    if(!installedModules[path[1]]) {
       wrapRes(res, msg.error({
-        description: 'Module: ' + path[0] + ' does not exist'
+        description: 'Module: ' + path[1] + ' does not exist'
       }));
     } else {
-    
-      // grab the access token if it exists
-      var session = subscribers.authenticate(req.headers);
-      var authFunction = installedModules[path[0]].auth[path[1]];
-      var noauthFunction = installedModules[path[0]].noauth[path[1]];
+      // create unique id
+      var id = uuid.v1();
+      var authFunction = installedModules[path[1]].auth[path[2]];
+      var noauthFunction = installedModules[path[1]].noauth[path[2]];
       var params = path.slice(2);
+      var ip = req.connection.remoteAddress;
+      
+			subscribers.authenticate(req.headers, function(session){
 
-      // execute the found function or error
-      if(noauthFunction) {
-        result = noauthFunction(req.method, params, req.body);
-        wrapRes(res, result);
-      } else if(authFunction && session) {
-        result = authFunction(session, req.method, params, req.body);
-        wrapRes(res, result);
-      } else {
-        wrapRes(res, msg.error({
-          description: 'Service: ' + path[1] + ' does not exist'
-        }));
-      }
+      	// execute the found function or error
+      	if(noauthFunction) {
+        	events.Emitter.once(id, function(result){
+          	wrapRes(res, result);
+        	});
+        	noauthFunction(req.method, params, req.body, ip, id);
+      	} else if(authFunction) {	
+      		events.Emitter.once(id, function(result){
+						wrapRes(res, result);
+					});
+					if(session){
+      			authFunction(session, req.method, params, req.body, ip, id);
+					} else {
+						events.Emitter.emit(id, msg.subscriberUnauthenticated() ); 
+					}
+      	} else {
+        	wrapRes(res, msg.error({
+          	description: 'Service: ' + path[2] + ' does not exist'
+        	}));
+     		}
+
+			});
     } 
   }
 }

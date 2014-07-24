@@ -16,7 +16,7 @@ FLYWAY_JAR="-jarDir=$PWD/$FLYWAY/jars"
 FLYWAY_URL='-url=jdbc:postgresql://localhost/flowsim'
 
 # flyway migrations locations
-FLYWAY_LOCATIONS="-locations=filesystem:$PWD/sql"
+FLYWAY_LOCATIONS="-locations=filesystem:$PWD/src/sql"
 
 # flyway username/password
 FLYWAY_USER='-user=flogdev'

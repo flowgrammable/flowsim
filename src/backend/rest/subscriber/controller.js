@@ -1,69 +1,92 @@
-
 var _ = require('underscore');
+var utils = require('./controllerUtils.js');
+var events = require('../../events');
 var msg = require('./msg');
 var model = require('./model');
 
-function subRegister(dataModel, method, params, data) {
+function passback(id, result, nextFunction){  
+  // filter out results here
+  events.Emitter.emit(id, result);
+}
+
+// ----------------------------------------------------------------------------
+// Noauth
+
+function subRegister(dataModel, method, params, data, ip, id) {
   // Provide some basic sanity checks
-  if(!data.email) return msg.missingEmail();
-  if(badEmail(data.email)) return msg.badEmail(data.email);
-  if(!data.password) return msg.missingPwd();
-  if(badPassword(data.password)) return msg.badPwd();
+  if(!data.email) return passback(id, msg.missingEmail());
+  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
+  if(!data.password) return passback(id, msg.missingPwd());
+  if(utils.invalidPassword(data.password) ) return passback(id, msg.badPwd());
 
-  // Attempt to create the user
-  msg.test(dataModel.subscriber.create(data.email, data.password),
-    function(succ) {
-      // generate email with url to present
-      // dataModel.subscriber.sendVerification(token);
-      return msg.success();
-    });
+  dataModel.subscriber.create(data.email, data.password, ip, function(result){
+      passback(id, result);
+  });
 }
 
-function subVerify(dataModel, method, params, data) {
-  // Ensure a verification token is present
-  if(!data.token) return msg.missingToken();
-  // Return the result of verification
-  return dataModel.subscriber.verify(data.token);
+function subVerify(dataModel, method, params, data, ip, id) {
+
+  var token = params[1];
+  // Ensure a verification token is present and valid
+  if(!token) return passback(id, msg.missingVerificationToken());
+  if(utils.invalidToken(token)) return passback(id, msg.badVerificationToken());
+
+  dataModel.subscriber.verify(token, function(result){
+      passback(id, result);
+  });
+
 }
 
-function subReset(dataModel, method, params, data) {
+function subReset(dataModel, method, params, data, ip, id) {
   // Ensure email is present and valid
   if(!data.email) return msg.missingEmail();
-  if(badEmail(data.email)) return msg.badEmail(data.email);
+  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
   // Return the result of password reset
-  msg.test(dataModel.subscriber.reset(data.email),
-    function(succ) {
-      // generate email with the url to present
-      return msg.success();
-    });
+  dataModel.subscriber.reset(data.email, function(result){
+    passback(id, result);
+  })
 }
 
-function subLogin(dataModel, method, params, data) {
-  if(!data.email) return msg.missingEmail();
-  if(badEmail(data.email)) return msg.badEmail(data.email);
-  //if(!data.
-  msg.test(dataModel.login(data.email, data.password),
-    //Incorrect Password??
-    //User is registered but not verified??
-    function(succ) {
-      // pass back the X-Access-Token 
-      return msg.success();
-    });
-}
-
-function subLogout(dataModel, session, method, params, data) {
-  return msg.success();
+function subLogin(dataModel, method, params, data, ip, id) {
+  if(!data.email) return passback(id, msg.missingEmail());
+  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
+  dataModel.session.authenticate(data.email, data.password,
+  function(result){
+    passback(id, result);
+  });
 }
     
-function sessAuthenticate(dataModel, headers) {
-  if(headers['X-Access-Token']) {
-    return dataModel.session.getByAccessToken(headers['X-Access-Token']);
-  }
-  return null;
+function sessAuthenticate(dataModel, headers, cb) {
+  if(headers['x-access-token']) { // header has x-access-token
+    dataModel.session.getByAccessToken(headers['x-access-token'],
+    function(result){
+      console.log(result);
+      cb(result);
+    });
+  } else cb(null); // no x-access-token in the header
 }
 
-module.exports = function(db) {
-  var dataModel = model(db);
+// ----------------------------------------------------------------------------
+// Auth
+
+function subLogout(dataModel, session, method, params, data, ip, id) {
+  console.log('attempting to destroy session');
+  dataModel.session.destroy(session, 
+  function(result) { 
+    passback(id, result); 
+  });
+}
+
+// ----------------------------------------------------------------------------
+
+
+module.exports = function(testAdapter) {
+  var dataModel;
+	if(testAdapter){
+		dataModel = model(testAdapter);
+  } else {
+		dataModel = model();
+	} 
   return {
     authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {

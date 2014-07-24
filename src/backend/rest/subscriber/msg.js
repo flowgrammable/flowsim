@@ -5,6 +5,27 @@ exports.success = msg.success;
 exports.error = msg.error;
 exports.test = msg.test;
 
+exports.noDatabaseConnection = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "noDatabaseConnection"
+  });
+}
+
+exports.unknownError = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "unknownError"
+  });
+}
+
+exports.subscriberNotFound = function() {
+  return msg.error({
+    system: "subscriber/model",
+    type: "subscriberNotFound"
+  });
+}
+
 exports.emailInUse = function() {
   return msg.error({
     system: "subscriber/model",
@@ -83,10 +104,38 @@ exports.accessTokenExpired = function() {
   });
 }
 
-exports.unverifiedUser = function() {
+exports.subscriberNotActive = function() {
   return msg.error({
-    system: "subscriber/controller",
-    type: "unverifiedUser"
+    system: "subscriber/model",
+    type: "subscriberNotActive"
   });
 }
 
+// replace with subscriberNotActive?
+exports.unverifiedSubscriber = function() {
+  return msg.error({
+    system: "subscriber/model",
+    type: "unverifiedSubscriber"
+  });
+}
+
+exports.subscriberAlreadyVerified = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "subscriberAlreadyVerified"
+  });
+}
+
+exports.badConfig = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "badEmailConfiguration"
+  })
+}
+
+exports.sessionNotFound = function() {
+  return msg.error({
+    system: "subscriber/adapter",
+    type: "sessionNotFound"
+  })
+}

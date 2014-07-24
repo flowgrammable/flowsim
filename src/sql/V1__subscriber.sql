@@ -1,43 +1,29 @@
 
 -- create an enumerated type for the account status
-CREATE TYPE SUBSCRIBER_STATUS AS ENUM (
-  'REGISTERED',   -- a sub has registered but not confirmed they own their email
-  'VERIFIED'     -- a sub has confirmed they own their email
+CREATE TYPE SUBSCRIBERS_STATUS AS ENUM (
+  'CREATED',  -- a sub has been registered but not verified, logins should not be possible
+  'ACTIVE',   -- a sub has verified and can actively login
+  'RESET',    -- a sub has had their password reset, no logins possible only pwd reset procedure
+  'CLOSED'    -- a sub has been closed, no functionality is supported against this state
 );
 
--- create the primary subscriber table
-CREATE TABLE subscriber
+-- create the primary subscribers table
+CREATE TABLE subscribers
 (
   id SERIAL PRIMARY KEY,                          -- internal id uses for sub
   email VARCHAR(128) NOT NULL UNIQUE,             -- email owned by sub
   password CHAR(60) NOT NULL,                     -- hashed pwd of sub
   reg_date TIMESTAMP WITH TIME ZONE NOT NULL,    -- date/time of registration
   reg_ip INET NOT NULL,                           -- ip used for registration
-  status SUBSCRIBER_STATUS NOT NULL              -- current sub disposition
+  verification_token CHAR(36) NOT NULL,                    -- verification token
+  status SUBSCRIBERS_STATUS NOT NULL              -- current sub disposition
 --  status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
-);
-
-CREATE TABLE verification_token
-(
-  id SERIAL PRIMARY KEY,                             -- internal token id
-  sub_id INTEGER references subscriber(id) NOT NULL, -- reference to sub
-  token CHAR(36) NOT NULL,                           -- token string
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL      -- date token is created
-);
-
-CREATE TABLE access_token
-(
-  id SERIAL PRIMARY KEY,                             -- internal access token id
-  sub_id INTEGER references subscriber(id) NOT NULL, -- reference to sub
-  token CHAR NOT NULL,                               -- token string UUIDv4, need to determine length
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL,      -- date token created
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL       -- date token updated
 );
 
 CREATE TABLE switch_profile
 (
 	id SERIAL PRIMARY KEY,
-  sub_id INTEGER references subscriber(id) NOT NULL,
+  sub_id INTEGER references subscribers(id) NOT NULL,
   name CHAR(60) NOT NULL
 );
 
@@ -91,22 +77,14 @@ CREATE TABLE action_caps
   OFPAT_SET_FIELD_ETH_SRC BOOLEAN
 );
 
--- create an enumerated type for the session status
-CREATE TYPE SESSION_STATUS AS ENUM (
-  'ACTIVE',       -- a session is currently active
-  'TIMEDOUT',     -- a session ended by timing out
-  'LOGGEDOUT'     -- a session ended by explicit logout
-);
-
 -- create a session table
-CREATE TABLE session
+CREATE TABLE sessions
 (
   id SERIAL PRIMARY KEY,                              -- internal sesison id
-  sub_id INTEGER references subscriber(id) NOT NULL,  -- reference to sub
-  key CHAR(128) NOT NULL UNIQUE,                       -- session key for API
-  begin_time TIMESTAMP NOT NULL,                      -- date/time session began
-  end_time TIMESTAMP NOT NULL,                        -- date/time session ended
-  ip INET NOT NULL,                                   -- ip used for session
-  status SESSION_STATUS NOT NULL                      -- current session status
+  subscriber_id INTEGER references subscribers(id) NOT NULL,   -- reference to sub
+  key CHAR(36) NOT NULL UNIQUE,                       -- session key for API
+  -- begin_time TIMESTAMP WITH TIME ZONE NOT NULL,       -- date/time session began
+  timeout BIGINT /*NOT NULL,*/     -- date/time for session to end
+  -- ip INET NOT NULL                                    -- ip used for session
 );
 
