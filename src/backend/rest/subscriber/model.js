@@ -51,9 +51,14 @@ function subVerify(adapter, token, cb) {
       });
     },
     function(result, callback){
-      adapter.verifySubscriber(result.value , function(result){
-        resultChecker(result, callback);
-      });
+      var sub = result.value; // the subscriber
+      if (sub.status == 'ACTIVE') 
+        resultChecker(msg.subscriberAlreadyVerified(), callback);
+      else {
+        adapter.updateSubscriber(sub, { status: 'ACTIVE' }, function(result){
+          resultChecker(result, callback);
+        });
+      }
     },
 		function(result, callback){
 			adapter.verifyRedirect(function(result){
