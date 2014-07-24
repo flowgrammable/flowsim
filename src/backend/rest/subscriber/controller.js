@@ -58,10 +58,11 @@ function subLogin(dataModel, method, params, data, ip, id) {
     
 function sessAuthenticate(dataModel, headers, cb) {
   if(headers['x-access-token']) { // header has x-access-token
-    dataModel.session.getByAccessToken(headers['x-access-token'],
-    function(result){
-      console.log(result);
-      cb(result);
+	if(utils.invalidToken(headers['x-access-token'])) return cb(msg.badAccessToken());
+    	dataModel.session.getByAccessToken(headers['x-access-token'],
+    	function(result){
+      		console.log(result);
+     		cb(result);
     });
   } else cb(null); // no x-access-token in the header
 }
@@ -93,7 +94,7 @@ module.exports = function(testAdapter) {
       noauth: {
         register: _.bind(subRegister, null, dataModel),
         verify: _.bind(subVerify, null, dataModel),
-        reset: _.bind(subReset, null, dataModel),
+        reset: _.bind(subRegister, null, dataModel),
         login: _.bind(subLogin, null, dataModel)
       },
       auth: {
