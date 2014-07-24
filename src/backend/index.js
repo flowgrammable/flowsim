@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 require('./dbbs').setup();
-var clearSessions = require('./rest/subscriber/adapter.js').clearSessions;
+require('./rest/subscriber/adapter.js').clearTimeouts();
 var connect = require('connect');
 var program = require('commander');
 var html = require('./html/controller');
@@ -9,10 +9,7 @@ var rest = require('./rest/controller');
 var fs = require('fs');
 // var session = require('./session');
 
-setInterval(function() { 
-  console.log("**Checking sessions table and deleting timedout sessions**");
-  clearSessions();
-}, 86400000 /* milliseconds in a day */ );
+
 
 program
   .version(process.env.SERVER_VERSION)

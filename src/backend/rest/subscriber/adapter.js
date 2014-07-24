@@ -156,14 +156,17 @@ function destroySession(session, cb) {
     });
 }
 
-function clearSessions() {
-  var currTime = new Date().valueOf();
-  Session.destroy({ timeout: { lt: currTime } })
-    .success(function(result) { console.log("Rows deleted: " + result); })
-    .error  (function(err)    { console.log(err); });
+function clearTimeouts() {
+  setInterval(function() { 
+    console.log("**Checking sessions table and deleting timedout sessions**");
+    var currTime = new Date().valueOf();
+    Session.destroy({ timeout: { lt: currTime } })
+      .success(function(result) { console.log("Rows deleted: " + result); })
+      .error  (function(err)    { console.log(err); });
+  }, 86400000 /* milliseconds in a day */ );
 }
 
 exports.createSession = createSession;
 exports.fetchSession = fetchSession;
 exports.destroySession = destroySession;
-exports.clearSessions = clearSessions;
+exports.clearTimeouts = clearTimeouts;
