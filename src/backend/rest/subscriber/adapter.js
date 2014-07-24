@@ -5,7 +5,6 @@ var msg = require('./msg');
 var orm = require('../../dbbs');
 var Subscriber = orm.model("subscriber");
 var Session = orm.model("session");
-// var Authtoken = orm.model("authtoken");
 var mailer = require('../../mailer');
 var fs = require('fs');
 
@@ -28,8 +27,6 @@ function insertSubscriber(em, pwd, ip, cb) {
       });
     }
   });
-  // syntax to compare the password:
-  // bcrypt.compareSync("pass input by user", subscriber.password);
   Subscriber.create({
     email: em,
     password: encrypted,
@@ -47,7 +44,6 @@ function insertSubscriber(em, pwd, ip, cb) {
     else
      cb(msg.unknownError(err));
   });
-
 }
 
 // The fetchSubscriber function retrieves a table entry from the 
@@ -66,28 +62,13 @@ function fetchSubscriber(subInfo, cb) {
     });
 }
 
-// The verifySubscriber function changes the 'status' attribute of 
-// a subscriber from 'REGISTERED' to 'VERIFIED'. Upon successful
-// completion, a success message is sent containing the updated
-// subscriber. Failure as a result of the subscriber having already 
-// been verified results in a subscriberAlreadyVerified() message 
-// being sent to the callback function.
-//
-// Note: in this function 'sub' must be an instance of the dbmodel. 
-// This allows us to modify and save it, updating the corresponding 
-// entry in the database's subscribers table.
-function verifySubscriber(sub, cb) {
-  if (sub.status == 'ACTIVE') 
-    cb(msg.subscriberAlreadyVerified());
-  else {
-    sub.status = 'ACTIVE'; // set the status to active
-    sub.save()
-      .success(function(result) {
-        cb(msg.success(result));
-      }).error(function(err) {
-        cb(msg.unknownError(err)); // probably db connection error
-      });
-  }
+function updateSubscriber(sub, newSubInfo, cb) {
+  sub.updateAttributes(newSubInfo)
+    .success(function(result) {
+      cb(msg.success(result));
+    }).error(function(err) {
+      cb(msg.unknownError(err)); // probably db connection error
+    });
 }
 
 function sendVerificationEmail(subscriber, cb) {
@@ -113,7 +94,7 @@ exports.verifyRedirect = verifyRedirect;
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
-exports.verifySubscriber = verifySubscriber;
+exports.updateSubscriber = updateSubscriber;
 
 // ----------------------------------------------------------------------------
 // Session
