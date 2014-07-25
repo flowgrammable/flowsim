@@ -115,6 +115,7 @@ describe('Testing verification requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert(JSON.parse(body)['value'],'Unable to verify user');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -128,6 +129,7 @@ describe('Testing verification requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'subscriberAlreadyVerified');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -141,6 +143,7 @@ describe('Testing verification requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'missingVerificationToken');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -154,6 +157,102 @@ describe('Testing verification requests:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'badVerificationToken');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+});
+
+var session;
+describe('Testing subscriber login:',function() {
+  it('Subscriber logged in successfully',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert(JSON.parse(body)['value'],'Unable to login user');
+      console.log('\tResponse received : ', body);
+      session = JSON.parse(body)['value'];
+      done();
+    });
+  });
+  it('Missing Subscriber\'s Email Address',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'missingEmail');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('Incorrect Email Address',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"a-terriblest-email\", \"password\": \"my password\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'badEmail');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('Incorrect password',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'incorrectPwd');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+});
+
+describe('Testing subscriber logout:',function() {
+  it('Subscriber logged out successfully',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/logout',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\",\"session\": \"'+session+'\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      //assert(JSON.parse(body)['value'],'Unable to logout user');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+});
+
+describe('Testing subscriber reset password:',function() {
+  it('Subscriber password link sent successfully',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/reset',
+      body: '{ \"email\": \"'+testEmail+'\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      //assert(JSON.parse(body)['value'],'Unable to logout user');
       console.log('\tResponse received : ', body);
       done();
     });
