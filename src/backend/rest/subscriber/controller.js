@@ -37,15 +37,30 @@ function subVerify(dataModel, method, params, data, ip, id) {
 
 }
 
-function subReset(dataModel, method, params, data, ip, id) {
-  // Ensure email is present and valid
-  if(!data.email) return msg.missingEmail();
-  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
-  // Return the result of password reset
-  dataModel.subscriber.reset(data.email, function(result){
-    passback(id, result);
-  })
+function subForgotPassword(dataModel, method, params, data, ip, id) {
+  var token = params[1];
+  if (!token) { // PHASE ONE
+    if(!data.email) return msg.missingEmail();
+    if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
+    dataModel.subscriber.forgotRequest(data.email, function(result){
+      passback(id, result);
+    })
+  }
+  else {
+    if(utils.invalidToken(token)) return passback(id, msg.badResetToken());
+    if (method == 'GET') { // PHASE TWO
+      dataModel.subscriber.forgotRedirect(token, function(result){
+        passback(id, result);
+      });
+    }
+    else if (method == 'POST') { // PHASE THREE
+      dataModel.subscriber.forgotUpdate(token, password, function(result){
+        passback(id, result);
+      });
+    }
+  }
 }
+
 
 function subLogin(dataModel, method, params, data, ip, id) {
   if(!data.email) return passback(id, msg.missingEmail());
@@ -94,7 +109,7 @@ module.exports = function(testAdapter) {
       noauth: {
         register: _.bind(subRegister, null, dataModel),
         verify: _.bind(subVerify, null, dataModel),
-        reset: _.bind(subReset, null, dataModel),
+        forgotpassword: _.bind(subForgotPassword, null, dataModel),
         login: _.bind(subLogin, null, dataModel)
       },
       auth: {

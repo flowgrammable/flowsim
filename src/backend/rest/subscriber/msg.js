@@ -69,10 +69,10 @@ exports.badPwd = function() {
   });
 }
 
-exports.missingVerificationToken = function() {
+exports.missingResetToken = function() {
   return msg.error({
     system: "subscriber/controller",
-    type: "missingVerificationToken"
+    type: "missingResetToken"
   });
 }
 
@@ -80,6 +80,13 @@ exports.badVerificationToken = function() {
   return msg.error({
     system: "subscriber/controller",
     type: "badVerificationToken"
+  });
+}
+
+exports.badResetToken = function() {
+  return msg.error({
+    system: "subscriber/controller",
+    type: "badResetToken"
   });
 }
 
