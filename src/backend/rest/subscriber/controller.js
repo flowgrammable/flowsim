@@ -17,7 +17,7 @@ function subRegister(dataModel, method, params, data, ip, id) {
   if(!data.email) return passback(id, msg.missingEmail());
   if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
   if(!data.password) return passback(id, msg.missingPwd());
-  if(utils.invalidPassword(data.password) ) return passback(id, msg.badPwd());
+  if(utils.invalidPassword(data.password)) return passback(id, msg.badPwd());
 
   dataModel.subscriber.create(data.email, data.password, ip, function(result){
       passback(id, result);

@@ -73,8 +73,8 @@ function updateSubscriber(sub, newSubInfo, cb) {
 
 function sendVerificationEmail(subscriber, cb) {
   console.log(subscriber.values); 
-  var email = subscriber.values.email;
-  var token = subscriber.values.verification_token;
+  var email = subscriber.email;
+  var token = subscriber.verification_token;
   mailer.sendMail(email, mailer.verificationMessage(token), function(result) {
 		if (result.name) {
 		 console.log(result);
@@ -85,8 +85,8 @@ function sendVerificationEmail(subscriber, cb) {
 }
 
 exports.sendResetEmail = function(subscriber, cb){
-	var email = subscriber.values.email;
-	var resetToken = subscriber.values.reset_token;
+	var email = subscriber.email;
+	var resetToken = subscriber.reset_token;
 	mailer.sendMail(email, mailer.resetMessage(resetToken), function(result){
 		if(result.name){
 			console.log(result);
@@ -96,15 +96,6 @@ exports.sendResetEmail = function(subscriber, cb){
 	});
 }
 
-
-// given subscriber, generate reset token
-exports.generateResetToken = function(subscriber, cb){
-	// if reset_token associated with subscriber.id exists
-  // then expire the reset_token
-  // then generate a new token associated with the subscriber id
-  // and pass the token string back with cb(msg.success(resetToken))
-}
-
 function verifyRedirect(cb) {
 	var tunnel = {code:302,
 								headers: {'Location':'http://localhost:3000/#/login'}};
@@ -112,8 +103,17 @@ function verifyRedirect(cb) {
 }
 
 
+// TODO: this has to link to a different frontend page
+function resetRedirect(token, cb) {
+  console.log('redirecting reset request');
+  var tunnel = {code:302,
+                headers: {'Location':'http://localhost:3000/#/reset/' + token}};
+   cb(msg.success(null, tunnel));
+}
+
 
 exports.verifyRedirect = verifyRedirect;
+exports.resetRedirect = resetRedirect;
 exports.sendVerificationEmail = sendVerificationEmail;
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;

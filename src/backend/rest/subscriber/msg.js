@@ -118,6 +118,13 @@ exports.subscriberNotActive = function() {
   });
 }
 
+exports.subscriberNotReset = function() {
+  return msg.error({
+    system: "subscriber/model",
+    type: "subscriberNotReset"
+  });
+}
+
 // replace with subscriberNotActive?
 exports.unverifiedSubscriber = function() {
   return msg.error({

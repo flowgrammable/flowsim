@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var async = require('async');
 var bcrypt = require('bcrypt');
+var uuid = require('node-uuid');
 
 var msg = require('./msg');
 var adapter = require('./adapter');
@@ -30,7 +31,7 @@ function subCreate(adapter, em, pwd, ip, cb) {
       });
     },
     function(result, callback){
-      adapter.sendVerificationEmail(result.value,  function(result){
+      adapter.sendVerificationEmail(result.value, function(result){
         resultChecker(result, callback);
       });
     }
@@ -75,8 +76,6 @@ function subVerify(adapter, token, cb) {
 function subForgotRequest(adapter, email, cb) { // PHASE ONE
   // 1. Fetch subscriber
   // 2. Generate reset token
-  //    - if one already exists, expire it
-  //    - create reset token
   // 3. sendResetEmail(resetMessage(token))
   
   async.waterfall([
@@ -86,7 +85,9 @@ function subForgotRequest(adapter, email, cb) { // PHASE ONE
 			});
     },
 		function(result, callback){
-			adapter.generateResetToken(result.value, function(result){
+      var sub = result.value; // the subscriber
+			adapter.updateSubscriber(sub, { status: 'RESET', reset_token: uuid.v4() },
+      function(result){
 				resultChecker(result, callback);
 			});
 		},
@@ -97,14 +98,32 @@ function subForgotRequest(adapter, email, cb) { // PHASE ONE
 		}
     ], function(err, result){
         if(err) { cb(err); }
-        else    { cb(result);}
+        else    { cb(result); }
 
     });
 
 }
 
 function subForgotRedirect(adapter, token, cb) { // PHASE TWO
+  async.waterfall([
+    function(callback){
+      adapter.fetchSubscriber({ reset_token: token }, function(result){
+        resultChecker(result, callback);
+      });
+    },
+    function(result, callback){
+      var sub = result.value;
+      if (sub.status != 'RESET') resultChecker(msg.subscriberNotReset(), callback);
+      else
+        adapter.resetRedirect(token, function(result){
+          resultChecker(result, callback);
+        });
+    }
+    ], function(err, result){
+        if(err) { cb(err); }
+        else    { cb(result); }
 
+    });
 }
 
 function subForgotUpdate(adapter, token, password, cb) { // PHASE THREE

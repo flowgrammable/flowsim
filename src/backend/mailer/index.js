@@ -27,3 +27,14 @@ exports.verificationMessage = function(token){
   return message;
 }
 
+exports.resetMessage = function(token){
+  var message = '<html><title>Password reset request</title>'+
+                 '<body>You have requested a password reset for your Flowsim'+
+                 ' account.<br/>Click the link below to go to the password'+
+                 ' reset form.<br/><br/><a href=\"'+
+                 'http://localhost:3000/api/subscriber/forgotpassword/'+token+
+                 '\"'+'>https://www.flowgrammable.org/subscriber/forgotpassword/'+
+                 token+'</a><br/><br/>The Flowsim Team</body></html>'
+  return message;
+}
+
