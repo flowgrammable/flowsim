@@ -1,7 +1,7 @@
-#UNIT TEST RUNNER
-=================
+###UNIT TEST RUNNER
+-----------------
 
-###MOCHA TEST FRAMEWORK
+#MOCHA TEST FRAMEWORK
 ----------------------
   It is a feature-rich JS test framework running on node.js and the browser, making asynchronous testing simple and fun.
 
@@ -22,17 +22,17 @@
 + **afterEach()**
     * Run once after each test-case/test-suite
 
-###HOW TO RUN TESTS
+#HOW TO RUN TESTS
 ----------------
 * To run mocha tests, just add all the mocha javascript test files in a folder called "test"
 * By default mocha will use the pattern './test/*.js' if no parameter is given to it.
 * From the root directory of the project, run "make unit-test" to execute that Makefile, which runs mocha tests on all the files present in the test folder except the rest test files.
 
-###Example Code
+#Example Code
 -------------
 ##Testing synchronous code
-+ When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
-
+####When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
+  
   var assert = require('assert')
   
   describe('Array', function(){
@@ -44,6 +44,6 @@
     })
   })
 
-+ To run this test: 
-
-  mocha test.js
+####To run this test: 
+  
+  Mocha test.js
