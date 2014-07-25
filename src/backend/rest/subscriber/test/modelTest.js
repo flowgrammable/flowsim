@@ -30,10 +30,6 @@ describe('===> Testing createSubscriber: \n',function() {
 // Verification Tests
 describe('===> Testing subVerify: \n',function() {
   var token = '';
-  var expectedResult =
-  { value: {},
-    tunnel: {code: 302,
-             headers: {'Location':'http://localhost:3000/verified.html'}}};
   // setup subscriber
   before(function(){
     testAdapter.insertSubscriber('verify@test.com', '1234password', '127.0.0.1', 
@@ -43,7 +39,7 @@ describe('===> Testing subVerify: \n',function() {
   });
   it('Subscriber verified ',function(done) {
   	model.subscriber.verify(token, function(result){
-  	  assert.equal(JSON.stringify(result), JSON.stringify(expectedResult));
+  	  assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
 			done();
 		});
   });

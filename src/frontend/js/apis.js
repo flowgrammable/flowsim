@@ -33,7 +33,9 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           });
         } else if(data.error.type == 'subscriberNotActive') {
           $rootScope.$broadcast("subscriberNotActive");
-        }
+        } else if(data.error.type == 'subscriberNotFound'){
+					$rootScope.$broadcast("subscriberNotFound");
+				}
       }).error(function(data) {
         $rootScope.$broadcast("loginFailure");
       });
@@ -70,12 +72,18 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
     },
     verify : function(verificationToken) {
       $http({
-        method: 'PUT',
+        method: 'POST',
         url: 'api/subscriber/verify',
         data: JSON.stringify({
-          token: verficationToken
+          token: verificationToken
         })
       }).success(function(data) {
+				if(data.value){
+					console.log('broadcasting successful verification');
+					$rootScope.$broadcast("verificationSuccessful");
+				} else if(data.error.type == 'subscriberAlreadyVerified'){
+					$rootScope.$broadcast("alreadyVerified");
+				}
       }).error(function(data) {
       });
     },

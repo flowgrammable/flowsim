@@ -72,13 +72,27 @@ flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, u
         $scope.subscriberNotActive = true; 
       });
       $rootScope.$on("authenticated", function() { $location.path("/"); });
+			$rootScope.$on("subscriberNotFound", function(){
+				$scope.subscriberNotFound = true;
+			});
     }
   };
 });
 
 flowsimApp.controller('verifyCntrl', function($scope, $routeParams, 
                         flowgrammable) {
-  flowgrammable.verify($routeParams.token);
+  
+  $scope.verifySuccess = false;
+	$scope.alreadyVerified = false;
+	flowgrammable.verify($routeParams.token);
+	$scope.$on("verificationSuccessful", function(){
+		console.log('verificationSuccessful has been broadcasted');
+		$scope.verifySuccess = true;
+	});
+	$scope.$on("alreadyVerified", function(){
+		console.log('alreadyVerified has been broadcasted');
+		$scope.alreadyVerified = true;
+	});
 });
 
 flowsimApp.controller('menuCtrl', function($scope, flowgrammable) {
@@ -119,7 +133,7 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'reset.html',
       controller: 'resetCntrl'
     }).
-    when('/verify/:sid/:token', {
+    when('/verify/:token', {
       templateUrl: 'verify.html',
       controller: 'verifyCntrl'
     }).

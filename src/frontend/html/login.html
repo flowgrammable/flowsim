@@ -17,6 +17,10 @@
         <span>Email has not been verified, please click link in verification email.</span>
     </div>
 
+		<div class="error" ng-show="subscriberNotFound">
+			<span>An account with that email address does not exist.</span>
+		</div>
+
     <form name="loginForm" novalidate role="form">
       <div class="form-group">
         <label for="emailAddr">Email Address</label>
