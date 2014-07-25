@@ -32,7 +32,10 @@ Example Code
 -------------
   + **Testing synchronous code**
     * When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
+  ## 1. Import Subscriber Module
 
+        var mailer = require('./subscriber');
+     
         var assert = require('assert')
         
         describe('Array', function(){
