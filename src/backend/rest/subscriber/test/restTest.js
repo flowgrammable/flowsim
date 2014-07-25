@@ -114,7 +114,8 @@ describe('Testing verification requests:',function() {
         'Content-Type': 'application/json'
       },
       method: 'POST'
-    }, function (error, response, body) {
+    },
+    function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to verify user');
       console.log('\tResponse received : ', body);
       done();

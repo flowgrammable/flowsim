@@ -25,7 +25,7 @@ FLYWAY_CFG=$(FLYWAY_USER) $(FLYWAY_PASSWORD) $(FLYWAY_JAR) $(FLYWAY_URL) $(FLYWA
 
 flyway=$(FLYWAY)/flyway $(FLYWAY_CFG)
 
-server='$(PWD)/index.js'
+server=$(PWD)/index.js
 
 # looking for files present in "test" folder throughout the repo excluding "scratch" and "node_modules" folders
 UNIT_TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -not -path "*/*/rest*.js")
@@ -41,7 +41,7 @@ unit-test:
 system-test:
 	$(flyway) clean && $(flyway) migrate
 	$(server) -t & 
-	sleep 5
+	sleep 4
 	$(MOCHA) -t 40000 -R $(REPORTER) $(SYSTEM_TESTS)
 	killall -i node
 .PHONY: unit-test, system-test
