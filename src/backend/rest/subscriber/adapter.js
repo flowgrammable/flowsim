@@ -20,13 +20,6 @@ var fs = require('fs');
 function insertSubscriber(em, pwd, ip, cb) {
   var token = uuid.v4();
   var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
-  fs.exists('temp', function (exists) {
-    if(exists) {
-      fs.writeFile('temp', token, function (err) {
-        if (err) console.log('Unable to write token in file for restTest');
-      });
-    }
-  });
   Subscriber.create({
     email: em,
     password: encrypted,
@@ -36,6 +29,13 @@ function insertSubscriber(em, pwd, ip, cb) {
     status: 'CREATED'
   }).success(function(result) {
     // console.log(result);
+    fs.exists('temp', function (exists) {
+      if(exists) {
+        fs.writeFile('temp', token, function (err) {
+          if (err) console.log('Unable to write token in file for restTest');
+        });
+      }
+    });
     cb(msg.success(result));
   }).error(function(err) {
      console.log(err);

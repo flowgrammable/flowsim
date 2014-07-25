@@ -22,9 +22,9 @@ describe('Testing registration requests:',function() {
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to register user');
       console.log('\tResponse received : ', body);
-      fs.exists('/home/dev/main/flowsim/src/backend/temp', function (exists) {
+      fs.exists('/home/dev/flowsim/src/backend/temp', function (exists) {
         if(exists) {
-          fs.readFile('/home/dev/main/flowsim/src/backend/temp','utf8',function (err,data) {
+          fs.readFile('/home/dev/flowsim/src/backend/temp','utf8',function (err,data) {
             if (err) console.log('Unable to read token in file for restTest');
             else{ token = data;}
           });
@@ -109,25 +109,18 @@ describe('Testing verification requests:',function() {
   it('User verified successfully',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/'+token,
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    }, function (error, response, body) {
-      assert(JSON.parse(body)['value'],'Unable to verify user');
+      method: 'GET'
+    },
+    function (error, response, body) { 
       console.log('\tResponse received : ', body);
+			assert(JSON.parse(body)['value'],'Unable to verify user');
       done();
     });
   });
   it('User already verified',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/'+token,
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
+      method: 'GET'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'subscriberAlreadyVerified');
       console.log('\tResponse received : ', body);
@@ -137,11 +130,7 @@ describe('Testing verification requests:',function() {
   it('Missing verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
+      method: 'GET'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'missingVerificationToken');
       console.log('\tResponse received : ', body);
@@ -151,11 +140,7 @@ describe('Testing verification requests:',function() {
   it('Bad verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/Bad-Token',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
+      method: 'GET'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'badVerificationToken');
       console.log('\tResponse received : ', body);

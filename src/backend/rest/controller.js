@@ -7,7 +7,7 @@ var msg = require('./msg');
 var sub = require('./subscriber/controller');
 
 function wrapRes(res, result) {
-  console.log('sending response: ', result);
+  //console.log('sending response: ', result);
   var code = 200;
   var headers = {'Content-Type':'application/json'};
 	if(result.tunnel.code && result.tunnel.headers){
@@ -55,7 +55,7 @@ module.exports = function(db, userModules) {
 
     // a request must name a module and service
     var path = url.parse(req.url).pathname.split('/');
-	  console.log(path);	
+	  //console.log(path);	
     if(path.length < 2) {
       wrapRes(res, msg.error({
         description: 'Service not identified'
