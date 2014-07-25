@@ -41,7 +41,7 @@ unit-test:
 system-test:
 	$(flyway) clean && $(flyway) migrate
 	$(server) -t & 
-	$(MOCHA) -t 40000 -R $(REPORTER) $(SYSTEM_TESTS)
+	$(MOCHA) -t 50000 -R $(REPORTER) $(SYSTEM_TESTS)
 	killall -i node
 	
 .PHONY: unit-test, system-test
