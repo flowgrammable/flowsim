@@ -43,5 +43,5 @@ system-test:
 	$(server) -t & 
 	sleep 5
 	$(MOCHA) -t 40000 -R $(REPORTER) $(SYSTEM_TESTS)
-
+	killall -i node
 .PHONY: unit-test, system-test
