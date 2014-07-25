@@ -33,6 +33,7 @@ Example Code
   + **Testing synchronous code**
     * When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
       
+
       var assert = require('assert')
       
       describe('Array', function(){
@@ -45,5 +46,5 @@ Example Code
       })
 
     * To run this test: 
-    
-      mocha test.js
+
+          mocha test.js
