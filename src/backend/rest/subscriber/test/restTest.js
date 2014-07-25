@@ -229,9 +229,10 @@ describe('Testing subscriber logout:',function() {
   it('Subscriber logged out successfully',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/logout',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\",\"session\": \"'+session+'\"}',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-access-token': session
       },
       method: 'POST'
     }, function (error, response, body) {
@@ -241,8 +242,8 @@ describe('Testing subscriber logout:',function() {
     });
   });
 });
-
-describe('Testing subscriber reset password:',function() {
+/*
+describe('Testing subscriber forgot password:',function() {
   it('Subscriber password link sent successfully',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/reset',
@@ -258,4 +259,4 @@ describe('Testing subscriber reset password:',function() {
     });
   });
 });
-
+*/
