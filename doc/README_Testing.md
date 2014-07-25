@@ -70,7 +70,7 @@ Simply invoke the callback when your test is complete. By adding a callback (usu
     mocha -R spec test.js
 
 ###How to run unit test runner
-####1. Locate the Makefile
-####2. Run the unit test runner as follows in that Makefile directory
+  1. Locate the Makefile
+  2. Run the unit test runner as follows in that Makefile directory
     
-      make unit-test
+      `make unit-test`
