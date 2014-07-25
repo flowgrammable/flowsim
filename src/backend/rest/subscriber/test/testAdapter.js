@@ -81,18 +81,19 @@ function fetchSubscriber(subInfo, cb) {
   else cb(msg.success(sub));
 }
 
-function verifySubscriber(sub, cb) {
-  if (sub.status == 'ACTIVE') cb(msg.subscriberAlreadyVerified());
-  else {
-    sub.status = 'ACTIVE';
-    cb(msg.success(sub));
-  }
+// NO ERROR HANDLING
+function updateSubscriber(sub, subInfo, cb) {
+  if (subInfo.status)   sub.status = subInfo.status;
+  if (subInfo.password) sub.password = subInfo.password;
+  if (subInfo.email)    sub.email = subInfo.email;
+  cb (msg.success(sub));
 }
 
 exports.insertSubscriber = insertSubscriber;
 exports.fetchSubscriber = fetchSubscriber;
-exports.verifySubscriber = verifySubscriber;
 exports.makeSubscriber = makeSubscriber;
+exports.updateSubscriber = updateSubscriber;
+
 
 // ----------------------------------------------------------------------------
 // Mailer
