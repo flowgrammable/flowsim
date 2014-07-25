@@ -5,21 +5,21 @@
 ----------------------
   It is a feature-rich JS test framework running on node.js and the browser, making asynchronous testing simple and fun.
 
-##describe()
++ **describe()**
     * commonly known as test suites, which contains test cases
     * It is used for grouping test cases and we can have groups within groups
-##it()
++ **it()**
     * This is used to write a test case
-##before(), beforeEach(), after(), afterEach()
++ **before(), beforeEach(), after(), afterEach()**
     * All 'hooks' may be sync or async as well, behaving much like a regular test-case.
     * They are hooks to run before/after first/each it() or describe(), which means, `before()` is run before first it()/describe()
-##before()
++ **before()**
     * Run once before the first test-case/test-suite
-##beforeEach()
++ **beforeEach()**
     * Run once before each test-case/test-suite
-##after()
++ **after()**
     * Run once before first test-case/test-suite
-##afterEach()
++ **afterEach()**
     * Run once after each test-case/test-suite
 
 ###HOW TO RUN TESTS
@@ -31,7 +31,7 @@
 ###Example Code
 -------------
 ##Testing synchronous code
-  + When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
++ When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
 
   var assert = require('assert')
   
@@ -44,6 +44,6 @@
     })
   })
 
-  + To run this test: 
++ To run this test: 
 
   mocha test.js
