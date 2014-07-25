@@ -1,5 +1,5 @@
-#UNIT TEST RUNNER
------------------
+##UNIT TEST RUNNER
+==================
 
 ###MOCHA TEST FRAMEWORK
 
@@ -22,15 +22,15 @@
 + **afterEach()**
     * Run once after each test-case/test-suite
 
-####HOW TO RUN TESTS
+###HOW TO RUN TESTS
 
 * To run mocha tests, just add all the mocha javascript test files in a folder called "test"
 * By default mocha will use the pattern './test/*.js' if no parameter is given to it.
 * From the root directory of the project, run "make unit-test" to execute that Makefile, which runs mocha tests on all the files present in the test folder except the rest test files.
 
 ###Example Code
--------------
-##Testing synchronous code
+
+####Testing synchronous code
 When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
   
     var assert = require('assert')
@@ -44,6 +44,27 @@ When testing synchronous code, omit the callback and Mocha will automatically co
       })
     })
 
-#To run this test: 
+####To run this test: 
 
-  mocha test.js
+    mocha -R spec test.js
+
+####Testing Asynchronous code
+Simply invoke the callback when your test is complete. By adding a callback (usually named done) to it() Mocha will know that it should wait for completion.
+
+    var assert = require("assert");
+    var fs = require('fs');  
+    
+    describe('fs', function(){
+      describe('#readFile()', function(){
+        it('should read without error', function(done){
+          fs.readFile("test/test.js", function (err, data) {
+            if (err) throw err;
+            done();
+          });
+        });
+      });
+    });
+    
+####To run this test: 
+
+    mocha -R spec test.js
