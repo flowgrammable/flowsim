@@ -160,7 +160,7 @@ describe('===> Testing resetPassword: \n', function(){
 
 describe('===> Testing resetPassword: \n', function(){
   it('resetPassword(email) should return msg.subscriberNotFound() when trying' + 
-			'to reset a subscriber that has not been registered' : \n', function(done){
+			'to reset a subscriber that has not been registered : \n', function(done){
 		model.subscriber.subReset('idont@exist.com', function(result){
 			assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberNotFound()));
 			done();
