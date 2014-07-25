@@ -1,5 +1,22 @@
-##UNIT TEST RUNNER
+##TEST RUNNER
 ==================
+###How to run unit test runner
+
+Unit test runner runs all the test files except the rest tests on server.
+
+  1. Locate the Makefile
+  2. Run the unit test runner as follows in that Makefile directory
+    
+      `make unit-test`
+
+###How to run system test runner
+
+System test runner runs all the rest test files except the unit tests.
+
+  1. Locate the Makefile
+  2. Run the system test runner as follows in that Makefile directory
+    
+      `make system-test`
 
 ###MOCHA TEST FRAMEWORK
 
@@ -69,11 +86,4 @@ Simply invoke the callback when your test is complete. By adding a callback (usu
 
     mocha -R spec test.js
 
-###How to run unit test runner
 
-Unit test runner runs all the test files except the rest tests on server.
-
-  1. Locate the Makefile
-  2. Run the unit test runner as follows in that Makefile directory
-    
-      `make unit-test`
