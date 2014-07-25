@@ -5,10 +5,10 @@ MOCHA TEST FRAMEWORK
 ---------------------
   It is a feature-rich JS test framework running on node.js and the browser, making asynchronous testing simple and fun.
 
-  + **describe()**
+  ## describe()
     * commonly known as test suites, which contains test cases
     * It is used for grouping test cases and we can have groups within groups
-  + **it()**
+  ## it()
     * This is used to write a test case
   + **before(), beforeEach(), after(), afterEach()** 
     * All 'hooks' may be sync or async as well, behaving much like a regular test-case.
@@ -32,21 +32,18 @@ Example Code
 -------------
   + **Testing synchronous code**
     * When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
-  ## 1. Import Subscriber Module
 
-        var mailer = require('./subscriber');
-     
-        var assert = require('assert')
-        
-        describe('Array', function(){
-          describe('#indexOf()', function(){
-            it('should return -1 when the value is not present', function(){
-              assert.equal([1,2,3].indexOf(5),-1);
-              assert.equal([1,2,3].indexOf(0),-1);
+          var assert = require('assert')
+          
+          describe('Array', function(){
+            describe('#indexOf()', function(){
+              it('should return -1 when the value is not present', function(){
+                assert.equal([1,2,3].indexOf(5),-1);
+                assert.equal([1,2,3].indexOf(0),-1);
+              })
             })
           })
-        })
 
     * To run this test: 
     
-      mocha test.js
+        mocha test.js
