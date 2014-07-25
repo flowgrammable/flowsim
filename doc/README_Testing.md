@@ -1,3 +1,7 @@
+**UNIT TEST RUNNER**
+--------------------
+--------------------
+
 HOW TO RUN TESTS
 ================
 * Mocha test framework is used for testing.
@@ -53,8 +57,5 @@ How to Run mocha
 * By default mocha will use the pattern './test/*.js' if no parameter is given to it.
 * By giving filename as parameter to mocha, then mocha will run on the file
 
-Reference:
-=========
-* http://visionmedia.github.io/mocha/
-* http://samwize.com/2014/02/08/a-guide-to-mochas-describe-it-and-setup-hooks/
-* http://dailyjs.com/2011/12/08/mocha/
+Example Code:
+=============
