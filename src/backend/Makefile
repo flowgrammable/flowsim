@@ -14,7 +14,7 @@ FLYWAY_JAR="-jarDir=$(FLYWAY)/jars"
 FLYWAY_URL='-url=jdbc:postgresql://localhost/flowsim'
 
 # flyway migrations locations
-FLYWAY_LOCATIONS="-locations=filesystem:sql"
+FLYWAY_LOCATIONS="-locations=filesystem:$(PWD)/../sql"
 
 # flyway username/password
 FLYWAY_USER='-user=flogdev'
@@ -31,7 +31,7 @@ server='$(PWD)/index.js'
 UNIT_TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -not -path "*/*/rest*.js")
 
 # looking for files present in "test" folder throughout the repo excluding "scratch" and "node_modules" folders
-SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*")
+SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*" )
 
 unit-test:
 	$(flyway) clean && $(flyway) migrate
@@ -40,8 +40,8 @@ unit-test:
 
 system-test:
 	$(flyway) clean && $(flyway) migrate
-	$(server) -t & done 
-	sleep 0.1
+	$(server) -t & 
+	sleep 5
 	$(MOCHA) -t 40000 -R $(REPORTER) $(SYSTEM_TESTS)
 
 .PHONY: unit-test, system-test
