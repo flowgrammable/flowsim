@@ -70,6 +70,9 @@ Simply invoke the callback when your test is complete. By adding a callback (usu
     mocha -R spec test.js
 
 ###How to run unit test runner
+
+Unit test runner runs all the test files except the rest tests on server.
+
   1. Locate the Makefile
   2. Run the unit test runner as follows in that Makefile directory
     
