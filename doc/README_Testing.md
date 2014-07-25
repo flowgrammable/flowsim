@@ -30,3 +30,20 @@ HOW TO RUN TESTS
 
 Example Code
 -------------
+  + **Testing synchronous code**
+    * When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test
+      
+      var assert = require('assert')
+      
+      describe('Array', function(){
+        describe('#indexOf()', function(){
+          it('should return -1 when the value is not present', function(){
+            assert.equal([1,2,3].indexOf(5),-1);
+            assert.equal([1,2,3].indexOf(0),-1);
+          })
+        })
+      })
+
+    * To run this test: 
+    
+      mocha test.js
