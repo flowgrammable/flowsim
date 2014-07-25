@@ -45,16 +45,10 @@ describe('===> Testing fetchSubscriber adapter function:\n', function() {
 // ----------------------------------------------------------------------------
 // Testing verifySubscriber
 
-describe('===> Testing verifySubscriber adapter function:\n', function() {
-  it('User verified successfully', function(done) {
-    adapter.verifySubscriber(subscriber, function (result) {
+describe('===> Testing updateSubscriber adapter function:\n', function() {
+  it("User status updated to 'ACTIVE' successfully", function(done) {
+    adapter.updateSubscriber(subscriber, { status: 'ACTIVE' }, function (result) {
       assert(result.value, "Unable to verify user")
-      done();
-    });
-  });
-  it('Subscriber Already verified', function(done) {
-    adapter.verifySubscriber(subscriber, function (result) {
-      assert.equal(result.error.type, "subscriberAlreadyVerified")
       done();
     });
   });
