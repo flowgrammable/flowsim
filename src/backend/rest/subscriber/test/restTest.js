@@ -22,9 +22,9 @@ describe('Testing registration requests:',function() {
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to register user');
       console.log('\tResponse received : ', body);
-      fs.exists('/home/dev/flowsim/src/backend/temp', function (exists) {
+      fs.exists(process.cwd()+'/temp', function (exists) {
         if(exists) {
-          fs.readFile('/home/dev/flowsim/src/backend/temp','utf8',function (err,data) {
+          fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
             if (err) console.log('Unable to read token in file for restTest');
             else{ token = data;}
           });
@@ -108,15 +108,22 @@ describe('Testing registration requests:',function() {
 describe('Testing verification requests:',function() {
   it('User verified successfully',function(done) {
     request( {
-      url: 'http://localhost:3000/api/subscriber/verify/'+token,
-      method: 'GET'
+      url: 'http://localhost:3000/api/subscriber/verify/',
+      body: '{ \"token\": \"'+token+'\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
     },
     function (error, response, body) { 
-      console.log('\tResponse received : ', body);
+      //console.log('\tResponse received : ', body,response);
+      console.log(token);
 			assert(JSON.parse(body)['value'],'Unable to verify user');
       done();
     });
   });
+});
+/*
   it('User already verified',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/'+token,
@@ -245,3 +252,4 @@ describe('Testing subscriber forgot password:',function() {
   });
 });
 */
+
