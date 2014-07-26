@@ -35,14 +35,14 @@ SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*" 
 
 unit-test:
 	$(flyway) clean && $(flyway) migrate
-	clear
+	@clear
 	$(MOCHA) -t 20000 -R $(REPORTER) $(UNIT_TESTS)
 
 system-test:
 	$(flyway) clean && $(flyway) migrate
 	$(server) -t & 
-	sleep 4
-	-$(MOCHA) -t 60000 -R $(REPORTER) $(SYSTEM_TESTS) && false
-	killall node
+	@sleep 4
+	-$(MOCHA) -t 60000 -R $(REPORTER) $(SYSTEM_TESTS)
+	@killall node
 
 .PHONY: unit-test, system-test
