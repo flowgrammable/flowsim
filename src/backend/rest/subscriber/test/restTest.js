@@ -140,8 +140,8 @@ describe('Testing verification requests:',function() {
 
   it('Missing verification token',function(done) {
     request( {
-      url: 'http://localhost:3000/api/subscriber/verify',
-	body: '{ \"token\": \"'+token+'\"}',
+      url: 'http://localhost:3000/api/subscriber/verify/',
+	body: '{ \"token\": \"'+''+'\"}',
 	headers: {
 		'Content-Type': 'application/json'
 	},
