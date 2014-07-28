@@ -103,6 +103,25 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
       }).error(function(data) {
       });
     },
+		resetPassword : function(token, newPassword){
+			$http({
+				method: 'POST',
+				url: 'api/subscriber/resetpassword',
+				data: JSON.stringify({
+					reset_token: token,
+					password: newPassword
+				})
+			}).success(function(data){
+				if(data.value){
+					$rootScope.$broadcast("resetSuccessful");
+				} else if(data.error.type == 'invalidResetToken'){
+					$rootScope.$broadcast("invalidResetToken");
+				} else if(data.error.type == 'badPwd'){
+					$rootScope.$broadcast("badPwd");
+				}
+			}).error(function(data){
+			});
+		},
     request : function(type, module, body, good, bad) {
       $http({
         method: type,

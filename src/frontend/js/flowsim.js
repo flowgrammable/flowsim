@@ -55,6 +55,37 @@ flowsimApp.controller('resetCntrl', function($scope, flowgrammable, utils) {
 	});
 });
 
+flowsimApp.controller('resetPassCntrl', function($scope, $routeParams, flowgrammable, utils){
+	$scope.token = $routeParams.token;
+	$scope.password1 = '';
+  $scope.password2 = '',
+  $scope.resetSuccess = false;
+	$scope.resetPass = function(){
+		if(utils.validPwd($scope.password1)){
+			$scope.badPwd1 = false;
+		} else {
+			$scope.badPwd1 = true;
+		} 	
+		if(utils.validPwd($scope.password2)){
+			$scope.badPwd2 = false;
+		} else {
+			$scope.badPwd2 = true;
+		} 
+    if(!$scope.badPwd1 && !$scope.badPwd2) {
+			flowgrammable.resetPassword($scope.token, $scope.password1);
+			$scope.$on("resetSuccessful", function() {
+				$scope.resetSuccessful = true;
+			});
+			$scope.$on("invalidResetToken", function() {
+				$scope.invalidResetToken = true;
+			});
+			$scope.$on("badPwd", function() {
+				$scope.badPwd = true;
+			});
+		}
+	}
+});
+
 flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, utils, $rootScope) {
   $scope.emailAddr = '';
   $scope.password = '';
@@ -139,6 +170,10 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'reset.html',
       controller: 'resetCntrl'
     }).
+		when('/reset/:token', {
+			templateUrl: 'resetpassword.html',
+			controller: 'resetPassCntrl'
+		}).
     when('/verify/:token', {
       templateUrl: 'verify.html',
       controller: 'verifyCntrl'
