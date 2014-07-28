@@ -89,12 +89,17 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
     },
     reset : function(subEmail) {
       $http({
-        method: 'PUT',
-        url: 'api/subscriber/reset',
+        method: 'POST',
+        url: 'api/subscriber/forgotpassword',
         data: JSON.stringify({
           email: subEmail
         })
       }).success(function(data) {
+					if(data.value){
+        		$rootScope.$broadcast("forgotSuccess");
+					} else if (data.error.type == 'subscriberNotFound'){
+						$rootScope.$broadcast("subscriberNotFound");
+					} 
       }).error(function(data) {
       });
     },
