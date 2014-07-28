@@ -86,10 +86,12 @@ function subForgotRequest(adapter, email, cb) { // PHASE ONE
     },
 		function(result, callback){
       var sub = result.value; // the subscriber
-			adapter.updateSubscriber(sub, { status: 'RESET', reset_token: uuid.v4() },
-      function(result){
-				resultChecker(result, callback);
-			});
+      if (sub.status != 'CLOSED')
+  			adapter.updateSubscriber(sub, { status: 'RESET', reset_token: uuid.v4() },
+        function(result){
+  				resultChecker(result, callback);
+  			});
+      else resultChecker(msg.subscriberClosed(), callback);
 		},
 		function(result, callback){
 			adapter.sendResetEmail(result.value, function(result){

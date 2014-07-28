@@ -72,7 +72,7 @@ function updateSubscriber(sub, newSubInfo, cb) {
 }
 
 function sendVerificationEmail(subscriber, cb) {
-  console.log(subscriber.values); 
+  // console.log(subscriber.values); 
   var email = subscriber.email;
   var token = subscriber.verification_token;
   mailer.sendMail(email, mailer.verificationMessage(token), function(result) {
@@ -85,6 +85,7 @@ function sendVerificationEmail(subscriber, cb) {
 }
 
 exports.sendResetEmail = function(subscriber, cb){
+  // console.log(subscriber.values); 
 	var email = subscriber.email;
 	var resetToken = subscriber.reset_token;
 	mailer.sendMail(email, mailer.resetMessage(resetToken), function(result){

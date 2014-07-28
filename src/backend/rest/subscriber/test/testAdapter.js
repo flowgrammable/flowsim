@@ -9,9 +9,11 @@ var Session = database['sessions'];
 // var mailer = require('../../mailer');
 
 Array.prototype.findSub = function(sub) {
-  var hasEmail, hasVerToken, found;
+  var hasEmail, hasVerToken, hasResetToken, found;
   if (sub.email) hasEmail = true;
   if (sub.verification_token) hasVerToken = true;
+  if (sub.reset_token) hasResetToken = true;
+
   for (i in this) {
     found = false;
     if (hasEmail) {
@@ -20,6 +22,10 @@ Array.prototype.findSub = function(sub) {
     }
     if (hasVerToken) {
       if (this[i].verification_token == sub.verification_token) found = true;
+      else continue;
+    }
+    if (hasResetToken) {
+      if (this[i].reset_token == sub.reset_token) found = true;
       else continue;
     }
     if (found) return this[i];
@@ -101,7 +107,13 @@ function sendVerificationEmail(em, cb){
     cb(msg.success());
 }
 
+function sendResetEmail(em, cb){
+    cb(msg.success());
+}
+
 exports.sendVerificationEmail = sendVerificationEmail;
+exports.sendResetEmail = sendResetEmail;
+
 
 // ----------------------------------------------------------------------------
 // Redirect
