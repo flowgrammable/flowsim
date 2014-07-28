@@ -156,7 +156,7 @@ describe('Testing verification requests:',function() {
   it('Bad verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/Bad-Token',
-	body: '{ \"token\": \"'+token+'\"}',
+	body: '{ \"token\": \"'+'bad_token'+'\"}',
 	headers: {
                 'Content-Type': 'application/json'
         },
