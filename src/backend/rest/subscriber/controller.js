@@ -38,22 +38,17 @@ function subVerify(dataModel, method, params, data, ip, id) {
 }
 
 function subForgotPassword(dataModel, method, params, data, ip, id) {
-  var token = params[1];
+  var token = data.reset_token;
+  var password = data.password;
+  var email = data.email;
+
   if (!token) { // PHASE ONE
-    if(!data.email) return msg.missingEmail();
-    if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
+    if(!email) return msg.missingEmail();
+    if(utils.invalidEmail(email)) return passback(id, msg.badEmail(data.email));
     dataModel.subscriber.forgotRequest(data.email, function(result){
       passback(id, result);
     })
-  }
-  else {
-    if(utils.invalidToken(token)) return passback(id, msg.badResetToken());
-    if (method == 'GET') { // PHASE TWO
-      dataModel.subscriber.forgotRedirect(token, function(result){
-        passback(id, result);
-      });
-    }
-    else if (method == 'POST') { // PHASE THREE
+  }else if (method == 'POST') { // PHASE THREE
       dataModel.subscriber.forgotUpdate(token, password, function(result){
         passback(id, result);
       });
