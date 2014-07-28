@@ -37,16 +37,22 @@ flowsimApp.controller('registrationCntrl', function($scope, utils, flowgrammable
 });
 
 flowsimApp.controller('resetCntrl', function($scope, flowgrammable, utils) {
-  $scope.sent = false;
+  $scope.forgotSuccess = false;
   $scope.emailAddr = '';
+  $scope.subscriberNotFound = false;
   $scope.reset = function() {
     if(utils.validEmail($scope.emailAddr)) {
       flowgrammable.reset($scope.emailAddr);
-      $scope.sent = true;
     } else {
       $scope.badEmail = true;
     }
   }
+	$scope.$on("forgotSuccess", function() {
+		$scope.forgotSuccess = true;
+	});
+	$scope.$on("subscriberNotFound", function() {
+		$scope.subscriberNotFound = true;
+	});
 });
 
 flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, utils, $rootScope) {
