@@ -168,7 +168,7 @@ describe('Testing verification requests:',function() {
     });
   });
 });
-/*
+
 var session;
 describe('Testing subscriber login:',function() {
   it('Subscriber logged in successfully',function(done) {
@@ -200,7 +200,7 @@ describe('Testing subscriber login:',function() {
       done();
     });
   });
-  it('Incorrect Email Address',function(done) {
+  it('Invalid Email Address',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/login',
       body: '{ \"email\": \"a-terriblest-email\", \"password\": \"my password\"}',
@@ -217,7 +217,7 @@ describe('Testing subscriber login:',function() {
   it('Incorrect password',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/login',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"\"}',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"'+'badPassword'+\"}',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -228,8 +228,43 @@ describe('Testing subscriber login:',function() {
       done();
     });
   });
-});
+  it('Unregistered user',function(done) {
+  });
+  it('Unverified sunscriber', function(done) {
+	//register a user first, do not verify
+	//before hook
+	//make registration request before logging in user
+	before(function() {
+		request( {
+     		 url: 'http://localhost:3000/api/subscriber/register',
+     		 body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+     		 headers: {
+        		'Content-Type': 'application/json'
+     		 },
+     		 method: 'POST'
+   		 }, function (error, response, body) {
+     			 assert(JSON.parse(body)['value'],'Unable to register user');
+     			 console.log('\tResponse received : ', body);
+    		});
+	});
+  });
+  it('Missing password',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"\"}',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'missingPwd');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
 
+});
+/*
 describe('Testing subscriber logout:',function() {
   it('Subscriber logged out successfully',function(done) {
     request( {
