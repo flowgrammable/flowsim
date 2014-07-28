@@ -83,6 +83,13 @@ exports.badVerificationToken = function() {
   });
 }
 
+exports.missingVerificationToken = function() {
+	return msg.error({
+		system: "subscriber/controller",
+		type: "missingVerificationToken"
+	});
+}
+
 exports.badResetToken = function() {
   return msg.error({
     system: "subscriber/controller",
