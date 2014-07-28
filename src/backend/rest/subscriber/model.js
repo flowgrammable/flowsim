@@ -104,7 +104,7 @@ function subForgotRequest(adapter, email, cb) { // PHASE ONE
 
 }
 
-function subForgotRedirect(adapter, token, cb) { // PHASE TWO
+function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
   async.waterfall([
     function(callback){
       adapter.fetchSubscriber({ reset_token: token }, function(result){
@@ -114,20 +114,20 @@ function subForgotRedirect(adapter, token, cb) { // PHASE TWO
     function(result, callback){
       var sub = result.value;
       if (sub.status != 'RESET') resultChecker(msg.subscriberNotReset(), callback);
-      else
-        adapter.resetRedirect(token, function(result){
+      else {
+        var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
+        adapter.updateSubscriber(sub, 
+        { password: encrypted, status: 'ACTIVE', reset_token: null },
+        function(result) {
           resultChecker(result, callback);
         });
+      }
     }
     ], function(err, result){
         if(err) { cb(err); }
         else    { cb(result); }
 
     });
-}
-
-function subForgotUpdate(adapter, token, password, cb) { // PHASE THREE
-
 }
 
 // ----------------------------------------------------------------------------
@@ -204,8 +204,7 @@ module.exports = function(testAdapter) {
       create:           _.bind(subCreate, null, adapter),
       verify:           _.bind(subVerify, null, adapter),
       forgotRequest:    _.bind(subForgotRequest, null, adapter),
-      forgotRedirect:   _.bind(subForgotRedirect, null, adapter),
-      forgotUpdate:     _.bind(subForgotUpdate, null, adapter),
+      passwordUpdate:     _.bind(subPasswordUpdate, null, adapter),
       // update:           _.bind(subUpdate, null, db),
       // destroy:          _.bind(subDestroy, null, db)
     },

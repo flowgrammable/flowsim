@@ -37,25 +37,33 @@ function subVerify(dataModel, method, params, data, ip, id) {
 
 }
 
+
 function subForgotPassword(dataModel, method, params, data, ip, id) {
 	// Phase 1 - POST {email:email}  -> Generate reset token and send email 
 	
 	var email = data.email;
   
-	if(!email) return msg.missingEmail();
-  if(utils.invalidEmail(email)) return passback(id, msg.badEmail(data.email));
+	if (!email) return passback(id, msg.missingEmail());
+  if (utils.invalidEmail(email)) return passback(id, msg.badEmail(data.email));
   dataModel.subscriber.forgotRequest(data.email, function(result){
-      passback(id, result);
+    passback(id, result);
   });
 }
 
 function subResetPassword(dataModel, method, params, data, ip, id){
 	// Phase 2 - POST { reset_token: reset_token, password: newPassword }
-  var reset_token = data.reset_token;
-	var new_password = data.password;
-	
-	// If token is valid, update subscriber with new password, and set to 'ACTIVE'
-	
+
+  var token = data.reset_token;
+  if (!token) return passback(id, msg.missingResetToken());
+  if (utils.invalidToken(token)) return passback(id, msg.badResetToken());
+
+  var new_password = data.password;
+  if (!new_password) return passback(id, msg.missingPwd());
+  if (utils.invalidPassword(new_password)) return passback(id, msg.badPwd());
+
+  dataModel.subscriber.passwordUpdate(token, new_password, function(result){
+    passback(id, result);
+  });
 }
 
 function subLogin(dataModel, method, params, data, ip, id) {
