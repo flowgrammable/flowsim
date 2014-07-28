@@ -6,12 +6,12 @@ var fs = require('fs');
 
 orm.setup()
 
-var testEmail = 'ash.1382@gmail.com';
+var testEmail = 'oron.hazi@gmail.com';
 var token;
 
 describe('Testing registration requests:',function() {
   it('User registered successfully',function(done) {
-    this.timeout(5000);
+//    this.timeout(5000);
     request( {
       url: 'http://localhost:3000/api/subscriber/register',
       body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
@@ -122,32 +122,45 @@ describe('Testing verification requests:',function() {
       done();
     });
   });
-});
-/*
+
   it('User already verified',function(done) {
     request( {
-      url: 'http://localhost:3000/api/subscriber/verify/'+token,
-      method: 'GET'
+      url: 'http://localhost:3000/api/subscriber/verify/',
+	body: '{ \"token\": \"'+token+'\"}',
+	headers: {
+		'Content-Type': 'application/json'
+	},
+      method: 'POST'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'subscriberAlreadyVerified');
       console.log('\tResponse received : ', body);
       done();
     });
   });
+
   it('Missing verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify',
-      method: 'GET'
+	body: '{ \"token\": \"'+token+'\"}',
+	headers: {
+		'Content-Type': 'application/json'
+	},
+      method: 'POST'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'missingVerificationToken');
       console.log('\tResponse received : ', body);
       done();
     });
   });
+
   it('Bad verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/Bad-Token',
-      method: 'GET'
+	body: '{ \"token\": \"'+token+'\"}',
+	headers: {
+                'Content-Type': 'application/json'
+        },
+      method: 'POST'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'badVerificationToken');
       console.log('\tResponse received : ', body);
@@ -155,7 +168,7 @@ describe('Testing verification requests:',function() {
     });
   });
 });
-
+/*
 var session;
 describe('Testing subscriber login:',function() {
   it('Subscriber logged in successfully',function(done) {
