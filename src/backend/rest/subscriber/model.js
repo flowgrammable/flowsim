@@ -7,7 +7,6 @@ var msg = require('./msg');
 var adapter = require('./adapter');
 var config = true;
 
-
 function resultChecker(result, callback){
   if(result.value){
     callback(null, result);
@@ -86,10 +85,12 @@ function subForgotRequest(adapter, email, cb) { // PHASE ONE
     },
 		function(result, callback){
       var sub = result.value; // the subscriber
-			adapter.updateSubscriber(sub, { status: 'RESET', reset_token: uuid.v4() },
-      function(result){
-				resultChecker(result, callback);
-			});
+      if (sub.status != 'CLOSED')
+  			adapter.updateSubscriber(sub, { status: 'RESET', reset_token: uuid.v4() },
+        function(result){
+  				resultChecker(result, callback);
+  			});
+      else resultChecker(msg.subscriberClosed(), callback);
 		},
 		function(result, callback){
 			adapter.sendResetEmail(result.value, function(result){
@@ -104,7 +105,7 @@ function subForgotRequest(adapter, email, cb) { // PHASE ONE
 
 }
 
-function subForgotRedirect(adapter, token, cb) { // PHASE TWO
+function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
   async.waterfall([
     function(callback){
       adapter.fetchSubscriber({ reset_token: token }, function(result){
@@ -114,10 +115,14 @@ function subForgotRedirect(adapter, token, cb) { // PHASE TWO
     function(result, callback){
       var sub = result.value;
       if (sub.status != 'RESET') resultChecker(msg.subscriberNotReset(), callback);
-      else
-        adapter.resetRedirect(token, function(result){
+      else {
+        var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
+        adapter.updateSubscriber(sub, 
+        { password: encrypted, status: 'ACTIVE', reset_token: null },
+        function(result) {
           resultChecker(result, callback);
         });
+      }
     }
     ], function(err, result){
         if(err) { cb(err); }
@@ -126,10 +131,33 @@ function subForgotRedirect(adapter, token, cb) { // PHASE TWO
     });
 }
 
-function subForgotUpdate(adapter, token, password, cb) { // PHASE THREE
+function subEditPassword(adapter, email, oldPassword, newPassword, cb) {
+  // 1. Fetch subscriber
+  // 2. Update oldPasswd with new
 
+  async.waterfall([
+    function(callback){
+      adapter.fetchSubscriber({email: email}, function(result){
+        resultChecker(result, callback);
+      });
+    },
+    function(result, callback){
+      var sub = result.value; // the subscriber
+      if (!bcrypt.compareSync(oldPassword, sub.password)) // wrong pwd
+        resultChecker(msg.incorrectPwd(), callback);
+      else {
+        var encryptPwd = bcrypt.hashSync(newPassword, 10);
+        adapter.updateSubscriber(sub, {password: encryptPwd },
+        function(result){
+          resultChecker(result, callback);
+        });
+      }
+    },
+    ], function(err, result){
+        if(err) { cb(err); }
+        else    { cb(msg.success()); }
+    });
 }
-
 // ----------------------------------------------------------------------------
 // Session
 
@@ -204,10 +232,10 @@ module.exports = function(testAdapter) {
       create:           _.bind(subCreate, null, adapter),
       verify:           _.bind(subVerify, null, adapter),
       forgotRequest:    _.bind(subForgotRequest, null, adapter),
-      forgotRedirect:   _.bind(subForgotRedirect, null, adapter),
-      forgotUpdate:     _.bind(subForgotUpdate, null, adapter),
+      passwordUpdate:     _.bind(subPasswordUpdate, null, adapter),
       // update:           _.bind(subUpdate, null, db),
-      // destroy:          _.bind(subDestroy, null, db)
+      // destroy:          _.bind(subDestroy, null, db),
+      editPasswd:       _.bind(subEditPassword, null, adapter)
     },
     session: {
       destroy:          _.bind(sessDestroy, null, adapter),

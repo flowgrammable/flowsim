@@ -58,12 +58,24 @@ describe('===> Testing updateSubscriber adapter function:\n', function() {
 // Testing sendVerificationEmail
 
 describe('===> Testing sendVerificationEmail adapter function: \n', function(){
-	it('Mail sent successfully', function(done){
+	it('Verification email sent successfully', function(done){
 		adapter.sendVerificationEmail(testEmail, function(result) {
 			assert(result.value, "could not sent mail")
 			done();
 		});
 	});
+});
+
+// ----------------------------------------------------------------------------
+// Testing sendResetEmail
+
+describe('===> Testing sendResetEmail adapter function: \n', function(){
+  it('Reset email sent successfully', function(done){
+    adapter.sendVerificationEmail(testEmail, function(result) {
+      assert(result.value, "could not sent mail")
+      done();
+    });
+  });
 });
 
 // ----------------------------------------------------------------------------

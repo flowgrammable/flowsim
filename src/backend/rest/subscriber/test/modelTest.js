@@ -39,7 +39,9 @@ describe('===> Testing subVerify: \n',function() {
   });
   it('Subscriber verified ',function(done) {
   	model.subscriber.verify(token, function(result){
-  	  assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
+  	  assert.equal(JSON.stringify(result), 
+      "{\"value\":{},\"tunnel\":{\"code\":302,\"headers\":{\"Location\":"+
+      "\"http://localhost:3000/verified.html\"}}}");
 			done();
 		});
   });
@@ -132,7 +134,7 @@ describe('===> Testing sessionAuthenticate: \n', function(){
 
 //------------------------------------------------------------------------------
 // Reset Password 
-describe('===> Testing resetPassword: \n', function(){
+describe('===> Testing forgotRequest: \n', function(){
 	var testSubscriber4 = {
 		email: 'testSubscriber4@test.com',
 		password: 'doesnt matter',
@@ -144,23 +146,121 @@ describe('===> Testing resetPassword: \n', function(){
 	before(function(){
 		testAdapter.makeSubscriber(testSubscriber4);
 	});
-  it('resetPassword(email) should return msg.success() if subsciber is ACTIVE : \n', function(done){
-		model.subscriber.subReset(email, function(result){
-			assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
-			done();
-		});
-			
-	});
+  it('forgotRequest(email) should return msg.success() if subsciber exists and is not CLOSED : \n', 
+    function(done){
+  		model.subscriber.forgotRequest(testSubscriber4.email, function(result){
+  			assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
+  			done();
+  		});	
+    }
+  );
+  it('forgotRequest(email) should return msg.subscriberNotFound() if subscriber is not found : \n', 
+    function(done){
+      model.subscriber.forgotRequest('doesnotexist@gmail.com', function(result){
+        assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberNotFound()));
+        done();
+      }); 
+    }
+  );
+  it('forgotRequest(email) should return msg.subscriberClosed() if subsciber status is CLOSED : \n', 
+    function(done){
+      testAdapter.updateSubscriber(testSubscriber4, {status: 'CLOSED'}, function(result){});
+      model.subscriber.forgotRequest(testSubscriber4.email, function(result){
+        assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberClosed()));
+        done();
+      }); 
+    }
+  );
 });
 
 
-describe('===> Testing resetPassword: \n', function(){
-  it('resetPassword(email) should return msg.subscriberNotFound() when trying' + 
-			'to reset a subscriber that has not been registered : \n', function(done){
-		model.subscriber.subReset('idont@exist.com', function(result){
-			assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberNotFound()));
-			done();
-		});
-			
-	});
+describe('===> Testing passwordUpdate: \n', function(){
+  var testSubscriber5 = {
+    email: 'testSubscriber5@test.com',
+    password: 'doesnt matter',
+    reg_date: new Date(),
+    reg_ip: '127.0.0.1',
+    verification_token: 'doesnt matter',
+    status: 'RESET',
+    reset_token: 'c2e6de55-2030-41e0-aa48-6ce5d2312a67'
+  };
+  var activeSubscriber = {
+    email: 'closedSub@test.com',
+    password: 'pwd',
+    reg_date: new Date(),
+    reg_ip: '127.0.0.1',
+    verification_token: 'none',
+    status: 'ACTIVE',
+    reset_token: 'c2e6re55-2130-41e0-aa47-6ce5d2312a67'
+  };
+  before(function(){
+    testAdapter.makeSubscriber(testSubscriber5);
+    testAdapter.makeSubscriber(activeSubscriber);
+  });
+  it('passwordUpdate(token,password) should return msg.success() '+
+    'if subscriber exists and has RESET status : \n', 
+    function(done){
+      model.subscriber.passwordUpdate(testSubscriber5.reset_token, "pwd",
+       function(result){
+        assert(result.value, "Could not update password");
+        done();
+       }
+      ); 
+    }
+  );
+  it('passwordUpdate(token,password) should return msg.subscriberNotFound()'+
+     ' if subscriber is not found : \n', 
+    function(done){
+      model.subscriber.passwordUpdate('c2e6de55-2030-41e0-aa48-6ce5d2312a68', "pwd",
+       function(result){
+        assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberNotFound()));
+        done();
+       }
+      ); 
+    }
+  );
+  it('passwordUpdate(token,password) should return msg.subscriberNotReset()'+
+     ' if subsciber status is not RESET : \n', 
+    function(done){
+      model.subscriber.passwordUpdate(activeSubscriber.reset_token, "pwd", 
+       function(result){
+        assert.equal(JSON.stringify(result), JSON.stringify(msg.subscriberNotReset()));
+        done();
+       }
+      ); 
+    }
+  );
 });
+
+//------------------------------------------------------------------------------
+// Edit Password
+describe('===> Testing editPasswd: \n', function(){
+  var encrypted =  bcrypt.hashSync('somePasswd123', 10);
+  var testSubscriber = {email: 'testEditPwd@test.com',
+      password: encrypted,
+      reg_date: new Date(),
+      reg_ip: '127.0.0.1',
+      verification_token: 'doesntmatter',
+      status: 'ACTIVE'
+      };
+  before(function(){
+   testAdapter.makeSubscriber(testSubscriber);
+  });
+  it('editPassword(email) should return msg.success() if subsciber inputs a matching pwd is  : \n', function(done){
+    model.subscriber.editPasswd('testEditPwd@test.com', 'somePasswd123', 'this123matters', function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
+      done();
+    });
+
+  });
+
+  it('editPassword(email) should return msg.incorrectPwd() when trying' +
+      'to give invalid current password : \n', function(done){
+    model.subscriber.editPasswd('testEditPwd@test.com', 'blahblahblah', 'something_good', function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.incorrectPwd()));
+      done();
+    });
+
+  });
+});
+

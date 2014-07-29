@@ -132,6 +132,13 @@ exports.subscriberNotReset = function() {
   });
 }
 
+exports.subscriberClosed = function() {
+  return msg.error({
+    system: "subscriber/model",
+    type: "subscriberClosed"
+  });
+}
+
 // replace with subscriberNotActive?
 exports.unverifiedSubscriber = function() {
   return msg.error({
