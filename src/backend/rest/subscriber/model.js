@@ -131,7 +131,7 @@ function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
     });
 }
 
-function subEditPassword(adapter, email, oldPassword, newPassword, cb) {
+function subEditPassword(adapter, session, oldPassword, newPassword, cb) {
   // 1. Fetch subscriber
   // 2. Update oldPasswd with new
 
