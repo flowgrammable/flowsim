@@ -35,7 +35,9 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
           $rootScope.$broadcast("subscriberNotActive");
         } else if(data.error.type == 'subscriberNotFound'){
 					$rootScope.$broadcast("subscriberNotFound");
-				}
+				} else if(data.error.type == 'incorrectPwd'){
+          $rootScope.$broadcast("incorrectPwd");
+        }
       }).error(function(data) {
         $rootScope.$broadcast("loginFailure");
       });

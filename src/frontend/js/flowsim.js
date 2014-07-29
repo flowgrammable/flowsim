@@ -102,14 +102,15 @@ flowsimApp.controller('loginCntrl', function($scope, $location, flowgrammable, u
     }
     if(!$scope.badEmail && !$scope.badPwd) {
       flowgrammable.login($scope.emailAddr, $scope.password);
-      $rootScope.$on("loginFailure", function() { 
+      $scope.$on("loginFailure", function() { 
         $scope.loginFail = true; 
       });
-      $rootScope.$on("subscriberNotActive", function() { 
+      $scope.$on("subscriberNotActive", function() { 
         $scope.subscriberNotActive = true; 
       });
-      $rootScope.$on("authenticated", function() { $location.path("/"); });
-			$rootScope.$on("subscriberNotFound", function(){
+      $scope.$on("incorrectPwd", function() { $scope.incorrectPwd = true;} );
+      $scope.$on("authenticated", function() { $location.path("/"); });
+			$scope.$on("subscriberNotFound", function(){
 				$scope.subscriberNotFound = true;
 			});
     }
@@ -150,10 +151,12 @@ flowsimApp.controller('menuCtrl', function($scope, flowgrammable) {
 
 });
 
-flowsimApp.controller('editPassCntrl', function($scope, flowgrammable, utils) {
+flowsimApp.controller('editPassCntrl', function($scope, flowgrammable, utils, $rootScope) {
   $scope.oldPassword = '';
   $scope.password1 = '';
   $scope.password2 = '';
+  $scope.editPasswordSuccess = false;
+
   $scope.editPassword = function(){
     if(utils.validPwd($scope.oldPassword)){
       $scope.oldPwd = false;
@@ -174,6 +177,7 @@ flowsimApp.controller('editPassCntrl', function($scope, flowgrammable, utils) {
       flowgrammable.editPassword($scope.oldPassword, $scope.password1);
       $scope.$on("editPasswordSuccess", function() {
         $scope.editPasswordSuccess = true;
+        $rootScope.$broadcast("unauthenticated");
       });
       $scope.$on("incorrectPwd", function() {
         $scope.incorrectPwd = true;
@@ -214,8 +218,8 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
       controller: 'verifyCntrl'
     }).
     when('/profile', {
-      templateUrl: 'profile.html',
-      controller: 'profileCntrl'
+      templateUrl: 'profile.html'
+      //controller: 'profileCntrl'
     }).
     when('/editpassword', {
       templateUrl: 'editpassword.html',

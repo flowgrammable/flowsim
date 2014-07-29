@@ -36,8 +36,8 @@
         </label>
         <input name="userPwd" type="password" class="form-control" id="password"
                placeholder="Password" ng-model="password" required>
-        <div class="error" ng-show="badPwd">
-          <span>Please enter a valid password.</span>
+        <div class="error" ng-show="incorrectPwd">
+          <span>Password is incorrect.</span>
         </div>
       </div>
       <a href="" class="btn btn-default" ng-click="login()">Login</a>
