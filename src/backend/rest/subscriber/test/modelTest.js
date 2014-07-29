@@ -231,3 +231,36 @@ describe('===> Testing passwordUpdate: \n', function(){
     }
   );
 });
+
+//------------------------------------------------------------------------------
+// Edit Password
+describe('===> Testing editPasswd: \n', function(){
+  var encrypted =  bcrypt.hashSync('somePasswd123', 10);
+  var testSubscriber = {email: 'testEditPwd@test.com',
+      password: encrypted,
+      reg_date: new Date(),
+      reg_ip: '127.0.0.1',
+      verification_token: 'doesntmatter',
+      status: 'ACTIVE'
+      };
+  before(function(){
+   testAdapter.makeSubscriber(testSubscriber);
+  });
+  it('editPassword(email) should return msg.success() if subsciber inputs a matching pwd is  : \n', function(done){
+    model.subscriber.editPasswd('testEditPwd@test.com', 'somePasswd123', 'this123matters', function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
+      done();
+    });
+
+  });
+
+  it('editPassword(email) should return msg.incorrectPwd() when trying' +
+      'to give invalid current password : \n', function(done){
+    model.subscriber.editPasswd('testEditPwd@test.com', 'blahblahblah', 'something_good', function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.incorrectPwd()));
+      done();
+    });
+
+  });
+});
+

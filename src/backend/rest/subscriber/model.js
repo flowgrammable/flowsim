@@ -131,6 +131,33 @@ function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
     });
 }
 
+function subEditPassword(adapter, email, oldPassword, newPassword, cb) {
+  // 1. Fetch subscriber
+  // 2. Update oldPasswd with new
+
+  async.waterfall([
+    function(callback){
+      adapter.fetchSubscriber({email: email}, function(result){
+        resultChecker(result, callback);
+      });
+    },
+    function(result, callback){
+      var sub = result.value; // the subscriber
+      if (!bcrypt.compareSync(oldPassword, sub.password)) // wrong pwd
+        resultChecker(msg.incorrectPwd(), callback);
+      else {
+        var encryptPwd = bcrypt.hashSync(newPassword, 10);
+        adapter.updateSubscriber(sub, {password: encryptPwd },
+        function(result){
+          resultChecker(result, callback);
+        });
+      }
+    },
+    ], function(err, result){
+        if(err) { cb(err); }
+        else    { cb(result); }
+    });
+}
 // ----------------------------------------------------------------------------
 // Session
 
@@ -207,7 +234,8 @@ module.exports = function(testAdapter) {
       forgotRequest:    _.bind(subForgotRequest, null, adapter),
       passwordUpdate:     _.bind(subPasswordUpdate, null, adapter),
       // update:           _.bind(subUpdate, null, db),
-      // destroy:          _.bind(subDestroy, null, db)
+      // destroy:          _.bind(subDestroy, null, db),
+      editPasswd:       _.bind(subEditPassword, null, adapter)
     },
     session: {
       destroy:          _.bind(sessDestroy, null, adapter),

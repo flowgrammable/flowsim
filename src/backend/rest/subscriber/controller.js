@@ -97,6 +97,15 @@ function subLogout(dataModel, session, method, params, data, ip, id) {
   });
 }
 
+function subEditPasswd(dataModel, method, params, data, ip, id) {
+  console.log("--------------******"+data.oldPassword+"****----------------");
+  if(!data.oldPassword) return passback(id, msg.missingPwd());
+  if(!data.newPassword) return passback(id, msg.missingPwd());
+  if(utils.invalidPassword(data.newPassword)) return passback(id, msg.badPwd());
+  dataModel.subscriber.editPasswd(data.oldPassword, data.newPassword, function(result){
+      passback(id, result);
+  });
+}
 // ----------------------------------------------------------------------------
 
 
@@ -118,7 +127,8 @@ module.exports = function(testAdapter) {
         login: _.bind(subLogin, null, dataModel)
       },
       auth: {
-        logout: _.bind(subLogout, null, dataModel)
+        logout: _.bind(subLogout, null, dataModel),
+        editPasswd: _.bind(subEditPasswd, null, dataModel)
       }
     }
   }
