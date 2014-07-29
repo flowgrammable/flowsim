@@ -9,10 +9,11 @@ var Session = database['sessions'];
 // var mailer = require('../../mailer');
 
 Array.prototype.findSub = function(sub) {
-  var hasEmail, hasVerToken, hasResetToken, found;
+  var hasId, hasEmail, hasVerToken, hasResetToken, found;
   if (sub.email) hasEmail = true;
   if (sub.verification_token) hasVerToken = true;
   if (sub.reset_token) hasResetToken = true;
+	if (sub.id) hasId = true;
 
   for (i in this) {
     found = false;
@@ -26,6 +27,10 @@ Array.prototype.findSub = function(sub) {
     }
     if (hasResetToken) {
       if (this[i].reset_token == sub.reset_token) found = true;
+      else continue;
+    } 
+    if (hasId){
+			if (this[i].id == sub.id ) found = true;
       else continue;
     }
     if (found) return this[i];
@@ -128,12 +133,12 @@ exports.verifyRedirect = verifyRedirect;
 // ----------------------------------------------------------------------------
 // Session
 
-function createSession(subId, cb) {
+function createSession(sub, cb) {
   var sessKey = uuid.v4();
   var newTimeout = new Date();
   newTimeout.setDate(newTimeout.getDate() + 1);
   var sessToAdd = { 
-    subscriber_id: subId,
+    subscriber_id: sub.id,
     key: sessKey,
     timeout: newTimeout
   };
