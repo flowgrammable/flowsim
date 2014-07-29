@@ -155,7 +155,7 @@ function subEditPassword(adapter, email, oldPassword, newPassword, cb) {
     },
     ], function(err, result){
         if(err) { cb(err); }
-        else    { cb(result); }
+        else    { cb(msg.success()); }
     });
 }
 // ----------------------------------------------------------------------------
