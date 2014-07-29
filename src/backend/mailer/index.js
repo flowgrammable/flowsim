@@ -32,7 +32,7 @@ exports.resetMessage = function(token){
                  '<body>You have requested a password reset for your Flowsim'+
                  ' account.<br/>Click the link below to go to the password'+
                  ' reset form.<br/><br/><a href=\"'+
-                 'http://localhost:3000/#/resetpassword/'+token+
+                 'http://localhost:3000/#/reset/'+token+
                  '\"'+'>https://www.flowgrammable.org/#/resetpassword/'+
                  token+'</a><br/><br/>The Flowsim Team</body></html>'
   return message;
