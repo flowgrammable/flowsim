@@ -14,67 +14,78 @@ function passback(id, result, nextFunction){
 
 function subRegister(dataModel, method, params, data, ip, id) {
   // Provide some basic sanity checks
-  if(!data.email) return passback(id, msg.missingEmail());
-  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
-  if(!data.password) return passback(id, msg.missingPwd());
-  if(utils.invalidPassword(data.password)) return passback(id, msg.badPwd());
+	if(method == 'POST'){
+		if(!data.email) 
+			return passback(id, msg.missingEmail());
+  	if(utils.invalidEmail(data.email)) 
+			return passback(id, msg.badEmail(data.email));
+  	if(!data.password) 
+			return passback(id, msg.missingPwd());
+  	if(utils.invalidPassword(data.password)) 
+			return passback(id, msg.badPwd());
 
-  dataModel.subscriber.create(data.email, data.password, ip, function(result){
-      passback(id, result);
-  });
+  	dataModel.subscriber.create(data.email, data.password, ip, function(result){
+      	passback(id, result);
+ 		 });
+   } else return passback(id, msg.methodNotSupported());
 }
 
 function subVerify(dataModel, method, params, data, ip, id) {
+	if(method == 'POST') {
+  	var token = data.token;
+  	// Ensure a verification token is present and valid
+  	if(!token) return passback(id, msg.missingVerificationToken());
+  	if(utils.invalidToken(token)) return passback(id, msg.badVerificationToken());
 
-  var token = data.token;
-  // Ensure a verification token is present and valid
-  if(!token) return passback(id, msg.missingVerificationToken());
-  if(utils.invalidToken(token)) return passback(id, msg.badVerificationToken());
-
-  dataModel.subscriber.verify(token, function(result){
-      passback(id, result);
-  });
+  	dataModel.subscriber.verify(token, function(result){
+      	passback(id, result);
+  	});
+	} else return passback(id, msg.methodNotSupported());
 
 }
 
 
 function subForgotPassword(dataModel, method, params, data, ip, id) {
 	// Phase 1 - POST {email:email}  -> Generate reset token and send email 
-	
-	var email = data.email;
+  if(method == 'POST') {	
+		var email = data.email;
   
-	if (!email) return passback(id, msg.missingEmail());
-  if (utils.invalidEmail(email)) return passback(id, msg.badEmail(data.email));
-  dataModel.subscriber.forgotRequest(data.email, function(result){
-    passback(id, result);
-  });
+		if (!email) return passback(id, msg.missingEmail());
+  	if (utils.invalidEmail(email)) return passback(id, msg.badEmail(data.email));
+  	dataModel.subscriber.forgotRequest(data.email, function(result){
+    	passback(id, result);
+  	});
+	} else return passback(id, msg.methodNotSupported());
 }
 
 function subResetPassword(dataModel, method, params, data, ip, id){
 	// Phase 2 - POST { reset_token: reset_token, password: newPassword }
+	if(method == 'POST') {
+  	var token = data.reset_token;
+  	if (!token) return passback(id, msg.missingResetToken());
+  	if (utils.invalidToken(token)) return passback(id, msg.badResetToken());
 
-  var token = data.reset_token;
-  if (!token) return passback(id, msg.missingResetToken());
-  if (utils.invalidToken(token)) return passback(id, msg.badResetToken());
+  	var new_password = data.password;
+  	if (!new_password) return passback(id, msg.missingPwd());
+  	if (utils.invalidPassword(new_password)) return passback(id, msg.badPwd());
 
-  var new_password = data.password;
-  if (!new_password) return passback(id, msg.missingPwd());
-  if (utils.invalidPassword(new_password)) return passback(id, msg.badPwd());
-
-  dataModel.subscriber.passwordUpdate(token, new_password, function(result){
-    passback(id, result);
-  });
+  	dataModel.subscriber.passwordUpdate(token, new_password, function(result){
+    	passback(id, result);
+  	});
+	} else return passback(id, msg.methodNotSupported());
 }
 
 function subLogin(dataModel, method, params, data, ip, id) {
-  if(!data.email) return passback(id, msg.missingEmail());
-  if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
-  if(!data.password) return passback(id, msg.missingPwd());
-  if(utils.invalidPassword(data.password)) return passback(id, msg.badPwd());
-  dataModel.session.authenticate(data.email, data.password,
-  function(result){
-    passback(id, result);
-  });
+	if(method == 'POST') {
+  	if(!data.email) return passback(id, msg.missingEmail());
+  	if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
+  	if(!data.password) return passback(id, msg.missingPwd());
+  	if(utils.invalidPassword(data.password)) return passback(id, msg.badPwd());
+  	dataModel.session.authenticate(data.email, data.password,
+  	function(result){
+    	passback(id, result);
+  	});
+	} else return passback(id, msg.methodNotSupported());
 }
     
 function sessAuthenticate(dataModel, headers, cb) {
@@ -93,19 +104,23 @@ function sessAuthenticate(dataModel, headers, cb) {
 
 function subLogout(dataModel, session, method, params, data, ip, id) {
   //console.log('attempting to destroy session');
-  dataModel.session.destroy(session, 
-  function(result) { 
-    passback(id, result); 
-  });
+	if(method == 'POST') {
+  	dataModel.session.destroy(session, 
+  	function(result) { 
+    	passback(id, result); 
+  	});
+	} else return passback(id, msg.methodNotSupported());
 }
 
 function subEditPasswd(dataModel, session, method, params, data, ip, id) {
-  if(!data.oldPassword) return passback(id, msg.missingPwd());
-  if(!data.newPassword) return passback(id, msg.missingPwd());
-  if(utils.invalidPassword(data.newPassword)) return passback(id, msg.badPwd());
-  dataModel.subscriber.editPasswd(session, data.oldPassword, data.newPassword, function(result){
-      passback(id, result);
-  });
+	if(method =='POST') {
+  	if(!data.oldPassword) return passback(id, msg.missingPwd());
+  	if(!data.newPassword) return passback(id, msg.missingPwd());
+  	if(utils.invalidPassword(data.newPassword)) return passback(id, msg.badPwd());
+  	dataModel.subscriber.editPasswd(session, data.oldPassword, data.newPassword, function(result){
+      	passback(id, result);
+  	});
+	} else return passback(id, msg.methodNotSupported());
 }
 // ----------------------------------------------------------------------------
 
@@ -128,7 +143,7 @@ module.exports = function(testAdapter) {
       },
       auth: {
         logout: _.bind(subLogout, null, dataModel),
-        editPasswd: _.bind(subEditPasswd, null, dataModel)
+        editpassword: _.bind(subEditPasswd, null, dataModel)
       }
     }
   }

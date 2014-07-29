@@ -260,7 +260,7 @@ describe('Testing subscriber login:',function() {
 describe('Testing subscriber editPasswd:',function() {
   it('Subscriber password changed successfully',function(done) {
     request( {
-      url: 'http://localhost:3000/api/subscriber/editPasswd',
+      url: 'http://localhost:3000/api/subscriber/editpassword',
       body: '{ \"oldPassword\": \"my password\", \"newPassword\": \"my123password\"}',
       headers: {
         'Content-Type': 'application/json',

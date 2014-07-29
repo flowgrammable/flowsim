@@ -5,6 +5,13 @@ exports.success = msg.success;
 exports.error = msg.error;
 exports.test = msg.test;
 
+exports.methodNotSupported = function() {
+	return msg.error({
+		system: "subscriber/controller",
+		type: "methodNotSupported"
+	})
+}
+
 exports.noDatabaseConnection = function() {
   return msg.error({
     system: "subscriber/adapter",

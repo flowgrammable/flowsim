@@ -131,7 +131,7 @@ function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
     }
     ], function(err, result){
         if(err) { cb(err); }
-        else    { cb(result); }
+        else    { cb(msg.success()); }
 
     });
 }
