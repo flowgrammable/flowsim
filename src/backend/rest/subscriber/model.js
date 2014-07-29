@@ -7,7 +7,6 @@ var msg = require('./msg');
 var adapter = require('./adapter');
 var config = true;
 
-
 function resultChecker(result, callback){
   if(result.value){
     callback(null, result);
