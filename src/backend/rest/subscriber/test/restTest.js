@@ -257,7 +257,7 @@ describe('Testing subscriber login:',function() {
   });
 });
 
-/*
+
 describe('Testing subscriber logout:',function() {
   it('Subscriber logged out successfully',function(done) {
     request( {
@@ -275,7 +275,7 @@ describe('Testing subscriber logout:',function() {
     });
   });
 });
-*/
+
 
 // ----------------------------------------------------------------------------
 // Testing forgot password phase one
