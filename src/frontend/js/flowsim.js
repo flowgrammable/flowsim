@@ -150,6 +150,41 @@ flowsimApp.controller('menuCtrl', function($scope, flowgrammable) {
 
 });
 
+flowsimApp.controller('editPassCntrl', function($scope, flowgrammable, utils) {
+  $scope.oldPassword = '';
+  $scope.password1 = '';
+  $scope.password2 = '';
+  $scope.editPassword = function(){
+    if(utils.validPwd($scope.oldPassword)){
+      $scope.oldPwd = false;
+    } else {
+      $scope.oldPwd = true;
+    }
+    if(utils.validPwd($scope.password1)){
+      $scope.badPwd1 = false;
+    } else {
+      $scope.badPwd1 = true;
+    }   
+    if(utils.validPwd($scope.password2)){
+      $scope.badPwd2 = false;
+    } else {
+      $scope.badPwd2 = true;
+    } 
+    if(!$scope.badPwd1 && !$scope.badPwd2) {
+      flowgrammable.editPassword($scope.oldPassword, $scope.password1);
+      $scope.$on("editPasswordSuccess", function() {
+        $scope.editPasswordSuccess = true;
+      });
+      $scope.$on("incorrectPwd", function() {
+        $scope.incorrectPwd = true;
+      });
+      $scope.$on("badPwd", function() {
+        $scope.badPwd = true;
+      });
+    }
+  }
+})
+
 flowsimApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
     when('/', {
@@ -177,6 +212,14 @@ flowsimApp.config(['$routeProvider', function($routeProvider) {
     when('/verify/:token', {
       templateUrl: 'verify.html',
       controller: 'verifyCntrl'
+    }).
+    when('/profile', {
+      templateUrl: 'profile.html',
+      controller: 'profileCntrl'
+    }).
+    when('/editpassword', {
+      templateUrl: 'editpassword.html',
+      controller: 'editPassCntrl'
     }).
     otherwise({
       templateUrl: 'lost.html'

@@ -129,7 +129,7 @@ module.exports = function(testAdapter) {
       },
       auth: {
         logout: _.bind(subLogout, null, dataModel),
-        editPasswd: _.bind(subEditPasswd, null, dataModel)
+        editpassword: _.bind(subEditPasswd, null, dataModel)
       }
     }
   }

@@ -52,6 +52,29 @@ flowAPI.factory('flowgrammable', function($http, $rootScope) {
       }).error(function(data) {
       });
     },
+    editPassword : function(oldPwd, newPwd){
+      $http({
+        method: 'POST',
+        url: 'api/subscriber/editpassword',
+        headers: {
+          "X-Access-Token": accessToken
+        },
+        data: JSON.stringify({
+          oldPassword: oldPwd,
+          newPassword: newPwd
+        })
+      }).success(function(data){
+        if(data.value){
+          $rootScope.$broadcast("editPasswordSuccess");
+        }
+        else if(data.error.type == 'incorrectPwd'){
+          $rootScope.$broadcast("incorrectPwd");
+        } else if(data.error.type == 'badPwd'){
+          $rootScope.$broadcast("badPwd");
+        }
+      }).error(function(data){
+      });
+    },
     register : function(subEmail, subPwd) {
       $http({
         method: 'POST',
