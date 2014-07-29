@@ -61,6 +61,7 @@ function subResetPassword(dataModel, method, params, data, ip, id){
 function subLogin(dataModel, method, params, data, ip, id) {
   if(!data.email) return passback(id, msg.missingEmail());
   if(utils.invalidEmail(data.email)) return passback(id, msg.badEmail(data.email));
+  if(!data.password) return passback(id, msg.missingPwd());
   dataModel.session.authenticate(data.email, data.password,
   function(result){
     passback(id, result);

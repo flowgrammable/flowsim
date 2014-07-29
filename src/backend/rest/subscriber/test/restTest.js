@@ -217,7 +217,7 @@ describe('Testing subscriber login:',function() {
   it('Incorrect password',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/login',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"'+'badPassword'+\"}',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"'+'badPassword'+'\"}',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -228,37 +228,50 @@ describe('Testing subscriber login:',function() {
       done();
     });
   });
-  it('Unregistered user',function(done) {
+  it('Test: Logging in with an unregistered user should return {msg.subscriberNotFound()}',function(done) {
+  	//attempt login with valid email and pwd but not registered
+	//'subscriberNotFound'
   });
-  it('Unverified sunscriber', function(done) {
+  it('Test: Logging in with an unverified subscriber should return {msg.subscriberNotActive() }', function(done) {
 	//register a user first, do not verify
 	//before hook
 	//make registration request before logging in user
-	before(function() {
 		request( {
      		 url: 'http://localhost:3000/api/subscriber/register',
-     		 body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+     		 body: '{ \"email\": \"'+'valid_email@gmail.com'+'\", \"password\": \"my password\"}',
      		 headers: {
         		'Content-Type': 'application/json'
      		 },
      		 method: 'POST'
    		 }, function (error, response, body) {
-     			 assert(JSON.parse(body)['value'],'Unable to register user');
-     			 console.log('\tResponse received : ', body);
-    		});
-	});
-  });
-  it('Missing password',function(done) {
+     		 console.log('\tBefore Response received : ', body);
+		request( {
+	        	url: 'http://localhost:3000/api/subscriber/login',
+       		 	body: '{ \"email\": \"'+'valid_email@gmail.com'+'\", \"password\": \"my password\"}',
+		 	headers: {
+                		'Content-Type': 'application/json'
+             		},
+             		method: 'POST'
+           	}, function (error, response, body) {
+               		 console.log('\tResponse received : ', body);
+             		 assert.equal(JSON.parse(body)['error']['type'],'subscriberNotActive');
+//            		 console.log('\tResponse received : ', body);
+              	       	 done();
+        	});
+    	});
+});
+  it('Test: logging in with out a password should return msg.missingPassword',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/login',
-      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"\"}',
+      body: '{ \"email\": \"valid_email@gmail.com\"}',
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST'
     }, function (error, response, body) {
+	console.log('\tResponse received : ', body);
       assert.equal(JSON.parse(body)['error']['type'],'missingPwd');
-      console.log('\tResponse received : ', body);
+//      console.log('\tResponse received : ', body);
       done();
     });
   });
