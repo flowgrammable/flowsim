@@ -11,7 +11,7 @@ Unit test runner runs all the test files except the rest tests on server.
 
 ###How to run system test runner
 
-System test runner runs all the rest test files except the unit tests.
+System test runner runs all the rest tests on the server files except the unit tests.
 
   1. Locate the Makefile
   2. Run the system test runner as follows in that Makefile directory
