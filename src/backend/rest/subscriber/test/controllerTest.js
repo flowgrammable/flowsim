@@ -146,35 +146,39 @@ describe('===> Testing Reset subscriber controller: \n', function(){
 
 // -------------------------------------------------------------------------------------
 // Edit Password Test
-describe('===> Testing updation of subscriber\'s password: \n', function(){
-
+describe('===> Testing editing of subscriber password: \n', function(){
+  var session = { 
+    subscriber_id:1,
+    key: '121212',
+    timeout: '123'
+  };
   it('Test if old password not provided', function(done){
-    var testId = 'testerID1';
+    var testId = 'testerID9';
     var data = {email: 'ash.1382@gmail.com', oldPassword: '', newPassword: 'new123password'};
     events.Emitter.once(testId, function(result){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPwd()));
       done();
     });
-   controller.module.auth.editPasswd('POST', {}, data, '127.0.0.1', testId);
+   controller.module.auth.editPasswd(session,'POST', {}, data, '127.0.0.1', testId);
   });
   it('Test if new password not provided', function(done){
-    var testId = 'testerID2';
-    var data = {email: 'ash.1382@gmail.com', oldPassword: 'my123password', newPassword: ''};
+    var testId = 'testerID10';
+    var data = {oldPassword: 'my123password', newPassword: ''};
     events.Emitter.once(testId, function(result){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPwd()));
       done();
     });
-    controller.module.auth.editPasswd('POST', {}, data, '127.0.0.1', testId);
+    controller.module.auth.editPasswd(session,'POST', {}, data, '127.0.0.1', testId);
   });
-   it('Test if new password is bad', function(done){
-                var testId = 'testerID3';
-      var data = {email: 'ash.1382@gmail.com', oldPassword: 'my123password', newPassword: 'what'};
-                events.Emitter.once(testId, function(result){
-                assert.equal(JSON.stringify(result), JSON.stringify(msg.badPwd(data.email)));
-                done();
-                });
-   controller.module.auth.editPasswd('POST', {}, data, '127.0.0.1', testId);
-        });
+  it('Test if new password is bad', function(done){
+    var testId = 'testerID11';
+    var data = {oldPassword: 'my123password', newPassword: 'what'};
+    events.Emitter.once(testId, function(result){
+     assert.equal(JSON.stringify(result), JSON.stringify(msg.badPwd(data.email)));
+     done();
+    });
+    controller.module.auth.editPasswd(session,'POST', {}, data, '127.0.0.1', testId);
+   });
 });
 
 //-------------------------------------------------------------------------------------
