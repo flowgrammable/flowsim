@@ -36,7 +36,7 @@ SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*" 
 unit-test:
 	$(flyway) clean && $(flyway) migrate
 	@clear
-	$(MOCHA) -t 20000 -R $(REPORTER) $(UNIT_TESTS)
+	-$(MOCHA) -t 20000 -R $(REPORTER) $(UNIT_TESTS)
 
 system-test:
 	$(flyway) clean && $(flyway) migrate
