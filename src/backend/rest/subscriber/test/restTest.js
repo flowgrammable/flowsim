@@ -26,7 +26,10 @@ describe('Testing registration requests:',function() {
         if(exists) {
           fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
             if (err) console.log('Unable to read token in file for restTest');
-            else{ token = data;}
+            else {
+              var array = data.toString().split("\n"); 
+              token = JSON.parse(array[0]).ver_token;
+            }
           });
         }
       });
@@ -258,6 +261,24 @@ describe('Testing subscriber login:',function() {
 });
 // ----------------------------------------------------------------------------
 // Testing editPasswd
+describe('Testing subscriber editPasswd:',function() {
+  it('Subscriber password changed successfully',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/editPasswd',
+      body: '{ \"oldPassword\": \"my password\", \"newPassword\": \"my123password\"}',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': session
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert(JSON.parse(body)['value'],'Unable to logout user');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+});
+
 
 // ----------------------------------------------------------------------------
 // Testing logout
