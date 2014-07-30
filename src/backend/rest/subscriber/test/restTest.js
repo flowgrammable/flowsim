@@ -158,10 +158,6 @@ describe('Testing verification requests:',function() {
 // Testing login
 var session;
 describe('Testing subscriber login:',function() {
-  // Register a subscriber for use in the 'Unverified subscriber' test
-  before(function() {
-    
-  });
   it('Subscriber logged in successfully',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/login',
@@ -314,15 +310,6 @@ describe('Testing forgot password requests:',function() {
       method: 'POST'
     }, function (error, response, body) { 
       assert(JSON.parse(body)['value'],'Unable to request password reset');
-      fs.exists(process.cwd()+'/temp', function (exists) {
-        if(exists) {
-          fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
-            var array = data.toString().split("\n");
-            if (err) console.log('Unable to read token in file for restTest');
-            else resetToken = JSON.parse(array[1]).reset_token;
-          });
-        }
-      });
       console.log('\tResponse received : ', body);
       done();
     });
@@ -368,17 +355,31 @@ describe('Testing forgot password requests:',function() {
   });
 });
 
+
 // ----------------------------------------------------------------------------
 // Testing forgot password phase two
 //
 // Note: keep the successful test at the bottom so that the subscriber
 // remains in the 'RESET' state containing the token
 describe('Testing reset password requests:',function() {
+  before(function() {
+    fs.exists(process.cwd()+'/temp', function (exists) {
+      if(exists) {
+        fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
+          if (err) console.log('Unable to read token in file for restTest');
+          else {
+            var array = data.toString().split("\n");
+            resetToken = JSON.parse(array[1]).reset_token;
+          }
+        });
+      }
+    });
+  });
   it('A reset password request with a missing reset token should return '+
      'msg.missingResetToken()',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/resetpassword/',
-      body: '{ \"reset_token\":\"\",\"password\":\"new pwd\"}',
+      body: '{ \"reset_token\":\"\",\"password\":\"new password\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) { 
@@ -391,7 +392,7 @@ describe('Testing reset password requests:',function() {
      'msg.badResetToken()',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/resetpassword/',
-      body: '{ \"reset_token\":\"invalid token\",\"password\":\"new pwd\"}',
+      body: '{ \"reset_token\":\"invalid token\",\"password\":\"new password\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) { 
@@ -401,27 +402,27 @@ describe('Testing reset password requests:',function() {
     });
   });
   it('A reset password request with a missing password should return '+
-     'msg.missingPassword()',function(done) {
+     'msg.missingPwd()',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/resetpassword/',
       body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) { 
-      assert.equal(JSON.parse(body)['error']['type'],'missingPassword');
+      assert.equal(JSON.parse(body)['error']['type'],'missingPwd');
       console.log('\tResponse received : ', body);
       done();
     });
   });
-    it('A reset password request with a missing password should return '+
-     'msg.missingPassword()',function(done) {
+    it('A reset password request with an invalid password should return '+
+     'msg.badPwd()',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/resetpassword/',
-      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"\"}',
+      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"bad pwd\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) { 
-      assert.equal(JSON.parse(body)['error']['type'],'missingPassword');
+      assert.equal(JSON.parse(body)['error']['type'],'badPwd');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -430,11 +431,11 @@ describe('Testing reset password requests:',function() {
      function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/resetpassword/',
-      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"new pwd\"}',
+      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"new password\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) { 
-      assert(JSON.parse(body)['value'],'Unable to request password reset');
+      assert(JSON.parse(body)['value'],'Unable to reset password');
       console.log('\tResponse received : ', body);
       done();
     });

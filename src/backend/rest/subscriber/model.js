@@ -95,6 +95,9 @@ function subForgotRequest(adapter, email, cb) { // PHASE ONE
       else resultChecker(msg.subscriberClosed(), callback);
 		},
 		function(result, callback){
+      fs.appendFile('temp', '\n{\"reset_token\":"'+result.value.reset_token+'\"}', function (err) {
+        if (err) console.log('Unable to write reset token in file for restTest');
+      });
 			adapter.sendResetEmail(result.value, function(result){
 				resultChecker(result, callback);
 			});
@@ -116,13 +119,6 @@ function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
     },
     function(result, callback){
       var sub = result.value;
-      fs.exists('temp', function (exists) {
-        if(exists) {
-          fs.appendFile('temp', '\n{\"reset_token\":"'+sub.reset_token+'\"}', function (err) {
-            if (err) console.log('Unable to write reset token in file for restTest');
-          });
-        }
-      });
       if (sub.status != 'RESET') resultChecker(msg.subscriberNotReset(), callback);
       else {
         var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password

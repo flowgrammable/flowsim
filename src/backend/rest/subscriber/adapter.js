@@ -29,13 +29,13 @@ function insertSubscriber(em, pwd, ip, cb) {
     status: 'CREATED'
   }).success(function(result) {
     // console.log(result);
-    fs.exists('temp', function (exists) {
-      if(exists) {
+    // fs.exists('temp', function (exists) {
+    //   if(exists) {
         fs.writeFile('temp', '{\"ver_token\":\"'+token+'\"}', function (err) {
           if (err) console.log('Unable to write token in file for restTest');
         });
-      }
-    });
+    //   }
+    // });
     cb(msg.success(result));
   }).error(function(err) {
      console.log(err);
