@@ -109,7 +109,6 @@ function subEditPasswd(dataModel, session, method, params, data, ip, id) {
 }
 // ----------------------------------------------------------------------------
 
-
 module.exports = function(testAdapter) {
   var dataModel;
 	if(testAdapter){
