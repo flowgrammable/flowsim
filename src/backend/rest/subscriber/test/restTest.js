@@ -7,7 +7,7 @@ var fs = require('fs');
 orm.setup()
 
 var testEmail = 'test@gmail.com';
-var token;
+var token, resetToken;
 
 // ----------------------------------------------------------------------------
 // Testing registration
@@ -280,7 +280,8 @@ describe('Testing subscriber logout:',function() {
 // ----------------------------------------------------------------------------
 // Testing forgot password phase one
 describe('Testing forgot password requests:',function() {
-  it('Password reset requested successfully',function(done) {
+  it('A successful forgot password request should return msg.success()',
+     function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/forgotpassword/',
       body: '{ \"email\": \"'+testEmail+'\" }',
@@ -288,14 +289,24 @@ describe('Testing forgot password requests:',function() {
       method: 'POST'
     }, function (error, response, body) { 
       assert(JSON.parse(body)['value'],'Unable to request password reset');
+      fs.exists(process.cwd()+'/temp', function (exists) {
+        if(exists) {
+          fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
+            var array = data.toString().split("\n");
+            if (err) console.log('Unable to read token in file for restTest');
+            else resetToken = JSON.parse(array[1]).reset_token;
+          });
+        }
+      });
       console.log('\tResponse received : ', body);
       done();
     });
   });
-  it('Missing email',function(done) {
+  it('A forgot password request without an email should return '+
+     'msg.missingEmail()',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/forgotpassword/',
-      body: '{ \"email\": \"'+''+'\" }',
+      body: '{ \"email\": \"\" }',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) { 
@@ -304,10 +315,103 @@ describe('Testing forgot password requests:',function() {
       done();
     });
   });
+  it('A forgot password request with an invalid email should return '+
+     'msg.badEmail()',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/forgotpassword/',
+      body: '{ \"email\": \"invalid_email\" }',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert.equal(JSON.parse(body)['error']['type'],'badEmail');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('A forgot password request with an email not linked to a subscriber '+
+     'should return msg.subscriberNotFound()',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/forgotpassword/',
+      body: '{ \"email\": \"nonexistent@gmail.com\" }',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert.equal(JSON.parse(body)['error']['type'],'subscriberNotFound');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
 });
 
 // ----------------------------------------------------------------------------
 // Testing forgot password phase two
+//
+// Note: keep the successful test at the bottom so that the subscriber
+// remains in the 'RESET' state containing the token
 describe('Testing reset password requests:',function() {
-  
+  it('A reset password request with a missing reset token should return '+
+     'msg.missingResetToken()',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/resetpassword/',
+      body: '{ \"reset_token\":\"\",\"password\":\"new pwd\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert.equal(JSON.parse(body)['error']['type'],'missingResetToken');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('A reset password request with an invalid reset token should return '+
+     'msg.badResetToken()',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/resetpassword/',
+      body: '{ \"reset_token\":\"invalid token\",\"password\":\"new pwd\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert.equal(JSON.parse(body)['error']['type'],'badResetToken');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('A reset password request with a missing password should return '+
+     'msg.missingPassword()',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/resetpassword/',
+      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert.equal(JSON.parse(body)['error']['type'],'missingPassword');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+    it('A reset password request with a missing password should return '+
+     'msg.missingPassword()',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/resetpassword/',
+      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert.equal(JSON.parse(body)['error']['type'],'missingPassword');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('A successful reset password request should return msg.success()',
+     function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/resetpassword/',
+      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"new pwd\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert(JSON.parse(body)['value'],'Unable to request password reset');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
 });

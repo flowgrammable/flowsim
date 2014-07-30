@@ -2,6 +2,8 @@ var _ = require('underscore');
 var async = require('async');
 var bcrypt = require('bcrypt');
 var uuid = require('node-uuid');
+var fs = require('fs');
+
 
 var msg = require('./msg');
 var adapter = require('./adapter');
@@ -114,6 +116,13 @@ function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
     },
     function(result, callback){
       var sub = result.value;
+      fs.exists('temp', function (exists) {
+        if(exists) {
+          fs.appendFile('temp', '\n{\"reset_token\":"'+sub.reset_token+'\"}', function (err) {
+            if (err) console.log('Unable to write reset token in file for restTest');
+          });
+        }
+      });
       if (sub.status != 'RESET') resultChecker(msg.subscriberNotReset(), callback);
       else {
         var encrypted = bcrypt.hashSync(pwd, 10); // encrypt the password
