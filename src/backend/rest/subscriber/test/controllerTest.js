@@ -130,7 +130,7 @@ describe('===> Testing Reset subscriber controller: \n', function(){
                		 assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
                		 done();
                		 });
- 	 controller.module.noauth.reset('POST', {}, data, '127.0.0.1', testId);
+ 	 controller.module.noauth.forgotpassword('POST', {}, data, '127.0.0.1', testId);
        	 });
 
  	 it('Test if email provided invalid', function(done){
@@ -140,7 +140,7 @@ describe('===> Testing Reset subscriber controller: \n', function(){
                 assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
                 done();
                 });
- 	 controller.module.noauth.reset('POST', {}, data, '127.0.0.1', testId);
+ 	 controller.module.noauth.forgotpassword('POST', {}, data, '127.0.0.1', testId);
         });
 });
 
