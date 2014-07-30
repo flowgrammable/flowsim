@@ -10,6 +10,7 @@ var singleton = function singleton(){
 
    sequelize = new Sequelize('flowsim', 'flogdev', 'flogdev', {
 	  dialect: "postgres",
+		logging: false,
 	  port: 5432
    });
 

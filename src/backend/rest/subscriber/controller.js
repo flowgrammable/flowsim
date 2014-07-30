@@ -93,7 +93,6 @@ function sessAuthenticate(dataModel, headers, cb) {
 	if(utils.invalidToken(headers['x-access-token'])) return cb(msg.badAccessToken());
     	dataModel.session.getByAccessToken(headers['x-access-token'],
     	function(result){
-      		//console.log(result);
      		cb(result);
     });
   } else cb(null); // no x-access-token in the header
@@ -103,7 +102,6 @@ function sessAuthenticate(dataModel, headers, cb) {
 // Auth
 
 function subLogout(dataModel, session, method, params, data, ip, id) {
-  //console.log('attempting to destroy session');
 	if(method == 'POST') {
   	dataModel.session.destroy(session, 
   	function(result) { 

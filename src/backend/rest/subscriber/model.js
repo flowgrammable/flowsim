@@ -217,7 +217,6 @@ function sessDestroy(adapter, session, cb){
 
 function sessGetByAccessToken(adapter, sessKey, cb) {
   adapter.fetchSession(sessKey, function(result){
-    // console.log(result);
     if (result.value) cb(result.value); 
     else if (result.error.type == 'sessionNotFound') cb(null); 
     else {

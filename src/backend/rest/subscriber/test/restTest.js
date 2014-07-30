@@ -6,7 +6,7 @@ var fs = require('fs');
 
 orm.setup()
 
-var testEmail = 'test@gmail.com';
+var testEmail = 'flowgrammablemailer@gmail.com';
 var token, resetToken;
 
 // ----------------------------------------------------------------------------
@@ -21,7 +21,6 @@ describe('Testing registration requests:',function() {
       method: 'POST'
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to register user');
-      console.log('\tResponse received : ', body);
       fs.exists(process.cwd()+'/temp', function (exists) {
         if(exists) {
           fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
@@ -227,7 +226,6 @@ describe('Testing subscriber login:',function() {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
-      console.log('\tBefore response received : ', body);
       // Now try to login with the unverified user
       request( {
         url: 'http://localhost:3000/api/subscriber/login',
@@ -250,7 +248,6 @@ describe('Testing subscriber login:',function() {
     }, function (error, response, body) {
 	console.log('\tResponse received : ', body);
       assert.equal(JSON.parse(body)['error']['type'],'missingPwd');
-//      console.log('\tResponse received : ', body);
       done();
     });
   });
@@ -268,7 +265,6 @@ describe('Testing subscriber editPasswd:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
-      console.log('session: ', session ); 
       console.log('\tResponse received : ', body);
 			assert(JSON.parse(body)['value'],'Unable to edit password');
       done();
