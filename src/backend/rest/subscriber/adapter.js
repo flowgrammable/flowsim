@@ -31,7 +31,7 @@ function insertSubscriber(em, pwd, ip, cb) {
     // console.log(result);
     fs.exists('temp', function (exists) {
       if(exists) {
-        fs.writeFile('temp', token, function (err) {
+        fs.writeFile('temp', '{\"ver_token\":\"'+token+'\"}', function (err) {
           if (err) console.log('Unable to write token in file for restTest');
         });
       }
