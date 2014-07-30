@@ -6,7 +6,7 @@ var fs = require('fs');
 
 orm.setup()
 
-var testEmail = 'test@gmail.com';
+var testEmail = 'ash.1382@gmail.com';
 var token;
 
 // ----------------------------------------------------------------------------
@@ -256,8 +256,11 @@ describe('Testing subscriber login:',function() {
     });
   });
 });
+// ----------------------------------------------------------------------------
+// Testing editPasswd
 
-
+// ----------------------------------------------------------------------------
+// Testing logout
 describe('Testing subscriber logout:',function() {
   it('Subscriber logged out successfully',function(done) {
     request( {
@@ -269,7 +272,7 @@ describe('Testing subscriber logout:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
-      //assert(JSON.parse(body)['value'],'Unable to logout user');
+      assert(JSON.parse(body)['value'],'Unable to logout user');
       console.log('\tResponse received : ', body);
       done();
     });
