@@ -245,18 +245,23 @@ describe('===> Testing editPasswd: \n', function(){
       };
   before(function(){
    testAdapter.makeSubscriber(testSubscriber);
+   model.session.authenticate(testSubscriber.email, 'somePasswd123', function(result){
+    testAdapter.fetchSession(result.value, function(res) {
+      session = res.value;
+    });
+   });
   });
-  it('editPassword(email) should return msg.success() if subsciber inputs a matching pwd is  : \n', function(done){
-    model.subscriber.editPasswd('testEditPwd@test.com', 'somePasswd123', 'this123matters', function(result){
+  it('editPassword should return msg.success() if subsciber inputs a matching oldpwd and a valid newpwd : \n', function(done){
+    model.subscriber.editPasswd(session, 'somePasswd123', 'this123matters', function(result){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.success()));
       done();
     });
 
   });
 
-  it('editPassword(email) should return msg.incorrectPwd() when trying' +
+  it('editPassword should return msg.incorrectPwd() when trying' +
       'to give invalid current password : \n', function(done){
-    model.subscriber.editPasswd('testEditPwd@test.com', 'blahblahblah', 'something_good', function(result){
+    model.subscriber.editPasswd(session, 'blahblahblah', 'something_good', function(result){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.incorrectPwd()));
       done();
     });

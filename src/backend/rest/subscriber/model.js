@@ -134,10 +134,9 @@ function subPasswordUpdate(adapter, token, pwd, cb) { // PHASE TWO
 function subEditPassword(adapter, session, oldPassword, newPassword, cb) {
   // 1. Fetch subscriber
   // 2. Update oldPasswd with new
-
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriber({id: session.subscriber_id}, function(result){
+      adapter.fetchSubscriber({email: session.subscriber_id.email}, function(result){
         resultChecker(result, callback);
       });
     },
