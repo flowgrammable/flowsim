@@ -272,7 +272,7 @@ describe('Testing subscriber editPasswd:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
-      assert(JSON.parse(body)['value'],'Unable to logout user');
+      assert(JSON.parse(body)['value'],'Unable to edit password');
       console.log('\tResponse received : ', body);
       done();
     });
