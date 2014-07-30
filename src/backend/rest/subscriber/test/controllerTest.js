@@ -159,7 +159,7 @@ describe('===> Testing editing of subscriber password: \n', function(){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPwd()));
       done();
     });
-   controller.module.auth.editPasswd(session,'POST', {}, data, '127.0.0.1', testId);
+   controller.module.auth.editpassword(session,'POST', {}, data, '127.0.0.1', testId);
   });
   it('Test if new password not provided', function(done){
     var testId = 'testerID10';
@@ -168,7 +168,7 @@ describe('===> Testing editing of subscriber password: \n', function(){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPwd()));
       done();
     });
-    controller.module.auth.editPasswd(session,'POST', {}, data, '127.0.0.1', testId);
+    controller.module.auth.editpassword(session,'POST', {}, data, '127.0.0.1', testId);
   });
   it('Test if new password is bad', function(done){
     var testId = 'testerID11';
@@ -177,7 +177,7 @@ describe('===> Testing editing of subscriber password: \n', function(){
      assert.equal(JSON.stringify(result), JSON.stringify(msg.badPwd(data.email)));
      done();
     });
-    controller.module.auth.editPasswd(session,'POST', {}, data, '127.0.0.1', testId);
+    controller.module.auth.editpassword(session,'POST', {}, data, '127.0.0.1', testId);
    });
 });
 
