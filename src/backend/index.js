@@ -34,8 +34,18 @@ if(program.test) {
   fs.createWriteStream('temp','utf8');
 }
 
+var profileList = [];
+
 app
    .use(connect.json())
+	 .use('/api/profile', function(request, response, next){
+			if(request.method == 'POST'){
+				profileList.push(request.body);
+				response.end(JSON.stringify({value:{}}));
+			} else if(request.method == 'GET'){
+				response.end(JSON.stringify({value:{profileList:profileList}}));
+			}
+		})
    .use('/api', rest(require(database), {}))
    .use(function(req, res) {
      res.writeHead('404');
