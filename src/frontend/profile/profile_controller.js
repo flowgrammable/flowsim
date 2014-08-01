@@ -16,12 +16,6 @@ profile.directive('fsCreateprofile', function(){
 	}
 });
 
-profile.directive('fsProfilepost', function(){
-	return {
-		restrict: 'E',
-		templateUrl: 'create_profile_form.html',
-	}
-});
 
 profile.controller('createCntrl', ['$scope', 'profileFactory',
 	function($scope, profileFactory){
