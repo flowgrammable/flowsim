@@ -1,5 +1,5 @@
 var subscriber = angular.module('subscriber', ['ngRoute', 'ui.bootstrap',
-		'subAPI']);
+		'subAPI', 'ngCookies']);
 
 //var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap',
 //    'flowAPI']);
@@ -102,8 +102,8 @@ subscriber.controller('resetPassCntrl', ['$scope', '$routeParams', 'subscriberFa
     }
 }]);
 
-subscriber.controller('loginCntrl', ['$scope', '$location','$rootScope','subscriberFactory', 'utils',
-  function($scope, $location, $rootScope, subscriberFactory, utils){
+subscriber.controller('loginCntrl', [ '$scope', '$cookies', '$location','$rootScope','subscriberFactory', 'utils',
+  function($scope, $cookies, $location, $rootScope, subscriberFactory, utils){
     $scope.emailAddr = '';
     $scope.password = '';
 
@@ -125,6 +125,7 @@ subscriber.controller('loginCntrl', ['$scope', '$location','$rootScope','subscri
             if(data.value){
               $rootScope.token = data.value;
               $rootScope.$broadcast("authenticated");
+							$cookies.token = data.value;
               $location.path("/");
             } else if(data.error.type == 'subscriberNotActive'){
               $scope.subscriberNotActive = true;

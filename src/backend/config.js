@@ -14,7 +14,8 @@ module.exports = {
   html: [ '../frontend/html', 
 		'../frontend/main',
 		'../frontend/subscriber',
-		'../frontend/profile'  
+		'../frontend/profile',
+		'../frontend/packet'  
 	],
   css: [ '../frontend/css',
     '../frontend/bower_components/bootstrap/dist/css'
@@ -26,10 +27,12 @@ module.exports = {
     '../frontend/bower_components/jquery/dist', 
     '../frontend/bower_components/angular',
     '../frontend/bower_components/angular-route',
-    '../frontend/bower_components/angular-ui-bootstrap/dist'
+    '../frontend/bower_components/angular-ui-bootstrap/dist',
+		'../frontend/bower_components/angular-cookies'
   ],
 	subscriber: [ '../frontend/subscriber' ],
 	profile: [ '../frontend/profile' ],
-	main: [ '../frontend/main' ]
+	main: [ '../frontend/main' ],
+	packet: [ '../frontend/packet' ]
 };
 
