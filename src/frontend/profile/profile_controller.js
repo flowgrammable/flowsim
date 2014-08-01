@@ -19,7 +19,7 @@ profile.directive('fsCreateprofile', function(){
 profile.directive('fsProfilepost', function(){
 	return {
 		restrict: 'E',
-		templateUrl: 'create_profile_form.html'
+		templateUrl: 'create_profile_form.html',
 	}
 });
 

@@ -8,5 +8,5 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 	profileFactory.create = function(data) {
 		return $http.post(urlBase + 'create', data);
 		};
-
+  return profileFactory;
 }]);
