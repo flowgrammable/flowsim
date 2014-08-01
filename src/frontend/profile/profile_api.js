@@ -16,6 +16,11 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 	profileFactory.update = function(data) {
 		return $http.put(urlBase + 'update', data);
 	};
+
+	profileFactory.delete = function(data) {
+		console.log('data from delete: ' + data);
+		return $http.put(urlBase + 'delete', data);
+	};
 	
   return profileFactory;
 }]);

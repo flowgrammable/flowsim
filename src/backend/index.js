@@ -37,6 +37,15 @@ if(program.test) {
 var profileId = 0;
 var profileList = [];
 
+function findById(source, id){
+	for (var i = 0; i < source.length; i++){
+		if(source[i].id === id){
+			return i;
+		}
+	}
+	throw "couldnt find object with id: " + id;
+}
+
 app
    .use(connect.json())
 	 .use('/api/profile', function(request, response, next){
@@ -45,7 +54,17 @@ app
 				response.end(JSON.stringify({value:{}}));
 			} else if(request.method == 'GET'){
 				response.end(JSON.stringify({value:{profileList:profileList}}));
-			}
+			} else if(request.method == 'PUT'){
+			  var oldindex = findById(profileList, request.body.id);
+				if(request.body.id && request.body.name){
+				profileList[oldindex] = {id: request.body.id, name: request.body.name};
+				response.end(JSON.stringify({value:{}}));
+				} else {
+				profileList.splice(oldindex,1);
+				response.end(JSON.stringify({value:{}}));
+				}
+			} 
+			
 		})
    .use('/api', rest(require(database), {}))
    .use(function(req, res) {

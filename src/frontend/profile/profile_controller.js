@@ -55,6 +55,16 @@ profile.controller('createCntrl', ['$scope', 'profileFactory',
 			profileFactory.update(modifiedItem)
 				.success(function(data){})
 				.error(function(data){});
-		}		
+		};
+
+		$scope.delete = function(item){
+			var del = {id: item.id};
+			profileFactory.delete(del)
+				.success(function(data){
+					if(data.value){
+						$scope.getProfiles();
+					}
+				}).error(function(data){});
+		};		
 }]);
 
