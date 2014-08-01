@@ -6,7 +6,7 @@ var fs = require('fs');
 
 orm.setup()
 
-var testEmail = 'flowgrammablemailer@gmail.com';
+var testEmail = 'test@gmail.com';
 var token, resetToken;
 
 // ----------------------------------------------------------------------------
@@ -21,17 +21,14 @@ describe('Testing registration requests:',function() {
       method: 'POST'
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to register user');
-      fs.exists(process.cwd()+'/temp', function (exists) {
-        if(exists) {
-          fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
-            if (err) console.log('Unable to read token in file for restTest');
-            else {
-              var array = data.toString().split("\n"); 
-              token = JSON.parse(array[0]).ver_token;
-            }
-          });
+      fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
+        if (err) console.log('Unable to read token in file for restTest');
+        else {
+          var array = data.toString().split("\n"); 
+          token = JSON.parse(array[0]).ver_token;
         }
       });
+      console.log('\tResponse received : ', body);
       done();
     }); 
   });
@@ -359,15 +356,11 @@ describe('Testing forgot password requests:',function() {
 // remains in the 'RESET' state containing the token
 describe('Testing reset password requests:',function() {
   before(function() {
-    fs.exists(process.cwd()+'/temp', function (exists) {
-      if(exists) {
-        fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
-          if (err) console.log('Unable to read token in file for restTest');
-          else {
-            var array = data.toString().split("\n");
-            resetToken = JSON.parse(array[1]).reset_token;
-          }
-        });
+    fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
+      if (err) console.log('Unable to read token in file for restTest');
+      else {
+        var array = data.toString().split("\n");
+        resetToken = JSON.parse(array[1]).reset_token;
       }
     });
   });

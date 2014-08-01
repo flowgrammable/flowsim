@@ -28,13 +28,9 @@ function insertSubscriber(em, pwd, ip, cb) {
     verification_token: token,
     status: 'CREATED'
   }).success(function(result) {
-    // fs.exists('temp', function (exists) {
-    //   if(exists) {
-        fs.writeFile('temp', '{\"ver_token\":\"'+token+'\"}', function (err) {
-          if (err) console.log('Unable to write token in file for restTest');
-        });
-    //   }
-    // });
+    fs.writeFile('temp', '{\"ver_token\":\"'+token+'\"}', function (err) {
+      if (err) console.log('Unable to write token in file for restTest');
+    });
     cb(msg.success(result));
   }).error(function(err) {
     if(err.detail == 'Key (email)=(' + em + ') already exists.')
