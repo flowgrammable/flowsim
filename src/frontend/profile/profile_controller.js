@@ -8,3 +8,17 @@ profile.config(['$routeProvider', function($routeProvider) {
     });
 }]);
 
+profile.directive('fsCreateprofile', function(){
+	return {
+		restrict: 'E',
+		templateUrl: 'create_profile.html'
+	}
+});
+
+profile.directive('fsProfilepost', function(){
+	return {
+		restrict: 'E',
+		templateUrl: 'create_profile_form.html'
+	}
+});
+
