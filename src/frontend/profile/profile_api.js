@@ -12,5 +12,10 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 	profileFactory.list = function() {
 		return $http.get(urlBase + 'list');
 	};
+
+	profileFactory.update = function(data) {
+		return $http.put(urlBase + 'update', data);
+	};
+	
   return profileFactory;
 }]);

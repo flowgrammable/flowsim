@@ -49,7 +49,12 @@ profile.controller('createCntrl', ['$scope', 'profileFactory',
 
 		$scope.update = function(item){
 			console.log('hit update');
-			console.log('item name: ', item.name);
+			console.log('item id: ', item.id);
+			console.log('mod name: ', item.name);
+			var modifiedItem = { id:item.id, name: item.name }; 
+			profileFactory.update(modifiedItem)
+				.success(function(data){})
+				.error(function(data){});
 		}		
 }]);
 
