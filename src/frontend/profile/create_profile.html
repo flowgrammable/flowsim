@@ -1,6 +1,6 @@
 <div ng-controller="createCntrl" style=" background-color:#ffffe0"> 
 <div class="row">
-	<div class="col-md-9"></div>
+	<div class="col-md-7"></div>
 	<div class="col-md-1">
 		<p>
 			<button type="button" class="btn btn-primary" ng-model="showCreate" btn-checkbox btn-checkbox-true="1" btn-checkbox-false ="0">Add Profile</button>
@@ -8,7 +8,7 @@
 	</div>
 </div>
 <div class="row" ng-show="showCreate">
-	<div class="col-md-8">
+	<div class="col-md-8" style="background-color:lightGreen">
 		<form class="form-inline" role="form">
 			<div class="form-group">
 				Profile Name
@@ -19,11 +19,9 @@
 	</div>
 </div>
 <div class="row">
-	<ul>
-		<li ng-repeat="item in profileList">
-			{{item.name}}
-		</li>
-	</ul>
+	<div class="list-group">
+		<a class="list-group-item" ng-repeat="item in profileList">{{item.name}}</a>
+	</div>
 </div>
 </div>
 

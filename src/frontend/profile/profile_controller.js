@@ -45,6 +45,11 @@ profile.controller('createCntrl', ['$scope', 'profileFactory',
 					}
 				}).error(function(data){});
 		};
-    $scope.getProfiles();		
+    $scope.getProfiles();
+
+		$scope.update = function(item){
+			console.log('hit update');
+			console.log('item name: ', item.name);
+		}		
 }]);
 
