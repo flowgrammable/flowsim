@@ -1,5 +1,5 @@
 var subscriber = angular.module('subscriber', ['ngRoute', 'ui.bootstrap',
-		'flowAPI']);
+		'subAPI']);
 
 //var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap',
 //    'flowAPI']);
