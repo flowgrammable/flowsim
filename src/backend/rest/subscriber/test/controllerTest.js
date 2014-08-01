@@ -98,50 +98,89 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 describe('===> Testing Login subscriber controller: \n', function(){
 
 	it('Test if email not provided', function(done){
-        	var testId = 'testerID1';
-   		var data = {email: '', password: 'tester'};
-                events.Emitter.once(testId, function(result){
-               		 assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
-               		 done();
-               		 });
- 	 controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
-       	 });
+    var testId = 'testerID1';
+ 		var data = {email: '', password: 'tester'};
+    events.Emitter.once(testId, function(result){
+   		assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
+   		done();
+    });
+ 	  controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+  });
 
- 	 it('Test if email provided invalid', function(done){
-                var testId = 'testerID2';
-   		var data = {email: 'a_terrible_email', password: 'tester'};
-                events.Emitter.once(testId, function(result){
-                assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
-                done();
-                });
- 	 controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
-        });
+ 	it('Test if email provided invalid', function(done){
+    var testId = 'testerID2';
+ 		var data = {email: 'a_terrible_email', password: 'tester'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
+      done();
+    });
+ 	  controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+  });
 	
 });
 
-// -------------------------------------------------------------------------------------
-// Reset Test
-describe('===> Testing Reset subscriber controller: \n', function(){
+// ----------------------------------------------------------------------------
+// Forgot password phase one
+describe('===> Testing Forgot Password subscriber controller: \n', function(){
+	it('If an email is not provided, a msg.missingEmail() should be returned', function(done){
+  	var testId = 'testerID1';
+ 		var data = {email: ''};
+    events.Emitter.once(testId, function(result){
+	    assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
+	    done();
+    });
+ 	  controller.module.noauth.forgotpassword('POST', {}, data, '127.0.0.1', testId);
+  });
+ 	it('If the email provided is invalid, a msg.badEmail() should be returned', function(done){
+    var testId = 'testerID2';
+   	var data = {email: 'a_terrible_email'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
+      done();
+    });
+ 	  controller.module.noauth.forgotpassword('POST', {}, data, '127.0.0.1', testId);
+  });
+});
 
-	it('Test if email not provided', function(done){
-        	var testId = 'testerID1';
-   		var data = {email: '', password: 'tester'};
-                events.Emitter.once(testId, function(result){
-               		 assert.equal(JSON.stringify(result), JSON.stringify(msg.missingEmail()));
-               		 done();
-               		 });
- 	 controller.module.noauth.forgotpassword('POST', {}, data, '127.0.0.1', testId);
-       	 });
-
- 	 it('Test if email provided invalid', function(done){
-                var testId = 'testerID2';
-   		var data = {email: 'a_terrible_email', password: 'tester'};
-                events.Emitter.once(testId, function(result){
-                assert.equal(JSON.stringify(result), JSON.stringify(msg.badEmail(data.email)));
-                done();
-                });
- 	 controller.module.noauth.forgotpassword('POST', {}, data, '127.0.0.1', testId);
-        });
+// ----------------------------------------------------------------------------
+// Forgot password phase two
+describe('===> Testing Reset Password subscriber controller: \n', function(){
+  it('If a token is not provided, a msg.missingResetToken() should be returned', function(done){
+    var testId = 'testerID1';
+    var data = {reset_token: '', password: 'new password'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.missingResetToken()));
+      done();
+    });
+    controller.module.noauth.resetpassword('POST', {}, data, '127.0.0.1', testId);
+  });
+  it('If an invalid token is provided, a msg.badResetToken() should be returned', function(done){
+    var testId = 'testerID1';
+    var data = {reset_token: 'bad token', password: 'new password'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.badResetToken()));
+      done();
+    });
+    controller.module.noauth.resetpassword('POST', {}, data, '127.0.0.1', testId);
+  });
+  it('If a new password is not provided, a msg.missingPwd() should be returned', function(done){
+    var testId = 'testerID1';
+    var data = {reset_token: 'ffffffff-ffff-ffff-ffff-ffffffffffff', password: ''};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPwd()));
+      done();
+    });
+    controller.module.noauth.resetpassword('POST', {}, data, '127.0.0.1', testId);
+  });
+  it('If an invalid token is provided, a msg.badResetToken() should be returned', function(done){
+    var testId = 'testerID1';
+    var data = {reset_token: 'ffffffff-ffff-ffff-ffff-ffffffffffff', password: 'bad pwd'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.badPwd()));
+      done();
+    });
+    controller.module.noauth.resetpassword('POST', {}, data, '127.0.0.1', testId);
+  });
 });
 
 // -------------------------------------------------------------------------------------
