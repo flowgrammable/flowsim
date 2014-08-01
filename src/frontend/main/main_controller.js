@@ -1,5 +1,5 @@
 var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap',
-		'subscriber', 'profile','packet', 'ngCookies']);
+		'_switch', 'subscriber', 'profile','packet', 'ngCookies']);
 
 flowsimApp.controller('menuCtrl', function($cookies, $scope, $rootScope, 
 	subscriberFactory) {

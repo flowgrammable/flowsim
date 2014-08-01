@@ -15,7 +15,8 @@ module.exports = {
 		'../frontend/main',
 		'../frontend/subscriber',
 		'../frontend/profile',
-		'../frontend/packet'  
+		'../frontend/packet',
+		'../frontend/switch'  
 	],
   css: [ '../frontend/css',
     '../frontend/bower_components/bootstrap/dist/css'
@@ -33,6 +34,7 @@ module.exports = {
 	subscriber: [ '../frontend/subscriber' ],
 	profile: [ '../frontend/profile' ],
 	main: [ '../frontend/main' ],
-	packet: [ '../frontend/packet' ]
+	packet: [ '../frontend/packet' ],
+	switch: [ '../frontend/switch' ]
 };
 
