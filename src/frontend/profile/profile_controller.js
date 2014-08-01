@@ -17,7 +17,7 @@ profile.directive('fsCreateprofile', function(){
 });
 
 
-profile.controller('createCntrl', ['$scope', 'profileFactory',
+profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 	function($scope, profileFactory){
 		$scope.name = '';
 		$scope.creationSuccess = false;
