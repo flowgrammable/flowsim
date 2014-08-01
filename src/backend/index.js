@@ -34,13 +34,14 @@ if(program.test) {
   fs.createWriteStream('temp','utf8');
 }
 
+var profileId = 0;
 var profileList = [];
 
 app
    .use(connect.json())
 	 .use('/api/profile', function(request, response, next){
 			if(request.method == 'POST'){
-				profileList.push(request.body);
+				profileList.push({id: profileId++, name: request.body.name});
 				response.end(JSON.stringify({value:{}}));
 			} else if(request.method == 'GET'){
 				response.end(JSON.stringify({value:{profileList:profileList}}));
