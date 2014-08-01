@@ -1,5 +1,5 @@
 var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap',
-		'subscriber']);
+		'subscriber', 'profile']);
 
 flowsimApp.controller('menutCtrl', function($scope, $rootScope, 
 	subscriberFactory) {

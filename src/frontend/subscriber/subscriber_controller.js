@@ -241,8 +241,8 @@ subscriber.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'verify.html',
       controller: 'verifyCntrl'
     }).
-    when('/profile', {
-      templateUrl: 'profile.html'
+    when('/settings', {
+      templateUrl: 'settings.html'
     }).
     when('/editpassword', {
       templateUrl: 'editpassword.html',
