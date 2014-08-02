@@ -92,6 +92,18 @@ describe('Testing registration requests:',function() {
       done();
     });
   });
+  it('GET Method not support',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/register',
+      body: '{ \"email\": \"\", \"password\": \"my password\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
 });
 
 // ----------------------------------------------------------------------------
@@ -104,8 +116,8 @@ describe('Testing verification requests:',function() {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) { 
-      console.log('\tResponse received : ', body);
 			assert(JSON.parse(body)['value'],'Unable to verify user');
+      console.log('\tResponse received : ', body);
       done();
     });
   });
@@ -122,7 +134,6 @@ describe('Testing verification requests:',function() {
       done();
     });
   });
-
   it('Missing verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/',
@@ -135,7 +146,6 @@ describe('Testing verification requests:',function() {
       done();
     });
   });
-
   it('Bad verification token',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/verify/Bad-Token',
@@ -148,6 +158,19 @@ describe('Testing verification requests:',function() {
       done();
     });
   });
+  it('GET method not supported',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/verify/Bad-Token',
+      body: '{ \"token\": \"'+'bad_token'+'\"}',
+      headers: { 'Content-Type': 'application/json'},
+      method: 'GET'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+
 });
 
 // ----------------------------------------------------------------------------
@@ -243,8 +266,20 @@ describe('Testing subscriber login:',function() {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
-	console.log('\tResponse received : ', body);
       assert.equal(JSON.parse(body)['error']['type'],'missingPwd');
+	    console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('GET method not supported',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"'+testEmail+'\", \"password\": \"my password\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
       done();
     });
   });
@@ -262,8 +297,8 @@ describe('Testing subscriber editPasswd:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
 			assert(JSON.parse(body)['value'],'Unable to edit password');
+      console.log('\tResponse received : ', body);
       done();
     });
   });
@@ -277,8 +312,8 @@ describe('Testing subscriber editPasswd:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
       assert.equal(JSON.parse(body)['error']['type'],'incorrectPwd');
+      console.log('\tResponse received : ', body);
       done();
     });
   });
@@ -292,8 +327,23 @@ describe('Testing subscriber editPasswd:',function() {
       },
       method: 'POST'
     }, function (error, response, body) {
-      console.log('\tResponse received : ', body);
       assert.equal(JSON.parse(body)['error']['type'],'badPwd');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('GET method not supported',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/editpassword',
+      body: '{ \"oldPassword\": \"my password\", \"newPassword\": \"myPassword\"}',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': session
+      },
+      method: 'GET'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
       done();
     });
   });
@@ -302,7 +352,7 @@ describe('Testing subscriber editPasswd:',function() {
 
 // ----------------------------------------------------------------------------
 // Testing logout
-/*describe('Testing subscriber logout:',function() {
+describe('Testing subscriber logout:',function() {
   it('Subscriber logged out successfully',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/logout',
@@ -319,7 +369,6 @@ describe('Testing subscriber editPasswd:',function() {
     });
   });
 });
-*/
 
 // ----------------------------------------------------------------------------
 // Testing forgot password phase one
@@ -372,6 +421,18 @@ describe('Testing forgot password requests:',function() {
       method: 'POST'
     }, function (error, response, body) { 
       assert.equal(JSON.parse(body)['error']['type'],'subscriberNotFound');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('GET method not supported',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/forgotpassword/',
+      body: '{ \"email\": \"nonexistent@gmail.com\" }',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);
       done();
     });
@@ -455,6 +516,18 @@ describe('Testing reset password requests:',function() {
       method: 'POST'
     }, function (error, response, body) { 
       assert(JSON.parse(body)['value'],'Unable to reset password');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('GET method not supported', function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/resetpassword/',
+      body: '{ \"reset_token\":\"'+resetToken+'\",\"password\":\"new password\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'GET'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);
       done();
     });
