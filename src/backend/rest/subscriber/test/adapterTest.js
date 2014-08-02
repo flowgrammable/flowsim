@@ -6,7 +6,7 @@ var testEmail ='test@gmail.com';
 var subscriber, session, sessKey;
 // ----------------------------------------------------------------------------
 // Testing insertSubscriber
-
+describe('Adapter Tests:\n', function() {
 describe('===> Testing insertSubscriber adapter function:\n', function() {
   it('User registered successfully', function(done) {
     adapter.insertSubscriber(testEmail, 'My Password', '127.0.0.1', function (result) {
@@ -142,3 +142,5 @@ describe('===> Testing destroySession adapter function:\n', function() {
     });
   });
 });
+});
+

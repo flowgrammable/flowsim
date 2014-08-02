@@ -1,20 +1,20 @@
 //utils Test
 var utils = require('../controllerUtils.js');
 var assert = require('assert');
-
+console.log("Utils Tests:\n");
 //email tests
 var badEmail = "ojh12345@gmail";
 var goodEmail = "ojh12345@yahoo.com";
-if(utils.invalidEmail(badEmail)) console.log("bad email");
-if(!utils.invalidEmail(goodEmail)) console.log("good email");
+if(utils.invalidEmail(badEmail)) console.log("===>bad email");
+if(!utils.invalidEmail(goodEmail)) console.log("===>good email");
 
 
 //password test
 var badPass = '2short';
 var goodPass = "password";
-if(utils.invalidPassword(badPass)) console.log("bad password");
+if(utils.invalidPassword(badPass)) console.log("===>bad password");
 //console.log(utils.invalidEmail(goodPass));
-if(!utils.invalidPassword(goodPass)) console.log("good password");
+if(!utils.invalidPassword(goodPass)) console.log("===>good password");
 
 //token test
 //invalid token returns false, needs to be 36 characters

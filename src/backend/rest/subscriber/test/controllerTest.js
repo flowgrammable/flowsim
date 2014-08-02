@@ -9,7 +9,7 @@ var controller = subController(testAdapter);
 
 //-----------------------------------------------------------------------------
 // Registration Controller Tests
-
+describe('Controller Tests:\n', function() {
 describe('===> Testing Register subscriber controller: \n', function(){
 
 
@@ -292,4 +292,5 @@ describe('===> Testing Session Authenticate controller: \n', function(){
 			done();
 		});
 	});
+});
 });
