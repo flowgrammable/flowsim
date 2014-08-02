@@ -267,6 +267,36 @@ describe('Testing subscriber editPasswd:',function() {
       done();
     });
   });
+  it('Incorrect old password',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/editpassword',
+      body: '{ \"oldPassword\": \"password\", \"newPassword\": \"my123password\"}',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': session
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      assert.equal(JSON.parse(body)['error']['type'],'incorrectPwd');
+      done();
+    });
+  });
+  it('Bad new password',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/editpassword',
+      body: '{ \"oldPassword\": \"my password\", \"newPassword\": \"my\"}',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': session
+      },
+      method: 'POST'
+    }, function (error, response, body) {
+      console.log('\tResponse received : ', body);
+      assert.equal(JSON.parse(body)['error']['type'],'badPwd');
+      done();
+    });
+  });
 });
 
 
