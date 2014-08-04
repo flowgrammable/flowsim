@@ -141,9 +141,31 @@ describe('===> Testing Login subscriber controller: \n', function(){
     });
  	  controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
   });
+	it('Test if password not provided',function(done){
+		var testId = 'testerID3';
+		var data = {email: 'test@hello.com', password: '' };
+		events.Emitter.once(testId, function(result){
+                	assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPwd()));
+                	done();
+   	 	});
+        controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+
+	});
+
+        it('Test if password provided invalid',function(done){
+                var testId = 'testerID4';
+                var data = {email: 'test@hello.com', password: 'badPass' };
+                events.Emitter.once(testId, function(result){
+                        assert.equal(JSON.stringify(result), JSON.stringify(msg.badPwd()));
+                        done();
+                });
+        controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+
+        });
+
 	
   it('Test if method is not POST', function(done){
-    var testId = 'testerID2';
+    var testId = 'testerID5';
     var data = {email: 'a_terrible_email', password: 'tester'};
     events.Emitter.once(testId, function(result){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.methodNotSupported()));
