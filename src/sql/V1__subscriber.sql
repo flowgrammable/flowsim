@@ -21,9 +21,9 @@ CREATE TABLE subscribers
   -- status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
 );
 
-CREATE TABLE switch_profile
+CREATE TABLE switch_profiles
 (
-	id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   sub_id INTEGER references subscribers(id) NOT NULL,
   name CHAR(60) NOT NULL
 );
