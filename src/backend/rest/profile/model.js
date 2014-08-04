@@ -5,27 +5,23 @@ var msg = require('./msg');
 var adapter = require('./adapter');
 
 function resultChecker(result, callback){
-  if(result.value){
-    callback(null, result);
-  } else if(result.error) {
-    callback(result, null);
-  } else {
-    throw "Undefined success and error objects";
-  }
+  if (result.value) callback(null, result);
+  else if (result.error) callback(result, null);
+  else throw "Undefined success and error objects";
 }
 
 // ----------------------------------------------------------------------------
 // Profile
 
-function profileCreate(adapter, name, cb) {
-  adapter.createProfile(name, function(result) { cb(result); });
+function profileCreate(adapter, subId, name, cb) {
+  adapter.createProfile(subId, name, function(result) { cb(result); });
 }
 
-
-function profileUpdate(adapter, oldProfileName, newProfileInfo, cb) {
+function profileUpdate(adapter, subId, oldProfileName, newProfileInfo, cb) {
   async.waterfall([
     function(callback){
-      adapter.fetchProfile({ name: oldProfileName }, function(result){
+      var profInfo = { subscriber_id: subId, name: oldProfileName };
+      adapter.fetchProfile(profInfo, function(result){
         resultChecker(result, callback);
       });
     },
@@ -41,8 +37,10 @@ function profileUpdate(adapter, oldProfileName, newProfileInfo, cb) {
     });
 }
 
+// ----------------------------------------------------------------------------
 
-module.exports = function() {
+module.exports = function(testAdapter) {
+  if(testAdapter) adapter = testAdapter;
   return {
     profile: {
       create:   _.bind(profileCreate, null, adapter),

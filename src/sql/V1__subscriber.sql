@@ -24,7 +24,7 @@ CREATE TABLE subscribers
 CREATE TABLE switch_profiles
 (
   id SERIAL PRIMARY KEY,
-  sub_id INTEGER references subscribers(id) NOT NULL,
+  subscriber_id INTEGER references subscribers(id) NOT NULL,
   name CHAR(60) NOT NULL
 );
 

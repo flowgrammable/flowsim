@@ -5,10 +5,15 @@ var Profile = orm.model("profile");
 // ----------------------------------------------------------------------------
 // Profile
 
-function createProfile(name, cb) {
-  Profile.create({ name: name })
+function createProfile(subId, name, cb) {
+  Profile.create({ subscriber_id: subId, name: name })
     .success(function(result) { cb(msg.success(result)); })
-    .error  (function(err)    { cb(msg.unknownError(err)); });
+    .error(function(err) { 
+      if(err.detail == 'Key (name)=(' + name + ') already exists.') 
+        cb(msg.nameInUse());
+      else 
+        cb(msg.unknownError(err));
+    });
 }
 
 function fetchProfile(profileInfo, cb) {

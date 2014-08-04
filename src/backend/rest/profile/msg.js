@@ -25,3 +25,10 @@ exports.missingName = function() {
     type: "missingName"
   });
 }
+
+exports.nameInUse = function() {
+  return msg.error({
+    system: "profile/model",
+    type: "nameInUse"
+  });
+}
