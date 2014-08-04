@@ -1,24 +1,22 @@
-//utils Test
+
 var utils = require('../controllerUtils.js');
 var assert = require('assert');
-console.log("Utils Tests:\n");
-//email tests
-var badEmail = "ojh12345@gmail";
-var goodEmail = "ojh12345@yahoo.com";
-if(utils.invalidEmail(badEmail)) console.log("===>bad email");
-if(!utils.invalidEmail(goodEmail)) console.log("===>good email");
+describe('===> Utils Test: \n', function(){
+	var badEmail = "ojh12345@gmail";
+	it('Test passing invalid email should return true', function(done){
+		assert.equal(utils.invalidEmail(badEmail), true);
+		done();
+	});
 
+	var badPass = '2short';
+	it('Test passing invalid password should return true (not 8-16 chars)', function(done){
+		assert.equal(utils.invalidPassword(badPass), true);
+		done();
+	});
 
-//password test
-var badPass = '2short';
-var goodPass = "password";
-if(utils.invalidPassword(badPass)) console.log("===>bad password");
-//console.log(utils.invalidEmail(goodPass));
-if(!utils.invalidPassword(goodPass)) console.log("===>good password");
-
-//token test
-//invalid token returns false, needs to be 36 characters
-//var badToken = "1245720983";
-//var goodToken = "123456789012345678901234567890123456";
-//assert.equal(utils.validToken(badToken), false, ['invalid token']);
-//assert.equal(utils.validToken(goodToken), true, ["valid token"]);
+	var badToken = 'not36chaaracters';
+	it('Test passing invalid token should return true (not 36 characters)', function(done){
+		assert.equal(utils.invalidToken(badToken), true);
+		done();
+	});
+});
