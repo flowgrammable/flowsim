@@ -21,6 +21,13 @@ CREATE TABLE subscribers
   -- status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
 );
 
+CREATE TABLE packet
+(
+  id SERIAL PRIMARY KEY,
+  sub_id INTEGER references subscribers(id) NOT NULL,
+  name CHAR(60) NOT NULL
+);
+
 CREATE TABLE switch_profile
 (
 	id SERIAL PRIMARY KEY,
