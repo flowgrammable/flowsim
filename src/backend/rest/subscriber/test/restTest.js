@@ -494,7 +494,7 @@ describe('Testing reset password requests:',function() {
       done();
     });
   });
-    it('A reset password request with an invalid password should return '+
+  it('A reset password request with an invalid password should return '+
      'msg.badPwd()',function(done) {
     request( {
       url: 'http://localhost:3000/api/subscriber/resetpassword/',
@@ -503,6 +503,20 @@ describe('Testing reset password requests:',function() {
       method: 'POST'
     }, function (error, response, body) { 
       assert.equal(JSON.parse(body)['error']['type'],'badPwd');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+  it('A reset password request with a reset token that is not linked to a '+
+     'subscriber should return msg.subscriberNotFound()',function(done) {
+    request( {
+      url: 'http://localhost:3000/api/subscriber/resetpassword/',
+      body: '{ \"reset_token\":\"ffffffff-ffff-ffff-ffff-ffffffffffff\",'+
+            '\"password\":\"new password\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) { 
+      assert.equal(JSON.parse(body)['error']['type'],'subscriberNotFound');
       console.log('\tResponse received : ', body);
       done();
     });
