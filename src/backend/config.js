@@ -11,7 +11,11 @@
 
 module.exports = {
   favicon: '../frontend/img/favicon.png',
-  html: [ '../frontend/html' ],
+  html: [ '../frontend/html', 
+		'../frontend/main',
+		'../frontend/subscriber',
+		'../frontend/profile'  
+	],
   css: [ '../frontend/css',
     '../frontend/bower_components/bootstrap/dist/css'
   ],
@@ -23,6 +27,9 @@ module.exports = {
     '../frontend/bower_components/angular',
     '../frontend/bower_components/angular-route',
     '../frontend/bower_components/angular-ui-bootstrap/dist'
-  ]
+  ],
+	subscriber: [ '../frontend/subscriber' ],
+	profile: [ '../frontend/profile' ],
+	main: [ '../frontend/main' ]
 };
 
