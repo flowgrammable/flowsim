@@ -14,7 +14,10 @@ function resultChecker(result, callback){
 // Profile
 
 function profileCreate(adapter, subId, name, cb) {
-  adapter.createProfile(subId, name, function(result) { cb(result); });
+  adapter.createProfile(subId, name, function(result) { 
+    if (result.value) cb(msg.success());
+    else cb(result); 
+  });
 }
 
 function profileUpdate(adapter, subId, oldProfileName, newProfileInfo, cb) {

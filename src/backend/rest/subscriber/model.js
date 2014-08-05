@@ -28,7 +28,7 @@ function subCreate(adapter, em, pwd, ip, cb) {
   async.waterfall([
     function(callback){
       adapter.insertSubscriber(em, pwd, ip, function(result){
-      resultChecker(result, callback);
+        resultChecker(result, callback);
       });
     },
     function(result, callback){
