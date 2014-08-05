@@ -1,6 +1,6 @@
 var msg = require('./msg');
 var orm = require('../../dbbs');
-var Profile = orm.model("profile");
+var Profile = orm.model("switch_profile");
 
 // ----------------------------------------------------------------------------
 // Profile
@@ -24,6 +24,14 @@ function fetchProfile(profileInfo, cb) {
     }).error(function(err) { cb(msg.unknownError(err)); });
 }
 
+function listProfiles(subId, cb) {
+  Profile.findAll({ where: { subscriber_id: subId } })
+    .success(function(profiles) {
+      if(profiles == null) cb(msg.noProfilesFound);
+      else cb(msg.success(profiles));
+    }).error(function(err) { cb(msg.unknownError(err)); })
+}
+
 function updateProfile(profile, newProfileInfo, cb) {
   profile.updateAttributes(newProfileInfo)
     .success(function(result) { cb(msg.success(result)); })
@@ -38,5 +46,6 @@ function destroyProfile(profile, cb) {
 
 exports.createProfile  = createProfile;
 exports.fetchProfile   = fetchProfile;
+exports.listProfiles   = listProfiles;
 exports.updateProfile  = updateProfile;
 exports.destroyProfile = destroyProfile;

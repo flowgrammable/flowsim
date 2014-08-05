@@ -17,7 +17,7 @@ Array.prototype.findProfile = function(profInfo) {
       if (this[i].subscriber_id == profInfo.subscriber_id) found = true;
       else continue;
     }
-    if (hasVerToken) {
+    if (hasName) {
       if (this[i].name == profInfo.name) found = true;
       else continue;
     }
@@ -60,8 +60,8 @@ function createProfile(subId, name, cb) {
   }
 }
 
-function fetchProfile(subId, name, cb) {
-  var prof = Profile.findProfile({ subscriber_id: subId, name: name });
+function fetchProfile(profileInfo, cb) {
+  var prof = Profile.findProfile(profileInfo);
   if (prof == null) cb(msg.profileNotFound());
   else cb(msg.success(prof));
 }
@@ -77,11 +77,16 @@ function destroyProfile(profile, cb) {
   else cb(msg.unknownError);
 }
 
+function listProfiles(profile, cb) { cb(msg.success(Profile)); }
+
 function makeProfile(prof, cb) {
   Profile.push(prof); 
 }
 
-exports.createSession = createSession;
-exports.fetchSession = fetchSession;
-exports.destroySession = destroySession;
+exports.createProfile  = createProfile;
+exports.fetchProfile   = fetchProfile;
+exports.listProfiles   = listProfiles;
+exports.updateProfile  = updateProfile;
+exports.destroyProfile = destroyProfile;
+exports.makeProfile    = makeProfile;
 

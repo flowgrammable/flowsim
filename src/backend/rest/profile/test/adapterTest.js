@@ -7,7 +7,7 @@ var profile;
 // Testing createProfile
 describe('===> Testing createProfile adapter function:\n', function() {
   it('Profile created successfully', function(done) {
-    adapter.createProfile("test profile", function (result) {
+    adapter.createProfile(1, "test profile", function (result) {
       assert(result.value, "Unable to create profile")
       done();
     });
@@ -18,7 +18,7 @@ describe('===> Testing createProfile adapter function:\n', function() {
 // Testing fetchProfile
 describe('===> Testing fetchProfile adapter function:\n', function() {
   it('Profile fetched successfully', function(done) {
-    adapter.fetchProfile({ name: "test profile" }, function (result) {
+    adapter.fetchProfile({ subscriber_id: "1", name: "test profile" }, function (result) {
       assert(result.value, "Unable to fetch profile")
       profile = result.value;
       done();
