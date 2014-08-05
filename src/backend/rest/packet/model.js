@@ -20,54 +20,36 @@ function resultChecker(result, callback){
 }
 
 // ----------------------------------------------------------------------------
-// Subscriber
+// Packet
 
-function subCreate(adapter, em, pwd, ip, cb) {
-  // 1. Insert User
-  // 2. Send Verification Email
+function packCreate(adapter, session, name, cb) {
+  // 1. Insert User created packet
   async.waterfall([
     function(callback){
-      adapter.insertSubscriber(em, pwd, ip, function(result){
+      adapter.createPacket(name, session.subscriber_id, function(result){
       resultChecker(result, callback);
       });
     },
-    function(result, callback){
-      adapter.sendVerificationEmail(result.value, function(result){
-        resultChecker(result, callback);
-      });
-    }
   ], function(err, result){
       if(err) { cb(err);    } 
       else    { cb(result); }
   });
 }
 
-function subEditPassword(adapter, session, oldPassword, newPassword, cb) {
-  // 1. Fetch subscriber
-  // 2. Update oldPasswd with new
+
+function packList(adapter, session, cb) {
   async.waterfall([
     function(callback){
-      adapter.fetchSubscriber({id: session.subscriber_id}, function(result){
-        resultChecker(result, callback);
+      adapter.fetchPacket(session.subscriber_id, function(result){
+      resultChecker(result, callback);
       });
     },
-    function(result, callback){
-      var sub = result.value; // the subscriber
-      if (!bcrypt.compareSync(oldPassword, sub.password)) // wrong pwd
-        resultChecker(msg.incorrectPwd(), callback);
-      else {
-        var encryptPwd = bcrypt.hashSync(newPassword, 10);
-        adapter.updateSubscriber(sub, {password: encryptPwd },
-        function(result){
-          resultChecker(result, callback);
-        });
-      }
-    },
-    ], function(err, result){
-        if(err) { cb(err); }
-        else    { cb(msg.success()); }
-    });
+  ], function(err, result){
+      if(err) { cb(err);    }
+      else    { cb(result); }
+  });
 }
+
 // ----------------------------------------------------------------------------
 // Session
 
@@ -114,9 +96,11 @@ module.exports = function(testAdapter) {
 		adapter = testAdapter;
   }
   return {
-    subscriber: {
-      create:           _.bind(subCreate, null, adapter),
-      editPasswd:       _.bind(subEditPassword, null, adapter)
+    packet: {
+      create: _.bind(packCreate, null, adapter),
+      //update: _.bind(packUpdate, null, adapter),
+      //delete: _.bind(packDelete, null, adapter),
+      list:  _.bind(packList, nul, adapter);
     },
     session: {
       authenticate:     _.bind(sessAuthenticate, null, adapter),

@@ -10,31 +10,32 @@ function passback(id, result, nextFunction){
 }
 
 // ----------------------------------------------------------------------------
-// Noauth
-
-
-// ----------------------------------------------------------------------------
 // Auth
 
 function packetCreate(dataModel, session, method, params, data, ip, id) {
 	if(method =='POST') {
-  	if(!data.oldPassword) return passback(id, msg.missingPwd());
-  	if(!data.newPassword) return passback(id, msg.missingPwd());
-  	if(utils.invalidPassword(data.newPassword)) return passback(id, msg.badPwd());
-  	dataModel.subscriber.editPasswd(session, data.oldPassword, data.newPassword, function(result){
+  	dataModel.packet.packCreate(session, data.name, function(result){
       	passback(id, result);
   	});
 	} else return passback(id, msg.methodNotSupported());
+}
+
+function packetList(dataModel, session, method, params, data, ip, id) {
+  if(method =='POST') {
+    dataModel.packet.packList(session, function(result){
+        passback(id, result);
+    });
+  } else return passback(id, msg.methodNotSupported());
 }
 // ----------------------------------------------------------------------------
 
 module.exports = function(testAdapter) {
   var dataModel;
-	//if(testAdapter){
-	//	dataModel = model(testAdapter);
-  //} else {
+	if(testAdapter){
+		dataModel = model(testAdapter);
+  } else {
 		dataModel = model();
-	//} 
+	} 
   return {
     authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {
@@ -43,8 +44,6 @@ module.exports = function(testAdapter) {
       auth: {
         create: _.bind(packetCreate, null, dataModel),
         list: _.bind(packetList, null, dataModel)
-        update: _.bind(packetUpdate, null, dataModel)
-        read: _.bind(packetRead, null, dataModel)
       }
     }
   }

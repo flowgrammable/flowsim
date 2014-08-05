@@ -21,6 +21,12 @@ module.exports = {
       key: 'f151d3c9-2452-41b2-a249-8b8cb2535097',
       timeout: 0
     }
-  ]
+  ],
+  packets: [
+    {
+      subscriber_id: 1,
+      name: 'Packet1'
+    }
+  ],
 }
 

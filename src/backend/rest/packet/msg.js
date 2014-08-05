@@ -7,7 +7,7 @@ exports.test = msg.test;
 
 exports.methodNotSupported = function() {
 	return msg.error({
-		system: "subscriber/controller",
+		system: "packet/controller",
 		type: "methodNotSupported"
 	})
 }
@@ -33,74 +33,11 @@ exports.subscriberNotFound = function() {
   });
 }
 
-exports.emailInUse = function() {
-  return msg.error({
-    system: "subscriber/model",
-    type: "emailInUse"
-  });
-}
 
-exports.missingEmail = function() {
+exports.missingPacketName = function() {
   return msg.error({
-    system: "subscriber/controller",
-    type: "missingEmail"
-  });
-}
-
-exports.badEmail = function(email) {
-  return msg.error({
-    system: "subscriber/controller",
-    type: "badEmail",
-    email: email
-  });
-}
-
-exports.incorrectPwd = function() {
-  return msg.error({
-    system: "subscriber/model",
-    type: "incorrectPwd"
-  });
-}
-
-exports.missingPwd = function() {
-  return msg.error({
-    system: "subscriber/controller",
-    type: "missingPwd"
-  });
-}
-
-exports.badPwd = function() {
-  return msg.error({
-    system: "subscriber/controller",
-    type: "badPwd"
-  });
-}
-
-exports.missingResetToken = function() {
-  return msg.error({
-    system: "subscriber/controller",
-    type: "missingResetToken"
-  });
-}
-
-exports.badVerificationToken = function() {
-  return msg.error({
-    system: "subscriber/controller",
-    type: "badVerificationToken"
-  });
-}
-
-exports.missingVerificationToken = function() {
-	return msg.error({
-		system: "subscriber/controller",
-		type: "missingVerificationToken"
-	});
-}
-
-exports.badResetToken = function() {
-  return msg.error({
-    system: "subscriber/controller",
-    type: "badResetToken"
+    system: "packet/controller",
+    type: "missingPacketName"
   });
 }
 
@@ -132,32 +69,10 @@ exports.subscriberNotActive = function() {
   });
 }
 
-exports.subscriberNotReset = function() {
-  return msg.error({
-    system: "subscriber/model",
-    type: "subscriberNotReset"
-  });
-}
-
 exports.subscriberClosed = function() {
   return msg.error({
     system: "subscriber/model",
     type: "subscriberClosed"
-  });
-}
-
-// replace with subscriberNotActive?
-exports.unverifiedSubscriber = function() {
-  return msg.error({
-    system: "subscriber/model",
-    type: "unverifiedSubscriber"
-  });
-}
-
-exports.subscriberAlreadyVerified = function() {
-  return msg.error({
-    system: "subscriber/controller",
-    type: "subscriberAlreadyVerified"
   });
 }
 

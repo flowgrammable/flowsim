@@ -37,6 +37,7 @@ var singleton = function singleton(){
 	function init() {
     var sess  = require('./rest/subscriber/db/session');
 		var sub   = require('./rest/subscriber/db/subscriber');
+		var pack   = require('./rest/packet/db/packet');
 
     var options = {timestamps: false, underscored: true};
 
@@ -44,6 +45,8 @@ var singleton = function singleton(){
     relationships["session"] = sess.relations;
 		models["subscriber"] = sequelize.define("subscriber", sub.model, options);
 		relationships["subscriber"] = sub.relations; // none at the moment
+    models["packet"] = sequelize.define("packet", pack.model, options);
+    relationships["packet"] = pack.relations;
 
 		for(var name in relationships){
       var relation = relationships[name];
