@@ -9,13 +9,13 @@ var msg = require('../msg.js');
 // Registration Tests
 describe('===> Testing profileCreate: \n',function() {
   it('Profile created successfully',function(done) {
-  	model.profile.create('test profile', function(result){
+  	model.profile.create(1, 'test profile', function(result){
   		assert(result.value, "Could not create profile");
 		  done();
 	  });
   });
   it('Duplicate profile',function(done) {
-  	model.profile.create('test profile', function(result){
+  	model.profile.create(1, 'test profile', function(result){
   		assert.equal(result.error.type, "nameInUse");
 		  done();
 	  });
