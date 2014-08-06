@@ -8,12 +8,7 @@ var Profile = orm.model("switch_profile");
 function createProfile(subId, name, cb) {
   Profile.create({ subscriber_id: subId, name: name })
     .success(function(result) { cb(msg.success(result)); })
-    .error(function(err) { 
-      if(err.detail == 'Key (name)=(' + name + ') already exists.') 
-        cb(msg.nameInUse());
-      else 
-        cb(msg.unknownError(err));
-    });
+    .error(function(err) { cb(msg.unknownError(err)); });
 }
 
 function fetchProfile(profileInfo, cb) {

@@ -12,12 +12,14 @@ var token, sessKey;
 describe('Testing create profile requests:',function() {
   // Register, verify, then login a subscriber
   before(function(done) { 
+    this.timeout(5000);
     request( { // register subscriber
       url: 'http://localhost:3000/api/subscriber/register',
       body: '{ \"email\": \"test@gmail.com\", \"password\": \"my password\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
+      console.log(body);
       assert(JSON.parse(body)['value'],'Unable to register user');
       fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
         if (err) console.log('Unable to read token in file for restTest');
@@ -55,19 +57,6 @@ describe('Testing create profile requests:',function() {
       method: 'POST'
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to create profile');
-      console.log('\tResponse received : ', body);
-      done();
-    }); 
-  });
-  it('A request with a name that already exists should return msg.nameInUse()',
-  function(done) {
-    request( {
-      url: 'http://localhost:3000/api/profile/create',
-      body: '{ \"name\": \"test profile\"}',
-      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
-      method: 'POST'
-    }, function (error, response, body) {
-      assert.equal(JSON.parse(body)['error']['type'],'nameInUse');
       console.log('\tResponse received : ', body);
       done();
     }); 

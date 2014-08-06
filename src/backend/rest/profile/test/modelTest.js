@@ -14,10 +14,4 @@ describe('===> Testing profileCreate: \n',function() {
 		  done();
 	  });
   });
-  it('Duplicate profile',function(done) {
-  	model.profile.create(1, 'test profile', function(result){
-  		assert.equal(result.error.type, "nameInUse");
-		  done();
-	  });
-  });
 });

@@ -36,28 +36,19 @@ Array.prototype.deleteProfile = function(profile) {
   return success;
 }
 
-Array.prototype.subscriberHasProfileName = function(id, name) {
-  for (i in this) 
-    if (this[i].subscriber_id == id && this[i].name == name) return true;
-  return false;
-}
-
 // ----------------------------------------------------------------------------
 // Profile Adapter Functions
 
 function createProfile(subId, name, cb) {
-  if (Profile.subscriberHasProfileName(subId, name)) cb(msg.nameInUse());
-  else {
-    var profToAdd = { 
-      id: (Profile[Profile.length-1].id + 1),
-      subscriber_id: subId,
-      name: name
-    };
-    Profile.push(profToAdd);
-    var newProf = Profile[Profile.length-1];
-    if (newProf == profToAdd) cb(msg.success(newProf));
-    else cb(msg.unknownError(Profile.pop()));
-  }
+  var profToAdd = { 
+    id: (Profile[Profile.length-1].id + 1),
+    subscriber_id: subId,
+    name: name
+  };
+  Profile.push(profToAdd);
+  var newProf = Profile[Profile.length-1];
+  if (newProf == profToAdd) cb(msg.success(newProf));
+  else cb(msg.unknownError(Profile.pop()));
 }
 
 function fetchProfile(profileInfo, cb) {

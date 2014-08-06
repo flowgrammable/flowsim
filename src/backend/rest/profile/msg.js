@@ -26,9 +26,3 @@ exports.missingName = function() {
   });
 }
 
-exports.nameInUse = function() {
-  return msg.error({
-    system: "profile/model",
-    type: "nameInUse"
-  });
-}

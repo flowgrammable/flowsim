@@ -25,7 +25,7 @@ CREATE TABLE switch_profiles
 (
   id SERIAL PRIMARY KEY,
   subscriber_id INTEGER references subscribers(id) NOT NULL,
-  name VARCHAR(60) NOT NULL UNIQUE
+  name VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE dp_caps
