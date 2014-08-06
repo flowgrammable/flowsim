@@ -1,9 +1,13 @@
 var flowsimApp = angular.module('flowsimApp', ['ngRoute', 'ui.bootstrap',
-		'subscriber', 'profile']);
+		'_switch', 'subscriber', 'profile','packet', 'ngCookies']);
 
-flowsimApp.controller('menutCtrl', function($scope, $rootScope, 
+flowsimApp.controller('menuCtrl', function($cookies, $scope, $rootScope, 
 	subscriberFactory) {
 	$scope.authenticated = false;
+
+	if($cookies.token){
+		$scope.authenticated = true;
+	}
 	
 	$scope.$on("authenticated", function() {
 		$scope.authenticated = true;

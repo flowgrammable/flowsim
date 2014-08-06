@@ -1,0 +1,71 @@
+<div ng-controller="createProfileCntrl"> 
+
+
+  <!-- MODAL PROFILE CREATE -->
+<div class="row">
+<!-- Button trigger modal -->
+<button class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+ <span class="glyphicon glyphicon-plus"></span> Add Profile 
+</button>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">Create Profile</h4>
+        </div>
+        <div class="modal-body">
+        
+				<form  role="form">
+					<div class="form-group">
+						Profile Name
+						<input type="text" class="form-control" ng-model="name">
+					</div>
+				</form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-click="create()">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROFILE LIST -->
+<div class="row">
+<!-- Button trigger modal -->
+ 
+	<div class="list-group">
+		<a class="list-group-item" data-toggle="modal" data-target="#{{item.id}}" href="" ng-repeat="item in profileList">{{item.name}}</a>
+	</div>
+<!-- Modal -->
+ 
+	<div class="modal fade" ng-repeat="item in profileList" id="{{item.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  	  <div class="modal-dialog">
+    	<div class="modal-content">
+      	  <div class="modal-header">
+        	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        	<h4 class="modal-title" id="myModalLabel">Edit Profile</h4>
+      	  </div>
+      	  <div class="modal-body">
+        	<form  role="form">
+						<div class="form-group">
+							Profile Name
+							<input type="text" class="form-control" ng-model="item.name">
+						</div>
+					</form>
+      	   </div>
+      	   <div class="modal-footer">
+        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        	<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="delete(item)">Delete</button>
+			<button type="submit" class="btn btn-primary" data-dismiss="modal" ng-click="update(item)">Save</button>
+      	   </div>
+    	</div>
+  	  </div>
+	</div>
+</div>
+</div>
+

@@ -1,7 +1,7 @@
 
-var flowAPI = angular.module('flowAPI', []);
+var subAPI = angular.module('subAPI', []);
 
-flowAPI.factory('utils', function() {
+subAPI.factory('utils', function() {
   return {
     validEmail : function(email) {
       var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -14,7 +14,7 @@ flowAPI.factory('utils', function() {
   };
 });
 
-flowAPI.factory('subscriberFactory', ['$http','$rootScope', function($http, $rootScope){
+subAPI.factory('subscriberFactory', ['$http','$rootScope', function($http, $rootScope){
 
   var urlBase = '/api/subscriber/';
   var subscriberFactory = {};

@@ -1,30 +1,30 @@
-var profile = angular.module('profile', ['ngRoute', 'ui.bootstrap', 
-	'profileAPI']);
+var packet = angular.module('packet', ['ngRoute', 'ui.bootstrap', 
+	'packetAPI']);
 
-profile.config(['$routeProvider', function($routeProvider) {
+packet.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
-    when('/profile', {
-      templateUrl: 'profile.html',
-      //controller: 'profileCntrl'
+    when('/packet', {
+      templateUrl: 'packet.html',
+      //controller: 'packetCntrl'
     });
 }]);
 
-profile.directive('fsCreateprofile', function(){
+packet.directive('fsCreatepacket', function(){
 	return {
 		restrict: 'E',
-		templateUrl: 'create_profile.html'
+		templateUrl: 'create_packet.html'
 	}
 });
 
 
-profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
-	function($scope, profileFactory){
+packet.controller('createPacketCntrl', ['$scope', 'packetFactory',
+	function($scope, packetFactory){
 		$scope.name = '';
 		$scope.creationSuccess = false;
-    $scope.profileList = [];
+    $scope.packetList = [];
 		$scope.create = function() {
-			var profile = {name: $scope.name};
-			profileFactory.create(profile)
+			var packet = {name: $scope.name};
+			packetFactory.create(packet)
 				.success(function(data){
 					if(data.value){
 						$scope.showCreate = false;
@@ -38,10 +38,10 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 			
 		};
 		$scope.getProfiles = function(){
-			profileFactory.list()
+			packetFactory.list()
 				.success(function(data){
 					if(data.value){
-						$scope.profileList = data.value.profileList;
+						$scope.packetList = data.value.packetList;
 					}
 				}).error(function(data){});
 		};
@@ -52,14 +52,14 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 			console.log('item id: ', item.id);
 			console.log('mod name: ', item.name);
 			var modifiedItem = { id:item.id, name: item.name }; 
-			profileFactory.update(modifiedItem)
+			packetFactory.update(modifiedItem)
 				.success(function(data){})
 				.error(function(data){});
 		};
 
 		$scope.delete = function(item){
 			var del = {id: item.id};
-			profileFactory.delete(del)
+			packetFactory.delete(del)
 				.success(function(data){
 					if(data.value){
 						$scope.getProfiles();
