@@ -26,3 +26,16 @@ exports.missingName = function() {
   });
 }
 
+exports.missingId = function() {
+  return msg.error({
+    system: "profile/controller",
+    type: "missingId"
+  });
+}
+
+exports.notAuthorized = function() {
+  return msg.error({
+    system: "profile/controller",
+    type: "notAuthorized"
+  });
+}

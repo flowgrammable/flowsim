@@ -16,11 +16,27 @@ function profCreate(dataModel, session, method, params, data, ip, id) {
   });
 }
 
+function profUpdate(dataModel, session, method, params, data, ip, id) {
+  if(!data.id) return passback(id, msg.missingId());
+  if(data.subscriber_id) return passback(id, msg.notAuthorized());
+  dataModel.profile.update(session.subscriber_id, data, function(result) { 
+    passback(id, result); 
+  });
+}
+
 function profList(dataModel, session, method, params, data, ip, id) {
   dataModel.profile.list(session.subscriber_id, function(result) { 
     passback(id, result); 
   });
 }
+
+function profDelete(dataModel, session, method, params, data, ip, id) {
+  var profId = params[1];
+  dataModel.profile.destroy(session.subscriber_id, profId, function(result) { 
+    passback(id, result); 
+  });
+}
+
 
 // ----------------------------------------------------------------------------
 
@@ -37,7 +53,9 @@ module.exports = function(testAdapter) {
       noauth: {},
       auth: {
         create: _.bind(profCreate, null, dataModel),
-        list:   _.bind(profList, null, dataModel)
+        update: _.bind(profUpdate, null, dataModel),
+        list:   _.bind(profList, null, dataModel),
+        delete: _.bind(profDelete, null, dataModel)
       }
     }
   }

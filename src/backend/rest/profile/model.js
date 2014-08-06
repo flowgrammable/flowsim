@@ -20,34 +20,37 @@ function profileCreate(adapter, subId, name, cb) {
   });
 }
 
-function profileUpdate(adapter, subId, oldProfileName, newProfileInfo, cb) {
+function profileUpdate(adapter, subId, newProfInfo, cb) {
   async.waterfall([
     function(callback){
-      var profInfo = { subscriber_id: subId, name: oldProfileName };
+      var profInfo = { subscriber_id: subId, id: newProfInfo.id };
       adapter.fetchProfile(profInfo, function(result){
         resultChecker(result, callback);
       });
     },
     function(result, callback){
       var profile = result.value;
-      adapter.updateProfile(profile, newProfileInfo, function(result) {
+      adapter.updateProfile(profile, newProfInfo, function(result) {
         resultChecker(result, callback);
       });
     }
     ], function(err, result){
       if(err) { cb(err); }
-      else    { cb(result); }
+      else    { cb(msg.success()); }
     });
 }
 
 function profileList(adapter, subId, cb) {
-  adapter.listProfiles(subId, function(result){ cb(result); });
+  adapter.listProfiles(subId, function(result){ 
+    for(i in result) delete result[i].subscriber_id;
+    cb(result); 
+  });
 }
 
-function profileDestroy(adapter, subId, name, cb) {
+function profileDestroy(adapter, subId, profId, cb) {
   async.waterfall([
     function(callback){
-      var profInfo = { subscriber_id: subId, name: name };
+      var profInfo = { subscriber_id: subId, id: profId };
       adapter.fetchProfile(profInfo, function(result){
         resultChecker(result, callback);
       });
