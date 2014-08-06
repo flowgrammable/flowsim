@@ -37,14 +37,13 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 		});
 	};
 
-	profileFactory.delete = function(body) {
-		return $http({
-			method: 'PUT',
-			url: 'api/profile/delete',
+	profileFactory.delete = function(itemId) {
+			return $http({
+			method: 'DELETE',
+			url: 'api/profile/destroy/' + itemId,
 			headers: {
 				"X-Access-Token": $rootScope.token
-			},
-			data: body
+			}
 		});
 	};
 	

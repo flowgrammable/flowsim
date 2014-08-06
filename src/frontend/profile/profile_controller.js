@@ -58,8 +58,7 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 		};
 
 		$scope.delete = function(item){
-			var del = {id: item.id};
-			profileFactory.delete(del)
+			profileFactory.delete(item.id)
 				.success(function(data){
 					if(data.value){
 						$scope.getProfiles();
