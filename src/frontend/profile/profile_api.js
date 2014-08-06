@@ -5,21 +5,47 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 	var urlBase = '/api/profile/';
 	var profileFactory = {};
 
-	profileFactory.create = function(data) {
-		return $http.post(urlBase + 'create', data);
-		};
+	profileFactory.create = function(body) {
+		return $http({
+			method: 'POST',
+			url: 'api/profile/create',
+			headers: {
+				"X-Access-Token": $rootScope.token
+			},
+			data: JSON.stringify(body)
+		});
+	};
 
 	profileFactory.list = function() {
-		return $http.get(urlBase + 'list');
+		return $http({
+			method: 'GET',
+			url: 'api/profile/list',
+			headers: {
+				"X-Access-Token": $rootScope.token
+			}
+		});
 	};
 
-	profileFactory.update = function(data) {
-		return $http.put(urlBase + 'update', data);
+	profileFactory.update = function(body) {
+		return $http({
+			method: 'PUT',
+			url: 'api/profile/update',
+			headers: {
+				"X-Access-Token": $rootScope.token
+			},
+			data: JSON.stringify(body)
+		});
 	};
 
-	profileFactory.delete = function(data) {
-		console.log('data from delete: ' + data);
-		return $http.put(urlBase + 'delete', data);
+	profileFactory.delete = function(body) {
+		return $http({
+			method: 'PUT',
+			url: 'api/profile/delete',
+			headers: {
+				"X-Access-Token": $rootScope.token
+			},
+			data: body
+		});
 	};
 	
   return profileFactory;

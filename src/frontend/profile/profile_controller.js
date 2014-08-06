@@ -41,7 +41,7 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 			profileFactory.list()
 				.success(function(data){
 					if(data.value){
-						$scope.profileList = data.value.profileList;
+						$scope.profileList = data.value;
 					}
 				}).error(function(data){});
 		};
