@@ -2,9 +2,10 @@ var events = require('../events');
 var uuid = require('node-uuid');
 
 
-var url = require('url');
-var msg = require('./msg');
-var sub = require('./subscriber/controller');
+var url  = require('url');
+var msg  = require('./msg');
+var sub  = require('./subscriber/controller');
+var prof = require('./profile/controller');
 
 function wrapRes(res, result) {
   var code = 200;
@@ -42,11 +43,12 @@ function validateModules(userModules) {
 module.exports = function(db, userModules) {
 
   var subscribers = sub();
-
+  var profiles    = prof();
   // Validate the supplied modules and install subscriber functions
   validateModules(userModules);
-  var installedModules = userModules;
+  var installedModules        = userModules;
   installedModules.subscriber = subscribers.module;
+  installedModules.profile    = profiles.module;
 
   // construct and return the message handler
   return function(req, res, next) {
