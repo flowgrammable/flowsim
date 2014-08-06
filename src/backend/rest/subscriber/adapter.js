@@ -28,17 +28,11 @@ function insertSubscriber(em, pwd, ip, cb) {
     verification_token: token,
     status: 'CREATED'
   }).success(function(result) {
-    // console.log(result);
-    fs.exists('temp', function (exists) {
-      if(exists) {
-        fs.writeFile('temp', '{\"ver_token\":\"'+token+'\"}', function (err) {
-          if (err) console.log('Unable to write token in file for restTest');
-        });
-      }
+    fs.writeFile('temp', '{\"ver_token\":\"'+token+'\"}', function (err) {
+      if (err) console.log('Unable to write token in file for restTest');
     });
     cb(msg.success(result));
   }).error(function(err) {
-     console.log(err);
     if(err.detail == 'Key (email)=(' + em + ') already exists.')
       cb(msg.emailInUse());
     else
@@ -72,12 +66,10 @@ function updateSubscriber(sub, newSubInfo, cb) {
 }
 
 function sendVerificationEmail(subscriber, cb) {
-  // console.log(subscriber.values); 
   var email = subscriber.email;
   var token = subscriber.verification_token;
   mailer.sendMail(email, mailer.verificationMessage(token), function(result) {
 		if (result.name) {
-		 console.log(result);
 		 cb(msg.unknownError());
 		}
     else cb(msg.success());   
@@ -85,12 +77,10 @@ function sendVerificationEmail(subscriber, cb) {
 }
 
 exports.sendResetEmail = function(subscriber, cb){
-  // console.log(subscriber.values); 
 	var email = subscriber.email;
 	var resetToken = subscriber.reset_token;
 	mailer.sendMail(email, mailer.resetMessage(resetToken), function(result){
 		if(result.name){
-			console.log(result);
 			cb(msg.unknownError());
 		}
 		else cb(msg.success());
@@ -106,7 +96,6 @@ function verifyRedirect(cb) {
 
 // TODO: this has to link to a different frontend page
 function resetRedirect(token, cb) {
-  console.log('redirecting reset request');
   var tunnel = {code:302,
                 headers: {'Location':'http://localhost:3000/#/reset/' + token}};
    cb(msg.success(null, tunnel));
@@ -132,7 +121,6 @@ function createSession(sub, cb) {
     subscriber_id: sub.id,
     timeout: newTimeout.valueOf()
   }).success(function(result) {
-    console.log(result);
     cb(msg.success(result.key));
   }).error(function(err) {
     console.log(err);
@@ -163,7 +151,6 @@ function destroySession(session, cb) {
 
 function clearTimeouts() {
   setInterval(function() { 
-    console.log("**Checking sessions table and deleting timedout sessions**");
     var currTime = new Date().valueOf();
     Session.destroy({ timeout: { lt: currTime } })
       .success(function(result) { console.log("Rows deleted: " + result); })

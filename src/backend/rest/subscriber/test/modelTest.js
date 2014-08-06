@@ -8,6 +8,7 @@ var msg = require('../msg.js');
 
 //------------------------------------------------------------------------------
 // Registration Tests
+describe('Model Tests: \n',function() {
 describe('===> Testing createSubscriber: \n',function() {
   it('User registered successfully',function(done) {
   	model.subscriber.create('test@test.com', 'mypassword', '127.0.0.1', 
@@ -236,7 +237,9 @@ describe('===> Testing passwordUpdate: \n', function(){
 // Edit Password
 describe('===> Testing editPasswd: \n', function(){
   var encrypted =  bcrypt.hashSync('somePasswd123', 10);
-  var testSubscriber = {email: 'testEditPwd@test.com',
+  var testSubscriber = {
+			id: 66, 
+			email: 'testEditPwd@test.com',
       password: encrypted,
       reg_date: new Date(),
       reg_ip: '127.0.0.1',
@@ -267,5 +270,6 @@ describe('===> Testing editPasswd: \n', function(){
     });
 
   });
+});
 });
 
