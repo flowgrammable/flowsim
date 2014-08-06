@@ -15,7 +15,7 @@ describe('===> Utils Test: \n', function(){
                 assert.equal(utils.invalidProfile(badData), true);
                 done();
         });
-        it('Proilfe: Test passing data with no "name" field should return true', function(done){
+        it('Profile: Test passing data with no "name" field should return true', function(done){
                 assert.equal(utils.invalidProfile(noNameData), true);
                 done();
         });
