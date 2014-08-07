@@ -1,4 +1,6 @@
 
+// this needs to get moved to scratch/... something -jc
+
 var connect = require('connect');
 var events = require('events');
 var _ = require('underscore');
