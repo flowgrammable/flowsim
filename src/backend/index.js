@@ -5,12 +5,6 @@ var connect = require('connect');
 var program = require('commander');
 var fs      = require('fs');
 
-// Second obtain local modules
-var html = require('./html/controller');
-var rest = require('./rest/controller');
-
-var profile_mod = require('./rest/profile/controller');
-var packet_mod = require('./rest/packet/controller');
 
 // Something about this seems wrong .. why do we not need references to ddbs or 
 // adapter here? If we are trying to perform code initialization then it belongs
@@ -20,11 +14,16 @@ var packet_mod = require('./rest/packet/controller');
 require('./dbbs').setup();
 require('./rest/subscriber/adapter.js').clearTimeouts();
 
-// var session = require('./session');
+var profile_mod = require('./rest/profile/controller');
+var packet_mod = require('./rest/packet/controller');
 
 // again ... what is going on here ... should this a global action?
 var prof = profile_mod();
 var pack = packet_mod();
+
+// Second obtain local modules
+var html = require('./html/controller');
+var rest = require('./rest/controller');
 
 // Build the comand line parsing help strings
 program

@@ -37,7 +37,7 @@ function profList(dataModel, session, method, params, data, ip, id) {
 }
 
 function profDestroy(dataModel, session, method, params, data, ip, id) {
-  if(method =='DEL') {
+  if(method =='DELETE') {
     if(!params[1]) return passback(id, msg.missingId());
     var profId = params[1];
     dataModel.profile.destroy(session.subscriber_id, profId, function(result) { 
