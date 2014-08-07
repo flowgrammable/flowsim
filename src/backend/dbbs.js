@@ -1,3 +1,11 @@
+
+// Is this the dummy datamodel interface ? -jc
+//
+// Why must this be a singleton? -jc
+//
+// Is the singleton stuff at teh bottom really necessary? Is there an existing
+// nodejs or underscore mechanism for this pattern? -jc
+
 var filesystem = require('fs');
 var models = {};
 var relationships = {};
