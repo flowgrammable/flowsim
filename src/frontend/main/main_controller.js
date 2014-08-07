@@ -5,6 +5,18 @@ flowsimApp.controller('menuCtrl', function($cookies, $scope, $rootScope,
 	subscriberFactory) {
 	$scope.authenticated = false;
 
+    $scope.logout = function() {
+    console.log('clicked logged out');
+    subscriberFactory.logout()
+      .success(function(data){
+        $scope.authenticated = false;
+        delete $cookies['token'];
+        console.log('clicked logout');
+      }).error(function(data){
+      });
+    }
+
+
 	if($cookies.token){
 		$scope.authenticated = true;
 	}
