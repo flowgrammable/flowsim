@@ -14,6 +14,7 @@ function passback(id, result, nextFunction){
 
 function packetCreate(dataModel, session, method, params, data, ip, id) {
 	if(method =='POST') {
+    if(!data.name) return passback(id, msg.missingPacketName());
   	dataModel.packet.packCreate(session, data.name, function(result){
       	passback(id, result);
   	});
@@ -37,7 +38,6 @@ module.exports = function(testAdapter) {
 		dataModel = model();
 	} 
   return {
-    authenticate: _.bind(sessAuthenticate, null, dataModel),
     module: {
       noauth: {
       },
