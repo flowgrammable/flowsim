@@ -31,7 +31,7 @@ server=$(PWD)/index.js
 UNIT_TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -not -path "*/*/rest*.js")
 
 # looking for files present in "test" folder throughout the repo excluding "scratch" and "node_modules" folders
-SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*" )
+SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*" -not -path "*/packet/*")
 
 unit-test:
 	$(flyway) clean && $(flyway) migrate

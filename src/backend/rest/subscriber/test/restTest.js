@@ -1,5 +1,4 @@
 var orm = require('../../../dbbs');
-var Subscriber = orm.model("subscriber");
 var request = require('request');
 var assert = require('assert');
 var fs = require('fs');

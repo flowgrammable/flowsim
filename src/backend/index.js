@@ -8,8 +8,7 @@ var html = require('./html/controller');
 var rest = require('./rest/controller');
 var fs = require('fs');
 // var session = require('./session');
-
-
+var packet = require('./rest/packet/controller');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -36,7 +35,7 @@ if(program.test) {
 
 app
    .use(connect.json())
-   .use('/api', rest(require(database), {}))
+   .use('/api', rest(require(database), {packet: packet}))
    .use(function(req, res) {
      res.writeHead('404');
      res.end('');
