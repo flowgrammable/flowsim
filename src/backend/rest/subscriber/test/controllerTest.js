@@ -9,7 +9,7 @@ var controller = subController(testAdapter);
 
 //-----------------------------------------------------------------------------
 // Registration Controller Tests
-
+describe('Controller Tests:\n', function() {
 describe('===> Testing Register subscriber controller: \n', function(){
 
 
@@ -61,6 +61,19 @@ describe('===> Testing Register subscriber controller: \n', function(){
 		});
   controller.module.noauth.register('POST', {}, data, '127.0.0.1', testId);
 	});
+  
+
+  it('Test if method is not POST', function(done){
+    var testId = 'testerID4';
+    var data = {email: 'test@hello.com', password: '2short'};
+
+    events.Emitter.once(testId, function(result){
+    assert.equal(JSON.stringify(result),
+                 JSON.stringify(msg.methodNotSupported()));
+    done();
+    });
+  controller.module.noauth.register('GET', {}, data, '127.0.0.1', testId);
+  });
 });
 
 // ----------------------------------------------------------------------------
@@ -91,6 +104,18 @@ describe('===> Testing Verify subscriber controller: \n', function(){
 		});
 	  controller.module.noauth.verify('POST', params, data, '127.0.0.1', testId);
 	});
+
+  it('Test if method is not POST', function(done){
+    var testId = 'testerID2';
+        var data = {};
+        var params = ['doesnt_matter_only_looking_for_params1', ''];
+    events.Emitter.once(testId, function(result){
+    assert.equal(JSON.stringify(result),
+    JSON.stringify(msg.methodNotSupported()));
+    done();
+    });
+    controller.module.noauth.verify('GET', params, data, '127.0.0.1', testId);
+  });
 });
 
 // --------------------------------------------------------------------------------
@@ -116,7 +141,38 @@ describe('===> Testing Login subscriber controller: \n', function(){
     });
  	  controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
   });
+	it('Test if password not provided',function(done){
+		var testId = 'testerID3';
+		var data = {email: 'test@hello.com', password: '' };
+		events.Emitter.once(testId, function(result){
+                	assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPwd()));
+                	done();
+   	 	});
+        controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+
+	});
+
+        it('Test if password provided invalid',function(done){
+                var testId = 'testerID4';
+                var data = {email: 'test@hello.com', password: 'badPass' };
+                events.Emitter.once(testId, function(result){
+                        assert.equal(JSON.stringify(result), JSON.stringify(msg.badPwd()));
+                        done();
+                });
+        controller.module.noauth.login('POST', {}, data, '127.0.0.1', testId);
+
+        });
+
 	
+  it('Test if method is not POST', function(done){
+    var testId = 'testerID5';
+    var data = {email: 'a_terrible_email', password: 'tester'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.methodNotSupported()));
+      done();
+    });
+    controller.module.noauth.login('GET', {}, data, '127.0.0.1', testId);
+  });
 });
 
 // ----------------------------------------------------------------------------
@@ -139,6 +195,15 @@ describe('===> Testing Forgot Password subscriber controller: \n', function(){
       done();
     });
  	  controller.module.noauth.forgotpassword('POST', {}, data, '127.0.0.1', testId);
+  });
+  it('Test if method is not POST', function(done){
+    var testId = 'testerID2';
+    var data = {email: 'a_terrible_email'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.methodNotSupported()));
+      done();
+    });
+    controller.module.noauth.forgotpassword('GET', {}, data, '127.0.0.1', testId);
   });
 });
 
@@ -181,6 +246,15 @@ describe('===> Testing Reset Password subscriber controller: \n', function(){
     });
     controller.module.noauth.resetpassword('POST', {}, data, '127.0.0.1', testId);
   });
+  it('Test if method is not POST', function(done){
+    var testId = 'testerID1';
+    var data = {reset_token: 'ffffffff-ffff-ffff-ffff-ffffffffffff', password: 'bad pwd'};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.methodNotSupported()));
+      done();
+    });
+    controller.module.noauth.resetpassword('GET', {}, data, '127.0.0.1', testId);
+  });
 });
 
 // -------------------------------------------------------------------------------------
@@ -218,6 +292,15 @@ describe('===> Testing editing of subscriber password: \n', function(){
     });
     controller.module.auth.editpassword(session,'POST', {}, data, '127.0.0.1', testId);
    });
+   it('Test if method is not POST', function(done){
+    var testId = 'testerID11';
+    var data = {oldPassword: 'my123password', newPassword: 'what'};
+    events.Emitter.once(testId, function(result){
+     assert.equal(JSON.stringify(result), JSON.stringify(msg.methodNotSupported()));
+     done();
+    });
+    controller.module.auth.editpassword(session,'GET', {}, data, '127.0.0.1', testId);
+   });
 });
 
 //-------------------------------------------------------------------------------------
@@ -231,4 +314,5 @@ describe('===> Testing Session Authenticate controller: \n', function(){
 			done();
 		});
 	});
+});
 });

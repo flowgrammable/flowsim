@@ -21,6 +21,7 @@ CREATE TABLE subscribers
   -- status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
 );
 
+<<<<<<< HEAD
 CREATE TABLE packet
 (
   id SERIAL PRIMARY KEY,
@@ -29,16 +30,19 @@ CREATE TABLE packet
 );
 
 CREATE TABLE switch_profile
+=======
+CREATE TABLE switch_profiles
+>>>>>>> 48da2640202e0ad90e2726de899c5d76a742c0e4
 (
-	id SERIAL PRIMARY KEY,
-  sub_id INTEGER references subscribers(id) NOT NULL,
-  name CHAR(60) NOT NULL
+  id SERIAL PRIMARY KEY,
+  subscriber_id INTEGER references subscribers(id) NOT NULL,
+  name VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE dp_caps
 (
 	id SERIAL PRIMARY KEY,
-  profile_id INTEGER references switch_profile(id) NOT NULL,
+  profile_id INTEGER references switch_profiles(id) NOT NULL,
   -- Virual Ports
 	vp_all BOOLEAN, 
   vp_controller BOOLEAN, 

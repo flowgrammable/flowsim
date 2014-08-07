@@ -8,6 +8,7 @@ var msg = require('../msg.js');
 
 //------------------------------------------------------------------------------
 // Registration Tests
+describe('Model Tests: \n',function() {
 describe('===> Testing createSubscriber: \n',function() {
   it('User registered successfully',function(done) {
   	model.subscriber.create('test@test.com', 'mypassword', '127.0.0.1', 
@@ -269,5 +270,6 @@ describe('===> Testing editPasswd: \n', function(){
     });
 
   });
+});
 });
 

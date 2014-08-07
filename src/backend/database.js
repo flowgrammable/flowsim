@@ -12,7 +12,7 @@ module.exports = {
       reg_date: new Date(),
       reg_ip: '127.0.0.1',
       verification_token: 'c2e6de55-2030-41e0-aa48-6ce5d2314a67',
-      status: 'CREATED'                        // CREATED | ACTIVE | RESET | CLOSED,
+      status: 'CREATED'
     }
   ],
   sessions: [
@@ -28,5 +28,11 @@ module.exports = {
       subscriber_id: 1
     }
   ],
+  switch_profiles: [
+    {
+      subscriber_id: 1,
+      name: 'profile'
+    }
+  ]
 }
 
