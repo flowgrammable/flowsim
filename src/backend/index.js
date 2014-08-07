@@ -8,8 +8,10 @@ var html = require('./html/controller');
 var rest = require('./rest/controller');
 var fs = require('fs');
 var profile_mod = require('./rest/profile/controller');
+var packet_mod = require('./rest/packet/controller');
 // var session = require('./session');
 var prof = profile_mod();
+var pack = packet_mod();
 
 
 program
@@ -41,35 +43,17 @@ var profileList = [];
 var packetId = 0;
 var packetList = [];
 function findById(source, id){
-	for (var i = 0; i < source.length; i++){
-		if(source[i].id === id){
-			return i;
-		}
-	}
-	throw "couldnt find object with id: " + id;
+  for (var i = 0; i < source.length; i++){
+    if(source[i].id === id){
+      return i;
+    }
+  }
+  throw "couldnt find object with id: " + id;
 }
 
 app
    .use(connect.json())
-	 .use('/api/packet', function(request, response, next){
-			if(request.method == 'POST'){
-				packetList.push({id: packetId++, name: request.body.name});
-				response.end(JSON.stringify({value:{}}));
-			} else if(request.method == 'GET'){
-				response.end(JSON.stringify({value:{packetList:packetList}}));
-			} else if(request.method == 'PUT'){
-			  var oldindex = findById(packetList, request.body.id);
-				if(request.body.id && request.body.name){
-				packetList[oldindex] = {id: request.body.id, name: request.body.name};
-				response.end(JSON.stringify({value:{}}));
-				} else {
-				packetList.splice(oldindex,1);
-				response.end(JSON.stringify({value:{}}));
-				}
-			} 
-			
-		})
-   .use('/api', rest(require(database), {profile: prof.module}))
+   .use('/api', rest(require(database), {profile: prof.module, packet: pack.module}))
    .use(function(req, res) {
      res.writeHead('404');
      res.end('');
@@ -77,4 +61,3 @@ app
    .listen(port, ip);
 
 console.log('Server started on: %s:%d', ip, port);
-
