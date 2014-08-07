@@ -8,8 +8,15 @@ var Profile = orm.model("switch_profile");
 function createProfile(subId, name, cb) {
   Profile.create({ subscriber_id: subId, name: name })
     .success(function(result) { cb(msg.success(result)); })
-    .error(function(err) { cb(msg.unknownError(err)); });
+    .error(function(err) { console.log(err); cb(msg.unknownError(err)); });
 }
+
+// setTimeout(function() { 
+//   createProfile(1, "name", function(result) { 
+//     result.value.getSubscriber().success(function(result) { console.log(result); });
+//   }); 
+// }, 1500);
+
 
 function fetchProfile(profileInfo, cb) {
   Profile.find({ where: profileInfo })

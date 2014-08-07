@@ -49,13 +49,17 @@ var singleton = function singleton(){
     models["packet"] = sequelize.define("packet", pack.model, options);
     relationships["packet"] = pack.relations;
     models["switch_profile"] = sequelize.define("switch_profile", prof.model, options);
+    // models["switch_profile"].belongsTo(models["subscriber"], {as: "Subscriber"});
     relationships["switch_profile"] = prof.relations;
 
 		for(var name in relationships){
       var relation = relationships[name];
       for(var relName in relation){
         var related = relation[relName];
-        models[name][relName](models[related]);
+        if (related.relative && related.as)
+          models[name][relName](models[related.relative], { as: related.as })
+        else
+          models[name][relName](models[related]);
         // console.log(models[name][relName](models[related]));
       }
     }
