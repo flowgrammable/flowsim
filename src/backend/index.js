@@ -31,11 +31,18 @@ var htmlbase = program.base || process.env.BASE || __dirname;
 var database = program.database || process.env.DATABASE || './dbbs';
 
 var app = connect();
+
+// Note - it would be nice if this could be refactored to a connect functor
 html.serve(app, connect, { base: htmlbase, content: require(config)});
 
 if(program.test) {
   fs.createWriteStream('temp','utf8');
 }
+
+// What are these global variables for? ... globals are bad!
+// Also, it appears to be providing some sort of application functionality;
+// however, this is a top-level composition. There should only being argument
+// handling and service initialization at this point.
 
 var profileId = 0;
 var profileList = [];
@@ -52,12 +59,16 @@ function findById(source, id){
 }
 
 app
-   .use(connect.json())
-   .use('/api', rest(require(database), {profile: prof.module, packet: pack.module}))
-   .use(function(req, res) {
-     res.writeHead('404');
-     res.end('');
-   })
-   .listen(port, ip);
+  .use(connect.json())
+  .use('/api', 
+       rest(require(database), {profile: prof.module, packet: pack.module})
+      )
+  // We should refactor this into a generic resource not found handler.
+  // Definitions should be really be in this file (index.js)
+  .use(function(req, res) {
+    res.writeHead('404');
+    res.end('');
+  })
+  .listen(port, ip);
 
 console.log('Server started on: %s:%d', ip, port);
