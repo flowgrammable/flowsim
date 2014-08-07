@@ -7,6 +7,7 @@ exports.sendMail = function (email, message, next){
   var messageOptions = { from: 'flog mailer', to: email, subject: 'test', html: message}
   smtpTransport.sendMail(messageOptions, function(err, response){
     if(err){
+      console.log("Error: ", err);
       smtpTransport.close();
       next(err);
     }else{
