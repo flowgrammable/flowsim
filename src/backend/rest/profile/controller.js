@@ -10,7 +10,7 @@ function passback(id, result, nextFunction){ events.Emitter.emit(id, result); }
 // Auth
 
 function profCreate(dataModel, session, method, params, data, ip, id) {
-  if(!data.name) return passback(id, msg.missingName());
+  if(utils.invalidProfile(data)) return passback(id, msg.missingName());
   dataModel.profile.create(session.subscriber_id, data.name, function(result){
     passback(id, result);
   });
