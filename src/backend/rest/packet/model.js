@@ -17,7 +17,7 @@ function resultChecker(result, callback){
 // ----------------------------------------------------------------------------
 // Packet
 
-function packCreate(adapter, name, session, cb) {
+function packetCreate(adapter, name, session, cb) {
   // 1. Insert User created packet
   async.waterfall([
     function(callback){
@@ -32,7 +32,7 @@ function packCreate(adapter, name, session, cb) {
 }
 
 
-function packList(adapter, session, cb) {
+function packetList(adapter, session, cb) {
   async.waterfall([
     function(callback){
       adapter.fetchPacket(session.subscriber_id, function(result){
@@ -51,10 +51,10 @@ module.exports = function(testAdapter) {
   }
   return {
     packet: {
-      create: _.bind(packCreate, null, adapter),
-      //update: _.bind(packUpdate, null, adapter),
-      //delete: _.bind(packDelete, null, adapter),
-      list:  _.bind(packList, null, adapter)
+      create: _.bind(packetCreate, null, adapter),
+      //update: _.bind(packetUpdate, null, adapter),
+      //delete: _.bind(packetDelete, null, adapter),
+      list:  _.bind(packetList, null, adapter)
     }
   };
 }
