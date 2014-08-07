@@ -75,14 +75,10 @@ function destroyProfile(profile, cb) {
 }
 
 function listProfiles(subId, cb) { 
-  var list;
-  for (i in Profile) {
-    if (Profile[i].subscriber_id == subId){
-      list[i].id = Profile[i].id;
-      list[i].name = Profile[i].name;
-      // extend this to include version, etc...
-    }
-  }
+  var list = new Array();
+  for (i in Profile) 
+    if (Profile[i].subscriber_id == subId) 
+      list[i] = Profile[i];
   cb(msg.success(list)); 
 }
 
