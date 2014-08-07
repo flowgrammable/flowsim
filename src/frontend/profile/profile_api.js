@@ -26,6 +26,16 @@ profileAPI.factory('profileFactory', ['$http', '$cookies', '$rootScope', functio
 		});
 	};
 
+  profileFactory.detail = function(id){
+		return $http({
+			method: 'GET',
+			url: 'api/profile/detail' + id,
+			headers: {
+				"X-Access-Token": $cookies.token
+			}
+		});
+	};
+
 	profileFactory.update = function(body) {
 		return $http({
 			method: 'PUT',
