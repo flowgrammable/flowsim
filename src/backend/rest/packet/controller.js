@@ -15,15 +15,15 @@ function passback(id, result, nextFunction){
 function packetCreate(dataModel, session, method, params, data, ip, id) {
 	if(method =='POST') {
     if(!data.name) return passback(id, msg.missingPacketName());
-  	dataModel.packet.packCreate(session, data.name, function(result){
+  	dataModel.packet.packetCreate(session, data.name, function(result){
       	passback(id, result);
   	});
 	} else return passback(id, msg.methodNotSupported());
 }
 
 function packetList(dataModel, session, method, params, data, ip, id) {
-  if(method =='POST') {
-    dataModel.packet.packList(session, function(result){
+  if(method =='GET') {
+    dataModel.packet.packetList(session, function(result){
         passback(id, result);
     });
   } else return passback(id, msg.methodNotSupported());
