@@ -22,7 +22,7 @@ function packetCreate(dataModel, session, method, params, data, ip, id) {
 }
 
 function packetList(dataModel, session, method, params, data, ip, id) {
-  if(method =='POST') {
+  if(method =='GET') {
     dataModel.packet.packList(session, function(result){
         passback(id, result);
     });
