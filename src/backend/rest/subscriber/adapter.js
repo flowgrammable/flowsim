@@ -56,6 +56,17 @@ function fetchSubscriber(subInfo, cb) {
     });
 }
 
+// setTimeout(function() { 
+//   fetchSubscriber({id: 1}, function(result) { 
+//     result.value.getProfiles({attributes: ['id','name']})
+//       .success(function(result) { 
+//         for (i in result)
+//           console.log(result[i].dataValues); 
+//       });
+//   }); 
+// }, 1500);
+
+
 function updateSubscriber(sub, newSubInfo, cb) {
   sub.updateAttributes(newSubInfo)
     .success(function(result) {
