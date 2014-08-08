@@ -76,3 +76,21 @@ describe('Testing create profile requests:',function() {
   });
 });
 
+// --------------------------------------------------------------------------
+// Testing update profile
+describe('Testing update profile request: ', function() {
+	it('Test: PUT to /api/profile/update without an id in the body should return msg.missingId()', 
+	function(done) {
+		request( {
+			url: 'http://localhost:3000/api/profile/update',
+			body: '{ \"name\": \"test profile\"}',
+		   	headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+   			method: 'PUT'
+ 		}, function (error, response, body) {
+			assert.equal(JSON.parse(body)['error']['type'],'missingId');
+			console.log('\tResponse received : ', body);
+      			done();
+    		});
+  	});
+});
+
