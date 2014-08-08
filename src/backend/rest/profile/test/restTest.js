@@ -52,7 +52,7 @@ describe('Testing create profile requests:',function() {
   function(done) {
     request( {
       url: 'http://localhost:3000/api/profile/create',
-      body: '{ \"name\": \"test profile\"}',
+      body: '{ \"name\": \"test profile\", \"ofp_version\" : \"10\"}',
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'POST'
     }, function (error, response, body) {
@@ -84,7 +84,7 @@ describe('Testing update profile request: ', function() {
 	function(done) {
 		request( {
 			url: 'http://localhost:3000/api/profile/update',
-			body: '{\"id\": \"1\", \"name\": \"test profile\"}',
+			body: '{\"id\": \"1\", \"name\": \"test profile\", \"ofp_version\" : \"10\" }',
 			headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
                         method: 'PUT'
                 }, function (error, response, body) {
