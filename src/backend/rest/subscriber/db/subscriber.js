@@ -13,6 +13,11 @@ module.exports = {
 	},
   relations:{
         // hasMany:"session",
-		// hasOne:"authtoken"
+		 hasOne:"session"
+	},
+	options: {
+		timestamps: false,
+		underscored: true,
+		tableName: 'subscriber'
 	}
 }

@@ -6,6 +6,11 @@ module.exports = {
     name: Seq.STRING
 	},
   relations:{
-    hasMany:"subscriber",
-	}
+    belongsTo:"subscriber",
+	},
+	options:{
+		timestamps: false,
+		underscored: true,
+		tableName: 'packet'
+	} 
 }
