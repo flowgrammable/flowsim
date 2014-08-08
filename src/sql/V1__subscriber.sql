@@ -46,7 +46,7 @@ CREATE TABLE switch_profile
   /*
    * Openflow protocol version
    */
-  ofp_version INTEGER NOT NULL
+  ofp_version INTEGER NOT NULL,
 
   /*
    * Profile name
@@ -159,6 +159,16 @@ CREATE TABLE ft_caps
   max_entries INTEGER
 );
 
+
+
+CREATE TYPE FIELD_TYPES AS ENUM (
+  'OFPXMT_OFB_IN_PORT', 
+  'OFPXMT_OFB_IN_PHY_PORT',
+  'OFPXMT_OFB_METADATA',
+  'OFPXMT_OFB_ETH_DST',
+  'OFPXMT_OFB_ETH_SRC',
+  'OFPXMT_OFB_ETH_TYPE'
+);
 -- Field Capabilities ----------------------------------------------------------
 CREATE TABLE field_caps
 (
@@ -188,13 +198,26 @@ CREATE TABLE field_caps
     apply_setfield_miss BOOLEAN
 );
 
-CREATE TYPE FIELD_TYPES AS ENUM (
-  'OFPXMT_OFB_IN_PORT', 
-  'OFPXMT_OFB_IN_PHY_PORT',
-  'OFPXMT_OFB_METADATA',
-  'OFPXMT_OFB_ETH_DST',
-  'OFPXMT_OFB_ETH_SRC',
-  'OFPXMT_OFB_ETH_TYPE'
+
+CREATE TYPE ACTION_TYPES AS ENUM (
+  --Required--
+  'OFPAT_OUTPUT',
+  'DROP',
+  'OFPAT_GROUP',
+  --Optional--
+  'OFPAT_COPY_TTL_OUT',
+  'OFPAT_COPY_TTL_IN',
+  'OFPAT_SET_MPLS_TTL',
+  'OFPAT_DEC_MPLS_TTL',
+  'OFPAT_PUSH_VLAN',
+  'OFPAT_POP_MPLS',
+  'OFPAT_SET_QUEUE',
+  'OFPAT_SET_NW_TTL',
+  'OFPAT_DEC_NW_TTL',
+  'OFPAT_SET_FIELD',
+  'OFPAT_PUSH_PBB',
+  'OFPAT_POP_PBB',
+  'OFPAT_EXPERIMENTER'
 );
 
 CREATE TABLE action_capabilities
@@ -220,27 +243,6 @@ CREATE TABLE action_capabilities
   write_actions_miss BOOLEAN,
   apply_actions BOOLEAN,
   apply_actions_miss BOOLEAN
-);
-
-CREATE TYPE ACTION_TYPES AS ENUM (
-  --Required--
-  'OFPAT_OUTPUT',
-  'DROP',
-  'OFPAT_GROUP',
-  --Optional--
-  'OFPAT_COPY_TTL_OUT',
-  'OFPAT_COPY_TTL_IN',
-  'OFPAT_SET_MPLS_TTL',
-  'OFPAT_DEC_MPLS_TTL',
-  'OFPAT_PUSH_VLAN',
-  'OFPAT_POP_MPLS',
-  'OFPAT_SET_QUEUE',
-  'OFPAT_SET_NW_TTL',
-  'OFPAT_DEC_NW_TTL',
-  'OFPAT_SET_FIELD',
-  'OFPAT_PUSH_PBB',
-  'OFPAT_POP_PBB',
-  'OFPAT_EXPERIMENTER'
 );
 
 CREATE TABLE match_caps

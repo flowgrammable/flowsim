@@ -18,7 +18,8 @@ function resultChecker(result, callback){
 // through a call to the createProfile adapter function. If successful, 
 // msg.success() is returned, if unsuccessful the error is returned.
 function profileCreate(adapter, subId, name, ver, cb) {
-  adapter.createProfile(subId, name, ver, function(result) { 
+  console.log('profile id in model', subId);
+	adapter.createProfile(subId, name, ver, function(result) { 
     if (result.value) cb(msg.success());
     else cb(result); 
   });
@@ -63,6 +64,7 @@ function profileList(adapter, subId, cb) {
     if (result.error) cb(result);
     else {
       var profs = result.value;
+			var list = [];
       // all profiles w/all attributes are in an array so we need to 
       // strip the subscriber_id from it    
       for(i in profs) list[i] = { id: profs[i].id, name: profs[i].name }

@@ -13,7 +13,8 @@ function profCreate(dataModel, session, method, params, data, ip, id) {
   if(method =='POST') {
     if(utils.invalidProfile(data)) return passback(id, msg.missingName());
     if(!data.ofp_version) return passback(id, msg.missingOfpVersion());
-    dataModel.profile.create(session.subscriber_id, data.name, data.ofp_version,
+    console.log('session subscriber id', session.subscriber_id);
+		dataModel.profile.create(session.subscriber_id, data.name, data.ofp_version,
     function(result){
       passback(id, result);
     });

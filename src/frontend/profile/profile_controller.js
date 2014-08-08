@@ -24,7 +24,7 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
     $scope.profileList = [];
 		$scope.detail = {};
 	$scope.create = function() {
-		var profile = {name: $scope.profdata.name, version: $scope.profdata.version};
+		var profile = {name: $scope.profdata.name, ofp_version: $scope.profdata.version};
 		profileFactory.create(profile)
 			.success(function(data){
 				if(data.value){
@@ -50,7 +50,7 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
     $scope.getProfiles();
 
 		$scope.detail = function(id){
-			profileFactory.detail()
+			profileFactory.detail(id)
 				.success(function(data){
 					if(data.value){
 						$scope.detail = data.value;

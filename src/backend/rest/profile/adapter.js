@@ -14,13 +14,15 @@ var FtCaps = orm.model("ft_caps");
 // be inferred based on the ofp_version
 function createProfile(subId, name, ver, cb) {
   var prof;
+	console.log('sub id from adapter: ', subId);
   Profile.create({ 
     subscriber_id: subId, 
     name: name, 
     ofp_version: ver 
-  }).then(function(profile) { 
-    prof = profile; 
-    return DpCaps.create(generateDpCaps(prof.id, ver)); 
+  }).then(function(profile) {
+    prof = profile;  
+    console.log('profile id from subcreate: ', prof.id); 
+	  return DpCaps.create(generateDpCaps(prof.id, ver)); 
   }).then(function(dp_caps) { 
     return FtCaps.create(generateFtCaps(dp_caps.id, ver)); 
   }).then(function(ft_caps) { cb(msg.success(prof)) })
@@ -29,7 +31,8 @@ function createProfile(subId, name, ver, cb) {
 // The generateDpCaps function returns values for the dp_caps table 
 // entry based on the ofp_version passed in.
 function generateDpCaps(profId, version) {
-  if (version == 1) 
+  console.log('profId from gen dp caps: ', profId);
+  if (version == 10) 
     return {
       profile_id:    profId,
       vp_all:        true, 
@@ -46,7 +49,7 @@ function generateDpCaps(profId, version) {
 // The generateDpCaps function returns values for the dp_caps table 
 // entry based on the ofp_version passed in.
 function generateFtCaps(dpId, version) {
-  if (version == 1) 
+  if (version == 10) 
     return {
       dp_id:       dpId,
       table_id:    1,
@@ -74,6 +77,7 @@ function fetchProfileDetails(profile, cb) {
   var dp_caps, ft_caps;
   profile.getDpCaps()
   .then(function(dpCaps){
+		console.log('dpcaps: ', dpCaps);
     dp_caps = dpCaps.values;
     return dpCaps.getFtCaps()
   }).then(function(ftCaps){
