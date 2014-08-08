@@ -22,6 +22,13 @@ module.exports = {
       timeout: 0
     }
   ],
+  packets: [
+    {
+      id: 1,
+      name: 'Packet123',
+      subscriber_id: 1
+    }
+  ],
   switch_profiles: [
     {
       subscriber_id: 1,

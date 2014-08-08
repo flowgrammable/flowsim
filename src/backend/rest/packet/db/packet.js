@@ -3,14 +3,14 @@ var orm = require('../../../dbbs'),
 
 module.exports = {
 	model:{
-    name: Seq.STRING  
+    name: Seq.STRING
 	},
-	relations:{
-		belongsTo:"subscriber"
+  relations:{
+    belongsTo:"subscriber",
 	},
 	options:{
 		timestamps: false,
 		underscored: true,
-		tableName: 'switch_profile'
-	}
+		tableName: 'packet'
+	} 
 }

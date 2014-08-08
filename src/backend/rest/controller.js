@@ -1,8 +1,8 @@
-var events = require('../events');
+
 var uuid = require('node-uuid');
-
-
 var url  = require('url');
+
+var events = require('../events');
 var msg  = require('./msg');
 var sub  = require('./subscriber/controller');
 
@@ -26,6 +26,7 @@ function validateModules(userModules) {
   // Verify each module has an auth and unath section
   for(var property in userModules) {
     if(userModules.hasOwnProperty(property)) {
+      console.log(userModules);
       if(!userModules[property].auth) {
         throw "Module: " + property + " is missing component: " + "auth"
       }
@@ -35,9 +36,6 @@ function validateModules(userModules) {
     }
   }
 }
-
-// 
-
 
 module.exports = function(db, userModules) {
 

@@ -31,10 +31,11 @@ module.exports = {
     '../frontend/bower_components/angular-ui-bootstrap/dist',
 		'../frontend/bower_components/angular-cookies'
   ],
+  // Not really sure what these are for .. this is static file mapper
 	subscriber: [ '../frontend/subscriber' ],
 	profile: [ '../frontend/profile' ],
 	main: [ '../frontend/main' ],
 	packet: [ '../frontend/packet' ],
-	switch: [ '../frontend/switch' ]
+	switch: [ '../frontend/switch' ]        // 'switch' is a keyword, must change
 };
 

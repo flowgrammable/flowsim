@@ -1,7 +1,7 @@
 var profileAPI = angular.module('profileAPI', []);
 
-profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
-	$rootScope){
+profileAPI.factory('profileFactory', ['$http', '$cookies', '$rootScope', function($http,
+	$cookies, $rootScope){
 	var urlBase = '/api/profile/';
 	var profileFactory = {};
 
@@ -10,7 +10,7 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 			method: 'POST',
 			url: 'api/profile/create',
 			headers: {
-				"X-Access-Token": $rootScope.token
+				"X-Access-Token": $cookies.token
 			},
 			data: JSON.stringify(body)
 		});
@@ -21,7 +21,7 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 			method: 'GET',
 			url: 'api/profile/list',
 			headers: {
-				"X-Access-Token": $rootScope.token
+				"X-Access-Token": $cookies.token
 			}
 		});
 	};
@@ -31,7 +31,7 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 			method: 'PUT',
 			url: 'api/profile/update',
 			headers: {
-				"X-Access-Token": $rootScope.token
+				"X-Access-Token": $cookies.token
 			},
 			data: JSON.stringify(body)
 		});
@@ -42,7 +42,7 @@ profileAPI.factory('profileFactory', ['$http', '$rootScope', function($http,
 			method: 'DELETE',
 			url: 'api/profile/destroy/' + itemId,
 			headers: {
-				"X-Access-Token": $rootScope.token
+				"X-Access-Token": $cookies.token
 			}
 		});
 	};

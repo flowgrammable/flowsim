@@ -11,5 +11,10 @@ module.exports = {
 	},
 	relations:{
 		belongsTo:"subscriber"
+	},
+	options: {
+		timestamps: false,
+		underscored: true,
+		tableName: 'session'
 	}
 }

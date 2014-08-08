@@ -4,7 +4,7 @@ var request = require('request');
 var assert = require('assert');
 var fs = require('fs');
 
-orm.setup()
+//orm.setup()
 var token, sessKey;
 
 // ----------------------------------------------------------------------------
@@ -15,7 +15,7 @@ describe('Testing create profile requests:',function() {
     this.timeout(5000);
     request( { // register subscriber
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"test@gmail.com\", \"password\": \"my password\"}',
+      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
@@ -35,7 +35,7 @@ describe('Testing create profile requests:',function() {
             assert(JSON.parse(body)['value'],'Unable to verify user');
             request( { // login subscriber
               url: 'http://localhost:3000/api/subscriber/login',
-              body: '{ \"email\": \"test@gmail.com\", \"password\": \"my password\"}',
+              body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
               headers: { 'Content-Type': 'application/json' },
               method: 'POST'
             }, function (error, response, body) {

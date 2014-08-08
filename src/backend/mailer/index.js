@@ -1,5 +1,6 @@
 var nodemailer = require("nodemailer");
-var config = require('./config.js');
+var config     = require('./config.js');
+
 // function to send mail
 exports.sendMail = function (email, message, next){
 
@@ -7,6 +8,7 @@ exports.sendMail = function (email, message, next){
   var messageOptions = { from: 'flog mailer', to: email, subject: 'test', html: message}
   smtpTransport.sendMail(messageOptions, function(err, response){
     if(err){
+      console.log("Error: ", err);
       smtpTransport.close();
       next(err);
     }else{

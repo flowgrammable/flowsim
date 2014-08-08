@@ -1,3 +1,11 @@
+
+// Is this the dummy datamodel interface ? -jc
+//
+// Why must this be a singleton? -jc
+//
+// Is the singleton stuff at teh bottom really necessary? Is there an existing
+// nodejs or underscore mechanism for this pattern? -jc
+
 var filesystem = require('fs');
 var models = {};
 var relationships = {};
@@ -37,16 +45,18 @@ var singleton = function singleton(){
 	function init() {
     var sess  = require('./rest/subscriber/db/session');
 		var sub   = require('./rest/subscriber/db/subscriber');
+		var pack   = require('./rest/packet/db/packet');
     var prof  = require('./rest/profile/db/profile');
-
 
     var options = {timestamps: false, underscored: true};
 
-    models["session"] = sequelize.define("session", sess.model, options);
+    models["session"] = sequelize.define("session", sess.model, sess.options);
     relationships["session"] = sess.relations;
-		models["subscriber"] = sequelize.define("subscriber", sub.model, options);
+		models["subscriber"] = sequelize.define("subscriber", sub.model, sub.options);
 		relationships["subscriber"] = sub.relations; // none at the moment
-    models["switch_profile"] = sequelize.define("switch_profile", prof.model, options);
+    models["packet"] = sequelize.define("packet", pack.model, pack.options);
+    relationships["packet"] = pack.relations;
+    models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;
 
 		for(var name in relationships){

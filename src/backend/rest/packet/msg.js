@@ -6,43 +6,51 @@ exports.error = msg.error;
 exports.test = msg.test;
 
 exports.methodNotSupported = function() {
+	return msg.error({
+		system: "packet/controller",
+		type: "methodNotSupported"
+	})
+}
+
+exports.noDatabaseConnection = function() {
   return msg.error({
-    system: "profile/controller",
-    type: "methodNotSupported"
-  })
+    system: "packet/adapter",
+    type: "noDatabaseConnection"
+  });
 }
 
 exports.unknownError = function() {
   return msg.error({
-    system: "profile/adapter",
+    system: "packet/adapter",
     type: "unknownError"
   });
 }
 
-exports.profileNotFound = function() {
+exports.missingPacketName = function() {
   return msg.error({
-    system: "profile/adapter",
-    type: "profileNotFound"
+    system: "packet/controller",
+    type: "missingPacketName"
   });
 }
 
-exports.missingName = function() {
+exports.packetNotFound = function() {
   return msg.error({
-    system: "profile/controller",
-    type: "missingName"
+    system: "packet/adapter",
+    type: "packetNotFound"
   });
 }
 
 exports.missingId = function() {
   return msg.error({
-    system: "profile/controller",
+    system: "packet/controller",
     type: "missingId"
   });
 }
 
 exports.notAuthorized = function() {
   return msg.error({
-    system: "profile/controller",
+    system: "packet/controller",
     type: "notAuthorized"
   });
 }
+

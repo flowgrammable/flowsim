@@ -8,11 +8,16 @@ var Profile = database['switch_profiles'];
 // Database Functionality
 
 Array.prototype.findProfile = function(profInfo) {
-  var hasSubId, hasName, found;
+  var hasId, hasSubId, hasName, found;
+  if (profInfo.id) hasId = true;
   if (profInfo.subscriber_id) hasSubId = true;
   if (profInfo.name) hasName = true;
   for (i in this) {
     found = false;
+    if (hasId) {
+      if (this[i].id == profInfo.id) found = true;
+      else continue;
+    }
     if (hasSubId) {
       if (this[i].subscriber_id == profInfo.subscriber_id) found = true;
       else continue;
@@ -59,6 +64,7 @@ function fetchProfile(profileInfo, cb) {
 
 // NO ERROR HANDLING
 function updateProfile(profile, profileInfo, cb) {
+  // extend this to include version, etc...
   if (profileInfo.name) profile.name = profileInfo.name;
   cb (msg.success(profile));
 }
@@ -68,7 +74,13 @@ function destroyProfile(profile, cb) {
   else cb(msg.unknownError);
 }
 
-function listProfiles(profile, cb) { cb(msg.success(Profile)); }
+function listProfiles(subId, cb) { 
+  var list = new Array();
+  for (i in Profile) 
+    if (Profile[i].subscriber_id == subId) 
+      list[i] = Profile[i];
+  cb(msg.success(list)); 
+}
 
 function makeProfile(prof, cb) {
   Profile.push(prof); 

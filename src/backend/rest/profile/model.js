@@ -42,8 +42,10 @@ function profileUpdate(adapter, subId, newProfInfo, cb) {
 
 function profileList(adapter, subId, cb) {
   adapter.listProfiles(subId, function(result){ 
-    for(i in result) delete result[i].subscriber_id;
-    cb(result); 
+    var profs = result.value;
+    var list = new Array();
+    for(i in profs) list[i] = { id: profs[i].id, name: profs[i].name }
+    cb(msg.success(list)); 
   });
 }
 

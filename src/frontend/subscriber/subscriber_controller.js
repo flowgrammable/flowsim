@@ -123,7 +123,7 @@ subscriber.controller('loginCntrl', [ '$scope', '$cookies', '$location','$rootSc
         subscriberFactory.login(data)
           .success(function(data){
             if(data.value){
-              $rootScope.token = data.value;
+             // $rootScope.token = data.value;
               $rootScope.$broadcast("authenticated");
 							$cookies.token = data.value;
               $location.path("/");
@@ -155,29 +155,6 @@ subscriber.controller('verifyCntrl', ['$scope', '$routeParams','subscriberFactor
 
       });
 }]);
-
-
-subscriber.controller('menuCtrl', function($scope, $rootScope, subscriberFactory) {
-  $scope.authenticated = false;
-
-
-  $scope.logout = function() {
-    subscriberFactory.logout()
-      .success(function(data){
-        $scope.authenticated = false;
-      }).error(function(data){
-      });
-  }
-
-  $scope.$on("authenticated", function() {
-    $scope.authenticated = true;
-  });
-  
-  $scope.$on("unauthenticated", function() {
-    $scope.authenticated = false;
-  });
-
-});
 
 subscriber.controller('editPassCntrl', function($scope, subscriberFactory, utils){
   $scope.oldPassword = '';
