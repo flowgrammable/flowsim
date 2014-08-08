@@ -24,6 +24,7 @@ module.exports = {
   ],
   packets: [
     {
+      id: 1,
       name: 'Packet123',
       subscriber_id: 1
     }
