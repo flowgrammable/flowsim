@@ -39,25 +39,6 @@ if(program.test) {
   fs.createWriteStream('temp','utf8');
 }
 
-// What are these global variables for? ... globals are bad!
-// Also, it appears to be providing some sort of application functionality;
-// however, this is a top-level composition. There should only being argument
-// handling and service initialization at this point.
-
-var profileId = 0;
-var profileList = [];
-
-var packetId = 0;
-var packetList = [];
-function findById(source, id){
-  for (var i = 0; i < source.length; i++){
-    if(source[i].id === id){
-      return i;
-    }
-  }
-  throw "couldnt find object with id: " + id;
-}
-
 app
   .use(connect.json())
   .use('/api', 

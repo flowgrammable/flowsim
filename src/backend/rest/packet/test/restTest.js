@@ -4,7 +4,7 @@ var assert = require('assert');
 
 orm.setup()
 
-var testEmail = 'test@gmail.com';
+var testEmail = 'flowgrammablemailer@gmail.com';
 
 // ----------------------------------------------------------------------------
 // Testing packet creation

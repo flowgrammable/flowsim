@@ -20,5 +20,10 @@ module.exports = {
 	},
 	relations:{
 		belongsTo: { relative: "subscriber", as: "Subscriber" }
+	},
+	options:{
+		timestamps: false,
+		underscored: true,
+		tableName: 'switch_profile'
 	}
 }

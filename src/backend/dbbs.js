@@ -50,14 +50,13 @@ var singleton = function singleton(){
 
     var options = {timestamps: false, underscored: true};
 
-    models["session"] = sequelize.define("session", sess.model, options);
+    models["session"] = sequelize.define("session", sess.model, sess.options);
     relationships["session"] = sess.relations;
-		models["subscriber"] = sequelize.define("subscriber", sub.model, options);
+		models["subscriber"] = sequelize.define("subscriber", sub.model, sub.options);
 		relationships["subscriber"] = sub.relations; // none at the moment
-    models["packet"] = sequelize.define("packet", pack.model, options);
+    models["packet"] = sequelize.define("packet", pack.model, pack.options);
     relationships["packet"] = pack.relations;
-    models["switch_profile"] = sequelize.define("switch_profile", prof.model, options);
-    // models["switch_profile"].belongsTo(models["subscriber"], {as: "Subscriber"});
+    models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;
 
 		for(var name in relationships){

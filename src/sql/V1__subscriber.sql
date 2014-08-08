@@ -7,8 +7,8 @@ CREATE TYPE SUBSCRIBERS_STATUS AS ENUM (
   'CLOSED'    -- a sub has been closed, no functionality is supported against this state
 );
 
--- create the primary subscribers table
-CREATE TABLE subscribers
+-- create the primary subscriber table
+CREATE TABLE subscriber
 (
   id SERIAL PRIMARY KEY,                          -- internal id uses for sub
   email VARCHAR(128) NOT NULL UNIQUE,             -- email owned by sub
@@ -24,21 +24,21 @@ CREATE TABLE subscribers
 CREATE TABLE packet
 (
   id SERIAL PRIMARY KEY,
-  subscriber_id INTEGER references subscribers(id) NOT NULL,
+  subscriber_id INTEGER references subscriber(id) NOT NULL,
   name CHAR(60) NOT NULL
 );
 
 CREATE TABLE switch_profiles
 (
   id SERIAL PRIMARY KEY,
-  subscriber_id INTEGER references subscribers(id) NOT NULL,
+  subscriber_id INTEGER references subscriber(id) NOT NULL,
   name VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE dp_caps
 (
 	id SERIAL PRIMARY KEY,
-  profile_id INTEGER references switch_profiles(id) NOT NULL,
+  profile_id INTEGER references switch_profile(id) NOT NULL,
   -- Virual Ports
 	vp_all BOOLEAN, 
   vp_controller BOOLEAN, 
@@ -86,10 +86,10 @@ CREATE TABLE action_caps
 );
 
 -- create a session table
-CREATE TABLE sessions
+CREATE TABLE session
 (
   id SERIAL PRIMARY KEY,                              -- internal sesison id
-  subscriber_id INTEGER references subscribers(id) NOT NULL,   -- reference to sub
+  subscriber_id INTEGER references subscriber(id) NOT NULL,   -- reference to sub
   key CHAR(36) NOT NULL UNIQUE,                       -- session key for API
   -- begin_time TIMESTAMP WITH TIME ZONE NOT NULL,       -- date/time session began
   timeout BIGINT /*NOT NULL,*/     -- date/time for session to end
