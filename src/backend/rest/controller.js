@@ -1,8 +1,8 @@
-var events = require('../events');
+
 var uuid = require('node-uuid');
-
-
 var url  = require('url');
+
+var events = require('../events');
 var msg  = require('./msg');
 var sub  = require('./subscriber/controller');
 
@@ -36,9 +36,6 @@ function validateModules(userModules) {
     }
   }
 }
-
-// 
-
 
 module.exports = function(db, userModules) {
 

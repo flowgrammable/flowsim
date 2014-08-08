@@ -1,5 +1,6 @@
 var nodemailer = require("nodemailer");
-var config = require('./config.js');
+var config     = require('./config.js');
+
 // function to send mail
 exports.sendMail = function (email, message, next){
 
