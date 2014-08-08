@@ -39,7 +39,7 @@
 <!-- Button trigger modal -->
  
 	<div class="list-group">
-		<a class="list-group-item" data-toggle="modal" data-target="#{{item.id}}" href="" ng-repeat="item in profileList">{{item.name}}</a>
+		<a class="list-group-item" data-toggle="modal" data-target="#{{item.id}}" href="" ng-click="detail(item.id)"  ng-repeat="item in profileList">{{item.name}}</a>
 	</div>
 <!-- Modal -->
  
@@ -54,7 +54,7 @@
         	<form  role="form">
 						<div class="form-group">
 							Profile Name
-							<input type="text" class="form-control" ng-model="item.name">
+							<input type="text" class="form-control" ng-model="detail.name">
 						</div>
 					</form>
       	   </div>

@@ -22,6 +22,7 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 		$scope.name = '';
 		$scope.creationSuccess = false;
     $scope.profileList = [];
+		$scope.detail = {};
 		$scope.create = function() {
 			var profile = {name: $scope.name};
 			profileFactory.create(profile)
@@ -47,6 +48,15 @@ profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 		};
     $scope.getProfiles();
 
+		$scope.detail = function(id){
+			profileFactory.detail()
+				.success(function(data){
+					if(data.value){
+						$scope.detail = data.value;
+					}
+				}).error(function(data){});
+		} 
+		
 		$scope.update = function(item){
 			console.log('hit update');
 			console.log('item id: ', item.id);
