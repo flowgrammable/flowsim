@@ -28,7 +28,7 @@ CREATE TABLE packet
   name CHAR(60) NOT NULL
 );
 
-CREATE TABLE switch_profiles
+CREATE TABLE switch_profile
 (
   id SERIAL PRIMARY KEY,
   subscriber_id INTEGER references subscriber(id) NOT NULL,
