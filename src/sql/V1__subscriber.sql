@@ -32,7 +32,8 @@ CREATE TABLE switch_profile
 (
   id SERIAL PRIMARY KEY,
   subscriber_id INTEGER references subscriber(id) NOT NULL,
-  name VARCHAR(60) NOT NULL
+  name VARCHAR(60) NOT NULL,
+  ofp_version INTEGER NOT NULL
 );
 
 CREATE TABLE dp_caps

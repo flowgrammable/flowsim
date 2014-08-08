@@ -3,23 +3,14 @@ var orm = require('../../../dbbs'),
 
 module.exports = {
 	model:{
-    id: { 
-      type: Seq.INTEGER, 
-      allowNull: false, 
-      primaryKey: true 
-    },
-    subscriber_id: { 
-      type: Seq.INTEGER, 
-      references: "subscriber",
-      allowNull: false 
-    },
-    name: { 
-      type: Seq.STRING, 
-      allowNull: false 
-    }
+    id:            { type: Seq.INTEGER, allowNull: false, primaryKey: true },
+    subscriber_id: { type: Seq.INTEGER, allowNull: false, references: "subscriber" },
+    name:          { type: Seq.STRING, allowNull: false },
+    ofp_version:   { type: Seq.INTEGER, allowNull: false }
 	},
 	relations:{
-		belongsTo: { relative: "subscriber", as: "Subscriber" }
+		belongsTo: { relative: "subscriber", options: { as: "Subscriber" } },
+    hasOne:    { relative: "dp_caps", options: { as: "DpCaps", foreignKey: "profile_id" } }
 	},
 	options:{
 		timestamps: false,

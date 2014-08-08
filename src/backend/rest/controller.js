@@ -26,7 +26,7 @@ function validateModules(userModules) {
   // Verify each module has an auth and unath section
   for(var property in userModules) {
     if(userModules.hasOwnProperty(property)) {
-      console.log(userModules);
+      // console.log(userModules);
       if(!userModules[property].auth) {
         throw "Module: " + property + " is missing component: " + "auth"
       }

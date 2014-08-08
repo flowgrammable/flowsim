@@ -47,6 +47,8 @@ var singleton = function singleton(){
 		var sub   = require('./rest/subscriber/db/subscriber');
 		var pack   = require('./rest/packet/db/packet');
     var prof  = require('./rest/profile/db/profile');
+    var dpCaps  = require('./rest/profile/db/dp_caps');
+    var ftCaps  = require('./rest/profile/db/ft_caps');
 
     var options = {timestamps: false, underscored: true};
 
@@ -58,16 +60,16 @@ var singleton = function singleton(){
     relationships["packet"] = pack.relations;
     models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;
+    models["dp_caps"] = sequelize.define("dp_caps", dpCaps.model, dpCaps.options);
+    relationships["dp_caps"] = dpCaps.relations;
+    models["ft_caps"] = sequelize.define("ft_caps", ftCaps.model, ftCaps.options);
+    relationships["ft_caps"] = ftCaps.relations;
 
-		for(var name in relationships){
+		for (var name in relationships) {
       var relation = relationships[name];
-      for(var relName in relation){
+      for (var relName in relation) {
         var related = relation[relName];
-        if (related.relative && related.as)
-          models[name][relName](models[related.relative], { as: related.as })
-        else
-          models[name][relName](models[related]);
-        // console.log(models[name][relName](models[related]));
+        models[name][relName](models[related.relative], related.options)
       }
     }
 	}

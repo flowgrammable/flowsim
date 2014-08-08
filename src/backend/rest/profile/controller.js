@@ -12,7 +12,9 @@ function passback(id, result, nextFunction){ events.Emitter.emit(id, result); }
 function profCreate(dataModel, session, method, params, data, ip, id) {
   if(method =='POST') {
     if(utils.invalidProfile(data)) return passback(id, msg.missingName());
-    dataModel.profile.create(session.subscriber_id, data.name, function(result){
+    if(!data.ofp_version) return passback(id, msg.missingOfpVersion());
+    dataModel.profile.create(session.subscriber_id, data.name, data.ofp_version,
+    function(result){
       passback(id, result);
     });
   } else return passback(id, msg.methodNotSupported());
@@ -31,6 +33,17 @@ function profUpdate(dataModel, session, method, params, data, ip, id) {
 function profList(dataModel, session, method, params, data, ip, id) {
   if(method =='GET') {
     dataModel.profile.list(session.subscriber_id, function(result) { 
+      passback(id, result); 
+    });
+  } else return passback(id, msg.methodNotSupported());
+}
+
+
+function profDetail(dataModel, session, method, params, data, ip, id) {
+  if(method =='GET') {
+    if(!params[1]) return passback(id, msg.missingId());
+    var profId = params[1];
+    dataModel.profile.detail(session.subscriber_id, profId, function(result) { 
       passback(id, result); 
     });
   } else return passback(id, msg.methodNotSupported());
@@ -61,9 +74,10 @@ module.exports = function(testAdapter) {
     module: {
       noauth: {},
       auth: {
-        create: _.bind(profCreate, null, dataModel),
-        update: _.bind(profUpdate, null, dataModel),
-        list:   _.bind(profList, null, dataModel),
+        create:  _.bind(profCreate, null, dataModel),
+        update:  _.bind(profUpdate, null, dataModel),
+        list:    _.bind(profList, null, dataModel),
+        detail:  _.bind(profDetail, null, dataModel),
         destroy: _.bind(profDestroy, null, dataModel)
       }
     }
