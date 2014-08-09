@@ -64,10 +64,11 @@ function profileList(adapter, subId, cb) {
     if (result.error) cb(result);
     else {
       var profs = result.value;
-			var list = [];
+			var list = new Array();
       // all profiles w/all attributes are in an array so we need to 
-      // strip the subscriber_id from it    
-      for(i in profs) list[i] = { id: profs[i].id, name: profs[i].name }
+      // filter the result for the id and name
+      for (var i = 0; i < profs.length; i++)
+        list[i] = { id: profs[i].id, name: profs[i].name }
       cb(msg.success(list)); 
     }
   });

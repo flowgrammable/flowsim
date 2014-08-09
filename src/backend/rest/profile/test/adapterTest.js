@@ -34,6 +34,28 @@ describe('===> Testing fetchProfile adapter function:\n', function() {
 });
 
 // ----------------------------------------------------------------------------
+// Testing listProfiles
+describe('===> Testing listProfiles adapter function:\n', function() {
+  it('Profiles list retrieved successfully', function(done) {
+    adapter.listProfiles(1, function(result) {
+      assert(result.value, "Unable to list profiles")
+      done();
+    });
+  });
+});
+
+// ----------------------------------------------------------------------------
+// Testing fetchProfileDetails
+describe('===> Testing fetchProfileDetails adapter function:\n', function() {
+  it('Profile details retrieved successfully', function(done) {
+    adapter.fetchProfileDetails(profile, function(result) {
+      assert(result.value, "Unable to list profiles")
+      done();
+    });
+  });
+});
+
+// ----------------------------------------------------------------------------
 // Testing updateProfile
 describe('===> Testing updateProfile adapter function:\n', function() {
   it('Profile updated successfully', function(done) {

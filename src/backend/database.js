@@ -36,7 +36,7 @@ module.exports = {
       name:          'profile',
       ofp_version:   10
     }
-  ]
+  ],
   dp_caps: [
     {
       id:            1,
@@ -50,7 +50,7 @@ module.exports = {
       vp_normal:     true,
       vp_flood:      true
     }
-  ]
+  ],
   ft_caps: [
     {
       id:          1, 
