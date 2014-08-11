@@ -78,12 +78,15 @@ function listProfiles(subId, cb) {
   //   .success(function(profiles) { cb(msg.success(profiles)); })
   //   .error  (function(err)      { cb(msg.unknownError(err)); })
 
-  // way 2: find sub, then use sub.getProfiles
-
+  // way 2: find sub, then use sub.getProfiles. the array contains
+  // extra sequelize info that is removed
   subAdapter.fetchSubscriber({ id: subId }, function(result) { 
     result.value.getProfiles({attributes: ['id', 'name']})
-      .success(function(result) { cb(msg.success(result)); })
-      .error  (function(err)    { cb(msg.unknownError(err)); });
+      .success(function(result) { 
+        var list = new Array();
+        for (i in result) list[i] = result[i].dataValues; 
+        cb(msg.success(list)); 
+      }).error(function(err) { cb(msg.unknownError(err)); });
   }); 
 }
 

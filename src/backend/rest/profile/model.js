@@ -13,6 +13,10 @@ function resultChecker(result, callback){
 // ----------------------------------------------------------------------------
 // Profile
 
+// The profileCreate function is responsible for creating and inserting
+// a profile with the given information into the database. This is done
+// through a call to the createProfile adapter function. If successful, 
+// msg.success() is returned, if unsuccessful the error is returned.
 function profileCreate(adapter, subId, name, ver, cb) {
   adapter.createProfile(subId, name, ver, function(result) { 
     if (result.value) cb(msg.success());
@@ -20,6 +24,15 @@ function profileCreate(adapter, subId, name, ver, cb) {
   });
 }
 
+// The profileUpdate function is responsible for updating a switch
+// profile to contain the provided values. This is done in two async
+// phases. First, the profile is fetched from the database by the
+// id given in the request body, and the subscriber_id, which was 
+// retrieved through the session. These semantics ensure that a
+// subscribers may only modify their own profiles. If the fetch is
+// successful, the adapter function to update the profile's attributes 
+// is called, resulting in either a msg.success() or error message 
+// being returned.
 function profileUpdate(adapter, subId, newProfInfo, cb) {
   async.waterfall([
     function(callback){
@@ -40,25 +53,31 @@ function profileUpdate(adapter, subId, newProfInfo, cb) {
     });
 }
 
+// The profileList function is responsible for returning the list 
+// of switch profiles that belong to a subscriber. This list is 
+// retrieved through a call to the listProfiles adapter function.
+// If successful, a success message containing the list of profiles
+// is returned, otherwise the error message is returned.
 function profileList(adapter, subId, cb) {
   adapter.listProfiles(subId, function(result){ 
-    var list = new Array();
     // way 1: all profiles w/all attributes are in an array so we need to 
-    // strip the subscriber_id from it
+    // strip the subscriber_id from it    
 
-    // var profs = result.value;
-    // for(i in profs) 
-    //   list[i] = { id: profs[i].id, name: profs[i].name, ofp_version: profs[i].ofp_version }
-    // cb(msg.success(list)); 
+    // if (result.error) cb(result);
+    // else {
+    //   var profs = result.value;
+    //   for(i in profs) 
+    //     list[i] = { id: profs[i].id, name: profs[i].name, ofp_version: profs[i].ofp_version }
+    //   cb(msg.success(list)); 
+    // }
 
     // way 2: all profiles w/only the attributes we are interested in are
-    // in an array, but they contain extra sequelize info that is removed
-    var profs = result.value;
-    for (i in profs) list[i] = profs[i].dataValues; 
-    cb(msg.success(list)); 
+    // in an array so we simply return it (or the error).
+    cb(result);
   });
 }
 
+// Work in progress
 function profileDetail(adapter, subId, profId, cb) {
   async.waterfall([
     function(callback){
@@ -79,6 +98,15 @@ function profileDetail(adapter, subId, profId, cb) {
     });
 }
 
+// The profileDestroy function is responsible for deleting the
+// profile with the given id from the database. This is done in two 
+// async phases. First, the profile is fetched from the database by
+// the id given in the url of the request, and the subscriber_id, 
+// which was retrieved through the session. These semantics ensure 
+// that a subscriber may only delete their own profiles. If the fetch 
+// is successful, the adapter function to update the profile's 
+// attributes is called, resulting in either a msg.success() or 
+// error message being returned.
 function profileDestroy(adapter, subId, profId, cb) {
   async.waterfall([
     function(callback){
