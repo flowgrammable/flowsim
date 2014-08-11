@@ -21,9 +21,13 @@
 				<form  role="form">
 					<div class="form-group">
 						Profile Name
-						<input type="text" class="form-control" ng-model="name">
+						<input type="text" class="form-control" ng-model="profdata.name">
 					</div>
 				</form>
+                <select class="form-control">
+                    <option ng-model="profdata.version" value="10">1.0</option>
+                    <option ng-model="profdata.version" value="11">1.1</option>
+                </select>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
