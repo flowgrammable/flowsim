@@ -19,33 +19,34 @@ profile.directive('fsCreateprofile', function(){
 
 profile.controller('createProfileCntrl', ['$scope', 'profileFactory',
 	function($scope, profileFactory){
-		$scope.name = '';
+	//	$scope.name = '';
 		$scope.creationSuccess = false;
     $scope.profileList = [];
 		$scope.detail = {};
-		$scope.create = function() {
-			var profile = {name: $scope.name};
-			profileFactory.create(profile)
-				.success(function(data){
-					if(data.value){
-						$scope.showCreate = false;
-						$scope.name = '';
-						$scope.getProfiles();
-					}
-					else if(data.error.type == 'invalidProfileName'){
-						$scope.invalidProfileName = true;
-					}}).error(function(data){
-				});
+	$scope.create = function() {
+		var profile = {name: $scope.profdata.name, version: $scope.profdata.version};
+		profileFactory.create(profile)
+			.success(function(data){
+				if(data.value){
+					$scope.showCreate = false;
+					$scope.name = '';
+                    $scope.version = '';
+					$scope.getProfiles();
+				}
+				else if(data.error.type == 'invalidProfileName'){
+					$scope.invalidProfileName = true;
+				}}).error(function(data){
+			});
 			
-		};
-		$scope.getProfiles = function(){
-			profileFactory.list()
-				.success(function(data){
-					if(data.value){
-						$scope.profileList = data.value;
-					}
-				}).error(function(data){});
-		};
+	};
+	$scope.getProfiles = function(){
+		profileFactory.list()
+			.success(function(data){
+				if(data.value){
+					$scope.profileList = data.value;
+				}
+			}).error(function(data){});
+	};
     $scope.getProfiles();
 
 		$scope.detail = function(id){
