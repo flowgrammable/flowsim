@@ -73,14 +73,14 @@ CREATE TABLE dp_caps
    * packets to the controller using packet-in messages
    * (cut or keep?)
    */
-  no_buffers INTEGER NOT NULL,
+  no_buffers INTEGER ,
 
   /*
    * Number of Flowtables in switch data plane
    * 1.0 has only only 1 table
    * 1.1 - 1.4 can have multiple tables
    */
-  no_tables INTEGER NOT NULL, 
+  no_tables INTEGER , 
 
   /* 
    * Supported Capabilities - 
