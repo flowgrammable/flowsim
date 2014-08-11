@@ -79,6 +79,21 @@ describe('Testing create profile requests:',function() {
 // --------------------------------------------------------------------------
 // Testing update profile
 describe('Testing update profile request: ', function() {
+
+	it('Test: Successful update of profile PUT /api/profile/update {id: id, name: name} should return msg.success()', 
+	function(done) {
+		request( {
+			url: 'http://localhost:3000/api/profile/update',
+			body: '{\"id\": \"1\", \"name\": \"test profile\"}',
+			headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+                        method: 'PUT'
+                }, function (error, response, body) {
+                        assert(JSON.parse(body)['value'],'Unable to update profile');
+                        console.log('\tResponse received : ', body);
+                        done();
+		});
+	});
+
 	it('Test: PUT to /api/profile/update without an id in the body should return msg.missingId()', 
 	function(done) {
 		request( {
@@ -92,5 +107,6 @@ describe('Testing update profile request: ', function() {
       			done();
     		});
   	});
+	
 });
 
