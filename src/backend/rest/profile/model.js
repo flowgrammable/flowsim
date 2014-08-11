@@ -60,20 +60,14 @@ function profileUpdate(adapter, subId, newProfInfo, cb) {
 // is returned, otherwise the error message is returned.
 function profileList(adapter, subId, cb) {
   adapter.listProfiles(subId, function(result){ 
-    // way 1: all profiles w/all attributes are in an array so we need to 
-    // strip the subscriber_id from it    
-
-    // if (result.error) cb(result);
-    // else {
-    //   var profs = result.value;
-    //   for(i in profs) 
-    //     list[i] = { id: profs[i].id, name: profs[i].name, ofp_version: profs[i].ofp_version }
-    //   cb(msg.success(list)); 
-    // }
-
-    // way 2: all profiles w/only the attributes we are interested in are
-    // in an array so we simply return it (or the error).
-    cb(result);
+    if (result.error) cb(result);
+    else {
+      var profs = result.value;
+      // all profiles w/all attributes are in an array so we need to 
+      // strip the subscriber_id from it    
+      for(i in profs) list[i] = { id: profs[i].id, name: profs[i].name }
+      cb(msg.success(list)); 
+    }
   });
 }
 
