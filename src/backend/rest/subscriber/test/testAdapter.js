@@ -4,8 +4,8 @@ var bcrypt = require('bcrypt');
 var msg = require('../msg');
 
 var database = require('../../../database.js');
-var Subscriber = database['subscribers'];
-var Session = database['sessions'];
+var Subscriber = database['subscriber'];
+var Session = database['session'];
 // var mailer = require('../../mailer');
 
 Array.prototype.findSub = function(sub) {

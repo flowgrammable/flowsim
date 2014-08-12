@@ -3,7 +3,7 @@
 // returned by this module is a mock-database
 
 module.exports = {
-  subscribers: [
+  subscriber: [
     {
       id: 1,
       email: 'jasson.casey@gmail.com',
@@ -15,24 +15,26 @@ module.exports = {
       status: 'CREATED'
     }
   ],
-  sessions: [
+  session: [
     {
       subscriber_id: 1,
       key: 'f151d3c9-2452-41b2-a249-8b8cb2535097',
       timeout: 0
     }
   ],
-  packets: [
+  packet: [
     {
       id: 1,
       name: 'Packet123',
       subscriber_id: 1
     }
   ],
-  switch_profiles: [
+  switch_profile: [
     {
+      id: 1,
       subscriber_id: 1,
-      name: 'profile'
+      name: 'profile',
+      ofp_version: 1
     }
   ]
 }
