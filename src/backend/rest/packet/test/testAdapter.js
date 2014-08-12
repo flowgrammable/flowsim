@@ -1,6 +1,6 @@
 var msg = require('../msg');
 var database = require('../../../database.js');
-var Packet = database['packets'];
+var Packet = database['packet'];
 
 Array.prototype.findPacket = function(packetInfo) {
   var hasId, hasSubId, hasName, found;

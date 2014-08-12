@@ -14,14 +14,12 @@ var FtCaps = orm.model("ft_caps");
 // be inferred based on the ofp_version
 function createProfile(subId, name, ver, cb) {
   var prof;
-	console.log('sub id from adapter: ', subId);
   Profile.create({ 
     subscriber_id: subId, 
     name: name, 
     ofp_version: ver 
   }).then(function(profile) {
     prof = profile;  
-    console.log('profile id from subcreate: ', prof.id); 
 	  return DpCaps.create(generateDpCaps(prof.id, ver)); 
   }).then(function(dp_caps) { 
     return FtCaps.create(generateFtCaps(dp_caps.id, ver)); 
@@ -31,7 +29,6 @@ function createProfile(subId, name, ver, cb) {
 // The generateDpCaps function returns values for the dp_caps table 
 // entry based on the ofp_version passed in.
 function generateDpCaps(profId, version) {
-  console.log('profId from gen dp caps: ', profId);
   if (version == 10) 
     return {
       profile_id:    profId,
