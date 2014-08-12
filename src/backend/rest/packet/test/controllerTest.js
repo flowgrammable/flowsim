@@ -98,7 +98,7 @@ describe('===> Testing update packet controller: \n', function(){
   controller.module.auth.update(session, 'PUT', {}, data, '127.0.0.1', testId);
   });
   it('Test if method is not PUT', function(done){
-    var testId = 'testerID2';
+    var testId = 'testerID9';
     var session = { subscriber_id: 1, key: '', timeout: '' };
     var data = {name:'something'};
     events.Emitter.once(testId, function(result){
@@ -106,6 +106,29 @@ describe('===> Testing update packet controller: \n', function(){
       done();
     });
   controller.module.auth.update(session,'GET', {}, data, '127.0.0.1', testId);
+  });
+});
+
+describe('===> Testing destroy packet controller: \n', function(){
+  it('Test if packet_id not provided', function(done){
+    var testId = 'testerID10';
+    var session = { subscriber_id: 1, key: '', timeout: '' };
+    var data = {};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result), JSON.stringify(msg.missingId()));
+      done();
+    });
+  controller.module.auth.destroy(session, 'DEL', {}, data, '127.0.0.1', testId);
+  });
+  it('Test if method is not DEL', function(done){
+    var testId = 'testerID11';
+    var session = { subscriber_id: 1, key: '', timeout: '' };
+    var data = {};
+    events.Emitter.once(testId, function(result){
+      assert.equal(JSON.stringify(result),JSON.stringify(msg.methodNotSupported()));
+      done();
+    });
+  controller.module.auth.destroy(session,'POST', {}, data, '127.0.0.1', testId);
   });
 });
 
