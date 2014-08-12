@@ -35,6 +35,7 @@ Array.prototype.deletePacket = function(packet) {
     }
   return success;
 }
+
 // ----------------------------------------------------------------------------
 // Packet
 
@@ -68,16 +69,14 @@ function destroyPacket(packet, cb) {
 
 function listPackets(subId, cb) {
   var list = new Array();
-  for (i in Packet)
-    if (Packet[i].subscriber_id == subId)
-      list[i] = Packet[i];
+  for (var i=0;i<Packet.length;i++) 
+    if (Packet[i].subscriber_id == subId) list[i] = Packet[i];
   cb(msg.success(list));
 }
 
 function makePacket(packet, cb) {
-  Profile.push(packet);
+  Packet.push(packet);
 }
-
 exports.createPacket = createPacket;
 exports.fetchPacket = fetchPacket;
 exports.listPackets   = listPackets;
