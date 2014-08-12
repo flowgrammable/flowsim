@@ -79,7 +79,7 @@ function fetchProfileDetails(profile, cb) {
     return dpCaps.getFtCaps()
   }).then(function(ftCaps){
     ft_caps = ftCaps.values;
-    cb(msg.success({ dp_caps: dp_caps, ft_caps: ft_caps }))
+    cb(msg.success({ dp_caps: dp_caps, ft_caps: ft_caps }));
   })
 }
 
@@ -116,3 +116,5 @@ exports.fetchProfileDetails   = fetchProfileDetails;
 exports.listProfiles          = listProfiles;
 exports.updateProfile         = updateProfile;
 exports.destroyProfile        = destroyProfile;
+exports.generateDpCaps        = generateDpCaps;
+exports.generateFtCaps        = generateFtCaps;

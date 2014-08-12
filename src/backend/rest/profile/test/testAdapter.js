@@ -1,8 +1,11 @@
 var msg = require('../msg');
 
+var generateDpCaps = require('../adapter').generateDpCaps;
+var generateFtCaps = require('../adapter').generateFtCaps;
 var database = require('../../../database.js');
 var Profile = database['switch_profile'];
-
+var DpCaps = database['dp_caps'];
+var FtCaps = database['ft_caps'];
 
 // ----------------------------------------------------------------------------
 // Database Functionality
@@ -22,6 +25,11 @@ Array.prototype.findProfile = function(info) {
   return null; // if we make it here, the profile wasn't found
 }
 
+Array.prototype.findById = function(id) {
+  for (i in this) if (this[i].id == id) return this[i];
+  return null;
+}
+
 Array.prototype.deleteProfile = function(profile) {
   var success = false;
   for (i in this) 
@@ -36,22 +44,35 @@ Array.prototype.deleteProfile = function(profile) {
 // Profile Adapter Functions
 
 function createProfile(subId, name, ver, cb) {
-  var profToAdd = { 
+  var newProf = { 
     id: (Profile[Profile.length-1].id + 1),
     subscriber_id: subId,
     name: name,
     ofp_version: ver
   };
-  Profile.push(profToAdd);
-  var newProf = Profile[Profile.length-1];
-  if (newProf == profToAdd) cb(msg.success(newProf));
-  else cb(msg.unknownError(Profile.pop()));
+  Profile.push(newProf);
+
+  var newDpCaps = generateDpCaps(newProf.id, ver);
+  newDpCaps.id = DpCaps[DpCaps.length-1].id + 1;
+  DpCaps.push(newDpCaps);
+
+  var newFtCaps = generateFtCaps(newDpCaps.id, ver);
+  newFtCaps.id = FtCaps[FtCaps.length-1].id + 1;
+  FtCaps.push(newFtCaps);
+
+  cb(msg.success(newProf));
 }
 
 function fetchProfile(profileInfo, cb) {
   var prof = Profile.findProfile(profileInfo);
   if (prof == null) cb(msg.profileNotFound());
   else cb(msg.success(prof));
+}
+
+function fetchProfileDetails(profile, cb) { 
+  var dp_caps = DpCaps.findById(profile.id);
+  var ft_caps = FtCaps.findById(dp_caps.id);
+  cb(msg.success({ dp_caps: dp_caps, ft_caps: ft_caps }));
 }
 
 // NO ERROR HANDLING
@@ -81,10 +102,11 @@ function makeProfile(prof, cb) {
   Profile.push(prof); 
 }
 
-exports.createProfile  = createProfile;
-exports.fetchProfile   = fetchProfile;
-exports.listProfiles   = listProfiles;
-exports.updateProfile  = updateProfile;
-exports.destroyProfile = destroyProfile;
-exports.makeProfile    = makeProfile;
+exports.createProfile         = createProfile;
+exports.fetchProfile          = fetchProfile;
+exports.fetchProfileDetails   = fetchProfileDetails;
+exports.listProfiles          = listProfiles;
+exports.updateProfile         = updateProfile;
+exports.destroyProfile        = destroyProfile;
+exports.makeProfile           = makeProfile;
 
