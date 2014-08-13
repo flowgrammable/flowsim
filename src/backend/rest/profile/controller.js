@@ -16,8 +16,8 @@ function passback(id, result, nextFunction){ events.Emitter.emit(id, result); }
 // is called with the given information.
 function profCreate(dataModel, session, method, params, data, ip, id) {
   if(method =='POST') {
-    if(utils.invalidProfile(data)) return passback(id, msg.missingName());
-    if(!data.ofp_version) return passback(id, msg.missingOfpVersion());
+	var message = utils.invalidProfile(data);
+    if(message) return passback(id, message);
 		dataModel.profile.create(session.subscriber_id, data.name, data.ofp_version,
     function(result){
       passback(id, result);
@@ -33,7 +33,8 @@ function profCreate(dataModel, session, method, params, data, ip, id) {
 // is called with the given information.
 function profUpdate(dataModel, session, method, params, data, ip, id) {
   if(method =='PUT') {
-    if(!data.id) return passback(id, msg.missingId());
+    var message = utils.invalidProfileUpdate(data);
+    if(message) return passback(id, message);
     if(data.subscriber_id) return passback(id, msg.notAuthorized());
     dataModel.profile.update(session.subscriber_id, data, function(result) { 
       passback(id, result); 
