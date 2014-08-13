@@ -7,7 +7,7 @@ var profile;
 // Testing createProfile
 describe('===> Testing createProfile adapter function:\n', function() {
   it('Profile created successfully', function(done) {
-    adapter.createProfile(1, "test profile", function(result) {
+    adapter.createProfile(1, "test profile", 10, function(result) {
       assert(result.value, "Unable to create profile")
       done();
     });
@@ -18,7 +18,7 @@ describe('===> Testing createProfile adapter function:\n', function() {
 // Testing fetchProfile
 describe('===> Testing fetchProfile adapter function:\n', function() {
   it('Profile fetched successfully', function(done) {
-    adapter.fetchProfile({ subscriber_id: "1", name: "test profile" }, 
+    adapter.fetchProfile({ subscriber_id: "1", id: "1", ofp_version: "10" }, 
     function(result) {
       assert(result.value, "Unable to fetch profile")
       profile = result.value;
@@ -26,7 +26,7 @@ describe('===> Testing fetchProfile adapter function:\n', function() {
     });
   });
   it('Profile not found', function(done) {
-    adapter.fetchProfile({ name: "nonexistent profile" }, function(result) {
+    adapter.fetchProfile({ id: "1234567890" }, function(result) {
       assert.equal(result.error.type, "profileNotFound")
       done();
     });

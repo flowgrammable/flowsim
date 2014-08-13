@@ -21,20 +21,21 @@ function packetCreate(adapter, name, sub_id, cb) {
   });
 }
 
-
-function packetFetch(adapter, sub_id, cb) {
-  adapter.fetchPacket(sub_id, function(err, result) {
-    if(err) cb(err);  
-    else cb(result);
-  });
-}
-
 function packetList(adapter, sub_Id, cb) {
   adapter.listPackets(sub_Id, function(result) {
     var packets = result.value;
     var list = new Array();
-    for(i in packets) list[i] = { id: packets[i].id, name: packets[i].name }
+    for(var i = 0;i<packets.length;i++) 
+      list[i] = { id: packets[i].id, name: packets[i].name }
     cb(msg.success(list));
+  });
+}
+
+function packetDetail(adapter, sub_id, pack_id, cb) {
+  var packetInfo = { subscriber_id: sub_id, id: pack_id };
+  adapter.fetchPacket(packetInfo, function(err, result) {
+    if(err) cb(err);
+    else cb(result);
   });
 }
 
@@ -86,7 +87,7 @@ module.exports = function(testAdapter) {
     packet: {
       create: _.bind(packetCreate, null, adapter),
       list:  _.bind(packetList, null, adapter),
-      fetch: _.bind(packetFetch, null, adapter),
+      detail: _.bind(packetDetail, null, adapter),
       update: _.bind(packetUpdate, null, adapter),
       destroy: _.bind(packetDestroy, null, adapter),
     }

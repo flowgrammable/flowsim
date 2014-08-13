@@ -28,10 +28,21 @@ function packetList(dataModel, session, method, params, data, ip, id) {
   } else return passback(id, msg.methodNotSupported());
 }
 
+function packetDetail(dataModel, session, method, params, data, ip, id) {
+  if(method =='GET') {
+    if(!params[1]) return passback(id, msg.missingId());
+    var packetId = params[1];
+    dataModel.packet.detail(session.subscriber_id, packetId, function(result) {
+      passback(id, result);
+    });
+  } else return passback(id, msg.methodNotSupported());
+}
+
 function packetUpdate(dataModel, session, method, params, data, ip, id) {
   if(method =='PUT') {
     if(!data.id) return passback(id, msg.missingId());
-    //if(data.subscriber_id) return passback(id, msg.notAuthorized());
+    if(!data.name) return passback(id, msg.missingPacketName());
+    if(data.subscriber_id) return passback(id, msg.notAuthorized());
     dataModel.packet.update(session.subscriber_id, data, function(result) {
       passback(id, result);
     });
@@ -63,8 +74,10 @@ module.exports = function(testAdapter) {
       },
       auth: {
         create: _.bind(packetCreate, null, dataModel),
-        list: _.bind(packetList, null, dataModel),
-        
+        list:    _.bind(packetList, null, dataModel),
+        detail:  _.bind(packetDetail, null, dataModel),
+        update:  _.bind(packetUpdate, null, dataModel),
+        destroy: _.bind(packetDestroy, null, dataModel)
       }
     }
   }

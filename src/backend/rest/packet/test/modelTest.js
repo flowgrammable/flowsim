@@ -6,32 +6,11 @@ var assert = require('assert');
 var model = packModel(testAdapter);
 var msg = require('../msg.js');
 
-var subTestAdapter = require('../../subscriber/test/testAdapter.js');
-var subscriberModel = require('../../subscriber/model.js');
-var subModel = subscriberModel(subTestAdapter);
 var session;
 //-----------------------------------------------------------------------------
-describe('===> Testing createPacket: \n',function() {
-  var encrypted =  bcrypt.hashSync('somePasswd123', 10);
-  var testSubscriber = {
-      id: 66,
-      email: 'testPackCreation@test.com',
-      password: encrypted,
-      reg_date: new Date(),
-      reg_ip: '127.0.0.1',
-      verification_token: 'doesntmatter',
-      status: 'ACTIVE'
-      };
-  before(function(){
-   subTestAdapter.makeSubscriber(testSubscriber);
-   subModel.session.authenticate(testSubscriber.email, 'somePasswd123', function(result){
-    subTestAdapter.fetchSession(result.value, function(res) {
-      session = res.value;
-    });
-   });
-  });
+describe('===> Testing packetCreate: \n',function() {
   it('Packet created successfully',function(done) {
-  	model.packet.create('Packet9', session, 
+  	model.packet.create('Packet1', 1, 
 			function(result){
         console.log(result.value);
   		  assert(result.value, "Could not create packet");
@@ -40,12 +19,51 @@ describe('===> Testing createPacket: \n',function() {
   });
 });
 
-describe('===> Testing fetchPacket: \n',function() {
-  it('Packet fetched successfully',function(done) {
-    model.packet.list(session,
+describe('===> Testing packetList: \n',function() {
+  it('All Packets listed successfully',function(done) {
+    model.packet.list(1,
       function(result){
         console.log(result.value);
-        assert(result.value, "Could not create packet");
+        assert(result.value, "Could not list packet");
+        done();
+      });
+  });
+});
+
+describe('===> Testing packetDetail: \n',function() {
+  it('Packet fetched successfully',function(done) {
+    model.packet.detail(1,2,
+      function(result){
+        console.log(result.value);
+        assert(result.value, "Could not fetch packet");
+        done();
+      });
+  });
+});
+
+describe('===> Testing packetUpdate: \n',function() {
+  after(function(done) {
+    model.packet.list(1,function(result) {console.log(result.value);});
+    done();
+  })
+  it('Packet updated successfully',function(done) {
+    model.packet.update(1,{id:1, name: 'UpdatedPacket'},
+      function(result){
+        assert(result.value, "Could not update packet");
+        done();
+      });
+  });
+});
+
+describe('===> Testing packetDestroy: \n',function() {
+  after(function(done) {
+    model.packet.list(1,function(result) {console.log(result.value);});
+    done();
+  })
+  it('Packet destroyed successfully',function(done) {
+    model.packet.destroy(1,1,
+      function(result){
+        assert(result.value, "Could not destroy packet");
         done();
       });
   });

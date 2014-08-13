@@ -40,6 +40,13 @@ exports.missingId = function() {
   });
 }
 
+exports.missingOfpVersion = function() {
+  return msg.error({
+    system: "profile/controller",
+    type: "missingOfpVersion"
+  });
+}
+
 exports.notAuthorized = function() {
   return msg.error({
     system: "profile/controller",

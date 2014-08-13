@@ -10,7 +10,7 @@ module.exports = {
     // status: Seq.STRING    
 	},
 	relations:{
-		belongsTo:"subscriber"
+    belongsTo: { relative: "subscriber", options: { as: "Subscriber" } }
 	},
 	options: {
 		timestamps: false,
