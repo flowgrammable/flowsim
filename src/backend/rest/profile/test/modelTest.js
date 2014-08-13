@@ -25,6 +25,7 @@ describe('===> Testing profileList: \n',function() {
   it('All profiles listed successfully',function(done) {
     model.profile.list(1, function(result) {
         assert(result.value, "Could not list profiles");
+        console.log(result.value);
         done();
       });
   });
@@ -44,4 +45,19 @@ describe('===> Testing profileUpdate: \n',function() {
       });
   });
 });
+
+describe('===> Testing profileDestroy: \n',function() {
+  after(function(done) {
+    model.profile.list(1,function(result) {console.log(result.value);});
+    done();
+  })
+  it('Profile destroyed successfully',function(done) {
+    model.profile.destroy(1,1,
+      function(result){
+        assert(result.value, "Could not destroy profile");
+        done();
+      });
+  });
+});
+
 
