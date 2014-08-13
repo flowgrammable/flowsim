@@ -60,4 +60,14 @@ describe('===> Testing profileDestroy: \n',function() {
   });
 });
 
+describe('===> Testing profileDetail: \n',function() {
+  it('Successfully fetched profile details',function(done) {
+    model.profile.detail(1,2,
+      function(result){
+        console.log(result.value);
+        assert(result.value, "Could not fetch profile");
+        done();
+      });
+  });
+});
 
