@@ -50,7 +50,6 @@ describe('===> Testing fetchProfileDetails adapter function:\n', function() {
   it('Profile details retrieved successfully', function(done) {
     adapter.fetchProfileDetails(profile, function(result) {
       assert(result.value, "Unable to list profiles")
-      console.log(result.value);
       done();
     });
   });

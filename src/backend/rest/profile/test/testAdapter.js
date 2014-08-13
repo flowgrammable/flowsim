@@ -93,7 +93,7 @@ function listProfiles(subId, cb) {
   // add all profiles with the given subId to an array
   for (i in Profile) 
     if (Profile[i].subscriber_id == subId) 
-      list[i] = Profile[i];
+      list.push(Profile[i]);
   cb(msg.success(list)); // return the array with all of the profiles
 }
 
