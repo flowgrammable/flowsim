@@ -115,7 +115,7 @@ CREATE TABLE dp_caps
    *  (O) Normal - 1.1, 1.2, 1.3, 1.4
    *  (O) Flood - 1.1, 1.2, 1.3, 1.4
    */ 
-	vp_all BOOLEAN, 
+  vp_all BOOLEAN, 
   vp_controller BOOLEAN, 
   vp_table BOOLEAN,
   vp_in_port BOOLEAN,
