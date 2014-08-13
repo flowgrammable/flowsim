@@ -191,7 +191,7 @@ describe('Testing update profile request: ', function() {
         function(done) {
                 request( {
                         url: 'http://localhost:3000/api/profile/update',
-                        body: '{\"subscriber_id\": \"1\", \"id\": \"999999999\", \"name\": \"test3profile\"}',
+                        body: '{ \"id\": \"999999999\", \"name\": \"test3profile\"}',
                         headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
                         method: 'PUT'
                 }, function (error, response, body) {
