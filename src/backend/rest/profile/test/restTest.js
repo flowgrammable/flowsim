@@ -56,7 +56,7 @@ describe('Testing create profile requests:',function() {
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'POST'
     }, function (error, response, body) {
-	console.log('\tResponse received : ', body);
+      console.log('\tResponse received : ', body);
       assert(JSON.parse(body)['value'],'Unable to create profile');
       //console.log('\tResponse received : ', body);
       done();
@@ -233,11 +233,11 @@ describe('Testing list profile request: ', function(){
   function(done) {
     request( {
       url: 'http://localhost:3000/api/profile/list',
-      body: '{ \"id\": \"999999999\", \"name\": \"test3profile\"}',
+      body: '{ \"id\": \"1\", \"name\": \"test profile\"}',
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'PUT'
     }, function (error, response, body) {
-      assert.equal(JSON.parse(body)['error']['type'],'profileNotFound');
+      assert.equal(JSON.parse(body)['error']['type'],'subscriberUnauthenticated');
       console.log('\tResponse received : ', body);
       done();
     });
