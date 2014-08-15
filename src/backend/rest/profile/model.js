@@ -67,7 +67,11 @@ function profileList(adapter, subId, cb) {
       // all profiles w/all attributes are in an array so we need to 
       // filter the result for the id and name
       for (var i = 0; i < profs.length; i++)
-        list[i] = { id: profs[i].id, name: profs[i].name }
+        list[i] = { 
+          id: profs[i].id, 
+          name: profs[i].name,
+          ofp_version: profs[i].ofp_version
+        }
       cb(msg.success(list)); 
     }
   });
