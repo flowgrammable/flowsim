@@ -32,6 +32,8 @@ UNIT_TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -no
 
 # looking for files present in "test" folder throughout the repo excluding "scratch" and "node_modules" folders
 SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*" -not -path "*/packet/*")
+PACKET_TESTS=$(shell find -path "*/packet/test/rest*.js" -not -path "*/node_modules/*")
+PROFILE_TESTS=$(shell find -path "*/profile/test/rest*.js" -not -path "*/node_modules/*")
 
 unit-test:
 	$(flyway) clean && $(flyway) migrate
@@ -42,7 +44,21 @@ system-test:
 	$(flyway) clean && $(flyway) migrate
 	$(server) -t & 
 	@sleep 4
-	-$(MOCHA) -t 60000 -R $(REPORTER) $(SYSTEM_TESTS)
+	-$(MOCHA) -t 90000 -R $(REPORTER) $(SYSTEM_TESTS)
 	@killall node
 
-.PHONY: unit-test, system-test
+packet-test:
+	$(flyway) clean && $(flyway) migrate
+	$(server) -t & 
+	@sleep 4
+	-$(MOCHA) -t 90000 -R $(REPORTER) $(PACKET_TESTS)
+	@killall node
+
+profile-test:
+	$(flyway) clean && $(flyway) migrate
+	$(server) -t & 
+	@sleep 4
+	-$(MOCHA) -t 90000 -R $(REPORTER) $(PROFILE_TESTS)
+	@killall node
+
+.PHONY: unit-test, system-test, packet-test, profile-test
