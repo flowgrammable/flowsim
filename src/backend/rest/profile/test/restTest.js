@@ -109,6 +109,20 @@ describe('Testing update profile request: ', function() {
     		});
   	});
 	
+        it('Test: PUT to /api/profile/update without an ofp_Version should return msg.missingofpversion()',
+        function(done) {
+                request( {
+                        url: 'http://localhost:3000/api/profile/update',
+                        body: '{ \"name\": \"test profile\", \"id\" : \"1\" }',
+                        headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+                        method: 'PUT'
+                }, function (error, response, body) {
+                        assert.equal(JSON.parse(body)['error']['type'],'missingOfpVersion');
+                        console.log('\tResponse received : ', body);
+                        done();
+                });
+        });
+
 	before(function(done) {
 	  this.timeout(5000);
 	  request( { // register anoter subscriber
@@ -192,8 +206,8 @@ describe('Testing update profile request: ', function() {
         function(done) {
                 request( {
                         url: 'http://localhost:3000/api/profile/update',
-                        body: '{ \"id\": \"999999999\", \"name\": \"test3profile\",' +
-															' \"ofp_version\" : \"10\" }',
+                        body: '{ \"id\": \"999999999\", \"name\": \"test3profile\",' + 
+                              ' \"ofp_version\" : \"10\" }',
                         headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
                         method: 'PUT'
                 }, function (error, response, body) {
@@ -207,19 +221,25 @@ describe('Testing update profile request: ', function() {
 //-----------------------------------------------------------------------------
 //Test list profile
 describe('Testing list profile request: ', function(){
-  /*it('Test: Successful request of profiles GET /api/profile/list should return {"id":id, "name":name, "ofp_version": a_version}',
-  function(done) {
   
-  });
-  it('Test: GET /api/profile/list with no profiles found should return msg.noProfilesFound()',
+  it('Test: Successful request of profiles GET /api/profile/list should return {"id":id, "name":name, "ofp_version": a_version}',
   function(done) {
-
+      request({
+        url : 'http://localhost:3000/api/profile/list',
+        headers: {'Content-Type': 'application/json','x-access-token': sessKey},
+        method: 'GET' 
+      }, function (error, response, body) {
+	console.log(body);
+        assert(JSON.parse(body)['value'][0]);
+	assert(JSON.parse(body)['value'][0].id);
+        assert(JSON.parse(body)['value'][0].name);
+        assert(JSON.parse(body)['value'][0].ofp_version);
+	done();
+    });
   });
-  it('Test: List of profiles should only return {"id":id, "name":name, "ofp_version": a_version}',
+  
+  it('Test: GET /api/profile/list while not logged in should return msg.subscriberUnauthenticated()',
   function(done) {
-
-  });*/
-  before(function(done){
     request( { //logout
       url: 'http://localhost:3000/api/subscriber/logout',
       body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
@@ -228,20 +248,63 @@ describe('Testing list profile request: ', function(){
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to logout user');
       console.log('\tResponse received : ', body);
-      done();
+      request( {
+        url: 'http://localhost:3000/api/profile/list',
+        body: '{ \"id\": \"1\", \"name\": \"test profile\"}',
+        headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+        method: 'PUT'
+      }, function (error, response, body) {
+        assert.equal(JSON.parse(body)['error']['type'],'subscriberUnauthenticated');
+        console.log('\tResponse received : ', body);
+        done();
+      });
     });
   });
-  it('Test: GET /api/profile/list while not logged in should return msg.subscriberUnauthenticated()',
+
+  it('Test: GET /api/profile/list with no profiles found should return msg.noProfilesFound()',
   function(done) {
-    request( {
-      url: 'http://localhost:3000/api/profile/list',
-      body: '{ \"id\": \"1\", \"name\": \"test profile\"}',
-      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
-      method: 'PUT'
+    this.timeout(5000);
+    request( { // register subscriber
+      url: 'http://localhost:3000/api/subscriber/register',
+      body: '{ \"email\": \"flowgrammabletest@flog.com\", \"password\": \"my3password\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
     }, function (error, response, body) {
-      assert.equal(JSON.parse(body)['error']['type'],'subscriberUnauthenticated');
-      console.log('\tResponse received : ', body);
-      done();
+      console.log(body);
+      assert(JSON.parse(body)['value'],'Unable to register user');
+      fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
+        if (err) console.log('Unable to read token in file for restTest');
+        else {
+          var array = data.toString().split("\n");
+          token = JSON.parse(array[0]).ver_token;
+          request( { // verify subscriber
+            url: 'http://localhost:3000/api/subscriber/verify/',
+            body: '{ \"token\": \"'+token+'\"}',
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST'
+          }, function (error, response, body) {
+            assert(JSON.parse(body)['value'],'Unable to verify user');
+            request( { // login subscriber
+              url: 'http://localhost:3000/api/subscriber/login',
+              body: '{ \"email\": \"flowgrammabletest@flog.com\", \"password\": \"my3password\"}',
+              headers: { 'Content-Type': 'application/json' },
+              method: 'POST'
+            }, function (error, response, body) {
+              assert(JSON.parse(body)['value'],'Unable to login user');
+              sessKey = JSON.parse(body)['value'];
+              request( {
+                url : 'http://localhost:3000/api/profile/list',
+                headers: {'Content-Type': 'application/json','x-access-token': sessKey},
+      		method: 'GET'
+    	      }, function (error, response, body) {
+      		assert(JSON.parse(body)['value'],'noProfilesFound');
+      		console.log('\tResponse received : ', body);
+      		done();
+    	      });
+            });
+          });
+        }
+      });
     });
   });
 });
