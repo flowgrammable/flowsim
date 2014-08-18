@@ -272,10 +272,12 @@ CREATE TABLE action_caps
   OFPAT_SET_FIELD_ETH_SRC BOOLEAN
 );
 
-CREATE TABLE packet
+-----Packet --------------------------------------------------------------------
+create table packet
 (
-  id SERIAL PRIMARY KEY,
-  subscriber_id INTEGER references subscriber(id) NOT NULL,
-  name CHAR(60) NOT NULL
+   id SERIAL PRIMARY KEY,
+   subscriber_id INTEGER references subscriber(id) NOT NULL,
+   name VARCHAR(60) NOT NULL,
+   bytes INTEGER NOT NULL
 );
 
