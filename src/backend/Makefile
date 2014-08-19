@@ -31,7 +31,7 @@ server=$(PWD)/index.js
 UNIT_TESTS=$(shell find -path "*/test/*.js" -not -path "*/node_modules/*" -a -not -path "*/*/rest*.js")
 
 # looking for files present in "test" folder throughout the repo excluding "scratch" and "node_modules" folders
-SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*" -not -path "*/packet/*")
+SYSTEM_TESTS=$(shell find -path "*/test/rest*.js" -not -path "*/node_modules/*")
 PACKET_TESTS=$(shell find -path "*/packet/test/rest*.js" -not -path "*/node_modules/*")
 PROFILE_TESTS=$(shell find -path "*/profile/test/rest*.js" -not -path "*/node_modules/*")
 
