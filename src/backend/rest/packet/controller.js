@@ -21,7 +21,7 @@ function passback(id, result, nextFunction){
 function packetCreate(dataModel, session, method, params, data, ip, id) {
 	if(method =='POST') {
     if(!data.name) return passback(id, msg.missingPacketName());
-  	dataModel.packet.create(session.subscriber_id, data.name, function(result) {
+  	dataModel.packet.create(session.subscriber_id, data.name, data.bytes, function(result) {
       	passback(id, result);
   	});
 	} else return passback(id, msg.methodNotSupported());

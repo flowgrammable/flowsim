@@ -11,13 +11,15 @@ var Packet = orm.model("packet");
  * be inferred based on the ofp_version
  */
   
-function createPacket(sub_id, name, cb) {
+function createPacket(sub_id, name, bytes, cb) {
   Packet.create({
+    subscriber_id: sub_id,
     name: name,
-    subscriber_id: sub_id
+    bytes: bytes
   }).success(function(result) {
     cb(msg.success(result));
   }).error(function(err) {
+     console.log(err);
      cb(msg.unknownError(err));
   });
 }

@@ -19,8 +19,8 @@ function resultChecker(result, callback){
  * adapter function. If successful, it returns msg.success() else an error 
  * msg is returned.
  */
-function packetCreate(adapter, name, sub_id, cb) {
-  adapter.createPacket(sub_id, name, function(err, result) {
+function packetCreate(adapter, sub_id, name, bytes, cb) {
+  adapter.createPacket(sub_id, name, bytes, function(err, result) {
     if(err) cb(err);  
     else cb(result); 
   });
