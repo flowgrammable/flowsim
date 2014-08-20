@@ -12,8 +12,7 @@ var token, sessKey;
 describe('Testing create profile requests:',function() {
   // Register, verify, then login a subscriber
   before(function(done) { 
-    this.timeout(5000);
-    request( { // register subscriber
+    /*request( { // register subscriber
       url: 'http://localhost:3000/api/subscriber/register',
       body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
       headers: { 'Content-Type': 'application/json' },
@@ -32,7 +31,7 @@ describe('Testing create profile requests:',function() {
             headers: { 'Content-Type': 'application/json' },
             method: 'POST'
           }, function (error, response, body) { 
-            assert(JSON.parse(body)['value'],'Unable to verify user');
+            assert(JSON.parse(body)['value'],'Unable to verify user');*/
             request( { // login subscriber
               url: 'http://localhost:3000/api/subscriber/login',
               body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
@@ -43,10 +42,10 @@ describe('Testing create profile requests:',function() {
               sessKey = JSON.parse(body)['value'];
               done();
             });
-          });
+         /* });
         }
       });
-    }); 
+    });*/
   });
   it('A request that is successful should return msg.success()',
   function(done) {
@@ -125,9 +124,17 @@ describe('Testing update profile request: ', function() {
 
 	before(function(done) {
 	  this.timeout(5000);
+	  request( {
+	    url: 'http://localhost:3000/api/subscriber/logout',
+            body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+            headers: {'Content-Type': 'application/json','x-access-token': sessKey},
+            method: 'POST'
+          }, function (error, response, body) {
+            assert(JSON.parse(body)['value'],'Unable to logout user');
+            console.log('\tResponse received : ', body);
 	  request( { // register anoter subscriber
 	    url: 'http://localhost:3000/api/subscriber/register',
-      	    body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
+      	    body: '{ \"email\": \"flowgrammabltest1@gmail.com\", \"password\": \"openflow1\"}',
       	    headers: { 'Content-Type': 'application/json' },
       	    method: 'POST'
     	  }, function (error, response, body) {
@@ -147,7 +154,7 @@ describe('Testing update profile request: ', function() {
             	assert(JSON.parse(body)['value'],'Unable to verify user');
                 request( { // login subscriber
               	url: 'http://localhost:3000/api/subscriber/login',
-              	body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
+              	body: '{ \"email\": \"flowgrammabltest1@gmail.com\", \"password\": \"openflow1\"}',
                 headers: { 'Content-Type': 'application/json' },
                 method: 'POST'
             	}, function (error, response, body) {
@@ -163,7 +170,7 @@ describe('Testing update profile request: ', function() {
       		    console.log('\tResponse received : ', body);
       		    request( { //logout
       		      url: 'http://localhost:3000/api/subscriber/logout',
-      		      body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
+      		      body: '{ \"email\": \"flowgrammabltest1@gmail.com\", \"password\": \"openflow1\"}',
       		      headers: {'Content-Type': 'application/json','x-access-token': sessKey},
       		      method: 'POST'
     		    }, function (error, response, body) {
@@ -186,6 +193,7 @@ describe('Testing update profile request: ', function() {
              }
       	   });
     	 });
+	 });
        });
 	it('Test: PUT to /api/profile/update with subscriber_id in the body should return msg.notAuthorized()',
 	function(done) {
@@ -242,7 +250,7 @@ describe('Testing list profile request: ', function(){
   function(done) {
     request( { //logout
       url: 'http://localhost:3000/api/subscriber/logout',
-      body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
+      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
       headers: {'Content-Type': 'application/json','x-access-token': sessKey},
       method: 'POST'
     }, function (error, response, body) {
@@ -263,10 +271,10 @@ describe('Testing list profile request: ', function(){
 
   it('Test: GET /api/profile/list with no profiles found should return msg.noProfilesFound()',
   function(done) {
-    this.timeout(5000);
+   /* this.timeout(5000);
     request( { // register subscriber
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"flowgrammabletest@flog.com\", \"password\": \"my3password\"}',
+      body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
@@ -283,10 +291,10 @@ describe('Testing list profile request: ', function(){
             headers: { 'Content-Type': 'application/json' },
             method: 'POST'
           }, function (error, response, body) {
-            assert(JSON.parse(body)['value'],'Unable to verify user');
+            assert(JSON.parse(body)['value'],'Unable to verify user');*/
             request( { // login subscriber
               url: 'http://localhost:3000/api/subscriber/login',
-              body: '{ \"email\": \"flowgrammabletest@flog.com\", \"password\": \"my3password\"}',
+              body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
               headers: { 'Content-Type': 'application/json' },
               method: 'POST'
             }, function (error, response, body) {
@@ -301,11 +309,11 @@ describe('Testing list profile request: ', function(){
       		console.log('\tResponse received : ', body);
       		done();
     	      });
-            });
+            });/*
           });
         }
       });
-    });
+    });*/
   });
 });
 

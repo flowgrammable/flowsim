@@ -53,7 +53,7 @@ describe('Testing create packet requests:',function() {
     this.timeout(5000);
     request( {
       url: 'http://localhost:3000/api/packet/create',
-      body: '{ \"name\": \"test packet\"}',
+      body: '{ \"name\": \"test packet\", \"bytes\": \"100\"}',
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'POST'
     }, function (error, response, body) {
@@ -134,7 +134,7 @@ describe('Testing list packet request: ', function() {
   function(done) {
     request( { // register anoter subscriber
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
+      body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
@@ -154,7 +154,7 @@ describe('Testing list packet request: ', function() {
           assert(JSON.parse(body)['value'],'Unable to verify user');
           request( { // login subscriber
             url: 'http://localhost:3000/api/subscriber/login',
-            body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
+            body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
             headers: { 'Content-Type': 'application/json' },
             method: 'POST'
           }, function (error, response, body) {
@@ -180,7 +180,7 @@ describe('Testing list packet request: ', function() {
   function(done) {
     request( { //logout
       url: 'http://localhost:3000/api/subscriber/logout',
-      body: '{ \"email\": \"test@flog.com\", \"password\": \"my_password\"}',
+      body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
       headers: {'Content-Type': 'application/json','x-access-token': sessKey},
       method: 'POST'
     }, function (error, response, body) {
