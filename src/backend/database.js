@@ -26,7 +26,8 @@ module.exports = {
     {
       id:            1,
       name:          'Packet123',
-      subscriber_id: 1
+      subscriber_id: 1,
+      bytes:         256
     }
   ],
   switch_profile: [
