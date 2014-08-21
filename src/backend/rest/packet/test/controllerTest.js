@@ -11,7 +11,7 @@ describe('===> Testing create packet controller: \n', function(){
   it('Test if name not provided', function(done){
     var testId = 'testerID1';
     var session = { subscriber_id: 1, key: '', timeout: '' };
-    var data = { name: '' };
+    var data = { name: '', bytes: 256 };
     events.Emitter.once(testId, function(result){
       assert.equal(JSON.stringify(result), JSON.stringify(msg.missingPacketName()));
       done();
@@ -21,7 +21,7 @@ describe('===> Testing create packet controller: \n', function(){
   it('Test if method is not POST', function(done){
     var testId = 'testerID2';
     var session = { subscriber_id: 1, key: '', timeout: '' };
-    var data = {name:'something'};
+    var data = {name:'something', bytes: 256};
     events.Emitter.once(testId, function(result){
       assert.equal(JSON.stringify(result),JSON.stringify(msg.methodNotSupported()));
       done();

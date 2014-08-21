@@ -7,7 +7,7 @@ var packet;
 
 describe('===> Testing createPacket adapter function:\n', function() {
   it('User registered successfully', function(done) {
-    adapter.createPacket(1, 'Packet1', function (result) {
+    adapter.createPacket(1, 'Packet1', 256, function (result) {
       console.log(result.value);
       assert(result.value, "Packet creation unsuccessful")
       done();

@@ -7,6 +7,7 @@ Array.prototype.findPacket = function(packetInfo) {
   if (packetInfo.id) hasId = true;
   if (packetInfo.subscriber_id) hasSubId = true;
   if (packetInfo.name) hasName = true;
+  console.log(this);
   for (i in this) {
     found = false;
     if (hasId) {
@@ -39,11 +40,12 @@ Array.prototype.deletePacket = function(packet) {
 // ----------------------------------------------------------------------------
 // Packet
 
-function createPacket(sub_id, name, cb) {
+function createPacket(sub_id, name, bytes, cb) {
   var packetToAdd = {
     id: (Packet[Packet.length-1].id + 1),
     name: name,
-    subscriber_id: sub_id
+    subscriber_id: sub_id,
+    bytes: bytes
   };
   Packet.push(packetToAdd);
   var newPacket = Packet[Packet.length-1];

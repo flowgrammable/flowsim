@@ -10,7 +10,7 @@ var session;
 //-----------------------------------------------------------------------------
 describe('===> Testing packetCreate: \n',function() {
   it('Packet created successfully',function(done) {
-  	model.packet.create('Packet1', 1, 
+  	model.packet.create(1, 'Packet1', 256, 
 			function(result){
         console.log(result.value);
   		  assert(result.value, "Could not create packet");
