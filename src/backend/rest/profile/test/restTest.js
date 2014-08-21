@@ -74,6 +74,21 @@ describe('Testing create profile requests:',function() {
       done();
     }); 
   });
+
+  it('Test: any method but POST should return msg.methodNotSupported()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/profile/create',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'GET',
+      method: 'PUT',
+      method: 'DELETE'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
 });
 
 // --------------------------------------------------------------------------
@@ -225,6 +240,21 @@ describe('Testing update profile request: ', function() {
                 });
         });
 
+  it('Test: any method but PUT should return msg.methodNotSupported()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/profile/update',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'GET',
+      method: 'POST',
+      method: 'DELETE'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+
 });
 //-----------------------------------------------------------------------------
 //Test list profile
@@ -314,6 +344,20 @@ describe('Testing list profile request: ', function(){
         }
       });
     });*/
+  });
+  it('Test: any method but GET should return msg.methodNotSupported()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/profile/list',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'POST',
+      method: 'PUT',
+      method: 'DELETE'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
   });
 });
 

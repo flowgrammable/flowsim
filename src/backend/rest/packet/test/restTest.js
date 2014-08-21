@@ -61,6 +61,20 @@ describe('Testing create packet requests:',function() {
       console.log('\tResponse received : ', body);
       done();
     }); 
+  });
+  it('Test: any method but POST should return msg.methodNotSupported()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/packet/create',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'GET',
+      method: 'PUT',
+      method: 'DELETE'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
   });/*
   it('A request with a missing name should return msg.missingName()',
   function(done) {
