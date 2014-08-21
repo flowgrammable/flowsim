@@ -47,6 +47,13 @@ exports.missingOfpVersion = function() {
   });
 }
 
+exports.invalidOfpVersion = function() {
+  return msg.error({
+    system: "profile/controller",
+    type: "invalidOfpVersion"
+  });
+}
+
 exports.notAuthorized = function() {
   return msg.error({
     system: "profile/controller",
