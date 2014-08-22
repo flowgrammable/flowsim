@@ -273,11 +273,105 @@ CREATE TABLE action_caps
 );
 
 -----Packet --------------------------------------------------------------------
-create table packet
+CREATE TABLE packet
 (
    id SERIAL PRIMARY KEY,
    subscriber_id INTEGER references subscriber(id) NOT NULL,
    name VARCHAR(60) NOT NULL,
    bytes INTEGER NOT NULL
+);
+
+CREATE TABLE ethernet
+(
+  id SERIAL PRIMARY KEY,
+  packet_id INTEGER references packet(id) NOT NULL,
+  eth_src_mac BYTEA NOT NULL,
+  eth_dst_mac BYTEA NOT NULL,
+  eth_type BYTEA NOT NULL
+);
+
+CREATE TABLE VLAN
+(
+  id SERIAL PRIMARY KEY,
+  ethernet_id INTEGER references ethernet(id) NOT NULL,
+  eth_vlan_vid BYTEA NOT NULL,
+  eth_vlan_pcp BYTEA NOT NULL,
+  eth_type BYTEA NOT NULL
+);
+
+CREATE TABLE MPLS
+(
+  id SERIAL PRIMARY KEY,
+  ethernet_id INTEGER references ethernet(id) NOT NULL,
+  mpls_label BYTEA NOT NULL,
+  mpls_tc BYTEA NOT NULL,
+  mpls_bos_bit BYTEA NOT NULL
+);
+
+CREATE TABLE ARP
+(
+  id SERIAL PRIMARY KEY,
+  ethernet_id INTEGER references ethernet(id) NOT NULL,
+  arp_op BYTEA NOT NULL,
+  arp_sha BYTEA NOT NULL,
+  arp_spa BYTEA NOT NULL,
+  arp_tha BYTEA NOT NULL,
+  arp_tpa BYTEA NOT NULL
+);
+
+CREATE TABLE IPv4
+(
+  id SERIAL PRIMARY KEY,
+  ethernet_id INTEGER references ethernet(id),
+  VLAN_id INTEGER references VLAN(id),
+  MPLS_id INTEGER references MPLS(id),
+  ipv4_dscp BYTEA NOT NULL,
+  ipv4_ecn BYTEA NOT NULL,
+  ipv4_proto BYTEA NOT NULL,
+  ipv4_src BYTEA NOT NULL,
+  ipv4_dst BYTEA NOT NULL
+);
+
+CREATE TABLE IPv6
+(
+  id SERIAL PRIMARY KEY,
+  ethernet_id INTEGER references ethernet(id),
+  VLAN_id INTEGER references VLAN(id),
+  MPLS_id INTEGER references MPLS(id),
+  ipv6_dscp BYTEA NOT NULL,
+  ipv6_ecn BYTEA NOT NULL,
+  ipv6_proto BYTEA NOT NULL,
+  ipv6_src BYTEA NOT NULL,
+  ipv6_dst BYTEA NOT NULL,
+  ipv6_flabel BYTEA NOT NULL,
+  ipv6_exthdr BYTEA NOT NULL
+);
+
+CREATE TABLE ICMPv4
+(
+  id SERIAL PRIMARY KEY,
+  ipv4_id INTEGER references IPv4(id) NOT NULL,
+  icmpv4_type BYTEA NOT NULL,
+  icmpv4_code BYTEA NOT NULL
+);
+
+CREATE TABLE ICMPv6
+(
+  id SERIAL PRIMARY KEY,
+  ipv6_id INTEGER references IPv6(id) NOT NULL,
+  icmpv6_type BYTEA NOT NULL,
+  icmpv6_code BYTEA NOT NULL,
+  icmpv6_nd_target BYTEA NOT NULL,
+  icmpv6_nd_sll BYTEA NOT NULL,
+  icmpv6_nd_tll BYTEA NOT NULL
+);
+
+CREATE TABLE Layer4
+(
+  id SERIAL PRIMARY KEY,
+  ipv4_id INTEGER references IPv4(id) NOT NULL,
+  ipv6_id INTEGER references IPv6(id) NOT NULL,
+  src_port BYTEA NOT NULL,
+  dst_port BYTEA NOT NULL
 );
 
