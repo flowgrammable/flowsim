@@ -82,7 +82,7 @@ describe('Testing create profile requests:',function() {
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'GET',
       method: 'PUT',
-      method: 'DELETE'
+      method: 'DEL'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);
@@ -247,7 +247,7 @@ describe('Testing update profile request: ', function() {
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'GET',
       method: 'POST',
-      method: 'DELETE'
+      method: 'DEL'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);
@@ -352,7 +352,7 @@ describe('Testing list profile request: ', function(){
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'POST',
       method: 'PUT',
-      method: 'DELETE'
+      method: 'DEL'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);

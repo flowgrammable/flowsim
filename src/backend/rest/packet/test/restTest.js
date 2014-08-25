@@ -69,7 +69,7 @@ describe('Testing create packet requests:',function() {
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'GET',
       method: 'PUT',
-      method: 'DELETE'
+      method: 'DEL'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);
@@ -189,7 +189,20 @@ describe('Testing list packet request: ', function() {
       });
     });
   });
-
+  it('Test: any method but GET should return msg.methodNotSupported()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/packet/list',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'POST',
+      method: 'PUT',
+      method: 'DEL'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
   it('Test: GET /api/packet/list while not logged in should return msg.subscriberUnauthenticated()',
   function(done) {
     request( { //logout
@@ -201,16 +214,15 @@ describe('Testing list packet request: ', function() {
       assert(JSON.parse(body)['value'],'Unable to logout user');
       console.log('\tResponse received : ', body);
       request( {
-        url: 'http://localhost:3000/api/profile/list',
+        url: 'http://localhost:3000/api/packet/list',
         headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
-        method: 'PUT'
+        method: 'GET'
       }, function (error, response, body) {
         assert.equal(JSON.parse(body)['error']['type'],'subscriberUnauthenticated');
         console.log('\tResponse received : ', body);
         done();
       });
     });
-  });
-  
+  });  
 });
 
