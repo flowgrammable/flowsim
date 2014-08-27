@@ -12,9 +12,9 @@ var token, sessKey;
 describe('Testing create profile requests:',function() {
   // Register, verify, then login a subscriber
   before(function(done) { 
-    /*request( { // register subscriber
+    request( { // register subscriber
       url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+      body: '{ \"email\": \"flog.tester@gmail.com\", \"password\": \"my password\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
@@ -31,10 +31,10 @@ describe('Testing create profile requests:',function() {
             headers: { 'Content-Type': 'application/json' },
             method: 'POST'
           }, function (error, response, body) { 
-            assert(JSON.parse(body)['value'],'Unable to verify user');*/
+            assert(JSON.parse(body)['value'],'Unable to verify user');
             request( { // login subscriber
               url: 'http://localhost:3000/api/subscriber/login',
-              body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+              body: '{ \"email\": \"flog.tester@gmail.com\", \"password\": \"my password\"}',
               headers: { 'Content-Type': 'application/json' },
               method: 'POST'
             }, function (error, response, body) {
@@ -42,10 +42,10 @@ describe('Testing create profile requests:',function() {
               sessKey = JSON.parse(body)['value'];
               done();
             });
-         /* });
+          });
         }
       });
-    });*/
+    });
   });
   it('A request that is successful should return msg.success()',
   function(done) {
@@ -139,7 +139,7 @@ describe('Testing update profile request: ', function() {
 	  this.timeout(5000);
 	  request( {
 	    url: 'http://localhost:3000/api/subscriber/logout',
-            body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+            body: '{ \"email\": \"flog.tester@gmail.com\", \"password\": \"my password\"}',
             headers: {'Content-Type': 'application/json','x-access-token': sessKey},
             method: 'POST'
           }, function (error, response, body) {
@@ -191,7 +191,7 @@ describe('Testing update profile request: ', function() {
       		      console.log('\tResponse received : ', body);
       	 	      request( { // login subscriber 1
              	        url: 'http://localhost:3000/api/subscriber/login',
-               	        body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+               	        body: '{ \"email\": \"flog.tester@gmail.com\", \"password\": \"my password\"}',
               	        headers: { 'Content-Type': 'application/json' },
                         method: 'POST'
             	      }, function (error, response, body) {
@@ -271,12 +271,25 @@ describe('Testing list profile request: ', function(){
 	done();
     });
   });
+
+  it('Test: any method but GET should return msg.methodNotSupported()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/profile/list',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
   
   it('Test: GET /api/profile/list while not logged in should return msg.subscriberUnauthenticated()',
   function(done) {
     request( { //logout
       url: 'http://localhost:3000/api/subscriber/logout',
-      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+      body: '{ \"email\": \"flog.tester@gmail.com\", \"password\": \"my password\"}',
       headers: {'Content-Type': 'application/json','x-access-token': sessKey},
       method: 'POST'
     }, function (error, response, body) {
@@ -295,63 +308,6 @@ describe('Testing list profile request: ', function(){
     });
   });
 
-  it('Test: GET /api/profile/list with no profiles found should return msg.noProfilesFound()',
-  function(done) {
-   /* this.timeout(5000);
-    request( { // register subscriber
-      url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log(body);
-      assert(JSON.parse(body)['value'],'Unable to register user');
-      fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
-        if (err) console.log('Unable to read token in file for restTest');
-        else {
-          var array = data.toString().split("\n");
-          token = JSON.parse(array[0]).ver_token;
-          request( { // verify subscriber
-            url: 'http://localhost:3000/api/subscriber/verify/',
-            body: '{ \"token\": \"'+token+'\"}',
-            headers: { 'Content-Type': 'application/json' },
-            method: 'POST'
-          }, function (error, response, body) {
-            assert(JSON.parse(body)['value'],'Unable to verify user');*/
-            request( { // login subscriber
-              url: 'http://localhost:3000/api/subscriber/login',
-              body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
-              headers: { 'Content-Type': 'application/json' },
-              method: 'POST'
-            }, function (error, response, body) {
-              assert(JSON.parse(body)['value'],'Unable to login user');
-              sessKey = JSON.parse(body)['value'];
-              request( {
-                url : 'http://localhost:3000/api/profile/list',
-                headers: {'Content-Type': 'application/json','x-access-token': sessKey},
-      		method: 'GET'
-    	      }, function (error, response, body) {
-      		assert(JSON.parse(body)['value'],'noProfilesFound');
-      		console.log('\tResponse received : ', body);
-      		done();
-    	      });
-            });/*
-          });
-        }
-      });
-    });*/
-  });
-  it('Test: any method but GET should return msg.methodNotSupported()',
-  function(done) {
-    request({
-      url: 'http://localhost:3000/api/profile/list',
-      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
-      method: 'POST'
-    }, function (error, response, body) {
-      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
-      console.log('\tResponse received : ', body);
-      done();
-    });
-  });
+
 });
 
