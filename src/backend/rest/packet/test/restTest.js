@@ -67,9 +67,7 @@ describe('Testing create packet requests:',function() {
     request({
       url: 'http://localhost:3000/api/packet/create',
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
-      method: 'GET',
-      method: 'PUT',
-      method: 'DEL'
+      method: 'GET'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);
@@ -88,18 +86,18 @@ describe('Testing create packet requests:',function() {
       console.log('\tResponse received : ', body);
       done();
     }); 
-  });
+  });*/
 });
 
 // --------------------------------------------------------------------------
 // Testing update profile
 describe('Testing update profile request: ', function() {
 
-	it('Test: Successful update of profile PUT /api/profile/update {id: id, name: name} should return msg.success()', 
+	it('Test: Successful update of profile PUT /api/packet/update {id: id, name: name} should return msg.success()', 
 	function(done) {
 		request( {
-			url: 'http://localhost:3000/api/profile/update',
-			body: '{\"id\": \"1\", \"name\": \"test profile\"}',
+			url: 'http://localhost:3000/api/packet/update',
+			body: '{\"id\": \"1\", \"name\": \"test packet\"}',
 			headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
                         method: 'PUT'
                 }, function (error, response, body) {
@@ -112,8 +110,8 @@ describe('Testing update profile request: ', function() {
 	it('Test: PUT to /api/profile/update without an id in the body should return msg.missingId()', 
 	function(done) {
 		request( {
-			url: 'http://localhost:3000/api/profile/update',
-			body: '{ \"name\": \"test profile\"}',
+			url: 'http://localhost:3000/api/packet/update',
+			body: '{ \"name\": \"test packet\"}',
 		   	headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
    			method: 'PUT'
  		}, function (error, response, body) {
@@ -122,7 +120,7 @@ describe('Testing update profile request: ', function() {
       			done();
     		});
   	});
-	*/
+	
 });
 
 // -----------------------------------------------------------------------------
@@ -146,6 +144,14 @@ describe('Testing list packet request: ', function() {
 
   it('Test: GET /api/packet/list with no packet found should return {value: [ ] }',
   function(done) {
+    request( { //logout
+      url: 'http://localhost:3000/api/subscriber/logout',
+      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+      headers: {'Content-Type': 'application/json','x-access-token': sessKey},
+      method: 'POST'
+    }, function (error, response, body) {
+      assert(JSON.parse(body)['value'],'Unable to logout user');
+      console.log('\tResponse received : ', body);
     request( { // register anoter subscriber
       url: 'http://localhost:3000/api/subscriber/register',
       body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
@@ -188,15 +194,14 @@ describe('Testing list packet request: ', function() {
       }
       });
     });
+    });
   });
   it('Test: any method but GET should return msg.methodNotSupported()',
   function(done) {
     request({
       url: 'http://localhost:3000/api/packet/list',
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
-      method: 'POST',
-      method: 'PUT',
-      method: 'DEL'
+      method: 'POST'
     }, function (error, response, body) {
       assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
       console.log('\tResponse received : ', body);
@@ -225,4 +230,58 @@ describe('Testing list packet request: ', function() {
     });
   });  
 });
+//-----------------------------------------------------------------------------
+// Testing delete packet
+describe('Test delete packet request: ', function() {
+  it('Test: Successful deletion of packet DEL /api/packet/delete/packet_id should return msg.success()',
+  function(done) {
+    request( { // login subscriber
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST'
+    }, function (error, response, body) {
+      assert(JSON.parse(body)['value'],'Unable to login user');
+      sessKey = JSON.parse(body)['value'];
+      request({
+        url: 'http://localhost:3000/api/packet/delete/packet_id',
+        body: '{ \"packet_id\": \"1\"}',
+        headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+        method: 'DEL'
+      }, function (error, response, body) {
+        console.log('\tResponse received : ', body);
+        assert(JSON.parse(body)['value'],'Unable to delete packet');
+        //console.log('\tResponse received : ', body);
+        done();
+      });
+    });
+  });
+  it('Test: DEL to /api/packet/delete/packet_id without packet_id should return msg.missingId()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/packet/delete/packet_id',
+      body: '{ \"packet_id\": \"\"}',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'DEL'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'missingId');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
 
+  it('Test: any method but DEL should return msg.methodNotSupported()',
+  function(done) {
+    request({
+      url: 'http://localhost:3000/api/packet/delete/packet_id',
+      body: '{ \"packet_id\": \"1\"}',
+      headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
+      method: 'GET'
+    }, function (error, response, body) {
+      assert.equal(JSON.parse(body)['error']['type'],'methodNotSupported');
+      console.log('\tResponse received : ', body);
+      done();
+    });
+  });
+
+});
