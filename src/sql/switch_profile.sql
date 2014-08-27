@@ -19,11 +19,22 @@ CREATE TABLE switch_profile
   /*
    * Openflow protocol version
    */
-  ofp_version BYTEA(32)  NOT NULL,
+  ofp_version BYTEA(8)  NOT NULL,
 
   /*
    * datapath_id 
    * 
    */
-  name VARCHAR(60) NOT NULL
+   datapath_id BYTEA(64) NOT NULL,
+
+  /*
+	 * n_buffers
+   */
+   n_buffers BYTEA(32) NOT NULL,
+
+  /*
+   * n_tables
+   * number of flowtable in the datapath
+   */
+   n_Tables BYTEA(8) NOT NULL
 );
