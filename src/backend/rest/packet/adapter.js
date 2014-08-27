@@ -34,7 +34,7 @@ function createPacket(sub_id, name, bytes, cb) {
 function fetchPacket(packetInfo, cb) {
   Packet.find({ where: packetInfo })
     .success(function(result) {
-      if (result == null) cb(msg.noPacketFound());
+      if (result == null) cb(msg.packetNotFound());
       else cb(msg.success(result));
     }).error(function(err) {
       cb(msg.unknownError(err)); 
@@ -64,7 +64,7 @@ function listPackets(sub_id, cb) {
  */
 
 function updatePacket(packet, newPacketInfo, cb) {
-  Packet.updateAttributes(newPacketInfo)
+  packet.updateAttributes(newPacketInfo)
     .success(function(result) { cb(msg.success(result)); })
     .error  (function(err)    { cb(msg.unknownError(err)); });
 }
@@ -76,9 +76,10 @@ function updatePacket(packet, newPacketInfo, cb) {
  */
 
 function destroyPacket(packet, cb) {
-  Packet.destroy()
-    .success(function(result) { cb(msg.success()); })
-    .error  (function(err)    { cb(msg.unknownError(err)); });
+  console.log(packet);
+  packet.destroy()
+    .success(function(result) { console.log(result);cb(msg.success()); })
+    .error  (function(err)    { console.log("Err:"+err);cb(msg.unknownError(err)); });
 }
 
 exports.createPacket = createPacket;
