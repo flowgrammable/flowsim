@@ -91,7 +91,7 @@ describe('Testing create packet requests:',function() {
 
 // --------------------------------------------------------------------------
 // Testing update profile
-describe('Testing update profile request: ', function() {
+/*describe('Testing update profile request: ', function() {
 
 	it('Test: Successful update of profile PUT /api/packet/update {id: id, name: name} should return msg.success()', 
 	function(done) {
@@ -122,7 +122,7 @@ describe('Testing update profile request: ', function() {
   	});
 	
 });
-
+*/
 // -----------------------------------------------------------------------------
 // Testing list packet
 describe('Testing list packet request: ', function() {
@@ -244,8 +244,7 @@ describe('Test delete packet request: ', function() {
       assert(JSON.parse(body)['value'],'Unable to login user');
       sessKey = JSON.parse(body)['value'];
       request({
-        url: 'http://localhost:3000/api/packet/delete/packet_id',
-        body: '{ \"packet_id\": \"1\"}',
+        url: 'http://localhost:3000/api/packet/delete/1',
         headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
         method: 'DEL'
       }, function (error, response, body) {
@@ -259,8 +258,7 @@ describe('Test delete packet request: ', function() {
   it('Test: DEL to /api/packet/delete/packet_id without packet_id should return msg.missingId()',
   function(done) {
     request({
-      url: 'http://localhost:3000/api/packet/delete/packet_id',
-      body: '{ \"packet_id\": \"\"}',
+      url: 'http://localhost:3000/api/packet/delete/',
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'DEL'
     }, function (error, response, body) {
@@ -273,8 +271,7 @@ describe('Test delete packet request: ', function() {
   it('Test: any method but DEL should return msg.methodNotSupported()',
   function(done) {
     request({
-      url: 'http://localhost:3000/api/packet/delete/packet_id',
-      body: '{ \"packet_id\": \"1\"}',
+      url: 'http://localhost:3000/api/packet/delete/1',
       headers: { 'Content-Type':'application/json', 'x-access-token': sessKey },
       method: 'GET'
     }, function (error, response, body) {
