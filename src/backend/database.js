@@ -32,20 +32,20 @@ module.exports = {
   ],
   ethernet: [
     {
-      id: ,
-      packet_id: ,
-      eth_src_mac: ,
-      eth_dst_mac: ,
-      eth_type:
+      id: 1,
+      packet_id: 1,
+      eth_src_mac: "0a2b4c6d7d8f",
+      eth_dst_mac: "8f7d6d4c2b0a",
+      eth_type: "0800"
     }
   ],
   VLAN: [
     {
-      id: ,
-      ethernet_id: ,
-      eth_vlan_vid: ,
-      eth_vlan_pcp: ,
-      eth_type:
+      id: 1,
+      ethernet_id: 1,
+      eth_vlan_vid: "12F",
+      eth_vlan_pcp: "2",
+      eth_type: "0800"
     }
   ],
   MPLS: [
@@ -70,15 +70,15 @@ module.exports = {
   ],
   IPv4: [
     {
-      id: ,
-      ethernet_id: ,
-      VLAN_id: ,
-      MPLS_id: ,
-      ipv4_dscp: ,
-      ipv4_ecn: ,
-      ipv4_proto: ,
-      ipv4_src: ,
-      ipv4_dst:
+      id: 1,
+      ethernet_id: 1,
+      //VLAN_id: NULL,
+      //MPLS_id: NULL,
+      ipv4_dscp: "01",
+      ipv4_ecn: "ff",
+      ipv4_proto: "06",
+      ipv4_src: "C0A80101",
+      ipv4_dst: "C0A80102"
     }
   ],
   IPv6: [
