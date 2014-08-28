@@ -30,6 +30,101 @@ module.exports = {
       bytes:         256
     }
   ],
+  ethernet: [
+    {
+      id: ,
+      packet_id: ,
+      eth_src_mac: ,
+      eth_dst_mac: ,
+      eth_type:
+    }
+  ],
+  VLAN: [
+    {
+      id: ,
+      ethernet_id: ,
+      eth_vlan_vid: ,
+      eth_vlan_pcp: ,
+      eth_type:
+    }
+  ],
+  MPLS: [
+    {
+      id: ,
+      ethernet_id: ,
+      mpls_label: ,
+      mpls_tc: ,
+      mpls_bos_bit:
+    }
+  ],
+  ARP: [
+    {
+      id: ,
+      ethernet_id: ,
+      arp_op: ,
+      arp_sha: ,
+      arp_spa: ,
+      arp_tha: ,
+      arp_tpa:
+    }
+  ],
+  IPv4: [
+    {
+      id: ,
+      ethernet_id: ,
+      VLAN_id: ,
+      MPLS_id: ,
+      ipv4_dscp: ,
+      ipv4_ecn: ,
+      ipv4_proto: ,
+      ipv4_src: ,
+      ipv4_dst:
+    }
+  ],
+  IPv6: [
+    {
+      id: ,
+      ethernet_id: ,
+      VLAN_id: ,
+      MPLS_id: ,
+      ipv6_dscp: ,
+      ipv6_ecn: ,
+      ipv6_proto: ,
+      ipv6_src: ,
+      ipv6_dst: ,
+      ipv6_flabel: ,
+      ipv6_exthdr:
+    } 
+  ],
+  ICMPv4: [
+    {
+      id: ,
+      ipv4_id: ,
+      icmpv4_type: ,
+      icmpv4_code:
+    }
+  ],
+  ICMPv6: [
+    {
+      id: ,
+      ipv6_id: ,
+      icmpv6_type: ,
+      icmpv6_code: ,
+      icmpv6_nd_target: ,
+      icmpv6_nd_sll: ,
+      icmpv6_nd_tll:
+    }  
+  ],
+  Layer4: [
+    {
+      id: ,
+      ipv4_id: ,
+      ipv6_id: ,
+      src_port: ,
+      dst_port:
+    }
+  ],
+
   switch_profile: [
     {
       id:            1,
