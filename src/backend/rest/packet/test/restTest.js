@@ -124,6 +124,36 @@ describe('Testing create packet requests:',function() {
 });
 */
 // -----------------------------------------------------------------------------
+// Testing fetch details
+describe('Testing fetch details request: ', function() {
+  it('Test: Successful request of profile GET /api/packet/detail/id should return {"id":id, "name":name}',
+  function(done) {
+      request({
+        url : 'http://localhost:3000/api/packet/detail/1',
+        headers: {'Content-Type': 'application/json','x-access-token': sessKey},
+        method: 'GET'
+      }, function (error, response, body) {
+        console.log(body);
+        assert(JSON.parse(body)['value'][0]);
+        assert(JSON.parse(body)['value'][0].id);
+        assert(JSON.parse(body)['value'][0].name);
+        done();
+    });
+  });
+  it('Test: GET to /api/packet/detail/id without an id should return msg.missingId()' ,
+  function(done) {
+      request({
+        url : 'http://localhost:3000/api/packet/detail',
+        headers: {'Content-Type': 'application/json','x-access-token': sessKey},
+        method: 'GET'
+      }, function (error, response, body) {
+        assert.equal(JSON.parse(body)['error']['type'],'missingId');
+        console.log('\tResponse received : ', body);
+        done();
+    });
+  });
+});
+// -----------------------------------------------------------------------------
 // Testing list packet
 describe('Testing list packet request: ', function() {
 
