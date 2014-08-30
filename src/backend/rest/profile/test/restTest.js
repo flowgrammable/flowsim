@@ -31,6 +31,7 @@ describe('Testing create profile requests:',function() {
             headers: { 'Content-Type': 'application/json' },
             method: 'POST'
           }, function (error, response, body) { 
+            console.log(body);
             assert(JSON.parse(body)['value'],'Unable to verify user');
             request( { // login subscriber
               url: 'http://localhost:3000/api/subscriber/login',
