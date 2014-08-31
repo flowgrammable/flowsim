@@ -12,8 +12,9 @@ module.exports = {
     status: Seq.STRING
 	},
   relations:{
-        hasMany: { relative: "switch_profile", options: { as: "Profiles" } },
+//        hasMany: { relative: "switch_profile", options: { as: "Profiles" } },
 		// hasOne:"session"
+		hasMany: { relative: "packet", options: { as: "Packet" }}
 	},
 	options: {
 		timestamps: false,

@@ -6,7 +6,7 @@ module.exports = {
     id:            { type: Seq.INTEGER, allowNull: false, primaryKey: true },
     subscriber_id: { type: Seq.INTEGER, allowNull: false, references: "subscriber" },
     name:          { type: Seq.STRING, allowNull: false },
-    bytes:         { type: Seq.INTEGER, allowNull: false }
+    bytes:         { type: Seq.INTEGER, allowNull: true }
   },
   relations:{
     belongsTo: { relative: "subscriber", options: { as: "Subscriber" } }

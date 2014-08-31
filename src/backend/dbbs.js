@@ -19,7 +19,7 @@ var singleton = function singleton(){
    sequelize = new Sequelize('flowsim', 'flogdev', 'flogdev', {
 	  dialect: "postgres",
 		logging: false,
-	  port: 5432
+	  port: 5432 
    });
 
    sequelize
@@ -46,9 +46,10 @@ var singleton = function singleton(){
     var sess  = require('./rest/subscriber/db/session');
 		var sub   = require('./rest/subscriber/db/subscriber');
 		var pack   = require('./rest/packet/db/packet');
-    var prof  = require('./rest/profile/db/profile');
-    var dpCaps  = require('./rest/profile/db/dp_caps');
-    var ftCaps  = require('./rest/profile/db/ft_caps');
+  //  var prof  = require('./rest/profile/db/profile');
+  //  var dpCaps  = require('./rest/profile/db/dp_caps');
+  //  var ftCaps  = require('./rest/profile/db/ft_caps');
+		var ethernet = require('./rest/packet/db/ethernet');
 
     var options = {timestamps: false, underscored: true};
 
@@ -58,13 +59,17 @@ var singleton = function singleton(){
 		relationships["subscriber"] = sub.relations; // none at the moment
     models["packet"] = sequelize.define("packet", pack.model, pack.options);
     relationships["packet"] = pack.relations;
+		models["ethernet"] = sequelize.define("ethernet", ethernet.model, ethernet.options);
+	//	relationships["ethernet"] = ethernet.relations;
+
+/*
     models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;
     models["dp_caps"] = sequelize.define("dp_caps", dpCaps.model, dpCaps.options);
     relationships["dp_caps"] = dpCaps.relations;
     models["ft_caps"] = sequelize.define("ft_caps", ftCaps.model, ftCaps.options);
     relationships["ft_caps"] = ftCaps.relations;
-
+*/
 		for (var name in relationships) {
       var relation = relationships[name];
       for (var relName in relation) {

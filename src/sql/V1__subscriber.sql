@@ -278,7 +278,7 @@ CREATE TABLE packet
    id SERIAL PRIMARY KEY,
    subscriber_id INTEGER references subscriber(id) NOT NULL,
    name VARCHAR(60) NOT NULL,
-   bytes INTEGER NOT NULL
+   bytes INTEGER --NOT NULL
 );
 
 CREATE TABLE ethernet
