@@ -3,6 +3,7 @@ var msg = require('./msg');
 var orm = require('../../dbbs');
 var Packet = orm.model("packet");
 var Ethernet = orm.model("ethernet");
+var IPv4 = orm.model("ipv4");
 // ----------------------------------------------------------------------------
 // Packet
 
@@ -24,7 +25,15 @@ function createPacket(sub_id, name, data, cb) {
 			eth_dst_mac: '\\x' + data[0].data.dst_mac,
 			eth_type: '\\x' + data[0].data.eth_type
 		}).success(function(result){
-		    cb(msg.success(result));
+				IPv4.create({
+					packet_id: result.packet_id,
+					//TODO: add dscp, ecn
+					ipv4_proto: '\\x' +  data[1].data.proto,
+					ipv4_src: '\\x' + data[1].data.src_ip,
+					ipv4_dst: '\\x' + data[1].data.dst_ip
+				}).success(function(result){
+		    		cb(msg.success());
+				}).error(function(err){console.log(err);});
 		}).error(function(err){ console.log(err);});
   }).error(function(err) {
      console.log(err);

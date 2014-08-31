@@ -50,7 +50,7 @@ var singleton = function singleton(){
   //  var dpCaps  = require('./rest/profile/db/dp_caps');
   //  var ftCaps  = require('./rest/profile/db/ft_caps');
 		var ethernet = require('./rest/packet/db/ethernet');
-
+    var ipv4 = require('./rest/packet/db/ipv4');
     var options = {timestamps: false, underscored: true};
 
     models["session"] = sequelize.define("session", sess.model, sess.options);
@@ -60,8 +60,9 @@ var singleton = function singleton(){
     models["packet"] = sequelize.define("packet", pack.model, pack.options);
     relationships["packet"] = pack.relations;
 		models["ethernet"] = sequelize.define("ethernet", ethernet.model, ethernet.options);
-	//	relationships["ethernet"] = ethernet.relations;
-
+		relationships["ethernet"] = ethernet.relations;
+		models["ipv4"] = sequelize.define("ipv4", ipv4.model, ipv4.options);
+		relationships["ipv4"] = ipv4.relations;
 /*
     models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;

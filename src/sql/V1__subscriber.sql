@@ -322,11 +322,9 @@ CREATE TABLE ARP
 CREATE TABLE IPv4
 (
   id SERIAL PRIMARY KEY,
-  ethernet_id INTEGER references ethernet(id),
-  VLAN_id INTEGER references VLAN(id),
-  MPLS_id INTEGER references MPLS(id),
-  ipv4_dscp BYTEA NOT NULL,
-  ipv4_ecn BYTEA NOT NULL,
+  packet_id INTEGER references packet(id),
+  ipv4_dscp BYTEA,
+  ipv4_ecn BYTEA ,
   ipv4_proto BYTEA NOT NULL,
   ipv4_src BYTEA NOT NULL,
   ipv4_dst BYTEA NOT NULL

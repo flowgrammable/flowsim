@@ -72,8 +72,8 @@ function sendVerificationEmail(subscriber, cb) {
 		if (result.name) {
 		 cb(msg.unknownError());
 		}
-    else cb(msg.success());   
   });
+  cb(msg.success());   
 }
 
 exports.sendResetEmail = function(subscriber, cb){
