@@ -41,7 +41,7 @@ packet.controller('createPacketCntrl', ['$scope', 'packetFactory',
 			packetFactory.list()
 				.success(function(data){
 					if(data.value){
-						$scope.packetList = data.value.packetList;
+						$scope.packetList = data.value;
 					}
 				}).error(function(data){});
 		};
