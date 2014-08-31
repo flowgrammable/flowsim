@@ -23,7 +23,24 @@ packet.controller('createPacketCntrl', ['$scope', 'packetFactory',
 		$scope.creationSuccess = false;
     $scope.packetList = [];
 		$scope.create = function() {
-			var packet = {name: $scope.name};
+			var packet = {name: $scope.name,
+				data: [ {
+					protocol: "ethernet",
+					data: {
+						src_mac: "0a2b4c6d7d8f",
+						dst_mac: "0bb2cd232323",
+						eth_type: "0800"
+					}
+					},
+					{ protocol: "ipv4",
+						data: {
+							proto: "06",
+							src_ip: "0a0a0a0a",
+							dst_ip: "0a0a0a0b"
+						}
+					}]
+				};
+				
 			packetFactory.create(packet)
 				.success(function(data){
 					if(data.value){
