@@ -67,10 +67,10 @@ function packetDetail(adapter, sub_id, pack_id, cb) {
  * existing packet is updated and msg.success() is returned or error 
  * message is returned. 
  */
-function packetUpdate(adapter, sub_Id, newPacketInfo, cb) {
+function packetUpdate(adapter, sub_Id, packetId, newPacketInfo, cb) {
   async.waterfall([
     function(callback){
-      var packetInfo = { subscriber_id: sub_Id, id: newPacketInfo.id };
+      var packetInfo = { subscriber_id: sub_Id, id: packetId };
       adapter.fetchPacket(packetInfo, function(result){
         resultChecker(result, callback);
       });

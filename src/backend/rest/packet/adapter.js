@@ -16,17 +16,12 @@ var IPv4 = orm.model("ipv4");
 function createPacket(sub_id, name, data, cb) {
   Packet.create({
     subscriber_id: sub_id,
-    name: name
-    //bytes: bytes
+    name: name,
+		eth_src_mac: '\\x' +  data[0].data.src_mac,
+		eth_dst_mac: '\\x' + data[0].data.dst_mac,
+		eth_type: '\\x' + data[0].data.eth_type
   }).success(function(result) {
-		Ethernet.create({
-			packet_id: result.id,
-			eth_src_mac: '\\x' +  data[0].data.src_mac,
-			eth_dst_mac: '\\x' + data[0].data.dst_mac,
-			eth_type: '\\x' + data[0].data.eth_type
-		}).success(function(result){
-		    		cb(msg.success());
-		}).error(function(err){ console.log(err);});
+		 cb(msg.success());
   }).error(function(err) {
      console.log(err);
      cb(msg.unknownError(err));

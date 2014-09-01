@@ -68,10 +68,11 @@ function packetDetail(dataModel, session, method, params, data, ip, id) {
  */
 function packetUpdate(dataModel, session, method, params, data, ip, id) {
   if(method =='PUT') {
-    if(!data.id) return passback(id, msg.missingId());
+    if(!params[1]) return passback(id, msg.missingId());
+		var packetId = params[1];
     if(!data.name) return passback(id, msg.missingPacketName());
     if(data.subscriber_id) return passback(id, msg.notAuthorized());
-    dataModel.packet.update(session.subscriber_id, data, function(result) {
+    dataModel.packet.update(session.subscriber_id, packetId, data, function(result) {
       passback(id, result);
     });
   } else return passback(id, msg.methodNotSupported());
@@ -85,7 +86,7 @@ function packetUpdate(dataModel, session, method, params, data, ip, id) {
  * destroy packet is called with the given packet id.
  */
 function packetDestroy(dataModel, session, method, params, data, ip, id) {
-  if(method =='DEL') {
+  if(method =='DELETE') {
     if(!params[1]) return passback(id, msg.missingId());
     var packetId = params[1];
     dataModel.packet.destroy(session.subscriber_id, packetId, function(result) {
