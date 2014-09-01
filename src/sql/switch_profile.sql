@@ -27,24 +27,24 @@ CREATE TABLE switch_profile
   /*
    * Openflow protocol version
    */
-  ofp_version BYTEA(8)  NOT NULL,
+  ofp_version BYTEA  NOT NULL,
 
   /*
    * datapath_id 
    * 
    */
-   datapath_id BYTEA(64) NOT NULL,
+   datapath_id BYTEA NOT NULL,
 
   /*
 	 * n_buffers
    */
-   n_buffers BYTEA(32) NOT NULL,
+   n_buffers BYTEA NOT NULL,
 
   /*
    * n_tables
    * number of flowtable in the datapath
    */
-   n_Tables BYTEA(8) NOT NULL, 
+   n_tables BYTEA NOT NULL, 
 
   /*
    * ip_reassembly
@@ -69,8 +69,11 @@ CREATE TABLE switch_profile
   /*
    * version_in_use
    * the ofp version being used
-   */
+   *
    version_in_use INTEGER NOT NULL,
+   *
+   * ofp_version is same thing as this, commenting out - colton
+   */
   -----------------------------------------------------------------------------
   
   --------------------------- Datapath Description ----------------------------
