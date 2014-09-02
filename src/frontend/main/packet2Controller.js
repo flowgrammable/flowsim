@@ -6,13 +6,10 @@ flowsimApp.controller('packet2Controller',
     $scope.packets = [
       {
         name: 'eth1.pkt',
-        pos: 0
       }, {
         name: 'eth2.pkt',
-        pos: 1
       }, {
         name: 'eth3.pkt',
-        pos: 2
       }
     ];
     $scope.packetName = '';
