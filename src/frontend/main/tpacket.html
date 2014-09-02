@@ -41,6 +41,7 @@
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
               Ethernet
+              <span class="glyphicon glyphicon-minus-sign pull-right"></span>
             </a>
           </h4>
         </div>
@@ -48,15 +49,19 @@
           <div class="panel-body">
             <table class="table table-striped">
               <tr>
-                <td>src</td>
+                <td>Source</td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" class="form-control input-sm" placeholder="Source MAC">
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Destination</td>
                 <td>00:11:22:33:44:55</td>
               </tr>
               <tr>
-                <td>dst</td>
-                <td>00:11:22:33:44:55</td>
-              </tr>
-              <tr>
-                <td>ethertype</td>
+                <td>Ethertype</td>
                 <td>IPv4(0x0800)</td>
               </tr>
             </table>
@@ -68,6 +73,7 @@
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
               IPv4
+              <span class="glyphicon glyphicon-minus-sign pull-right"></span>
             </a>
           </h4>
         </div>
