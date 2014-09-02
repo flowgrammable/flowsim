@@ -24,7 +24,7 @@ Formatter.prototype.indent = function() {
 
 Formatter.prototype.begin = function(name) {
   this.indent();
-  this.result += name + '{' + '\n';
+  this.result += name + ' {' + '\n';
   this.level += 1;
 }
 
