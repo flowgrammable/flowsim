@@ -21,14 +21,24 @@ Address.prototype.toString = function() {
   return result.join(':');
 }
 
-Ethernet = function(src, dst, ethertype) {
+Address.prototype.isBroadcast = function() {
+  return this.addr[0] == 0xff && this.addr[1] == 0xff &&
+    this.addr[2] == 0xff && this.addr[3] == 0xff &&
+    this.addr[4] == 0xff && this.addr[5] == 0xff;
+}
+
+Address.prototype.isMulticast = function() {
+  return this.addr[0] & 0x01;
+}
+
+Header = function(src, dst, ethertype) {
   this.src = new Address(src);
   this.dst = new Address(dst);
   if(ethertype) this.ethertype = ethertype;
 }
-exports.Ethernet = Ethernet;
+exports.Header = Header;
 
-Ethernet.prototype.toFormatter = function(f) {
+Header.prototype.toFormatter = function(f) {
   f.begin('Ethernet');
   f.addPair('Src', this.src.toString());
   f.addPair('Dst', this.dst.toString());
@@ -37,7 +47,7 @@ Ethernet.prototype.toFormatter = function(f) {
   f.end();
 }
 
-Ethernet.prototype.toString = function() {
+Header.prototype.toString = function() {
   var f = new formatter.Formatter();
   this.toFormatter(f);
   var result = f.toString();
@@ -45,10 +55,7 @@ Ethernet.prototype.toString = function() {
   return result;
 }
 
-var eth = new Ethernet('00:11:22:33:44:55', 'ff:ff:ff:ff:ff:ff', 0x8100);
-console.log(eth.toString());
-
-Ethernet.prototype.to_buffer = function(buf) {
+Header.prototype.to_buffer = function(buf) {
   if(buf.remaining() < 14)
     throw new buf.Structural(14, buf.remaining());
 
@@ -57,7 +64,7 @@ Ethernet.prototype.to_buffer = function(buf) {
   buf.writeUInt16(this.ethertype);
 }
 
-Ethernet.prototype.from_buffer = function(buf) {
+Header.prototype.from_buffer = function(buf) {
   if(buf.remaining() < 14)
     throw new buf.Structural(14, buf.remaining());
 
