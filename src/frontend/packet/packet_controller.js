@@ -16,7 +16,6 @@ packet.directive('fsCreatepacket', function(){
 	}
 });
 
-
 packet.controller('createPacketCntrl', ['$scope', 'packetFactory',
 	function($scope, packetFactory){
 		$scope.name = '';
