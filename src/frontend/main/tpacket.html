@@ -1,0 +1,83 @@
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-2">
+    <h3>Packets</h3>
+    <div class="list-group">
+      <a href="#" class="list-group-item">
+        arp_1.pkt
+        <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+      </a>
+      <a href="#" class="list-group-item">
+        arp_2.pkt
+        <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+      </a>
+      <a href="#" class="list-group-item active">
+        http_1.pkt
+        <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+      </a>
+      <a href="#" class="list-group-item">
+        dhcp_1.pkt
+        <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+      </a>
+      <a href="#" class="list-group-item">
+        <form class="form-inline" role="form">
+          <div class="form-group">
+            <label class="sr-only" for="exampleInputEmail2">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+          </div>
+        </form>
+      </a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h3>View</h3>
+    <img src="img/packet.png"></img>
+  </div>
+  <div class="col-md-4">
+    <h3>Controls</h3>
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+              Ethernet
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <table class="table table-striped">
+              <tr>
+                <td>src</td>
+                <td>00:11:22:33:44:55</td>
+              </tr>
+              <tr>
+                <td>dst</td>
+                <td>00:11:22:33:44:55</td>
+              </tr>
+              <tr>
+                <td>ethertype</td>
+                <td>IPv4(0x0800)</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+              IPv4
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+          <div class="panel-body">
+            protocol: TCP(6)<br>
+            src: 10.0.0.1<br>
+            dst: 1.2.3.4<br>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

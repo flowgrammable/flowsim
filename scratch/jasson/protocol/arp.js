@@ -10,10 +10,10 @@ var OpcodeValues = {
 
 ARP = function() {
   this.opcode = null;
-  this.sha = null;
-  this.spa = null;
-  this.tha = null;
-  this.tpa = null;
+  this.sha = ethernet.Address();
+  this.spa = ipv4.Address();
+  this.tha = ethernet.Address();
+  this.tpa = ipv4.Address();
 }
 exports.ARP = ARP;
 

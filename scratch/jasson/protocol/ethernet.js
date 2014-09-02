@@ -3,13 +3,19 @@ var formatter = require('./formatter');
 var ethertypes = require('./ethertypes');
 
 Address = function(v) {
-  var addr = /(([0-9a-fA-F]{2})(-|:)){5}([0-9a-fA-F]{2})/;
-  var octet = /[0-9a-fA-F]{2}/g;
-  if(!addr.test(v)) throw "Invalid MAC Addr";
-  var result = v.match(octet);
-  this.addr = [];
-  for(var i=0; i<result.length; ++i) {
-    this.addr.push(parseInt(result[i], 16));
+  if(typeof v == 'string') {
+    var addr = /(([0-9a-fA-F]{2})(-|:)){5}([0-9a-fA-F]{2})/;
+    var octet = /[0-9a-fA-F]{2}/g;
+    if(!addr.test(v)) throw "Invalid MAC Addr";
+    var result = v.match(octet);
+    this.addr = [];
+    for(var i=0; i<result.length; ++i) {
+      this.addr.push(parseInt(result[i], 16));
+    }
+  } else if(!v) {
+    this.addr = [0, 0, 0, 0, 0, 0];
+  } else {
+    throw 'Invalid MAC Addr';
   }
 }
 exports.Address = Address;

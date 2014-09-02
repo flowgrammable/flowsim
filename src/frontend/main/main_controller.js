@@ -40,6 +40,9 @@ flowsimApp.config(['$routeProvider',
 		  when('/about', {
 			  templateUrl: 'about.html'
 		  }).
+      when('/tpacket', {
+        templateUrl: 'tpacket.html'
+      }).
 		  otherwise({
 			  templateUrl: 'lost.html'
 		  });
