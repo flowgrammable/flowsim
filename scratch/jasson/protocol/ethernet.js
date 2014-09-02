@@ -13,7 +13,11 @@ var EtherTypes = {
 };
 
 function lookup(value) {
-  for(var prop
+  for(var prop in EtherTypes) {
+    if(EtherTypes[prop] == value)
+      return prop;
+  }
+  return 'UNDEFINED';
 }
 
 exports.MAC = function(v) {
@@ -35,8 +39,8 @@ exports.MAC.prototype.toString = function() {
 }
 
 exports.Ethernet = function(src, dst, ethertype) {
-  this.src = new MAC(src);
-  this.dst = new MAC(dst);
+  this.src = new exports.MAC(src);
+  this.dst = new exports.MAC(dst);
   if(ethertype) this.ethertype = ethertype;
 }
 
@@ -56,10 +60,10 @@ exports.Ethernet.prototype.toString = function() {
   return result;
 }
 
-var eth = new Ethernet('00:11:22:33:44:55', 'ff:ff:ff:ff:ff:ff', 0x8100);
+var eth = new exports.Ethernet('00:11:22:33:44:55', 'ff:ff:ff:ff:ff:ff', 0x8100);
 console.log(eth.toString());
 
-Ethernet.prototype.to_buffer = function(buf) {
+exports.Ethernet.prototype.to_buffer = function(buf) {
   if(buf.remaining() < 14)
     throw new buf.Structural(14, buf.remaining());
 
@@ -68,7 +72,7 @@ Ethernet.prototype.to_buffer = function(buf) {
   buf.writeUInt16(this.ethertype);
 }
 
-Ethernet.prototype.from_buffer = function(buf) {
+exports.Ethernet.prototype.from_buffer = function(buf) {
   if(buf.remaining() < 14)
     throw new buf.Structural(14, buf.remaining());
 
