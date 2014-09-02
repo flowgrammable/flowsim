@@ -20,7 +20,7 @@ function lookup(value) {
   return 'UNDEFINED';
 }
 
-exports.MAC = function(v) {
+MAC = function(v) {
   var addr = /(([0-9a-fA-F]{2})(-|:)){5}([0-9a-fA-F]{2})/;
   var octet = /[0-9a-fA-F]{2}/g;
   if(!addr.test(v)) throw "Invalid MAC Addr";
@@ -30,21 +30,23 @@ exports.MAC = function(v) {
     this.addr.push(parseInt(result[i], 16));
   }
 }
+exports.MAC = MAC;
 
-exports.MAC.prototype.toString = function() {
+MAC.prototype.toString = function() {
   var result = [];
   for(var i=0; i<this.addr.length; ++i)
     result.push(this.addr[i].toString(16));
   return result.join(':');
 }
 
-exports.Ethernet = function(src, dst, ethertype) {
+Ethernet = function(src, dst, ethertype) {
   this.src = new exports.MAC(src);
   this.dst = new exports.MAC(dst);
   if(ethertype) this.ethertype = ethertype;
 }
+exports.Ethernet = Ethernet;
 
-exports.Ethernet.prototype.toFormatter = function(f) {
+Ethernet.prototype.toFormatter = function(f) {
   f.begin('Ethernet');
   f.addPair('Src', this.src.toString());
   f.addPair('Dst', this.dst.toString());
@@ -52,7 +54,7 @@ exports.Ethernet.prototype.toFormatter = function(f) {
   f.end();
 }
 
-exports.Ethernet.prototype.toString = function() {
+Ethernet.prototype.toString = function() {
   var f = new formatter.Formatter();
   this.toFormatter(f);
   var result = f.toString();
@@ -60,10 +62,10 @@ exports.Ethernet.prototype.toString = function() {
   return result;
 }
 
-var eth = new exports.Ethernet('00:11:22:33:44:55', 'ff:ff:ff:ff:ff:ff', 0x8100);
+var eth = new Ethernet('00:11:22:33:44:55', 'ff:ff:ff:ff:ff:ff', 0x8100);
 console.log(eth.toString());
 
-exports.Ethernet.prototype.to_buffer = function(buf) {
+Ethernet.prototype.to_buffer = function(buf) {
   if(buf.remaining() < 14)
     throw new buf.Structural(14, buf.remaining());
 
@@ -72,7 +74,7 @@ exports.Ethernet.prototype.to_buffer = function(buf) {
   buf.writeUInt16(this.ethertype);
 }
 
-exports.Ethernet.prototype.from_buffer = function(buf) {
+Ethernet.prototype.from_buffer = function(buf) {
   if(buf.remaining() < 14)
     throw new buf.Structural(14, buf.remaining());
 
