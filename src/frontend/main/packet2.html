@@ -6,9 +6,11 @@
     <h4>Packets</h4>
 
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="packet name">
+      <input type="text" class="form-control" placeholder="packet name" ng-model="packetName">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Add</button>
+        <button class="btn btn-default" type="button" ng-click="addPacket">
+          Add
+        </button>
       </span>
     </div>
 

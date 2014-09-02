@@ -8,5 +8,11 @@ flowsimApp.controller('packet2Controller',
       'eth2.pkt',
       'eth3.pkt'
     ];
+    $scope.packetName = '';
+
+    $scope.addPacket = function() {
+      $scope.packets.push($scope.packetName);
+      $scope.packetName = '';
+    }
   });
 
