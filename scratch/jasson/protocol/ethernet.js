@@ -61,7 +61,7 @@ Header.prototype.bytes = function() {
 
 Header.prototype.labels = function() {
   return {
-    name: 'Ethernet',
+    protocol: 'Ethernet',
     bytes: this.bytes(),
     fields: [
       { name: 'src', value: this.src.toString() },

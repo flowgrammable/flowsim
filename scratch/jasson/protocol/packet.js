@@ -4,18 +4,18 @@ var formatter = require('./formatter');
 function Packet(name) {
   this.name = name;
   this.protocols = [];
-  this.bytes = 0;
+  this._bytes = 0;
 }
 exports.Packet = Packet;
 
 Packet.prototype.pushProtocol = function(p) {
   this.protocols.push(p);
-  this.bytes += p.bytes();
+  this._bytes += p.bytes();
 }
 
 Packet.prototype.popProtocol = function() {
   if(this.protocols.length > 0) {
-    this.bytes -= this.protocols[this.protocols.length-1].bytes();
+    this._bytes -= this.protocols[this.protocols.length-1].bytes();
     this.protocols.splice(this.protocols.length-1, 1);
   }
 }
@@ -27,9 +27,13 @@ Packet.prototype.labels = function() {
   }
   return {
     name: this.name,
-    bytes: this.bytes,
+    bytes: this._bytes,
     protocols: result
   }
+}
+
+Packet.prototype.bytes = function() {
+  return this._bytes;
 }
 
 function Payload(bytes) {
@@ -53,7 +57,7 @@ Payload.prototype.toString = function() {
 
 Payload.prototype.labels = function() {
   return {
-    name: 'Payload',
+    protocol: 'Payload',
     bytes: this.bytes(),
     fields: []
   };
