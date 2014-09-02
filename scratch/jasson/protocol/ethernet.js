@@ -55,6 +55,25 @@ Header.prototype.toString = function() {
   return result;
 }
 
+Header.prototype.bytes = function() {
+  return 16;
+}
+
+Header.prototype.labels = function() {
+  return {
+    name: 'Ethernet',
+    bytes: this.bytes(),
+    fields: [
+      { name: 'src', value: this.src.toString() },
+      { name: 'dst', value: this.dst.toString() },
+      { name: 'ethertype', 
+        value: ethertypes.Lookup(this.ethertype) + 
+               '(' + this.ethertype.toString(16)+ ')' 
+      }
+    ]
+  };
+}
+
 Header.prototype.to_buffer = function(buf) {
   if(buf.remaining() < 14)
     throw new buf.Structural(14, buf.remaining());

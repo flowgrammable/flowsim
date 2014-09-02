@@ -1,5 +1,5 @@
 
-var key = require('./key');
+var key = require('../key');
 
 var k = new key.Key();
 k.inport = 2;
