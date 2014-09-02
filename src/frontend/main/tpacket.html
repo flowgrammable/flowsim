@@ -34,14 +34,13 @@
     <img src="img/packet.png" class="img-responsive" alt="Responsive image"></img>
   </div>
   <div class="col-md-3">
-    <h3>Controls</h3>
+    <h3>Payloads</h3>
     <div class="panel-group" id="accordion">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
               Ethernet
-              <span class="glyphicon glyphicon-minus-sign pull-right"></span>
             </a>
           </h4>
         </div>
@@ -52,17 +51,28 @@
                 <td>Source</td>
                 <td>
                   <div class="input-group">
-                    <input type="text" class="form-control input-sm" placeholder="Source MAC">
+                    <input type="text" name="ethSrc" value="00:00:00:00:00:00" 
+                           class="form-control input-sm" placeholder="Source MAC">
                   </div>
                 </td>
               </tr>
               <tr>
                 <td>Destination</td>
-                <td>00:11:22:33:44:55</td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" name="ethDst" value="00:11:22:33:44:55" 
+                           class="form-control input-sm" placeholder="Destination MAC">
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td>Ethertype</td>
-                <td>IPv4(0x0800)</td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" name="ethType" value="IPv4 (0x0800)" 
+                           class="form-control input-sm" placeholder="Ether Type">
+                  </div>
+                </td>
               </tr>
             </table>
           </div>
@@ -85,11 +95,13 @@
           </div>
         </div>
     </div>
+    <h4>Add Payload</h4>
     <div class="input-group">
     <select class="form-control input-sm">
       <option>TCP</option>
       <option>SCTP</option>
       <option>UDP</option>
+      <option>Generic Payload</option>
     </select>
       <span class="input-group-btn">
       <button class="btn btn-default" type="button">Add</button>
