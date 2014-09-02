@@ -20,7 +20,7 @@
       <tr ng-repeat="packet in packets">
         <td>
           {{packet.name}}
-          <span class="glyphicon glyphicon-minus-sign pull-right" ng-click="delPacket(packet.pos)"></span>
+          <span class="glyphicon glyphicon-minus-sign pull-right" ng-click="delPacket($index)"></span>
         </td>
       </tr>
     </table>
