@@ -11,8 +11,10 @@ flowsimApp.controller('packet2Controller',
     $scope.packetName = '';
 
     $scope.addPacket = function() {
+      console.log('addPacket');
       $scope.packets.push($scope.packetName);
       $scope.packetName = '';
     }
+    console.log('controller init');
   });
 
