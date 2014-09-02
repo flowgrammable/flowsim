@@ -1,0 +1,43 @@
+
+<div ng-controller="packet2Controller">
+
+<div class="row">
+  <div class="col-md-2 col-md-offset-1">
+    <h4>Packets</h4>
+
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="packet name">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Add</button>
+      </span>
+    </div>
+
+    <br>
+
+    <table class="table table-striped table-hover">
+      <tr ng-repat="packet in packets">
+        <td>
+          {{packet}}
+          <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+  <div class="col-md-4">
+    <h4>Packet View</h4>
+    <img src="img/packet.png" class="img-responsive" alt="Responsive image"></img>
+  </div>
+  <div class="col-md-4">
+    <h3>Right</h3>
+
+    <div class="form-group">
+      <label for="ethSrc" class="col-md-3 control-label">Source MAC</label>
+      <div class="col-md-4">
+        <input type="text" class="form-control" id="ethSrc" placeholder="Source MAC">
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
