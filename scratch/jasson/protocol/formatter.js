@@ -44,3 +44,13 @@ Formatter.prototype.addTriple = function(field, name, value) {
   this.result += field + ': ' + name + '(' + value + ')' + '\n';
 }
 
+Formattable = function() {}
+exports.Formattable = Formattable;
+
+Formattable.prototype.toString = function() {
+  var f = new Formatter();
+  this.toFormatter(f);
+  var result = f.toString();
+  delete f;
+  return result;
+}

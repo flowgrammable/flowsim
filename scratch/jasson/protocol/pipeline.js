@@ -1,5 +1,8 @@
 
 var formatter = require('./formatter');
+
+var trace = require('./trace');
+
 var arrival = require('./arrival');
 var extraction = require('./extraction');
 var table = require('./table');
@@ -19,7 +22,7 @@ function Pipeline() {
 exports.Pipeline = Pipeline;
 
 Pipeline.prototype.step = function() {
-   
+
 }
 
 Pipeline.prototype.run = function() {
