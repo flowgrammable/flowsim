@@ -4,17 +4,30 @@ var flowsimApp = angular.module('flowsimApp');
 flowsimApp.controller('packet2Controller',
   function($scope) {
     $scope.packets = [
-      'eth1.pkt',
-      'eth2.pkt',
-      'eth3.pkt'
+      {
+        name: 'eth1.pkt',
+        pos: 0
+      }, {
+        name: 'eth2.pkt',
+        pos: 1
+      }, {
+        name: 'eth3.pkt',
+        pos: 2
+      }
     ];
     $scope.packetName = '';
 
     $scope.addPacket = function() {
-      console.log('addPacket');
-      $scope.packets.push($scope.packetName);
+      $scope.packets.push(
+        {
+          name: $scope.packetName,
+          pos: $scope.packets.length
+        });
       $scope.packetName = '';
     }
-    console.log('controller init');
+
+    $scope.delPacket = function(pos) {
+      $scope.packets.splice(pos, 1);
+    }
   });
 

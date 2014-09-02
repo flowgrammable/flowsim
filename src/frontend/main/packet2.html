@@ -19,8 +19,8 @@
     <table class="table table-striped table-hover">
       <tr ng-repeat="packet in packets">
         <td>
-          {{packet}}
-          <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+          {{packet.name}}
+          <span class="glyphicon glyphicon-minus-sign pull-right" ng-click="delPacket(packet.pos)"></span>
         </td>
       </tr>
     </table>
