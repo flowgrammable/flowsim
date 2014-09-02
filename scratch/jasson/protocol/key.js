@@ -1,9 +1,9 @@
 
 var formatter = require('./formatter');
 
-Key = function() {
+Key = function(port) {
   table_id = 0;
-  inport = null;
+  inport = port;
   eth_src = null;
   eth_dst = null;
   eth_type = null;
