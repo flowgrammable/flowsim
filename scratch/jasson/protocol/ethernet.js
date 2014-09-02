@@ -2,7 +2,7 @@
 var formatter = require('./formatter');
 var ethertypes = require('./ethertypes');
 
-MAC = function(v) {
+Address = function(v) {
   var addr = /(([0-9a-fA-F]{2})(-|:)){5}([0-9a-fA-F]{2})/;
   var octet = /[0-9a-fA-F]{2}/g;
   if(!addr.test(v)) throw "Invalid MAC Addr";
@@ -12,9 +12,9 @@ MAC = function(v) {
     this.addr.push(parseInt(result[i], 16));
   }
 }
-exports.MAC = MAC;
+exports.Address = Address;
 
-MAC.prototype.toString = function() {
+Address.prototype.toString = function() {
   var result = [];
   for(var i=0; i<this.addr.length; ++i)
     result.push(this.addr[i].toString(16));
@@ -22,8 +22,8 @@ MAC.prototype.toString = function() {
 }
 
 Ethernet = function(src, dst, ethertype) {
-  this.src = new exports.MAC(src);
-  this.dst = new exports.MAC(dst);
+  this.src = new Address(src);
+  this.dst = new Address(dst);
   if(ethertype) this.ethertype = ethertype;
 }
 exports.Ethernet = Ethernet;
