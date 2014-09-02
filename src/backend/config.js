@@ -12,6 +12,7 @@
 module.exports = {
   favicon: '../frontend/img/favicon.png',
   html: [ '../frontend/html', 
+    '../frontend/bower_components/angular-ui-bootstrap',
 		'../frontend/main',
 		'../frontend/subscriber',
 		'../frontend/profile',
