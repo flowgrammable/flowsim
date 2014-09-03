@@ -15,35 +15,61 @@ var Ethernet = (function(){
     LLDP: 0x88cc
   };
 
-  var AddressCons = function(value) {
+  var _Address = function(value) {
       var result = [];
       if(value === undefined) {
         this.addr = [0, 0, 0, 0, 0, 0];
       } else if(typeof value == 'string' && macp.test(value)) {
         result = value.match(octp);
         this.addr = value.match(octp).slice(0,6);
-      } else if(value instanceof AddressCons) {
+      } else if(value instanceof _Address) {
         this.addr = value.addr.slice(0);
       } else {
         throw 'Invalid MAC: ' + value;
       }
   };
+  
+  _Address.prototype.clone = function() {
+    return new _Address(this);
+  }
 
-  var HeaderCons = function(src, dst, type) {
-      if(src instanceof HeaderCons && dst === undefined && type === undefined) {
+  _Address.prototype.bytes = function() {
+    return 6;
+  }
+
+  _Address.prototype.isBroadcast = function() {
+    return this.addr[0] == 0xff && this.addr[1] == 0xff &&
+      this.addr[2] == 0xff && this.addr[3] == 0xff &&
+      this.addr[4] == 0xff && this.addr[5] == 0xff;
+  }
+
+  _Address.prototype.isMulticast = function() {
+    return this.addr[0] & 0x01;
+  }
+
+  var _Header = function(src, dst, type) {
+      if(src instanceof _Header && dst === undefined && type === undefined) {
         this.src = src.src.clone();
         this.dst = src.dst.clone();
         this.type = src.type;
       } else {
-        this.src = new AddressCons(src);
-        this.dst = new AddressCons(dst);
+        this.src = new _Address(src);
+        this.dst = new _Address(dst);
         this.type = type || 0;
       }
   };
 
+  _Header.prototype.clone = function() {
+    return new _Header(this);
+  }
+
+  _Header.prototype.bytes = function() {
+    return 14;
+  }
+
   return {
-    Address : AddressCons,
-    Header : HeaderCons,
+    Address : _Address,
+    Header : _Header,
 
     etherTypeByName : function(name) {
       if(name in etherTypes) {
@@ -65,32 +91,6 @@ var Ethernet = (function(){
 
   };
 })();
-
-Ethernet.Address.prototype.clone = function() {
-  return new Ethernet.Address(this);
-}
-
-Ethernet.Address.prototype.bytes = function() {
-  return 6;
-}
-
-Ethernet.Address.prototype.isBroadcast = function() {
-  return this.addr[0] == 0xff && this.addr[1] == 0xff &&
-    this.addr[2] == 0xff && this.addr[3] == 0xff &&
-    this.addr[4] == 0xff && this.addr[5] == 0xff;
-}
-
-Ethernet.Address.prototype.isMulticast = function() {
-  return this.addr[0] & 0x01;
-}
-
-Ethernet.Header.prototype.clone = function() {
-  return new Ethernet.Header(this);
-}
-
-Ethernet.Header.prototype.bytes = function() {
-  return 14;
-}
 
 var e0 = new Ethernet.Header('00:11:22:33:44:55', 'ff:ff:ff:ff:ff:ff', 0);
 var e1 = e0.clone();
