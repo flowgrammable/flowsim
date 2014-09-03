@@ -49,16 +49,24 @@
       Create a packet to manipulate.
     </div>
     <div ng-show="packets.size()">
-    <accordion close-others="true">
-      <accordion-group heading="Ethernet">
-        blah
-      </accordion-group>
-      <accordion-group heading="IPv4">
-        bleh
-      </accordion-group>
-    </accordion>
-  </div>
-
+      <accordion close-others="true">
+        <accordion-group 
+          ng-repeat="protocol in packet.protocols" 
+          heading="{{protocol.name}}">
+          Protocol Contents ...
+        </accordion-group>
+      </accordion>
+      <div class="input-group">
+        <select class="form-control" ng-model="protocol">
+          <option ng-repeat="name in packet.next">{{name}}</option>
+        </select>
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-click="addProtocol()">
+            Add
+          </button>
+        </span>
+      </div>
+    </div>
   </div>
 </div>
 
