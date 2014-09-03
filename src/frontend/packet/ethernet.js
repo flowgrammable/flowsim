@@ -14,6 +14,24 @@ var Ethernet = (function(){
     MPLSm: 0x8848,
     LLDP: 0x88cc
   };
+    
+  var _etherTypeByName = function(name) {
+    if(name in etherTypes) {
+      return etherTypes[name];
+    } else {
+      return 'Unknown EtherType';
+    }
+  };
+
+  var _etherTypeByValue = function(value) {
+    for(var prop in EtherTypes) {
+      if(EtherTypes.hasOwnProperty(prop)) {
+        if(value == EtherTypes[prop])
+          return prop;
+      }
+    }
+    return 'Unknown EtherType';
+  };
 
   var _Address = function(value) {
       var result = [];
@@ -105,29 +123,14 @@ var Ethernet = (function(){
     }
   }
 
+  // Return the local bindings
   return {
+    etherTypeByName : _etherTypeByName,
+    etherTypeByValue : _etherTypeByValue,
     Address : _Address,
-    Header : _Header,
-
-    etherTypeByName : function(name) {
-      if(name in etherTypes) {
-        return etherTypes[name];
-      } else {
-        return 'Unknown EtherType';
-      }
-    },
-
-    etherTypeByValue : function(value) {
-      for(var prop in EtherTypes) {
-        if(EtherTypes.hasOwnProperty(prop)) {
-          if(value == EtherTypes[prop])
-            return prop;
-        }
-      }
-      return 'Unknown EtherType';
-    }
-
+    Header : _Header
   };
+
 })();
 
 var e0 = new Ethernet.Header('00:11:22:33:44:55', 'ff:ff:ff:ff:ff:ff', 0);
