@@ -11,6 +11,11 @@
         </button>
       </span>
     </div>
+    <div class="error" ng-show="packetExists">
+      <h6><span>
+        Packet name already in use.
+      </h6></span>
+    </div>
     <div class="error" ng-show="badPacketName">
       <h6>
         <span>
@@ -24,7 +29,7 @@
     <br>
 
     <table class="table table-striped table-hover">
-      <tr ng-repeat="packet in packets" ng-class="{success: $index==focus}">
+      <tr ng-repeat="packet in packets.packets" ng-class="{info: $index==focus}">
         <td ng-click="shiftFocus($index)">
           {{packet.name}}
           <span class="glyphicon glyphicon-minus-sign pull-right" ng-click="delPacket($index)"></span>

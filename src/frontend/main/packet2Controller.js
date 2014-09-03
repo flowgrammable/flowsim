@@ -35,13 +35,57 @@ Packet.prototype.popProtocol = function() {
   }
 }
 
-var acceptableName = /[a-zA-Z_][a-zA-Z0-9_]*/;
+function Packets() {
+  this.acceptableName = /[a-zA-Z_][a-zA-Z0-9_]*/;
+  this.packets = [];
+  this.names = {};
+}
+
+Packets.prototype.addPacket = function(name) {
+  var pkt = null;
+  if(name in this.names)
+    return 'packetExists';
+  if(!this.acceptableName.test(name))
+    return 'badPacketName';
+  pkt = new Packet(name);
+  this.packets.push(pkt);
+  this.names[name] = pkt;
+  return '';
+}
+
+Packets.prototype.delPacketByName = function(name) {
+  var i;
+  if(name in this.names)
+    delete this.names[name];
+  for(i=0; i<this.packets.length; ++i) {
+    if(name == this.packets[i].name) {
+      delete this.packets.splice(i, 1);
+      return ;
+    }
+  }
+}
+
+Packets.prototype.delPacketByPos = function(pos) {
+  var pkt = null;
+  if(pos >= -1 && pos < this.packets.length) {
+    pkt = this.packets.splice(pos, 1);
+    if(pkt.name in this.names) {
+      delete this.names[pkt.name];
+    }
+    delete pkt;
+  }
+}
+
+Packets.prototype.size = function() {
+  return this.packets.length;
+}
 
 flowsimApp.controller('packet2Controller',
   function($scope) {
-    $scope.packets = [];
+    $scope.packets = new Packets();
     $scope.packetName = '';
     $scope.badPacketName = false;
+    $scope.packetExists = false;
     $scope.focus = -1;
 
     $scope.shiftFocus = function(pos) {
@@ -49,15 +93,19 @@ flowsimApp.controller('packet2Controller',
     }
 
     $scope.addPacket = function() {
-      var pkt = null;
-      if(acceptableName.test($scope.packetName)) {
-        pkt = new Packet($scope.packetName);
-        $scope.focus = $scope.packets.length;
-        $scope.packets.push(pkt);
-        $scope.packetName = '';
-        $scope.badPacketName = false;
-      } else {
-        $scope.badPacketName = true;
+      switch($scope.packets.addPacket($scope.packetName)) {
+        case 'packetExists':
+          $scope.packetExists = true;
+          break;
+        case 'badPacketName':
+          $scope.badPacketName = true;
+          break;
+        default:
+          $scope.badPacketName = false;
+          $scope.packetExists = false;
+          $scope.packetName = '';
+          $scope.focus = $scope.packets.size()-1;
+          break;
       }
     }
 
@@ -66,7 +114,7 @@ flowsimApp.controller('packet2Controller',
         $scope.focus = -1;
       else if($scope.focus != -1)
         $scope.focus -= 1;
-      delete $scope.packets.splice(pos, 1);
+      $scope.packets.delPacketByPos(pos);
     }
   });
 
