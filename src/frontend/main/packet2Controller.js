@@ -68,11 +68,10 @@ Packets.prototype.delPacketByName = function(name) {
 Packets.prototype.delPacketByPos = function(pos) {
   var pkt = null;
   if(pos >= -1 && pos < this.packets.length) {
-    pkt = this.packets.splice(pos, 1);
-    if(pkt.name in this.names) {
-      delete this.names[pkt.name];
+    if(this.packets[pos].name in this.names) {
+      delete this.names[this.packets[pos].name];
     }
-    delete pkt;
+    this.packets.splice(pos, 1);
   }
 }
 
@@ -112,7 +111,7 @@ flowsimApp.controller('packet2Controller',
     $scope.delPacket = function(pos) {
       if($scope.focus == pos)
         $scope.focus = -1;
-      else if($scope.focus != -1)
+      else if($scope.focus != -1 && pos <= $scope.focus)
         $scope.focus -= 1;
       $scope.packets.delPacketByPos(pos);
     }
