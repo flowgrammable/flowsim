@@ -41,14 +41,14 @@
   <div class="col-md-4">
       <h4>Packet View</h4>
       <div ng-hide="packets.length">Create a packet to view</div>
-        <img src="img/packet.png" class="img-responsive" alt="Responsive image" ng-show="packets.length"></img>
+        <img src="img/packet.png" class="img-responsive" alt="Responsive image" ng-show="packets.size()"></img>
   </div>
   <div class="col-md-4">
     <h4>Payloads</h4>
-    <div ng-hide="packets.length">
+    <div ng-hide="packets.size()">
       Create a packet to manipulate.
     </div>
-    <div ng-show="packets.length">
+    <div ng-show="packets.size()">
     <accordion close-others="true">
       <accordion-group heading="Ethernet">
         blah
