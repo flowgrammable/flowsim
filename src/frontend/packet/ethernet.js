@@ -19,8 +19,7 @@ var Ethernet = (function(){
       var result = [];
       if(value === undefined) {
         this.addr = [0, 0, 0, 0, 0, 0];
-      } else if(typeof value == 'string' && macp.test(value)) {
-        result = value.match(octp);
+      } else if(typeof value === 'string' && macp.test(value)) {
         this.addr = value.match(octp).slice(0,6);
       } else if(value instanceof _Address) {
         this.addr = value.addr.slice(0);
@@ -47,6 +46,21 @@ var Ethernet = (function(){
     return this.addr[0] & 0x01;
   }
 
+  _Address.prototype.set = function(v) {
+    if(typeof v === 'string' && macp.test(value)) {
+      this.addr = value.match(octp).slice(0,6);
+    } else {
+      throw 'Invalid MAC: ' + value;
+    }
+  }
+
+  _Address.prototype.toString = function() {
+    var result = [];
+    for(var i=0; i<this.addr.length; ++i)
+      result.push(this.addr[i].toString(16));
+    return result.join(':');
+  }
+
   var _Header = function(src, dst, type) {
       if(src instanceof _Header && dst === undefined && type === undefined) {
         this.src = src.src.clone();
@@ -65,6 +79,30 @@ var Ethernet = (function(){
 
   _Header.prototype.bytes = function() {
     return 14;
+  }
+
+  _Header.prototype.setSrc = function(src) {
+    this.src.set(src);
+  }
+  
+  _Header.prototype.setDst = function(dst) {
+    this.dst.set(dst);
+  }
+
+  _Header.prototype.setEtherType = function(et) {
+    var tmp;
+    if(typeof et === 'string') {
+      tmp = etherTypeByName(et);
+      if(typeof tmp === 'number') {
+        this.type = tmp;
+      } else {
+        throw 'Unknown EtherType: ' + et;
+      }
+    } else if(typeof et === 'number') {
+      this.type = et;
+    } else {
+      throw 'Bad EtherType: ' + et;
+    }
   }
 
   return {
