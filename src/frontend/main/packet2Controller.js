@@ -1,30 +1,30 @@
 
 var flowsimApp = angular.module('flowsimApp');
 
+function Packet(name) {
+  this.name = name;
+}
+
+var acceptableName = /[a-zA-Z_][a-zA-Z0-9_]*/;
+
 flowsimApp.controller('packet2Controller',
   function($scope) {
-    $scope.packets = [
-      {
-        name: 'eth1.pkt',
-      }, {
-        name: 'eth2.pkt',
-      }, {
-        name: 'eth3.pkt',
-      }
-    ];
+    $scope.packets = [];
     $scope.packetName = '';
+    $scope.badPacketName = false;
 
     $scope.addPacket = function() {
-      $scope.packets.push(
-        {
-          name: $scope.packetName,
-          pos: $scope.packets.length
-        });
-      $scope.packetName = '';
+      if(acceptableName.test($scope.packetName)) {
+        $scope.packets.push(new Packet($scope.packetName));
+        $scope.packetName = '';
+        $scope.badPacketName = false;
+      } else {
+        $scope.badPacketName = true;
+      }
     }
 
     $scope.delPacket = function(pos) {
-      $scope.packets.splice(pos, 1);
+      delete $scope.packets.splice(pos, 1);
     }
   });
 
