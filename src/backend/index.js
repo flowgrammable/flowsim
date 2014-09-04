@@ -5,7 +5,6 @@ var connect = require('connect');
 var program = require('commander');
 var fs      = require('fs');
 
-
 // Something about this seems wrong .. why do we not need references to ddbs or 
 // adapter here? If we are trying to perform code initialization then it belongs
 // in some initialization code block for the associated module or the modules
