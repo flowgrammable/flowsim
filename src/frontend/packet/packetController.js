@@ -1,5 +1,12 @@
 
-var flowsimApp = angular.module('flowsimApp');
+var packetCreator = angular.module('packetCreator', ['ngRoute', 'ui.bootstrap']);
+
+packetCreator.config(['$routeProvider', function($routeProvider) {
+  $routeProvider
+    .when('/packet', {
+      templateUrl: 'packet.html'
+    });
+}]);
 
 flowsimApp.controller('packetController', 
   function($scope, $rootScope, packetManager) {
