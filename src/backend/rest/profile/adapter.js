@@ -3,7 +3,7 @@ var orm = require('../../dbbs');
 var subAdapter = require('../subscriber/adapter');
 
 var Profile = orm.model("switch_profile");
-var DpCaps = orm.model("dp_caps");
+// var DpCaps = orm.model("dp_caps");
 var FtCaps = orm.model("ft_caps");
 
 // ----------------------------------------------------------------------------
@@ -18,12 +18,13 @@ function createProfile(subId, name, ver, cb) {
     subscriber_id: subId, 
     name: name, 
     ofp_version: ver 
-  }).then(function(profile) {
-    prof = profile;  
-	  return DpCaps.create(generateDpCaps(prof.id, ver)); 
-  }).then(function(dp_caps) { 
-    return FtCaps.create(generateFtCaps(dp_caps.id, ver)); 
-  }).then(function(ft_caps) { cb(msg.success(prof)) })
+  }).success(function(result) { cb(msg.success(result)) });
+  // .then(function(profile) {
+  //   prof = profile;  
+	 //  return DpCaps.create(generateDpCaps(prof.id, ver)); 
+  // }).then(function(dp_caps) { 
+  //   return FtCaps.create(generateFtCaps(dp_caps.id, ver)); 
+  // }).then(function(ft_caps) { cb(msg.success(prof)) })
 }
 
 // The generateDpCaps function returns values for the dp_caps table 
@@ -71,16 +72,17 @@ function fetchProfile(profileInfo, cb) {
 // message containing an object with each of the table entries is
 // returned.
 function fetchProfileDetails(profile, cb) {
-  var dp_caps, ft_caps;
-  profile.getDpCaps()
-  .then(function(dpCaps){
-		console.log('dpcaps: ', dpCaps);
-    dp_caps = dpCaps.values;
-    return dpCaps.getFtCaps()
-  }).then(function(ftCaps){
-    ft_caps = ftCaps.values;
-    cb(msg.success({ dp_caps: dp_caps, ft_caps: ft_caps }));
-  })
+  var ft_caps;
+  profile.getFtCaps()
+  .success(function(ft_caps) { cb(msg.success({ ft_caps: ft_caps })); })
+  // .then(function(dpCaps){
+    // console.log('dpcaps: ', dpCaps);
+  //   dp_caps = dpCaps.values;
+  //   return dpCaps.getFtCaps()
+  // }).then(function(ftCaps){
+  //   ft_caps = ftCaps.values;
+  //   cb(msg.success({ dp_caps: dp_caps, ft_caps: ft_caps }));
+  // })
 }
 
 // The listProfiles function retrieves all profiles based on the 
