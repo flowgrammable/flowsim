@@ -1,11 +1,3 @@
--- create an enumerated type for ip fragment handling
-CREATE TYPE IP_FRAG_HANDLING AS ENUM (
-  'NORMAL',       -- no special handling for fragments
-  'DROP',         -- drop fragments
-  'REASSEMBLE',   -- reassemble if ip_reassembly is set).
-  'MASK'          
-);	
-
 --FLOW TABLE CAPS AND CONFIG---------------------------------------------------------------
 CREATE TABLE flow_table
 (
