@@ -63,6 +63,7 @@ function profileList(adapter, subId, cb) {
     if (result.error) cb(result);
     else {
       var profs = result.value;
+      console.log(profs);
 			var list = new Array();
       // all profiles w/all attributes are in an array so we need to 
       // filter the result for the id and name

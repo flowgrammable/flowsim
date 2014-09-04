@@ -46,9 +46,9 @@ var singleton = function singleton(){
     var sess  = require('./rest/subscriber/db/session');
 		var sub   = require('./rest/subscriber/db/subscriber');
 		var pack   = require('./rest/packet/db/packet');
-  //  var prof  = require('./rest/profile/db/profile');
+    var prof  = require('./rest/profile/db/switch_profile');
   //  var dpCaps  = require('./rest/profile/db/dp_caps');
-  //  var ftCaps  = require('./rest/profile/db/ft_caps');
+    var ftCaps  = require('./rest/profile/db/ft_caps');
 		var ethernet = require('./rest/packet/db/ethernet');
     var ipv4 = require('./rest/packet/db/ipv4');
     var options = {timestamps: false, underscored: true};
@@ -63,14 +63,14 @@ var singleton = function singleton(){
 		relationships["ethernet"] = ethernet.relations;
 		models["ipv4"] = sequelize.define("ipv4", ipv4.model, ipv4.options);
 		relationships["ipv4"] = ipv4.relations;
-/*
+
     models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;
-    models["dp_caps"] = sequelize.define("dp_caps", dpCaps.model, dpCaps.options);
-    relationships["dp_caps"] = dpCaps.relations;
+    // models["dp_caps"] = sequelize.define("dp_caps", dpCaps.model, dpCaps.options);
+    // relationships["dp_caps"] = dpCaps.relations;
     models["ft_caps"] = sequelize.define("ft_caps", ftCaps.model, ftCaps.options);
     relationships["ft_caps"] = ftCaps.relations;
-*/
+
 		for (var name in relationships) {
       var relation = relationships[name];
       for (var relName in relation) {
