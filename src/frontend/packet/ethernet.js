@@ -30,8 +30,12 @@ var Ethernet = (function(){
           return prop;
       }
     }
-    return 'Unknown EtherType';
+    return 'Unknown';
   };
+
+  var _etherTypeToString = function(value) {
+    return _etherTypeByValue(value) + '(' + value + ')'
+  }
 
   var _Address = function(value) {
       var result = [];
@@ -90,6 +94,10 @@ var Ethernet = (function(){
         this.type = type || 0;
       }
   };
+
+  _Header.prototype.name = function() {
+    return 'Ethernet';
+  }
 
   _Header.prototype.clone = function() {
     return new _Header(this);
