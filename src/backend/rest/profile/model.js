@@ -17,11 +17,51 @@ function resultChecker(result, callback){
 // a profile with the given information into the database. This is done
 // through a call to the createProfile adapter function. If successful, 
 // msg.success() is returned, if unsuccessful the error is returned.
-function profileCreate(adapter, subId, name, ver, cb) {
-	adapter.createProfile(subId, name, ver, function(result) { 
+function profileCreate(adapter, subId, data, cb) {
+  var prof = generateProfileData(subId, data);
+	adapter.createProfile(prof, function(result) { 
     if (result.value) cb(msg.success());
     else cb(result); 
   });
+}
+
+// The generateProfileData function generates values for version-dependent 
+// fields for the switch profile
+function generateProfileData(subId, data) {
+  if (data.ofp_version == 10) 
+    return {
+      subscriber_id:   subId,
+      name:            data.name,
+      ofp_version:     data.ofp_version,
+      datapath_id:     data.datapath_id,     // ?
+      n_buffers:       data.n_buffers,       // remove? might need to use bytea
+      n_tables:        1,                    // only 1 flowtable in version 1.0
+      n_ports:         data.n_ports,         // ?
+      ip_reassembly:   false,
+      port_blocked:    data.port_blocked,    // called stp in 1.0
+      mfr_description: data.mfr_description, 
+      hw_description:  data.hw_description,
+      sw_description:  data.sw_description, 
+      serial_num:      data.serial_num,
+      dp_description:  data.dp_description,
+      // - configuration:
+       // miss_send_len:   ?,
+       // frag_handling:   ?,
+       // invalid_ttl_to_controller: false, // name is so long!! only in 1.1+
+      vp_all:          true,
+      vp_controller:   true,
+      vp_table:        true,
+      vp_in_port:      true,
+      vp_any:          true,
+      vp_local:        true,
+      vp_normal:       data.vp_normal,       // ?
+      vp_flood:        data.vp_flood,        // ?
+      flow_stats:      data.flow_stats,      // ?
+      table_stats:     data.table_stats,     // ?
+      port_stats:      data.port_stats,      // ?
+      group_stats:     data.group_stats,     // ?
+      queue_stats:     data.queue_stats      // ?
+    }
 }
 
 // The profileUpdate function is responsible for updating a switch
@@ -63,16 +103,15 @@ function profileList(adapter, subId, cb) {
     if (result.error) cb(result);
     else {
       var profs = result.value;
-      console.log(profs);
 			var list = new Array();
       // all profiles w/all attributes are in an array so we need to 
       // filter the result for the id and name
-      for (var i = 0; i < profs.length; i++)
+      for (var i = 0; i < profs.length; i++){
         list[i] = { 
           id: profs[i].id, 
           name: profs[i].name,
           ofp_version: profs[i].ofp_version
-        }
+        }; console.log(profs[i].dataValues)}
       cb(msg.success(list)); 
     }
   });

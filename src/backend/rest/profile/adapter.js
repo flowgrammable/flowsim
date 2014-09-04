@@ -12,47 +12,15 @@ var FtCaps = orm.model("ft_caps");
 // The createProfile function creates and makes a database insert 
 // for the profile and any related table entries whose fields can 
 // be inferred based on the ofp_version
-function createProfile(subId, name, ver, cb) {
+function createProfile(data, cb) {
   var prof;
-  Profile.create({ 
-    subscriber_id: subId, 
-    name: name, 
-    ofp_version: ver 
-  }).success(function(result) { cb(msg.success(result)) });
+  Profile.create(data).success(function(result) { cb(msg.success(result)) });
   // .then(function(profile) {
   //   prof = profile;  
 	 //  return DpCaps.create(generateDpCaps(prof.id, ver)); 
   // }).then(function(dp_caps) { 
   //   return FtCaps.create(generateFtCaps(dp_caps.id, ver)); 
   // }).then(function(ft_caps) { cb(msg.success(prof)) })
-}
-
-// The generateDpCaps function returns values for the dp_caps table 
-// entry based on the ofp_version passed in.
-function generateDpCaps(profId, version) {
-  if (version == 10) 
-    return {
-      profile_id:    profId,
-      vp_all:        true, 
-      vp_controller: true, 
-      vp_table:      true,
-      vp_in_port:    true,
-      vp_any:        true,
-      vp_local:      true,
-      vp_normal:     true,
-      vp_flood:      true
-    }
-}
-
-// The generateDpCaps function returns values for the dp_caps table 
-// entry based on the ofp_version passed in.
-function generateFtCaps(dpId, version) {
-  if (version == 10) 
-    return {
-      dp_id:       dpId,
-      table_id:    1,
-      max_entries: 1
-    }
 }
 
 // The fetchProfile function retrieves a profile based on the info
@@ -118,5 +86,3 @@ exports.fetchProfileDetails   = fetchProfileDetails;
 exports.listProfiles          = listProfiles;
 exports.updateProfile         = updateProfile;
 exports.destroyProfile        = destroyProfile;
-exports.generateDpCaps        = generateDpCaps;
-exports.generateFtCaps        = generateFtCaps;

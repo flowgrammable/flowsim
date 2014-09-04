@@ -9,11 +9,10 @@ module.exports = {
     
     // ------------------------ Datapath Capabilities -------------------------  
     ofp_version:   { type: Seq.INTEGER/*, allowNull: false*/ },
-    datapath_id:   { type: Seq.BLOB('tiny')/*, allowNull: false*/ },
-    n_buffers:     { type: Seq.BLOB('tiny')/*, allowNull: false*/ },
-    n_tables:      { type: Seq.BLOB('tiny')/*, allowNull: false*/ },
-    n_ports:       { type: Seq.BLOB('tiny')/*, allowNull: false*/ },
-    n_queues:      { type: Seq.BLOB('tiny')/*, allowNull: false*/ },
+    datapath_id:   { type: Seq.STRING(8)/*, allowNull: false*/ },
+    n_buffers:     { type: Seq.INTEGER/*, allowNull: false*/ },
+    n_tables:      { type: Seq.INTEGER/*, allowNull: false*/ },
+    n_ports:       { type: Seq.INTEGER/*, allowNull: false*/ },
     ip_reassembly: { type: Seq.BOOLEAN/*, allowNull: false*/ },
     stp:           { type: Seq.BOOLEAN/*, allowNull: false*/ }, 
     port_blocked:  { type: Seq.BOOLEAN/*, allowNull: false*/ },

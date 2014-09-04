@@ -68,7 +68,7 @@ CREATE TABLE switch_profile
    *  Lower 48 bits for switch mac address
    *  Upper 16 bits are implementer defined
    */ 
-  datapath_id BYTEA /*NOT NULL*/,
+  datapath_id CHAR(8) /*NOT NULL*/,
 
   /*
    * Number of buffers
@@ -76,24 +76,19 @@ CREATE TABLE switch_profile
    * packets to the controller using packet-in messages
    * (cut or keep?)
    */
-  n_buffers BYTEA /*NOT NULL*/,
+  n_buffers INTEGER /*NOT NULL*/,
 
   /*
    * Number of Flowtables in switch data plane
    * 1.0 has only only 1 table
    * 1.1 - 1.4 can have multiple tables
    */
-  n_tables BYTEA /*NOT NULL*/, 
+  n_tables INTEGER /*NOT NULL*/, 
   
   /*
    * Number of physical ports
    */
-  n_ports BYTEA /*NOT NULL*/,
-
-  /*
-   * Number of physical ports
-   */
-  n_queues BYTEA /*NOT NULL*/, 
+  n_ports INTEGER /*NOT NULL*/,
 
   /*
    * IP reassembly
@@ -228,14 +223,14 @@ CREATE TABLE dp_caps
    * packets to the controller using packet-in messages
    * (cut or keep?)
    */
-  no_buffers INTEGER ,
+  no_buffers INTEGER, 
 
   /*
    * Number of Flowtables in switch data plane
    * 1.0 has only only 1 table
    * 1.1 - 1.4 can have multiple tables
    */
-  no_tables INTEGER , 
+  no_tables INTEGER, 
 
   /* 
    * Supported Capabilities - 

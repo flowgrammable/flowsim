@@ -18,7 +18,7 @@ function profCreate(dataModel, session, method, params, data, ip, id) {
   if(method =='POST') {
 	var message = utils.invalidProfile(data);
     if(message) return passback(id, message);
-		dataModel.profile.create(session.subscriber_id, data.name, data.ofp_version,
+		dataModel.profile.create(session.subscriber_id, data,
     function(result){
       passback(id, result);
     });
