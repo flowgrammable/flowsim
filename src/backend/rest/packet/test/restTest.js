@@ -48,7 +48,7 @@ describe('Testing create packet requests:',function() {
       });
     }); 
   });
-  it('A request that is successful should return msg.success()',
+  it('A packet creation request that is successful should return msg.success()',
   function(done) {
     this.timeout(5000);
     request( {
