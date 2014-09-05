@@ -20,7 +20,12 @@ fgWidgets.directive('fgStack', function() {
       ];
 
       $scope.addNode = function() {
+        console.log($scope.nodeType);
         $scope.list.push({name: $scope.nodeType, body: 'stuff'});
+      }
+
+      $scope.delNode = function(pos) {
+        $scope.list.splice($scope.list.length-1, 1);
       }
     }
   };

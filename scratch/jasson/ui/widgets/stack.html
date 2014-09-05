@@ -4,10 +4,15 @@
 </h4>
 
 <accordion close-others="true">
-  <accordion-group ng-repeat="node in list" heading="{{node.name}}">
-    {{node.components}}
+  <accordion-group ng-repeat="node in list">
+    <accordion-heading>
+      {{node.name}}
+      <span ng-if="$last" class="glyphicon glyphicon-minus-sign pull-right" 
+        ng-click="delNode($index)"></span>
+    </accordion-heading>
+    {{node.body}}
   </accordion-group>
-</accordian>
+</accordion>
 
 <div class="input-group">
   <select class="form-control" ng-model="nodeType">
