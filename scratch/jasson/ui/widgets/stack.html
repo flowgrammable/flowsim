@@ -1,0 +1,22 @@
+
+<h4 ng-transclude>
+  <!-- transclude the list title -->
+</h4>
+
+<accordion close-others="true">
+  <accordion-group ng-repeat="node in list" heading="{{node.name}}">
+    {{node.components}}
+  </accordion-group>
+</accordian>
+
+<div class="input-group">
+  <select class="form-control" ng-model="nodeType">
+    <option ng-repeat="name in options">{{name}}</option>
+  </select>
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="addNode()">
+      Add
+    </button>
+  </span>
+</div>
+

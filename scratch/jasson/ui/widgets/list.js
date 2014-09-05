@@ -14,7 +14,7 @@ fgWidgets.directive('fgList', function() {
     },
     controller: function($scope) {
       $scope.itemName = '';
-      $scope.items = $scope.getItems()();
+      $scope.items = [];
       $scope.focus = -1;
       $scope.errorOccurred = false;
       $scope.errorMessage = '';

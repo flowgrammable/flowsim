@@ -1,11 +1,15 @@
 
 var fgPacket = angular.module('fgPacket', []);
 
+var Packet = function() {
+};
+
 fgPacket.controller('packetCtrl', function($scope) {
 
   var namePattern = /[a-zA-Z_][a-zA-Z_0-9]*/;
   $scope.packets = {};
   $scope.packet = null;
+  $scope.hide = false;
 
   $scope.listPackets = function() {
     return $scope.packets;
@@ -17,7 +21,7 @@ fgPacket.controller('packetCtrl', function($scope) {
     } else if(name in $scope.packets) {
       return 'Name exists';
     } else {
-      $scope.packets[name] = true;
+      $scope.packets[name] = new Packet();
       return 'success';
     }
   }
@@ -29,7 +33,7 @@ fgPacket.controller('packetCtrl', function($scope) {
   }
 
   $scope.setPacket = function(name) {
-    $scope.packet = name;
+    $scope.packet = $scope.packets[name];
   }
 
 });
