@@ -1,5 +1,5 @@
 --FLOW TABLE CAPS AND CONFIG---------------------------------------------------
-CREATE TABLE flow_table
+CREATE TABLE flowtable
 (
   id SERIAL PRIMARY KEY,
   /*

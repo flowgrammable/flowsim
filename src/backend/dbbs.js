@@ -48,7 +48,7 @@ var singleton = function singleton(){
 		var pack   = require('./rest/packet/db/packet');
     var prof  = require('./rest/profile/db/switch_profile');
   //  var dpCaps  = require('./rest/profile/db/dp_caps');
-    var ftCaps  = require('./rest/profile/db/ft_caps');
+    var flowtable  = require('./rest/profile/db/flowtable');
 		var ethernet = require('./rest/packet/db/ethernet');
     var ipv4 = require('./rest/packet/db/ipv4');
     var options = {timestamps: false, underscored: true};
@@ -66,10 +66,10 @@ var singleton = function singleton(){
 
     models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;
-    // models["dp_caps"] = sequelize.define("dp_caps", dpCaps.model, dpCaps.options);
-    // relationships["dp_caps"] = dpCaps.relations;
-    models["ft_caps"] = sequelize.define("ft_caps", ftCaps.model, ftCaps.options);
-    relationships["ft_caps"] = ftCaps.relations;
+    models["flowtable"] = sequelize.define("flowtable", flowtable.model, flowtable.options);
+    relationships["flowtable"] = flowtable.relations;
+//    models["ft_caps"] = sequelize.define("ft_caps", ftCaps.model, ftCaps.options);
+//    relationships["ft_caps"] = ftCaps.relations;
 
 		for (var name in relationships) {
       var relation = relationships[name];
