@@ -38,7 +38,7 @@ CREATE TYPE IP_FRAG_HANDLING AS ENUM (
   'DROP',         -- drop fragments
   'REASSEMBLE',   -- reassemble if ip_reassembly is set).
   'MASK'          
-);  
+);	
 
   --SWITCH PROFILE ---------------------------------------------------------------
 CREATE TABLE switch_profile
@@ -61,14 +61,14 @@ CREATE TABLE switch_profile
   /*
    * Openflow protocol version
    */
-  ofp_version INTEGER /*NOT NULL*/,
+  ofp_version BYTEA /*NOT NULL*/,
 
   /*
    * Datapath Id - 
    *  Lower 48 bits for switch mac address
    *  Upper 16 bits are implementer defined
    */ 
-  datapath_id CHAR(8) /*NOT NULL*/,
+  datapath_id BYTEA /*NOT NULL*/,
 
   /*
    * Number of buffers
@@ -76,19 +76,14 @@ CREATE TABLE switch_profile
    * packets to the controller using packet-in messages
    * (cut or keep?)
    */
-  n_buffers INTEGER /*NOT NULL*/,
+  n_buffers BYTEA /*NOT NULL*/,
 
   /*
    * Number of Flowtables in switch data plane
    * 1.0 has only only 1 table
    * 1.1 - 1.4 can have multiple tables
    */
-  n_tables INTEGER /*NOT NULL*/, 
-  
-  /*
-   * Number of physical ports
-   */
-  n_ports INTEGER /*NOT NULL*/,
+  n_tables BYTEA /*NOT NULL*/, 
 
   /*
    * IP reassembly
@@ -149,16 +144,21 @@ CREATE TABLE switch_profile
     * IP fragment handling
     * determines how to handle ip fragments
     */
-  frag_handling IP_FRAG_HANDLING,
+  frag_handling IP_FRAG_HANDLING /*NOT NULL*/,
    
    /*
     * invalid_ttl_to_controller
     * 
     */
-  invalid_ttl_to_controller BOOLEAN,
+  invalid_ttl_to_controller BOOLEAN /*NOT NULL*/,
   -----------------------------------------------------------------------------
 
   ---------------------------- Ports Capabilities -----------------------------
+  /*
+   * Number of physical ports
+   */
+  n_ports BYTEA /*NOT NULL*/, 
+
   /*
    * Supported Virtual Ports
    *  (Req) All - 1.0
@@ -193,94 +193,9 @@ CREATE TABLE switch_profile
   table_stats BOOLEAN /*NOT NULL*/,
   port_stats BOOLEAN /*NOT NULL*/,
   group_stats BOOLEAN /*NOT NULL*/,
-  queue_stats BOOLEAN /*NOT NULL*/
+  queue_stats BOOLEAN /*NOT NULL*/,
   -----------------------------------------------------------------------------
 );
-
-
--- Data path capabilities --
--- will be removed since it's included in switch_profile - twynn
-CREATE TABLE dp_caps
-(
-	id SERIAL PRIMARY KEY,
-
-  /* 
-   * Profile Id 
-   * A switch can only have a single datapath id
-   */
-  profile_id INTEGER references switch_profile(id) NOT NULL,
-  
-  /*
-   * Datapath Id - 
-   *  Lower 48 bits for switch mac address
-   *  Upper 16 bits are implementer defined
-   */ 
-  datapath_id CHAR(8),
-
-  /*
-   * Number of buffers
-   * maximum number of of packets the switch can buffer when sending
-   * packets to the controller using packet-in messages
-   * (cut or keep?)
-   */
-  no_buffers INTEGER, 
-
-  /*
-   * Number of Flowtables in switch data plane
-   * 1.0 has only only 1 table
-   * 1.1 - 1.4 can have multiple tables
-   */
-  no_tables INTEGER, 
-
-  /* 
-   * Supported Capabilities - 
-   *   Flow Stats   -  1.0, 1.1, 1.2, 1.3, 1.4 
-   *   Table Stats  -  1.0, 1.1, 1.2, 1.3, 1.4
-   *   Port Stats   -  1.0, 1.1, 1.2, 1.3, 1.4
-   *   Group Stats  -  1.1, 1.2, 1.3, 1.4
-   *   IP_Reassem   -  1.0, 1.1, 1.2, 1.3, 1.4
-   *   Queue Stats  -  1.0, 1.1, 1.2, 1.3, 1.4
-   *   Port Blocked -  1.2, 1.3, 1.4
-   */
-   ofpc_flow_stats BOOLEAN,
-   ofpc_table_stats BOOLEAN,
-   ofpc_port_stats BOOLEAN,
-   ofpc_group_stats BOOLEAN,
-   ofpc_ip_reasm BOOLEAN,
-   ofpc_port_bocked BOOLEAN,
-
-  /*
-   * Supported Virtual Ports
-   *  (Req) All - 1.0
-   *  (R) Controller - 1.0
-   *  (R) Table - 1.0
-   *  (R) In_Port - 1.0
-   *  (R) Any - 1.2, 1.3, 1.4
-   *  Local - 1.0 (R), 1.1 (O), 1.2(O), 1.3(O), 1.4(O)
-   *  (O) Normal - 1.1, 1.2, 1.3, 1.4
-   *  (O) Flood - 1.1, 1.2, 1.3, 1.4
-   */ 
-  vp_all BOOLEAN, 
-  vp_controller BOOLEAN, 
-  vp_table BOOLEAN,
-  vp_in_port BOOLEAN,
-  vp_any BOOLEAN,
-  vp_local BOOLEAN,
-  vp_normal BOOLEAN,
-  vp_flood BOOLEAN
-
-  /*
-   * TODO: Counters
-   *   Port
-   *   Queue
-   *   FlowTable
-   *   FlowEntry
-   *   Meter
-   *   Bucket
-   *   Group
-   */   
-);
-
 
 --FLOW TABLE CAPS AND CONFIG---------------------------------------------------
 CREATE TABLE flowtable
@@ -342,7 +257,7 @@ CREATE TYPE FIELD_TYPES AS ENUM (
   'OFPXMT_OFB_ETH_TYPE'
 );
 -- Field Capabilities ----------------------------------------------------------
-CREATE TABLE field_caps
+CREATE TABLE field_capability
 (
   id SERIAL PRIMARY KEY,
 
@@ -351,7 +266,7 @@ CREATE TABLE field_caps
    * Each flow table is able to match / and apply actions to a field
    * field_caps belong to a single flow table
    */
-  ft_id INTEGER REFERENCES ft_caps(id) NOT NULL,
+  flowtable_id INTEGER REFERENCES flowtable(id) NOT NULL,
 
   /*
    * Field_Type
@@ -392,7 +307,7 @@ CREATE TYPE ACTION_TYPES AS ENUM (
   'OFPAT_EXPERIMENTER'
 );
 
-CREATE TABLE action_capabilities
+CREATE TABLE action_capability
 (
   id SERIAL PRIMARY KEY,
 
@@ -400,7 +315,7 @@ CREATE TABLE action_capabilities
    * Flow Table ID
    * a flow table can have many action_capabilities by action type
    */
-  ft_id INTEGER REFERENCES ft_caps(id) NOT NULL,
+  flowtable_id INTEGER REFERENCES flowtable(id) NOT NULL,
 
   /*
    * Action Type
@@ -417,33 +332,49 @@ CREATE TABLE action_capabilities
   apply_actions_miss BOOLEAN
 );
 
-CREATE TABLE match_caps
+--- Instruction Capability --------------------------------------------------
+CREATE TYPE instruction as ENUM
 (
-  id SERIAL PRIMARY KEY,
-  ft_id INTEGER references ft_caps(id) NOT NULL,
-  OFPXMT_OFB_IN_PORT BOOLEAN,
-  OFPXMT_OFB_IN_PHY_PORT BOOLEAN,
-  OFPXMT_OFB_ETH_DST BOOLEAN,
-  OFPXMT_OFB_ETH_SRC BOOLEAN,
-  OFPXMT_OFB_ETH_TYPE BOOLEAN
+    /*
+     * Required instructions:
+     * - goto_table
+     * - write_action
+     */
+     'WRITE_METADATA',
+     'APPLY_ACTIONS',
+     'CLEAR_ACTIONS'
 );
 
-CREATE TABLE instruction_caps
+--- Instruction Capability --------------------------------------------------
+CREATE TYPE instruction_capability 
 (
-	id SERIAL PRIMARY KEY,
-  ft_id INTEGER references ft_caps(id) NOT NULL,
-  OFPIT_APPLY_ACTIONS BOOLEAN
-);
+    id SERIAL PRIMARY KEY,
 
-CREATE TABLE action_caps
-(
-	id SERIAL PRIMARY KEY,
-  ft_id INTEGER references ft_caps(id) NOT NULL,
-  OFPAT_OUTPUT BOOLEAN,
-  OFPAT_SET_FIELD_ETH_DST BOOLEAN,
-  OFPAT_SET_FIELD_ETH_SRC BOOLEAN
-);
+    /*
+     * Flow Table ID
+     * Each flow table supports configurable instruction capabilities
+     *
+     */
+     flow_table_id INTEGER references flow_table(id) NOT NULL,
 
+    /*
+     * instruction_type
+     */
+     instruction_type instruction NOT NULL,
+
+    /*
+     * instruction
+     * indicates flow table is able to execute instruction_type
+     */
+     instruction BOOL,
+
+    /*
+     * instruction_miss
+     * indicates flow table is able to execute instruction_type on
+     * table miss
+     */
+     instruction_miss BOOL
+);
 -----Packet --------------------------------------------------------------------
 CREATE TABLE packet
 (
