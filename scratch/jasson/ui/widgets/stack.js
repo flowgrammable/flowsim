@@ -2,6 +2,7 @@
 var fgWidgets = angular.module('fgWidgets');
 
 fgWidgets.directive('fgStack', function() {
+  var pattern = /(([0-9a-fA-F]{1,2})(-|:)){5}([0-9a-fA-F]{1,2})/;
   return {
     restrict: 'E',
     transclude: true,
@@ -28,17 +29,26 @@ fgWidgets.directive('fgStack', function() {
       $scope.list = [
         {name: 'Ethernet', fields: [
           { 
-            name: 'src',
+            name: 'Src',
             value: '00:00:00:00:00:00',
-            set: function(v) { return 'success'; }
+            tip: 'Ethernet source address, a six byte hexadecimal value',
+            test: function(v) { 
+              return pattern.test(v);
+            }
           }, {
-            name: 'dst',
+            name: 'Dst',
             value: '00:00:00:00:00:00',
-            set: function(v) { return 'success'; }
+            tip: 'Ethernet destination address, a six byte hexadecimal value',
+            test: function(v) { 
+              return pattern.test(v);
+            }
           }, {
-            name: 'type',
+            name: 'Type',
             value: '0',
-            set: function(v) { return 'success'; }
+            tip: 'A two byte hexidecimal value indcating the type of the payload',
+            test: function(v) { return 'success'; 
+              return true;
+            }
           }
         ]}
       ];

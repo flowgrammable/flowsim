@@ -5,14 +5,19 @@
 
 <accordion close-others="true">
   <accordion-group ng-repeat="node in list">
+    <!-- Print the heading and delete button if last element -->
     <accordion-heading>
       {{node.name}}
-      <span ng-if="$last && node.name!='Ethernet'" class="glyphicon glyphicon-minus-sign pull-right" 
+      <span ng-if="$last && node.name!='Ethernet'" 
+        class="glyphicon glyphicon-minus-sign pull-right" 
         ng-click="delNode($index)"></span>
     </accordion-heading>
-    <div class="input-group" ng-repeat="field in node.fields">
-      <span class="input-group-addon" style="width:60px">{{field.name}}</span>
-      <input type="text" class="form-control" placeholder="{{field.value}}">
+    <!-- Print a label and input box for each field -->
+    <div class="input-group" ng-repeat="field in node.fields"
+      ng-class="{'has-error': !field.test(field.value)}">
+      <span class="input-group-addon" style="width:60px"
+        tooltip="{{field.tip}}" tooltip-popup-delay='1000'>{{field.name}}</span>
+      <input type="text" class="form-control" ng-model="field.value">
     </div>
   </accordion-group>
 </accordion>
@@ -26,5 +31,12 @@
       Add
     </button>
   </span>
+</div>
+
+<br>
+
+<div style="text-align:center">
+  <button type="button" class="btn btn-primary btn-sm">Save Changes</button>
+  <button type="button" class="btn btn-primary btn-sm">Revert Changes</button>
 </div>
 
