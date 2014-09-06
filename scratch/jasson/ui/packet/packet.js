@@ -8,11 +8,12 @@ fgPacket.controller('packetCtrl', function($scope) {
 
   var namePattern = /[a-zA-Z_][a-zA-Z_0-9]*/;
   $scope.packets = {};
+  $scope.names = ['one', 'two'];
   $scope.packet = null;
   $scope.hide = false;
 
-  $scope.listPackets = function() {
-    return $scope.packets;
+  $scope.listPackets = function(cb) {
+    cb($scope.names, null);
   }
 
   $scope.addPacket = function(name) {

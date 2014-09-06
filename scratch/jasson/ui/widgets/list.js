@@ -52,6 +52,15 @@ fgWidgets.directive('fgList', function() {
           $scope.onDel()(item);
         }
       }
+      
+      $scope.getItems()(function(data, err) {
+        if(data) {
+          $scope.items = data;
+          if($scope.items.length > 0) {
+            $scope.shiftFocus(0);
+          }
+        }
+      });
     }
   };
 });

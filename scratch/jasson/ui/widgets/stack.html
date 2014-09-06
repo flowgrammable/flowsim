@@ -35,8 +35,16 @@
 
 <br>
 
+{{changed}}
+
 <div style="text-align:center">
-  <button type="button" class="btn btn-primary btn-sm">Save Changes</button>
-  <button type="button" class="btn btn-primary btn-sm">Revert Changes</button>
+  <button type="button" class="btn btn-primary btn-sm" 
+    ng-disabled="{{changed}}" ng-click="save()">
+    Save Changes
+  </button>
+  <button type="button" class="btn btn-primary btn-sm" 
+    ng-disabled="{{!changed}}" ng-click="revert()">
+    Revert Changes
+  </button>
 </div>
 

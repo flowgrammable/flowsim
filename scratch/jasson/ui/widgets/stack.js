@@ -26,6 +26,15 @@ fgWidgets.directive('fgStack', function() {
 
       $scope.options = $scope.payloadOptions['Ethernet'];
 
+      $scope.changed = false;
+
+      $scope.save = function() {
+        $scope.changed = false;
+      }
+      $scope.revert = function() {
+        $scope.changed = false;
+      }
+
       $scope.list = [
         {name: 'Ethernet', fields: [
           { 
@@ -57,12 +66,14 @@ fgWidgets.directive('fgStack', function() {
         if($scope.nodeType.length > 0) {
           $scope.list.push({name: $scope.nodeType, body: 'stuff'});
           $scope.options = $scope.payloadOptions[$scope.nodeType];
+          $scope.changed = true;
         }
       }
 
       $scope.delNode = function(pos) {
         $scope.list.splice($scope.list.length-1, 1);
         $scope.options = $scope.payloadOptions[$scope.list[$scope.list.length-1].name];
+        $scope.changed = true;
       }
     }
   };
