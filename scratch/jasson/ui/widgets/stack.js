@@ -12,8 +12,19 @@ fgWidgets.directive('fgStack', function() {
       setAttr: '&'
     },
     controller: function($scope) {
+
       $scope.nodeType = '';
-      $scope.options = ['ARP', 'MPLS', 'IPv4'];
+
+      $scope.payloadOptions = {
+        Ethernet: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
+        VLAN: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
+        MPLS: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
+        IPv4: ['TCP', 'UDP', 'SCTP', 'ICMPv4', 'ICMPv6'],
+        IPv6: ['TCP', 'UDP', 'SCTP', 'ICMPv4', 'ICMPv6']
+      };
+
+      $scope.options = $scope.payloadOptions['Ethernet'];
+
       $scope.list = [
         {name: 'Ethernet', fields: [
           { 
@@ -29,18 +40,19 @@ fgWidgets.directive('fgStack', function() {
             value: '0',
             set: function(v) { return 'success'; }
           }
-        ]},
-        {name: 'ARP', fields: [] }
+        ]}
       ];
 
       $scope.addNode = function() {
         if($scope.nodeType.length > 0) {
           $scope.list.push({name: $scope.nodeType, body: 'stuff'});
+          $scope.options = $scope.payloadOptions[$scope.nodeType];
         }
       }
 
       $scope.delNode = function(pos) {
         $scope.list.splice($scope.list.length-1, 1);
+        $scope.payloadOption[$scope.list[$scope.list.length-1].name];
       }
     }
   };
