@@ -52,7 +52,7 @@ fgWidgets.directive('fgStack', function() {
 
       $scope.delNode = function(pos) {
         $scope.list.splice($scope.list.length-1, 1);
-        $scope.payloadOption[$scope.list[$scope.list.length-1].name];
+        $scope.options = $scope.payloadOptions[$scope.list[$scope.list.length-1].name];
       }
     }
   };
