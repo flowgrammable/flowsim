@@ -15,13 +15,28 @@ fgWidgets.directive('fgStack', function() {
       $scope.nodeType = '';
       $scope.options = ['ARP', 'MPLS', 'IPv4'];
       $scope.list = [
-        {name: 'Ethernet', body: 'stuff...'},
-        {name: 'ARP', body: 'stuff...'}
+        {name: 'Ethernet', fields: [
+          { 
+            name: 'src',
+            value: '00:00:00:00:00:00',
+            set: function(v) { return 'success'; }
+          }, {
+            name: 'dst',
+            value: '00:00:00:00:00:00',
+            set: function(v) { return 'success'; }
+          }, {
+            name: 'type',
+            value: '0',
+            set: function(v) { return 'success'; }
+          }
+        ]},
+        {name: 'ARP', fields: [] }
       ];
 
       $scope.addNode = function() {
-        console.log($scope.nodeType);
-        $scope.list.push({name: $scope.nodeType, body: 'stuff'});
+        if($scope.nodeType.length > 0) {
+          $scope.list.push({name: $scope.nodeType, body: 'stuff'});
+        }
       }
 
       $scope.delNode = function(pos) {
