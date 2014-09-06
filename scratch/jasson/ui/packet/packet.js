@@ -34,7 +34,11 @@ fgPacket.controller('packetCtrl', function($scope) {
   }
 
   $scope.setPacket = function(name) {
-    $scope.packet = $scope.packets[name];
+    if(typeof name === 'string') {
+      $scope.packet = $scope.packets[name];
+    } else {
+      console.log('all packets have been deleted');
+    }
   }
 
 });

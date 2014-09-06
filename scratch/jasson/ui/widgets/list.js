@@ -10,7 +10,7 @@ fgWidgets.directive('fgList', function() {
       getItems: '&',
       onAdd: '&',
       onDel: '&',
-      changeFocus: '&'
+      setItem: '&'
     },
     controller: function($scope) {
       $scope.itemName = '';
@@ -27,7 +27,7 @@ fgWidgets.directive('fgList', function() {
 
       $scope.shiftFocus = function(pos) {
         $scope.focus = pos;
-        $scope.changeFocus()($scope.items[pos]);
+        $scope.setItem()($scope.items[pos]);
       }
 
       $scope.addItem = function() {
@@ -45,10 +45,12 @@ fgWidgets.directive('fgList', function() {
       $scope.delItem = function(pos) {
         var item;
         if(pos >= -1 && pos < $scope.items.length) {
+          item = $scope.items.splice(pos, 1); 
           if(pos < $scope.focus) {
             $scope.shiftFocus($scope.focus-1);
+          } else if(pos <= $scope.focus) {
+            $scope.shiftFocus($scope.focus);
           }
-          item = $scope.items.splice(pos, 1); 
           $scope.onDel()(item);
         }
       }
