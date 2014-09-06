@@ -12,10 +12,15 @@ fgPacket.controller('packetCtrl', function($scope) {
   $scope.packet = null;
   $scope.hide = false;
 
+  // This function is called by the UI widet to
+  // provide an array of strings of all existing
+  // packets
   $scope.listPackets = function(cb) {
     cb($scope.names, null);
   }
 
+  // This function is called by the UI widget to
+  // create a new named packet
   $scope.addPacket = function(name) {
     if(!namePattern.test(name)) {
       return 'Bad name';
@@ -27,12 +32,16 @@ fgPacket.controller('packetCtrl', function($scope) {
     }
   }
 
+  // This function is called by the UI widget to
+  // delete a named packet
   $scope.delPacket = function(name) {
     if(name in $scope.packets) {
       delete $scope.packets[name];
     }
   }
 
+  // This function is called by the UI widget to
+  // change the focus of a named packet
   $scope.setPacket = function(name) {
     if(typeof name === 'string') {
       $scope.packet = $scope.packets[name];
