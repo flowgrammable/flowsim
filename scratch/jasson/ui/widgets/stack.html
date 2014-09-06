@@ -7,7 +7,7 @@
   <accordion-group ng-repeat="node in list">
     <accordion-heading>
       {{node.name}}
-      <span ng-if="$last" class="glyphicon glyphicon-minus-sign pull-right" 
+      <span ng-if="$last && node.name!='Ethernet'" class="glyphicon glyphicon-minus-sign pull-right" 
         ng-click="delNode($index)"></span>
     </accordion-heading>
     <div class="input-group" ng-repeat="field in node.fields">
