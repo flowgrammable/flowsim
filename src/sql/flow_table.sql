@@ -1,4 +1,4 @@
---FLOW TABLE CAPS AND CONFIG---------------------------------------------------------------
+--FLOW TABLE CAPS AND CONFIG---------------------------------------------------
 CREATE TABLE flow_table
 (
   id SERIAL PRIMARY KEY,
@@ -64,7 +64,7 @@ CREATE TABLE field_capability
  
   /*
    * Flow Table ID
-   * Each flow table supports configurable field capabilities
+   * Each flow table supports configurable capabilities
    * 
    */ 
   flow_table_id INTEGER references flow_table(id) NOT NULL,
@@ -116,4 +116,101 @@ CREATE TABLE field_capability
    */
    apply_setfield_miss BOOL
 
+);
+
+--- Action Types --------------------------------------------------------------
+CREATE TYPE action AS ENUM
+(
+    'SET_FIELD'
+);
+
+--- Action Capabilities -------------------------------------------------------
+CREATE TABLE action_capability
+(
+    id SERIAL PRIMARY KEY,
+
+   /*
+    * Flow Table ID
+    * Each flow table supports configurable action capabilities
+    *
+    */
+    flow_table_id INTEGER references flow_table(id) NOT NULL,
+
+    /*
+     * action_type
+     * 
+     */
+     action_type action NOT NULL,
+
+    /*
+     * write_action - bool
+     * indicates flow table is able to write_action_(action_type)
+     * 
+     */ 
+     write_action BOOL,
+
+    /*
+     * write_action_miss - bool
+     * indicates flow table is able to write_action_(action_type)
+     * on a table miss
+     */
+     write_action_miss BOOL,
+
+    /*
+     * apply_action - bool
+     * indicates flow table is able to apply_action_(action_type)
+     *
+     */
+     apply_action BOOL,
+
+    /*
+     * apply_action_miss - bool
+     * indicates flow table is able to apply_action_(action_type)
+     * on table miss
+     */
+     apply_action_miss BOOL
+);
+
+--- Instruction Capability --------------------------------------------------
+CREATE TYPE instruction as ENUM
+(
+    /*
+     * Required instructions:
+     * - goto_table
+     * - write_action
+     */
+     'WRITE_METADATA',
+     'APPLY_ACTIONS',
+     'CLEAR_ACTIONS'
+);
+
+--- Instruction Capability --------------------------------------------------
+CREATE TYPE instruction_capability 
+(
+    id SERIAL PRIMARY KEY,
+
+    /*
+     * Flow Table ID
+     * Each flow table supports configurable instruction capabilities
+     *
+     */
+     flow_table_id INTEGER references flow_table(id) NOT NULL,
+
+    /*
+     * instruction_type
+     */
+     instruction_type instruction NOT NULL,
+
+    /*
+     * instruction
+     * indicates flow table is able to execute instruction_type
+     */
+     instruction BOOL,
+
+    /*
+     * instruction_miss
+     * indicates flow table is able to execute instruction_type on
+     * table miss
+     */
+     instruction_miss BOOL
 );
