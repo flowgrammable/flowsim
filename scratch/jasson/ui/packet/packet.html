@@ -1,15 +1,18 @@
 
 <div class="row" ng-controller="packetCtrl">
+  <!-- Use the List Widget to manage packet names -->
   <div class="col-md-2 col-md-offset-1">
     <fg-list get-items="listPackets" on-add="addPacket" on-del="delPacket" 
       set-item="setPacket">
       Packets
     </fg-list>
   </div>
+  <!-- Use the custom packet widget for displaying packet details -->
   <div class="col-md-4">
     <h4>Packet View</h4>
     <img src="img/packet.png" class="img-responsive" alt="Responsive image"></img>
   </div>
+  <!-- Use the Stack Widget to manage packet payloads -->
   <div class="col-md-3">
     <fg-stack>
       Payloads

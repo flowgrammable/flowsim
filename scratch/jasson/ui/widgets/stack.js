@@ -2,79 +2,70 @@
 var fgWidgets = angular.module('fgWidgets');
 
 fgWidgets.directive('fgStack', function() {
-  var pattern = /(([0-9a-fA-F]{1,2})(-|:)){5}([0-9a-fA-F]{1,2})/;
   return {
     restrict: 'E',
     transclude: true,
     templateUrl: 'widgets/stack.html',
     scope: {
-      addNode: '&',
-      delNode: '&',
-      setAttr: '&'
+      getOptions: '&',    // used to retreive an option tree
+      createNode: '&',    // used to extend a type constructor
+      save: '&'           // used to signal a data persist
     },
-    controller: function($scope) {
+    controller: function($scope, $rootScope) {
+     
+      $scope.stack = [];          // stack of items to present
+      $Scope.prevStack = null;    //
+      $scope.stackDirty = false;  // track the persistent state of the stack
+      $scope.nodeType = '';       // select input box value
+      $scope.options = [];        // select options to present
 
-      $scope.nodeType = '';
+      // initialize our decision tree from directive attrs
+      $scope.optionTree = $scope.getOptions()();
 
-      $scope.payloadOptions = {
-        Ethernet: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
-        VLAN: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
-        MPLS: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
-        IPv4: ['TCP', 'UDP', 'SCTP', 'ICMPv4', 'ICMPv6'],
-        IPv6: ['TCP', 'UDP', 'SCTP', 'ICMPv4', 'ICMPv6']
-      };
-
-      $scope.options = $scope.payloadOptions['Ethernet'];
-
-      $scope.changed = false;
-
-      $scope.save = function() {
-        $scope.changed = false;
-      }
-      $scope.revert = function() {
-        $scope.changed = false;
-      }
-
-      $scope.list = [
-        {name: 'Ethernet', fields: [
-          { 
-            name: 'Src',
-            value: '00:00:00:00:00:00',
-            tip: 'Ethernet source address, a six byte hexadecimal value',
-            test: function(v) { 
-              return pattern.test(v);
-            }
-          }, {
-            name: 'Dst',
-            value: '00:00:00:00:00:00',
-            tip: 'Ethernet destination address, a six byte hexadecimal value',
-            test: function(v) { 
-              return pattern.test(v);
-            }
-          }, {
-            name: 'Type',
-            value: '0',
-            tip: 'A two byte hexidecimal value indcating the type of the payload',
-            test: function(v) { return 'success'; 
-              return true;
-            }
-          }
-        ]}
-      ];
-
+      // Add a new Node type to the back of the stack
       $scope.addNode = function() {
+        var node;
         if($scope.nodeType.length > 0) {
-          $scope.list.push({name: $scope.nodeType, body: 'stuff'});
-          $scope.options = $scope.payloadOptions[$scope.nodeType];
-          $scope.changed = true;
+          node = $scope.createNode($scope.nodeType);
+          $scope.stack.push(node); 
+          $scope.stackDirty = true;
+          $scope.nodeType = '';
+          $scope.options = $scope.optionTree[node.name];
         }
       }
 
+      // Delete the node from the top of the stack
       $scope.delNode = function(pos) {
-        $scope.list.splice($scope.list.length-1, 1);
-        $scope.options = $scope.payloadOptions[$scope.list[$scope.list.length-1].name];
-        $scope.changed = true;
+        var lastName;
+        $scope.stack.pop();
+        lastName = $scope.stack[$scope.stack.length-1].name;
+        $scope.options = $scope.optionTree[lastName];
+        $scope.stackDirty = true;
       }
+    
+      // Save our current changes
+      $scope.save = function() {
+        if($scope.stackDirty) {
+          $scope.save()();
+          $scope.prevStack = null;
+          $scope.stackDirty = false;
+        }
+      }
+
+      // Cancel our existing changes
+      $scope.revert = function() {
+        if($scope.stackDirty) {
+          $scope.stack = $scope.prevStack;
+          $scope.stackDirty = false;
+        }
+      }
+      
+      // Update the current display
+      $scope.$on('change', function(ev, data) {
+        $scope.prevStack = data;
+        $scope.stack = data;
+        $scope.stackDirty = false;
+      });
     }
   };
 });
