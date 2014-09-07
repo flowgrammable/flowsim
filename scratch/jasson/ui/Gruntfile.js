@@ -4,13 +4,15 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
       widgets: {
-        src: ['widgets/list.js', 'widgets/stack.js']
+        src: ['widgets/*.js']
       }
+    },
+    concat: {
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-
-  grunt.registerTask('default', ['jshint']);
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.registerTask('default', ['jshint', 'concat']);
 };
 
