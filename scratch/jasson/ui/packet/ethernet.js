@@ -34,8 +34,8 @@
   };
 
   var _etherTypeToString = function(value) {
-    return _etherTypeByValue(value) + '(' + value + ')'
-  }
+    return _etherTypeByValue(value) + '(' + value + ')';
+  };
 
   var _Address = function(value) {
       var result = [];
@@ -52,21 +52,21 @@
   
   _Address.prototype.clone = function() {
     return new _Address(this);
-  }
+  };
 
   _Address.prototype.bytes = function() {
     return 6;
-  }
+  };
 
   _Address.prototype.isBroadcast = function() {
     return this.addr[0] == 0xff && this.addr[1] == 0xff &&
       this.addr[2] == 0xff && this.addr[3] == 0xff &&
       this.addr[4] == 0xff && this.addr[5] == 0xff;
-  }
+  };
 
   _Address.prototype.isMulticast = function() {
     return this.addr[0] & 0x01;
-  }
+  };
 
   _Address.prototype.set = function(v) {
     if(typeof v === 'string' && macp.test(value)) {
@@ -74,14 +74,14 @@
     } else {
       throw 'Invalid MAC: ' + value;
     }
-  }
+  };
 
   _Address.prototype.toString = function() {
     var result = [];
     for(var i=0; i<this.addr.length; ++i)
       result.push(this.addr[i].toString(16));
     return result.join(':');
-  }
+  };
 
   var _Header = function(src, dst, type) {
       if(src instanceof _Header && dst === undefined && type === undefined) {
@@ -97,23 +97,23 @@
 
   _Header.prototype.name = function() {
     return 'Ethernet';
-  }
+  };
 
   _Header.prototype.clone = function() {
     return new _Header(this);
-  }
+  };
 
   _Header.prototype.bytes = function() {
     return 14;
-  }
+  };
 
   _Header.prototype.setSrc = function(src) {
     this.src.set(src);
-  }
+  };
   
   _Header.prototype.setDst = function(dst) {
     this.dst.set(dst);
-  }
+  };
 
   _Header.prototype.setEtherType = function(et) {
     var tmp;
@@ -129,7 +129,7 @@
     } else {
       throw 'Bad EtherType: ' + et;
     }
-  }
+  };
 
   // Return the local bindings
   var Ethernet = {
