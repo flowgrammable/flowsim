@@ -48,3 +48,72 @@ CREATE TABLE flow_table
   lookup_count BYTEA NOT NULL,
   matched_count BYTEA NOT NULL
 );
+
+--Field Types------------------------------------------------------------------
+CREATE TYPE field AS ENUM
+(
+	'ETH_DST',
+	'ETH_SRC',
+	'ETH_TYPE'
+);
+
+--Field Capabilities-----------------------------------------------------------
+CREATE TABLE field_capability 
+(
+  id SERIAL PRIMARY KEY,
+ 
+  /*
+   * Flow Table ID
+   * Each flow table supports configurable field capabilities
+   * 
+   */ 
+  flow_table_id INTEGER references flow_table(id) NOT NULL,
+
+  /*
+   * Field Type
+   * 
+   */
+   field_type field NOT NULL,
+
+  /*
+   * Match - bool
+   * indicates flow table is able to match on field
+   *
+   */
+   match BOOL,
+
+  /*
+   * wildcards - bool
+   * indicates flow table is able to wildcard on field
+   *
+   */
+   wildcard BOOL,
+
+  /*
+   * write_setfield - bool
+   * indicates flow table is able write set_field_(field_type)
+   *
+   */
+   write_setfield BOOL,
+
+  /*
+   * write_setfield_miss - bool
+   * indicates flow table is able to write set_field_(field_type)
+   * on table miss
+   */
+   write_setfield_miss BOOL,
+
+  /*
+   * apply_setfield - bool
+   * indicates flow table is able to apply set_field_(field_type)
+   */
+   apply_setfield BOOL,
+
+  /*
+   * apply_setfield_miss - bool
+   * indicates flow table is able to apply set_field_(field_type)
+   * on table miss
+   */
+   apply_setfield_miss BOOL
+
+);
