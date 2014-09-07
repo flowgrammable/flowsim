@@ -3,6 +3,12 @@
   <!-- transclude the list title -->
 </h4>
 
+<h5 ng-hide="stack.length">
+  No items selected for display.
+</h5>
+
+<div ng-show="stack.length">
+
 <accordion close-others="true">
   <accordion-group ng-repeat="node in stack">
     <!-- Print the heading and delete button if last element -->
@@ -44,5 +50,7 @@
     ng-disabled="{{!stackDirty}}" ng-click="revert()">
     Revert
   </button>
+</div>
+
 </div>
 
