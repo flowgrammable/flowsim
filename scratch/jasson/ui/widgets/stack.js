@@ -32,7 +32,7 @@ fgWidgets.directive('fgStack', function() {
           $scope.nodeType = '';
           $scope.options = $scope.optionTree[node.name];
         }
-      }
+      };
 
       // Delete the node from the top of the stack
       $scope.delNode = function(pos) {
@@ -41,7 +41,7 @@ fgWidgets.directive('fgStack', function() {
         lastName = $scope.stack[$scope.stack.length-1].name;
         $scope.options = $scope.optionTree[lastName];
         $scope.stackDirty = true;
-      }
+      };
     
       // Save our current changes
       $scope.save = function() {
@@ -50,7 +50,7 @@ fgWidgets.directive('fgStack', function() {
           $scope.prevStack = null;
           $scope.stackDirty = false;
         }
-      }
+      };
 
       // Cancel our existing changes
       $scope.revert = function() {
@@ -58,7 +58,7 @@ fgWidgets.directive('fgStack', function() {
           $scope.stack = $scope.prevStack;
           $scope.stackDirty = false;
         }
-      }
+      };
       
       // Update the current display
       $scope.$on('change', function(ev, data) {

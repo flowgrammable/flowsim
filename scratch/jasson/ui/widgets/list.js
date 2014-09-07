@@ -23,12 +23,12 @@ fgWidgets.directive('fgList', function() {
         $scope.itemName = '';
         $scope.errorOccurred = false;
         $scope.errorMessage = '';
-      }
+      };
 
       $scope.shiftFocus = function(pos) {
         $scope.focus = pos;
         $scope.setItem()($scope.items[pos]);
-      }
+      };
 
       $scope.addItem = function() {
         var result = $scope.onAdd()($scope.itemName);
@@ -40,7 +40,7 @@ fgWidgets.directive('fgList', function() {
           $scope.errorOccurred = true;
           $scope.errorMessage = result;
         }
-      }
+      };
 
       $scope.delItem = function(pos) {
         var item;
@@ -53,7 +53,7 @@ fgWidgets.directive('fgList', function() {
           }
           $scope.onDel()(item);
         }
-      }
+      };
       
       $scope.getItems()(function(data, err) {
         if(data) {

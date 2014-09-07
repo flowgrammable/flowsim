@@ -2,18 +2,18 @@
 var fgPacket = angular.module('fgPacket', ['fgProtocol']);
 
 var isUInt16 = function(i) {
-  return typeof i == "number" && isFinite(i) && i%1===0 && i >= 0 i <= 65535;
-}
+  return (typeof i == "number") && isFinite(i) && (i%1===0) && i >= 0 && i <= 65535;
+};
 
 var isMAC = function(m) {
   var macPat = /(([0-9a-fA-F]{2})(-|:)){5}([0-9a-fA-F]{2})/;
   return typeof m === "string" && macPat.test(m);
-}
+};
 
 var isIPv4 = function() {
   var ipv4Pat = /([0-9]{1,3}\.){3][0-9]{1,3}/;
   return typeof m === "string" && ipv4Pat.test(m);
-}
+};
 
 function Ethernet() {
   this.name = 'Ethernet';
@@ -93,20 +93,20 @@ function SCTP() {
 var Packet = {
   createProtocol: function(name) {
     switch(name) {
-      case 'Ethernet': return new Ethernet(); break;
-      case 'ARP': return new ARP(); break;
-      case 'MPLS': return new MPLS(); break;
-      case 'IPv4': return new IPv4(); break;
-      case 'IPv6': return new IPv6(); break;
-      case 'ICMPv4': return new ICMPv4(); break;
-      case 'ICMPv6': return new ICMPv6(); break;
-      case 'TCP': return new TCP(); break;
-      case 'UDP': return new UDP(); break;
-      case 'SCTP': return new SCTP(); break;
+      case 'Ethernet': return new Ethernet();
+      case 'ARP': return new ARP();
+      case 'MPLS': return new MPLS();
+      case 'IPv4': return new IPv4();
+      case 'IPv6': return new IPv6();
+      case 'ICMPv4': return new ICMPv4();
+      case 'ICMPv6': return new ICMPv6();
+      case 'TCP': return new TCP();
+      case 'UDP': return new UDP(); 
+      case 'SCTP': return new SCTP();
       default: return null;
     }
   }
-}
+};
 
 fgPacket.controller('packetCtrl', function($scope, Ethernet) {
 
@@ -128,17 +128,17 @@ fgPacket.controller('packetCtrl', function($scope, Ethernet) {
 
   $scope.createProtocol = function(protocol) {
     return Packet.createProtocol(protocol);
-  }
+  };
 
   $scope.savePacket = function() {
-  }
+  };
 
   // This function is called by the UI widet to
   // provide an array of strings of all existing
   // packets
   $scope.listPackets = function(cb) {
     cb($scope.names, null);
-  }
+  };
 
   // This function is called by the UI widget to
   // create a new named packet
@@ -151,7 +151,7 @@ fgPacket.controller('packetCtrl', function($scope, Ethernet) {
       $scope.packets[name] = new Ethernet.Header();
       return 'success';
     }
-  }
+  };
 
   // This function is called by the UI widget to
   // delete a named packet
@@ -159,7 +159,7 @@ fgPacket.controller('packetCtrl', function($scope, Ethernet) {
     if(name in $scope.packets) {
       delete $scope.packets[name];
     }
-  }
+  };
 
   var pattern = /(([0-9a-fA-F]{1,2})(-|:)){5}([0-9a-fA-F]{1,2})/;
 
@@ -175,7 +175,7 @@ fgPacket.controller('packetCtrl', function($scope, Ethernet) {
     } else {
       console.log('all packets have been deleted');
     }
-  }
+  };
 
 });
 
