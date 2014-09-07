@@ -170,7 +170,7 @@ fgPacket.controller('packetCtrl', function($scope, Ethernet) {
       $scope.packet = $scope.packets[name];
       // Notify any children controllers of the focus change
       $scope.$broadcast('change', {
-        list: packet
+        list: $scope.packet
       });
     } else {
       console.log('all packets have been deleted');

@@ -14,7 +14,7 @@ fgWidgets.directive('fgStack', function() {
     controller: function($scope, $rootScope) {
      
       $scope.stack = [];          // stack of items to present
-      $Scope.prevStack = null;    //
+      $scope.prevStack = null;    //
       $scope.stackDirty = false;  // track the persistent state of the stack
       $scope.nodeType = '';       // select input box value
       $scope.options = [];        // select options to present
