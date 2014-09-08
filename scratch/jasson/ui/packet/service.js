@@ -45,7 +45,7 @@ var Storage = function($http) {
   };
 };
 
-angular.module('fgPacket', [])
+angular.module('fgPktMgr', [])
   .service('pktStorage', Storage);
 
 })();

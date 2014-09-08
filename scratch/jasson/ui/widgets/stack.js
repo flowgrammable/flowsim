@@ -13,14 +13,14 @@ var fgStack = function() {
     },
     controller: function($scope, $rootScope) {
 
-      $scope.unsaved = false;     // save state of current stack
+      $scope.stack = [];
       $scope.nodeType = '';       // input type to create node
       $scope.options = [];        // input select options
-      
+
       // Update the current display
       $scope.$on('setStack', function(ev, data) {
         $scope.stack = data;
-        $scope.stackDirty = false;
+        $scope.options = $scope.getOptions($scope.stack);
       });
 
       // Add a new Node type to the back of the stack
@@ -29,9 +29,8 @@ var fgStack = function() {
         if($scope.nodeType.length > 0) {
           node = $scope.createNode($scope.nodeType);
           $scope.stack.push(node); 
-          $scope.stackDirty = true;
           $scope.nodeType = '';
-          $scope.options = $scope.optionTree[node.name];
+          $scope.options = $scope.getOptions($scope.stack); 
         }
       };
 
@@ -39,11 +38,10 @@ var fgStack = function() {
       $scope.delNode = function(pos) {
         var lastName;
         $scope.stack.pop();
-        lastName = $scope.stack[$scope.stack.length-1].name;
-        $scope.options = $scope.optionTree[lastName];
-        $scope.stackDirty = true;
+        $scope.options = $scope.getOptions($scope.stack); 
       };
-    
+   
+      /*
       // Save our current changes
       $scope.save = function() {
         if($scope.stackDirty) {
@@ -60,6 +58,7 @@ var fgStack = function() {
           $scope.stackDirty = false;
         }
       };
+      */
       
     }
   };
@@ -69,3 +68,4 @@ var fgWidgets = angular.module('fgWidgets');
 fgWidgets.directive('fgStack', fgStack);
 
 })();
+

@@ -107,20 +107,19 @@ var _Packet = function(pkt) {
   this.actual = pkt;
   this.stack = [];
   for(var i=0; i<pkt.data.length; ++i) {
-    this.stack.push(createAdaptor(pkt.data[i].name, pkt.data[i]));
+    this.stack.push(_createProtocol(pkt.data[i].protocol, pkt.data[i].data));
   }
 };
 
-var _createPacket = function(pkt) { return new _Packet(pkt); };
+var _wrap = function(p) {
+  return new _Packet(p);
+}
 
-var Adaptor = function() {
-  return {
-    createProtocol: _createProtocol,
-    createPacket: _createPacket
-  };
+var Adaptor = {
+  wrap: _wrap
 };
 
-angular.module('fgPacket')
+angular.module('fgPktMgr')
   .value('pktAdaptor', Adaptor);
 
 })();

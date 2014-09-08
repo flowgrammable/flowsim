@@ -1,4 +1,4 @@
 
-var flowsimApp = angular.module('flowsimApp', ['fgWidgets', 'fgPacket']);
+var flowsimApp = angular.module('flowsimApp', ['fgWidgets', 'fgPktMgr']);
 
 

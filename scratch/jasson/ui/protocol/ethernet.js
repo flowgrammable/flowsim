@@ -135,13 +135,16 @@ _Header.prototype.setEtherType = function(et) {
   }
 };
 
+var _create = function() { return new _Header(); }
+
 // Return the local bindings
 return {
   etherTypeByName : _etherTypeByName,
   etherTypeByValue : _etherTypeByValue,
   isMAC: _isMAC,
   Address : _Address,
-  Header : _Header
+  Header : _Header,
+  create: _create
 };
 
 })();
