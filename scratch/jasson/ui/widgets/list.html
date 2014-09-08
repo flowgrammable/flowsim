@@ -8,7 +8,8 @@
   <input type="text" class="form-control" placeholder="name" 
     ng-model="itemName">
   <span class="input-group-btn">
-    <button class="btn btn-default" type="button" ng-click="addItem()">
+    <button class="btn btn-default" type="button" ng-click="addItem()"
+      ng-disabled="{{isInit}}">
       Add
     </button>
   </span>
@@ -28,7 +29,9 @@
   <tr ng-repeat="item in items" ng-class="{info: $index==focus}">
     <td ng-click="shiftFocus($index)">
       {{item}}
-      <span class="glyphicon glyphicon-minus-sign pull-right" ng-click="delItem($index)"></span>
+      <span class="glyphicon glyphicon-minus-sign pull-right" 
+        ng-click="delItem($index)">
+      </span>
     </td>
   </tr>
 </table>

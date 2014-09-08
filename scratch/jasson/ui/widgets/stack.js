@@ -1,7 +1,7 @@
 
-var fgWidgets = angular.module('fgWidgets');
+(function(){
 
-fgWidgets.directive('fgStack', function() {
+var fgStack = function() {
   return {
     restrict: 'E',
     transclude: true,
@@ -68,5 +68,9 @@ fgWidgets.directive('fgStack', function() {
       });
     }
   };
-});
+};
 
+var fgWidgets = angular.module('fgWidgets');
+fgWidgets.directive('fgStack', fgStack);
+
+})();

@@ -1,9 +1,9 @@
 
-<div class="row" ng-controller="packetCtrl">
+<div class="row" ng-controller="packetController">
   <!-- Use the List Widget to manage packet names -->
   <div class="col-md-2 col-md-offset-1">
-    <fg-list get-items="listPackets" on-add="addPacket" on-del="delPacket" 
-      set-item="setPacket">
+    <fg-list items="pktNames" on-add="addPacket" on-del="delPacket" 
+      set-item="setPacket" is-init="isInit">
       Packets
     </fg-list>
   </div>

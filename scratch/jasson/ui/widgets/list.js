@@ -1,20 +1,20 @@
 
-var fgWidgets = angular.module('fgWidgets');
+(function(){
 
-fgWidgets.directive('fgList', function() {
+var fgList = function() {
   return {
     restrict: 'E',
     transclude: true,
     templateUrl: 'widgets/list.html',
     scope: {
-      getItems: '&',
+      isInit: '=',
+      items: '=',
       onAdd: '&',
       onDel: '&',
       setItem: '&'
     },
     controller: function($scope) {
       $scope.itemName = '';
-      $scope.items = [];
       $scope.focus = -1;
       $scope.errorOccurred = false;
       $scope.errorMessage = '';
@@ -54,15 +54,11 @@ fgWidgets.directive('fgList', function() {
           $scope.onDel()(item);
         }
       };
-      
-      $scope.getItems()(function(data, err) {
-        if(data) {
-          $scope.items = data;
-          if($scope.items.length > 0) {
-            $scope.shiftFocus(0);
-          }
-        }
-      });
     }
   };
-});
+};
+
+var fgWidgets = angular.module('fgWidgets');
+fgWidgets.directive('fgList', fgList);
+
+})();
