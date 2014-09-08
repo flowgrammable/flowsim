@@ -116,7 +116,8 @@ var _wrap = function(p) {
 }
 
 var Adaptor = {
-  wrap: _wrap
+  wrap: _wrap,
+  getProtocols: _getProtocols
 };
 
 angular.module('fgPktMgr')
