@@ -6,19 +6,17 @@ var pktCache = {};
 
 var Controller = function($scope, pktStorage, pktAdaptor) {
 
-  $scope.isInit = false;
   $scope.packet = null;
-  $scope.pktNames = [];
 
   pktStorage.getPackets(function(data, err) {
+    var list = [];
     if(data) {
       // for each packet in response
       for(var i=0; i<data.length; ++i) {
-        $scope.pktNames.push(data[i].name);   // add name to list
         pktCache[data[i].name] = data[i];     // add packet to cache
+        list.push(data[i].name);
       }
-      // consider the list initialized
-      $scope.isInit = true;
+      $scope.$broadcast('initList', list);
     } else if(err) {
       console.log('Could not get initial list:' + err);
     }
@@ -59,8 +57,8 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
   // This function is called by the UI widget to
   // delete a named packet
   $scope.delPacket = function(name) {
-    pktStorage.delPacket(name);
     if(name in pktCache) {
+      pktStorage.delPacket(name);
       delete pktCache[name];
     }
   };

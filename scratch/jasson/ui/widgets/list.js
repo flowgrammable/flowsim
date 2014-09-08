@@ -23,6 +23,9 @@ var fgList = function() {
       $scope.$on('initList', function(event, data) {
         $scope.items = data;
         $scope.init = true;
+        if(data.length > 0) {
+          $scope.shiftFocus(0);
+        }
       });
 
       $scope.clearState = function() {
@@ -32,8 +35,10 @@ var fgList = function() {
       };
 
       $scope.shiftFocus = function(pos) {
-        $scope.focus = pos;                   // Update the local focus
-        $scope.onSet()($scope.items[pos]);    // Update the parent with new name
+        if(pos >= -1 && pos < $scope.items.length) {
+          $scope.focus = pos;                   // Update the local focus
+          $scope.onSet()($scope.items[pos]);    // Update the parent with name
+        }
       };
 
       $scope.addItem = function() {
