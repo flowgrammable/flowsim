@@ -121,7 +121,7 @@ var Adaptor = function() {
 };
 
 var packet = angular.module('fgPacket');
-packet.value('fgAdaptor', Adaptor);
+packet.value('pktAdaptor', Adaptor);
 
 })();
 

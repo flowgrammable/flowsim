@@ -4,7 +4,7 @@
 var namePattern = /[a-zA-Z_][a-zA-Z_0-9]*/;
 var pktCache = {};
 
-var packetController = function($scope, packetService, Adaptor) {
+var Controller = function($scope, pktStorage, pktAdaptor) {
 
   $scope.isInit = false;
   $scope.packet = null;
@@ -80,8 +80,8 @@ var packetController = function($scope, packetService, Adaptor) {
 
 };
 
-var fgPacket = angular.module('fgPacket');
-fgPacket.controller('packetController', packetController);
+var module = angular.module('fgPacket');
+module.controller('pktController', Controller);
 
 })();
 
