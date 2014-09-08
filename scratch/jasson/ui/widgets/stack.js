@@ -19,7 +19,7 @@ var fgStack = function() {
 
       // Update the current display
       $scope.$on('setStack', function(ev, data) {
-        $scope.stack = data;
+        $scope.stack = data.stack;
         $scope.options = $scope.getOptions($scope.stack);
       });
 
