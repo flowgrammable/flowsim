@@ -1,7 +1,7 @@
 
 (function(){
 
-var Storage = function($http, Packet) {
+var Storage = function($http) {
 
   // Initialize the local packet cache with
   // what current exists on the backend
@@ -45,8 +45,8 @@ var Storage = function($http, Packet) {
   };
 };
 
-var module = angular.module('fgPacket');
-module.service('pktStorage', Storage);
+angular.module('fgPacket', [])
+  .service('pktStorage', Storage);
 
 })();
 

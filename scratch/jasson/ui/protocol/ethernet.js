@@ -139,7 +139,7 @@ _Header.prototype.setEtherType = function(et) {
 return {
   etherTypeByName : _etherTypeByName,
   etherTypeByValue : _etherTypeByValue,
-  isMac: _isMac,
+  isMAC: _isMAC,
   Address : _Address,
   Header : _Header
 };

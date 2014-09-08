@@ -10,7 +10,7 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
   $scope.packet = null;
   $scope.pktNames = [];
 
-  packetService.getPackets(function(data, err) {
+  pktStorage.getPackets(function(data, err) {
     if(data) {
       // for each packet in response
       for(var i=0; i<data.length; ++i) {
@@ -33,14 +33,14 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
   // packet to the persistent store
   $scope.savePacket = function() {
     if(packet !== null) {
-      packetService.savePacket(packet);
+      pktStorage.savePacket(packet);
     }
   };
 
   // This function is called by the UI to
   // revert the current packet modifications
   $scope.revertPacket = function() {
-    packetService.revertPacket(packet.name);
+    pktStorage.revertPacket(packet.name);
   };
 
   // This function is called by the UI widget to
@@ -51,7 +51,7 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
     } else if(name in pktCache) {
       return 'Name exists';
     } else {
-      pktCache[name] = new Packet.createPacket(name);
+      //pktCache[name] = new Packet.createPacket(name);
       return 'success';
     }
   };
@@ -59,7 +59,7 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
   // This function is called by the UI widget to
   // delete a named packet
   $scope.delPacket = function(name) {
-    packetService.delPacket(name);
+    pktStorage.delPacket(name);
     if(name in pktCache) {
       delete pktCache[name];
     }
@@ -80,8 +80,8 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
 
 };
 
-var module = angular.module('fgPacket');
-module.controller('pktController', Controller);
+angular.module('fgPacket')
+  .controller('pktController', Controller);
 
 })();
 

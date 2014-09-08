@@ -1,7 +1,7 @@
 
 (function(){
 
-var module = angular.module('fgPacket', []);
+angular.module('fgPacket', []);
 
 })();
 

@@ -120,8 +120,8 @@ var Adaptor = function() {
   };
 };
 
-var packet = angular.module('fgPacket');
-packet.value('pktAdaptor', Adaptor);
+angular.module('fgPacket')
+  .value('pktAdaptor', Adaptor);
 
 })();
 
