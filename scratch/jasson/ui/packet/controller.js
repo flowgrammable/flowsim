@@ -26,6 +26,7 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
   };
  
   $scope.createProtocol = function(name) {
+    return pktAdaptor.wrapProtocol(fgProtocol.create(name));
   };
 
   // This function is called by the UI to 
@@ -72,7 +73,7 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
     if(typeof name === 'string' && name in pktCache) {
       // Notify any children controllers of the focus change
       // .. need to look at this in detail ...
-      $scope.$broadcast('setStack', pktAdaptor.wrap(pktCache[name]));
+      $scope.$broadcast('setStack', pktAdaptor.wrapPacket(pktCache[name]));
     } else {
       console.log('No packets for list foucs');
     }

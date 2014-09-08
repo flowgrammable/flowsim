@@ -8,12 +8,12 @@ var EthernetAdaptor = function(eth) {
     { 
       name: 'Src',
       tip: 'Ethernet source MAC address',
-      test: fgEthernet.isMac,
+      test: fgEthernet.isMAC,
       value: eth.src
     }, {
       name: 'Dst',
       tip: 'Ethernet destination MAC address',
-      test: fgEthernet.isMac,
+      test: fgEthernet.isMAC,
       value: eth.dst
     }, {
       name: 'type',
@@ -103,6 +103,10 @@ var _getProtocols = function() {
   };
 };
 
+var _wrapProtocol = function(p) {
+  return _createProtocol(p.protocol, p.data);
+}
+
 var _Packet = function(pkt) {
   this.actual = pkt;
   this.stack = [];
@@ -111,12 +115,13 @@ var _Packet = function(pkt) {
   }
 };
 
-var _wrap = function(p) {
+var _wrapPacket = function(p) {
   return new _Packet(p);
 };
 
 var Adaptor = {
-  wrap: _wrap,
+  wrapPacket: _wrapPacket,
+  wrapProtocol: _wrapProtocol,
   getProtocols: _getProtocols
 };
 
