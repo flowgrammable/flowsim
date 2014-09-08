@@ -1,7 +1,7 @@
 
 (function(){
 
-var packetService = function($http) {
+var packetService = function($http, Packet) {
 
   // Initialize the local packet cache with
   // what current exists on the backend

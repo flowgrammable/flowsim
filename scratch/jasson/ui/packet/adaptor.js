@@ -70,7 +70,7 @@ var SCTPAdaptor = function() {
   throw 'SCTPAdaptor not implemented';
 }
   
-var createAdaptor = function(name, payload) {
+var _createProtocol = function(name, payload) {
   switch(name) {
     case 'Ethernet': return new EthernetAdaptor(payload);
     case 'VLAN': return new VLANAdaptor(payload);
@@ -87,7 +87,23 @@ var createAdaptor = function(name, payload) {
   }
 };
 
-var PacketAdaptor = function(pkt) {
+var _getProtocols = function() {
+  return {
+    Ethernet: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
+    VLAN: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
+    ARP: [],
+    MPLS: ['IPv4', 'IPv6'],
+    IPv4: ['TCP', 'UDP', 'SCTP', 'ICMPv4'],
+    IPv6: ['TCP', 'UDP', 'SCTP', 'ICMPv6'],
+    TCP: [],
+    UDP: [],
+    SCTP: [],
+    ICMPv4: [],
+    ICMPv6: []
+  };
+};
+
+var _Packet = function(pkt) {
   this.actual = pkt;
   this.stack = [];
   for(var i=0; i<pkt.data.length; ++i) {
@@ -95,8 +111,17 @@ var PacketAdaptor = function(pkt) {
   }
 };
 
-var protocol = angular.module('fgProtocol');
-protocol.value('PacketAdaptor', PacketAdaptor);
+var _createPacket = function(pkt) { return new _Packet(pkt); }
+
+var Adaptor = function() {
+  return {
+    createProtocol: _createProtocol,
+    createPacket: _createPacket
+  };
+};
+
+var packet = angular.module('fgPacket');
+protocol.value('fgAdaptor', Adaptor);
 
 })();
 

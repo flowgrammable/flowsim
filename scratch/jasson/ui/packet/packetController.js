@@ -12,34 +12,20 @@ var packetController = function($scope, packetService, Packet) {
 
   packetService.getPackets(function(data, err) {
     if(data) {
+      // for each packet in response
       for(var i=0; i<data.length; ++i) {
-        $scope.pktNames.push(data[i].name);
-        pktCache[data[i].name] = data[i];
+        $scope.pktNames.push(data[i].name);   // add name to list
+        pktCache[data[i].name] = data[i];     // add packet to cache
       }
+      // consider the list initialized
       $scope.isInit = true;
     } else if(err) {
       console.log('Could not get initial list:' + err);
     }
   });
  
-  $scope.getProtocols = function() {
-    return {
-      Ethernet: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
-      VLAN: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
-      ARP: [],
-      MPLS: ['IPv4', 'IPv6'],
-      IPv4: ['TCP', 'UDP', 'SCTP', 'ICMPv4'],
-      IPv6: ['TCP', 'UDP', 'SCTP', 'ICMPv6'],
-      TCP: [],
-      UDP: [],
-      SCTP: [],
-      ICMPv4: [],
-      ICMPv6: []
-    };
-  };
-
   $scope.createProtocol = function(name) {
-    return null;
+    return Packet.createProtocol(name);
   };
 
   // This function is called by the UI to 
@@ -65,7 +51,7 @@ var packetController = function($scope, packetService, Packet) {
     } else if(name in pktCache) {
       return 'Name exists';
     } else {
-      pktCache[name] = new Packet(name);
+      pktCache[name] = new Packet.createPacket(name);
       return 'success';
     }
   };
@@ -86,6 +72,7 @@ var packetController = function($scope, packetService, Packet) {
       $scope.packet = pktCache[name];
       // Notify any children controllers of the focus change
       // .. need to look at this in detail ...
+      fgPacketAdaptor
       $scope.$broadcast('change', pktCache[name]);
     } else {
       console.log('No packets for list foucs');

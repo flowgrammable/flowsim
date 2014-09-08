@@ -7,17 +7,23 @@ var fgList = function() {
     transclude: true,
     templateUrl: 'widgets/list.html',
     scope: {
-      isInit: '=',
-      items: '=',
       onAdd: '&',
       onDel: '&',
-      setItem: '&'
+      onSet: '&'
     },
     controller: function($scope) {
       $scope.itemName = '';
       $scope.focus = -1;
       $scope.errorOccurred = false;
       $scope.errorMessage = '';
+
+      $scope.items = [];
+      $scope.init = false;
+
+      $scope.on('initList', function(event, data) {
+        $scope.items = data;
+        $scope.init = true;
+      });
 
       $scope.clearState = function() {
         $scope.itemName = '';
@@ -26,8 +32,8 @@ var fgList = function() {
       };
 
       $scope.shiftFocus = function(pos) {
-        $scope.focus = pos;
-        $scope.setItem()($scope.items[pos]);
+        $scope.focus = pos;                   // Update the local focus
+        $scope.onSet()($scope.items[pos]);    // Update the parent with new name
       };
 
       $scope.addItem = function() {
