@@ -12,7 +12,7 @@ _Packet.prototype.addPayload = function(p) {
   this.bytes += p.bytes();
 };
 
-var _create = function(n) = { return new _Packet(n); }
+var _create = function(n) { return new _Packet(n); };
 
 return {
   Packet: _Packet,

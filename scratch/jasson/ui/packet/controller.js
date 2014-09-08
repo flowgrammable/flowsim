@@ -22,9 +22,8 @@ var Controller = function($scope, pktStorage, pktAdaptor) {
 
   $scope.getProtocols = function(pkt) {
     var name = pkt.stack[pkt.stack.length-1].name;
-    console.log('name: ' + name);
     return pktAdaptor.getProtocols()[name]; 
-  }
+  };
  
   $scope.createProtocol = function(name) {
   };

@@ -113,7 +113,7 @@ var _Packet = function(pkt) {
 
 var _wrap = function(p) {
   return new _Packet(p);
-}
+};
 
 var Adaptor = {
   wrap: _wrap,
