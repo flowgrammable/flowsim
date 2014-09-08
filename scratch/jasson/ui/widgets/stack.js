@@ -3,23 +3,25 @@
 
 var fgStack = function() {
   return {
-    restrict: 'E',
-    transclude: true,
-    templateUrl: 'widgets/stack.html',
+    restrict: 'E',                      // HTML Element
+    transclude: true,                   // Copy element body in
+    templateUrl: 'widgets/stack.html',  // Location of template
     scope: {
-      getOptions: '&',    // used to retreive an option tree
-      createNode: '&',    // used to extend a type constructor
-      saveStack: '&'      // used to signal a data persist
+      getOptions: '&',    // callback for node construction tree
+      createNode: '&',    // callback for creating a node
+      saveStack: '&'      // callback for persisting changes
     },
     controller: function($scope, $rootScope) {
-     
-      $scope.prevStack = null;    //
-      $scope.stackDirty = false;  // track the persistent state of the stack
-      $scope.nodeType = '';       // select input box value
-      $scope.options = [];        // select options to present
 
-      // initialize our decision tree from directive attrs
-      $scope.optionTree = $scope.getOptions()();
+      $scope.unsaved = false;     // save state of current stack
+      $scope.nodeType = '';       // input type to create node
+      $scope.options = [];        // input select options
+      
+      // Update the current display
+      $scope.$on('setStack', function(ev, data) {
+        $scope.stack = data;
+        $scope.stackDirty = false;
+      });
 
       // Add a new Node type to the back of the stack
       $scope.addNode = function() {
@@ -59,12 +61,6 @@ var fgStack = function() {
         }
       };
       
-      // Update the current display
-      $scope.$on('change', function(ev, data) {
-        $scope.prevStack = data;
-        $scope.stack = data;
-        $scope.stackDirty = false;
-      });
     }
   };
 };

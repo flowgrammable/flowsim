@@ -3,24 +3,24 @@
 
 var fgList = function() {
   return {
-    restrict: 'E',
-    transclude: true,
-    templateUrl: 'widgets/list.html',
+    restrict: 'E',                      // HTML Element
+    transclude: true,                   // Copy element body in
+    templateUrl: 'widgets/list.html',   // Location of template
     scope: {
-      onAdd: '&',
-      onDel: '&',
-      onSet: '&'
+      onAdd: '&',                       // callback for adding item
+      onDel: '&',                       // callback for deleting item
+      onSet: '&'                        // callback for changing item focus
     },
     controller: function($scope) {
-      $scope.itemName = '';
-      $scope.focus = -1;
-      $scope.errorOccurred = false;
-      $scope.errorMessage = '';
+      $scope.itemName = '';             // input name to create item
+      $scope.focus = -1;                // item with current focus
+      $scope.errorOccurred = false;     // input name error state
+      $scope.errorMessage = '';         // input name error message
 
-      $scope.items = [];
-      $scope.init = false;
+      $scope.items = [];                // display list of items
+      $scope.init = false;              // dislay list initialization state
 
-      $scope.on('initList', function(event, data) {
+      $scope.$on('initList', function(event, data) {
         $scope.items = data;
         $scope.init = true;
       });

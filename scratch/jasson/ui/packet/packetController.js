@@ -4,7 +4,7 @@
 var namePattern = /[a-zA-Z_][a-zA-Z_0-9]*/;
 var pktCache = {};
 
-var packetController = function($scope, packetService, Packet) {
+var packetController = function($scope, packetService, Adaptor) {
 
   $scope.isInit = false;
   $scope.packet = null;
@@ -72,7 +72,6 @@ var packetController = function($scope, packetService, Packet) {
       $scope.packet = pktCache[name];
       // Notify any children controllers of the focus change
       // .. need to look at this in detail ...
-      fgPacketAdaptor
       $scope.$broadcast('change', pktCache[name]);
     } else {
       console.log('No packets for list foucs');

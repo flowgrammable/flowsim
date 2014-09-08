@@ -1,0 +1,32 @@
+
+<div ng-controller="ioListCtrl">
+
+<div class="input-group">
+  <input type="text" class="form-control" placeholder="{{item_name}}"
+    ng-model="itemName">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="addItem()">
+      Add
+    </button>
+  </span>
+</div>
+
+<div class="error" ng-show="errorOccured">
+  <h6><span>
+    {{errorMessage}}
+  </h6></span>
+</div>
+
+<br>
+
+<table class="table table-striped table-hover">
+  <tr ng-repeat="item in items" ng-class="{info: $index==focus}">
+    <td ng-click="shiftFocus($index)">
+      {{item.name}}
+      <span class="glyphicon glyphicon-minus-sign pull-right"
+        ng-click="delItem($index)"></span>
+    </td>
+  </tr>
+</table>
+
+</div>

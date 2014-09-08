@@ -10,35 +10,7 @@ packetCreator.config(['$routeProvider', function($routeProvider) {
 
 flowsimApp.controller('packetController', 
   function($scope, $rootScope, packetManager) {
-
-    // Packet Input value
-    $scope.name = '';
-
-    // Packet focused on in packet list
-    $scope.focus = -1;
-
-    // User Input Error Flags
-    $scope.nameExists = false;
-    $scope.badName = false;
-
-    // Set the display list
-    $scope.packets = packetManager.getPackets();
-
-    // House keeping for shifting foucs
-    $scope.shiftFocus = function(pos) {
-      if($scope.focus != pos) {
-        $scope.focus = pos;
-        $rootScope.broadcast('some stuff');
-      }
-    }
-
-    // House keeping for clearing the input box
-    $scope.clearInput = function() {
-      $scope.name = '';
-      $scope.nameExists = false;
-      $scope.badName = false;
-    }
-
+    
     // Method to add a new packet
     $scope.addPacket = function() {
       switch(packetManager.addPacket($scope.name)) {

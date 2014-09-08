@@ -5,7 +5,7 @@ var ipv4Pat = /([0-9]{1,3}\.){3][0-9]{1,3}/;
 var octp = /[0-9]{1,3}/;
 
 var _isAddr = function(value) {
-  if(typeof m !=== 'string' || !ipv4Pat.test(value)) {
+  if(typeof m !== 'string' || !ipv4Pat.test(value)) {
     return false;
   } else {
     value.match(octp).slice(0,4);

@@ -45,15 +45,8 @@ var packetService = function($http, Packet) {
   };
 };
 
-var Packet = function(name) {
-  this.name = name;
-  this.bytes = 0;
-  this.data = [ new Ethernet() ];
-}
-
 var module = angular.module('fgPacket', []);
 module.service('packetService', packetService);
-module.value('Packet', Packet);
 
 })();
 

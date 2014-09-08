@@ -28,47 +28,47 @@ EthernetAdaptor.prototype.save = function() {
   this.eth.setSrc(this.fields[0].value);
   this.eth.setDst(this.fields[1].value);
   this.eth.setEtherType(this.fields[2].value);
-}
+};
 
 var VLANAdaptor = function() {
   throw 'VLANAdaptor not implemented';
-}
+};
 
 var ARPAdaptor = function() {
   throw 'ARPAdaptor not implemented';
-}
+};
 
 var MPLSAdaptor = function() {
   throw 'MPLSAdaptor not implemented';
-}
+};
 
 var IPv4Adaptor = function() {
   throw 'IPv4Adaptor not implemented';
-}
+};
 
 var IPv6Adaptor = function() {
   throw 'IPv6Adaptor not implemented';
-}
+};
 
 var ICMPv4Adaptor = function() {
   throw 'ICMPv4Adaptor not implemented';
-}
+};
 
 var ICMPv6Adaptor = function() {
   throw 'ICMPv6Adaptor not implemented';
-}
+};
 
 var TCPAdaptor = function() {
   throw 'TCPAdaptor not implemented';
-}
+};
 
 var UDPAdaptor = function() {
   throw 'UDPAdaptor not implemented';
-}
+};
 
 var SCTPAdaptor = function() {
   throw 'SCTPAdaptor not implemented';
-}
+};
   
 var _createProtocol = function(name, payload) {
   switch(name) {
@@ -111,7 +111,7 @@ var _Packet = function(pkt) {
   }
 };
 
-var _createPacket = function(pkt) { return new _Packet(pkt); }
+var _createPacket = function(pkt) { return new _Packet(pkt); };
 
 var Adaptor = function() {
   return {
@@ -121,7 +121,7 @@ var Adaptor = function() {
 };
 
 var packet = angular.module('fgPacket');
-protocol.value('fgAdaptor', Adaptor);
+packet.value('fgAdaptor', Adaptor);
 
 })();
 
