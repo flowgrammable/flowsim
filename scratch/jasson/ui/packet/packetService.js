@@ -45,13 +45,6 @@ var packetService = function($http) {
   };
 };
 
-var Ethernet = function() {
-  this.name = 'Ethernet';
-  this.src = '00:00:00:00:00:00';
-  this.dst = '00:00:00:00:00:00';
-  this.type = 0;
-}
-
 var Packet = function(name) {
   this.name = name;
   this.bytes = 0;

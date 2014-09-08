@@ -9,7 +9,7 @@ var fgStack = function() {
     scope: {
       getOptions: '&',    // used to retreive an option tree
       createNode: '&',    // used to extend a type constructor
-      saveStack: '&'           // used to signal a data persist
+      saveStack: '&'      // used to signal a data persist
     },
     controller: function($scope, $rootScope) {
      

@@ -1,5 +1,5 @@
 
-(function(){
+var fgEthernet = (function(){
 
 var macp = /(([0-9a-fA-F]{2})(-|:)){5}([0-9a-fA-F]{2})/;
 var octp = /[0-9a-fA-F]{2}/g;
@@ -13,6 +13,10 @@ var etherTypes = {
   MPLSu: 0x8847,
   MPLSm: 0x8848,
   LLDP: 0x88cc
+};
+
+var _isMAC = function(m) {
+  return typeof m === "string" && macp.test(m);
 };
     
 var _etherTypeByName = function(name) {
@@ -132,15 +136,13 @@ _Header.prototype.setEtherType = function(et) {
 };
 
 // Return the local bindings
-var Ethernet = {
+return {
   etherTypeByName : _etherTypeByName,
   etherTypeByValue : _etherTypeByValue,
+  isMac: _isMac,
   Address : _Address,
   Header : _Header
 };
-
-var protocol = angular.module('fgProtocol');
-protocol.value('Ethernet', Ethernet);
 
 })();
 
