@@ -2,19 +2,20 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    deps: grunt.file.readJSON('deps.json'),
     jshint: {
       files: ['gruntfile.js', 'src/**/*.js']
     },
     concat: {
       dist: {
         src: ['src/**/*.js'],
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: 'dist/js/<%= pkg.name %>.js'
       }
     },
     uglify: {
       dist: {
         files: {
-          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+          'dist/js/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
         }
       }
     }
