@@ -33,11 +33,11 @@ To create your own test runner say xxxx-test in makefile:
       + **$(XXXX_TESTS)**: Give the name of the test directory path variable here (created in step 3).
     + **@killall node**: kills the server.
   
-<span>5. </span> Add the test runner name to **.PHONY** separated by comma:
+<span>5. </span>  Add the test runner name to **.PHONY** separated by comma:
     
-      `.PHONY: unit-test, system-test, xxxx-test`
+      .PHONY: unit-test, system-test, xxxx-test
 
-  +  Why .PHONY?
+  + Why .PHONY?
     + Makefile targets are "file targets" - they are used to build files from other files. Make assumes its target is a file, and this makes writing Makefiles relatively easy. However, sometimes you want your Makefile to run commands that do not represent physical files in the file system. These special targets are called phony and you can explicitly tell Make they're not associated with files.
 
 
