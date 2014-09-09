@@ -1,0 +1,27 @@
+
+Flowsim by Flowgrammable
+------------------------
+
+Flowsim is an OpenFlow data plane simulator. The goal of this tool is visualize
+and simulate the abstract data plane specified by the OpenFlow switch
+specifications.
+
+Global Dependencies
+-------------------
+
+- Nodejs
+- Bower
+- grunt-cli
+
+Building
+--------
+
+  1. Insall and build local 
+
+    npm install
+    cd bower_components/angular-ui-bootstrap/
+    npm install
+    grunt
+    cd ../..
+
+

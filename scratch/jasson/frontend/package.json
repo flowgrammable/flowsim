@@ -1,0 +1,34 @@
+{
+  "name": "flowsim",
+  "version": "0.0.1",
+  "description": "An OpenFlow data plane visual simulator.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flowgrammable/flowsim"
+  },
+  "keywords": [
+    "openflow",
+    "sdn",
+    "software",
+    "defined",
+    "networking",
+    "simulator"
+  ],
+  "author": "Jasson Casey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flowgrammable/flowsim/issues"
+  },
+  "homepage": "https://github.com/flowgrammable/flowsim",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-uglify": "^0.5.1"
+  }
+}
