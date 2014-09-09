@@ -1,5 +1,46 @@
 ##TEST RUNNER
 ==================
+###How to create test runner for a module using Makefile
+
+Makefiles are a simple way to organize code compilation, here we use makefile to automate testing.
+To create your own test runner say xxxx-test in makefile:
+
+  1. Open the Makefile (It is in flowsim/src/backend directory).
+  2. Locate this line:
+  
+      `#--ADD PATH OF THE MODULE SPECIFIC TEST DIRECTORY HERE--`  
+
+  3. Add the path of the module specific test directory below the above located line. For example to add xxxx module test directory path (note we are excluding node_modules folder here, since it might contain its own test directory):
+  
+    `XXXX_TESTS=$(shell find -path "*/xxxx/test/rest*.js" -not -path "*/node_modules/*")`
+
+  4. Finally we write the test runner as follows:
+        
+        xxxx-test:
+          $(flyway) clean && $(flyway) migrate
+          $(server) -t & 
+          @sleep 4
+          -$(MOCHA) -t 90000 -R $(REPORTER) $(XXXX_TESTS)
+          @killall node
+  
+    + Note that lines following **xxxx-test:** must be indented by tab and not by spaces. 
+    + **xxxx-test:** is the name of the test-runner.
+    + **$(flyway) clean && $(flyway) migrate** is used to clean and migrate the database using flyway.
+    + **$(server) -t &** will start server in test mode.
+    + **@sleep 4** is used to wait(sleep for 4 seconds) for server to start.
+    + **-$(MOCHA) -t 90000 -R $(REPORTER) $(PACKET_TESTS)**:
+      + **- before $(MOCHA)** is used to ignore the errors which may occur during the tests, hence it makes sure that all test cases are executed.
+      + **$(XXXX_TESTS)**: Give the name of the test directory path variable here (created in step 3).
+    + **@killall node**: kills the server.
+  
+<span>5. </span>  Add the test runner name to **.PHONY** separated by comma:
+    
+      .PHONY: unit-test, system-test, xxxx-test
+
+  + Why .PHONY?
+    + Makefile targets are "file targets" - they are used to build files from other files. Make assumes its target is a file, and this makes writing Makefiles relatively easy. However, sometimes you want your Makefile to run commands that do not represent physical files in the file system. These special targets are called phony and you can explicitly tell Make they're not associated with files.
+
+
 ###How to run unit test runner
 
 Unit test runner runs all the test files except the rest tests on server.
@@ -17,6 +58,7 @@ System test runner runs all the rest tests on the server files except the unit t
   2. Run the system test runner as follows in that Makefile directory
     
       `make system-test`
+
 
 ###MOCHA TEST FRAMEWORK
 

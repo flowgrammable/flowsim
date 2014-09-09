@@ -19,8 +19,8 @@ var fgStack = function() {
 
       // Update the current display
       $scope.$on('setStack', function(ev, data) {
-        $scope.stack = data;
-        $scope.options = $scope.getOptions($scope.stack);
+        $scope.stack = data.stack;
+        $scope.options = $scope.getOptions()(data);
       });
 
       // Add a new Node type to the back of the stack

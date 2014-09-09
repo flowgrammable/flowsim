@@ -20,7 +20,7 @@
     </accordion-heading>
     <!-- Print a label and input box for each field -->
     <div class="input-group" ng-repeat="attr in node.attrs"
-      ng-class="{'has-error': !attr.isValid(attr.value)}">
+      ng-class="{'has-error': !attr.test(attr.value)}">
       <span class="input-group-addon" style="width:60px"
         tooltip="{{attr.tip}}" tooltip-popup-delay='1000'>{{attr.name}}</span>
       <input type="text" class="form-control" ng-model="attr.value">

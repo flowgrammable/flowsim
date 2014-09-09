@@ -280,31 +280,58 @@ CREATE TABLE dp_caps
    *   Group
    */   
 );
---- Flow Table Capabilities ----------------------------------------------------
-CREATE TABLE ft_caps
+
+
+--FLOW TABLE CAPS AND CONFIG---------------------------------------------------
+CREATE TABLE flowtable
 (
-	id SERIAL PRIMARY KEY,
-
-  /* 
-   * Datapath Id
-   * Datapath can have only 1 table - 1.0
-   * Datapath can have multiple tables - 1.1, 1.2, 1.3, 1.4
-   */
-	dp_id INTEGER references dp_caps(id) NOT NULL,
+  id SERIAL PRIMARY KEY,
+  /*
+   * Profile ID
+   * A profile can have many flow_tables
+   * Openflow 1.0 only supports 1 flow_table
+   */ 
+  profile_id INTEGER references subscriber(id) NOT NULL,
 
   /*
-   * Table ID
-   * The ID of a flow table
+   * Flowtable ID
+   * 1 byte
    */
-  table_id INTEGER,
+	flowtable_id BYTEA NOT NULL,
 
   /*
-   * Max entries in flow table
+   * Flowtable Name
+   * 
    */
-  max_entries INTEGER
+  name VARCHAR(60) /*NOT NULL*/,
+
+	/*
+   * Max Entries
+   * 4 bytes
+   */
+  max_entries BYTEA ,
+
+
+  /*
+   * Flow table configuration
+   * 
+   */
+  miss_controller BOOL ,
+  miss_conintue BOOL ,
+  miss_drop BOOL ,
+  eviction BOOL ,
+  vacancy BOOL ,
+
+  /*
+   * FlowTable Stats
+   * active_count - number of entries in table - 4 byte
+   * lookup_count - number of packets looked up in table -8 bytes
+   * matched_count - number of packets that hit the table - 8 bytes
+   */
+  active_count BYTEA ,
+  lookup_count BYTEA ,
+  matched_count BYTEA 
 );
-
-
 
 CREATE TYPE FIELD_TYPES AS ENUM (
   'OFPXMT_OFB_IN_PORT', 

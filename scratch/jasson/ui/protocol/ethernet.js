@@ -135,7 +135,7 @@ _Header.prototype.setEtherType = function(et) {
   }
 };
 
-var _create = function() { return new _Header(); }
+var _create = function() { return new _Header(); };
 
 // Return the local bindings
 return {

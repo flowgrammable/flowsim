@@ -14,6 +14,7 @@ var FtCaps = orm.model("ft_caps");
 // be inferred based on the ofp_version
 function createProfile(data, cb) {
   var prof;
+  console.log('create profile adapter data:', data);
   Profile.create(data).success(function(result) { cb(msg.success(result)) });
   // .then(function(profile) {
   //   prof = profile;  
