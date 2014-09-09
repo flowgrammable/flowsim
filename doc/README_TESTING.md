@@ -51,7 +51,7 @@ To create your own test runner say xxxx-test in makefile:
       + **$(PACKET_TESTS)**: Give the name of the test directory path variable here (created in step 3).
     + **@killall node**: kills the server.
   
-  5. Add the test runner name to **.PHONY** separated by comma:
+5. Add the test runner name to **.PHONY** separated by comma:
     
       `.PHONY: unit-test, system-test, packet-test`
 
