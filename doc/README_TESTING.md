@@ -1,6 +1,5 @@
 ##TEST RUNNER
 ==================
-
 ###How to create test runner for a module using Makefile
 
 Makefiles are a simple way to organize code compilation, here we use makefile to automate testing.
@@ -16,7 +15,7 @@ To create your own test runner say xxxx-test in makefile:
     `XXXX_TESTS=$(shell find -path "*/xxxx/test/rest*.js" -not -path "*/node_modules/*")`
 
   4. Finally we write the test runner as follows:
-      
+        
         xxxx-test:
           $(flyway) clean && $(flyway) migrate
           $(server) -t & 
@@ -33,8 +32,8 @@ To create your own test runner say xxxx-test in makefile:
       + **- before $(MOCHA)** is used to ignore the errors which may occur during the tests, hence it makes sure that all test cases are executed.
       + **$(XXXX_TESTS)**: Give the name of the test directory path variable here (created in step 3).
     + **@killall node**: kills the server.
-
-5.Add the test runner name to **.PHONY** separated by comma:
+  
+<span>5. </span> Add the test runner name to **.PHONY** separated by comma:
     
       `.PHONY: unit-test, system-test, xxxx-test`
 
