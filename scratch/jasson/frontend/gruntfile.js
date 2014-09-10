@@ -99,7 +99,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-html2js');
-
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('default', ['jshint', 'copy:debug', 'indexgen:debug']);
   grunt.registerTask('debug', ['default']);
