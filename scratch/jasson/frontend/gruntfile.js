@@ -73,7 +73,7 @@ module.exports = function(grunt) {
     },
     clean: {
       debug: ['debug'],
-      dist: ['release']
+      release: ['release']
     }
   });
 
