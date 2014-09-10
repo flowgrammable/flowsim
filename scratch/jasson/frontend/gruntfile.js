@@ -113,7 +113,7 @@ module.exports = function(grunt) {
 
     // set the includes based on mode
     if(this.target == 'debug' ) {
-      options.styles = removePath(options.deps.debug_css).map(function(s) { return 'css/'; });
+      options.styles = removePath(options.deps.debug_css).map(function(s) { return 'css/' + s; });
       options.scripts = removePath(options.deps.debug_js).map(function(s) { return 'js/' + s; });
       grunt.file.recurse('src/', function(f){
         if(endsWith(f, '.js')) {
@@ -122,7 +122,7 @@ module.exports = function(grunt) {
       });
       //options.scripts.concat();
     } else if(this.target == 'release') {
-      options.styles = removePath(options.deps.release_css).map(function(s) { return 'css/'; });
+      options.styles = removePath(options.deps.release_css).map(function(s) { return 'css/' + s; });
       options.scripts = removePath(options.deps.release_js).map(function(s) { return 'js/' + s; });
       options.scripts.push('js/' + options.title + '.min.js');
     }

@@ -1,3 +1,2 @@
 1. not getting all of deps.json resources
 2. not copying *.map for minified versions
-3. not generating 'debug' local script includes
