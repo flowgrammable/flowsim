@@ -54,6 +54,8 @@ module.exports = function(grunt) {
             dest: 'release/css'},
           { expand: true, flatten: true, src: '<%= deps.release_js %>', 
             dest: 'release/js'},
+          { expand: true, flatten: true, src: '<%= deps.release_js.map(function(i) { console.log(i+".map");return i+".map";}) %>', 
+            dest: 'release/js'},
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
             rename: replaceHead }
         ]
@@ -63,7 +65,8 @@ module.exports = function(grunt) {
       options: {
         title: '<%= pkg.name %>',
         body: grunt.file.read('src/main.thtml'),
-        deps: grunt.file.readJSON('deps.json')
+        deps: grunt.file.readJSON('deps.json'),
+        jssrc: 'src/**/*.js'
       },
       debug: {
         files: {
@@ -123,6 +126,8 @@ module.exports = function(grunt) {
       }).map(function(filepath) {
         return grunt.file.read(filepath);
       });
+
+      console.log('jssrc:' + options.jssrc);
 
       grunt.file.write(file.dest, ejs.render(contents[0], options));
     });
