@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= title %></title>
     <% for(var i=0; i<styles.length; i++) 
-      { %><link href="css/<%= styles[i] %>" rel="stylesheet">
+      { %><link href="<%= styles[i] %>" rel="stylesheet">
     <% } %><% for(var i=0; i<scripts.length; i++) 
-      { %><script src="js/<%= scripts[i] %>"></script> 
+      { %><script src="<%= scripts[i] %>"></script> 
     <% } %>
   </head>
   <body>

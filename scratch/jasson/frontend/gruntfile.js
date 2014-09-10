@@ -8,12 +8,22 @@ var removePath = function(fileList) {
   });
 };
 
+var chopHead = function(file) {
+  var tmp = file.split('/').filter(function(item) { return item.length > 0; });
+  tmp.splice(0, 1);
+  return tmp.join('/');
+};
+
 var replaceHead = function(dest, src) {
   var tsrc = src.split('/').filter(function(item) { return item.length > 0; });
   tsrc.splice(0, 1);
   var tdest = dest.split('/').filter(function(item) { return item.length > 0; });
   return tdest.concat(tsrc).join('/');
 };
+
+function endsWith(str, suffix) {
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
 
 module.exports = function(grunt) {
   grunt.initConfig({
@@ -103,18 +113,19 @@ module.exports = function(grunt) {
 
     // set the includes based on mode
     if(this.target == 'debug' ) {
-      options.styles = options.deps.debug_css;
-      options.scripts = options.deps.debug_js;
+      options.styles = removePath(options.deps.debug_css).map(function(s) { return 'css/'; });
+      options.scripts = removePath(options.deps.debug_js).map(function(s) { return 'js/' + s; });
+      grunt.file.recurse('src/', function(f){
+        if(endsWith(f, '.js')) {
+          options.scripts.push(chopHead(f));
+        }
+      });
       //options.scripts.concat();
     } else if(this.target == 'release') {
-      options.styles = options.deps.release_css;
-      options.scripts = options.deps.release_js;
-      options.scripts.push(options.title + '.min.js');
+      options.styles = removePath(options.deps.release_css).map(function(s) { return 'css/'; });
+      options.scripts = removePath(options.deps.release_js).map(function(s) { return 'js/' + s; });
+      options.scripts.push('js/' + options.title + '.min.js');
     }
-
-    // remove the prepended path section of each include
-    options.styles = removePath(options.styles);
-    options.scripts = removePath(options.scripts);
 
     this.files.forEach(function(file) {
       var contents = file.src.filter(function(filepath) {
@@ -126,8 +137,6 @@ module.exports = function(grunt) {
       }).map(function(filepath) {
         return grunt.file.read(filepath);
       });
-
-      console.log('jssrc:' + options.jssrc);
 
       grunt.file.write(file.dest, ejs.render(contents[0], options));
     });
