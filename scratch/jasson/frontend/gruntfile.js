@@ -8,6 +8,13 @@ var removePath = function(fileList) {
   });
 };
 
+var replaceHead = function(dest, src) {
+  var tsrc = src.split('/').filter(function(item) { return item.length > 0; });
+  tsrc.splice(0, 1);
+  var tdest = dest.split('/').filter(function(item) { return item.length > 0; });
+  return tdest.concat(tsrc).join('/');
+};
+
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -31,15 +38,19 @@ module.exports = function(grunt) {
     copy: {
       debug: {
         files: [
-          {expand: true, src: '{<%= deps.debug_css %>}', dest: 'debug/css'},
-          {expand: true, src: '{<%= deps.debug_js %>}', dest: 'debug/js'},
-          {expand: true, src: ['src/*.js', 'src/**/*.js'], dest: 'debug/'},
-          {expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/'}
+          {expand: true, flatten: true, src: '{<%= deps.debug_css %>}', dest: 'debug/css'},
+          {expand: true, flatten: true, src: '{<%= deps.debug_js %>}', dest: 'debug/js'},
+          {expand: true, src: ['src/*.js', 'src/**/*.js'], dest: 'debug/', 
+            rename: replaceHead },
+          {expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/',
+            rename: replaceHead }
         ]
       },
       release: {
         files: [
-          {expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/'}
+          {expand: true, flatten: true, src: '{<%= deps.release_css %>}', dest: 'release/css'},
+          {expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
+            rename: replaceHead }
         ]
       }
     },
