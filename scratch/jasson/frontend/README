@@ -9,19 +9,34 @@ specifications.
 Global Dependencies
 -------------------
 
-- Nodejs
-- Bower
-- grunt-cli
+* Nodejs    - `install however you wish'
+* Bower     - sudo npm install -g bower
+* grunt-cli - sudo npm install -g grunt-cli
 
-Building
---------
+Build Environment
+-----------------
 
-  1. Insall and build local 
+  Install node and bower dependencies
+  - npm install     
 
-    npm install
-    cd bower_components/angular-ui-bootstrap/
-    npm install
-    grunt
-    cd ../..
+  Build angular-ui-bootstrap (an unbuilt bower depenency)
+  - cd bower_components/angular-ui-bootstrap/
+  - npm install
+  - grunt
+  - cd ../..
 
+  Build the debug site
+  - grunt
+
+  Build the release site
+  - grunt release
+
+  Clean the sites
+  - grunt clean           (removes both debug and release sites)
+  - grunt clean:debug     (removes debug site)
+  - grunt clean:release   (removes release site)
+
+  Run the site locally
+  - http-server debug     (runs the debug version locally)
+  - http-server release   (runs the release version locally)
 
