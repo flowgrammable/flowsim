@@ -1,16 +1,25 @@
 {
-  "debug_css": [
-    "bower_components/bootstrap/dist/css/bootstrap.css"
-  ],
-  "release_css" : [
-    "bower_components/bootstrap/dist/css/bootstrap.min.css"
-  ],
-  "debug_js" : [
-    "bower_components/angular/angular.js",
-    "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.js"
-  ],
-  "release_js" : [
-    "bower_components/angular/angular.min.js",
-    "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.min.js"
-  ]
+  "debug": {
+    "css": [
+      "bower_components/bootstrap/dist/css/bootstrap.css",
+      "bower_components/bootstrap/dist/css/bootstrap.css.map",
+      "bower_components/bootstrap/dist/css/bootstrap-theme.css",
+      "bower_components/bootstrap/dist/css/bootstrap-theme.css.map"
+    ],
+    "js": [
+      "bower_components/angular/angular.js",
+      "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.js"
+    ]
+  },
+  "release": {
+    "css": [
+      "bower_components/bootstrap/dist/css/bootstrap.min.css",
+      "bower_components/bootstrap/dist/css/bootstrap-theme.min.css"
+    ],
+    "js": [
+      "bower_components/angular/angular.min.js",
+      "bower_components/angular/angular.min.js.map",
+      "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.min.js"
+    ]
+  }
 }

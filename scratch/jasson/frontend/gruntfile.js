@@ -48,9 +48,9 @@ module.exports = function(grunt) {
     copy: {
       debug: {
         files: [
-          { expand: true, flatten: true, src: '<%= deps.debug_css %>', 
+          { expand: true, flatten: true, src: ['<%= deps.debug.css %>'], 
             dest: 'debug/css'},
-          { expand: true, flatten: true, src: '<%= deps.debug_js %>', 
+          { expand: true, flatten: true, src: ['<%= deps.debug.js %>'], 
             dest: 'debug/js'},
           { expand: true, src: ['src/*.js', 'src/**/*.js'], dest: 'debug/', 
             rename: replaceHead },
@@ -60,11 +60,9 @@ module.exports = function(grunt) {
       },
       release: {
         files: [
-          { expand: true, flatten: true, src: '<%= deps.release_css %>', 
+          { expand: true, flatten: true, src: ['<%= deps.release.css %>'], 
             dest: 'release/css'},
-          { expand: true, flatten: true, src: '<%= deps.release_js %>', 
-            dest: 'release/js'},
-          { expand: true, flatten: true, src: '<%= deps.release_js.map(function(i) { console.log(i+".map");return i+".map";}) %>', 
+          { expand: true, flatten: true, src: ['<%= deps.release.js %>'], 
             dest: 'release/js'},
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
             rename: replaceHead }
@@ -113,8 +111,21 @@ module.exports = function(grunt) {
 
     // set the includes based on mode
     if(this.target == 'debug' ) {
-      options.styles = removePath(options.deps.debug_css).map(function(s) { return 'css/' + s; });
-      options.scripts = removePath(options.deps.debug_js).map(function(s) { return 'js/' + s; });
+      options.styles = removePath(options.deps.debug.css)
+        .filter(function(s) {
+          if(endsWith(s, '.map')) return false;
+          else return true;
+        }).map(function(s) { 
+          return 'css/' + s; 
+        });
+      options.scripts = removePath(options.deps.debug.js)
+        .filter(function(s) {
+          if(endsWith(s, '.map')) return false;
+          else return true;
+        })
+        .map(function(s) { 
+          return 'js/' + s; 
+        });
       grunt.file.recurse('src/', function(f){
         if(endsWith(f, '.js')) {
           options.scripts.push(chopHead(f));
@@ -122,8 +133,22 @@ module.exports = function(grunt) {
       });
       //options.scripts.concat();
     } else if(this.target == 'release') {
-      options.styles = removePath(options.deps.release_css).map(function(s) { return 'css/' + s; });
-      options.scripts = removePath(options.deps.release_js).map(function(s) { return 'js/' + s; });
+      options.styles = removePath(options.deps.release.css)
+        .filter(function(s) {
+          if(endsWith(s, '.map')) return false;
+          else return true;
+        })
+        .map(function(s) { 
+          return 'css/' + s; 
+        });
+      options.scripts = removePath(options.deps.release.js)
+        .filter(function(s) {
+          if(endsWith(s, '.map')) return false;
+          else return true;
+        })
+        .map(function(s) { 
+          return 'js/' + s; 
+        });
       options.scripts.push('js/' + options.title + '.min.js');
     }
 
