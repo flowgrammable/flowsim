@@ -1,11 +1,11 @@
 {
-  "devcss": [
+  "debug_css": [
     "bower_components/bootstrap/dist/css/bootstrap.css"
   ],
   "css" : [
     "bower_components/bootstrap/dist/css/bootstrap.min.css"
   ],
-  "devjs" : [
+  "debug_js" : [
     "bower_components/angular/angular.js",
     "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.js"
   ],

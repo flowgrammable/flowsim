@@ -51,13 +51,14 @@ module.exports = function(grunt) {
   grunt.registerTask('dist', ['jshint', 'concat', 'uglify']);
 
   grunt.registerMultiTask('indexgen', 'Generate an index.html', function() {
-    if(this.task == 'debug' ) {
-    } else if(this.task == 'dist') {
-    }
     var options = this.options();
-    options.styles = options.deps.devcss;
-    options.scripts = options.deps.devjs;
-    console.log(options.body);
+    if(this.target == 'debug' ) {
+      options.styles = options.deps.debug_css;
+      options.scripts = options.deps.debug_js;
+    } else if(this.target == 'dist') {
+      options.styles = options.deps.css;
+      options.scripts = options.deps.js;
+    }
     this.files.forEach(function(file) {
       var contents = file.src.filter(function(filepath) {
         if (!grunt.file.exists(filepath)) {
