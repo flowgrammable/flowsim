@@ -23,33 +23,38 @@ module.exports = function(grunt) {
       files: ['gruntfile.js', 'src/**/*.js']
     },
     concat: {
-      dist: {
+      release: {
         src: ['src/**/*.js'],
         dest: 'release/js/<%= pkg.name %>.js'
       }
     },
     uglify: {
-      dist: {
+      release: {
         files: {
-          'release/js/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+          'release/js/<%= pkg.name %>.min.js': ['<%= concat.release.dest %>']
         }
       }
     },
     copy: {
       debug: {
         files: [
-          {expand: true, flatten: true, src: '{<%= deps.debug_css %>}', dest: 'debug/css'},
-          {expand: true, flatten: true, src: '{<%= deps.debug_js %>}', dest: 'debug/js'},
-          {expand: true, src: ['src/*.js', 'src/**/*.js'], dest: 'debug/', 
+          { expand: true, flatten: true, src: '<%= deps.debug_css %>', 
+            dest: 'debug/css'},
+          { expand: true, flatten: true, src: '<%= deps.debug_js %>', 
+            dest: 'debug/js'},
+          { expand: true, src: ['src/*.js', 'src/**/*.js'], dest: 'debug/', 
             rename: replaceHead },
-          {expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/',
+          { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/',
             rename: replaceHead }
         ]
       },
       release: {
         files: [
-          {expand: true, flatten: true, src: '{<%= deps.release_css %>}', dest: 'release/css'},
-          {expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
+          { expand: true, flatten: true, src: '<%= deps.release_css %>', 
+            dest: 'release/css'},
+          { expand: true, flatten: true, src: '<%= deps.release_js %>', 
+            dest: 'release/js'},
+          { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
             rename: replaceHead }
         ]
       }
@@ -87,7 +92,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['jshint', 'copy:debug', 'indexgen:debug']);
   grunt.registerTask('debug', ['default']);
-  grunt.registerTask('release', ['jshint', 'concat', 'uglify', 'copy:release', 'indexgen:release']);
+  grunt.registerTask('release', ['jshint', 'concat:release', 'uglify:release', 
+    'copy:release', 'indexgen:release']);
 
   grunt.registerMultiTask('indexgen', 'Generate an index.html', function() {
     var options = this.options();
@@ -96,9 +102,11 @@ module.exports = function(grunt) {
     if(this.target == 'debug' ) {
       options.styles = options.deps.debug_css;
       options.scripts = options.deps.debug_js;
+      //options.scripts.concat();
     } else if(this.target == 'release') {
       options.styles = options.deps.release_css;
       options.scripts = options.deps.release_js;
+      options.scripts.push(options.title + '.min.js');
     }
 
     // remove the prepended path section of each include
