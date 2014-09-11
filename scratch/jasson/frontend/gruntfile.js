@@ -50,8 +50,6 @@ module.exports = function(grunt) {
           'grunt',
           'cd ../..'
         ].join('&&')
-      },
-      run: {
       }
     },
     jshint: {
@@ -79,6 +77,8 @@ module.exports = function(grunt) {
             dest: 'debug/js'},
           { expand: true, flatten: true, src: ['<%= deps.debug.fonts %>'], 
             dest: 'debug/fonts'},
+          { expand: true, flatten: true, src: ['<%= deps.debug.assets %>'], 
+            dest: 'debug/', rename: chopHead },
           { expand: true, src: ['tmp/*.annotated.js', 'tmp/**/*.annotated.js'], 
             dest: 'debug/', rename: replaceHead2 },
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/',
@@ -93,6 +93,8 @@ module.exports = function(grunt) {
             dest: 'release/js'},
           { expand: true, flatten: true, src: ['<%= deps.release.fonts %>'], 
             dest: 'release/fonts'},
+          { expand: true, flatten: true, src: ['<%= deps.release.assets %>'], 
+            dest: 'release/', rename: chopHead },
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
             rename: replaceHead }
         ]
@@ -134,7 +136,6 @@ module.exports = function(grunt) {
       debug: ['debug', 'tmp'],
       release: ['release'],
       tmp: ['tmp', 'release/js/<%= pkg.name %>.js'],
-      all: ['bower_components', 'node_modules', 'debug', 'release', 'tmp']
     }
   });
 
@@ -177,11 +178,13 @@ module.exports = function(grunt) {
         .map(function(s) { 
           return 'js/' + s; 
         });
-      grunt.file.recurse('tmp/', function(f){
-        if(endsWith(f, '.js')) {
-          options.scripts.push(chopHead2(f));
-        }
-      });
+      if(grunt.file.isDir('tmp/')) {
+        grunt.file.recurse('tmp/', function(f){
+          if(endsWith(f, '.js')) {
+            options.scripts.push(chopHead2(f));
+          }
+        });
+      }
       //options.scripts.concat();
     } else if(this.target == 'release') {
       options.styles = removePath(options.deps.release.css)
