@@ -28,7 +28,7 @@ function profileCreate(adapter, subId, data, cb) {
 // The generateProfileData function generates values for version-dependent 
 // fields for the switch profile
 function generateProfileData(subId, data) {
-  if (data.ofp_version == 10) 
+  if (data.ofp_version == 0) 
     return {
       subscriber_id:   subId,
       name:            data.name,

@@ -3,10 +3,9 @@ var orm = require('../../dbbs');
 var subAdapter = require('../subscriber/adapter');
 
 var Profile = orm.model("switch_profile");
-// var DpCaps = orm.model("dp_caps");
-var FtCaps = orm.model("ft_caps");
+var Flowtable = orm.model("flowtable");
 
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // Profile
 
 // The createProfile function creates and makes a database insert 
