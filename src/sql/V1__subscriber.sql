@@ -193,7 +193,7 @@ CREATE TABLE switch_profile
   table_stats BOOLEAN /*NOT NULL*/,
   port_stats BOOLEAN /*NOT NULL*/,
   group_stats BOOLEAN /*NOT NULL*/,
-  queue_stats BOOLEAN /*NOT NULL*/,
+  queue_stats BOOLEAN /*NOT NULL*/
   -----------------------------------------------------------------------------
 );
 
@@ -346,7 +346,7 @@ CREATE TYPE instruction as ENUM
 );
 
 --- Instruction Capability --------------------------------------------------
-CREATE TYPE instruction_capability 
+CREATE TABLE instruction_capability 
 (
     id SERIAL PRIMARY KEY,
 
@@ -355,7 +355,7 @@ CREATE TYPE instruction_capability
      * Each flow table supports configurable instruction capabilities
      *
      */
-     flow_table_id INTEGER references flow_table(id) NOT NULL,
+     flowtable_id INTEGER references flowtable(id) NOT NULL,
 
     /*
      * instruction_type

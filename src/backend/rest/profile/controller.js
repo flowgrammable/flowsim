@@ -16,8 +16,8 @@ function passback(id, result, nextFunction){ events.Emitter.emit(id, result); }
 // is called with the given information.
 function profCreate(dataModel, session, method, params, data, ip, id) {
   if(method =='POST') {
-	var message = utils.invalidProfile(data);
-    if(message) return passback(id, message);
+//	var message = utils.invalidProfile(data);
+ //   if(message) return passback(id, message);
 		dataModel.profile.create(session.subscriber_id, data,
     function(result){
       passback(id, result);
