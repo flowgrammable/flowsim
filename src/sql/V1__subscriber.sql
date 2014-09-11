@@ -61,7 +61,7 @@ CREATE TABLE switch_profile
   /*
    * Openflow protocol version
    */
-  ofp_version BYTEA /*NOT NULL*/,
+  ofp_version INTEGER /*NOT NULL*/,
 
   /*
    * Datapath Id - 
@@ -76,14 +76,14 @@ CREATE TABLE switch_profile
    * packets to the controller using packet-in messages
    * (cut or keep?)
    */
-  n_buffers BYTEA /*NOT NULL*/,
+  n_buffers INTEGER /*NOT NULL*/,
 
   /*
    * Number of Flowtables in switch data plane
    * 1.0 has only only 1 table
    * 1.1 - 1.4 can have multiple tables
    */
-  n_tables BYTEA /*NOT NULL*/, 
+  n_tables INTEGER /*NOT NULL*/, 
 
   /*
    * IP reassembly
@@ -157,7 +157,7 @@ CREATE TABLE switch_profile
   /*
    * Number of physical ports
    */
-  n_ports BYTEA /*NOT NULL*/, 
+  n_ports INTEGER /*NOT NULL*/, 
 
   /*
    * Supported Virtual Ports

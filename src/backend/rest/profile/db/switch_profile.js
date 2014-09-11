@@ -8,7 +8,7 @@ module.exports = {
     name:          { type: Seq.STRING/*, allowNull: false*/ },
     
     // ------------------------ Datapath Capabilities -------------------------  
-    ofp_version:   { type: Seq.BLOB/*, allowNull: false*/ },
+    ofp_version:   { type: Seq.INTEGER/*, allowNull: false*/ },
     datapath_id:   { type: Seq.STRING(8)/*, allowNull: false*/ },
     n_buffers:     { type: Seq.INTEGER/*, allowNull: false*/ },
     n_tables:      { type: Seq.INTEGER/*, allowNull: false*/ },
