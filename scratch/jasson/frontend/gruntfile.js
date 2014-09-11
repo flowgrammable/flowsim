@@ -42,6 +42,18 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     deps: grunt.file.readJSON('deps.json'),
+    shell: {
+      buildAngularUIBoostrap: {
+        command: [
+          'cd bower_components/angular-ui-bootstrap/',
+          'npm install',
+          'grunt',
+          'cd ../..'
+        ].join('&&')
+      },
+      run: {
+      }
+    },
     jshint: {
       files: ['gruntfile.js', 'src/**/*.js']
     },
@@ -121,7 +133,8 @@ module.exports = function(grunt) {
     clean: {
       debug: ['debug', 'tmp'],
       release: ['release'],
-      tmp: ['tmp', 'release/js/<%= pkg.name %>.js']
+      tmp: ['tmp', 'release/js/<%= pkg.name %>.js'],
+      all: ['bower_components', 'node_modules', 'debug', 'release', 'tmp']
     }
   });
 
@@ -131,6 +144,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-ng-annotate');
+  grunt.loadNpmTasks('grunt-shell');
   
   //grunt.loadNpmTasks('grunt-html2js');
   //grunt.loadNpmTasks('grunt-git');
@@ -141,6 +155,7 @@ module.exports = function(grunt) {
   grunt.registerTask('release', ['jshint', 'ngAnnotate:release',
     'concat:release', 'uglify:release', 'copy:release', 'indexgen:release',
     'clean:tmp']);
+  grunt.registerTask('init', ['shell:buildAngularUIBoostrap']);
 
   grunt.registerMultiTask('indexgen', 'Generate an index.html', function() {
     var options = this.options();

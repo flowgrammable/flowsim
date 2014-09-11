@@ -16,14 +16,16 @@ Global Dependencies
 Build Environment
 -----------------
 
-  Install node and bower dependencies
-  - npm install     
+  Install your necessary local depenencies
 
-  Build angular-ui-bootstrap (an unbuilt bower depenency)
+  Build dependencies by hand
   - cd bower_components/angular-ui-bootstrap/
   - npm install
   - grunt
   - cd ../..
+
+  Build dependencies with grunt
+  - grunt init
 
   Build the debug site
   - grunt
