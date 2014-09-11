@@ -14,9 +14,22 @@ var chopHead = function(file) {
   return tmp.join('/');
 };
 
+var chopHead2 = function(file) {
+  var tmp = file.split('/').filter(function(item) { return item.length > 0; });
+  tmp.splice(0, 2);
+  return tmp.join('/');
+};
+
 var replaceHead = function(dest, src) {
   var tsrc = src.split('/').filter(function(item) { return item.length > 0; });
   tsrc.splice(0, 1);
+  var tdest = dest.split('/').filter(function(item) { return item.length > 0; });
+  return tdest.concat(tsrc).join('/');
+};
+
+var replaceHead2 = function(dest, src) {
+  var tsrc = src.split('/').filter(function(item) { return item.length > 0; });
+  tsrc.splice(0, 2);
   var tdest = dest.split('/').filter(function(item) { return item.length > 0; });
   return tdest.concat(tsrc).join('/');
 };
@@ -34,7 +47,7 @@ module.exports = function(grunt) {
     },
     concat: {
       release: {
-        src: ['src/**/*.js'],
+        src: ['tmp/**/*.annotated.js'],
         dest: 'release/js/<%= pkg.name %>.js'
       }
     },
@@ -54,8 +67,8 @@ module.exports = function(grunt) {
             dest: 'debug/js'},
           { expand: true, flatten: true, src: ['<%= deps.debug.fonts %>'], 
             dest: 'debug/fonts'},
-          { expand: true, src: ['src/*.js', 'src/**/*.js'], dest: 'debug/', 
-            rename: replaceHead },
+          { expand: true, src: ['tmp/*.annotated.js', 'tmp/**/*.annotated.js'], 
+            dest: 'debug/', rename: replaceHead2 },
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/',
             rename: replaceHead }
         ]
@@ -91,9 +104,24 @@ module.exports = function(grunt) {
         }
       }
     },
+    ngAnnotate: {
+      debug: {
+        files: [
+          { expand: true, src: ['src/**/*.js'], dest: 'tmp/', 
+            ext: '.annotated.js'}
+        ]
+      },
+      release: {
+        files: [
+          { expand: true, src: ['src/**/*.js'], dest: 'tmp/', 
+            ext: '.annotated.js'}
+        ]
+      }
+    },
     clean: {
-      debug: ['debug'],
-      release: ['release']
+      debug: ['debug', 'tmp'],
+      release: ['release'],
+      tmp: ['tmp', 'release/js/<%= pkg.name %>.js']
     }
   });
 
@@ -102,13 +130,17 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-html2js');
-  grunt.loadNpmTasks('grunt-git');
+  grunt.loadNpmTasks('grunt-ng-annotate');
+  
+  //grunt.loadNpmTasks('grunt-html2js');
+  //grunt.loadNpmTasks('grunt-git');
 
-  grunt.registerTask('default', ['jshint', 'copy:debug', 'indexgen:debug']);
+  grunt.registerTask('default', ['jshint', 'ngAnnotate:debug', 'copy:debug',
+    'indexgen:debug', 'clean:tmp']);
   grunt.registerTask('debug', ['default']);
-  grunt.registerTask('release', ['jshint', 'concat:release', 'uglify:release', 
-    'copy:release', 'indexgen:release']);
+  grunt.registerTask('release', ['jshint', 'ngAnnotate:release',
+    'concat:release', 'uglify:release', 'copy:release', 'indexgen:release',
+    'clean:tmp']);
 
   grunt.registerMultiTask('indexgen', 'Generate an index.html', function() {
     var options = this.options();
@@ -130,9 +162,9 @@ module.exports = function(grunt) {
         .map(function(s) { 
           return 'js/' + s; 
         });
-      grunt.file.recurse('src/', function(f){
+      grunt.file.recurse('tmp/', function(f){
         if(endsWith(f, '.js')) {
-          options.scripts.push(chopHead(f));
+          options.scripts.push(chopHead2(f));
         }
       });
       //options.scripts.concat();

@@ -1,6 +1,5 @@
-1. add support for bootstrap fonts to gruntfile.js
-2. add support for ng-annotate to gruntfile.js
-3. add support for html2js to gruntfile.js
-4. figure out a test framework and work into gruntfile
-5. integrate git tagging into gruntfile
-6. integrate production push into gruntfile
+1. add support for ng-annotate to gruntfile.js
+2. add support for html2js to gruntfile.js
+3. figure out a test framework and work into gruntfile
+4. integrate git tagging into gruntfile
+5. integrate production push into gruntfile
