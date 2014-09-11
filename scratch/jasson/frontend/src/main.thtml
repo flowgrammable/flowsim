@@ -1,1 +1,13 @@
-<h1>Body filler</h1>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Title
+    <span class="glyphicon glyphicon-search pull-right"></span>
+  </div>
+  <div class="panel-body">
+  <ul>
+    <li>one</li>
+    <li>two</li>
+    <li>three</li>
+  </ul>
+  </div>
+</div>

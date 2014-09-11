@@ -9,6 +9,12 @@
     "js": [
       "bower_components/angular/angular.js",
       "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.js"
+    ],
+    "fonts": [
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot",
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf",
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg",
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff"
     ]
   },
   "release": {
@@ -20,6 +26,12 @@
       "bower_components/angular/angular.min.js",
       "bower_components/angular/angular.min.js.map",
       "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.min.js"
+    ],
+    "fonts": [
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot",
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf",
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg",
+      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff"
     ]
   }
 }

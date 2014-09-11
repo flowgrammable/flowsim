@@ -52,6 +52,8 @@ module.exports = function(grunt) {
             dest: 'debug/css'},
           { expand: true, flatten: true, src: ['<%= deps.debug.js %>'], 
             dest: 'debug/js'},
+          { expand: true, flatten: true, src: ['<%= deps.debug.fonts %>'], 
+            dest: 'debug/fonts'},
           { expand: true, src: ['src/*.js', 'src/**/*.js'], dest: 'debug/', 
             rename: replaceHead },
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/',
@@ -64,6 +66,8 @@ module.exports = function(grunt) {
             dest: 'release/css'},
           { expand: true, flatten: true, src: ['<%= deps.release.js %>'], 
             dest: 'release/js'},
+          { expand: true, flatten: true, src: ['<%= deps.release.fonts %>'], 
+            dest: 'release/fonts'},
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
             rename: replaceHead }
         ]
