@@ -159,6 +159,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');     // move dirs/files
   grunt.loadNpmTasks('grunt-contrib-clean');    // remove tmp/debug/release
   grunt.loadNpmTasks('grunt-ng-annotate');      // angularjs js preprocessing
+  //grunt.loadNpmTasks('grunt-html2js');        // angularjs template caching
   grunt.loadNpmTasks('grunt-shell');            // use the shell
 
   grunt.registerTask('init', ['shell:init']);
