@@ -67,9 +67,8 @@ var singleton = function singleton(){
     models["switch_profile"] = sequelize.define("switch_profile", prof.model, prof.options);
     relationships["switch_profile"] = prof.relations;
     models["flowtable"] = sequelize.define("flowtable", flowtable.model, flowtable.options);
-    relationships["flowtable"] = flowtable.relations;
-//    models["ft_caps"] = sequelize.define("ft_caps", ftCaps.model, ftCaps.options);
-//    relationships["ft_caps"] = ftCaps.relations;
+    //relationships["flowtable"] = flowtable.relations;
+
 
 		for (var name in relationships) {
       var relation = relationships[name];

@@ -48,7 +48,7 @@ exports.generateFlowtable = function(data){
   if(data.ofp_version == 0){
     console.log('gen flow table ofp_version', data.ofp_version)
     return {
-      flowtable_id: data.flow_tables[0].flowtable_id,
+      flowtable_id:data.flow_tables[0].flowtable_id,
     }
   }
 }
