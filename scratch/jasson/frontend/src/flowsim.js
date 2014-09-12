@@ -1,4 +1,4 @@
-var flowsim = angular.module('flowsim', ['ngRoute']);
+var flowsim = angular.module('flowsim', ['ngRoute', 'ui.bootstrap']);
 
 flowsim.config(['$routeProvider', function($routeProvider) {
   $routeProvider
@@ -35,6 +35,5 @@ flowsim.config(['$routeProvider', function($routeProvider) {
 }]);
 
 flowsim.controller('flowsimCtlr', function($scope) {
-  $scope.authenticated = false;
-  $scope.value = 1;
+  $scope.authenticated = true;
 });
