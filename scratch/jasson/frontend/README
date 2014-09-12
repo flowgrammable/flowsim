@@ -42,6 +42,9 @@ Build Environment
   - http-server debug     (runs the debug version locally)
   - http-server release   (runs the release version locally)
 
+  Run a continuous rebuild on watch loop
+  - grunt watch           (rebuilds debug directory on src/** changes)
+
 Development
 ------------
 

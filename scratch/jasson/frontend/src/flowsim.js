@@ -32,5 +32,5 @@ flowsim.config(['$routeProvider', function($routeProvider) {
 }]);
 
 flowsim.controller('flowsimCtrl', function($scope) {
-  $scope.items = ['one', 'two', 'three'];
+  $scope.authenticated = false;
 });

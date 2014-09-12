@@ -7,11 +7,21 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><a class="navbar-brand" href="#profile">Profile</a></li>
-        <li><a class="navbar-brand" href="#switch">Switch</a></li>
-        <li><a class="navbar-brand" href="#packet">Packet</a></li>
-        <li><a class="navbar-brand" href="#simulator">Simulator</a></li>
-        <li><a class="navbar-brand" href="#help">Help</a></li>
+        <li ng-hide="authenticated">
+          <a class="navbar-brand" href="#profile">Profile</a>
+        </li>
+        <li ng-hide="authenticated">
+          <a class="navbar-brand" href="#switch">Switch</a>
+        </li>
+        <li ng-hide="authenticated">
+          <a class="navbar-brand" href="#packet">Packet</a>
+        </li>
+        <li ng-hide="authenticated">
+          <a class="navbar-brand" href="#simulator">Simulator</a>
+        </li>
+        <li ng-hide="authenticated">
+          <a class="navbar-brand" href="#help">Help</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -24,6 +34,8 @@
 <div class="container">
   <hr>
   <footer>
+
+  {{authenticated}}
 
   <a target="_blank" href="https://facebook.com/flowgrammable">
     <i class="fa fa-facebook"></i>

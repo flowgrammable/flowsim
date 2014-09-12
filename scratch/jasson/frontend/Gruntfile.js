@@ -58,6 +58,16 @@ module.exports = function(grunt) {
       // Provide initialization hooks for any external dependencies
       init: {
         command: dep.init.join('&&')
+      },
+      debug: {
+        command: [
+          'http-server debug'
+        ].join('&&')
+      },
+      release: {
+        command: [
+          'http-server release'
+        ].join('&&')
       }
     },
     jshint: {
@@ -149,6 +159,12 @@ module.exports = function(grunt) {
         }
       }
     },
+    watch: {
+      files: ['src/**'],
+      tasks: ['debug'],
+      options: {
+      }
+    },
     // Provide basic debug|release|tmp removal
     clean: {
       debug: ['debug'],
@@ -168,6 +184,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-ng-annotate');      // angularjs js preprocessing
   //grunt.loadNpmTasks('grunt-html2js');        // angularjs template caching
   grunt.loadNpmTasks('grunt-shell');            // use the shell
+  grunt.loadNpmTasks('grunt-contrib-watch');    // watch files for changes
 
   grunt.registerTask('init', ['shell:init']);
   grunt.registerTask('default', ['debug']);
