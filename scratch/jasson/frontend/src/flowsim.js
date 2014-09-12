@@ -20,6 +20,12 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     .when('/help', {
       templateUrl: 'help/help.html'
     })
+    .when('/login', {
+      templateUrl:'subscriber/login.html'
+    })
+    .when('/register', {
+      templateUrl:'subscriber/register.html'
+    })
     .otherwise({
       templateUrl: 'lost.html'
     });
