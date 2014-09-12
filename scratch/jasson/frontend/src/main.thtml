@@ -1,3 +1,6 @@
+
+<div ng-controller="flowsimCtlr">
+
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -7,19 +10,22 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li ng-hide="authenticated">
+        <li>
+          <a class="navbar-brand" href="#about">About</a>
+        </li>
+        <li ng-show="{{authenticated}}">
           <a class="navbar-brand" href="#profile">Profile</a>
         </li>
-        <li ng-hide="authenticated">
+        <li ng-show="authenticated">
           <a class="navbar-brand" href="#switch">Switch</a>
         </li>
-        <li ng-hide="authenticated">
+        <li ng-show="authenticated">
           <a class="navbar-brand" href="#packet">Packet</a>
         </li>
-        <li ng-hide="authenticated">
+        <li ng-show="authenticated">
           <a class="navbar-brand" href="#simulator">Simulator</a>
         </li>
-        <li ng-hide="authenticated">
+        <li ng-show="authenticated">
           <a class="navbar-brand" href="#help">Help</a>
         </li>
       </ul>
@@ -33,21 +39,7 @@
 
 <div class="container">
   <hr>
-  <footer>
-
-  {{authenticated}}
-
-  <a target="_blank" href="https://facebook.com/flowgrammable">
-    <i class="fa fa-facebook"></i>
-  </a>
-  <a target="_blank" href="https://twitter.com/flowgrammable">
-    <i class="fa fa-twitter"></i>
-  </a>
-  <a target="_blank" href="https://google.com/+Flowgrammable">
-    <i class="fa fa-google-plus"></i>
-  </a>
-
-    <p>&copy; Flowgrammable 2014</p>
-  </footer>
+  <p>&copy; Flowgrammable 2014</p>
 </div>
 
+</div>

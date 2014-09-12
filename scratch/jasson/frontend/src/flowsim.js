@@ -5,6 +5,9 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     .when('/', {
       templateUrl: 'main.html'
     })
+    .when('/about', {
+      templateUrl: 'about.html'
+    })
     .when('/profile', {
       templateUrl: 'profile/profile.html'
     })
@@ -31,6 +34,7 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     });
 }]);
 
-flowsim.controller('flowsimCtrl', function($scope) {
+flowsim.controller('flowsimCtlr', function($scope) {
   $scope.authenticated = false;
+  $scope.value = 1;
 });
