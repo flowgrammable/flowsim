@@ -42,3 +42,37 @@ Build Environment
   - http-server debug     (runs the debug version locally)
   - http-server release   (runs the release version locally)
 
+Development
+------------
+
+  How to include external dependencies?
+  =====================================
+  1. Install the dep - bower install <dependency> --save
+  2. If necessary build the dep
+    * do this by hand at first
+    * once you know the procedure add the build instructions
+      to dependencies.json file under "init"
+  3. Include the dependencies in the depeneccies.json file
+    - add the appropriate relative filepath to css/js/fonts
+    - be sure to add both release and debug references
+  4. Test your work
+    - your new depenencies should be automatically added to the index.html
+    - test that both the debug and release versions do the following:
+      - place your resources in the proper location in release|debug
+      - include your new dependencies in the index.html
+
+  How do I add new images to the application?
+  ===========================================
+  1. Place your images within img/
+  2. Reference your images using 'img/path/to/image.png'
+
+  How do I add new javascript to the application?
+  ===============================================
+  1. Place your javascript anywhere within src/
+     - everything else is automatic
+
+  How do I add new style sheets to the application?
+  =================================================
+  1. Place your style sheets anywhere within src/
+     - everything else is automatic
+
