@@ -18,3 +18,22 @@
 </div>
 
 <div ng-view></div>
+
+<div class="container">
+  <hr>
+  <footer>
+
+  <a target="_blank" href="https://facebook.com/flowgrammable">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a target="_blank" href="https://twitter.com/flowgrammable">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a target="_blank" href="https://google.com/+Flowgrammable">
+    <i class="fa fa-google-plus"></i>
+  </a>
+
+    <p>&copy; Flowgrammable 2014</p>
+  </footer>
+</div>
+

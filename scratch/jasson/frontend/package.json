@@ -1,5 +1,5 @@
 {
-  "name": "flowsim",
+  "name": "Flowsim",
   "version": "0.0.1",
   "description": "An OpenFlow data plane visual simulator.",
   "main": "index.js",

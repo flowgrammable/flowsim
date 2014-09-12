@@ -189,8 +189,7 @@ module.exports = function(grunt) {
     'uglify:release',
     'cssmin:release',
     'copy:release',
-    'indexgen:release',
-    'jshint:release_post'
+    'indexgen:release'
   ]);
 
   grunt.registerMultiTask('indexgen', 'Generate the index.html', function() {
