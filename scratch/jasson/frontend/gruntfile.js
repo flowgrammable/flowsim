@@ -77,8 +77,8 @@ module.exports = function(grunt) {
             dest: 'debug/js'},
           { expand: true, flatten: true, src: ['<%= deps.debug.fonts %>'], 
             dest: 'debug/fonts'},
-          { expand: true, flatten: true, src: ['<%= deps.debug.assets %>'], 
-            dest: 'debug/', rename: chopHead },
+          { expand: true, src: ['<%= deps.debug.assets %>/**'],
+            dest: 'debug/', rename: replaceHead },
           { expand: true, src: ['tmp/*.annotated.js', 'tmp/**/*.annotated.js'], 
             dest: 'debug/', rename: replaceHead2 },
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'debug/',
@@ -93,8 +93,8 @@ module.exports = function(grunt) {
             dest: 'release/js'},
           { expand: true, flatten: true, src: ['<%= deps.release.fonts %>'], 
             dest: 'release/fonts'},
-          { expand: true, flatten: true, src: ['<%= deps.release.assets %>'], 
-            dest: 'release/', rename: chopHead },
+          { expand: true, src: ['<%= deps.release.assets %>/**'], 
+            dest: 'release/', rename: replaceHead },
           { expand: true, src: ['src/*.html', 'src/**/*.html'], dest: 'release/',
             rename: replaceHead }
         ]
