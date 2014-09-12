@@ -21,7 +21,7 @@ flowsim.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'help/help.html'
     })
     .otherwise({
-      redirectTo: 'lost.html'
+      templateUrl: 'lost.html'
     });
 }]);
 
