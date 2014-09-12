@@ -5,22 +5,22 @@ var subAdapter = require('../subscriber/adapter');
 var Profile = orm.model("switch_profile");
 var Flowtable = orm.model("flowtable");
 
+function createFlowtable(data) {
+  var flowtable = Flowtable.build(data);
+  return flowtable;
+}
+
 // ---------------------------------------------------------------------------
 // Profile
 
 // The createProfile function creates and makes a database insert 
 // for the profile and any related table entries whose fields can 
 // be inferred based on the ofp_version
-function createProfile(data, cb) {
-  var prof;
-  console.log('create profile adapter data:', data);
-  Profile.create(data).success(function(result) { cb(msg.success(result)) });
-  // .then(function(profile) {
-  //   prof = profile;  
-	 //  return DpCaps.create(generateDpCaps(prof.id, ver)); 
-  // }).then(function(dp_caps) { 
-  //   return FtCaps.create(generateFtCaps(dp_caps.id, ver)); 
-  // }).then(function(ft_caps) { cb(msg.success(prof)) })
+function createProfile(data) {
+  var datapath = Profile.build(data)
+  return datapath
+  //.success(function(result) { cb(msg.success(result)) });
+
 }
 
 // The fetchProfile function retrieves a profile based on the info
@@ -80,6 +80,7 @@ function destroyProfile(profile, cb) {
     .error  (function(err)    { cb(msg.unknownError(err)); });
 }
 
+exports.createFlowtable       = createFlowtable;
 exports.createProfile         = createProfile;
 exports.fetchProfile          = fetchProfile;
 exports.fetchProfileDetails   = fetchProfileDetails;

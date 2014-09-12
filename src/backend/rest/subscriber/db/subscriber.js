@@ -14,6 +14,7 @@ module.exports = {
   relations:{
 //        hasMany: { relative: "switch_profile", options: { as: "Profiles" } },
 		// hasOne:"session"
+		hasMany: { relative: "switch_profile", options: { as: "Profile"}},
 		hasMany: { relative: "packet", options: { as: "Packet" }}
 	},
 	options: {

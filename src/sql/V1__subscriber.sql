@@ -206,13 +206,13 @@ CREATE TABLE flowtable
    * A profile can have many flow_tables
    * Openflow 1.0 only supports 1 flow_table
    */ 
-  profile_id INTEGER references subscriber(id) NOT NULL,
+  profile_id INTEGER references switch_profile(id) NOT NULL,
 
   /*
    * Flowtable ID
    * 1 byte
    */
-	flowtable_id BYTEA NOT NULL,
+	flowtable_id INTEGER NOT NULL,
 
   /*
    * Flowtable Name

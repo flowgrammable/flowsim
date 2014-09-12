@@ -19,11 +19,47 @@ function resultChecker(result, callback){
 // through a call to the createProfile adapter function. If successful, 
 // msg.success() is returned, if unsuccessful the error is returned.
 function profileCreate(adapter, subId, data, cb) {
-  var prof = modelUtils.generateProfileData(subId, data);
-  adapter.createProfile(prof, function(result) { 
-    if (result.value) cb(msg.success());
-    else cb(result); 
-  });
+
+      // create data by version and convert byte arrays 
+      var datapath_data = modelUtils.generateDatapath(subId, data);
+      var flowtable_data = modelUtils.generateFlowtable(data);
+
+      //
+      var datapath_table = adapter.createProfile(datapath_data);
+      var flowtable_table = adapter.createFlowtable(flowtable_data);
+      datapath_table.save().success(function(datapath){
+        datapath.setFlowtable([flowtable_table]).success(function(result){
+          flowtable_table.save().success(function(){
+            console.log('we saved the flow table!');
+          }).error(function(result2){
+            console.log('result2 error:', result2)
+          }) 
+        })
+      }) 
+ /* async.waterfall([
+    function(callback){
+      datapath_table.save().success(function(datapath){
+        callback(null, datapath)
+      })
+    },
+    function(datapath, callback){
+      datapath.setFlowtable([flowtable_table]).success(function(result){
+        callback(null, result)
+      })
+    },
+    function(result, callback){
+      flowtable_table.save().success(function(result){
+        console.log('we saved flow table');
+        callback(null, result)
+      })
+    }
+    ], function(err, result){
+      if(err) { cb(err); }
+      else    { cb(msg.success()); }
+    }); */
+
+
+
 }
 
 
