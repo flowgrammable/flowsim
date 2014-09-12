@@ -52,7 +52,7 @@ module.exports = {
     // ------------------------------------------------------------------------
   },
   relations: {
-    belongsTo: { relative: "subscriber", options: { as: "Subscriber" } },
+   // belongsTo: { relative: "subscriber", options: { as: "Subscriber" } },
     hasMany:   { relative: "flowtable", options: { as: "Flowtable", foreignKey: "profile_id" }}
   },
   options: {

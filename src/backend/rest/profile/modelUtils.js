@@ -1,25 +1,20 @@
 
-exports.generateProfileData = function(subId, data) {
+exports.generateDatapath = function(subId, data) {
   if (data.ofp_version == 0 )
-		return generateOpenflow10(subId, data);
+		return generateDatapath10(subId, data);
   else if(data.ofp_version == 1)
-		return generateOpenflow11(data);
+		return generateDatapath11(data);
 	else if(data.ofp_version == 2)
-		return generateOpenflow12(data);
+		return generateDatapath12(data);
   else if(data.ofp_version == 3)
-		return generateOpenflow13(data);
+		return generateDatapath13(data);
   else if(data.ofp_version == 4)
-		return generateOpenflow14(data);
+		return generateDatapath14(data);
 	else
     return msg.invalidVersion(); 
 }
 
-function generateOpenflow10(subId, data) { 
-   var profile = generateDatapath10(subId, data);
-   return profile 
-}
-
-function generateDatapath10(data){
+function generateDatapath10(subId, data){
    return {
       subscriber_id:   subId,
       name:            data.name,
@@ -49,4 +44,11 @@ function generateDatapath10(data){
     }
 }
 
-		
+exports.generateFlowtable = function(data){
+  if(data.ofp_version == 0){
+    console.log('gen flow table ofp_version', data.ofp_version)
+    return {
+      flowtable_id: data.flow_tables[0].flowtable_id,
+    }
+  }
+}
