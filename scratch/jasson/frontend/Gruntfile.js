@@ -49,6 +49,7 @@ module.exports = function(grunt) {
 
   // Provide grunt module input/output guidance
   grunt.initConfig({
+    pack: pkg,
     shell: {
       // Provide initialization hooks for any external dependencies
       init: {
@@ -66,7 +67,40 @@ module.exports = function(grunt) {
         src: ['Gruntfile.js', 'src/**/*.js']
       },
       release_post: {
-        src: []
+        src: ['release/js/' + pkg.name + '.min.js']
+      }
+    },
+    ngAnnotate: {
+      release: {
+        files: [
+          { expand: true, src: ['src/**/*.js'], dest: 'tmp/', ext: '.annotated.js' }
+        ]
+      }
+    },
+    concat: {
+      release: {
+          src: ['tmp/**/*.annotated.js'],
+          dest: 'tmp/js/' + pkg.name + '.js'
+      }
+    },
+    concat_css: {
+      release: {
+          src: ['src/**/*.css'],
+          dest: 'tmp/css/' + pkg.name + '.css'
+      }
+    },
+    uglify: {
+      release: {
+        files: {
+          'release/js/<%= pack.name %>.min.js': ['<%= concat.release.dest %>']
+        }
+      }
+    },
+    cssmin: {
+      release: {
+        files: {
+          'release/css/<%= pack.name %>.min.css': ['<%= concat_css.release.dest %>']
+        }
       }
     },
     copy: {
@@ -110,14 +144,16 @@ module.exports = function(grunt) {
     },
     // Provide basic debug|release|tmp removal
     clean: {
-      debug: ['debug', 'tmp'],
-      release: ['release', 'tmp']
+      debug: ['debug'],
+      release: ['release'],
+      tmp: ['tmp']
     }
   });
 
   // Load external grunt modules
   grunt.loadNpmTasks('grunt-contrib-jshint');   // analyze all javascript
-  grunt.loadNpmTasks('grunt-contrib-concat');   // concat local js and css
+  grunt.loadNpmTasks('grunt-contrib-concat');   // concat local js
+  grunt.loadNpmTasks('grunt-concat-css');       // concat local css
   grunt.loadNpmTasks('grunt-contrib-uglify');   // minify local js
   grunt.loadNpmTasks('grunt-contrib-cssmin');   // minify local css
   grunt.loadNpmTasks('grunt-contrib-copy');     // move dirs/files
@@ -139,6 +175,11 @@ module.exports = function(grunt) {
   // Release build process
   grunt.registerTask('release', [
     'jshint:release_pre', 
+    'ngAnnotate:release',
+    'concat:release',
+    'concat_css:release',
+    'uglify:release',
+    'cssmin:release',
     'copy:release',
     'indexgen:release',
     'jshint:release_post'
