@@ -2,8 +2,6 @@
 
 var program = require('commander');
 var connect = require('connect');
-var html = require('html');
-var apis = require('apis');
 
 program
   .version(process.env.SERVER_VERSION)
@@ -12,19 +10,15 @@ program
   .parse(process.argv);
 
 var port = program.port || process.env.PORT || 3000;
-var ip = program.address || process.env.ADDRESS || '127.0.0.1';
+var ip = program.address | process.env.ADDRESS || '127.0.0.1';
 
-var conn = connect()
-  .use(connect.logger);
+connect()
+  .use(connect.logger())
+  .use(function(req, res, next) {
+    var addr = req.connection.remoteAddress;
+    res.end(addr);
+  })
+  .listen(port, ip);
 
-add_static(conn, conf.favicon);
-add_static(conn, '/css', conf.css);
-add_static(conn, '/js', conf.js);
-add_static(conn, '/img', conf.img);
-
-  .use('/apis/', apis.dispatcher)
-  .use('/', html.content)
-
-conn.listen(port, ip);
 console.log('Server started on: %s:%d', ip, port);
 
