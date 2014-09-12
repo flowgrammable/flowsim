@@ -1,12 +1,8 @@
 
+// Get ejs for html template expansion
 var ejs = require('ejs');
-
-var removePath = function(fileList) {
-  return fileList.map(function(item) {
-    var tmp = item.split('/');
-    return tmp[tmp.length-1];
-  });
-};
+var path = require('path');
+var _ = require('underscore');
 
 var chopHead = function(file) {
   var tmp = file.split('/').filter(function(item) { return item.length > 0; });
@@ -65,6 +61,13 @@ module.exports = function(grunt) {
       release: {
         files: {
           'release/js/<%= pkg.name %>.min.js': ['<%= concat.release.dest %>']
+        }
+      }
+    }
+    cssmin: {
+      release: {
+        files: {
+          'release/css/<%= pkg.name %>.min.css': ['<%= concat.release.dest %>']
         }
       }
     },
@@ -142,10 +145,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-shell');
+
   
   //grunt.loadNpmTasks('grunt-html2js');
   //grunt.loadNpmTasks('grunt-git');
@@ -163,14 +168,14 @@ module.exports = function(grunt) {
 
     // set the includes based on mode
     if(this.target == 'debug' ) {
-      options.styles = removePath(options.deps.debug.css)
+      options.styles = _.map(options.deps.debug.css, path.basename);
         .filter(function(s) {
           if(endsWith(s, '.map')) return false;
           else return true;
         }).map(function(s) { 
           return 'css/' + s; 
         });
-      options.scripts = removePath(options.deps.debug.js)
+      options.scripts = _.map(options.deps.debug.js, path.basename)
         .filter(function(s) {
           if(endsWith(s, '.map')) return false;
           else return true;
@@ -187,7 +192,7 @@ module.exports = function(grunt) {
       }
       //options.scripts.concat();
     } else if(this.target == 'release') {
-      options.styles = removePath(options.deps.release.css)
+      options.styles = _.map(options.deps.release.css, path.basename)
         .filter(function(s) {
           if(endsWith(s, '.map')) return false;
           else return true;
@@ -195,7 +200,7 @@ module.exports = function(grunt) {
         .map(function(s) { 
           return 'css/' + s; 
         });
-      options.scripts = removePath(options.deps.release.js)
+      options.scripts = _.map(options.deps.release.js, path.basename)
         .filter(function(s) {
           if(endsWith(s, '.map')) return false;
           else return true;

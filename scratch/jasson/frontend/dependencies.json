@@ -15,9 +15,6 @@
       "bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf",
       "bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg",
       "bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff"
-    ],
-    "assets": [
-      "assets"
     ]
   },
   "release": {
@@ -35,9 +32,12 @@
       "bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf",
       "bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg",
       "bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff"
-    ],
-    "assets": [
-      "assets"
     ]
-  }
+  },
+  "init": [
+    "cd bower_components/angular-ui-bootstrap/",
+    "npm install",
+    "grunt",
+    "cd ../.."
+  ]
 }

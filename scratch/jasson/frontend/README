@@ -18,13 +18,13 @@ Build Environment
 
   Install your necessary local depenencies
 
-  Build dependencies by hand
+  Build dependencies by hand ..
   - cd bower_components/angular-ui-bootstrap/
   - npm install
   - grunt
   - cd ../..
 
-  Build dependencies with grunt
+  .. OR .. build dependencies with grunt
   - grunt init
 
   Build the debug site
