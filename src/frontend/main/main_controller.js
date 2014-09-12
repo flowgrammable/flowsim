@@ -19,7 +19,7 @@ flowsimApp.controller('menuCtrl',
       });
     }
 
-	  if($cookies.token){
+	  if($cookies.token) {
 		  $scope.authenticated = true;
 	  }
 	
@@ -33,7 +33,7 @@ flowsimApp.controller('menuCtrl',
 });
 
 flowsimApp.config(['$routeProvider', 
-  function($routeProvider){
+  function($routeProvider) {
 	  $routeProvider.
 	    when('/', {
         templateUrl: 'main.html'

@@ -1,174 +1,20 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
-  <a class="navbar-brand" href="#">Hello</a>
-  <a class="navbar-brand" href="#">One</a>
-  <a class="navbar-brand" href="#">Two</a>
-  <a class="navbar-brand" href="#">Three</a>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        <img style="Max-height: 25px;" src="img/logo.png" alt="Flowgrammable">
+      </a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a class="navbar-brand" href="#profile">Profile</a></li>
+        <li><a class="navbar-brand" href="#switch">Switch</a></li>
+        <li><a class="navbar-brand" href="#packet">Packet</a></li>
+        <li><a class="navbar-brand" href="#simulator">Simulator</a></li>
+        <li><a class="navbar-brand" href="#help">Help</a></li>
+      </ul>
+    </div>
   </div>
 </div>
 
-<h1>blah blah</h1>
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-    Title
-    <span class="glyphicon glyphicon-search pull-right"></span>
-  </div>
-  <div class="panel-body">
-  <ul>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>one</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-    <li>two</li>
-    <li>three</li>
-  </ul>
-  </div>
-</div>
+<div ng-view></div>

@@ -11,6 +11,10 @@ module.exports = function(grunt) {
     };
   }
 
+  function isMap(filepath) {
+    return path.extname(filepath) == '.map';
+  }
+
   function dropHead(filepath) {
     return _.rest(path.normalize(filepath).split(path.sep));
   }
@@ -78,6 +82,9 @@ module.exports = function(grunt) {
       }
     },
     concat: {
+      options: {
+        separator: ';'
+      },
       release: {
           src: ['tmp/**/*.annotated.js'],
           dest: 'tmp/js/' + pkg.name + '.js'
@@ -191,15 +198,19 @@ module.exports = function(grunt) {
 
     // Set the debug indexgen options
     if(this.target == 'debug') {
-      options.styles = _.map(dep.debug.css, baseAndPrepend('css'));
-      options.scripts = _.map(dep.debug.js, baseAndPrepend('js'));
+      options.styles = _.filter(_.map(dep.debug.css, baseAndPrepend('css')), 
+                                _.negate(isMap));
+      options.scripts = _.filter(_.map(dep.debug.js, baseAndPrepend('js')),
+                                _.negate(isMap));
       options.styles = options.styles.concat(getLocalsByExt('src/', '.css'));
       options.scripts = options.scripts.concat(getLocalsByExt('src/', '.js'));
     } 
     // Set the release indexgen options
     else if(this.target == 'release') {
-      options.styles = _.map(dep.release.css, baseAndPrepend('css'));
-      options.scripts = _.map(dep.release.js, baseAndPrepend('js'));
+      options.styles = _.filter(_.map(dep.release.css, baseAndPrepend('css')), 
+                                _.negate(isMap));
+      options.scripts = _.filter(_.map(dep.release.js, baseAndPrepend('js')),
+                                _.negate(isMap));
       options.styles.push('css/' + options.title + '.min.css');
       options.scripts.push('js/' + options.title + '.min.js');
     }
