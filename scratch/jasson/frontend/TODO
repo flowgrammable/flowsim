@@ -1,9 +1,18 @@
-1. update landing page text
-2. update registration page text
-3. update registration success text
-4. integrate $resource for registration request
-5. update registration-email validation landing page and text
+1. Update site text
+  - landing page
+  - registration page
+  - registration success page
+  - verification email content
+  - verification landing page content
+2. Integrate $resource for rest calls
+  - registration
+  - login
+  - logout
+  - pwd reset
+3. Develop sprint-production process
+  - main branch should integrate git-pull requests
+  - update readme to account for this
 
--. add support for html2js to gruntfile.js
--. figure out a test framework and work into gruntfile
--. integrate git tagging into gruntfile
+Other
+- add support for html2js to gruntfile.js
+- figure out a test framework and work into gruntfile
