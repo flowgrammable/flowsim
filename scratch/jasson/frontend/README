@@ -39,8 +39,8 @@ Build Environment
   - grunt clean:release   (removes release site)
 
   Run the site locally
-  - http-server debug     (runs the debug version locally)
-  - http-server release   (runs the release version locally)
+  - node_modules/.bin/http-server debug     (runs the debug version locally)
+  - node_modules/.bin/http-server release   (runs the release version locally)
 
   Run a continuous rebuild on watch loop
   - grunt watch           (rebuilds debug directory on src/** changes)
