@@ -25,6 +25,9 @@
         <li ng-show="authenticated">
           <a href="#help">Help</a>
         </li>
+        <li>
+          <a href="http://www.flowgrammable.org">.Org</a>
+        </li>
       </ul>
       <form class="navbar-form navbar-right" role="form" 
         ng-hide="authenticated">
