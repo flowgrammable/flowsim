@@ -49,6 +49,9 @@
   <hr>
   <footer>
     <p class="pull-right">&copy; Flowgrammable 2014</p>
+    <a target="_blank" href="https://linkedin.com/flowgrammable">
+      <i class="fa fa-linkedin"></i>
+    </a>
     <a target="_blank" href="https://facebook.com/flowgrammable">
       <i class="fa fa-facebook"></i>
     </a>
