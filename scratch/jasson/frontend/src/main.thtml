@@ -10,9 +10,6 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-          <a href="#about">About</a>
-        </li>
         <li ng-show="authenticated">
           <a href="#profile">Profile</a>
         </li>
@@ -31,7 +28,7 @@
       </ul>
       <form class="navbar-form navbar-right" role="form" 
         ng-hide="authenticated">
-        <a href="#login" class="btn btn-success">Login</a>
+        <a href="#login" class="btn btn-success" ng-hide="true">Login</a>
         <a href="#register" class="btn btn-success">Register</a>
       </form>
       <form class="navbar-form navbar-right" role="form" 

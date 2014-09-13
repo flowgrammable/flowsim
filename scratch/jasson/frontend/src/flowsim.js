@@ -38,5 +38,5 @@ flowsim.config(['$routeProvider', function($routeProvider) {
 }]);
 
 flowsim.controller('flowsimCtlr', function($scope) {
-  $scope.authenticated = true;
+  $scope.authenticated = false;
 });
