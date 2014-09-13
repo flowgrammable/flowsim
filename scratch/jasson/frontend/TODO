@@ -1,3 +1,9 @@
-1. add support for html2js to gruntfile.js
-2. figure out a test framework and work into gruntfile
-3. integrate git tagging into gruntfile
+1. update landing page text
+2. update registration page text
+3. update registration success text
+4. integrate $resource for registration request
+5. update registration-email validation landing page and text
+
+-. add support for html2js to gruntfile.js
+-. figure out a test framework and work into gruntfile
+-. integrate git tagging into gruntfile

@@ -47,7 +47,18 @@
 
 <div class="container">
   <hr>
-  <p>&copy; Flowgrammable 2014</p>
+  <footer>
+    <p class="pull-right">&copy; Flowgrammable 2014</p>
+    <a target="_blank" href="https://facebook.com/flowgrammable">
+      <i class="fa fa-facebook"></i>
+    </a>
+    <a target="_blank" href="https://twitter.com/flowgrammable">
+      <i class="fa fa-twitter"></i>
+    </a>
+    <a target="_blank" href="https://google.com/+Flowgrammable">
+      <i class="fa fa-google-plus"></i>
+    </a>
+  </footer>
 </div>
 
 </div>

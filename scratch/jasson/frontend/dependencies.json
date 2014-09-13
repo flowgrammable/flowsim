@@ -4,7 +4,8 @@
       "bower_components/bootstrap/dist/css/bootstrap.css",
       "bower_components/bootstrap/dist/css/bootstrap.css.map",
       "bower_components/bootstrap/dist/css/bootstrap-theme.css",
-      "bower_components/bootstrap/dist/css/bootstrap-theme.css.map"
+      "bower_components/bootstrap/dist/css/bootstrap-theme.css.map",
+      "bower_components/fontawesome/css/font-awesome.css"
     ],
     "js": [
       "bower_components/underscore/underscore.js",
@@ -13,16 +14,15 @@
       "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.js"
     ],
     "fonts": [
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot",
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf",
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg",
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff"
+      "bower_components/bootstrap/fonts/*",
+      "bower_components/fontawesome/fonts/*"
     ]
   },
   "release": {
     "css": [
       "bower_components/bootstrap/dist/css/bootstrap.min.css",
-      "bower_components/bootstrap/dist/css/bootstrap-theme.min.css"
+      "bower_components/bootstrap/dist/css/bootstrap-theme.min.css",
+      "bower_components/fontawesome/css/font-awesome.min.css"
     ],
     "js": [
       "bower_components/underscore/underscore-min.js",
@@ -34,10 +34,8 @@
       "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.min.js"
     ],
     "fonts": [
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.eot",
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.ttf",
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.svg",
-      "bower_components/bootstrap/fonts/glyphicons-halflings-regular.woff"
+      "bower_components/bootstrap/fonts/*",
+      "bower_components/fontawesome/fonts/*"
     ]
   },
   "init": [

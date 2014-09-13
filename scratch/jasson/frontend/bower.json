@@ -29,6 +29,7 @@
     "angular-route": "~1.2.24"
   },
   "devDependencies": {
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "fontawesome": "~4.2.0"
   }
 }

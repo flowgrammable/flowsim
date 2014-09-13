@@ -160,7 +160,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['src/**'],
+      files: ['src/**', 'dependencies.json'],
       tasks: ['debug'],
       options: {
       }
