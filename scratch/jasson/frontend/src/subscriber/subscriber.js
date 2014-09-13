@@ -4,6 +4,7 @@
 angular.module('fgSubscriber', [])
   .controller('fgSubscriberCtrl', function($scope) {
 
+    var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var pwdPattern = /[a-zA-Z0-9_]{8,}/;
 
     $scope.success = false;
@@ -24,8 +25,9 @@ angular.module('fgSubscriber', [])
 
     $scope.createSub = function() {
       reset();
-      if(false) {
-        // test the email input
+      if(!emailPattern($scope.emailAddr) {
+        $scope.emailError = true;
+        $scope.emailMsg = 'Invalid email address';
       } else if(!pwdPattern.test($scope.pwd1)) {
         $scope.pwd1Error = true;
         $scope.pwd1Msg = 'Bad password';
@@ -34,7 +36,7 @@ angular.module('fgSubscriber', [])
         $scope.pwd2Msg = 'Passwords do not match';
       } else {
         $scope.success = true;
-        // do interesting stuff ...
+        // send a registration request
       }
     };
 });

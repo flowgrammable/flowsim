@@ -7,6 +7,7 @@
       "bower_components/bootstrap/dist/css/bootstrap-theme.css.map"
     ],
     "js": [
+      "bower_components/underscore/underscore.js",
       "bower_components/angular/angular.js",
       "bower_components/angular-route/angular-route.js",
       "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.0.js"
@@ -24,6 +25,8 @@
       "bower_components/bootstrap/dist/css/bootstrap-theme.min.css"
     ],
     "js": [
+      "bower_components/underscore/underscore-min.js",
+      "bower_components/underscore/underscore-min.map",
       "bower_components/angular/angular.min.js",
       "bower_components/angular/angular.min.js.map",
       "bower_components/angular-route/angular-route.min.js",
