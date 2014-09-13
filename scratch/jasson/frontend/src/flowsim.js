@@ -29,6 +29,9 @@ flowsim.config(['$routeProvider', function($routeProvider) {
     .when('/register', {
       templateUrl:'subscriber/register.html'
     })
+    .when('/reset', {
+      templateUrl:'subscriber/reset.html'
+    })
     .otherwise({
       templateUrl: 'lost.html'
     });

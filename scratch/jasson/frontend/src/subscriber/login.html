@@ -1,1 +1,48 @@
-<h1>Login</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+    <h1>Login</h1>
+
+    Welcome to Flowgrammable's OpenFlow switch simulator. We're excited to share
+    our latest work with you; however, you must be logged in to use our tools.
+
+    <hr>
+        
+    <div class="error" ng-show="loginFail">
+        <span>Username and password were invalid.</span>
+    </div>
+
+    <div class="error" ng-show="subscriberNotActive">
+        <span>Email has not been verified, please click link in verification email.</span>
+    </div>
+
+		<div class="error" ng-show="subscriberNotFound">
+			<span>An account with that email address does not exist.</span>
+		</div>
+
+    <form name="loginForm" novalidate role="form">
+      <div class="form-group">
+        <label for="emailAddr">Email Address</label>
+        <input name="userEmail" type="email" class="form-control" id="emailAddr"
+               placeholder="Enter email" ng-model="emailAddr" required>
+        <div class="error" ng-show="badEmail">
+          <span>Please enter a valid email address.</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password
+          <a href="#reset">(Forgot Password)</a>
+        </label>
+        <input name="userPwd" type="password" class="form-control" id="password"
+               placeholder="Password" ng-model="password" required>
+        <div class="error" ng-show="incorrectPwd">
+          <span>Password is incorrect.</span>
+        </div>
+      </div>
+      <a href="" class="btn btn-default" ng-click="login()">Login</a>
+    </form>
+
+  </div>
+</div>
+

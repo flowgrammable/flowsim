@@ -11,22 +11,22 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-          <a class="navbar-brand" href="#about">About</a>
+          <a href="#about">About</a>
         </li>
         <li ng-show="authenticated">
-          <a class="navbar-brand" href="#profile">Profile</a>
+          <a href="#profile">Profile</a>
         </li>
         <li ng-show="authenticated">
-          <a class="navbar-brand" href="#switch">Switch</a>
+          <a href="#switch">Switch</a>
         </li>
         <li ng-show="authenticated">
-          <a class="navbar-brand" href="#packet">Packet</a>
+          <a href="#packet">Packet</a>
         </li>
         <li ng-show="authenticated">
-          <a class="navbar-brand" href="#simulator">Simulator</a>
+          <a href="#simulator">Simulator</a>
         </li>
         <li ng-show="authenticated">
-          <a class="navbar-brand" href="#help">Help</a>
+          <a href="#help">Help</a>
         </li>
       </ul>
       <form class="navbar-form navbar-right" role="form" 
@@ -36,7 +36,9 @@
       </form>
       <form class="navbar-form navbar-right" role="form" 
         ng-show="authenticated">
-        <a href="#" class="btn btn-success" ng-click="authenticated=false">Logout</a>
+        <a href="#" class="btn btn-success" ng-click="authenticated=false">
+          Logout
+        </a>
       </form>
     </div>
   </div>
