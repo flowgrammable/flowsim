@@ -224,7 +224,7 @@ CREATE TABLE flowtable
    * Max Entries
    * 4 bytes
    */
-  max_entries BYTEA ,
+  max_entries INTEGER ,
 
 
   /*

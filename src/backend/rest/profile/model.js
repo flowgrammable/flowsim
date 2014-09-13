@@ -20,14 +20,14 @@ function resultChecker(result, callback){
 // msg.success() is returned, if unsuccessful the error is returned.
 function profileCreate(adapter, subId, data, cb) {
 
-      // create data by version and convert byte arrays 
+      // create data by version and set defaults if partial profile
       var datapath_data = modelUtils.generateDatapath(subId, data);
       var flowtable_data = modelUtils.generateFlowtable(data);
 
       //
       var datapath_table = adapter.createProfile(datapath_data);
       var flowtable_table = adapter.createFlowtable(flowtable_data);
-      datapath_table.save().success(function(datapath){
+     /* datapath_table.save().success(function(datapath){
         datapath.setFlowtable([flowtable_table]).success(function(result){
           flowtable_table.save().success(function(){
             console.log('we saved the flow table!');
@@ -35,8 +35,8 @@ function profileCreate(adapter, subId, data, cb) {
             console.log('result2 error:', result2)
           }) 
         })
-      }) 
- /* async.waterfall([
+      }) */
+  async.waterfall([
     function(callback){
       datapath_table.save().success(function(datapath){
         callback(null, datapath)
@@ -56,8 +56,7 @@ function profileCreate(adapter, subId, data, cb) {
     ], function(err, result){
       if(err) { cb(err); }
       else    { cb(msg.success()); }
-    }); */
-
+    });
 
 
 }
