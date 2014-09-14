@@ -23,6 +23,14 @@ function createProfile(data) {
 
 }
 
+function insertDatapath(data, cb){
+  Profile.create(data).success(function(result){
+    cb(msg.success(result));
+  }).error(function(err){
+    cb(msg.unknownError(err));
+  });
+}
+
 // The fetchProfile function retrieves a profile based on the info
 // passed in. If successful, a success message containing the profile 
 // is returned. If no profile is found, msg.profileNotFound() is 
