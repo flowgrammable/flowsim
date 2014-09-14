@@ -16,6 +16,15 @@ Global Dependencies
 Build Environment
 -----------------
 
+  Preventatives
+  =============
+  Sometimes the npm environment gets installed with root ownership, which
+  causes failures during local npm installs. The error logs suggest to rerun
+  your commands but with 'sudo', this is the wrong solution to your problem!
+  You must fix your global npm ownership issues. As a preventative step do the 
+  following:
+  - chown -R `whoami` ~/.npm
+
   Install your necessary local depenencies
 
   Build dependencies by hand ..
