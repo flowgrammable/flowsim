@@ -25,7 +25,7 @@ angular.module('fgSubscriber', [])
 
     $scope.createSub = function() {
       reset();
-      if(!emailPattern($scope.emailAddr)) {
+      if(!emailPattern.test($scope.emailAddr)) {
         $scope.emailError = true;
         $scope.emailMsg = 'Invalid email address';
       } else if(!pwdPattern.test($scope.pwd1)) {
