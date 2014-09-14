@@ -26,15 +26,18 @@ Build Environment
   - chown -R `whoami` ~/.npm
 
   Install your necessary local depenencies
-
-  Build dependencies by hand ..
-  - cd bower_components/angular-ui-bootstrap/
   - npm install
-  - grunt
-  - cd ../..
 
-  .. OR .. build dependencies with grunt
-  - grunt init
+  Build your dependencies
+  =======================
+    Option 1) Build dependencies by hand ..
+    - cd bower_components/angular-ui-bootstrap/
+    - npm install
+    - grunt
+    - cd ../..
+
+    Option 2) build dependencies with grunt
+    - grunt init
 
   Build the debug site
   - grunt
