@@ -3,7 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var ejs = require('ejs');
 
-module.exports = function(dir) {
+module.exports = function(config) {
   var name = 'template';
   var cfg = config.get(name);
 

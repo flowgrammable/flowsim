@@ -1,6 +1,6 @@
 {
   "root": "/api",
-  "email": {
+  "mailer": {
     "service": "gmail",
     "user": "info@compilednetworks.com",
     "pwd": "$NtheBank!Steve"

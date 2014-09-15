@@ -2,11 +2,12 @@
 var subs = {};
 var tokenId = 1;
 
-module.exports = function(cfg, server, mlr, tmpEng) {
-  var config = cfg;
+module.exports = function(ctx) {
   var name = 'subscriber';
-  var mailer = mlr;
-  var templateEngine = tmpEng;
+  var config = ctx.config.data;
+  var server = ctx.rest;
+  var tmpEngine = ctx.template;
+  var mailer = ctx.mail;
 
   function mkMethod(path) {
     return config.root + '/' + name + '/' + path;

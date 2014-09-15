@@ -9,7 +9,7 @@ module.exports = function(config) {
   if(!name) throw 'Mailer missing config';
 
   var transporter = nm.createTransport({
-    server: cfg.service,
+    service: cfg.service,
     auth: {
       user: cfg.user,
       pass: cfg.pwd

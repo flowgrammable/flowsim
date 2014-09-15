@@ -1,8 +1,9 @@
+var fs = require('fs');
 
 module.exports = function(config) {
 
   var name = 'config';
-  var _config = require(config[name] || process.env.CONFIG || './config.json');
+  var _config = require(config[name] || process.env.CONFIG || '../cfg.json');
 
   // establish empty credentials
   var _creds = {};              
@@ -27,21 +28,18 @@ module.exports = function(config) {
     }
   }
 
-  // Read https credentials if present
-  if(_config.https) {
-
   // return the configured protocol
   function _protocol() {
     if(_config.https) return "https";
-    else reutrn "http";
+    else return "http";
   }
    
   // return the base url
   function _baseUrl() {
     if(_config.https) {
-      return _protocol() '://' + _config.localhost + ':' + _config.port;
+      return _protocol() + '://' + _config.hostname + ':' + _config.port;
     } else {
-      return _protocol() + '://' + _config.localhost + ':' + _config.port;
+      return _protocol() + '://' + _config.hostname + ':' + _config.port;
     }
   }
   
@@ -49,7 +47,9 @@ module.exports = function(config) {
     get: _get,
     data: _config,
     baseUrl: _baseUrl,
-    getCreds: function() { return _creds; }
+    getCreds: function() { return _creds; },
+    port: function() { return _config.port; },
+    hostname: function() { return _config.hostname; }
   };
 
 };

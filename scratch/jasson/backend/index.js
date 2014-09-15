@@ -6,10 +6,10 @@ var fs      = require('fs');
 var cmdr    = require('commander');
 
 // Internal dependent modules
-var cfg        = require('./config');
+var config     = require('./config');
 var mailer     = require('./mailer');
 var subscriber = require('./subscriber');
-var templates  = require('./template');
+var template  = require('./template');
 
 // Process the command line
 cmdr
@@ -19,18 +19,24 @@ cmdr
   .option('-p, --port [tcp port]', 'Specify a listening port')
   .parse(process.argv);
 
-var config = cfg(cmdr);
+// Initialze global objects
+var configuration  = config(cmdr);
+var mailEngine     = mailer(configuration);
+var templateEngine = template(configuration);
 
-var mlr = mailer(config);
-var templateEngine = templates(config);
-
-var server = restify.createServer(config.getCredentials())
+var server = restify.createServer(configuration.getCreds())
   .use(restify.jsonp())
   .use(restify.gzipResponse())
   .use(restify.bodyParser());
 
-subscriber(config, server, mlr, templateEngine);
+// Add the subscriber module
+subscriber({
+  config: configuration, 
+  rest: server, 
+  mail: mailEngine, 
+  template: templateEngine
+});
   
-server.listen(config.port, config.hostname);
-console.log('Started rest server @ %s', config.absUrl());
+server.listen(configuration.port(), configuration.hostname());
+console.log('Started rest server @ %s', configuration.baseUrl());
   
