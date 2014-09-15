@@ -1,3 +1,13 @@
+var orm = require('/dbbs');
+var Packet = orm.model("packet");
+var request = require('request');
+var assert = require('assert');
+var fs = require('fs');
+
+//orm.setup()
+var token, sessKey;
+
+
 //Registers and verifies temporary user 1
 
 describe('Registering user 1', function() {
