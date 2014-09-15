@@ -2,8 +2,8 @@
   "root": "/api",
   "mailer": {
     "service": "gmail",
-    "user": "info@compilednetworks.com",
-    "pwd": "$NtheBank!Steve"
+    "user": "info@flowgrammable.com",
+    "pwd": "abc123"
   },
   "address": "127.0.0.1",
   "hostname": "localhost",

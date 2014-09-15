@@ -20,7 +20,7 @@ cmdr
   .parse(process.argv);
 
 // Initialze global objects
-var configuration  = config(cmdr);
+var configuration  = config(cmdr, __dirname);
 var mailEngine     = mailer(configuration);
 var templateEngine = template(configuration);
 
@@ -36,7 +36,7 @@ subscriber({
   mail: mailEngine, 
   template: templateEngine
 });
-  
+ 
 server.listen(configuration.port(), configuration.hostname());
 console.log('Started rest server @ %s', configuration.baseUrl());
   

@@ -1,9 +1,10 @@
 var fs = require('fs');
 
-module.exports = function(config) {
+module.exports = function(config, cwd) {
 
   var name = 'config';
-  var _config = require(config[name] || process.env.CONFIG || '../cfg.json');
+  var prefix = cwd + '/' + (config[name] || process.env.CONFIG || 'cfg.json');
+  var _config = require(prefix);
 
   // establish empty credentials
   var _creds = {};              
