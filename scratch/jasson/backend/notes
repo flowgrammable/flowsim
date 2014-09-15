@@ -1,0 +1,10 @@
+
+GET
+====
+curl --cacert keys/localhost.crt https://localhost:3000/api/subscriber/verify/1
+
+POST
+====
+-H "Content-Type: application/json" -d '{ "email":"j@j.c", "pwd": "123" }'
+
+
