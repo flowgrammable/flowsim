@@ -1,0 +1,19 @@
+{
+  "root": "/api",
+  "email": {
+    "service": "gmail",
+    "user": "info@compilednetworks.com",
+    "pwd": "$NtheBank!Steve"
+  },
+  "https": {
+    "key": "keys/dev.key",
+    "cert": "keys/localhost.crt",
+    "baseUrl": "https://localhost"
+  },
+  "subscriber": {
+    "template": {
+      "verification": "template/verification.ejs",
+      "forgot": "template/forgot.ejs"
+    }
+  }
+}
