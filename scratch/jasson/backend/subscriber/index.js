@@ -35,7 +35,7 @@ module.exports = function(ctx) {
     if(!(email in subs)) {
       subs[email] = tokenId++;
 
-      mailer.send(email, from, 
+      mailer.send(email, 
         'Flowsim registration verification', 
         tmpEngine.render('verification', {
           baseUrl: mkMethod('verify'),

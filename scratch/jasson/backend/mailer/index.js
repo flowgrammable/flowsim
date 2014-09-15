@@ -20,9 +20,9 @@ module.exports = function(config) {
     transporter.close();
   }
   
-  function _mail(src, dst, sub, body) {
+  function _mail(dst, sub, body) {
     transporter.sendMail({
-      from: src,                            // set the smtp from
+      from: cfg.user,                       // set the smtp from
       to: dst,                              // set the smtp to
       subject: sub,                         // set the smtp subject
       html: body                            // set the smtp html-body
