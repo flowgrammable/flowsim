@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 
+// External dependencies
 var restify = require('restify');
 var fs      = require('fs');
 var cmdr    = require('commander');
 
-var mailer = require('./mailer');
+// Internal dependent modules
+var cfg        = require('./config');
+var mailer     = require('./mailer');
 var subscriber = require('./subscriber');
-//var database = require('./database');
+var templates  = require('./template');
 
+// Process the command line
 cmdr
   .version(process.env.SERVER_VERSION)
   .option('-c, --config [config file]', 'Specify a configuration file')
@@ -15,38 +19,18 @@ cmdr
   .option('-p, --port [tcp port]', 'Specify a listening port')
   .parse(process.argv);
 
-var config = require(cmdr.config || process.env.CONFIG || './config.json');
+var config = cfg(cmdr);
 
-config.hostname = cmdr.hostname || config.hostname;
-config.port     = cmdr.port     || config.port;
+var mlr = mailer(config);
+var templateEngine = templates(config);
 
-var mlr = mailer(config.email);
-//var db = database(config.database);
-
-function setHttps(c) {
-  if(c !== undefined) {
-    return {
-      key: fs.readFileSync(c.key),
-      certificate: fs.readFileSync(c.cert)
-    };
-  } else {
-    return undefined;
-  }
-}
-
-function getHttpMode() {
-  if(config.https) return 'https://';
-  else return 'http://';
-}
-
-var server = restify.createServer(setHttps(config.https) || {})
+var server = restify.createServer(config.getCredentials())
   .use(restify.jsonp())
   .use(restify.gzipResponse())
   .use(restify.bodyParser());
 
-subscriber(config, server, mlr);
+subscriber(config, server, mlr, templateEngine);
   
 server.listen(config.port, config.hostname);
-console.log('Started rest server @ %s%s:%s', getHttpMode(), config.hostname, 
-  config.port);
+console.log('Started rest server @ %s', config.absUrl());
   

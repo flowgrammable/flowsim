@@ -11,5 +11,8 @@
   "https": {
     "key": "keys/dev.key",
     "cert": "keys/localhost.crt"
+  },
+  "template": {
+    "dir": "template"
   }
 }

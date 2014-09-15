@@ -1,10 +1,12 @@
 
-var mailer = require('../mailer');
+var subs = {};
+var tokenId = 1;
 
-module.exports = function(cfg, server, mlr) {
+module.exports = function(cfg, server, mlr, tmpEng) {
   var config = cfg;
   var name = 'subscriber';
   var mailer = mlr;
+  var templateEngine = tmpEng;
 
   function mkMethod(path) {
     return config.root + '/' + name + '/' + path;
@@ -28,8 +30,22 @@ module.exports = function(cfg, server, mlr) {
   server.post(mkMethod('register'), function(req, res, next) {
     var email = req.body.email;
     var pwd = req.body.pwd;
-    console.log('register');
-    res.end('blahasdf');
+
+    if(!(email in subs)) {
+      subs[email] = tokenId++;
+
+      mailer.send(email, from, 
+        'Flowsim registration verification', 
+        tmpEngine.render('verification', {
+          baseUrl: mkMethod('verify'),
+          token: subs[email]
+       }));
+      console.log('Register: %s with %i', email, subs[email]);
+    } else {
+      console.log('Register: %s exists', email);
+    }
+    res.writeHead(200, {});
+    res.end('');
   });
   
   server.get(mkMethod('forgot/:email'), function(req, res, next) {
