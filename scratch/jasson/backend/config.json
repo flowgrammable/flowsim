@@ -5,16 +5,11 @@
     "user": "info@compilednetworks.com",
     "pwd": "$NtheBank!Steve"
   },
+  "address": "127.0.0.1",
+  "hostname": "localhost",
+  "port": 3000,
   "https": {
     "key": "keys/dev.key",
-    "cert": "keys/localhost.crt",
-    "hostname": "localhost",
-    "port": 3000
-  },
-  "subscriber": {
-    "template": {
-      "verification": "template/verification.ejs",
-      "forgot": "template/forgot.ejs"
-    }
+    "cert": "keys/localhost.crt"
   }
 }

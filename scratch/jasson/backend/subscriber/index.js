@@ -1,37 +1,14 @@
 
+var mailer = require('../mailer');
 
-module.exports = function(cfg, server) {
+module.exports = function(cfg, server, mlr) {
   var config = cfg;
   var name = 'subscriber';
+  var mailer = mlr;
 
   function mkMethod(path) {
     return config.root + '/' + name + '/' + path;
   }
-
-  /*
-server.post('/api/subscriber/register', function(req, res, next){
-   22   var email = req.body.email;
-    23   var pwd = req.body.pwd;
-     24 
-   25   if(email in subscribers) {
-      26     res.end(JSON.stringify({
-         27       blorp: true
-         28     }));
-       29   } else {
-          30     subscribers[email] = {
-             31       password: pwd,
-   32       state: 'INIT',
-   33       token: gen()
-   34     };
-           35     smtpBot.(
-              36       'info@compilednetworks.com',
-               37       'jasson.casey@gmail.com',
-                38       'test'
-                 39     );
-            40     res.end('blahasdf');
-             41   }
- 42 });
-*/
 
   server.get(mkMethod('login/:user/:pwd'), function(req, res, next) {
     console.log('login: ' + req.params.user + ':' + req.params.pwd);
@@ -49,6 +26,8 @@ server.post('/api/subscriber/register', function(req, res, next){
   });
 
   server.post(mkMethod('register'), function(req, res, next) {
+    var email = req.body.email;
+    var pwd = req.body.pwd;
     console.log('register');
     res.end('blahasdf');
   });
@@ -59,3 +38,4 @@ server.post('/api/subscriber/register', function(req, res, next){
   });
 
 };
+

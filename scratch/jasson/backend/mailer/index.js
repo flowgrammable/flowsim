@@ -1,20 +1,15 @@
 
 var nm = require('nodemailer');
-var ejs = require('ejs');
-var fs = require('fs');
 
-module.exports = function(srv, sub, pwd) {
+module.exports = function(config) {
   var transporter = nm.createTransport({
-    service: srv,
+    server: config.service,
     auth: {
-      user: sub,
-      pass: pwd
+      user: config.user,
+      pass: config.pwd
     }
   });
   return {
-    render: function(filename, ctx) {
-      return ejs.render(fs.readFileSync(filename, 'utf8'), ctx);
-    },
     close: function() {
       transporter.close();
     },
