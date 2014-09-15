@@ -46,6 +46,7 @@ var server = restify.createServer(setHttps(config.https) || {})
 
 subscriber(config, server, mlr);
   
-server.listen(config.port);
-console.log('Started rest server @ %s%s:%s', getHttpMode(), config.port);
+server.listen(config.port, config.hostname);
+console.log('Started rest server @ %s%s:%s', getHttpMode(), config.hostname, 
+  config.port);
   
