@@ -6,24 +6,22 @@ var cmdr    = require('commander');
 
 var mailer = require('./mailer');
 var subscriber = require('./subscriber');
-var database = require('./database');
+//var database = require('./database');
 
 cmdr
   .version(process.env.SERVER_VERSION)
   .option('-c, --config [config file]', 'Specify a configuration file')
-  .option('-a, --address [ip address]', 'Specify a listening ip address')
   .option('-h, --hostname [hostname]', 'Specify the servers hostname')
   .option('-p, --port [tcp port]', 'Specify a listening port')
   .parse(process.argv);
 
 var config = require(cmdr.config || process.env.CONFIG || './config.json');
 
-config.address  = cmdr.address  || config.address;
 config.hostname = cmdr.hostname || config.hostname;
 config.port     = cmdr.port     || config.port;
 
 var mlr = mailer(config.email);
-var db = database(config.database);
+//var db = database(config.database);
 
 function setHttps(c) {
   if(c !== undefined) {
@@ -48,6 +46,6 @@ var server = restify.createServer(setHttps(config.https) || {})
 
 subscriber(config, server, mlr);
   
-server.listen(config.port, config.address);
-console.log('Started rest server @ %s%s:%s', getHttpMode(), config.address, config.port);
+server.listen(config.port);
+console.log('Started rest server @ %s%s:%s', getHttpMode(), config.port);
   
