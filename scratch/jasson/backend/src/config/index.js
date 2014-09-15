@@ -12,13 +12,13 @@ module.exports = function(config, cwd) {
   // Read https credentials if present
   if(_config.https) {
     _creds.key =  fs.readFileSync(_config.https.key);
-    _creds.certificate = fs.readFileSync(_config.https.cert)
+    _creds.certificate = fs.readFileSync(_config.https.cert);
   }
 
   // Set the basic server configurations
-  _config.hostname = config['hostname'] || _config.hostname || 
+  _config.hostname = config.hostname || _config.hostname || 
                       process.env.HOSTNAME || 'localhost';
-  _config.port     = config['port'] || _config.port || process.env.PORT || 3000;
+  _config.port     = config.port || _config.port || process.env.PORT || 3000;
   
   // Provide a top-level getter
   function _get(name) {

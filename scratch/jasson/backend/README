@@ -1,11 +1,12 @@
 FILES & DIRS
 ------------
-- cfg.json - basic configuraiton file
-- config/  - configuration reader and helpers
-- index.js - main entry point
-- subscruber/ - subscriber services module
-- mailer/ - smtp services module
-- keys/ - SSL certs for local/dev site
-- template.js - template module
-- template/ - HTML templates (*.ejs)
+- package.json    - main npm configuration
+- config.json     - basic configuraiton file
+- keys/           - SSL certs for local/dev site
+- src/config/     - configuration reader and helpers
+- src/index.js    - main entry point
+- src/subscruber/ - subscriber services module
+- src/mailer/     - smtp services module
+- src/template.js - template module
+- src/template/   - HTML templates (*.ejs)
 
