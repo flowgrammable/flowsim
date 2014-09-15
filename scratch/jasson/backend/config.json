@@ -8,7 +8,8 @@
   "https": {
     "key": "keys/dev.key",
     "cert": "keys/localhost.crt",
-    "baseUrl": "https://localhost"
+    "hostname": "localhost",
+    "port": 3000
   },
   "subscriber": {
     "template": {

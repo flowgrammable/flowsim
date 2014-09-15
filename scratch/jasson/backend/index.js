@@ -4,7 +4,6 @@ var restify = require('restify');
 var fs = require('fs');
 
 var config = require('./config.json');
-config.https.baseUrl += ':' + 3000;
 var subscriber = require('./subscriber');
 
 var server = restify.createServer({
@@ -17,7 +16,7 @@ var server = restify.createServer({
 
 subscriber(config, server);
   
-server.listen(3000, function() {
+server.listen(config.https.port, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
   
