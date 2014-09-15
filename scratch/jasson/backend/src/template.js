@@ -8,11 +8,11 @@ module.exports = function(config) {
   var cfg = config.get(name);
 
   var templates = {};
-  fs.readdir(cfg.dir, function(err, files) {
+  fs.readdir(__dirname + '/' + cfg.dir, function(err, files) {
     if(err) throw err;
     files.forEach(function(file) {
       var basename = path.basename(file, '.ejs');
-      var relname = cfg.dir + '/' + file;
+      var relname = __dirname + '/' + cfg.dir + '/' + file;
       templates[basename] = fs.readFileSync(relname, 'utf8');
     });
   });

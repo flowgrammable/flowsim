@@ -5,6 +5,7 @@ module.exports = function(config, cwd) {
   var name = 'config';
   var prefix = cwd + '/' + (config[name] || process.env.CONFIG || 'cfg.json');
   var _config = require(prefix);
+  _config.toplevel = cwd;
 
   // establish empty credentials
   var _creds = {};              
