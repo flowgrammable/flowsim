@@ -123,7 +123,7 @@ describe('Testing update profile request: ', function() {
       console.log('\tResponse received : ', body);
       request( { // login subscriber
         url: 'http://localhost:3000/api/subscriber/login',
-        body: '{ \"email\": \"flowgrammabltest1@gmail.com\", \"password\": \"openflow1\"}',
+        body: '{ \"email\": \"flowgrammabltest2@gmail.com\", \"password\": \"openflow2\"}',
         headers: { 'Content-Type': 'application/json' },
         method: 'POST'
       }, function (error, response, body) {
@@ -139,7 +139,7 @@ describe('Testing update profile request: ', function() {
           console.log('\tResponse received : ', body);
           request( { //logout
             url: 'http://localhost:3000/api/subscriber/logout',
-            body: '{ \"email\": \"flowgrammabltest1@gmail.com\", \"password\": \"openflow1\"}',
+            body: '{ \"email\": \"flowgrammabltest2@gmail.com\", \"password\": \"openflow2\"}',
             headers: {'Content-Type': 'application/json','x-access-token': sessKey},
       	    method: 'POST'
           }, function (error, response, body) {
@@ -147,7 +147,7 @@ describe('Testing update profile request: ', function() {
             console.log('\tResponse received : ', body);
       	    request( { // login subscriber 1
               url: 'http://localhost:3000/api/subscriber/login',
-              body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
+              body: '{ \"email\": \"flowgrammabletest1@gmail.com\", \"password\": \"openflow1\"}',
               headers: { 'Content-Type': 'application/json' },
               method: 'POST'
             }, function (error, response, body) {
@@ -235,7 +235,7 @@ describe('Testing list profile request: ', function(){
   function(done) {
     request( { //logout
       url: 'http://localhost:3000/api/subscriber/logout',
-      body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
+      body: '{ \"email\": \"flowgrammabletest1@gmail.com\", \"password\": \"openflow1\"}',
       headers: {'Content-Type': 'application/json','x-access-token': sessKey},
       method: 'POST'
     }, function (error, response, body) {
