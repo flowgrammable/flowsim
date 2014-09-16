@@ -36,7 +36,7 @@ subscriber({
   mail: mailEngine, 
   template: templateEngine
 });
- 
+
 server.listen(configuration.port(), configuration.hostname());
 console.log('Started rest server @ %s', configuration.baseUrl());
   

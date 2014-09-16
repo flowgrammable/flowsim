@@ -2,6 +2,15 @@
 var subs = {};
 var tokenId = 1;
 
+var validator = require('validator');
+var rest = require('../rest');
+var msg = require('./msg');
+
+function isValidPassword(p) {
+  var pat = /[0-9a-zA-Z_\(\)\^\[\]\{\}\.\$,!\+\*\\\|/:;\'"?<>`\-=~@#%&]{8,}/;
+  return pat.test(p);
+}
+
 module.exports = function(ctx) {
   var name = 'subscriber';
   var config = ctx.config.data;
@@ -13,9 +22,24 @@ module.exports = function(ctx) {
     return config.root + '/' + name + '/' + path;
   }
 
-  server.get(mkMethod('login/:user/:pwd'), function(req, res, next) {
-    console.log('login: ' + req.params.user + ':' + req.params.pwd);
-    res.end('login: ' + req.params.user + ':' + req.params.pwd + '\n');
+  rest.addHandler(server, 'post', mkMethod('login'), 
+    function(req, res, next) {
+
+    var dispatch = rest.responder(res);
+    if(!req.body.email) {
+      dispatch(msg.missingEmail());
+    } else if(!validator.isEmail(req.body.email)) {
+      dispatch(msg.badEmail());
+    } else if(!req.body.pwd) {
+      dispatch(msg.missingPwd());
+    } else if(!isValidPassword(req.body.pwd)) {
+      dispatch(msg.badPwd());
+    }
+
+    dispatch(msg.success({
+      login: req.body.email,
+      pwd: req.body.pwd
+    }));
   });
 
   server.get(mkMethod('logout/:user'), function(req, res, next) {
