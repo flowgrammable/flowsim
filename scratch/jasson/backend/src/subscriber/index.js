@@ -1,11 +1,8 @@
 
-var subs = {};
-var tokenId = 1;
-
 var validator = require('validator');
 
 var rest = require('../rest');
-var msg = require('./msg');
+var msg  = require('./msg');
 
 function isValidPassword(p) {
   var pat = /[0-9a-zA-Z_\(\)\^\[\]\{\}\.\$,!\+\*\\\|/:;\'"?<>`\-=~@#%&]{8,}/;
@@ -25,7 +22,6 @@ module.exports = function(ctx) {
   }
 
   // Load the database modules
-  //database.loadModels(__dirname + '/models');
   database.loadLocalModels(__dirname);
 
   rest.addHandler(server, 'post', mkMethod('login'), 
