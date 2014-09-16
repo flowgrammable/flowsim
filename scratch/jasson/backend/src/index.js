@@ -36,7 +36,8 @@ subscriber({
   config: configuration, 
   rest: server, 
   mail: mailEngine, 
-  template: templateEngine
+  template: templateEngine,
+  database: db
 });
 
 server.listen(configuration.port(), configuration.hostname());

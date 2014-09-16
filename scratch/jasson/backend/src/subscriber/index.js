@@ -3,6 +3,7 @@ var subs = {};
 var tokenId = 1;
 
 var validator = require('validator');
+
 var rest = require('../rest');
 var msg = require('./msg');
 
@@ -17,10 +18,14 @@ module.exports = function(ctx) {
   var server = ctx.rest;
   var tmpEngine = ctx.template;
   var mailer = ctx.mail;
+  var database = ctx.database;
 
   function mkMethod(path) {
     return config.root + '/' + name + '/' + path;
   }
+
+  // Load the database modules
+  database.loadModels(__dirname + '/models');
 
   rest.addHandler(server, 'post', mkMethod('login'), 
     function(req, res, next) {
