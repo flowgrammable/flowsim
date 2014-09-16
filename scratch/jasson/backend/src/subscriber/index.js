@@ -25,7 +25,8 @@ module.exports = function(ctx) {
   }
 
   // Load the database modules
-  database.loadModels(__dirname + '/models');
+  //database.loadModels(__dirname + '/models');
+  database.loadLocalModels(__dirname);
 
   rest.addHandler(server, 'post', mkMethod('login'), 
     function(req, res, next) {

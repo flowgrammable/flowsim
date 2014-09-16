@@ -42,8 +42,13 @@ module.exports = function(cfg) {
     });
   }
 
+  function _loadLocalModels(dir) {
+    _loadModels(dir + '/models/');
+  }
+
   return {
-    loadModels: _loadModels
+    loadModels: _loadModels,
+    loadLocalModels: _loadLocalModels
   };
 };
 
