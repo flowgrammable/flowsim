@@ -11,14 +11,14 @@ module.exports = function(cfg) {
     config.user,
     config.pwd,
     {
-      host: config.host || 'localhost',
-      dialect: config.dialect,
-      port: config.port || 3306
+      host: config.host || '127.0.0.1',
+      dialect: config.dialect
+      //port: config.port || 3306     <-- some sort of bug with this 
     });
-  
+
+  // do not return until this is done
   async.series(db.authenticate().complete, function(err, results) {
-    if(err)
-      throw err;
+    if(err) throw err;
   });
 
   return {
