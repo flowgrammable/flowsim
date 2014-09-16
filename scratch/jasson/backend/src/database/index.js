@@ -47,6 +47,7 @@ module.exports = function(cfg) {
   }
 
   return {
+    get: function(name) { return models[name] || null; },
     loadModels: _loadModels,
     loadLocalModels: _loadLocalModels
   };

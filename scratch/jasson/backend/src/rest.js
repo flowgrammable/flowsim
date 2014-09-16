@@ -13,7 +13,7 @@ exports.addHandler = function(server, type, path, handler) {
   switch(type) {
     case 'post':
     case 'get':
-    case 'update':
+    case 'put':
     case 'delete':
       server[type](path, handler);
       break;
