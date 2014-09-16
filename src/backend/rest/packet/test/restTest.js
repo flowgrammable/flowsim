@@ -13,40 +13,16 @@ describe('Testing create packet requests:',function() {
   // Register, verify, then login a subscriber
   before(function(done) { 
     this.timeout(5000);
-    request( { // register subscriber
-      url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+    request( { // login subscriber
+      url: 'http://localhost:3000/api/subscriber/login',
+      body: '{ \"email\": \"flowgrammabletest1@gmail.com\", \"password\": \"openflow1\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
-      console.log(body);
-      assert(JSON.parse(body)['value'],'Unable to register user');
-      fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
-        if (err) console.log('Unable to read token in file for restTest');
-        else {
-          var array = data.toString().split("\n"); 
-          token = JSON.parse(array[0]).ver_token;
-          request( { // verify subscriber
-            url: 'http://localhost:3000/api/subscriber/verify/',
-            body: '{ \"token\": \"'+token+'\"}',
-            headers: { 'Content-Type': 'application/json' },
-            method: 'POST'
-          }, function (error, response, body) { 
-            assert(JSON.parse(body)['value'],'Unable to verify user');
-            request( { // login subscriber
-              url: 'http://localhost:3000/api/subscriber/login',
-              body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
-              headers: { 'Content-Type': 'application/json' },
-              method: 'POST'
-            }, function (error, response, body) {
-              assert(JSON.parse(body)['value'],'Unable to login user');
-              sessKey = JSON.parse(body)['value'];
-              done();
-            });
-          });
-        }
-      });
-    }); 
+      assert(JSON.parse(body)['value'],'Unable to login user');
+      sessKey = JSON.parse(body)['value'];
+      done();
+    });
   });
   it('A packet creation request that is successful should return msg.success()',
   function(done) {
@@ -176,54 +152,30 @@ describe('Testing list packet request: ', function() {
   function(done) {
     request( { //logout
       url: 'http://localhost:3000/api/subscriber/logout',
-      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+      body: '{ \"email\": \"flowgrammabletest1@gmail.com\", \"password\": \"openflow1\"}',
       headers: {'Content-Type': 'application/json','x-access-token': sessKey},
       method: 'POST'
     }, function (error, response, body) {
       assert(JSON.parse(body)['value'],'Unable to logout user');
       console.log('\tResponse received : ', body);
-    request( { // register anoter subscriber
-      url: 'http://localhost:3000/api/subscriber/register',
-      body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST'
-    }, function (error, response, body) {
-      console.log(body);
-      assert(JSON.parse(body)['value'],'Unable to register user');
-      fs.readFile(process.cwd()+'/temp','utf8',function (err,data) {
-      if (err) console.log('Unable to read token in file for restTest');
-      else {
-        var array = data.toString().split("\n");
-        token = JSON.parse(array[0]).ver_token;
-        request( { // verify subscriber
-          url: 'http://localhost:3000/api/subscriber/verify/',
-          body: '{ \"token\": \"'+token+'\"}',
-          headers: { 'Content-Type': 'application/json' },
-          method: 'POST'
+      request( { // login subscriber
+        url: 'http://localhost:3000/api/subscriber/login',
+        body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST'
+      }, function (error, response, body) {
+        assert(JSON.parse(body)['value'],'Unable to login user');
+        sessKey = JSON.parse(body)['value'];
+        request( {
+          url : 'http://localhost:3000/api/packet/list',
+          headers: {'Content-Type': 'application/json','x-access-token': sessKey},
+          method: 'GET'
         }, function (error, response, body) {
-          assert(JSON.parse(body)['value'],'Unable to verify user');
-          request( { // login subscriber
-            url: 'http://localhost:3000/api/subscriber/login',
-            body: '{ \"email\": \"flowgrammabletest2@gmail.com\", \"password\": \"openflow2\"}',
-            headers: { 'Content-Type': 'application/json' },
-            method: 'POST'
-          }, function (error, response, body) {
-            assert(JSON.parse(body)['value'],'Unable to login user');
-            sessKey = JSON.parse(body)['value'];
-            request( {
-              url : 'http://localhost:3000/api/packet/list',
-              headers: {'Content-Type': 'application/json','x-access-token': sessKey},
-              method: 'GET'
-            }, function (error, response, body) {
-              assert(JSON.parse(body)['value'],'noPacketsFound');
-              console.log('\tResponse received : ', body);
-              done();
-            }); 
-          });
-        });
-      }
+          assert(JSON.parse(body)['value'],'noPacketsFound');
+          console.log('\tResponse received : ', body);
+          done();
+        }); 
       });
-    });
     });
   });
   it('Test: any method but GET should return msg.methodNotSupported()',
@@ -267,7 +219,7 @@ describe('Test delete packet request: ', function() {
   function(done) {
     request( { // login subscriber
       url: 'http://localhost:3000/api/subscriber/login',
-      body: '{ \"email\": \"flowgrammablemailer@gmail.com\", \"password\": \"my password\"}',
+      body: '{ \"email\": \"flowgrammabletest1@gmail.com\", \"password\": \"openflow1\"}',
       headers: { 'Content-Type': 'application/json' },
       method: 'POST'
     }, function (error, response, body) {
