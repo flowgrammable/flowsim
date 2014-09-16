@@ -1,12 +1,20 @@
 {
-  "name": "frontend",
-  "version": "1.2.18",
+  "name": "flowsim",
+  "version": "0.0.1",
   "homepage": "https://github.com/flowgrammable/flowsim",
   "authors": [
     "Jasson Casey <jasson@flowgrammable.com>"
   ],
-  "license": "MIT",
-  "private": true,
+  "description": "An OpenFlow data plane visual simulator.",
+  "keywords": [
+    "openflow",
+    "sdn",
+    "software",
+    "defined",
+    "networking",
+    "simulator"
+  ],
+  "license": "ISC",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -15,10 +23,13 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.1.1",
-    "angular": "~1.2.18",
-    "angular-route": "~1.2.18",
+    "angular": "~1.2.23",
+    "bootstrap": "~3.2.0",
     "angular-ui-bootstrap": "~0.11.0",
-    "angular-cookies": "~1.2.21"
+    "angular-route": "~1.2.24"
+  },
+  "devDependencies": {
+    "underscore": "~1.7.0",
+    "fontawesome": "~4.2.0"
   }
 }
