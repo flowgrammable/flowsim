@@ -8,7 +8,7 @@ exports.methodNotSupported = function() {
 	return msg.error({
 		system: "subscriber/controller",
 		type: "methodNotSupported"
-	})
+	});
 };
 
 exports.noDatabaseConnection = function() {
@@ -164,13 +164,13 @@ exports.badConfig = function() {
   return msg.error({
     system: "subscriber/adapter",
     type: "badEmailConfiguration"
-  })
+  });
 };
 
 exports.sessionNotFound = function() {
   return msg.error({
     system: "subscriber/adapter",
     type: "sessionNotFound"
-  })
+  });
 };
 

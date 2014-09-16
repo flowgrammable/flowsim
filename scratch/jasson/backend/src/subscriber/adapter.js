@@ -1,7 +1,7 @@
 
 var msg = require('./msg');
 
-exports.module = function(db) {
+module.exports = function(db) {
 
 var database = db;
 
@@ -93,14 +93,14 @@ function _destroySessionLessThan(time, dispatch) {
 }
 
 return {
-  createSubscriber: _createSubscriber,
-  fetchSubscriber: _fetchSubscriber,
-  updateSubscriber: _updateSubscriber,
-  createSession: _createSession,
-  fetchSession: _fetchSession,
-  destroySession: _destroySession,
-  destroySessionLessThan: _destroySessionLessthan
+  createSubscriber:       _createSubscriber,
+  fetchSubscriber:        _fetchSubscriber,
+  updateSubscriber:       _updateSubscriber,
+  createSession:          _createSession,
+  fetchSession:           _fetchSession,
+  destroySession:         _destroySession,
+  destroySessionLessThan: _destroySessionLessThan
 };
 
-}
+};
 

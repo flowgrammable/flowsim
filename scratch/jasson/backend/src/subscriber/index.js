@@ -1,8 +1,9 @@
 
 var validator = require('validator');
 
-var rest = require('../rest');
-var msg  = require('./msg');
+var rest       = require('../rest');
+var msg        = require('./msg');
+var controller = require('./controller');
 
 function isValidPassword(p) {
   var pat = /[0-9a-zA-Z_\(\)\^\[\]\{\}\.\$,!\+\*\\\|/:;\'"?<>`\-=~@#%&]{8,}/;
@@ -17,12 +18,15 @@ module.exports = function(ctx) {
   var mailer = ctx.mail;
   var database = ctx.database;
 
+  var ctrl;
+
   function mkMethod(path) {
     return config.root + '/' + name + '/' + path;
   }
 
-  // Load the database modules
+  // Initialize our components
   database.loadLocalModels(__dirname);
+  ctrl = controller(database);
 
   rest.addHandler(server, 'post', mkMethod('login'), 
     function(req, res, next) {
