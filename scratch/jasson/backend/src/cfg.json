@@ -1,5 +1,11 @@
 {
   "root": "/api",
+  "database": {
+    "database": "flowsim",
+    "user": "flogdev",
+    "pwd": "flogdev",
+    "dialect": "postgres"
+  },
   "mailer": {
     "service": "gmail",
     "user": "info@flowgrammable.com",

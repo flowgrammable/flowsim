@@ -9,7 +9,8 @@ var cmdr    = require('commander');
 var config     = require('./config');
 var mailer     = require('./mailer');
 var subscriber = require('./subscriber');
-var template  = require('./template');
+var template   = require('./template');
+var database   = require('./database');
 
 // Process the command line
 cmdr
@@ -23,6 +24,7 @@ cmdr
 var configuration  = config(cmdr, __dirname);
 var mailEngine     = mailer(configuration);
 var templateEngine = template(configuration);
+var db             = database(configuration);
 
 var server = restify.createServer(configuration.getCreds())
   .use(restify.jsonp())
