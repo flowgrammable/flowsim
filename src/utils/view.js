@@ -10,7 +10,11 @@ exports.MSBF = MSBF;
 exports.LSBF = LSBF;
 
 function View(param) {
-  if(param instanceof Buffer) {
+  if(typeof param === 'number') {
+    this.buf = new Buffer(param);
+    this.begin = 0;
+    this.end = param;
+  } else if(param instanceof Buffer) {
     this.buf   = param;
     this.begin = 0;
     this.end   = param.length;
