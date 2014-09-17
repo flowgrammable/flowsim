@@ -1,6 +1,7 @@
 
 (function(){
 
+var fs     = require('fs');
 var buffer = require('./buffer');
 
 function getModeFromMagic(mode, value) {
@@ -52,6 +53,17 @@ Header.prototype.toView = function(view) {
 };
 
 Header.prototype.encode = buffer.encode;
+
+function File(name) {
+  this.fd = fs.openSync(name, 'rs');
+}
+exports.File = File;
+
+File.prototype.close = function() {
+  if(this.fd) {
+    fs.closeSync(this.fd);
+  }
+};
 
 })();
 
