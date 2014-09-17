@@ -1,16 +1,16 @@
 
 (function(){
 
-var fs     = require('fs');
 var view = require('../utils/view');
 
 function getModeFromMagic(mode, value) {
   var magic = parseInt('0xa1b2c3d4', 16);
   if(value !== magic && mode === view.MSBF) {
-    mode = view.LSBF;
+    return view.LSBF;
   } else if(value !== magic && mode === view.LSBF) {
-    mode = view.MSBF;
+    return view.MSBF;
   }
+
 }
 
 function Header() {
@@ -22,6 +22,7 @@ function Header() {
   this.snaplen      = null;
   this.datalink     = null;
 }
+exports.Header = Header;
 
 Header.prototype.bytes = function() {
   return 24;
@@ -50,19 +51,8 @@ Header.prototype._toView = function(v) {
   view.writeUInt32(mode)(v, this.datalink, 20);
 };
 
-Header.prototype.fromView = buffer.decode;
-Header.prototype.toView   = buffer.encode;
-
-function File(name) {
-  this.fd = fs.openSync(name, 'rs');
-}
-exports.File = File;
-
-File.prototype.close = function() {
-  if(this.fd) {
-    fs.closeSync(this.fd);
-  }
-};
+Header.prototype.fromView = view.decode;
+Header.prototype.toView   = view.encode;
 
 })();
 

@@ -55,85 +55,85 @@ function writeUInt8() {
 }
 
 function readUInt16(ordering) {
-  var byteOrdering = ordering;
+  var bo = ordering;
   return function(view, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === LSBF) {
+    if(bo === LSBF) {
       return view.buf.readUInt16LE(view.begin + _offset);
-    } else if(ordering === MSBF) {
+    } else if(bo === MSBF) {
       return view.buf.readUInt16BE(view.begin + _offset);
     } else {
-      throw 'Bad byte ordering: ' + ordering;
+      throw 'Bad byte ordering: ' + bo
     }
   };
 }
 
 function writeUInt16(ordering) {
-  var byteOrdering = ordering;
+  var bo = ordering;
   return function(view, value, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === LSBF) {
+    if(bo === LSBF) {
       view.buf.writeInt16LE(value, view.begin + _offset);
-    } else if(ordering === MSBF) {
+    } else if(bo === MSBF) {
       view.buf.writeUInt16BE(value, view.begin + _offset);
     } else {
-      throw 'Bad byte ordering: ' + ordering;
+      throw 'Bad byte ordering: ' + bo;
     }
   };
 }
 
 function readUInt32(ordering) {
-  var byteOrdering = ordering;
+  var bo = ordering;
   return function(view, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === LSBF) {
+    if(bo === LSBF) {
     return view.buf.readUInt32LE(view.begin + _offset);
-    } else if(ordering === MSBF) {
+    } else if(bo === MSBF) {
       return view.buf.readUInt32BE(view.begin + _offset);
     } else {
-      throw 'Bad byte ordering: ' + ordering;
+      throw 'Bad byte ordering: ' + bo;
     }
   };
 }
 
 function writeUInt32(ordering) {
-  var byteOrdering = ordering;
+  var bo = ordering;
   return function(view, value, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === LSBF) {
+    if(bo === LSBF) {
       view.buf.writeUInt32LE(value, view.begin + _offset);
-    } else if(ordering === MSBF) {
+    } else if(bo === MSBF) {
       view.buf.writeUInt32BE(value, view.begin + _offset);
     } else {
-      throw 'Bad byte ordering: ' + ordering;
+      throw 'Bad byte ordering: ' + bo;
     }
   };
 }
 
 function readUInt64(ordering) {
-  var byteOrdering = ordering;
+  var bo = ordering;
   return function(view, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === LSBF) {
+    if(bo === LSBF) {
     return view.buf.readUInt64LE(view.begin + _offset);
-    } else if(ordering === MSBF) {
+    } else if(bo === MSBF) {
       return view.buf.readUInt64BE(view.begin + _offset);
     } else {
-      throw 'Bad byte ordering: ' + ordering;
+      throw 'Bad byte ordering: ' + bo;
     }
   };
 }
 
 function writeUInt64(ordering) {
-  var byteOrdering = ordering;
+  var bo = ordering;
   return function(view, value, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === LSBF) {
+    if(bo === LSBF) {
       view.buf.writeUInt64LE(value, view.begin + _offset);
-    } else if(ordering === MSBF) {
+    } else if(bo === MSBF) {
       view.buf.writeUInt64BE(value, view.begin + _offset);
     } else {
-      throw 'Bad byte ordering: ' + ordering;
+      throw 'Bad byte ordering: ' + bo;
     }
   };
 }
@@ -165,7 +165,7 @@ function decode(view) {
     throw 'Underflow: ' + this.bytes();
   }
   this._fromView(view);
-  return advance(view, this.bytes());
+  return view.advance(this.bytes());
 }
 
 function encode(view) {
@@ -173,7 +173,7 @@ function encode(view) {
     throw 'Underflow: ' + this.bytes();
   }
   this._toView(view);
-  return advance(view, this.bytes());
+  return view.advance(this.bytes());
 }
 
 exports.decode = decode;
