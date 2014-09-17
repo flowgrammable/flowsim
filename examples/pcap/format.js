@@ -18,8 +18,8 @@ function Header() {
   this.minorVersion = null;
   this.gmtOffset    = null;
   this.tsAccuracy   = null;
-  this.maxCapture   = null;
-  this.netLink      = null;
+  this.snaplen      = null;
+  this.datalink     = null;
 }
 
 Header.prototype.bytes = function() {
@@ -35,20 +35,20 @@ Header.prototype.fromView = function(view) {
   this.minorVersion = buffer.readUInt16(mode)(view, 6);
   this.gmtOffset    = buffer.readUInt32(mode)(view, 8);
   this.tsAccuracy   = buffer.readUInt32(mode)(view, 12);
-  this.maxCapture   = buffer.readUInt32(mode)(view, 16);
-  this.netLink      = buffer.readUInt32(mode)(view, 20);
+  this.snaplen      = buffer.readUInt32(mode)(view, 16);
+  this.datalink     = buffer.readUInt32(mode)(view, 20);
 };
 
 Header.prototype.decode = buffer.decode;
 
 Header.prototype.toView = function(view) {
-  this.magicNumber  = buffer.writeUInt32(mode)(view, this.magicNumber);
-  this.majorVersion = buffer.writeUInt16(mode)(view, this.magorVersion, 4);
-  this.minorVersion = buffer.writeUInt16(mode)(view, this.minorVersion, 6);
-  this.gmtOffset    = buffer.writeUInt32(mode)(view, this.gmtOffset, 8);
-  this.tsAccuracy   = buffer.writeUInt32(mode)(view, this.tsAccuracy, 12);
-  this.maxCapture   = buffer.writeUInt32(mode)(view, this.maxCapture, 16);
-  this.netLink      = buffer.writeUInt32(mode)(view, this.netLink, 20);
+  buffer.writeUInt32(mode)(view, this.magicNumber);
+  buffer.writeUInt16(mode)(view, this.magorVersion, 4);
+  buffer.writeUInt16(mode)(view, this.minorVersion, 6);
+  buffer.writeUInt32(mode)(view, this.gmtOffset, 8);
+  buffer.writeUInt32(mode)(view, this.tsAccuracy, 12);
+  buffer.writeUInt32(mode)(view, this.snaplen, 16);
+  buffer.writeUInt32(mode)(view, this.datalink, 20);
 };
 
 Header.prototype.encode = buffer.encode;
