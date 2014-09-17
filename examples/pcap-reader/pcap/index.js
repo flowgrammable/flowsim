@@ -28,7 +28,6 @@ Header.prototype.bytes = function() {
 }
 
 Header.prototype.decode = function(buf) {
-  this.magicNumber = buf.readUInt32BE(0);
 }
 
 function PcapFile(name) {
