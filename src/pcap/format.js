@@ -2,14 +2,14 @@
 (function(){
 
 var fs     = require('fs');
-var buffer = require('../utils/buffer');
+var view = require('../utils/view');
 
 function getModeFromMagic(mode, value) {
   var magic = parseInt('0xa1b2c3d4', 16);
-  if(value !== magic && mode === buffer.msbf) {
-    mode = buffer.lsbf;
-  } else if(value !== magic && mode === buffer.lsbf) {
-    mode = buffer.msbf;
+  if(value !== magic && mode === view.MSBF) {
+    mode = view.LSBF;
+  } else if(value !== magic && mode === view.LSBF) {
+    mode = view.MSBF;
   }
 }
 
@@ -27,31 +27,31 @@ Header.prototype.bytes = function() {
   return 24;
 };
 
-Header.prototype._fromView = function(view) {
-  var mode = buffer.MSBF;
-  this.magicNumber  = view.readUInt32(mode)(view);
+Header.prototype._fromView = function(v) {
+  var mode = view.MSBF;
+  this.magicNumber  = view.readUInt32(mode)(v);
   mode = getModeFromMagic(mode, this.magicNumber);
 
-  this.majorVersion = buffer.readUInt16(mode)(view, 4);
-  this.minorVersion = buffer.readUInt16(mode)(view, 6);
-  this.gmtOffset    = buffer.readUInt32(mode)(view, 8);
-  this.tsAccuracy   = buffer.readUInt32(mode)(view, 12);
-  this.snaplen      = buffer.readUInt32(mode)(view, 16);
-  this.datalink     = buffer.readUInt32(mode)(view, 20);
+  this.majorVersion = view.readUInt16(mode)(v, 4);
+  this.minorVersion = view.readUInt16(mode)(v, 6);
+  this.gmtOffset    = view.readUInt32(mode)(v, 8);
+  this.tsAccuracy   = view.readUInt32(mode)(v, 12);
+  this.snaplen      = view.readUInt32(mode)(v, 16);
+  this.datalink     = view.readUInt32(mode)(v, 20);
 };
 
-Header.prototype._toView = function(view) {
-  buffer.writeUInt32(mode)(view, this.magicNumber);
-  buffer.writeUInt16(mode)(view, this.magorVersion, 4);
-  buffer.writeUInt16(mode)(view, this.minorVersion, 6);
-  buffer.writeUInt32(mode)(view, this.gmtOffset, 8);
-  buffer.writeUInt32(mode)(view, this.tsAccuracy, 12);
-  buffer.writeUInt32(mode)(view, this.snaplen, 16);
-  buffer.writeUInt32(mode)(view, this.datalink, 20);
+Header.prototype._toView = function(v) {
+  view.writeUInt32(mode)(v, this.magicNumber);
+  view.writeUInt16(mode)(v, this.magorVersion, 4);
+  view.writeUInt16(mode)(v, this.minorVersion, 6);
+  view.writeUInt32(mode)(v, this.gmtOffset, 8);
+  view.writeUInt32(mode)(v, this.tsAccuracy, 12);
+  view.writeUInt32(mode)(v, this.snaplen, 16);
+  view.writeUInt32(mode)(v, this.datalink, 20);
 };
 
 Header.prototype.fromView = buffer.decode;
-Header.prototype.toView = buffer.encode;
+Header.prototype.toView   = buffer.encode;
 
 function File(name) {
   this.fd = fs.openSync(name, 'rs');

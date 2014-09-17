@@ -1,7 +1,7 @@
 
 (function(){
 
-var buffer = require('../utils/buffer');
+var view = require('../utils/view');
 var data   = require('../utils/data');
 
 function Header() {
@@ -16,22 +16,22 @@ Header.prototype.bytes = function() {
   return 16;
 };
 
-Header.prototype._fromView = function(view) {
-  this.sec    = buffer.readUInt32(mode)(view);
-  this.usec   = buffer.readUInt32(mode)(view, 4);
-  this.caplen = buffer.readUInt32(mode)(view, 8);
-  this.len    = buffer.readUInt32(mode)(view, 12);
+Header.prototype._fromView = function(v) {
+  this.sec    = view.readUInt32(mode)(v);
+  this.usec   = view.readUInt32(mode)(v, 4);
+  this.caplen = view.readUInt32(mode)(v, 8);
+  this.len    = view.readUInt32(mode)(v, 12);
 };
 
-Header.prototype._toView = function(view) {
-  buffer.writeUInt32(mode)(view, this.sec);
-  buffer.writeUInt32(mode)(view, this.usec, 4);
-  buffer.writeUInt32(mode)(view, this.caplen, 8);
-  buffer.writeUInt32(mode)(view, this.len, 12);
+Header.prototype._toView = function(v) {
+  view.writeUInt32(mode)(v, this.sec);
+  view.writeUInt32(mode)(v, this.usec, 4);
+  view.writeUInt32(mode)(v, this.caplen, 8);
+  view.writeUInt32(mode)(v, this.len, 12);
 };
 
-Header.prototype.fromView = buffer.decode;
-Header.prototype.toView = buffer.encode;
+Header.prototype.fromView = view.decode;
+Header.prototype.toView = view.encode;
 
 function Packet() {
   this.header = new Header();
@@ -43,15 +43,15 @@ Packet.prototype.bytes = function(){
   return this.header.bytes() + this.packet.bytes();
 };
 
-Packet.prototype.fromView = function(view) {
-  view = this.header.fromView(view);
+Packet.prototype.fromView = function(v) {
+  v = this.header.fromView(v);
   this.packet = new data.Data(this.header.caplen);  
-  return this.packet.fromView(view);
+  return this.packet.fromView(v);
 };
 
-Packet.prototype.toView = function(view) {
-  view = this.header.toView(view);
-  return this.packet.toView(view);
+Packet.prototype.toView = function(v) {
+  v = this.header.toView(v);
+  return this.packet.toView(v);
 };
 
 })();
