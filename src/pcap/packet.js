@@ -33,5 +33,29 @@ Header.prototype.toView = function(view) {
 
 Header.prototype.encode = buffer.encode;
 
+function Packet() {
+  this.header = new Header();
+  this.packet = null;
+}
+exports.Packet = Packet;
+
+Packet.prototype.bytes = function(){
+  return this.header.bytes() + this.packet.bytes();
+}
+
+Packet.prototype.fromView = function(view) {
+  view = this.header.decode(view);
+  this.packet = new buffer.Data(this.header.caplen);  
+  return this.packet.fromView(view);
+};
+
+Packet.prototype.toView = function(view) {
+  view = this.header.encode(view);
+  return this.packet.toView(view);
+};
+
+Packet.prototype.decode = buffer.decode;
+Packet.prototype.encode = buffer.encode;
+
 })();
 

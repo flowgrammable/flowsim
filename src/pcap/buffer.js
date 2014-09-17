@@ -16,7 +16,7 @@ Buf.prototype.bytes = function() {
 };
 
 function View(buf) {
-  if(!buf instanceof Buf) {
+  if(!buf instanceof Buf || !buf instanceof View) {
     throw 'View constructed with: ' + typeof buf;
   }
   this.buf   = buf.buf;
@@ -144,14 +144,27 @@ function writeUInt64(ordering) {
   };
 }
 
+function readBuffer(view, offset) {
+  var _offset = offset === undefined ? 0 : offset;
+  return view.buf.splice(view.begin + _offset, view.end);
+}
+
+function writeBuffer(view, buf, offset, amount) {
+  var _offset = offset === undefined ? 0 : offset;
+  var _amount = amount === undefined ? 0 : amount;
+  buf.copy(view.buf, view.begin + _offset, _amount);
+}
+
 exports.readUInt8   = readUInt8;
 exports.readUInt16  = readUInt16;
 exports.readUInt32  = readUInt32;
 exports.readUInt64  = readUInt64;
+exports.readData    = readData;
 exports.writeUInt8  = writeUInt8;
 exports.writeUInt16 = writeUInt16;
 exports.writeUInt32 = writeUInt32;
 exports.writeUInt64 = writeUInt64;
+exports.writeData   = writeData;
 
 function decode(view) {
   if(view.bytes() < this.bytes()) {
@@ -171,6 +184,36 @@ function encode(view) {
 
 exports.decode = decode;
 exports.encode = encode;
+
+function Data(param) {
+  if(param instanceof Buffer) {
+    this.buf = param;
+  } else if(param typeof === 'number') {
+    this.buf = new Buffer(param);
+  } else {
+    this.buf = null;
+  }
+}
+exports.Data = Data;
+
+Data.prototype.bytes = function() {
+  if(this.buf) {
+    return this.buf.length;
+  } else {
+    return 0;
+  }
+};
+
+Data.prototype.fromView = function(view) {
+  this.buf = readBuf(view);
+};
+
+Data.prototype.toView = function(view) {
+  writeBuf(view, this.buf);
+};
+
+Data.prototype.decode = decode;
+Data.prototype.encode = encode;
 
 })();
 
