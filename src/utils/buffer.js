@@ -1,27 +1,26 @@
 
 (function(){
 
-function Buf(len) {
-  if(typeof len !== 'number') {
-    throw 'Buf constructed with: ' + typeof len;
-  }
-  this.buf   = new Buffer(len);
-  this.begin = 0;
-  this.end   = len;
-}
-exports.Buffer = Buf;
+var data = require('./data');
 
-Buf.prototype.bytes = function() {
-  return this.end - this.begin;
-};
+var MSBF = 'msbf';
+var LSBF = 'lsbf';
 
-function View(buf) {
-  if(!buf instanceof Buf || !buf instanceof View) {
-    throw 'View constructed with: ' + typeof buf;
+exports.MSBF = MSBF;
+exports.LSBF = LSBF;
+
+function View(param) {
+  if(param instanceof Buffer) {
+    this.buf   = param;
+    this.begin = 0;
+    this.end   = param.length;
+  } else if(param instanceof View) {
+    this.buf   = param.buf;
+    this.begin = param.begin;
+    this.end   = param.end;
+  } else {
+    throw "Constructed View with: " + typeof param;
   }
-  this.buf   = buf.buf;
-  this.begin = buf.begin;
-  this.end   = buf.end;
 }
 exports.View = View;
 
@@ -29,22 +28,13 @@ View.prototype.bytes = function() {
   return this.end - this.begin;
 };
 
-function constrain(view, amount) {
-  return new View(view.buf, view.begin, view.end - amount);
-}
+View.prototype.constrain = function(amount) {
+  return new View(this.buf, this.begin, this.end - amount);
+};
 
-function advance(view, amount) {
-  return new View(view.buf, view.begin + amount, view.end);
-}
-
-exports.constrain = constrain;
-exports.advance   = advance;
-
-var msbf = 'msbf';
-var lsbf = 'lsbf';
-
-exports.msbf = msbf;
-exports.lsbf = lsbf;
+View.prototype.advance = function(amount) {
+  return new View(this.buf, this.begin + amount, this.end);
+};
 
 function readUInt8() {
   return function(view, offset) {
@@ -64,9 +54,9 @@ function readUInt16(ordering) {
   var byteOrdering = ordering;
   return function(view, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === lsbf) {
+    if(ordering === LSBF) {
       return view.buf.readUInt16LE(view.begin + _offset);
-    } else if(ordering === msbf) {
+    } else if(ordering === MSBF) {
       return view.buf.readUInt16BE(view.begin + _offset);
     } else {
       throw 'Bad byte ordering: ' + ordering;
@@ -78,9 +68,9 @@ function writeUInt16(ordering) {
   var byteOrdering = ordering;
   return function(view, value, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === lsbf) {
+    if(ordering === LSBF) {
       view.buf.writeInt16LE(value, view.begin + _offset);
-    } else if(ordering === msbf) {
+    } else if(ordering === MSBF) {
       view.buf.writeUInt16BE(value, view.begin + _offset);
     } else {
       throw 'Bad byte ordering: ' + ordering;
@@ -92,9 +82,9 @@ function readUInt32(ordering) {
   var byteOrdering = ordering;
   return function(view, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === lsbf) {
+    if(ordering === LSBF) {
     return view.buf.readUInt32LE(view.begin + _offset);
-    } else if(ordering === msbf) {
+    } else if(ordering === MSBF) {
       return view.buf.readUInt32BE(view.begin + _offset);
     } else {
       throw 'Bad byte ordering: ' + ordering;
@@ -106,9 +96,9 @@ function writeUInt32(ordering) {
   var byteOrdering = ordering;
   return function(view, value, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === lsbf) {
+    if(ordering === LSBF) {
       view.buf.writeUInt32LE(value, view.begin + _offset);
-    } else if(ordering === msbf) {
+    } else if(ordering === MSBF) {
       view.buf.writeUInt32BE(value, view.begin + _offset);
     } else {
       throw 'Bad byte ordering: ' + ordering;
@@ -120,9 +110,9 @@ function readUInt64(ordering) {
   var byteOrdering = ordering;
   return function(view, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === lsbf) {
+    if(ordering === LSBF) {
     return view.buf.readUInt64LE(view.begin + _offset);
-    } else if(ordering === msbf) {
+    } else if(ordering === MSBF) {
       return view.buf.readUInt64BE(view.begin + _offset);
     } else {
       throw 'Bad byte ordering: ' + ordering;
@@ -134,9 +124,9 @@ function writeUInt64(ordering) {
   var byteOrdering = ordering;
   return function(view, value, offset) {
     var _offset = offset === undefined ? 0 : offset;
-    if(ordering === lsbf) {
+    if(ordering === LSBF) {
       view.buf.writeUInt64LE(value, view.begin + _offset);
-    } else if(ordering === msbf) {
+    } else if(ordering === MSBF) {
       view.buf.writeUInt64BE(value, view.begin + _offset);
     } else {
       throw 'Bad byte ordering: ' + ordering;
@@ -144,15 +134,15 @@ function writeUInt64(ordering) {
   };
 }
 
-function readBuffer(view, offset) {
+function readData(view, offset) {
   var _offset = offset === undefined ? 0 : offset;
-  return view.buf.splice(view.begin + _offset, view.end);
+  return new data.Data(view.buf.splice(view.begin + _offset, view.end));
 }
 
-function writeBuffer(view, buf, offset, amount) {
+function writeData(view, data, offset, amount) {
   var _offset = offset === undefined ? 0 : offset;
   var _amount = amount === undefined ? 0 : amount;
-  buf.copy(view.buf, view.begin + _offset, _amount);
+  data.getBuffer().copy(view.buf, view.begin + _offset, _amount);
 }
 
 exports.readUInt8   = readUInt8;
@@ -170,7 +160,7 @@ function decode(view) {
   if(view.bytes() < this.bytes()) {
     throw 'Underflow: ' + this.bytes();
   }
-  this.fromView(view);
+  this._fromView(view);
   return advance(view, this.bytes());
 }
 
@@ -178,42 +168,12 @@ function encode(view) {
   if(view.bytes() < this.bytes()) {
     throw 'Underflow: ' + this.bytes();
   }
-  this.toView(view);
+  this._toView(view);
   return advance(view, this.bytes());
 }
 
 exports.decode = decode;
 exports.encode = encode;
-
-function Data(param) {
-  if(param instanceof Buffer) {
-    this.buf = param;
-  } else if(param typeof === 'number') {
-    this.buf = new Buffer(param);
-  } else {
-    this.buf = null;
-  }
-}
-exports.Data = Data;
-
-Data.prototype.bytes = function() {
-  if(this.buf) {
-    return this.buf.length;
-  } else {
-    return 0;
-  }
-};
-
-Data.prototype.fromView = function(view) {
-  this.buf = readBuf(view);
-};
-
-Data.prototype.toView = function(view) {
-  writeBuf(view, this.buf);
-};
-
-Data.prototype.decode = decode;
-Data.prototype.encode = encode;
 
 })();
 

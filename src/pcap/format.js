@@ -2,7 +2,7 @@
 (function(){
 
 var fs     = require('fs');
-var buffer = require('./buffer');
+var buffer = require('../utils/buffer');
 
 function getModeFromMagic(mode, value) {
   var magic = parseInt('0xa1b2c3d4', 16);
@@ -27,8 +27,8 @@ Header.prototype.bytes = function() {
   return 24;
 };
 
-Header.prototype.fromView = function(view) {
-  var mode = buffer.msbf;
+Header.prototype._fromView = function(view) {
+  var mode = buffer.MSBF;
   this.magicNumber  = view.readUInt32(mode)(view);
   mode = getModeFromMagic(mode, this.magicNumber);
 
@@ -40,9 +40,7 @@ Header.prototype.fromView = function(view) {
   this.datalink     = buffer.readUInt32(mode)(view, 20);
 };
 
-Header.prototype.decode = buffer.decode;
-
-Header.prototype.toView = function(view) {
+Header.prototype._toView = function(view) {
   buffer.writeUInt32(mode)(view, this.magicNumber);
   buffer.writeUInt16(mode)(view, this.magorVersion, 4);
   buffer.writeUInt16(mode)(view, this.minorVersion, 6);
@@ -52,7 +50,8 @@ Header.prototype.toView = function(view) {
   buffer.writeUInt32(mode)(view, this.datalink, 20);
 };
 
-Header.prototype.encode = buffer.encode;
+Header.prototype.fromView = buffer.decode;
+Header.prototype.toView = buffer.encode;
 
 function File(name) {
   this.fd = fs.openSync(name, 'rs');
