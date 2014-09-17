@@ -153,5 +153,24 @@ exports.writeUInt16 = writeUInt16;
 exports.writeUInt32 = writeUInt32;
 exports.writeUInt64 = writeUInt64;
 
+function decode(view) {
+  if(view.bytes() < this.bytes()) {
+    throw 'Underflow: ' + this.bytes();
+  }
+  this.fromView(view);
+  return advance(view, this.bytes());
+}
+
+function encode(view) {
+  if(view.bytes() < this.bytes()) {
+    throw 'Underflow: ' + this.bytes();
+  }
+  this.toView(view);
+  return advance(view, this.bytes());
+}
+
+exports.decode = decode;
+exports.encode = encode;
+
 })();
 
