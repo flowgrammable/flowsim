@@ -1,12 +1,24 @@
 
+(function(){
+
+var fmt = require('../utils/formatter');
 var msg = require('./msg');
 
-module.exports = function(db) {
+function Storage(db) {
+  this.database = db;
+}
+exports.Storage = Storage;
 
-var database = db;
+Storage.prototype.toFormatter = function(f) {
+  f.begin('Storage');
+  this.database.toFormatter(f);
+  f.end();
+};
 
-function _createSubscriber(eml, pwd, date, ip, token, dispatch) {
-  database.table('subscriber').create({
+Storage.prototype.toString = fmt.toString;
+
+Storage.prototype.createSubscriber = function(eml, pwd, date, ip, token, dispatch) {
+  this.database.table('subscriber').create({
     email: eml,
     password: pwd,
     reg_date: date,
@@ -22,10 +34,10 @@ function _createSubscriber(eml, pwd, date, ip, token, dispatch) {
       dispatch(msg.unknownError(err));
     }
   });
-}
+};
 
-function _fetchSubscriber(subInfo, dispatch) {
-  database.table('subscriber').find({
+Storage.prototype.fetchSubscriber = function(subInfo, dispatch) {
+  this.database.table('subscriber').find({
     where: subInfo
   }).success(function(result) {
     if(result) {
@@ -36,19 +48,19 @@ function _fetchSubscriber(subInfo, dispatch) {
   }).error(function(err) {
     dispatch(msg.unknownError(err));
   });
-}
+};
 
-function _updateSubscriber(sub, newSubInfo, dispatch) {
-  database.table('subscriber').updateAttributes(newSubInfo)
+Storage.prototype.updateSubscriber = function(sub, newSubInfo, dispatch) {
+  this.database.table('subscriber').updateAttributes(newSubInfo)
     .success(function(result) {
       dispatch(msg.success(result));
     }).error(function(err) {
       dispatch(msg.unknownError(err));
     });
-}
+};
 
-function _createSession(sub, skey, tmo, distpatch) {
-  database.table('session').create({
+Storage.prototype.createSession = function(sub, skey, tmo, distpatch) {
+  this.database.table('session').create({
     key: skey,
     subscriber_id: sub.id,
     timeout: tmo
@@ -57,10 +69,10 @@ function _createSession(sub, skey, tmo, distpatch) {
   }).error(function(err) {
     dispatch(msg.unknownError(err));
   });
-}
+};
 
-function _fetchSession(skey, dispatch) {
-  database.table('session').find({
+Storage.prototype.fetchSession = function(skey, dispatch) {
+  this.database.table('session').find({
     where: { key: skey } 
   }).success(function(result) {
     if(result) {
@@ -71,36 +83,27 @@ function _fetchSession(skey, dispatch) {
   }).error(function(err) {
     dispatch(msg.unknownError(err)); // probably db connection error
   });
-}
+};
 
-function _destroySession(session, dispatch) {
-  session.destroy()
+Storage.prototype.destroySession = function(session, dispatch) {
+  this.session.destroy()
     .success(function(result) {
       dispatch(msg.success());
     }).error(function(err) {
     dispatch(msg.unknownError(err));
   });
-}
+};
 
-function _destroySessionLessThan(time, dispatch) {
-  database.table('session').destroy({
+Storage.prototype.destroySessionLessThan = function(time, dispatch) {
+  this.database.table('session').destroy({
     timeout: { lt: time } 
   }).success(function(result) { 
     dispatch(msg.success(result));
   }).error  (function(err) { 
     dispatch(msg.error(err));
   });
-}
-
-return {
-  createSubscriber:       _createSubscriber,
-  fetchSubscriber:        _fetchSubscriber,
-  updateSubscriber:       _updateSubscriber,
-  createSession:          _createSession,
-  fetchSession:           _fetchSession,
-  destroySession:         _destroySession,
-  destroySessionLessThan: _destroySessionLessThan
 };
 
-};
+})();
+
 

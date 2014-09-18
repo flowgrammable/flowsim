@@ -1,12 +1,12 @@
 
 (function(){
 
-var fmt     = require('../utils/formatter');
-var msg     = require('./msg');
-var adapter = require('./adapter');
+var fmt = require('../utils/formatter');
+var msg = require('./msg');
+var stg = require('./storage');
 
 function Controller(context) {
-  this.database = context.database;
+  this.storage  = new stg.Storage(context.database);
   this.mailer   = context.mailer;
   this.template = context.template;
 }
@@ -14,7 +14,7 @@ exports.Controller = Controller;
 
 Controller.prototype.toFromatter = function(f) {
   f.begin('Controller');
-  this.database.toFormatter(f);
+  this.storage.toFormatter(f);
   this.mailer.toFormatter(f);
   this.template.toFormatter(f);
   f.end();
