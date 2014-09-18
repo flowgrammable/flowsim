@@ -4,8 +4,7 @@
 var validator = require('validator');
 var fmt       = require('../utils/formatter');
 var msg       = require('./msg');
-
-var controller = require('./controller');
+var ctlr      = require('./controller');
 
 var name = 'subscriber';
 
@@ -14,61 +13,73 @@ function isValidPassword(p) {
   return pat.test(p);
 }
 
-function closure(srv, ctrl, f) {
-  var server = srv;
-  var controller = ctrl;
-  return f;
+function login(_server, _controller) {
+  var server     = _server;
+  var controller = _controller;
+  return function(req, res, next) {
+    var dispatch = server.responder(res);
+    if(!req.body.email) {
+      dispatch(msg.missingEmail());
+    } else if(!validator.isEmail(req.body.email)) {
+      dispatch(msg.badEmail());
+    } else if(!req.body.pwd) {
+      dispatch(msg.missingPwd());
+    } else if(!isValidPassword(req.body.pwd)) {
+      dispatch(msg.badPwd());
+    } else {
+      controller.login(req.body.email, req.body.pwd, dispatch);
+    }
+  };
 }
 
-function login(req, res, next) {
-  var dispatch = server.responder(res);
-  if(!req.body.email) {
-    dispatch(msg.missingEmail());
-  } else if(!validator.isEmail(req.body.email)) {
-    dispatch(msg.badEmail());
-  } else if(!req.body.pwd) {
-    dispatch(msg.missingPwd());
-  } else if(!isValidPassword(req.body.pwd)) {
-    dispatch(msg.badPwd());
-  } else {
-    controller.login(req.body.email, req.body.pwd, dispatch);
-  }
+function logout(_server, _controller) {
+  var server     = _server;
+  var controller = _controller;
+  return function(req, res, next) {
+    var dispatch = server.responder(res);
+    controller.logout(, dispatch);
+  };
 }
 
-function logout(req, res, next) {
-  var dispatch = server.responder(res);
-  controller.logout(, dispatch);
+function register((_server, _controller) {
+  var server     = _server;
+  var controller = _controller;
+  return function(req, res, next) {
+    var dispatch = server.responder(res);
+    if(!req.body.email) {
+      dispatch(msg.missingEmail());
+    } else if(!validator.isEmail(req.body.email)) {
+      dispatch(msg.badEmail());
+    } else if(!req.body.pwd) {
+      dispatch(msg.missingPwd());
+    } else if(!isValidPassword(req.body.pwd)) {
+      dispatch(msg.badPwd());
+    } else {
+      controller.register(req.body.email, req.body.pwd, dispatch);
+    }
+  };
 }
 
-function register(req, res, next) {
-  var dispatch = server.responder(res);
-  if(!req.body.email) {
-    dispatch(msg.missingEmail());
-  } else if(!validator.isEmail(req.body.email)) {
-    dispatch(msg.badEmail());
-  } else if(!req.body.pwd) {
-    dispatch(msg.missingPwd());
-  } else if(!isValidPassword(req.body.pwd)) {
-    dispatch(msg.badPwd());
-  } else {
-    controller.register(req.body.email, req.body.pwd, dispatch);
-  }
+function verify((_server, _controller) {
+  var server     = _server;
+  var controller = _controller;
+  return function(req, res, next) {
+    var dispatch = server.responder(res);
+    controller.verify(, dispatch);
+  };
 }
 
-function verify(req, res, next) {
-  var dispatch = server.responder(res);
-  controller.verify(, dispatch);
-}
-
-function reset(req, res, next) {
-  var dispatch = server.responder(res);
-  if(!req.body.email) {
-    dispatch(msg.missingEmail());
-  } else if(!validator.isEmail(req.body.email)) {
-    dispatch(msg.badEmail());
-  } else {
-    controller.reset(req.body.email, dispatch);
-  }
+function reset((_server, _controller) {
+  return function(req, res, next) {
+    var dispatch = server.responder(res);
+    if(!req.body.email) {
+      dispatch(msg.missingEmail());
+    } else if(!validator.isEmail(req.body.email)) {
+      dispatch(msg.badEmail());
+    } else {
+      controller.reset(req.body.email, dispatch);
+    }
+  };
 }
   
 function Subscriber(context) {
@@ -99,31 +110,31 @@ Subscriber.prototype.load = function(server) {
   server.addHandler(
     'post',
     this._getPathName(server, 'login'), 
-    closure(server, this.controller, login)
+    login(server, this.controller)
   );
 
   server.addHandler(
     'post',
     this._getPathName(server, 'logout'), 
-    closure(server, this.controller, logout)
+    logout(server, this.controller)
   );
 
   server.addHandler(
     'post',
     this._getPathName(server, 'register'), 
-    closure(server, this.controller, register)
+    register(server, this.controller)
   );
 
   server.addHandler(
     'post',
     this._getPathName(server, 'verify'), 
-    closure(server, this.controller, verify)
+    verify(server, this.controller)
   ):
 
   server.addHandler(
     'post',
     this._getPathName(server, 'reset'),
-    closure(server, this.controller, reset)
+    reset(server, this.controller)
   );
 
 };
