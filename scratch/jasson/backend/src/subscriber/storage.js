@@ -18,7 +18,7 @@ Storage.prototype.toFormatter = function(f) {
 
 Storage.prototype.toString = fmt.toString;
 
-Storage.prototype.createSubscriber = function(eml, pwd, date, ip, token, dispatch) {
+Storage.prototype.insertSubscriber = function(eml, pwd, date, ip, token, dispatch) {
   this.database.table('subscriber').create({
     email: eml,
     password: pwd,
@@ -27,9 +27,9 @@ Storage.prototype.createSubscriber = function(eml, pwd, date, ip, token, dispatc
     verification_token: token,
     status: 'CREATED'
   }).success(function(result) {
-    dispatch(msg.success(result));
+    dispatch(undefined, result);
   }).error(function(err) {
-    if(err.detail == 'Key (email)=(' + em + ') already exists.') {
+    if(err.detail == 'Key (email)=(' + eml + ') already exists.') {
       dispatch(msg.emailInUse()); 
     } else {
       dispatch(msg.unknownError(err));
@@ -77,7 +77,7 @@ Storage.prototype.fetchSession = function(skey, dispatch) {
     where: { key: skey } 
   }).success(function(result) {
     if(result) {
-      dispatch(msg.success(result));
+      dispatch(undefined, result);
     } else {
       dispatch(msg.sessionNotFound());
     }

@@ -14,15 +14,36 @@ function isValidPassword(p) {
   return pat.test(p);
 }
 
+function _authorize(_req, _next, _delegate) {
+  var delegate = _delegate;
+  var req = _req;
+  var next = _next;
+  return function(err, succ) {
+    if(err) {
+      delegate(err);
+    } else if(succ) {
+      req.subscriber_id = succ;
+      next();
+    } else {
+      //FIXME: find better error
+      delegate(msg.unknownError());
+    }
+  };
+}
+
 function authorize(_server, _controller) {
   var server     = _server;
   var controller = _controller;
   return function(req, res, next) {
-    //FIXME: authorization code goes here
+    var dispatch = util.Delegate(res);
     if(req.headers['x-access-token']) {
-      controller.authorize(req.headers['x-access-token']);
+      controller.authorize(
+        req.headers['x-access-token'], 
+        _authorize(req, next, dispatch)
+      );
+    } else {
+      return next();
     }
-    return next();
   };
 }
 

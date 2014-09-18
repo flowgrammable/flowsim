@@ -22,6 +22,10 @@ Controller.prototype.toFromatter = function(f) {
 
 Controller.prototype.toString = fmt.toString;
 
+Controller.prototype.authorize = function(token, delegate) {
+  this.storage.fetchSession(token, delegate); 
+}
+
 Controller.prototype.login = function(email, pwd, delgate) {
   delegate();
 };
