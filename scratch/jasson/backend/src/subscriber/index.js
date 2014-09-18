@@ -65,7 +65,14 @@ function verify(_server, _controller) {
   var controller = _controller;
   return function(req, res, next) {
     var dispatch = server.responder(res);
-    controller.verify(dispatch);
+    if(!req.body.token) {
+      dispatch(msg.missingVerificationToken());
+    } else if(invalid(req.body.token)) {
+      // FIXME: figure out how invali token works
+      dispatch(msg.badVerificationToken());
+    } else {
+      controller.verify(dispatch);
+    }
   };
 }
 
@@ -85,7 +92,7 @@ function reset(_server, _controller) {
 function Subscriber(context) {
   // Set the context references
   this.config     = context.configuration[name];
-  this.controller = new ctrl.Controller(context);
+  this.controller = new ctlr.Controller(context);
 }
 exports.Subscriber = Subscriber;
 
@@ -102,9 +109,6 @@ Subscriber.prototype._getPathName = function(server, path) {
 };
 
 Subscriber.prototype.load = function(server) {
-
-  // Initialize the database with the local models
-  this.database.loadLocalModules(__dirname);
 
   // Add the handlers
   server.addHandler(

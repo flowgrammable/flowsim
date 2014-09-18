@@ -32,8 +32,8 @@ function Server(config) {
   // Load credential information if present
   if(this.config.https) {
     this.creds = {
-      key: fs.readFileSync(dir + '/' + _config.https.key),
-      certificate: fs.readFileSync(dir + '/' + _config.https.cert)
+      key: fs.readFileSync(dir + '/' + this.config.https.key),
+      certificate: fs.readFileSync(dir + '/' + this.config.https.cert)
     };
   } else {
     this.creds = {};
@@ -64,7 +64,7 @@ Server.prototype.addHandler = function(method, path, handler) {
 };
 
 Server.prototype.addModule = function(mod) {
-  module.load(this);
+  mod.load(this);
   return this;
 };
 
@@ -77,7 +77,7 @@ Server.prototype.rootPath = function() {
 };
 
 Server.prototype.run = function() {
-  this.server.listen(this.config.port, this.config.);
+  this.server.listen(this.config.port, this.config.hostname);
   this.running = true;
 };
 

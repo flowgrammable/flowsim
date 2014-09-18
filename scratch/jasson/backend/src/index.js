@@ -21,12 +21,12 @@ prog
   .parse(process.argv);
 
 // Initialize the configuration
-var config     = require(cmdr.prog);
+var config     = require(prog.config || './config.json');
 config.basedir = __dirname;
 
 // Initialze global objects
 var db         = new dbs.Database(config);
-var mail       = new mlr.mailer(config);
+var mail       = new mlr.Mailer(config);
 var template   = new tmp.Template(config);
 var restServer = new srv.Server(config);
 

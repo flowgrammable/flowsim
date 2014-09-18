@@ -6,6 +6,7 @@ var msg = require('./msg');
 
 function Storage(db) {
   this.database = db;
+  this.database.loadLocalModels(__dirname);
 }
 exports.Storage = Storage;
 

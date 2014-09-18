@@ -14,7 +14,7 @@ var name = 'database';
 var defHost = '127.0.0.1';
 
 function Database(config) {
-  this.config = cfg[name] || {};
+  this.config = config[name] || {};
 
   this.models = {};
 
@@ -50,16 +50,17 @@ Database.prototype.table = function(tbl) {
 };
 
 Database.prototype.loadModels = function(dir) {
+  var that = this;
   _.each(fs.readdirSync(dir), function(file) {
     if(path.extname(file) == '.js') {
       var model = require(dir + '/' + file);
       // I'm not really sure we need to cache the models ..
-      this.models[model.name] = {
-        table: this.db.define(model.name, model.table, model.options),
+      that.models[model.name] = {
+        table: that.db.define(model.name, model.table, model.options),
         relation: model.relations
       };
       _.each(model.relation, function(value, key) {
-        this.models[model.name].table[key](value.relative, value.options);
+        that.models[model.name].table[key](value.relative, value.options);
       });
     }
   });

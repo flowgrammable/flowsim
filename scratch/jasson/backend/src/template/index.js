@@ -10,18 +10,19 @@ var fmt  = require('../utils/formatter');
 var name = 'template';
 
 function Template(config) {
-  var dir;
+  var dir, that;
 
-  this.config = config.get[name];
+  this.config = config[name];
   this.templates = {};
 
   dir = config.basedir + '/' + this.config.dir;
 
-  _.each(fs.readdirSync(dir, function(file) {
+  that = this;
+  _.each(fs.readdirSync(dir), function(file) {
     var basename = path.basename(file, '.ejs');
     var relname = dir + '/' + file;
-    this.templates[basename] = fs.readFileSync(relname, 'utf8');
-  }));
+    that.templates[basename] = fs.readFileSync(relname, 'utf8');
+  });
 }
 exports.Template = Template;
 
