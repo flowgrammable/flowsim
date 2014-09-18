@@ -19,6 +19,9 @@ function authorize(_server, _controller) {
   var controller = _controller;
   return function(req, res, next) {
     //FIXME: authorization code goes here
+    if(req.headers['x-access-token']) {
+      controller.authorize(req.headers['x-access-token']);
+    }
     return next();
   };
 }

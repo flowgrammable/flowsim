@@ -28,7 +28,6 @@ Controller.prototype.login = function(email, pwd, delgate) {
 
 Controller.prototype.logout = function(delegate) {
   delegate();
-  console.log('blah');
 };
 
 Controller.prototype.register = function(delegate) {
