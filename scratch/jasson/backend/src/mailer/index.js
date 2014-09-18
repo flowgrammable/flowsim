@@ -1,18 +1,22 @@
 
 var nm = require('nodemailer');
 
-module.exports = function(config) {
-
+module.exports = function(cfg) {
   var name = 'mailer';
-  var cfg = config.get(name);
 
-  if(!name) throw 'Mailer missing config';
+  // Grab a configuration if present ...
+  // ... otherwise throw an error
+  var config = cfg.get(name);
+  if(!config) {
+    // FIXME: add a better error mechanism
+    throw 'Mailer missing config';
+  }
 
   var transporter = nm.createTransport({
-    service: cfg.service,
+    service: config.service,
     auth: {
-      user: cfg.user,
-      pass: cfg.pwd
+      user: config.user,
+      pass: config.pwd
     }
   });
 
@@ -22,7 +26,7 @@ module.exports = function(config) {
   
   function _mail(dst, sub, body) {
     transporter.sendMail({
-      from: cfg.user,                       // set the smtp from
+      from: config.user,                    // set the smtp from
       to: dst,                              // set the smtp to
       subject: sub,                         // set the smtp subject
       html: body                            // set the smtp html-body
@@ -37,9 +41,19 @@ module.exports = function(config) {
     });
   }
 
+  function _toString() {
+    return "";
+  }
+
+  function _toFormatter(f) {
+    return f;
+  }
+
   return {
     mail: _mail,
-    close: _close
+    close: _close,
+    toString: _toString,
+    toFormatter: _toFormatter
   };
 };
 
