@@ -126,6 +126,7 @@ Subscriber.prototype.load = function(server) {
     server.rootPath() + '/*', 
     authorize(server, this.controller)
   );
+
   server.addHandler(
     'post',
     this._getPathName(server, 'login'), 
@@ -133,7 +134,7 @@ Subscriber.prototype.load = function(server) {
   );
 
   server.addHandler(
-    'get',
+    'post',
     this._getPathName(server, 'logout'), 
     logout(server, this.controller)
   );
