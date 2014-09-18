@@ -23,18 +23,24 @@ Controller.prototype.toFromatter = function(f) {
 Controller.prototype.toString = fmt.toString;
 
 Controller.prototype.login = function(email, pwd, delgate) {
+  delegate();
 };
 
-Controller.prototype.logout = function() {
+Controller.prototype.logout = function(delegate) {
+  delegate();
+  console.log('blah');
 };
 
-Controller.prototype.register = function() {
+Controller.prototype.register = function(delegate) {
+  delegate();
 };
 
-Controller.prototype.verify = function() {
+Controller.prototype.verify = function(delegate) {
+  delegate();
 };
 
-Controller.prototype.reset = function() {
+Controller.prototype.reset = function(delegate) {
+  delegate();
 };
 
 })();

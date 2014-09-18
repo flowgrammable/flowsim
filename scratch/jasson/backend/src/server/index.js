@@ -57,6 +57,9 @@ Server.prototype.addHandler = function(method, path, handler) {
     case 'delete':
       this.server[method](path, handler);
       break;
+    case '*':
+      this.server.use(handler);
+      break;
     default:
       throw 'Bad server handler: ' + method + ' ' + path + ' ' + handler;
       break;

@@ -3,6 +3,7 @@
 
 var validator = require('validator');
 var fmt       = require('../utils/formatter');
+var util      = require('../server/utils');
 var msg       = require('./msg');
 var ctlr      = require('./controller');
 
@@ -13,11 +14,20 @@ function isValidPassword(p) {
   return pat.test(p);
 }
 
+function authorize(_server, _controller) {
+  var server     = _server;
+  var controller = _controller;
+  return function(req, res, next) {
+    //FIXME: authorization code goes here
+    return next();
+  };
+}
+
 function login(_server, _controller) {
   var server     = _server;
   var controller = _controller;
   return function(req, res, next) {
-    var dispatch = server.responder(res);
+    var dispatch = util.Delegate(res);
     if(!req.body.email) {
       dispatch(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
@@ -36,7 +46,7 @@ function logout(_server, _controller) {
   var server     = _server;
   var controller = _controller;
   return function(req, res, next) {
-    var dispatch = server.responder(res);
+    var dispatch = util.Delegate(res);
     controller.logout(dispatch);
   };
 }
@@ -45,7 +55,7 @@ function register(_server, _controller) {
   var server     = _server;
   var controller = _controller;
   return function(req, res, next) {
-    var dispatch = server.responder(res);
+    var dispatch = util.Delegate(res);
     if(!req.body.email) {
       dispatch(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
@@ -64,7 +74,7 @@ function verify(_server, _controller) {
   var server     = _server;
   var controller = _controller;
   return function(req, res, next) {
-    var dispatch = server.responder(res);
+    var dispatch = util.Delegate(res);
     if(!req.body.token) {
       dispatch(msg.missingVerificationToken());
     } else if(invalid(req.body.token)) {
@@ -78,7 +88,7 @@ function verify(_server, _controller) {
 
 function reset(_server, _controller) {
   return function(req, res, next) {
-    var dispatch = server.responder(res);
+    var dispatch = util.Delegate(res);
     if(!req.body.email) {
       dispatch(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
@@ -112,13 +122,18 @@ Subscriber.prototype.load = function(server) {
 
   // Add the handlers
   server.addHandler(
+    '*', 
+    server.rootPath() + '/*', 
+    authorize(server, this.controller)
+  );
+  server.addHandler(
     'post',
     this._getPathName(server, 'login'), 
     login(server, this.controller)
   );
 
   server.addHandler(
-    'post',
+    'get',
     this._getPathName(server, 'logout'), 
     logout(server, this.controller)
   );
