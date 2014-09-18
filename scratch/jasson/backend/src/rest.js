@@ -9,13 +9,13 @@ exports.responder = function(res) {
   };
 };
 
-exports.addHandler = function(server, type, path, handler) {
-  switch(type) {
+exports.addHandler = function(server, method, path, handler) {
+  switch(method) {
     case 'post':
     case 'get':
     case 'put':
     case 'delete':
-      server[type](path, handler);
+      server[method](path, handler);
       break;
     default:
       throw "Unknown restify method: " + type;

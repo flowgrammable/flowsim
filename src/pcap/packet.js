@@ -46,7 +46,8 @@ Packet.prototype.bytes = function(){
 Packet.prototype.fromView = function(v) {
   v = this.header.fromView(v);
   this.packet = new data.Data(this.header.caplen);  
-  return this.packet.fromView(v);
+  this.packet.fromView(v.constrain(this.header.caplen));
+  return v.advance(this.header.caplen);
 };
 
 Packet.prototype.toView = function(v) {
