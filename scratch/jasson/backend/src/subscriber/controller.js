@@ -9,7 +9,7 @@ function Controller(context) {
   this.database = context.database;
   this.mailer   = context.mailer;
   this.template = context.template;
-};
+}
 exports.Controller = Controller;
 
 Controller.prototype.toFromatter = function(f) {
@@ -26,16 +26,16 @@ Controller.prototype.login = function(email, pwd, delgate) {
 };
 
 Controller.prototype.logout = function() {
-}
+};
 
 Controller.prototype.register = function() {
-}
+};
 
 Controller.prototype.verify = function() {
-}
+};
 
 Controller.prototype.reset = function() {
-}
+};
 
 })();
 

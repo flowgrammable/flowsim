@@ -41,11 +41,11 @@ Database.prototype.toFormatter = function(f) {
   f.addPair('Dialect', this.config.dialect);
   f.addPair('User', this.config.user);
   f.end();
-}
+};
 
 Database.prototype.toString = fmt.toString;
 
-Database/prototype.table = function(tbl) {
+Database.prototype.table = function(tbl) {
   return this.models[tbl].table || null;
 };
 

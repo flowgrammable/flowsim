@@ -1,7 +1,7 @@
 
 (function(){
 
-msg = require('../msg');
+var msg = require('../msg');
 
 exports.success = msg.success;
 exports.error = msg.error;

@@ -1,5 +1,5 @@
 
-(functio(){
+(function(){
 
 exports.success = function(data) {
   return {

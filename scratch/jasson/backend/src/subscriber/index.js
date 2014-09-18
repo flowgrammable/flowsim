@@ -37,11 +37,11 @@ function logout(_server, _controller) {
   var controller = _controller;
   return function(req, res, next) {
     var dispatch = server.responder(res);
-    controller.logout(, dispatch);
+    controller.logout(dispatch);
   };
 }
 
-function register((_server, _controller) {
+function register(_server, _controller) {
   var server     = _server;
   var controller = _controller;
   return function(req, res, next) {
@@ -60,16 +60,16 @@ function register((_server, _controller) {
   };
 }
 
-function verify((_server, _controller) {
+function verify(_server, _controller) {
   var server     = _server;
   var controller = _controller;
   return function(req, res, next) {
     var dispatch = server.responder(res);
-    controller.verify(, dispatch);
+    controller.verify(dispatch);
   };
 }
 
-function reset((_server, _controller) {
+function reset(_server, _controller) {
   return function(req, res, next) {
     var dispatch = server.responder(res);
     if(!req.body.email) {
@@ -85,7 +85,7 @@ function reset((_server, _controller) {
 function Subscriber(context) {
   // Set the context references
   this.config     = context.configuration[name];
-  this.controller = new ctrl.Controller(context);;
+  this.controller = new ctrl.Controller(context);
 }
 exports.Subscriber = Subscriber;
 
@@ -129,7 +129,7 @@ Subscriber.prototype.load = function(server) {
     'post',
     this._getPathName(server, 'verify'), 
     verify(server, this.controller)
-  ):
+  );
 
   server.addHandler(
     'post',

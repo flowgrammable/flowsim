@@ -1,5 +1,5 @@
 
-(funciton(){
+(function(){
 
 var fs   = require('fs');
 var _    = require('underscore');
@@ -21,7 +21,7 @@ function Template(config) {
     var basename = path.basename(file, '.ejs');
     var relname = dir + '/' + file;
     this.templates[basename] = fs.readFileSync(relname, 'utf8');
-  });
+  }));
 }
 exports.Template = Template;
 
@@ -32,7 +32,7 @@ Template.prototype.toFormatter = function(f) {
 
 Template.prototype.toString = fmt.toString;
 
-Template.prototype.render(id, ctx) {
+Template.prototype.render = function(id, ctx) {
   if(id in this.templates) {
     return ejs.render(this.templates[id], ctx);
   } else {
