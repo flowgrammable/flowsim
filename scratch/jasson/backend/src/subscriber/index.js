@@ -3,8 +3,8 @@
 
 var validator = require('validator');
 var fmt       = require('../utils/formatter');
+var msg       = require('./msg');
 
-var msg        = require('./msg');
 var controller = require('./controller');
 
 var name = 'subscriber';
@@ -14,91 +14,123 @@ function isValidPassword(p) {
   return pat.test(p);
 }
 
-function Subscriber(config, database, mailer, template) {
-  this.config = config.get(name);
+function closure(srv, ctrl, f) {
+  var server = srv;
+  var controller = ctrl;
+  return f;
+}
 
-  this.database = database;
-  this.mailer   = mailer;
-  this.template = template;
+function login(req, res, next) {
+  var dispatch = server.responder(res);
+  if(!req.body.email) {
+    dispatch(msg.missingEmail());
+  } else if(!validator.isEmail(req.body.email)) {
+    dispatch(msg.badEmail());
+  } else if(!req.body.pwd) {
+    dispatch(msg.missingPwd());
+  } else if(!isValidPassword(req.body.pwd)) {
+    dispatch(msg.badPwd());
+  } else {
+    controller.login(req.body.email, req.body.pwd, dispatch);
+  }
+}
+
+function logout(req, res, next) {
+  var dispatch = server.responder(res);
+  controller.logout(, dispatch);
+}
+
+function register(req, res, next) {
+  var dispatch = server.responder(res);
+  if(!req.body.email) {
+    dispatch(msg.missingEmail());
+  } else if(!validator.isEmail(req.body.email)) {
+    dispatch(msg.badEmail());
+  } else if(!req.body.pwd) {
+    dispatch(msg.missingPwd());
+  } else if(!isValidPassword(req.body.pwd)) {
+    dispatch(msg.badPwd());
+  } else {
+    controller.register(req.body.email, req.body.pwd, dispatch);
+  }
+}
+
+function verify(req, res, next) {
+  var dispatch = server.responder(res);
+  controller.verify(, dispatch);
+}
+
+function reset(req, res, next) {
+  var dispatch = server.responder(res);
+  if(!req.body.email) {
+    dispatch(msg.missingEmail());
+  } else if(!validator.isEmail(req.body.email)) {
+    dispatch(msg.badEmail());
+  } else {
+    controller.reset(req.body.email, dispatch);
+  }
+}
+  
+function Subscriber(context) {
+  // Set the context references
+  this.config   = context.configuration[name];
+  this.database = context.database;
+  this.mailer   = context.mailer;
+  this.template = context.template;
+
+  this.controller = {};
 }
 exports.Subscriber = Subscriber;
 
 Subscriber.prototype.toFormatter = function(f) {
   f.begin('Subscriber');
+  this.database.toFormatter(f);
+  this.mailer.toFormatter(f);
+  this.template.toFormatter(f);
   f.end();
 };
 
 Subscriber.prototype.toString = fmt.toString;
 
-Subscriber.prototype.load = function(server) {
-
-  var ctrl;
-
-  function mkMethod(path) {
-    return server.rootPath() + '/' + name + '/' + path;
-  }
-
-  // Initialize our components
-  database.loadLocalModels(__dirname);
-  ctrl = controller(database);
-
-  rest.addHandler(server, 'post', mkMethod('login'), 
-    function(req, res, next) {
-
-    var dispatch = rest.responder(res);
-    if(!req.body.email) {
-      dispatch(msg.missingEmail());
-    } else if(!validator.isEmail(req.body.email)) {
-      dispatch(msg.badEmail());
-    } else if(!req.body.pwd) {
-      dispatch(msg.missingPwd());
-    } else if(!isValidPassword(req.body.pwd)) {
-      dispatch(msg.badPwd());
-    }
-
-    dispatch(msg.success({
-      login: req.body.email,
-      pwd: req.body.pwd
-    }));
-  });
-
+Subscriber.prototype._getPathName = function(server, path) {
+  return server.rootPath() + '/' + name + '/' + path;
 };
 
-  server.get(mkMethod('logout/:user'), function(req, res, next) {
-    console.log('logout: '+ req.params.user);
-    res.end('logout: '+ req.params.user + '\n');
-  });
+Subscriber.prototype.load = function(server) {
 
-  server.get(mkMethod('verify/:token'), function(req, res, next) {
-    console.log('verify: ' + req.params.token);
-    res.end('verify: ' + req.params.token + '\n');
-  });
+  // Initialize the database with the local models
+  this.database.loadLocalModules(__dirname);
 
-  server.post(mkMethod('register'), function(req, res, next) {
-    var email = req.body.email;
-    var pwd = req.body.pwd;
+  // Add the handlers
+  server.addHandler(
+    'post',
+    this._getPathName(server, 'login'), 
+    closure(server, this.controller, login)
+  );
 
-    if(!(email in subs)) {
-      subs[email] = tokenId++;
+  server.addHandler(
+    'post',
+    this._getPathName(server, 'logout'), 
+    closure(server, this.controller, logout)
+  );
 
-      mailer.send(email, 
-        'Flowsim registration verification', 
-        tmpEngine.render('verification', {
-          baseUrl: mkMethod('verify'),
-          token: subs[email]
-       }));
-      console.log('Register: %s with %i', email, subs[email]);
-    } else {
-      console.log('Register: %s exists', email);
-    }
-    res.writeHead(200, {});
-    res.end('');
-  });
-  
-  server.get(mkMethod('forgot/:email'), function(req, res, next) {
-    console.log('forgot: ' + req.params.email);
-    res.end('forgot: ' + req.params.email + '\n');
-  });
+  server.addHandler(
+    'post',
+    this._getPathName(server, 'register'), 
+    closure(server, this.controller, register)
+  );
+
+  server.addHandler(
+    'post',
+    this._getPathName(server, 'verify'), 
+    closure(server, this.controller, verify)
+  ):
+
+  server.addHandler(
+    'post',
+    this._getPathName(server, 'reset'),
+    closure(server, this.controller, reset)
+  );
 
 };
 

@@ -1,5 +1,7 @@
 
-msg = require('../rest');
+(function(){
+
+msg = require('../msg');
 
 exports.success = msg.success;
 exports.error = msg.error;
@@ -173,4 +175,6 @@ exports.sessionNotFound = function() {
     type: "sessionNotFound"
   });
 };
+
+})();
 

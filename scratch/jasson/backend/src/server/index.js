@@ -64,6 +64,7 @@ Server.prototype.addHandler = function(method, path, handler) {
 };
 
 Server.prototype.addModule = function(mod) {
+  module.load(this);
   return this;
 };
 

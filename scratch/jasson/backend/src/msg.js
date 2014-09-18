@@ -1,4 +1,6 @@
 
+(functio(){
+
 exports.success = function(data) {
   return {
     value: data || {}
@@ -10,4 +12,6 @@ exports.error = function(data) {
     error: data || {}
   };
 };
+
+})();
 
