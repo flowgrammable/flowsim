@@ -1,45 +1,53 @@
 #!/usr/bin/env node
 
+(function(){
+
 // External dependencies
-var restify = require('restify');
-var fs      = require('fs');
-var cmdr    = require('commander');
+var fs   = require('fs');
+var _    = require('underscore');
+var prog = require('commander');
 
 // Internal dependent modules
-var config     = require('./config');
-var mailer     = require('./mailer');
-var subscriber = require('./subscriber');
-var template   = require('./template');
-var database   = require('./database');
+var dbs = require('./database');
+var mlr = require('./mailer');
+var tmp = require('./template');
+var srv = require('./server');
+var sub = require('./subscriber');
 
 // Process the command line
-cmdr
+prog
   .version(process.env.SERVER_VERSION)
   .option('-c, --config [config file]', 'Specify a configuration file')
-  .option('-h, --hostname [hostname]', 'Specify the servers hostname')
-  .option('-p, --port [tcp port]', 'Specify a listening port')
   .parse(process.argv);
 
+// Initialize the configuration
+var config     = require(cmdr.prog);
+config.basedir = __dirname;
+
 // Initialze global objects
-var configuration  = config(cmdr, __dirname);
-var mailEngine     = mailer(configuration);
-var templateEngine = template(configuration);
-var db             = database(configuration);
+var db         = new dbs.Database(config);
+var mail       = new mlr.mailer(config);
+var template   = new tmp.Template(config);
+var restServer = new srv.Server(config);
 
-var server = restify.createServer(configuration.getCreds())
-  .use(restify.jsonp())
-  .use(restify.gzipResponse())
-  .use(restify.bodyParser());
+// Initialize the modules
+var mods = [
+  new sub.Subscriber({
+    configuration: config,
+    database: db,
+    mailer: mail,
+    template: template
+  })
+];
 
-// Add the subscriber module
-subscriber({
-  config: configuration, 
-  rest: server, 
-  mail: mailEngine, 
-  template: templateEngine,
-  database: db
+// Load each module into the rest server
+_.each(mods, function(mod) {
+  restServer.addModule(mod);
 });
 
-server.listen(configuration.port(), configuration.hostname());
-console.log('Started rest server @ %s', configuration.baseUrl());
-  
+// Run the server
+restServer.run();
+console.log(restServer.toString());
+
+})();
+

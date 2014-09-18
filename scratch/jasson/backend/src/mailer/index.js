@@ -10,7 +10,7 @@ function Mailer(config) {
 
   // Grab a configuration if present ...
   // ... otherwise throw an error
-  this.config = config.get(name);
+  this.config = config[name];
   if(!this.config) {
     // FIXME: add a better error mechanism
     throw 'Mailer missing config';

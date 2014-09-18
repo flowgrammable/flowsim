@@ -1,8 +1,9 @@
 
 (function(){
 
-var fs  = require('fs');
-var fmt = require('../utils/formatter');
+var fs      = require('fs');
+var restify = require('restify');
+var fmt     = require('../utils/formatter');
 
 var name = 'server';
 
@@ -12,9 +13,11 @@ var defPort     = 8080;
 
 function Server(config) {
 
+  var dir = config.basedir;
+
   // Grab a configuration if present ...
   // ... otherwise supply a default configuration
-  this.config = config.get(name) || {
+  this.config = config[name] || {
     address:  defAddress,
     hostname: defHostname,
     port:     defPort
@@ -24,12 +27,13 @@ function Server(config) {
   this.config.address  = this.config.address  || defAddress;
   this.config.hostname = this.config.hostname || defHostname;
   this.config.port     = this.config.port     || defPort;
+  this.config.protocol = this.config.https ? 'https' : 'http';
 
   // Load credential information if present
   if(this.config.https) {
     this.creds = {
-      key: fs.readFileSync(_config.https.key),
-      certificate: fs.readFileSync(_config.https.cert)
+      key: fs.readFileSync(dir + '/' + _config.https.key),
+      certificate: fs.readFileSync(dir + '/' + _config.https.cert)
     };
   } else {
     this.creds = {};
@@ -59,10 +63,22 @@ Server.prototype.addHandler = function(method, path, handler) {
   }
 };
 
+Server.prototype.addModule = function(mod) {
+  return this;
+};
+
+Server.prototype.baseUrl = function() {
+  return this.config.protocol + this.config.hostname + ':' + this.config.port;
+};
+
+Server.prototype.rootPath = function() {
+  return this.config.root;
+};
+
 Server.prototype.run = function() {
   this.server.listen(this.config.port, this.config.);
   this.running = true;
-}
+};
 
 // Provide some basic pretty printing to the formatter
 Server.prototype.toFormatter = function(f) {
@@ -71,11 +87,11 @@ Server.prototype.toFormatter = function(f) {
   f.addPair('Hostname', this.config.hostname);
   f.addPair('Port', this.config.port);
   if(this.config.https) {
-    f.addPair('Protocol', 'HTTPS');
+    f.addPair('Protocol', this.config.protocol);
     f.addPair('Key', this.config.https.key);
     f.addPair('Cert', this.config.https.cert);
   } else {
-    f.addPair('Protocol', 'HTTP');
+    f.addPair('Protocol', this.config.protocol);
   }
   f.addPair('Running', this.running);
   f.end();

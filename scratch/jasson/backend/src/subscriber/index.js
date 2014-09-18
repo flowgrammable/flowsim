@@ -1,27 +1,41 @@
 
-var validator = require('validator');
+(function(){
 
-var rest       = require('../rest');
+var validator = require('validator');
+var fmt       = require('../utils/formatter');
+
 var msg        = require('./msg');
 var controller = require('./controller');
+
+var name = 'subscriber';
 
 function isValidPassword(p) {
   var pat = /[0-9a-zA-Z_\(\)\^\[\]\{\}\.\$,!\+\*\\\|/:;\'"?<>`\-=~@#%&]{8,}/;
   return pat.test(p);
 }
 
-module.exports = function(ctx) {
-  var name = 'subscriber';
-  var config = ctx.config.data;
-  var server = ctx.rest;
-  var tmpEngine = ctx.template;
-  var mailer = ctx.mail;
-  var database = ctx.database;
+function Subscriber(config, database, mailer, template) {
+  this.config = config.get(name);
+
+  this.database = database;
+  this.mailer   = mailer;
+  this.template = template;
+}
+exports.Subscriber = Subscriber;
+
+Subscriber.prototype.toFormatter = function(f) {
+  f.begin('Subscriber');
+  f.end();
+};
+
+Subscriber.prototype.toString = fmt.toString;
+
+Subscriber.prototype.load = function(server) {
 
   var ctrl;
 
   function mkMethod(path) {
-    return config.root + '/' + name + '/' + path;
+    return server.rootPath() + '/' + name + '/' + path;
   }
 
   // Initialize our components
@@ -47,6 +61,8 @@ module.exports = function(ctx) {
       pwd: req.body.pwd
     }));
   });
+
+};
 
   server.get(mkMethod('logout/:user'), function(req, res, next) {
     console.log('logout: '+ req.params.user);
@@ -85,4 +101,6 @@ module.exports = function(ctx) {
   });
 
 };
+
+})();
 

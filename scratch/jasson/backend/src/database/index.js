@@ -1,55 +1,73 @@
 
+(function(){
+
 var sequelize = require('sequelize');
-var async = require('async');
-var fs = require('fs');
-var path = require('path');
-var _ = require('underscore');
+var async     = require('async');
+var fs        = require('fs');
+var path      = require('path');
+var _         = require('underscore');
 
-module.exports = function(cfg) {
-  var name = 'database';
-  var config = cfg.get(name) || {};
+var fmt = require('../utils/formatter');
 
-  var models = {};
+var name = 'database';
 
-  var db = new sequelize(
-    config.database,
-    config.user,
-    config.pwd,
+var defHost = '127.0.0.1';
+
+function Database(config) {
+  this.config = cfg[name] || {};
+
+  this.models = {};
+
+  this.db = new sequelize(
+    this.config.database,
+    this.config.user,
+    this.config.pwd,
     {
-      host: config.host || '127.0.0.1',
-      dialect: config.dialect
-      //port: config.port || 3306     <-- some sort of bug with this 
+      host: this.config.host || defHost,
+      dialect: this.config.dialect
+      //port: this.config.port || 3306     <-- some sort of bug with this 
     });
 
   // do not return until this is done
-  async.series(db.authenticate().complete, function(err, results) {
+  async.series(this.db.authenticate().complete, function(err, results) {
     if(err) throw err;
   });
+}
+exports.Database = Database;
 
-  function _loadModels(dir) {
-    _.each(fs.readdirSync(dir), function(file) {
-      if(path.extname(file) == '.js') {
-        var model = require(dir + '/' + file);
-        // I'm not really sure we need to cache the models ..
-        models[model.name] = {
-          table: db.define(model.name, model.table, model.options),
-          relation: model.relations
-        };
-        _.each(model.relation, function(value, key) {
-          models[model.name].table[key](value.relative, value.options);
-        });
-      }
-    });
-  }
+Database.prototype.toFormatter = function(f) {
+  f.begin('Database');
+  f.addPair('Name', this.config.database);
+  f.addPair('Dialect', this.config.dialect);
+  f.addPair('User', this.config.user);
+  f.end();
+}
 
-  function _loadLocalModels(dir) {
-    _loadModels(dir + '/models/');
-  }
+Database.prototype.toString = fmt.toString;
 
-  return {
-    table: function(name) { return models[name].table || null; },
-    loadModels: _loadModels,
-    loadLocalModels: _loadLocalModels
-  };
+Database/prototype.table = function(tbl) {
+  return this.models[tbl].table || null;
 };
+
+Database.prototype.loadModels = function(dir) {
+  _.each(fs.readdirSync(dir), function(file) {
+    if(path.extname(file) == '.js') {
+      var model = require(dir + '/' + file);
+      // I'm not really sure we need to cache the models ..
+      this.models[model.name] = {
+        table: this.db.define(model.name, model.table, model.options),
+        relation: model.relations
+      };
+      _.each(model.relation, function(value, key) {
+        this.models[model.name].table[key](value.relative, value.options);
+      });
+    }
+  });
+};
+
+Database.prototype.loadLocalModels = function(dir) {
+  this.loadModels(dir + '/models/');
+};
+
+})();
 

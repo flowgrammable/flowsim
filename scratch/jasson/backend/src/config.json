@@ -1,0 +1,26 @@
+{
+  "mailer": {
+    "service": "gmail",
+    "user": "info@flowgrammable.com",
+    "pwd": "abc123"
+  },
+  "server": {
+    "address": "127.0.0.1",
+    "hostname": "localhost",
+    "port": 3000,
+    "root": "/api",
+    "https": {
+      "key": "keys/dev.key",
+      "cert": "keys/localhost.crt"
+    }
+  },
+  "database": {
+    "database": "flowsim",
+    "user": "flogdev",
+    "pwd": "flogdev",
+    "dialect": "postgres"
+  },
+  "template": {
+    "dir": "templates"
+  }
+}
