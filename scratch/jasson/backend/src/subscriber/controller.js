@@ -1,25 +1,40 @@
 
 (function(){
 
+var fmt     = require('../utils/formatter');
 var msg     = require('./msg');
 var adapter = require('./adapter');
 
-function _createSubscriber(dispatch) {
+function Controller(context) {
+  this.database = context.database;
+  this.mailer   = context.mailer;
+  this.template = context.template;
+};
+exports.Controller = Controller;
+
+Controller.prototype.toFromatter = function(f) {
+  f.begin('Controller');
+  this.database.toFormatter(f);
+  this.mailer.toFormatter(f);
+  this.template.toFormatter(f);
+  f.end();
+};
+
+Controller.prototype.toString = fmt.toString;
+
+Controller.prototype.login = function(email, pwd, delgate) {
+};
+
+Controller.prototype.logout = function() {
 }
 
-function _verifySubscriber(dispatch) {
+Controller.prototype.register = function() {
 }
 
-function _resetSubscriber(dispatch) {
+Controller.prototype.verify = function() {
 }
 
-function _updateSubscriber(dispatch) {
-}
-
-function _loginSubscriber(dispatch) {
-}
-
-function _logoutSubscriber(dispatch) {
+Controller.prototype.reset = function() {
 }
 
 })();

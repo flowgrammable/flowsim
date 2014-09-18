@@ -73,20 +73,14 @@ function reset(req, res, next) {
   
 function Subscriber(context) {
   // Set the context references
-  this.config   = context.configuration[name];
-  this.database = context.database;
-  this.mailer   = context.mailer;
-  this.template = context.template;
-
-  this.controller = {};
+  this.config     = context.configuration[name];
+  this.controller = new ctrl.Controller(context);;
 }
 exports.Subscriber = Subscriber;
 
 Subscriber.prototype.toFormatter = function(f) {
   f.begin('Subscriber');
-  this.database.toFormatter(f);
-  this.mailer.toFormatter(f);
-  this.template.toFormatter(f);
+  this.controller.toFormatter(f);
   f.end();
 };
 
