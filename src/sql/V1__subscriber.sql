@@ -60,6 +60,11 @@ CREATE TABLE switch_profile
   --------------------------- Datapath Capabilities ---------------------------  
   /*
    * Openflow protocol version
+   * 0 - 1.0
+   * 1 - 1.1
+   * 2 - 1.2
+   * 3 - 1.3
+   * 4 - 1.4
    */
   ofp_version INTEGER /*NOT NULL*/,
 
@@ -88,16 +93,13 @@ CREATE TABLE switch_profile
   /*
    * IP reassembly
    * datapath can reassemble ip fragments
+   * 1.0 - 1.4
    */
   ip_reassembly BOOLEAN /*NOT NULL*/, 
 
-  /*
-   * stp
-   * indicates whether a switch supports spanning-tree protocol
-   */
-  stp BOOLEAN /*NOT NULL*/, 
 
   /*
+   * STP - 1.0, 1.1
    * Port Blocked -  1.2, 1.3, 1.4
    * loops will be blocked by an external (non openflow) protocol
    */   
@@ -109,26 +111,31 @@ CREATE TABLE switch_profile
   --------------------------- Datapath Description ----------------------------
   /*
    * Manufacturer description
+   * 1.0 - 1.4
    */
   mfr_description VARCHAR(60) /*NOT NULL*/,
 
   /*
    * Hardware description
+   * 1.0 - 1.4
    */
   hw_description VARCHAR(60) /*NOT NULL*/,
 
   /*
    * Software description
+   * 1.0 - 1.4
    */
   sw_description VARCHAR(60) /*NOT NULL*/, 
 
   /*
    * Serial number
+   * 1.0 - 1.4
    */
   serial_num VARCHAR(60) /*NOT NULL*/,
 
   /*
    * Description of the datapath
+   * 1.0 - 1.4
    */
   dp_description VARCHAR(60) /*NOT NULL*/,
   -----------------------------------------------------------------------------
@@ -137,18 +144,21 @@ CREATE TABLE switch_profile
    /*
     * miss_send_len
     * max bytes of flows sent to controller
+    * 1.0 - 1.4 REQUIRED
     */
-  miss_send_len INTEGER /*NOT NULL*/,
-   
+    miss_send_len INTEGER /*NOT NULL*/,
+  
+
    /*
     * IP fragment handling
     * determines how to handle ip fragments
+    * 1.0 - 1.4 
     */
   frag_handling IP_FRAG_HANDLING /*NOT NULL*/,
    
    /*
     * invalid_ttl_to_controller
-    * 
+    * 1.1 - 1.4 
     */
   invalid_ttl_to_controller BOOLEAN /*NOT NULL*/,
   -----------------------------------------------------------------------------
@@ -169,15 +179,16 @@ CREATE TABLE switch_profile
    *  Local - 1.0 (R), 1.1 (O), 1.2(O), 1.3(O), 1.4(O)
    *  (O) Normal - 1.1, 1.2, 1.3, 1.4
    *  (O) Flood - 1.1, 1.2, 1.3, 1.4
-   */ 
-  vp_all BOOLEAN /*NOT NULL*/, 
-  vp_controller BOOLEAN /*NOT NULL*/, 
-  vp_table BOOLEAN /*NOT NULL*/,
-  vp_in_port BOOLEAN /*NOT NULL*/,
-  vp_any BOOLEAN /*NOT NULL*/,
-  vp_local BOOLEAN /*NOT NULL*/,
-  vp_normal BOOLEAN /*NOT NULL*/,
-  vp_flood BOOLEAN /*NOT NULL*/,
+  
+  vp_all BOOLEAN REQUIRED ALL VERSIONS, 
+  vp_controller BOOLEAN REQUIRED ALL VERSIONS, 
+  vp_table BOOLEAN REQUIRED ALL VERSIONS,
+  vp_in_port BOOLEAN REQUIRED ALL VERSIONS,
+  vp_any BOOLEAN REQUIRED ALL VERSIONS,
+  vp_local BOOLEAN NOT NULL - (1.0Local = 1.1-1.4 NORMAL) */
+  
+  vp_normal BOOLEAN /*OPTIONAL ALL VERSIONS*/,
+  vp_flood BOOLEAN /*OPTIONAL ALL VERSIONS*/,
   -----------------------------------------------------------------------------
 
   -------------------------- Statistics Capabilities --------------------------

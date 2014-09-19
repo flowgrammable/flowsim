@@ -1,79 +1,68 @@
 // Openflow 1.0 example
+// JSON Contains abstraction capabilities only
 {   
 	// Datapath Capabilities
-	"name": "profile 1.0 example",
-	"ofp_version": 0,
-	"datapath_id": [11, 22, 33, 44, 55, 66],
-	"n_buffers": 10,
-	"n_tables": 1,
-	"ip_reassembly": true,
-	"stp": true,
-	"port_blocked": true,
-	"mfr_description": "a description",
-	"hw_description": "rev1",
-	"sw_description": "build 1234",
-	"serial_num": "0a1b2c3d",
-	"dp_description": "ofp v1.0 dataplane",
-	// Datapath Config
-	"miss_send_len": 256,
-    "frag_handling": "NORMAL",
-    "invalid_ttl_to_controller": false,
-    // Ports capabilities
-    "n_ports": 8,
-    "vp_all": true,  //TODO: same as vp any and vp_local and normal?
-    "vp_controller": true,
-    "vp_table": true,
-    "vp_in_port": true,
-    "vp_flood": false,
-    "vp_normal": false,
+	"datapathName": "profile 1.0 example",
+	"datapathVersion": 0,
+	"datapathID": "ffdd001122334455",
+	"datapathBuffers": 10,
+	"datapathTables": 1,
+	"datapathIPRassem": true,
+	"datapathPortBlocked": false,
 
-    // Stats
-    "flow_stats":true,
-    "table_stats": true,
-    "port_stats": true,
-    "group_stats": false,
-    "queue_stats": true,
+	// Datapath Description
+	"datapathMFRDescription": "a description",
+	"datapathHWDescription": "rev1",
+	"datpathSWDescription": "build 1234",
+	"datapathSerial": "0a1b2c3d",
+	"datapathDescription": "ofp v1.0 dataplane",
+
+    // Ports capabilities  TODO
+    "portsNumber": 8,
+    "portsNormal": true,  //Normal in 1.0 is same as All in 1.0,
+    "portsFlood": false, // optional in all versions
+
+    // Stats capabilties
+    "statsFlow":true,
+    "statsTable": true,
+    "statsPort": true,
+    "statsGroup": false,
+    "statsQueue": true,
 
 
 	"flowtables":[{
-		"table_id": 0,
-		"name": "a flow table name",
-		"max_entries": 256,
-		"miss_controller": false,
-		"miss_contrinue": false,
-		"miss_drop": false,
-		"eviction": false,
-		"vacancy": false,
-		//Table Stats TODO: separate table?
-		"active_count": 0,
-		"lookup_count": 0,
-		"matched_count": 0,
+		// Flowtable Capabilities
+		"tableID": 0,
+		"tableName": "a flow table name",
+		"tableEntries": 256,
+
+
 		// Field Capabilities
 		// [match, wildcard, write_setfield, write_setfield_miss,
 		//  apply_setfield, apply_setfield_miss]
-		"field_in_port" : [0,0,0,0,0],
-		"field_in_phy_port" : [0,0,0,0,0],
-		"field_metadata": [0,0,0,0,0],
-		"field_eth_dst": [1, 1, 1, 0, 1, 0],
-		"field_eth_src": [1, 1, 1, 0, 1, 0],
-		"field_eth_type": [1, 1, 1, 0, 1, 0],
+		"fieldInPort" : [0,0,0,0,0],
+		"fieldInPhyPort" : [0,0,0,0,0],
+		"fieldMetadata": [0,0,0,0,0],
+		"fieldEthDst": [1, 1, 0, 0, 1, 0],
+		"fieldEthSrc": [1, 1, 0, 0, 1, 0],
+		"fieldEthType": [1, 1, 0, 0, 1, 0],
         // Action Capabilities
         // [write_actions, write_actions_miss, apply_actions
         //  apply_actions_miss]
-        "copy_ttl_out": [0,0,0,0],
-        "copy_ttl_in": [0,0,0,0],
-        "set_mpls_ttl": [0,0,0,0],
-        "dec_mpls_ttl": [0,0,0,0],
-        "push_vlan": [0,0,0,0],
-        "pop_vlan": [0,0,0,0],
-        "push_mpls": [0,0,0,0],
-        "pop_mpls": [0,0,0,0],
-        "set_queue": [0,0,0,0],
-        "set_nw_ttl": [0,0,0,0],
-        "dec_nw_ttl": [0,0,0,0],
-        "set_field": [0,0,0,0],
-        "push_pbb": [0,0,0,0],
-        "pop_pbb": [0,0,0,0],
+        "actionCopyTTLOUT": [0,0,0,0],
+        "actionCopyTTLIN": [0,0,0,0],
+        "actionSetMPLSTTL": [0,0,0,0],
+        "actionDecMPLSTTL": [0,0,0,0],
+        "actionPushVLAN": [0,0,0,0],
+        "actionPopVLAN": [0,0,0,0],
+        "actionPushMPLS": [0,0,0,0],
+        "actionPopMPLS": [0,0,0,0],
+        "actionSetQueue": [0,0,0,0],
+        "actionSetNWTTL": [0,0,0,0],
+        "actionDecNWTTL": [0,0,0,0],
+        "actionSetField": [0,0,1,0],
+        "actionPushPBB": [0,0,0,0],
+        "actionPopPBB": [0,0,0,0],
         // Instruction Capabilities
         // [instruction, instruction_miss]
         // required: write_action, goto_table
