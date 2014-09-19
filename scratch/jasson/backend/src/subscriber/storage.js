@@ -18,7 +18,9 @@ Storage.prototype.toFormatter = function(f) {
 
 Storage.prototype.toString = fmt.toString;
 
-Storage.prototype.insertSubscriber = function(eml, pwd, date, ip, token, dispatch) {
+Storage.prototype.insertSubscriber = function(eml, pwd, date, ip, token, 
+  dispatch) {
+
   this.database.table('subscriber').create({
     email: eml,
     password: pwd,
@@ -29,8 +31,10 @@ Storage.prototype.insertSubscriber = function(eml, pwd, date, ip, token, dispatc
   }).success(function(result) {
     dispatch(undefined, result);
   }).error(function(err) {
-    if(err.detail == 'Key (email)=(' + eml + ') already exists.') {
-      dispatch(msg.emailInUse()); 
+    if(err) {
+      //err.detail == 'Key (email)=(' + eml + ') already exists.') {
+      //dispatch(msg.emailInUse()); 
+      dispatch(err);
     } else {
       dispatch(msg.unknownError(err));
     }
