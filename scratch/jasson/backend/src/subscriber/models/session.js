@@ -1,4 +1,6 @@
 
+(function(){
+
 var sequelize = require('sequelize');
 
 module.exports = {
@@ -18,5 +20,7 @@ module.exports = {
 		underscored: true,
 		tableName: 'session'
 	}
-}
+};
+
+})();
 

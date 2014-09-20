@@ -62,7 +62,6 @@ Server.prototype.addHandler = function(method, path, handler) {
       break;
     default:
       throw 'Bad server handler: ' + method + ' ' + path + ' ' + handler;
-      break;
   }
 };
 
