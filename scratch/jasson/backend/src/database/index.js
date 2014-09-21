@@ -1,5 +1,9 @@
 
-(function(){
+/**
+ * @module database
+ */
+
+(/** @lends module:database */function(){
 
 var sequelize = require('sequelize');
 var async     = require('async');
@@ -12,6 +16,13 @@ var fmt = require('../utils/formatter');
 var name = 'database';
 
 var defHost = '127.0.0.1';
+
+/**
+ * Provides Database services.
+ *
+ * @constructor
+ * @param {config} config - a global configuration object
+ */
 
 function Database(config) {
   this.config = config[name] || {};

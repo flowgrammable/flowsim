@@ -23,26 +23,42 @@ Controller.prototype.toFromatter = function(f) {
 Controller.prototype.toString = fmt.toString;
 
 Controller.prototype.authorize = function(token, delegate) {
-  this.storage.fetchSession(token, delegate); 
+  this.storage.getSession(token, delegate); 
 };
 
 Controller.prototype.login = function(email, pwd, delgate) {
+  // validate email/pwd
+  // if good create a cression, return the token
+  // else return error
+  this.storage.createSession();
   delegate();
 };
 
 Controller.prototype.logout = function(delegate) {
+  // if a valid session then delete the session
+  this.storage.deleteSession();
   delegate();
 };
 
 Controller.prototype.register = function(delegate) {
+  // create the subscriber, send a verification email
+  // or return an error
+  this.storage.createSubscriber();
   delegate();
 };
 
 Controller.prototype.verify = function(delegate) {
+  // if the verification token is valid update
+  // subscriber state
+  // otherwise send an error
+  this.storage.updateSubscriber();
   delegate();
 };
 
 Controller.prototype.reset = function(delegate) {
+  // update the subscriber state and send and email
+  // or send an error
+  this.storage.updateSubscriber();
   delegate();
 };
 

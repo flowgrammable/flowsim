@@ -18,7 +18,7 @@ Storage.prototype.toFormatter = function(f) {
 
 Storage.prototype.toString = fmt.toString;
 
-Storage.prototype.insertSubscriber = function(eml, pwd, date, ip, token, 
+Storage.prototype.createSubscriber = function(eml, pwd, date, ip, token, 
   dispatch) {
 
   this.database.table('subscriber').create({
@@ -41,7 +41,7 @@ Storage.prototype.insertSubscriber = function(eml, pwd, date, ip, token,
   });
 };
 
-Storage.prototype.fetchSubscriber = function(subInfo, dispatch) {
+Storage.prototype.getSubscriber = function(subInfo, dispatch) {
   this.database.table('subscriber').find({
     where: subInfo
   }).success(function(result) {
@@ -76,7 +76,7 @@ Storage.prototype.createSession = function(sub, skey, tmo, distpatch) {
   });
 };
 
-Storage.prototype.fetchSession = function(skey, dispatch) {
+Storage.prototype.getSession = function(skey, dispatch) {
   this.database.table('session').find({
     where: { key: skey } 
   }).success(function(result) {
@@ -90,7 +90,7 @@ Storage.prototype.fetchSession = function(skey, dispatch) {
   });
 };
 
-Storage.prototype.destroySession = function(session, dispatch) {
+Storage.prototype.deleteSession = function(session, dispatch) {
   this.session.destroy()
     .success(function(result) {
       dispatch(msg.success());
@@ -99,7 +99,7 @@ Storage.prototype.destroySession = function(session, dispatch) {
   });
 };
 
-Storage.prototype.destroySessionLessThan = function(time, dispatch) {
+Storage.prototype.deleteStaleSession = function(time, dispatch) {
   this.database.table('session').destroy({
     timeout: { lt: time } 
   }).success(function(result) { 

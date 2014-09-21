@@ -10,7 +10,7 @@ var ctlr      = require('./controller');
 var name = 'subscriber';
 
 function isValidPassword(p) {
-  var pat = /[0-9a-zA-Z_\(\)\^\[\]\{\}\.\$,!\+\*\\\|/:;\'"?<>`\-=~@#%&]{8,}/;
+  var pat = /[0-9a-zA-Z_\(\){\}\[\]\^\$\.\+\-\*\/\|\!\\:;?<>='"`~@#%&,]{8,}/;
   return pat.test(p);
 }
 

@@ -1,11 +1,21 @@
 
-(function(){
+/**
+ * @module mailer
+ */
+
+(/** @lends module:mailer */function(){
 
 var nm  = require('nodemailer');
 var fmt = require('../utils/formatter');
 
 var name = 'mailer';
 
+/**
+ * Provides SMTP services.
+ *
+ * @constructor
+ * @param {config} config - a global configuration object
+ */
 function Mailer(config) {
 
   // Grab a configuration if present ...
@@ -28,10 +38,22 @@ function Mailer(config) {
 }
 exports.Mailer = Mailer;
 
+/**
+ * Close the open SMTP transport resources.
+ *
+ * @memberof mailer.Mailer
+ * @method close
+ */
 Mailer.prototype.close = function() {
   this.transporter.close();
 };
 
+/**
+ * Send a mail to a valid email destination.
+ *
+ * @memberof Mailer
+ * @method mail
+ */
 Mailer.prototype.mail = function(dst, sub, body, delegate) {
   transporter.sendMail({
     from: this.config.user,   // set the smtp from
