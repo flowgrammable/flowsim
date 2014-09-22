@@ -6,17 +6,23 @@
 (/** @lends module:utils */function(){
 
 /**
- * This is a string formatter.
+ * This is a string formatter, it is used for providing
+ * pretty printing of arbitrary objects to strings.
  *
  * @constructor
 */
-function Formatter(name) {
+function Formatter() {
   this.result = '';
-  this.tab = '  ';
-  this.level = 0;
+  this.tab    = '  ';
+  this.level  = 0;
 }
 exports.Formatter = Formatter;
 
+/**
+ * Returns a string verison of the formatter.
+ *
+ * @returns {String} a string version of the formatter.
+ */
 Formatter.prototype.toString = function() {
   return this.result;
 };
@@ -37,7 +43,8 @@ Formatter.prototype.indent = function() {
 /**
  * Used to begin a formatter block.
  *
- * @param {string} name - string name to use as formatter heading
+ * @param {String} name - the name of the current formatter block
+ * @returns {Formatter} a reference to self
  */
 Formatter.prototype.begin = function(name) {
   this.indent();
@@ -48,6 +55,8 @@ Formatter.prototype.begin = function(name) {
 
 /**
  * Used to end a formatter block.
+ *
+ * @returns {Formatter} a reference to self
  */
 Formatter.prototype.end = function() {
   this.level -= 1;
@@ -57,11 +66,11 @@ Formatter.prototype.end = function() {
 };
 
 /**
- * Used to add a '<name>: <value>' pair line to the formatter object.
+ * Adds a field/value to the formatter.
  *
- * @param {string} field - attribute title of the pair
- * @param {*} value - object that will be string serialized as value
- * @returns {Formatter} returns 'this' formatter instance
+ * @param {String} field - attribute title of the pair
+ * @param {Object} value - object that will be stringified
+ * @returns {Formatter} returns a self reference
  */
 Formatter.prototype.addPair = function(field, value) {
   this.indent();
@@ -70,11 +79,12 @@ Formatter.prototype.addPair = function(field, value) {
 };
 
 /**
- * Used to add a '''<name>: <name>(<value>)''' triple to the formatter object.
+ * Adds a field/name/value to the formatter. 
  *
- * @param {string} field - one
- * @param {string} name - two
- * @param {*} value - value
+ * @param {String} field - attribute title of the pair
+ * @param {String} name - string representation of value
+ * @param {Object} value - object that will be stringified
+ * @returns {Formatter} returns a self reference
  */
 Formatter.prototype.addTriple = function(field, name, value) {
   this.indent();
@@ -83,7 +93,10 @@ Formatter.prototype.addTriple = function(field, name, value) {
 };
 
 /**
- * Returns a string representation of the formatter object.
+ * A toString funciton that can be added to *.prototype.toString of
+ * objects that need this behavior.
+ *
+ * @returns {String} a stringified version of a formatter invoked against this
  */
 function toString() {
   var fmt = new Formatter();

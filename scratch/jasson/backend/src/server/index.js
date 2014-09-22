@@ -76,6 +76,10 @@ exports.Server = Server;
  */
 
 /**
+ * Registers a handler with the server to use for all HTTP reqeuests
+ * where the method and path match their respective parts from the
+ * request-url.
+ *
  * @param {String} method        - HTTP method to catpure
  * @param {String} path          - HTTP request-uri path to catpure
  * @param {httpCallback} handler - HTTP request handler to call
@@ -103,20 +107,41 @@ Server.prototype.addModule = function(mod) {
   return this;
 };
 
+/**
+ * Returns the base url for the running server.
+ *
+ * @returns {String} protocol://hostname:port
+ */
 Server.prototype.baseUrl = function() {
   return this.config.protocol + this.config.hostname + ':' + this.config.port;
 };
 
+/**
+ * Returns the path root of the server
+ *
+ * @returns {String} path root of server
+ */
 Server.prototype.rootPath = function() {
   return this.config.root;
 };
 
+/**
+ * Starts the server
+ *
+ * @returns {Server} returns a self reference
+ */
 Server.prototype.run = function() {
   this.server.listen(this.config.port, this.config.hostname);
   this.running = true;
+  return this;
 };
 
-// Provide some basic pretty printing to the formatter
+/**
+ * A formatter implementation for the Server.
+ *
+ * @param {module:utils~Formatter} f - formatter object to use
+ * @returns {module:utils~Formatter} a reference to the active formatter
+ */
 Server.prototype.toFormatter = function(f) {
   f.begin('Server');
   f.addPair('Address', this.config.address);
@@ -134,7 +159,11 @@ Server.prototype.toFormatter = function(f) {
   return f;
 };
 
-// The default formatter toString can be used
+/**
+ * Attach the basic formatter.toString funcitonality.
+ *
+ * @returns {String} a stringified version of the Server.
+ */
 Server.prototype.toString = fmt.toString;
 
 function Delegate(res) {
