@@ -1,6 +1,7 @@
 
 /**
  * @module server
+ * @requires module:utils~Formatter
  */
 
 (/** @lends module:server */function(){
@@ -16,8 +17,17 @@ var defHostname = 'localhost';
 var defPort     = 8080;
 
 /**
+ * Constructs a restify based HTTP server.
+ *
  * @constructor
- * @param {config} config - a server configuration object
+ * @param {Object} config              - a server configuration object
+ * @param {String} config.basedir      - the base directory of the server
+ * @param {String} [config.address]    - IP address to bind
+ * @param {String} [config.hostname]   - hostname to bind
+ * @param {String} [config.port]       - tcp port to bind
+ * @param {Object} [config.https]      - https configuration object
+ * @param {String} config.https.key    - location of https private key
+ * @param {String} config.https.cert   - location of https certificate
  */
 
 function Server(config) {
@@ -58,6 +68,19 @@ function Server(config) {
 }
 exports.Server = Server;
 
+/**
+ * @callback httpCallback
+ * @param {Object} req    - nodejs HTTP request object
+ * @param {Object} res    - nodejs HTTP response object
+ * @param {Function} next - function to envoke next http handler in chain
+ */
+
+/**
+ * @param {String} method        - HTTP method to catpure
+ * @param {String} path          - HTTP request-uri path to catpure
+ * @param {httpCallback} handler - HTTP request handler to call
+ * @returns {Server} a reference to the object instance
+ */
 Server.prototype.addHandler = function(method, path, handler) {
   switch(method) {
     case 'post':
@@ -72,6 +95,7 @@ Server.prototype.addHandler = function(method, path, handler) {
     default:
       throw 'Bad server handler: ' + method + ' ' + path + ' ' + handler;
   }
+  return this;
 };
 
 Server.prototype.addModule = function(mod) {
