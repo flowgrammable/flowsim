@@ -1,6 +1,7 @@
 
 /**
  * @module database
+ * @requires module:utils~Formatter
  */
 
 (/** @lends module:database */function(){
@@ -18,10 +19,15 @@ var name = 'database';
 var defHost = '127.0.0.1';
 
 /**
- * Provides Database services.
+ * A database connection wrapper using the Sequelize library.
  *
  * @constructor
- * @param {config} config - a global configuration object
+ * @param {Object} config          - a database configuration object
+ * @param {String} config.host     - the hostname of the database server
+ * @param {String} config.database - the name of the database
+ * @param {String} config.user     - the username to use for the connection
+ * @param {String} config.pwd      - the password to use for the connection
+ * @param {String} config.dialect  - the SQL database type
  */
 
 function Database(config) {
@@ -46,19 +52,41 @@ function Database(config) {
 }
 exports.Database = Database;
 
+/**
+ * Using a formatter nicely format the Database object.
+ *
+ * @param {module:utils~Formatter} f - a formatter instance
+ * @returns {module:utils~Formatter} a formatter object
+ */
 Database.prototype.toFormatter = function(f) {
   f.begin('Database');
   f.addPair('Name', this.config.database);
   f.addPair('Dialect', this.config.dialect);
   f.addPair('User', this.config.user);
   f.end();
+  return f;
 };
 
 Database.prototype.toString = fmt.toString;
 
+/**
+ * Obtain a reference to the Sequelize model corresponding to a particluar
+ * table.
+ *
+ * @param {String} tbl - the name of the database table to retrieve
+ * @returns {Object} a Sequelize model 
+ */
+
 Database.prototype.table = function(tbl) {
   return this.models[tbl].table || null;
 };
+
+/**
+ * Load all Sequelize models, relations, and tables from a directory.
+ *
+ * @param {String} dir - a qualified directory path
+ * @returns {undefined}
+ */
 
 Database.prototype.loadModels = function(dir) {
   var that = this;
@@ -77,6 +105,13 @@ Database.prototype.loadModels = function(dir) {
   });
 };
 
+/**
+ * Look for Sequelize models/relations/options in the models/ subdirectory
+ * located within the specified directory.
+ *
+ * @param {String} dir - a qualified directory path
+ * @returns {undefined}
+ */
 Database.prototype.loadLocalModels = function(dir) {
   this.loadModels(dir + '/models/');
 };

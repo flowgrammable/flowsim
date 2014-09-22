@@ -1,9 +1,18 @@
 
-(function(){
+/**
+ * @module subscriber
+ */
+
+(/** @lends module:subscriber */function(){
 
 var fmt = require('../utils/formatter');
-var msg = require('./msg');
+var msg = require('../utils/msg');
 var stg = require('./storage');
+
+/**
+ * @constructor
+ * @param {object} context - blah
+ */
 
 function Controller(context) {
   this.storage  = new stg.Storage(context.database);

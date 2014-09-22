@@ -1,7 +1,11 @@
 
-(function(){
+/**
+ * @module subscriber
+ */
 
-var msg = require('../msg');
+(/** @lends module:subscriber */function(){
+
+var msg = require('../utils/msg');
 
 exports.success = msg.success;
 exports.error = msg.error;

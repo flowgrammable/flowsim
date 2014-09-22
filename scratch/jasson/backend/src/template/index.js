@@ -1,5 +1,9 @@
 
-(function(){
+/**
+ * @module template
+ */
+
+(/** @lends module:template */function(){
 
 var fs   = require('fs');
 var _    = require('underscore');
@@ -9,6 +13,10 @@ var fmt  = require('../utils/formatter');
 
 var name = 'template';
 
+/**
+ * @constructor
+ * @param {config} config - blah
+ */
 function Template(config) {
   var dir, that;
 

@@ -1,5 +1,9 @@
 
-(function(){
+/**
+ * @module subscriber
+ */
+
+(/** @lends module:subscriber */function(){
 
 var sequelize = require('sequelize');
 

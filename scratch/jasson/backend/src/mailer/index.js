@@ -1,6 +1,7 @@
 
 /**
  * @module mailer
+ * @requires module:utils~Formatter
  */
 
 (/** @lends module:mailer */function(){
@@ -11,10 +12,16 @@ var fmt = require('../utils/formatter');
 var name = 'mailer';
 
 /**
- * Provides SMTP services.
+ * Provides mail service that wraps the nodemailer library. This object creates
+ * a pool of resources that are connected to the mail service. These connections
+ * are only closed when the object is destroyed or if close is explicitly 
+ * called.
  *
  * @constructor
- * @param {config} config - a global configuration object
+ * @param {Object} config         - a mail configuration object
+ * @param {String} config.service - name of the mail service provider
+ * @param {String} config.user    - email to use for the mail service
+ * @param {String} config.pwd     - passwod to use for the mail service
  */
 function Mailer(config) {
 
@@ -39,20 +46,32 @@ function Mailer(config) {
 exports.Mailer = Mailer;
 
 /**
- * Close the open SMTP transport resources.
+ * Close the connection resources associated with this object.
  *
- * @memberof mailer.Mailer
- * @method close
+ * @returns {Mailer}
  */
 Mailer.prototype.close = function() {
   this.transporter.close();
+  return this;
 };
 
 /**
- * Send a mail to a valid email destination.
+ * @callback mailCallback
+ * @param {Object} one - blah
+ * @param {Object} two - blah
+ */
+
+/**
+ * Sends an email to the indicated recipient using the provided
+ * subject and body. The sender address set using the email user
+ * provided during object construction.
  *
- * @memberof Mailer
- * @method mail
+ * @param {String} dst            - email address
+ * @param {String} sub            - email subject line
+ * @param {String} body           - email message body
+ * @param {mailCallback} delegate -
+ * @returns {Mailer}
+ *
  */
 Mailer.prototype.mail = function(dst, sub, body, delegate) {
   transporter.sendMail({
@@ -70,6 +89,7 @@ Mailer.prototype.mail = function(dst, sub, body, delegate) {
       console.log(err);
     }
   });
+  return this;
 }; 
 
 Mailer.prototype.toFormatter = function(f) {

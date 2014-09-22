@@ -1,5 +1,9 @@
 
-(function(){
+/**
+ * @module server
+ */
+
+(/** @lends module:server */function(){
 
 var fs      = require('fs');
 var restify = require('restify');
@@ -10,6 +14,11 @@ var name = 'server';
 var defAddress  = '127.0.0.1';
 var defHostname = 'localhost';
 var defPort     = 8080;
+
+/**
+ * @constructor
+ * @param {config} config - a server configuration object
+ */
 
 function Server(config) {
 

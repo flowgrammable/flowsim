@@ -1,10 +1,14 @@
 
-(function(){
+/**
+ * @module subscriber
+ */
+
+(/** @lends module:subscriber */function(){
 
 var validator = require('validator');
 var fmt       = require('../utils/formatter');
+var msg       = require('../utils/msg');
 var util      = require('../server/utils');
-var msg       = require('./msg');
 var ctlr      = require('./controller');
 
 var name = 'subscriber';
@@ -122,7 +126,11 @@ function reset(_server, _controller) {
     }
   };
 }
-  
+
+/**
+ * @constructor
+ * @param {object} context - blah
+ */
 function Subscriber(context) {
   // Set the context references
   this.config     = context.configuration[name];

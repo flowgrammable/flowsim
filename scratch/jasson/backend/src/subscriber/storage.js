@@ -1,8 +1,17 @@
 
-(function(){
+/**
+ * @module subscriber
+ */
+
+(/** @lends module:subscriber */function(){
 
 var fmt = require('../utils/formatter');
-var msg = require('./msg');
+var msg = require('../utils/msg');
+
+/**
+ * @constructor
+ * @param {module:database} db - blah
+ */
 
 function Storage(db) {
   this.database = db;
