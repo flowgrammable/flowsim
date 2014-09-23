@@ -32,7 +32,7 @@ var Codes = {
 
 function Storage(db) {
   this.database = db;
-  this.database.loadLocalModels(__dirname);
+  //this.database.loadLocalModels(__dirname);
 }
 exports.Storage = Storage;
 
@@ -73,6 +73,13 @@ Storage.prototype.toString = fmt.toString;
  */
 Storage.prototype.createSubscriber = function(email, password, date, ip, token,
   callback) {
+
+  this.database.insert('subscriber', 
+    ['email', 'password', 'reg_date', 'reg_ip', 'verification_token', 
+     'reset_token', 'status'
+    ], [ email, password, date, ip, token, token, 'CREATED' ],
+    function(err, result) {
+  });
 
   this.database.table('subscriber').create({
     email: email,

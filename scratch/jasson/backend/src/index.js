@@ -8,7 +8,7 @@ var _    = require('underscore');
 var prog = require('commander');
 
 // Internal dependent modules
-var dbs = require('./database');
+var dbs = require('./database/pg');
 var mlr = require('./mailer');
 var tmp = require('./template');
 var srv = require('./server');

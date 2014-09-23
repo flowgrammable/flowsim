@@ -15,7 +15,7 @@ CREATE TABLE subscriber
   password CHAR(60) NOT NULL,                     -- hashed pwd of sub
   reg_date TIMESTAMP WITH TIME ZONE NOT NULL,     -- date/time of registration
   reg_ip INET NOT NULL,                           -- ip used for registration
-  verification_token CHAR(36) NOT NULL,           -- verification token
+  verification_token CHAR(36) NOT NULL UNIQUE,    -- verification token
   reset_token CHAR(36),                           -- password reset token
   status SUBSCRIBERS_STATUS NOT NULL              -- current sub disposition
   -- status_date TIMESTAMP WITH TIME ZONE NOT NULL,  -- date of last change in disp
