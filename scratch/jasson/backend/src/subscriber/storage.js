@@ -74,11 +74,14 @@ Storage.prototype.toString = fmt.toString;
 Storage.prototype.createSubscriber = function(email, password, date, ip, token,
   callback) {
 
-  this.database.insert('subscriber', 
-    ['email', 'password', 'reg_date', 'reg_ip', 'verification_token', 
-     'status'
-    ], [ email, password, date, ip, token, 'CREATED' ],
-    function(err, result) {
+  this.database.insert('subscriber', {
+    email: email,
+    password: password,
+    reg_date: date,
+    reg_ip: ip,
+    verification_token: token,
+    status: 'CREATED'
+  }, function(err, result) {
       if(err) {
         callback(err);
       } else {
@@ -152,26 +155,17 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
     });
 };
 
-Storage.prototype.updateSubscriber = function(subscriber, callback) {
-  this.database.table('subscriber').update(subscriber)
-    .success(function(result) {
-      console.log('a');
-      callback(undefined, result);
-    }).error(function(err) {
-      console.log(err);
-      callback(msg.unknownError(err));
-    });
-};
-
-Storage.prototype.createSession = function(sub, skey, tmo, distpatch) {
-  this.database.table('session').create({
+Storage.prototype.createSession = function(sub, skey, tmo, callback) {
+  this.database.insert('session', {
     key: skey,
     subscriber_id: sub.id,
     timeout: tmo
-  }).success(function(result) {
-    dispatch(msg.success(result.key));
-  }).error(function(err) {
-    dispatch(msg.unknownError(err));
+  }, function(err, result) {
+    if(err) {
+      callback(err);
+    } else {
+      callback(result);
+    }
   });
 };
 

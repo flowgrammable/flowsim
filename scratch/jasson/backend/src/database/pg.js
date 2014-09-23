@@ -73,8 +73,17 @@ function mkStatement(head, table, fields) {
   return _head + ' (' + _fields + ') ' + 'VALUES' + ' (' + _values + ')';
 }
 
-function mkInsert(table, fields) {
-  return mkStatement('INSERT INTO ', table, fields);
+function mkInsert(table, dict) {
+  var _head, _fields, _values;
+  _head = 'INSERT INTO ' + table + ' ';
+  _fields = [];
+  _values = [];
+  _.each(dict, function(value, key) {
+    _fields.push(key);
+    _values.push(value);
+  });
+  return _head + ' (' + _fields.join(', ') + ') ' + 
+         'VALUES' + ' (' + _values.join(', ') + ')';
 }
 
 function mkSelect(table, exprs) {
@@ -100,8 +109,8 @@ function mkUpdate(table, fields, filters) {
   return _head + _fields + _filters;
 }
 
-Database.prototype.insert = function(table, fields, values, callback) {
-  this.queryArgs(mkInsert(table, fields), values, callback);
+Database.prototype.insert = function(table, dict, callback) {
+  this.queryStmt(mkInsert(table, dict), callback);
 };
 
 Database.prototype.search = function(table, exprs, callback) {
