@@ -87,13 +87,30 @@ function mkSelect(table, exprs) {
   return _head + '(' + _where + ')';
 }
 
+function mkUpdate(table, fields, filters) {
+  var _head, _fields, _filters;
+  _head = 'UPDATE ' + table + ' SET ';
+  _fields = _.map(fields, function(value, key) {
+    return value + ' = ' + '$' + (key + 1);
+  }).join(', ');
+  _filters = ' WHERE ' + _.map(filters, function(value, key) {
+    var _value = typeof value === 'number' ? value : '\'' + value + '\'';
+    return key + ' = ' + _value;
+  }).join(' AND ');
+  return _head + _fields + _filters;
+}
+
 Database.prototype.insert = function(table, fields, values, callback) {
   this.queryArgs(mkInsert(table, fields), values, callback);
 };
 
 Database.prototype.search = function(table, exprs, callback) {
-  console.log(mkSelect(table, exprs));
   this.queryStmt(mkSelect(table, exprs), callback);
+};
+
+Database.prototype.update = function(table, fields, filters, values, callback) {
+  console.log(mkUpdate(table, fields, filters));
+  this.queryArgs(mkUpdate(table, fields, filters), values, callback);
 };
 
 })();

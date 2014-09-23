@@ -29,4 +29,12 @@ store.getSubscriberByToken('1234321', function(err, result) {
   }
 });
 
+store.verifySubscriber('1234321', function(err, result) {
+  if(err) {
+    console.log(err);
+  } else {
+    console.log(result);
+  }
+});
+
 db.close();

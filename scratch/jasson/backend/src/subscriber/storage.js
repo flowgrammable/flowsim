@@ -110,6 +110,18 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
 
 Storage.prototype.verifySubscriber = function(token, callback) {
   // update where verification_token = token
+  this.database.update('subscriber', [
+    'verification_token',
+    'status'
+  ], {
+    verification_token: token
+  }, ['', 'ACTIVE'], function(err, result) {
+    if(err) {
+      callback(err);
+    } else {
+      callback(result);
+    }
+  });
 };
 
 Storage.prototype.resetSubscriber = function(email, callback) {
