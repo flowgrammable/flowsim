@@ -6,6 +6,7 @@
 (/** @lends module:database */function(){
 
 var pg = require('pg');
+var _  = require('underscore');
 
 var name = 'database';
 var defHost = '127.0.0.1';
@@ -49,15 +50,16 @@ Database.prototype.close = function() {
 
 function mkInsert(table, fields) {
   var _head, _fields, _values;
-  _head= 'INSERT INTO table';
+  _head= 'INSERT INTO ' + table;
   _fields = fields.join(', ');
   _values = _.map(fields, function(value, key) {
-    return '$' + key;
+    return '$' + (key + 1);
   }).join(', ');
-  return _head + ' (' + _fields + ') ' + ' VALUES ' + ' (' + _values + ')';
+  return _head + ' (' + _fields + ') ' + 'VALUES' + ' (' + _values + ')';
 };
 
 Database.prototype.insert = function(table, fields, values, callback) {
+  console.log(mkInsert(table, fields));
   this.query(mkInsert(table, fields), values, callback);
 };
 

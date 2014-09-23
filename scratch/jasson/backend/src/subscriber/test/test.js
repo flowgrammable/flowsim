@@ -1,7 +1,7 @@
 
 
-var pg = require('../database/pg');
-var st = require('./storage');
+var pg = require('../../database/pg');
+var st = require('./../storage');
 
 var db = new pg.Database({database:{
   user: 'flogdev',
@@ -13,3 +13,5 @@ var db = new pg.Database({database:{
 var store = new st.Storage(db);
 
 store.createSubscriber('j@j', '123', new Date(), '1.1.1.1', '090909');
+
+db.close();

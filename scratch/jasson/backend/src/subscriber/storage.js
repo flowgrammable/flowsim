@@ -76,32 +76,17 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
 
   this.database.insert('subscriber', 
     ['email', 'password', 'reg_date', 'reg_ip', 'verification_token', 
-     'reset_token', 'status'
-    ], [ email, password, date, ip, token, token, 'CREATED' ],
+     'status'
+    ], [ email, password, date, ip, token, 'CREATED' ],
     function(err, result) {
+      if(err) {
+        console.log('err');
+        console.log(err);
+      } else {
+        console.log('succ');
+        console.log(result);
+      }
   });
-
-  this.database.table('subscriber').create({
-    email: email,
-    password: password,
-    reg_date: date,
-    reg_ip: ip,
-    verification_token: token,
-    status: 'CREATED'
-  }).success(function(result) {
-    callback(undefined, result);
-  }).error(function(err) {
-    switch(err.code) {
-      case Codes.KEY_EXISTS:
-        callback(msg.emailInUse());
-        break;
-      default:
-        // what should go in here?
-        callback(msg.unknownError(err));
-        break;
-    }
-  });
-  return this;
 };
 
 /**
