@@ -41,7 +41,8 @@ function Database(config) {
     this.config.pwd,
     {
       host: this.config.host || defHost,
-      dialect: this.config.dialect
+      dialect: this.config.dialect,
+      logging: false
       //port: this.config.port || 3306     <-- some sort of bug with this 
     });
 

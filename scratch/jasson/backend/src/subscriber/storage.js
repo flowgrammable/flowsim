@@ -1,16 +1,33 @@
 
 /**
  * @module subscriber
+ * @requires module:utils~Formatter module:utils
  */
 
 (/** @lends module:subscriber */function(){
 
 var fmt = require('../utils/formatter');
-var msg = require('../utils/msg');
+var msg = require('./msg');
 
 /**
+ * SQL result codes based on postgres definitions.
+ *
+ * @memberof module:subscriber~Storage
+ * @readonly
+ * @enum {String}
+ */
+
+var Codes = {
+  /** An entry already exists in the table */
+  KEY_EXISTS: '23505',
+};
+
+/**
+ * The Storage object provides a simplified interface for the subscriber
+ * tables in the database.
+ *
  * @constructor
- * @param {module:database} db - blah
+ * @param {module:database~Database} db - a properly constructed database
  */
 
 function Storage(db) {
@@ -19,57 +36,115 @@ function Storage(db) {
 }
 exports.Storage = Storage;
 
+/**
+ * @param {module:formatter~Formatter} f - a properly constructed formatter
+ * @returns {Storage} returns a self refernce
+ */
 Storage.prototype.toFormatter = function(f) {
   f.begin('Storage');
   this.database.toFormatter(f);
   f.end();
+  return this;
 };
 
+/**
+ * @returns {String} returns a stringified version of storage state
+ */
 Storage.prototype.toString = fmt.toString;
 
-Storage.prototype.createSubscriber = function(eml, pwd, date, ip, token, 
-  dispatch) {
+/**
+ * @callback storageCallback
+ * @param {module:subscriber:msg} err - JSON wrapped error message
+ * @param {module:subscriber:msg} succ - JSON wrapped res
+ * @returns {undefined}
+ */
+
+
+/**
+ * Create a new row in the subscriber table.
+ *
+ * @param {String} email - a valid email for the subscriber
+ * @param {String} password - a salted password for this subscriber
+ * @param {String} date - date of registration
+ * @param {String} ip - client ip address used for registration
+ * @param {String} token - unique id for subscriber verification
+ * @param {storageCallback} - callback function to use 
+ * @returns {Storage} returns a self reference
+ */
+Storage.prototype.createSubscriber = function(email, password, date, ip, token,
+  callback) {
 
   this.database.table('subscriber').create({
-    email: eml,
-    password: pwd,
+    email: email,
+    password: password,
     reg_date: date,
     reg_ip: ip,
     verification_token: token,
     status: 'CREATED'
   }).success(function(result) {
-    dispatch(undefined, result);
+    callback(undefined, result);
   }).error(function(err) {
-    if(err) {
-      //err.detail == 'Key (email)=(' + eml + ') already exists.') {
-      //dispatch(msg.emailInUse()); 
-      dispatch(err);
-    } else {
-      dispatch(msg.unknownError(err));
+    switch(err.code) {
+      case Codes.KEY_EXISTS:
+        callback(msg.emailInUse());
+        break;
+      default:
+        // what should go in here?
+        callback(msg.unknownError(err));
+        break;
     }
   });
+  return this;
 };
 
-Storage.prototype.getSubscriber = function(subInfo, dispatch) {
+/**
+ * Retrieve a subscriber row by the verification token.
+ *
+ * @param {String} token - subscriber verification token
+ * @param {storageCallback} callback - 
+ * @returns {Storage} returns a self reference
+ */
+
+Storage.prototype.getSubscriberByToken = function(token, callback) {
   this.database.table('subscriber').find({
-    where: subInfo
+    where: { verification_token: token }
   }).success(function(result) {
-    if(result) {
-      dispatch(msg.success(result));
+    if(result && result.dataValues) {
+      callback(undefined, result.dataValues);
     } else {
-      dispatch(msg.subscriberNotFound());
+      callback(msg.subscriberNotFound());
     }
   }).error(function(err) {
-    dispatch(msg.unknownError(err));
+    switch(err.code) {
+      default:
+        callback(msg.unknownError(err));
+        break;
+    }
   });
+  return this;
 };
 
-Storage.prototype.updateSubscriber = function(sub, newSubInfo, dispatch) {
-  this.database.table('subscriber').updateAttributes(newSubInfo)
+Storage.prototype.verifySubscriber = function(token, callback) {
+  // update where verification_token = token
+};
+
+Storage.prototype.resetSubscriber = function(email, callback) {
+  // update where email = email
+};
+
+Storage.prototype.updateSubscriberPassword = function(email, password, 
+  callback) {
+  // update where email = email
+};
+
+Storage.prototype.updateSubscriber = function(subscriber, callback) {
+  this.database.table('subscriber').update(subscriber)
     .success(function(result) {
-      dispatch(msg.success(result));
+      console.log('a');
+      callback(undefined, result);
     }).error(function(err) {
-      dispatch(msg.unknownError(err));
+      console.log(err);
+      callback(msg.unknownError(err));
     });
 };
 

@@ -25,7 +25,8 @@ function handler(err, result) {
     }
 }
 
-storage.insertSubscriber(
+/*
+storage.createSubscriber(
   'asson@flowgrammable.com',
   'passwordishard',
   new Date(),
@@ -34,7 +35,7 @@ storage.insertSubscriber(
   handler
 );
 
-storage.insertSubscriber(
+storage.createSubscriber(
   'jasson@flowgrammable.com',
   'passwordishard',
   new Date(),
@@ -42,6 +43,50 @@ storage.insertSubscriber(
   'asdfasdf',
   handler
 );
+*/
+
+storage.getSubscriberByToken('asdfasdf', function(err, succ) {
+  if(err) {
+    console.log('reached an error');
+    console.log(err);
+  } else if(succ) {
+    console.log('found it');
+    console.log(succ);
+  } else {
+    console.log('no results');
+  }
+});
+
+storage.getSubscriberByToken('asasdf', function(err, succ) {
+  if(err) {
+    console.log('reached an error');
+    console.log(err);
+  } else if(succ) {
+    console.log('found it');
+    console.log(succ);
+  } else {
+    console.log('no results');
+  }
+});
+
+storage.updateSubscriber({
+  email: 'jasson@flowgrammable.com',
+  password: 'passwordishard',
+  date: new Date(),
+  ip: '10.0.0.1',
+  token: 'zzzzzzz',
+}, function(err, succ) {
+  console.log('update table');
+  if(err) {
+    console.log('err');
+    console.log(err);
+  } else if(succ) {
+    console.log('succ');
+    console.log(succ);
+  } else {
+    console.log('no results');
+  }
+});
 
 })();
 
