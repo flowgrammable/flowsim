@@ -80,11 +80,9 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     ], [ email, password, date, ip, token, 'CREATED' ],
     function(err, result) {
       if(err) {
-        console.log('err');
-        console.log(err);
+        callback(err);
       } else {
-        console.log('succ');
-        console.log(result);
+        callback(null, result);
       }
   });
 };
@@ -98,22 +96,16 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
  */
 
 Storage.prototype.getSubscriberByToken = function(token, callback) {
-  this.database.table('subscriber').find({
-    where: { verification_token: token }
-  }).success(function(result) {
-    if(result && result.dataValues) {
-      callback(undefined, result.dataValues);
+
+  this.database.search('subscriber', {
+    verification_token: token
+  }, function(err, result) {
+    if(err) {
+      callback(err);
     } else {
-      callback(msg.subscriberNotFound());
-    }
-  }).error(function(err) {
-    switch(err.code) {
-      default:
-        callback(msg.unknownError(err));
-        break;
+      callback(null, result);
     }
   });
-  return this;
 };
 
 Storage.prototype.verifySubscriber = function(token, callback) {

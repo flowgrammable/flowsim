@@ -25,7 +25,7 @@ function Database(config) {
 }
 exports.Database = Database;
 
-Database.prototype.query = function(qString, args, callback) {
+Database.prototype.queryArgs = function(qString, args, callback) {
   pg.connect(this.setup, function(err, client, done) {
     if(err) {
       callback(err);
@@ -33,14 +33,29 @@ Database.prototype.query = function(qString, args, callback) {
       client.query(qString, args, function(err, result) {
         if(err) {
           callback(err);
-        } else if(result) {
-          callback(null, result.rows);
         } else {
-          callback(err);
-        }
+          callback(null, result.rows);
+        } 
         done();
       });
-    }
+    } 
+  });
+};
+
+Database.prototype.queryStmt = function(qString, callback) {
+  pg.connect(this.setup, function(err, client, done) {
+    if(err) {
+      callback(err);
+    } else {
+      client.query(qString, function(err, result) {
+        if(err) {
+          callback(err);
+        } else {
+          callback(null, result.rows);
+        } 
+        done();
+      });
+    } 
   });
 };
 
@@ -48,19 +63,37 @@ Database.prototype.close = function() {
   pg.end();
 }
 
-function mkInsert(table, fields) {
+function mkStatement(head, table, fields) {
   var _head, _fields, _values;
-  _head= 'INSERT INTO ' + table;
+  _head= head + table;
   _fields = fields.join(', ');
   _values = _.map(fields, function(value, key) {
     return '$' + (key + 1);
   }).join(', ');
   return _head + ' (' + _fields + ') ' + 'VALUES' + ' (' + _values + ')';
-};
+}
+
+function mkInsert(table, fields) {
+  return mkStatement('INSERT INTO ', table, fields);
+}
+
+function mkSelect(table, exprs) {
+  var _head, _where;
+  _head = 'SELECT * FROM ' + table + ' WHERE ';
+  _where = _.map(exprs, function(value, key) {
+    var _value = (typeof value === 'number') ? value : '\'' + value + '\'';
+    return key + '=' + _value;
+  }).join(' AND ');
+  return _head + '(' + _where + ')';
+}
 
 Database.prototype.insert = function(table, fields, values, callback) {
-  console.log(mkInsert(table, fields));
-  this.query(mkInsert(table, fields), values, callback);
+  this.queryArgs(mkInsert(table, fields), values, callback);
+};
+
+Database.prototype.search = function(table, exprs, callback) {
+  console.log(mkSelect(table, exprs));
+  this.queryStmt(mkSelect(table, exprs), callback);
 };
 
 })();
