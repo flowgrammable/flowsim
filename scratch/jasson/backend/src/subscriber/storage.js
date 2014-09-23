@@ -110,27 +110,46 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
 
 Storage.prototype.verifySubscriber = function(token, callback) {
   // update where verification_token = token
-  this.database.update('subscriber', [
-    'verification_token',
-    'status'
-  ], {
-    verification_token: token
-  }, ['', 'ACTIVE'], function(err, result) {
-    if(err) {
-      callback(err);
-    } else {
-      callback(result);
-    }
-  });
+  this.database.update('subscriber', 
+    [ 'verification_token', 'status' ], 
+    { verification_token: token }, 
+    ['', 'ACTIVE'], 
+    function(err, result) {
+      if(err) {
+        callback(err);
+      } else {
+        callback(result);
+      }
+    });
 };
 
-Storage.prototype.resetSubscriber = function(email, callback) {
-  // update where email = email
+Storage.prototype.resetSubscriber = function(email, token, callback) {
+  this.database.update('subscriber',
+    [ 'verification_token', 'status' ], 
+    { email: email }, 
+    [ token, 'RESET' ], 
+    function(err, result) {
+      if(err) {
+        callback(err);
+      } else {
+        callback(result);
+      }
+    });
 };
 
 Storage.prototype.updateSubscriberPassword = function(email, password, 
   callback) {
-  // update where email = email
+  this.database.update('subscriber',
+    [ 'password' ], 
+    { email: email }, 
+    [ password  ], 
+    function(err, result) {
+      if(err) {
+        callback(err);
+      } else {
+        callback(result);
+      }
+    });
 };
 
 Storage.prototype.updateSubscriber = function(subscriber, callback) {
