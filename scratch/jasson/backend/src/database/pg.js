@@ -103,8 +103,7 @@ function mkAssignment(fvPairs) {
   var _result = '';
   if(Object.keys(fvPairs).length > 0) {
     _result = _.map(fvPairs, function(value, key) {
-      var _value = typeof value === 'number' ? value : '\'' + value + '\'';
-      return key + '=' value;
+      return key + '=' + (typeof value === 'number' ? value : '\'' + value + '\'');
     }).join(', ');
   }
   return _result;
@@ -124,6 +123,7 @@ function mkWhere(conjunction) {
       var _key, _value;
       _key = Object.keys(value)[0];
       _value = value[_key];
+      _value = typeof _value === 'number' ? _value : '\'' + _value + '\'';
       return key + _key + _value;
     }).join(' AND ');
     _where = 'WHERE (' + _where + ')';
@@ -186,7 +186,8 @@ function mkInsert(table, fvPairs) {
  * @param {Object} fvPairs    - a set of field/value pairs for insertion
  * @param {CallBack} callback - callback function to use
  */
-Databaset.prototype.insert = function(table, fvPairs, callback) {
+Database.prototype.insert = function(table, fvPairs, callback) {
+  console.log(mkInsert(table, fvPairs));
   this.queryStmt(mkInsert(table, fvPairs), callback);
 };
 
@@ -202,8 +203,8 @@ Databaset.prototype.insert = function(table, fvPairs, callback) {
 function mkSelect(table, fields, conjunct) {
   var _head, _where, _fields;
   _fields = fields.length > 0 ? fields.join(', ') : '*';
-  _head = 'SELECT ' + _fields + ' ' + table;
-  return _head + mkWhere(conjunct);
+  _head = 'SELECT ' + _fields + ' FROM ' + table;
+  return _head + ' ' + mkWhere(conjunct);
 }
 
 /**
@@ -217,6 +218,7 @@ function mkSelect(table, fields, conjunct) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype._select = function(table, fields, conjunct, callback) {
+  console.log(mkSelect(table, fields, conjunct));
   this.queryStmt(mkSelect(table, fields, conjunct), callback);
 };
 
@@ -248,7 +250,7 @@ Database.prototype.select = function() {
  * @returns {String} string representation of SQL UPDATE statement
  */
 function mkUpdate(table, fvPairs, conjunct) {
-  return 'UPDATE ' + table + ' SET ' + mkAssignment(fvPairs) + mkWhere(conjunct);
+  return 'UPDATE ' + table + ' SET ' + mkAssignment(fvPairs) + ' ' + mkWhere(conjunct);
 }
 
 /**
@@ -261,6 +263,7 @@ function mkUpdate(table, fvPairs, conjunct) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.update = function(table, fvPairs, conjunct, callback) {
+  console.log(mkUpdate(table, fvPairs, conjunct));
   this.queryStmt(mkUpdate(table, fvPairs, conjunct), callback);
 };
 
@@ -273,7 +276,7 @@ Database.prototype.update = function(table, fvPairs, conjunct, callback) {
  * @returns {String} string representation of SQL DELETE statement
  */
 function mkDelete(table, conjunct) {
-  return 'DELETE FROM ' + table + mkWhere(conjunct);
+  return 'DELETE FROM ' + table + ' ' + mkWhere(conjunct);
 }
 
 /**
@@ -285,6 +288,7 @@ function mkDelete(table, conjunct) {
  * @param {Callback} callback - callback function to use
  */
 Database.prototype.delete = function(table, conjunct, callback) {
+  console.log(mkDelete(table, conjunct));
   this.queryStmt(mkDelete(table, conjunct), callback);
 };
 

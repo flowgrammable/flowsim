@@ -115,9 +115,9 @@ Storage.prototype.verifySubscriber = function(token, callback) {
   // update where verification_token = token
   this.database.update('subscriber', {
     verification_token: '',
-    state: 'ACTIVE'
+    status: 'ACTIVE'
   }, {
-    verification_token: { '=', token }
+    verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
       callback(err);
