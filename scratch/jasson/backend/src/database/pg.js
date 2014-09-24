@@ -96,7 +96,8 @@ Database.prototype.queryStmt = function(qString, callback) {
  * Form a valid SQL assignment clause given a set of field/value pairs. This can
  * be used to construct WHERE clauses as well as for UPDATE statements.
  *
- * @param {Object} conjunction - field/value pairs to build an assignment
+ * @param {Object} fvPairs - field/value pairs to build an assignment
+ * @returns {String} string representation of SQL assignment clause
  */
 function mkAssignment(fvPairs) {
   var _result = '';
@@ -114,6 +115,7 @@ function mkAssignment(fvPairs) {
  * equality comparison.
  *
  * @param {Object} conjunction - field/value pairs to build a conjunction
+ * @returns {String} string representation of SQL WHERE conjunction clause
  */
 function mkWhere(conjunction) {
   var _where = '';
@@ -131,6 +133,7 @@ function mkWhere(conjunction) {
  * Constructs a valid SQL FIELDS clause given a set of field names.
  *
  * @param {[String]} fields - a list of field names
+ * @returns {String} string representation of SQL fields clause
  */
 function mkFields(fields) {
   return '(' + fields.join(', ') + ')';
@@ -140,6 +143,7 @@ function mkFields(fields) {
  * Constructs a valid SQL VALUES clause given a set of values.
  *
  * @param {[String|Number]} values - an array of values
+ * @returns {String} string representation of SQL VALUES clause
  */
 function mkValues(values) {
   var _values;
@@ -158,6 +162,7 @@ function mkValues(values) {
  *
  * @param {String} table - the target table for insertion
  * @param {Object} fvPairs - set of field/value pairs that to be inserted
+ * @returns {String} string representation of SQL INSERT statement
  */
 function mkInsert(table, fvPairs) {
   var _head, _fields, _values;
@@ -190,6 +195,7 @@ Databaset.prototype.insert = function(table, fvPairs, callback) {
  * @param {String} table    - the target table for insertion
  * @param {[String]} fields - a list of fields to present in the results
  * @param {Object} conjunct - a conjunction of field/value pairs to filter 
+ * @returns {String} string representation of SQL SELECT statement
  */
 function mkSelect(table, fields, conjunct) {
   var _head, _where, _fields;
@@ -218,6 +224,7 @@ Database.prototype.select = function(table, fields, conjunct, callback) {
  * @param {String} table    - target table for selection
  * @param {Object} fvPairs  - selects the target field and updates with value
  * @param {Object} conjunct - conjunction of field/value pairs to filter update
+ * @returns {String} string representation of SQL UPDATE statement
  */
 function mkUpdate(table, fvPairs, conjunct) {
   return 'UPDATE ' + table + ' SET ' + mkAssignment(fvPairs) + mkWhere(conjunct);
