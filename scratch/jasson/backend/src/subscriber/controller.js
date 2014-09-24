@@ -5,6 +5,9 @@
 
 (/** @lends module:subscriber */function(){
 
+var uuid   = require('node-uuid');
+var bcrypt = require('bcrypt');
+
 var fmt = require('../utils/formatter');
 var msg = require('../utils/msg');
 var stg = require('./storage');
@@ -35,7 +38,7 @@ Controller.prototype.authorize = function(token, delegate) {
   this.storage.getSession(token, delegate); 
 };
 
-Controller.prototype.login = function(email, pwd, delgate) {
+Controller.prototype.login = function(email, pwd, srcIp, delgate) {
   // validate email/pwd
   // if good create a cression, return the token
   // else return error
@@ -52,7 +55,8 @@ Controller.prototype.logout = function(delegate) {
 Controller.prototype.register = function(delegate) {
   // create the subscriber, send a verification email
   // or return an error
-  this.storage.createSubscriber();
+  this.storage.createSubscriber(email, bycrypt.hashSync(pwd, 10), 
+    (new Date()).toISOString(), srcIp, uuid.v4());
   delegate();
 };
 
