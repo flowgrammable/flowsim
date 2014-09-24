@@ -120,9 +120,11 @@ function mkAssignment(fvPairs) {
 function mkWhere(conjunction) {
   var _where = '';
   if(Object.keys(conjunction).length > 0) {
-    _result = _.map(conjunction, function(value, key) {
-      var _value = typeof value === 'number' ? value : '\'' + value + '\'';
-      return key + '=' value;
+    _where = _.map(conjunction, function(value, key) {
+      var _key, _value;
+      _key = Object.keys(value)[0];
+      _value = value[_key];
+      return key + _key + _value;
     }).join(' AND ');
     _where = 'WHERE (' + _where + ')';
   }
@@ -208,13 +210,32 @@ function mkSelect(table, fields, conjunct) {
  * Selects the specified field values from all rows in a table that match a user
  * provided field/value conjunction.
  *
+ * @private
  * @param {String} table      - target table for selection
+ * @param {String} fields     - list of fields to return in display
  * @param {Object} conjunct   - set of key/value pairs to filter matching rows
  * @param {CallBack} callback - callback function to use
  */
-Database.prototype.select = function(table, fields, conjunct, callback) {
+Database.prototype._select = function(table, fields, conjunct, callback) {
   this.queryStmt(mkSelect(table, fields, conjunct), callback);
 };
+
+/**
+ * Selects the specified field values from all rows in a table that match a user
+ * provided field/value conjunction.
+ *
+ * @param {String} table      - target table for selection
+ * @param [[String]] fields   - list of fields to return in display
+ * @param {Object} conjunct   - set of key/value pairs to filter matching rows
+ * @param {CallBack} callback - callback function to use
+ */
+Database.prototype.select = function() {
+  if(arguments.length === 3) {
+    this._select(arguments[0], [], arguments[1], arguments[2]);
+  } else {
+    this._select.apply(this, arguments);
+  }
+}
 
 /**
  * Create a valid SQL statement that udpates a set of specified fields with new
@@ -234,13 +255,37 @@ function mkUpdate(table, fvPairs, conjunct) {
  * Updates a set of rows in a table that match a field/value conjunction
  * using a set of field/value pairs.
  *
- * @param {String} table      - the target table for update
- * @param {Object} fvpairs    - a set of field/value pairs to update
- * @param {Object} conjunct   - a set of field/value pairs to filter
+ * @param {String} table      - target table of operation
+ * @param {Object} fvpairs    - set of field/value pairs to update
+ * @param {Object} conjunct   - set of field/value pairs to filter
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.update = function(table, fvPairs, conjunct, callback) {
   this.queryStmt(mkUpdate(table, fvPairs, conjunct), callback);
+};
+
+/**
+ * Create a valid SQL statement that will delete a set of rows from a target
+ * database where the conjunct fields match.
+ *
+ * @param {String} table    - target table of operation
+ * @param {Object} conjunct - set of field/value pairs 
+ * @returns {String} string representation of SQL DELETE statement
+ */
+function mkDelete(table, conjunct) {
+  return 'DELETE FROM ' + table + mkWhere(conjunct);
+}
+
+/**
+ * Delete a set of rows from a table in the database whose field values match
+ * the supplied field/value pairs.
+ *
+ * @param {String} table - target table of operation
+ * @param {Object} conjunct - set of field/value pairs
+ * @param {Callback} callback - callback function to use
+ */
+Database.prototype.delete = function(table, conjunct, callback) {
+  this.queryStmt(mkDelete(table, conjunct), callback);
 };
 
 })();

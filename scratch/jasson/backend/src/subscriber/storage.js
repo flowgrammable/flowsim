@@ -100,8 +100,8 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
 
 Storage.prototype.getSubscriberByToken = function(token, callback) {
 
-  this.database.search('subscriber', {
-    verification_token: token
+  this.database.select('subscriber', {
+    verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
       callback(err);
@@ -113,46 +113,48 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
 
 Storage.prototype.verifySubscriber = function(token, callback) {
   // update where verification_token = token
-  this.database.update('subscriber', 
-    [ 'verification_token', 'status' ], 
-    { verification_token: token }, 
-    ['', 'ACTIVE'], 
-    function(err, result) {
-      if(err) {
-        callback(err);
-      } else {
-        callback(result);
-      }
-    });
+  this.database.update('subscriber', {
+    verification_token: '',
+    state: 'ACTIVE'
+  }, {
+    verification_token: { '=', token }
+  }, function(err, result) {
+    if(err) {
+      callback(err);
+    } else {
+      callback(result);
+    }
+  });
 };
 
 Storage.prototype.resetSubscriber = function(email, token, callback) {
-  this.database.update('subscriber',
-    [ 'verification_token', 'status' ], 
-    { email: email }, 
-    [ token, 'RESET' ], 
-    function(err, result) {
-      if(err) {
-        callback(err);
-      } else {
-        callback(result);
-      }
-    });
+  this.database.update('subscriber', {
+    verification_token: token,
+    status: 'RESET'
+  }, {
+    email: { '=': email }
+  }, function(err, result) {
+    if(err) {
+      callback(err);
+    } else {
+      callback(result);
+    }
+  });
 };
 
 Storage.prototype.updateSubscriberPassword = function(email, password, 
   callback) {
-  this.database.update('subscriber',
-    [ 'password' ], 
-    { email: email }, 
-    [ password  ], 
-    function(err, result) {
-      if(err) {
-        callback(err);
-      } else {
-        callback(result);
-      }
-    });
+  this.database.update('subscriber', {
+    password: password
+  }, {
+    email: { '=': email }
+  }, function(err, result) {
+    if(err) {
+      callback(err);
+    } else {
+      callback(result);
+    }
+  });
 };
 
 Storage.prototype.createSession = function(sub, skey, tmo, callback) {
@@ -169,36 +171,39 @@ Storage.prototype.createSession = function(sub, skey, tmo, callback) {
   });
 };
 
-Storage.prototype.getSession = function(skey, dispatch) {
-  this.database.table('session').find({
-    where: { key: skey } 
-  }).success(function(result) {
-    if(result) {
-      dispatch(undefined, result);
+Storage.prototype.getSession = function(skey, callback) {
+  this.database.select('session', {
+    key: { '=': skey }
+  }, function(err, result) {
+    if(err) {
+      callback(err);
     } else {
-      dispatch(msg.sessionNotFound());
+      callback(result);
     }
-  }).error(function(err) {
-    dispatch(msg.unknownError(err)); // probably db connection error
   });
 };
 
-Storage.prototype.deleteSession = function(session, dispatch) {
-  this.session.destroy()
-    .success(function(result) {
-      dispatch(msg.success());
-    }).error(function(err) {
-    dispatch(msg.unknownError(err));
+Storage.prototype.deleteSession = function(session, callback) {
+  this.database.delete('session', {
+    key: { '=': session }
+  }, function(err, result) {
+    if(err) {
+      callback(err);
+    } else {
+      callback(result);
+    }
   });
 };
 
-Storage.prototype.deleteStaleSession = function(time, dispatch) {
-  this.database.table('session').destroy({
-    timeout: { lt: time } 
-  }).success(function(result) { 
-    dispatch(msg.success(result));
-  }).error  (function(err) { 
-    dispatch(msg.error(err));
+Storage.prototype.deleteStaleSession = function(time, callback) {
+  this.database.delete('session', {
+    time: {'<': time}
+  }, function(err, result) {
+    if(err) {
+      callback(err);
+    } else {
+      callback(result);
+    }
   });
 };
 
