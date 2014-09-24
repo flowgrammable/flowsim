@@ -8,6 +8,7 @@
 
 var fmt = require('../utils/formatter');
 var msg = require('./msg');
+var pg  = require('../database/pg');
 
 /**
  * SQL result codes based on postgres definitions.
@@ -97,16 +98,22 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
  * @param {storageCallback} callback - 
  * @returns {Storage} returns a self reference
  */
-
 Storage.prototype.getSubscriberByToken = function(token, callback) {
 
   this.database.select('subscriber', {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        case pg.Error.DUPLICATE_KEY:
+          callback(msg.emailInUse());
+          break;
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(null, result);
+      callback(null, msg.success(result));
     }
   });
 };
@@ -120,9 +127,13 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(result);
+      callback(null, msg.success(result));
     }
   });
 };
@@ -135,9 +146,13 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(result);
+      callback(null, msg.success(result));
     }
   });
 };
@@ -150,9 +165,13 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(result);
+      callback(null, msg.success(result));
     }
   });
 };
@@ -164,9 +183,13 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
     timeout: tmo
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(result);
+      callback(null, msg.success(result));
     }
   });
 };
@@ -176,9 +199,13 @@ Storage.prototype.getSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(result);
+      callback(null, msg.success(result));
     }
   });
 };
@@ -188,9 +215,13 @@ Storage.prototype.deleteSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(result);
+      callback(null, msg.success(result));
     }
   });
 };
@@ -200,9 +231,13 @@ Storage.prototype.deleteStaleSession = function(time, callback) {
     timeout: {'<': time}
   }, function(err, result) {
     if(err) {
-      callback(err);
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
     } else {
-      callback(result);
+      callback(null, msg.success(result));
     }
   });
 };

@@ -11,6 +11,10 @@ var _  = require('underscore');
 var name    = 'database';
 var defHost = '127.0.0.1';
 
+var Error = {
+  DUPLICATE_KEY: '23505'
+};
+
 /**
  * Wraps a pg database object.
  *
@@ -187,7 +191,6 @@ function mkInsert(table, fvPairs) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.insert = function(table, fvPairs, callback) {
-  console.log(mkInsert(table, fvPairs));
   this.queryStmt(mkInsert(table, fvPairs), callback);
 };
 
@@ -218,7 +221,6 @@ function mkSelect(table, fields, conjunct) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype._select = function(table, fields, conjunct, callback) {
-  console.log(mkSelect(table, fields, conjunct));
   this.queryStmt(mkSelect(table, fields, conjunct), callback);
 };
 
@@ -263,7 +265,6 @@ function mkUpdate(table, fvPairs, conjunct) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.update = function(table, fvPairs, conjunct, callback) {
-  console.log(mkUpdate(table, fvPairs, conjunct));
   this.queryStmt(mkUpdate(table, fvPairs, conjunct), callback);
 };
 
@@ -288,7 +289,6 @@ function mkDelete(table, conjunct) {
  * @param {Callback} callback - callback function to use
  */
 Database.prototype.delete = function(table, conjunct, callback) {
-  console.log(mkDelete(table, conjunct));
   this.queryStmt(mkDelete(table, conjunct), callback);
 };
 

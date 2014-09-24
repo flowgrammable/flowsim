@@ -19,7 +19,8 @@ var dISO = d.toISOString();
 store.createSubscriber('j@j', '123', dISO, '1.1.1.1', '090909', 
   function(err, result) {
     if(err) {
-      console.log(err);
+      console.log('createSub error');
+      console.log(err.code);
     } else {
       console.log(result);
     }
@@ -27,6 +28,7 @@ store.createSubscriber('j@j', '123', dISO, '1.1.1.1', '090909',
 
 store.getSubscriberByToken('1234321', function(err, result) {
   if(err) {
+    console.log('getSub error');
     console.log(err);
   } else {
     console.log(result);
@@ -35,6 +37,7 @@ store.getSubscriberByToken('1234321', function(err, result) {
 
 store.verifySubscriber('1234321', function(err, result) {
   if(err) {
+    console.log('verifySub err');
     console.log(err);
   } else {
     console.log(result);
