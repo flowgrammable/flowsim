@@ -99,15 +99,11 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
  * @returns {Storage} returns a self reference
  */
 Storage.prototype.getSubscriberByToken = function(token, callback) {
-
   this.database.select('subscriber', {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
       switch(err.code) {
-        case pg.Error.DUPLICATE_KEY:
-          callback(msg.emailInUse());
-          break;
         default:
           callback(msg.unknownError(err));
           break;
@@ -117,6 +113,121 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
     }
   });
 };
+
+Storage.prototype.getSubscriberByEmail = function(email, callback) {
+  this.database.select('subscriber', {
+    email: { '=': email }
+  }, function(err, result) {
+    if(err) {
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
+    } else {
+      callback(null, msg.success(result));
+    }
+  });
+};
+
+Storage.prototype.verifySubscriber = function(token, callback) {
+  // update where verification_token = token
+  this.database.update('subscriber', {
+    verification_token: '',
+    status: 'ACTIVE'
+  }, {
+    verification_token: { '=': token }
+  }, function(err, result) {
+    if(err) {
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
+    } else {
+      callback(null, msg.success(result));
+    }
+  });
+};
+
+Storage.prototype.resetSubscriber = function(email, token, callback) {
+  this.database.update('subscriber', {
+    verification_token: token,
+    status: 'RESET'
+  }, {
+    email: { '=': email }
+  }, function(err, result) {
+    if(err) {
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
+    } else {
+      callback(null, msg.success(result));
+    }
+  });
+};
+
+Storage.prototype.updateSubscriberPassword = function(email, password, 
+  callback) {
+  this.database.update('subscriber', {
+    password: password
+  }, {
+    email: { '=': email }
+  }, function(err, result) {
+    if(err) {
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
+    } else {
+      callback(null, msg.success(result));
+    }
+  });
+};
+
+Storage.prototype.createSession = function(skey, subId, tmo, callback) {
+  this.database.insert('session', {
+    key: skey,
+    subscriber_id: subId,
+    timeout: tmo
+  }, function(err, result) {
+    if(err) {
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
+    } else {
+      callback(null, msg.success(result));
+    }
+  });
+};
+
+Storage.prototype.getSession = function(skey, callback) {
+  this.database.select('session', {
+    key: { '=': skey }
+  }, function(err, result) {
+    if(err) {
+      switch(err.code) {
+        default:
+          callback(msg.unknownError(err));
+          break;
+      }
+    } else {
+      callback(null, msg.success(result));
+    }
+  });
+};
+
+Storage.prototype.deleteSession = function(skey, callback) {
+  this.database.delete('session', {
+    key: { '=': skey }
+  }, function(err, result) {
+    if(err) {
+      switch(err.code) {
 
 Storage.prototype.verifySubscriber = function(token, callback) {
   // update where verification_token = token
