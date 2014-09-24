@@ -157,10 +157,10 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
   });
 };
 
-Storage.prototype.createSession = function(sub, skey, tmo, callback) {
+Storage.prototype.createSession = function(skey, subId, tmo, callback) {
   this.database.insert('session', {
     key: skey,
-    subscriber_id: sub.id,
+    subscriber_id: subId,
     timeout: tmo
   }, function(err, result) {
     if(err) {
@@ -183,9 +183,9 @@ Storage.prototype.getSession = function(skey, callback) {
   });
 };
 
-Storage.prototype.deleteSession = function(session, callback) {
+Storage.prototype.deleteSession = function(skey, callback) {
   this.database.delete('session', {
-    key: { '=': session }
+    key: { '=': skey }
   }, function(err, result) {
     if(err) {
       callback(err);
@@ -197,7 +197,7 @@ Storage.prototype.deleteSession = function(session, callback) {
 
 Storage.prototype.deleteStaleSession = function(time, callback) {
   this.database.delete('session', {
-    time: {'<': time}
+    timeout: {'<': time}
   }, function(err, result) {
     if(err) {
       callback(err);
