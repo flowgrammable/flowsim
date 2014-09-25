@@ -21,7 +21,8 @@
     "restify": "^2.8.2",
     "sequelize": "^1.7.10",
     "underscore": "^1.7.0",
-    "validator": "^3.18.1"
+    "validator": "^3.18.1",
+    "mocha": "~1.21.4"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
