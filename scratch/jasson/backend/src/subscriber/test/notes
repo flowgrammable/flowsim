@@ -1,0 +1,11 @@
+Test: What happens if DB dies before subscriber is inserted
+
+Result: 
+createSub error
+{ [Error: connect ECONNREFUSED]
+  code: 'ECONNREFUSED',
+  errno: 'ECONNREFUSED',
+  syscall: 'connect' }
+
+
+ 
