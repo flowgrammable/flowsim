@@ -16,23 +16,23 @@ var d = new Date();
 var dISO = d.toISOString();
 
 function genString(n){
-	var y = '';
-	for(i = 0; i < n; i++)
-		y+= 'a';	
-	return y;
+    var y = '';
+    for(i = 0; i < n; i++)
+        y+= 'a';	
+    return y;
 };
 
 // email longer than 128 chars
 var badLength = genString(200);
 store.createSubscriber(badLength, '123', dISO, '1.1.1.1', uuid.v4(), 
-	function(err, result){
-		if(err) {
-			console.log('createSub error');
-      console.log('Email length greater than 128');
-			console.log(err);
-		} else {
-			console.log(result)
-		}
+    function(err, result){
+        if(err) {
+            console.log('createSub error');
+            console.log('Email length greater than 128');
+            console.log(err);
+        } else {
+            console.log(result)
+        }
 });
 
 // password longer than 60 chars
