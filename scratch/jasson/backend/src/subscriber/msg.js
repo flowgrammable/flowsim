@@ -5,6 +5,25 @@
 
 (/** @lends module:subscriber */function(){
 
+exports.scrub = function(logger) {
+  return function(msg) {
+    if(logger) {
+      logger.log(msg);
+    }
+    switch(msg.type) {
+      case "noDatabaseConnection":
+        return {
+          system: "Server Error",
+          type: ""
+        };
+        break;
+      default:
+        return msg;
+        break;
+    }
+  };
+}
+
 exports.methodNotSupported = function() {
 	return {
 		system: "subscriber/controller",
