@@ -108,7 +108,11 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      if(result.length == 0) {
+        callback(msg.badVerificationToken());
+      } else {
+        callback(null, result[0]);
+      }
     }
   });
 };
@@ -124,7 +128,7 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -144,7 +148,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -163,7 +167,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -182,7 +186,7 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -200,7 +204,7 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -216,7 +220,7 @@ Storage.prototype.getSession = function(skey, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -247,7 +251,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -266,7 +270,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -285,7 +289,7 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -303,7 +307,7 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -319,7 +323,7 @@ Storage.prototype.getSession = function(skey, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -335,7 +339,7 @@ Storage.prototype.deleteSession = function(skey, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };
@@ -351,7 +355,7 @@ Storage.prototype.deleteStaleSession = function(time, callback) {
           break;
       }
     } else {
-      callback(null, msg.success(result));
+      callback(null, result);
     }
   });
 };

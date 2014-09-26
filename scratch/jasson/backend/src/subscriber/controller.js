@@ -39,18 +39,48 @@ Controller.prototype.authorize = function(token, delegate) {
 };
 
 Controller.prototype.login = function(email, pwd, callback) {
-  // validate email/pwd
-  // if good create a cression, return the token
-  // else return error
+
+  async.waterfall([
+    function(cb) {
+      this.storage.getSubscriberByEmail(email,cb);
+    },
+    function(result, cb) {
+      if(bcrypt.compareSync(pwd, result.password)) {
+        this.storage.createSession(uuid.v4(), result.id, timeout, cb);
+      } else {
+        cb(msg.incorrectPwd());
+      }
+    }
+  ], function(err, result) {
+    if(err) {
+      callback(msg.error(err));
+    } else {
+      callback(msg.success(result));
+    }
+  });
+
+  // Grab the corresponding subscribers data
   this.storage.getSubscriberByEmail(email, function(err, result) {
     if(err) {
       callback(err);
-    } else if(bcrypt.compareSync(pwd, result[0].password)) {
-      this.storage.createSession(uuid.v4(), id, timeout, callback);
     } else {
+      if(bcrypt.compareSync(pwd, result[0].password)) {
+        this.storage.createSession(uuid.v4(), id, timeout, 
+          function(err, result) {
+            if(err) {
+              callback(err);
+            } else {
+              // need to set the verification_token
+              result.verification_token
+              // session was created 
+            }
+        });
+      } else {
+        // The supplied password does not match
+        callback(msg.incorrectPwd());
+      }
     }
   });
-  this.storage.createSession(uuid.v4(), id, timeout, callback);
 };
 
 Controller.prototype.logout = function(token, callback) {
