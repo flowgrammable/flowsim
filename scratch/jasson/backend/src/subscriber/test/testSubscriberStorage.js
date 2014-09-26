@@ -20,7 +20,7 @@ function genString(n){
   return y;
 }
 describe('Storage', function(){
-describe('.createSubscriber()', function(){
+describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
 // Create test subscriber
 var d = new Date();
 var dISO = d.toISOString();
@@ -49,14 +49,57 @@ var ts = { email: 'testSub@mail.com', password: '123',
     });
    });
 
-   it('should return error code 22001 for email length greater than 128', function(done){
+  it('should return error code 23505 for duplicate insert', function(done){
+    store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
+      function(err, result){
+          assert.equal('23505', err.code);
+          done();
+    });
+   });
+   it('should return error code 22001 for email length greater than 128', 
+     function(done){
      store.createSubscriber(genString(129), ts.password, ts.date, ts.ip, uuid.v4(),
       function(err, result){
           assert.equal('22001', err.code);
           done();
      });
    });
+
+  it('should return error code 22P02 for invalid IP address syntax',
+      function(done){
+      store.createSubscriber(ts.email, ts.password, ts.date, '01.1.1', uuid.v4(),
+        function(err, result){
+          assert.equal('22P02', err.code);
+          done();
+        });
+  });
           
+  it('should return error code 22P02 for invalid IP address type',
+      function(done){
+      store.createSubscriber(ts.email, ts.password, ts.date, 10 , uuid.v4(),
+        function(err, result){
+          assert.equal('42804', err.code);
+          done();
+        });
+  });
+
+  it('should return error code 22001 for token length greater than 36',
+    function(done){
+    store.createSubscriber('b@b', ts.password, ts.date, ts.ip, genString(37),
+      function(err, result){
+        assert.equal('22001', err.code);
+        done();
+    });
+  });
+
+  it('should return error code 22023 for invalid date type',
+    function(done){
+    store.createSubscriber('c@c', ts.password, new Date(), ts.ip, genString(37),
+      function(err, result){
+        assert.equal('22023', err.code);
+        done();
+    });
+  });
 });
 });
 /*
