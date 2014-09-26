@@ -19,13 +19,16 @@ function genString(n){
   for(i=0;i<n;i++) y+= 'a';
   return y;
 }
-describe('Storage', function(){
-describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
+
 // Create test subscriber
 var d = new Date();
 var dISO = d.toISOString();
 var ts = { email: 'testSub@mail.com', password: '123', 
     date: dISO, ip: '1.1.1.1', token: uuid.v4() } 
+
+
+describe('Storage', function(){
+describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
 
   // Delete all subscribers from db before running tests
   before(function(){
@@ -49,6 +52,13 @@ var ts = { email: 'testSub@mail.com', password: '123',
     });
    });
 
+  it('should set subscriber status to CREATED', function(done){
+    store.getSubscriberByToken(ts.token, function(err, result){
+      assert.equal('CREATED', result.value[0].status);
+      done();
+    });
+  });
+
   it('should return error code 23505 for duplicate insert', function(done){
     store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
       function(err, result){
@@ -56,6 +66,7 @@ var ts = { email: 'testSub@mail.com', password: '123',
           done();
     });
    });
+
    it('should return error code 22001 for email length greater than 128', 
      function(done){
      store.createSubscriber(genString(129), ts.password, ts.date, ts.ip, uuid.v4(),
@@ -101,24 +112,97 @@ var ts = { email: 'testSub@mail.com', password: '123',
     });
   });
 });
-});
-/*
-store.getSubscriberByToken(ts.token, function(err, result){
-  if(err){
-    console.log('fetch error:', err);
-  } else {
-    console.log('fetch by token:', result);
-  }
+
+describe('.getSubscriberByToken(token, cb)', function(){
+
+  it('should return an array of subscribers', function(done){
+    store.getSubscriberByToken(ts.token, function(err, result){
+      assert.equal(result.value[0].email, ts.email);
+      done();
+    });
+  });
+
+  it('should return an empty array if sub does not exist', function(done){
+    store.getSubscriberByToken('madeup', function(err, result){
+      assert.equal(0, result.value.length );
+      done();
+    });
+  });
+
 });
 
-store.getSubscriberByEmail('test@mail' , function(err, result){
-  if(err){
-    console.log('fetch by email error: ', err);
-  } else {
-    console.log('fetch by email test@mail: ', result);
-  }
+describe('.getSubscriberByEmail(email, cb)', function(){
+  
+  it('should return an array with a single subscriber', function(done){
+    store.getSubscriberByEmail(ts.email, function(err, result){
+      assert.equal(1, result.value.length);
+      assert.equal(ts.email, result.value[0].email);
+      done();
+    });
+  });
+
+  it('should return an empty array if sub does not exist', function(done){
+    store.getSubscriberByEmail('nope', function(err, result){
+      assert.equal(0, result.value.length);
+      done();
+    });
+  });
+
 });
 
-console.log('test sub', ts);
-*/
+describe('.verifySubscriber(token, cb)', function(){
+
+  it('should return an empty array on successful update', function(done){
+    store.verifySubscriber(ts.token, function(err, result){
+      assert.equal(0, result.value.length);
+      done();
+    });
+  });
+  
+  it('should update subscriber status to ACTIVE', function(done){
+    store.getSubscriberByEmail(ts.email, function(err, result){
+      if(err){
+        console.log(err);
+      } else {
+        assert.equal('ACTIVE', result.value[0].status);
+        done();
+      }
+    });
+  });
+});
+
+describe('.resetSubscriber(email, token, cb)', function(){
+
+  it('should return an empty array on successful update', function(done){
+    store.resetSubscriber(ts.email, 'resetToken', function(err, result){
+      assert.equal(0, result.value.length);
+      done();
+    });
+  });
+
+  it('should set subscriber status to RESET', function(done){
+    store.getSubscriberByEmail(ts.email, function(err, result){
+      assert.equal('RESET', result.value[0].status);
+      done();
+    });
+  });
+});
+
+describe('.updateSubscriberPassword(email, password, cb)', function(){
+    
+  it('should return \'value\' on success', function(done){
+    store.updateSubscriberPassword(ts.email, 'newpassword', function(err, result){
+      assert.equal(0, result.value.length);
+      done();
+    });
+  });
+
+  it('should update subscriber password', function(done){
+    store.getSubscriberByEmail(ts.email, function(err, result){
+      assert.equal('newpassword', result.value[0].password);
+      done();
+    });
+  });
+});
+});
 db.close();  
