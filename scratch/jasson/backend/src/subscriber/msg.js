@@ -12,14 +12,16 @@ exports.scrub = function(logger) {
     }
     switch(msg.type) {
       case "noDatabaseConnection":
-        return {
+        return msg = {
           system: "Server Error",
           type: ""
         };
         break;
       default:
-        return msg;
         break;
+    }
+    if(logger) {
+      logger.log(msg);
     }
   };
 }
