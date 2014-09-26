@@ -227,7 +227,11 @@ Storage.prototype.deleteSession = function(skey, callback) {
   }, function(err, result) {
     if(err) {
       switch(err.code) {
-
+      // need to complete
+      }
+    }
+  });
+};
 Storage.prototype.verifySubscriber = function(token, callback) {
   // update where verification_token = token
   this.database.update('subscriber', {
