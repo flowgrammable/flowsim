@@ -60,7 +60,6 @@ Storage.prototype.toString = fmt.toString;
  * @returns {undefined}
  */
 
-
 /**
  * Create a new row in the subscriber table.
  *
