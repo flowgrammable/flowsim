@@ -5,16 +5,11 @@
 
 (/** @lends module:subscriber */function(){
 
-var msg = require('../utils/msg');
-
-exports.success = msg.success;
-exports.error = msg.error;
-
 exports.methodNotSupported = function() {
-	return msg.error({
+	return {
 		system: "subscriber/controller",
 		type: "methodNotSupported"
-	});
+	};
 };
 
 exports.noDatabaseConnection = function() {
