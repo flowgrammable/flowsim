@@ -45,7 +45,7 @@ Controller.prototype.login = function(email, pwd, callback) {
   this.storage.getSubscriberByEmail(email, function(err, result) {
     if(err) {
       callback(err);
-    } else if(bcrypt.hash(pwd, 10) == result[0].password) {
+    } else if(bcrypt.compareSync(pwd, result[0].password)) {
       this.storage.createSession(uuid.v4(), id, timeout, callback);
     } else {
     }
