@@ -20,7 +20,7 @@ function genString(n){
   for(i = 0; i < n; i++)
       y+= 'a';	
   return y;
-};
+}
 
 // email longer than 128 chars
 var badLength = genString(200);
@@ -31,7 +31,7 @@ store.createSubscriber(badLength, '123', dISO, '1.1.1.1', uuid.v4(),
       console.log('Email length greater than 128');
       console.log(err);
     } else {
-      console.log(result)
+      console.log(result);
     }
 });
 

@@ -111,7 +111,7 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
     if(err) {
       errHandler(callback, err);
     } else {
-      if(result.length == 0) {
+      if(result.length === 0) {
         callback(msg.badVerificationToken());
       } else {
         callback(null, result[0]);

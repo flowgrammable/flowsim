@@ -26,7 +26,7 @@ grunt.loadNpmTasks('grunt-contrib-clean');
 
 grunt.registerTask('default', ['jshint']);
 grunt.registerTask('doc', ['jsdoc']);
-grunt.registerTask('clear', ['clean']);
+grunt.registerTask('clean', ['clean']);
 
 };
 

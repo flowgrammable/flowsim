@@ -147,7 +147,7 @@ Subscriber.prototype.toFormatter = function(f) {
 Subscriber.prototype.toString = fmt.toString;
 
 Subscriber.prototype._getPathName = function(server, path) {
-  return server.rootPath() + '/' + name + '/' + path;
+  return name + '/' + path;
 };
 
 Subscriber.prototype.load = function(server) {

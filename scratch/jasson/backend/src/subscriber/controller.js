@@ -71,7 +71,7 @@ Controller.prototype.login = function(email, pwd, callback) {
               callback(err);
             } else {
               // need to set the verification_token
-              result.verification_token
+              //result.verification_token
               // session was created 
             }
         });

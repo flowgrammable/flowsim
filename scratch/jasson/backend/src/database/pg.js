@@ -42,7 +42,7 @@ exports.Database = Database;
  */
 Database.prototype.close = function() {
   pg.end();
-}
+};
 
 /**
  * Take a parameterized SQL query and arguments, execute the rendered
@@ -239,7 +239,7 @@ Database.prototype.select = function() {
   } else {
     this._select.apply(this, arguments);
   }
-}
+};
 
 /**
  * Create a valid SQL statement that udpates a set of specified fields with new

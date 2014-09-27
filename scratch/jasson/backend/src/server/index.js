@@ -91,7 +91,7 @@ Server.prototype.addHandler = function(method, path, handler) {
     case 'get':
     case 'put':
     case 'delete':
-      this.server[method](path, handler);
+      this.server[method](this.rootPath() + path, handler);
       break;
     case '*':
       this.server.use(handler);
@@ -122,7 +122,7 @@ Server.prototype.baseUrl = function() {
  * @returns {String} path root of server
  */
 Server.prototype.rootPath = function() {
-  return this.config.root;
+  return this.config.root + '/';
 };
 
 /**

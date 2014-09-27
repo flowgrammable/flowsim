@@ -24,7 +24,7 @@ function genString(n){
 var d = new Date();
 var dISO = d.toISOString();
 var ts = { email: 'testSub@mail.com', password: '123', 
-    date: dISO, ip: '1.1.1.1', token: uuid.v4() } 
+    date: dISO, ip: '1.1.1.1', token: uuid.v4() };
 
 
 describe('Storage', function(){

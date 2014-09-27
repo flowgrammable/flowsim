@@ -3,14 +3,14 @@
 
 function _error(data) {
   return {
-    error: data || {};
+    error: data || {}
   };
 }
 exports.error = _error;
 
 function _success(data) {
   return {
-    value: data || {};
+    value: data || {}
   };
 }
 exports.success = _success;

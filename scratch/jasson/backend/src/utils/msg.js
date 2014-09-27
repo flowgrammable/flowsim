@@ -51,7 +51,7 @@ exports.filter = function(filter, pre, post) {
       _post(msg);
     }
     return msg;
-  }
+  };
 };
 
 })();
