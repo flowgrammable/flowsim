@@ -50,7 +50,7 @@ Database.prototype.close = function() {
  * appropriate arguments.
  *
  * @param {String} qString - parametric SQL query string
- * @param {[String]} args - array of arguments to render in parametric SQL query
+ * @param {Array(String)} args - array of arguments to render in parametric SQL query
  * @param {genericCallback} callback - a generic callback for query results
  */
 Database.prototype.queryArgs = function(qString, args, callback) {
@@ -138,7 +138,7 @@ function mkWhere(conjunction) {
 /**
  * Constructs a valid SQL FIELDS clause given a set of field names.
  *
- * @param {[String]} fields - a list of field names
+ * @param {Array(String)} fields - a list of field names
  * @returns {String} string representation of SQL fields clause
  */
 function mkFields(fields) {
@@ -148,7 +148,7 @@ function mkFields(fields) {
 /**
  * Constructs a valid SQL VALUES clause given a set of values.
  *
- * @param {[String|Number]} values - an array of values
+ * @param {(String[]|Number[])} values - an array of values
  * @returns {String} string representation of SQL VALUES clause
  */
 function mkValues(values) {
@@ -199,7 +199,7 @@ Database.prototype.insert = function(table, fvPairs, callback) {
  * and a conjunction of field/values to screen against.
  *
  * @param {String} table    - the target table for insertion
- * @param {[String]} fields - a list of fields to present in the results
+ * @param {Array(String)} fields - a list of fields to present in the results
  * @param {Object} conjunct - a conjunction of field/value pairs to filter 
  * @returns {String} string representation of SQL SELECT statement
  */
@@ -229,7 +229,7 @@ Database.prototype._select = function(table, fields, conjunct, callback) {
  * provided field/value conjunction.
  *
  * @param {String} table      - target table for selection
- * @param [[String]] fields   - list of fields to return in display
+ * @param [Array(String)] fields   - list of fields to return in display
  * @param {Object} conjunct   - set of key/value pairs to filter matching rows
  * @param {CallBack} callback - callback function to use
  */
