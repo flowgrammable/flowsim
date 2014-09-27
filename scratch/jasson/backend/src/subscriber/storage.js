@@ -60,6 +60,14 @@ Storage.prototype.toString = fmt.toString;
  * @returns {undefined}
  */
 
+function errHandler(callback, err) {
+  switch(err.code) {
+    default:
+      callback(msg.unknownError(err));
+      break;
+  }
+}
+
 /**
  * Create a new row in the subscriber table.
  *
@@ -71,8 +79,8 @@ Storage.prototype.toString = fmt.toString;
  * @param {storageCallback} - callback function to use 
  * @returns {Storage} returns a self reference
  */
-Storage.prototype.createSubscriber = function(email, password, date, ip, token,
-  callback) {
+Storage.prototype.createSubscriber = function(email, password, date, ip, token, 
+  cb) {
 
   this.database.insert('subscriber', {
     email: email,
@@ -81,13 +89,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     reg_ip: ip,
     verification_token: token,
     status: 'CREATED'
-  }, function(err, result) {
-      if(err) {
-        callback(err);
-      } else {
-        callback(null, result);
-      }
-  });
+  }, returnHandler(cb));
 };
 
 /**
@@ -102,11 +104,7 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       if(result.length == 0) {
         callback(msg.badVerificationToken());
@@ -122,11 +120,7 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -142,11 +136,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -161,11 +151,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -180,11 +166,7 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      
     } else {
       callback(null, result);
     }
@@ -198,11 +180,7 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
     timeout: tmo
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -214,11 +192,7 @@ Storage.prototype.getSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -230,9 +204,7 @@ Storage.prototype.deleteSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-      // need to complete
-      }
+      errHandler(callback, err);
     }
   });
 };
@@ -245,11 +217,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -264,11 +232,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -283,11 +247,7 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -301,11 +261,7 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
     timeout: tmo
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -317,11 +273,7 @@ Storage.prototype.getSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -333,11 +285,7 @@ Storage.prototype.deleteSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
@@ -349,11 +297,7 @@ Storage.prototype.deleteStaleSession = function(time, callback) {
     timeout: {'<': time}
   }, function(err, result) {
     if(err) {
-      switch(err.code) {
-        default:
-          callback(msg.unknownError(err));
-          break;
-      }
+      errHandler(callback, err);
     } else {
       callback(null, result);
     }
