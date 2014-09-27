@@ -80,7 +80,7 @@ function errHandler(callback, err) {
  * @returns {Storage} returns a self reference
  */
 Storage.prototype.createSubscriber = function(email, password, date, ip, token, 
-  cb) {
+  callback) {
 
   this.database.insert('subscriber', {
     email: email,
@@ -89,7 +89,12 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     reg_ip: ip,
     verification_token: token,
     status: 'CREATED'
-  }, returnHandler(cb));
+  }, function(err, result) {
+    if(err) {
+      errHandler(callback, err);
+    } else {
+    }
+  });
 };
 
 /**

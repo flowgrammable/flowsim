@@ -6,12 +6,14 @@ function _error(data) {
     error: data || {};
   };
 }
+exports.error = _error;
 
 function _success(data) {
   return {
     value: data || {};
   };
 }
+exports.success = _success;
 
 function _wrap(err, result) {
   if(err) {
@@ -20,6 +22,7 @@ function _wrap(err, result) {
     return _success(result);
   }
 }
+exports.wrap = _wrap;
 
 function Delegate(res) {
   var response = res;
