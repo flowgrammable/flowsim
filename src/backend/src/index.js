@@ -13,6 +13,7 @@ var mlr = require('./mailer');
 var tmp = require('./template');
 var srv = require('./server');
 var sub = require('./subscriber');
+var log = require('./logger');
 
 // Process the command line
 prog
@@ -29,6 +30,9 @@ var db         = new dbs.Database(config);
 var mail       = new mlr.Mailer(config);
 var template   = new tmp.Template(config);
 var restServer = new srv.Server(config);
+var logger     = new log.Logger(config);
+
+logger.addlog("hey it worked!");
 
 // Initialize the modules
 var mods = [
@@ -37,7 +41,8 @@ var mods = [
     database: db,
     mailer: mail,
     template: template,
-    server: restServer
+    server: restServer,
+    logger: logger
   })
 ];
 
@@ -48,6 +53,7 @@ _.each(mods, function(mod) {
 
 // Run the server
 restServer.run();
+logger.addlog(restServer.toString());
 console.log(restServer.toString());
 
 })();

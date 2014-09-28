@@ -26,13 +26,15 @@ var defTimeout = 180;
  * @param {Object} context.database - database engine
  * @param {Object} context.mailer   - SMTP engine
  * @param {Object} context.template - template engine
+ * @param {Object} context.logger   - logger engine
  */
 
-function Controller(s, m, t, h) {
+function Controller(s, m, t, h, l) {
   this.storage  = s;
   this.mailer   = m;
   this.template = t;
   this.server   = h;
+  this.logger   = l.log.child({module: 'subscriber'});
 }
 exports.Controller = Controller;
 
@@ -112,6 +114,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
     if(err) {
       callback(err);
     } else {
+      that.logger.info('Registered Subscriber: ' + email);
       subject = '';
       body = that.template.render('verification', {
         baseUrl: that.server.baseUrl(),

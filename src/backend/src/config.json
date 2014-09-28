@@ -1,8 +1,8 @@
 {
   "mailer": {
     "service": "gmail",
-    "user": "info@compilednetworks.com",
-    "pwd": ""
+    "user": "flowgrammablemailer@google.com",
+    "pwd": "flowtester2014"
   },
   "server": {
     "address": "127.0.0.1",
@@ -25,5 +25,8 @@
   },
   "template": {
     "dir": "templates"
+  },
+  "logger": {
+    "name": "flowsim"
   }
 }
