@@ -31,8 +31,9 @@ var Codes = {
  * @param {module:database~Database} db - a properly constructed database
  */
 
-function Storage(db) {
+function Storage(db, log) {
   this.database = db;
+  this.logger   = log;
   //this.database.loadLocalModels(__dirname);
 }
 exports.Storage = Storage;
@@ -90,6 +91,7 @@ function errHandler(callback, err, table) {
  */
 Storage.prototype.createSubscriber = function(email, password, date, ip, token, 
                                               callback) {
+  var that = this;
   this.database.insert('subscriber', {
     email: email,
     password: password,
@@ -99,6 +101,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     status: 'CREATED'
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       callback(null, result);

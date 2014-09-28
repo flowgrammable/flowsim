@@ -32,7 +32,6 @@ var template   = new tmp.Template(config);
 var restServer = new srv.Server(config);
 var logger     = new log.Logger(config);
 
-logger.addlog("hey it worked!");
 
 // Initialize the modules
 var mods = [
@@ -42,7 +41,7 @@ var mods = [
     mailer: mail,
     template: template,
     server: restServer,
-    logger: logger
+    logger: logger.log.child({module: 'subscriber'})
   })
 ];
 

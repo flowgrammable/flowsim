@@ -14,9 +14,10 @@ var name = 'subscriber';
  * @param {module:database~Pg} ctx.database       - database engine
  * @param {module:template~Template} ctx.template - template engine
  * @param {module:mailer~Mailer} ctx.mailer       - SMTP engine
+ * @param {module:logger-Logger} ctx.logger       - logger engine
  */
 function Subscriber(ctx) {
-  this.storage    = new s.Storage(ctx.database);
+  this.storage    = new s.Storage(ctx.database, ctx.logger);
   this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template, 
                                      ctx.server, ctx.logger);
   this.view       = new v.View(this.controller);
