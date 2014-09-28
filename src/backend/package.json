@@ -7,11 +7,21 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "contributors": [
-    { "name": "Jasson Casey" },
-    { "name": "Colton Chojnacki" },
-    { "name": "Oron Hazi" },
-    { "name": "Thomas Wynn" },
-    { "name": "Ashish Jain" }
+    {
+      "name": "Jasson Casey"
+    },
+    {
+      "name": "Colton Chojnacki"
+    },
+    {
+      "name": "Oron Hazi"
+    },
+    {
+      "name": "Thomas Wynn"
+    },
+    {
+      "name": "Ashish Jain"
+    }
   ],
   "license": "APSL-2.0",
   "dependencies": {
@@ -25,7 +35,8 @@
     "pg": "^3.4.2",
     "restify": "^2.8.2",
     "underscore": "^1.7.0",
-    "validator": "^3.18.1"
+    "validator": "^3.18.1",
+    "mailgun-js": "~0.6.5"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

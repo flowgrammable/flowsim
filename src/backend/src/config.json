@@ -1,8 +1,7 @@
 {
   "mailer": {
-    "service": "gmail",
-    "user": "flowgrammablemailer@google.com",
-    "pwd": "flowtester2014"
+    "apiKey": "",
+    "domain": ""
   },
   "server": {
     "address": "127.0.0.1",
