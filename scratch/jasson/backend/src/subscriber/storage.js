@@ -57,7 +57,6 @@ Storage.prototype.toString = fmt.toString;
  * @callback storageCallback
  * @param {module:subscriber:msg} err - JSON wrapped error message
  * @param {module:subscriber:msg} succ - JSON wrapped res
- * @returns {undefined}
  */
 
 function errHandler(callback, err) {
@@ -77,11 +76,9 @@ function errHandler(callback, err) {
  * @param {String} ip - client ip address used for registration
  * @param {String} token - unique id for subscriber verification
  * @param {storageCallback} - callback function to use 
- * @returns {Storage} returns a self reference
  */
 Storage.prototype.createSubscriber = function(email, password, date, ip, token, 
-  callback) {
-
+                                              callback) {
   this.database.insert('subscriber', {
     email: email,
     password: password,
@@ -93,6 +90,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     if(err) {
       errHandler(callback, err);
     } else {
+      callback(null, result);
     }
   });
 };
@@ -102,7 +100,6 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
  *
  * @param {String} token - subscriber verification token
  * @param {storageCallback} callback - 
- * @returns {Storage} returns a self reference
  */
 Storage.prototype.getSubscriberByToken = function(token, callback) {
   this.database.select('subscriber', {
@@ -120,6 +117,12 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
   });
 };
 
+/**
+ * Returns a subscriber row with the specified email address.
+ *
+ * @param {String} email - email address
+ * @param {Function} callback - standard callback
+ */
 Storage.prototype.getSubscriberByEmail = function(email, callback) {
   this.database.select('subscriber', {
     email: { '=': email }
@@ -127,7 +130,11 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
     if(err) {
       errHandler(callback, err);
     } else {
-      callback(null, result);
+      if(result.length === 0) {
+        callback(msg.badEmail());
+      } else {
+        callback(null, result[0]);
+      }
     }
   });
 };
@@ -199,7 +206,11 @@ Storage.prototype.getSession = function(skey, callback) {
     if(err) {
       errHandler(callback, err);
     } else {
-      callback(null, result);
+      if(result.length === 0) {
+        callback(msg.badSessionKey());
+      } else {
+        callback(null, result[0]);
+      }
     }
   });
 };

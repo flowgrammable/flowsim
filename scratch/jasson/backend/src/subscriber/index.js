@@ -19,34 +19,40 @@ function isValidPassword(p) {
   return pat.test(p);
 }
 
-function _authorize(_req, _next, _delegate) {
-  var delegate = _delegate;
-  var req = _req;
-  var next = _next;
-  return function(err, succ) {
-    if(err) {
-      delegate(err);
-    } else if(succ) {
-      req.subscriber_id = succ;
-      next();
-    } else {
-      //FIXME: find better error
-      delegate(msg.unknownError());
-    }
-  };
-}
-
-function authorize(_server, _controller) {
-  var server     = _server;
-  var controller = _controller;
+/**
+ * The authorize service attempts to obtain the x-access-token from the HTTP
+ * request headers. If the token is present then the controller will be asked to
+ * authenticate and authorize the token. If no token is present the request is
+ * unauthenticated.
+ *
+ * @param {Object} controller - instance of the subscriber controller
+ * @returns {Function} a valid Restify HTTP request handler function
+ */
+function authorize(controller) {
+  var _controller = controller;
   return function(req, res, next) {
-    var dispatch = util.Delegate(res);
+    var responder = util.Responder(res);
+    // if there is an access token attempt validation
     if(req.headers['x-access-token']) {
       controller.authorize(
-        req.headers['x-access-token'], 
-        _authorize(req, next, dispatch)
+        req.headers['x-access-token'],
+        function(err, succ) {
+          if(err) {
+            responder(err);
+          } else {
+            // set the appropriate credentials and call the next 
+            // handler in the chain
+            req.subscriber_id = succ.subscriber_id;
+            req.session_id    = succ.session_id;
+            next();
+          }
+        }
       );
     } else {
+      // set the request as unauthorized adn call the next 
+      // handler in the chain
+      req.subscriber_id = 0;
+      req.session_id    = 0;
       return next();
     }
   };
@@ -115,6 +121,7 @@ function verify(_server, _controller) {
   };
 }
 
+
 function reset(_server, _controller) {
   return function(req, res, next) {
     var dispatch = util.Delegate(res);
@@ -129,8 +136,16 @@ function reset(_server, _controller) {
 }
 
 /**
+ * A subscriber object manages all aspects of subscriber lifecycle on the
+ * server: registration, verification, login, logout, password reset, etc. This
+ * subscriber object manages all aspects of interacting with the HTTP server and
+ * subscriber controller (location of business logic).
+ *
  * @constructor
- * @param {object} context - blah
+ * @param {Object} context          - wrapper of necessary services
+ * @param {Object} context.database - database engine
+ * @param {Object} context.mailer   - SMTP engine
+ * @param {Object} context.template - template engine
  */
 function Subscriber(context) {
   // Set the context references
@@ -151,39 +166,52 @@ Subscriber.prototype._getPathName = function(server, path) {
   return name + '/' + path;
 };
 
+/**
+ * The load method is called by a server when it is ready to load
+ * the module. The module uses this event as a signal to establish any
+ * necessary preconditions to successful operation that haven't already been
+ * established.
+ *
+ * @param {Object} server - a well constructed server object
+ */
 Subscriber.prototype.load = function(server) {
 
-  // Add the handlers
+  // Add the authorization handler first and ensure it sees all method and paths
   server.addHandler(
     '*', 
     server.rootPath() + '/*', 
     authorize(server, this.controller)
   );
 
+  // Add the login handler for subscriber login requests
   server.addHandler(
     'post',
     this._getPathName(server, 'login'), 
     login(server, this.controller)
   );
 
+  // Add the logout handler for subscriber logout requests
   server.addHandler(
     'post',
     this._getPathName(server, 'logout'), 
     logout(server, this.controller)
   );
 
+  // Add the register handler for new subscriber registration requests
   server.addHandler(
     'post',
     this._getPathName(server, 'register'), 
     register(server, this.controller)
   );
 
+  // Add the verify handler for subscriber veification requests
   server.addHandler(
     'post',
     this._getPathName(server, 'verify'), 
     verify(server, this.controller)
   );
 
+  // Add the reset handler for subscriber password reset requests
   server.addHandler(
     'post',
     this._getPathName(server, 'reset'),

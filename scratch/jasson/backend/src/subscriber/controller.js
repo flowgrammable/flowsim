@@ -13,9 +13,19 @@ var fmt = require('../utils/formatter');
 var msg = require('../utils/msg');
 var stg = require('./storage');
 
+// Default session timeout in minutes
+var defTimeout = 180;
+
 /**
+ * A controller containins the primary business logic for all subuscriber module
+ * services. It is constructed with references to necessary external services
+ * and provides an interface for each of its public service offerings.
+ *
  * @constructor
- * @param {object} context - blah
+ * @param {Object} context          - wrapper of necessary services
+ * @param {Object} context.database - database engine
+ * @param {Object} context.mailer   - SMTP engine
+ * @param {Object} context.template - template engine
  */
 
 function Controller(context) {
@@ -35,50 +45,54 @@ Controller.prototype.toFromatter = function(f) {
 
 Controller.prototype.toString = fmt.toString;
 
-Controller.prototype.authorize = function(token, delegate) {
-  this.storage.getSession(token, delegate); 
-};
-
-Controller.prototype.login = function(email, pwd, callback) {
-
-  async.waterfall([
-    function(cb) {
-      this.storage.getSubscriberByEmail(email,cb);
-    },
-    function(result, cb) {
-      if(bcrypt.compareSync(pwd, result.password)) {
-        this.storage.createSession(uuid.v4(), result.id, timeout, cb);
-      } else {
-        cb(msg.incorrectPwd());
-      }
-    }
-  ], function(err, result) {
-    if(err) {
-      callback(msg.error(err));
-    } else {
-      callback(msg.success(result));
-    }
-  });
-
-  // Grab the corresponding subscribers data
-  this.storage.getSubscriberByEmail(email, function(err, result) {
+/**
+ * Determine if the provided token belongs to a valid active session. If
+ * the session token is valid subscriber and session identifier.
+ *
+ * @param {String} token - session token
+ * @param {Function} callback - a standard callback function
+ */
+Controller.prototype.authorize = function(token, callback) {
+  this.storage.getSession(token, function(err, succ) {
     if(err) {
       callback(err);
     } else {
-      if(bcrypt.compareSync(pwd, result[0].password)) {
-        this.storage.createSession(uuid.v4(), id, timeout, 
-          function(err, result) {
+      callback(null, {
+        subscriber_id: succ.sub_id,
+        session_id: succ.id 
+      });
+    }
+  }); 
+};
+
+/**
+ * Given an email and password attempt to login the subscriber. This involves
+ * first validating the email/password, second creating a new session for the
+ * subscriber, and third returning the session token needed for further
+ * authenticatd requests.
+ *
+ * @param {String} email - email address to login
+ * @param {String} pwd - password to authenticate the email
+ * @param {Function} callback - standard callback
+ */
+Controller.prototype.login = function(email, pwd, callback) {
+  this.storage.getSubscriberByEmail(email, function(err, succ) {
+    var token, currentTime;
+    if(err) { 
+      callback(err); 
+    } else {
+      if(bcrypt.compareSync(pwd, succ.password)) {
+        token = uuid.v4();
+        currentTime = new Date();
+        this.storage.createSession(token, succ.id, 
+          new Date(currentTime.gettime() + defTimeout * 60000), 
+          function(err, succ) {
             if(err) {
-              callback(err);
             } else {
-              // need to set the verification_token
-              //result.verification_token
-              // session was created 
             }
         });
       } else {
-        // The supplied password does not match
-        callback(msg.incorrectPwd());
+        callback(msg.incorrectPassword());
       }
     }
   });
