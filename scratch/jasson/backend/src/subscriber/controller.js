@@ -1,6 +1,7 @@
 
 /**
  * @module subscriber
+ * @requires module:utils~Formatter module:storage
  */
 
 (/** @lends module:subscriber */function(){

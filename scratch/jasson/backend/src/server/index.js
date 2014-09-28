@@ -20,14 +20,14 @@ var defPort     = 8080;
  * Constructs a restify based HTTP server.
  *
  * @constructor
- * @param {Object} config              - a server configuration object
- * @param {String} config.basedir      - the base directory of the server
- * @param {String} [config.address]    - IP address to bind
- * @param {String} [config.hostname]   - hostname to bind
- * @param {String} [config.port]       - tcp port to bind
- * @param {Object} [config.https]      - https configuration object
- * @param {String} config.https.key    - location of https private key
- * @param {String} config.https.cert   - location of https certificate
+ * @param {Object} config            - a server configuration object
+ * @param {String} config.basedir    - the base directory of the server
+ * @param {String} [config.address]  - IP address to bind
+ * @param {String} [config.hostname] - hostname to bind
+ * @param {String} [config.port]     - tcp port to bind
+ * @param {Object} [config.https]    - https configuration object
+ * @param {String} config.https.key  - location of https private key
+ * @param {String} config.https.cert - location of https certificate
  */
 
 function Server(config) {
@@ -81,7 +81,7 @@ exports.Server = Server;
  * request-url.
  *
  * @param {String} method        - HTTP method to catpure
- * @param {String} path          - HTTP request-uri path to catpure
+ * @param {String} path          - the relative path of the handler
  * @param {httpCallback} handler - HTTP request handler to call
  * @returns {Server} a reference to the object instance
  */
@@ -165,17 +165,6 @@ Server.prototype.toFormatter = function(f) {
  * @returns {String} a stringified version of the Server.
  */
 Server.prototype.toString = fmt.toString;
-
-function Delegate(res) {
-  var response = res;
-  return function(result) {
-    response.writeHead(200, {
-      'Content-Type': 'application/json'
-    });
-    response.end(JSON.stringify(result));
-  };
-}
-exports.Delegate = Delegate;
 
 })();
 
