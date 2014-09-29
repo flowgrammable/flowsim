@@ -38,12 +38,7 @@ function Mailer(config) {
     service: config.service,
     auth: {
       user: config.user,
-      pass: config.pwd,
-    ssl: true,
-      host: 'smtp.gmail.com',
-      use_authentication: true,
-      port: 465,
-      debug: true
+      pass: config.pwd
     }
   });
 
