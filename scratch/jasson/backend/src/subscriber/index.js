@@ -58,7 +58,7 @@ function authorize(controller) {
   };
 }
 
-function login(_server, controller) {
+function login(controller) {
   var _controller = controller;
   return function(req, res, next) {
     var responder = util.Responder(res);
@@ -75,19 +75,28 @@ function login(_server, controller) {
         if(err) {
           responder(err);
         } else {
-          responder({"x-access-token": succ});
+          responder(null, {"x-access-token": succ});
         }
       });
     }
   };
 }
 
-function logout(_server, _controller) {
-  var server     = _server;
-  var controller = _controller;
+function logout(controller) {
+  var _controller = controller;
   return function(req, res, next) {
-    var dispatch = util.Delegate(res);
-    controller.logout(dispatch);
+    var responder = util.Responder(res);
+    if(req.headers['x-access-token']) {
+      controller.logout(req.headers['x-access-token'], function(err, succ) {
+        if(err) {
+          responder(err);
+        } else {
+          responder(null, {});
+        }
+      });
+    } else {
+      responder(msg.missingAccessToken());
+    }
   };
 }
 

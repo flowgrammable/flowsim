@@ -102,7 +102,13 @@ Controller.prototype.login = function(email, pwd, callback) {
 
 Controller.prototype.logout = function(token, callback) {
   // if a valid session then delete the session
-  this.storage.deleteSession(token, callbac);
+  this.storage.deleteSession(token, function(err, succ) {
+    if(err) {
+      callback(err);
+    } else {
+
+    }
+  });
 };
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {

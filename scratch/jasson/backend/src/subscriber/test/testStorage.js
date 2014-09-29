@@ -1,7 +1,7 @@
 
 (function(){
 
-var db  = require('../../database');
+var db  = require('../../database/pg');
 var stg = require('../storage');
 
 var database = new db.Database({

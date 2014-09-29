@@ -57,7 +57,7 @@ function _tag(err, success) {
  * @param {Object} res - a response object
  * @return {Function} an asynchronous error/success function
  */
-function Responsder(res) {
+function Responder(res) {
   var response = res;
   return function(err, result) {
     response.writeHead(200, {

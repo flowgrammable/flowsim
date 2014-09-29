@@ -59,8 +59,15 @@ Storage.prototype.toString = fmt.toString;
  * @param {module:subscriber:msg} succ - JSON wrapped res
  */
 
-function errHandler(callback, err) {
+function errHandler(callback, err, table) {
   switch(err.code) {
+    case '23505':
+      if(table === 'subscriber') {
+        callback(msg.emailExists());
+      } else {
+        callback(msg.unknownError());
+      }
+      break;
     default:
       callback(msg.unknownError(err));
       break;
@@ -150,7 +157,11 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     if(err) {
       errHandler(callback, err);
     } else {
-      callback(null, result);
+      if(result.length === 0) {
+        callback(msg.badVerificationToken());
+      } else {
+        callback(null, result[0]);
+      }
     }
   });
 };
