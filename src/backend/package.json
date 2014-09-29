@@ -8,7 +8,10 @@
   },
   "contributors": [
     { "name": "Jasson Casey" },
-    { "name": "Colton Chojnacki" }
+    { "name": "Colton Chojnacki" },
+    { "name": "Oron Hazi" },
+    { "name": "Thomas Wynn" },
+    { "name": "Ashish Jain" }
   ],
   "license": "APSL-2.0",
   "dependencies": {
