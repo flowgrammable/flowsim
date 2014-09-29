@@ -70,17 +70,16 @@ Controller.prototype.authorize = function(token, callback) {
  * @param {Function} callback - standard callback
  */
 Controller.prototype.login = function(email, pwd, callback) {
-  console.log('login-controller');
+  var that = this;
   this.storage.getSubscriberByEmail(email, function(err, succ) {
-    var token, currentTime;
+    var token, expireTime;
     if(err) { 
       callback(err); 
     } else {
       if(bcrypt.compareSync(pwd, succ.password)) {
         token = uuid.v4();
-        currentTime = new Date();
-        this.storage.createSession(token, succ.id, 
-          new Date(currentTime.gettime() + defTimeout * 60000), 
+        expireTime = new Date((new Date()).getTime() + defTimeout * 60000);
+        that.storage.createSession(token, succ.id, expireTime.toISOString(),
           function(_err, _succ) {
             callback(_err, token);
         });
@@ -114,6 +113,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
         baseUrl: that.server.baseUrl(),
         token: token
       });
+      console.log('token: %s', token);
       that.mailer.mail(email, subject, body, callback);
     }
   });
@@ -140,6 +140,7 @@ Controller.prototype.forgot = function(email, callback) {
         baseUrl: that.server.baseUrl(),
         token: token
       });
+      console.log('token: %s', token);
       that.mailer.send(email, subject, body, callback);
     }
   });

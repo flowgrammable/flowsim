@@ -41,7 +41,6 @@ function authorize(view) {
 
 function login(view) {
   return function(req, res, next) {
-    console.log('login-view');
     var responder = util.Responder(res);
     if(!req.body.email) {
       responder(msg.missingEmail());
@@ -107,7 +106,7 @@ function forgot(view) {
     } else if(!validator.isEmail(req.body.email)) {
       responder(msg.badEmail());
     } else {
-      view.controller.reset(req.body.email, responder);
+      view.controller.forgot(req.body.email, responder);
     }
   };
 }
