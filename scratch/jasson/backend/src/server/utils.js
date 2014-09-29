@@ -73,7 +73,13 @@ exports.requiresAuth = function(callback) {
     if(req.subscriber_id && req.session_id) {
       callback(req, res, next);
     } else {
-      res.end('Failed');
+      res.writeHead(200, {
+        'Content-Type': 'application/json'
+      });
+      res.end(JSON.stringify(_error({
+        system: '*/*',
+        type: 'authorizationRequired'
+      })));
     }
   };
 };
