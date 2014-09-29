@@ -76,7 +76,7 @@ exports.requiresAuth = function(callback) {
       res.end('Failed');
     }
   };
-}
+};
 
 })();
 

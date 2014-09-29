@@ -1,14 +1,13 @@
 
 (function(){
 
-var _ = require('_');
+var _ = require('underscore');
 
 var v = require('./view');
 var s = require('./storage');
 var c = require('./controller');
 
 var name = 'subscriber';
-
 
 /**
  * @param {Object} ctx                            - configuration context
@@ -21,6 +20,7 @@ function Subscriber(ctx) {
   this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template);
   this.view       = new v.View(this.controller);
 }
+exports.Subscriber = Subscriber;
 
 /**
  * The load method is called by a server when it is ready to load
@@ -36,8 +36,7 @@ Subscriber.prototype.load = function(server) {
     var path = name + '/' + service.path;
     server.addHandler(service.method, path, service.handler);
   });
-
-}
+};
 
 })();
 
