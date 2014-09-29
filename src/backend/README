@@ -3,10 +3,10 @@ FILES & DIRS
 - package.json    - main npm configuration
 - config.json     - basic configuraiton file
 - keys/           - SSL certs for local/dev site
-- src/config/     - configuration reader and helpers
 - src/index.js    - main entry point
-- src/subscruber/ - subscriber services module
-- src/mailer/     - smtp services module
-- src/template.js - template module
-- src/template/   - HTML templates (*.ejs)
+- src/database/   - database engine (postgres)
+- src/mailer/     - smtp engine
+- src/template/   - template engine
+- src/templates/  - HTML templates (*.ejs)
+- src/subscruber/ - subscriber/session services
 

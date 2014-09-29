@@ -1,6 +1,10 @@
 
 (function(){
 
+exports.success = function() {
+  return '';
+};
+
 exports.missingEmail = function() {
   return {
     system: 'subscriber/view',
