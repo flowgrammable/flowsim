@@ -68,5 +68,15 @@ function Responder(res) {
 }
 exports.Responder = Responder;
 
+exports.requiresAuth = function(callback) {
+  return function(req, res, next) {
+    if(req.subscriber_id && req.session_id) {
+      callback(req, res, next);
+    } else {
+      res.end('Failed');
+    }
+  };
+}
+
 })();
 

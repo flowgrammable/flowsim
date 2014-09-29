@@ -28,10 +28,10 @@ var defTimeout = 180;
  * @param {Object} context.template - template engine
  */
 
-function Controller(context) {
-  this.storage  = new stg.Storage(context.database);
-  this.mailer   = context.mailer;
-  this.template = context.template;
+function Controller(s, m, t) {
+  this.storage = s;
+  this.mailer = m;
+  this.template = t;
 }
 exports.Controller = Controller;
 
@@ -120,14 +120,14 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
 
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
-                                token, function(err, succ) {
+                                token, baseUrl, function(err, succ) {
     var subject, body;
     if(err) {
       callback(err);
     } else {
       subject = '';
       body = this.template.render('verification', {
-        baseUrl: ,
+        baseUrl: baseUrl,
         token: token
       });
       this.mailer.send(email, subject, body, callback);
@@ -142,7 +142,7 @@ Controller.prototype.verify = function(token, callback) {
   this.storage.verifySubscriber(token, callback);
 };
 
-Controller.prototype.reset = function(email, callback) {
+Controller.prototype.forgot = function(email, baseUrl, callback) {
   // update the subscriber state and send and email
   // or send an error
   var token = uuid.v4();
@@ -152,12 +152,15 @@ Controller.prototype.reset = function(email, callback) {
       callback(err);
     } else {
       body = this.mailer.render('forgot', {
-        baseUrl: ,
+        baseUrl: baseUrl,
         token: token
       });
       this.mailer.send(email, subject, body, callback);
     }
   });
+};
+
+Controller.prototype.update = function(email, password, callback) {
 };
 
 })();
