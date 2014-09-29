@@ -64,6 +64,13 @@ function Server(config) {
     .use(restify.gzipResponse())
     .use(restify.bodyParser());
 
+  if(this.config.static) {
+    this.server.get(this.config.static.mount, restify.serveStatic({
+        directory: dir + '/' + this.config.static.directory,
+        default: 'index.html'
+    }));
+  }
+
   this.running = false;
 }
 exports.Server = Server;

@@ -12,6 +12,10 @@
     "https": {
       "key": "keys/dev.key",
       "cert": "keys/localhost.crt"
+    },
+    "static": {
+      "mount": "/",
+      "directory": "static"
     }
   },
   "database": {

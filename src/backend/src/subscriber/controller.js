@@ -117,7 +117,6 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
         baseUrl: that.server.baseUrl(),
         token: token
       });
-      console.log('token: %s', token);
       that.mailer.mail(email, subject, body, callback);
     }
   });
