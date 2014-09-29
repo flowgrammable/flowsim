@@ -160,7 +160,9 @@ Controller.prototype.forgot = function(email, baseUrl, callback) {
   });
 };
 
-Controller.prototype.update = function(email, password, callback) {
+Controller.prototype.update = function(subscriber_id, session_id, oldPwd, 
+                                       newPwd, callback) {
+  callback('not implimented');
 };
 
 })();

@@ -62,9 +62,7 @@ function logout(view) {
   return function(req, res, next) {
     var responder = util.Responder(res);
     if(req.headers['x-access-token']) {
-      view.controller.logout(req.headers['x-access-token'], function(err, succ) {
-        responder(err, {});
-      });
+      view.controller.logout(req.headers['x-access-token'], responder);
     } else {
       responder(msg.missingAccessToken());
     }
@@ -85,9 +83,7 @@ function register(view) {
     } else {
       view.controller.register(req.body.email, req.body.pwd,
           req.connection.remoteAddress, server.getBaseUrl(),
-          function(err, result) {
-            
-          });
+          responder);
     }
   };
 }
@@ -101,7 +97,7 @@ function verify(view) {
       // FIXME: figure out how invali token works
       responder(msg.badVerificationToken());
     } else {
-      view.controller.verify(dispatch);
+      view.controller.verify(req.body.token, responder);
     }
   };
 }
@@ -114,15 +110,26 @@ function forgot(view) {
     } else if(!validator.isEmail(req.body.email)) {
       responder(msg.badEmail());
     } else {
-      controller.reset(req.body.email, server.getBaseUrl(), function(err, succ) {
-      });
+      view.controller.reset(req.body.email, server.getBaseUrl(), responder);
     }
   };
 }
 
 function update(view) {
   return function(req, res, next) {
-
+    var responder = util.Responder(res);
+    if(!req.body.oldPwd) {
+      responder(msg.missingPwd());
+    } else if(!isValidPassword(req.body.oldPwd)) {
+      responder(msg.badPwd());
+    } else if(!req.body.newPwd) {
+      responder(msg.missingPwd());
+    } else if(!isValidPassword(req.body.newPwd)) {
+      responder(msg.badPwd());
+    } else {
+      view.controller.update(req.subscriber_id, req.session_id, req.body.oldPwd,
+                             req.body.newPwd, responder);
+    }
   };
 }
 
