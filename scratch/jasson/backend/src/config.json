@@ -1,8 +1,8 @@
 {
   "mailer": {
     "service": "gmail",
-    "user": "info@flowgrammable.com",
-    "pwd": "abc123"
+    "user": "info@compilednetworks.com",
+    "pwd": ""
   },
   "server": {
     "address": "127.0.0.1",

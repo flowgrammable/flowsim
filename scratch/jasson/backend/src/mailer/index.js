@@ -38,7 +38,12 @@ function Mailer(config) {
     service: config.service,
     auth: {
       user: config.user,
-      pass: config.pwd
+      pass: config.pwd,
+    ssl: true,
+      host: 'smtp.gmail.com',
+      use_authentication: true,
+      port: 465,
+      debug: true
     }
   });
 
@@ -79,7 +84,14 @@ Mailer.prototype.mail = function(dst, sub, body, callback) {
     to: dst,                  // set the smtp to
     subject: sub,             // set the smtp subject
     html: body                // set the smtp html-body
-  }, callback);
+  }, function(err, succ) {
+    if(err) {
+      console.log(err);
+      callback(err);
+    } else {
+      callback(null, succ);
+    }
+  });
 }; 
 
 Mailer.prototype.toFormatter = function(f) {
