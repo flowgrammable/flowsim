@@ -47,12 +47,12 @@ function login(view) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
       responder(msg.badEmail());
-    } else if(!req.body.pwd) {
+    } else if(!req.body.password) {
       responder(msg.missingPwd());
-    } else if(!isValidPassword(req.body.pwd)) {
+    } else if(!isValidPassword(req.body.password)) {
       responder(msg.badPwd());
     } else {
-      view.controller.login(req.body.email, req.body.pwd, function(err, succ) {
+      view.controller.login(req.body.email, req.body.password, function(err, succ) {
         responder(err, {"x-access-token": succ});
       });
     }
@@ -77,14 +77,13 @@ function register(view) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
       responder(msg.badEmail());
-    } else if(!req.body.pwd) {
+    } else if(!req.body.password) {
       responder(msg.missingPwd());
-    } else if(!isValidPassword(req.body.pwd)) {
+    } else if(!isValidPassword(req.body.password)) {
       responder(msg.badPwd());
     } else {
-      view.controller.register(req.body.email, req.body.pwd,
-          req.connection.remoteAddress, server.getBaseUrl(),
-          responder);
+      view.controller.register(req.body.email, req.body.password,
+        req.connection.remoteAddress, responder);
     }
   };
 }
@@ -108,7 +107,7 @@ function forgot(view) {
     } else if(!validator.isEmail(req.body.email)) {
       responder(msg.badEmail());
     } else {
-      view.controller.reset(req.body.email, server.getBaseUrl(), responder);
+      view.controller.reset(req.body.email, responder);
     }
   };
 }
@@ -116,17 +115,17 @@ function forgot(view) {
 function update(view) {
   return function(req, res, next) {
     var responder = util.Responder(res);
-    if(!req.body.oldPwd) {
+    if(!req.body.oldPassword) {
       responder(msg.missingPwd());
-    } else if(!isValidPassword(req.body.oldPwd)) {
+    } else if(!isValidPassword(req.body.oldPassword)) {
       responder(msg.badPwd());
-    } else if(!req.body.newPwd) {
+    } else if(!req.body.newPassword) {
       responder(msg.missingPwd());
-    } else if(!isValidPassword(req.body.newPwd)) {
+    } else if(!isValidPassword(req.body.newPassword)) {
       responder(msg.badPwd());
     } else {
-      view.controller.update(req.subscriber_id, req.session_id, req.body.oldPwd,
-                             req.body.newPwd, responder);
+      view.controller.update(req.subscriber_id, req.session_id, req.body.oldPassword,
+                             req.body.newPassword, responder);
     }
   };
 }

@@ -141,10 +141,8 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
       errHandler(callback, err);
     } else {
       if(result.length === 0) {
-        console.log('storage-0');
         callback(msg.subscriberNotFound());
       } else {
-        console.log('storage->0');
         callback(null, result[0]);
       }
     }

@@ -17,7 +17,8 @@ var name = 'subscriber';
  */
 function Subscriber(ctx) {
   this.storage    = new s.Storage(ctx.database);
-  this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template);
+  this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template, 
+                                     ctx.server);
   this.view       = new v.View(this.controller);
 }
 exports.Subscriber = Subscriber;

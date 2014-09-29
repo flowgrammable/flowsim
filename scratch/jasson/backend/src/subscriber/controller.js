@@ -28,10 +28,11 @@ var defTimeout = 180;
  * @param {Object} context.template - template engine
  */
 
-function Controller(s, m, t) {
+function Controller(s, m, t, h) {
   this.storage  = s;
   this.mailer   = m;
   this.template = t;
+  this.server   = h;
 }
 exports.Controller = Controller;
 
@@ -96,21 +97,25 @@ Controller.prototype.logout = function(token, callback) {
 };
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
+  var current, token, hash;
+  current = new Date();
+  token = uuid.v4();
+  hash = bcrypt.hashSync(pwd, 10);
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
-                                token, baseUrl, function(err, succ) {
+                                token, function(err, succ) {
     var subject, body, current, token, hash;
     if(err) {
+      console.log('create error');
       callback(err);
     } else {
       subject = '';
-      current = new Date();
-      token = uuid.v4();
-      hash = bcrypt.hashSync(pwd, 10);
+      console.log('blah');
       body = this.template.render('verification', {
-        baseUrl: baseUrl,
+        baseUrl: this.server.baseUrl(),
         token: token
       });
+      console.log('token: %s', token);
       this.mailer.send(email, subject, body, callback);
     }
   });
@@ -123,7 +128,7 @@ Controller.prototype.verify = function(token, callback) {
   this.storage.verifySubscriber(token, callback);
 };
 
-Controller.prototype.forgot = function(email, baseUrl, callback) {
+Controller.prototype.forgot = function(email, callback) {
   // update the subscriber state and send and email
   // or send an error
   var token = uuid.v4();
@@ -133,7 +138,7 @@ Controller.prototype.forgot = function(email, baseUrl, callback) {
       callback(err);
     } else {
       body = this.mailer.render('forgot', {
-        baseUrl: baseUrl,
+        baseUrl: this.server.baseUrl(),
         token: token
       });
       this.mailer.send(email, subject, body, callback);

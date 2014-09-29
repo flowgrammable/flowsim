@@ -36,7 +36,8 @@ var mods = [
     configuration: config,
     database: db,
     mailer: mail,
-    template: template
+    template: template,
+    server: restServer
   })
 ];
 
