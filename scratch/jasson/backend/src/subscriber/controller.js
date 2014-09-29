@@ -29,8 +29,8 @@ var defTimeout = 180;
  */
 
 function Controller(s, m, t) {
-  this.storage = s;
-  this.mailer = m;
+  this.storage  = s;
+  this.mailer   = m;
   this.template = t;
 }
 exports.Controller = Controller;
@@ -54,14 +54,7 @@ Controller.prototype.toString = fmt.toString;
  */
 Controller.prototype.authorize = function(token, callback) {
   this.storage.getSession(token, function(err, succ) {
-    if(err) {
-      callback(err);
-    } else {
-      callback(null, {
-        subscriber_id: succ.sub_id,
-        session_id: succ.id 
-      });
-    }
+    callback(err, { subscriber_id: succ.sub_id, session_id: succ.id });
   }); 
 };
 
@@ -87,14 +80,10 @@ Controller.prototype.login = function(email, pwd, callback) {
         this.storage.createSession(token, succ.id, 
           new Date(currentTime.gettime() + defTimeout * 60000), 
           function(_err, _succ) {
-            if(_err) {
-              callback(_err);
-            } else {
-              callback(null, token);
-            }
+            callback(_err, token);
         });
       } else {
-        callback(msg.incorrectPassword());
+        callback(msg.incorrectPwd());
       }
     }
   });
@@ -102,30 +91,21 @@ Controller.prototype.login = function(email, pwd, callback) {
 
 Controller.prototype.logout = function(token, callback) {
   // if a valid session then delete the session
-  this.storage.deleteSession(token, function(err, succ) {
-    if(err) {
-      callback(err);
-    } else {
-
-    }
-  });
+  this.storage.deleteSession(token, callback);
 };
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
-  // Grab the current time/date, create a verification token
-  var current = new Date();
-  var token = uuid.v4();
-  // Salt and hash the provided password
-  var hash = bycrypt.hashSync(pwd, 10);
-
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
                                 token, baseUrl, function(err, succ) {
-    var subject, body;
+    var subject, body, current, token, hash;
     if(err) {
       callback(err);
     } else {
       subject = '';
+      current = new Date();
+      token = uuid.v4();
+      hash = bcrypt.hashSync(pwd, 10);
       body = this.template.render('verification', {
         baseUrl: baseUrl,
         token: token
@@ -162,7 +142,19 @@ Controller.prototype.forgot = function(email, baseUrl, callback) {
 
 Controller.prototype.update = function(subscriber_id, session_id, oldPwd, 
                                        newPwd, callback) {
-  callback('not implimented');
+  this.storage.getSubscriberById(subscriber_id, function(err, succ) {
+    var hash;
+    if(err) {
+      callback(err);
+    } else {
+      if(bcrypt.compareSync(oldPwd, succ.password)) {
+        hash = bcrypt.hashSync(newPwd, 10);
+        this.storage.updateSubscriberPassword(subscriber_id, hash, callback);
+      } else {
+        callback(msg.incorrectPwd());
+      }
+    }
+  });
 };
 
 })();

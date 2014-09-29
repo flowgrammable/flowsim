@@ -32,8 +32,8 @@ function authorize(view) {
     } else {
       // set the request as unauthorized adn call the next 
       // handler in the chain
-      req.subscriber_id = 0;
-      req.session_id    = 0;
+      req.subscriber_id = -1;
+      req.session_id    = -1;
       return next();
     }
   };
@@ -93,9 +93,6 @@ function verify(view) {
     var responder = util.Responder(res);
     if(!req.body.token) {
       responder(msg.missingVerificationToken());
-    } else if(invalid(req.body.token)) {
-      // FIXME: figure out how invali token works
-      responder(msg.badVerificationToken());
     } else {
       view.controller.verify(req.body.token, responder);
     }
