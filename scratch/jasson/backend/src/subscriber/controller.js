@@ -86,9 +86,11 @@ Controller.prototype.login = function(email, pwd, callback) {
         currentTime = new Date();
         this.storage.createSession(token, succ.id, 
           new Date(currentTime.gettime() + defTimeout * 60000), 
-          function(err, succ) {
-            if(err) {
+          function(_err, _succ) {
+            if(_err) {
+              callback(_err);
             } else {
+              callback(null, token);
             }
         });
       } else {

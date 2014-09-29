@@ -63,7 +63,7 @@ function Responsder(res) {
     response.writeHead(200, {
       'Content-Type': 'application/json'
     });
-    response.end(JSON.stringify(_tag(err, result));
+    response.end(JSON.stringify(_tag(err, result)));
   };
 }
 exports.Responder = Responder;

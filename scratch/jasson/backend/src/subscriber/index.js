@@ -58,21 +58,26 @@ function authorize(controller) {
   };
 }
 
-function login(_server, _controller) {
-  var server     = _server;
-  var controller = _controller;
+function login(_server, controller) {
+  var _controller = controller;
   return function(req, res, next) {
-    var dispatch = util.Delegate(res);
+    var responder = util.Responder(res);
     if(!req.body.email) {
-      dispatch(msg.missingEmail());
+      responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
-      dispatch(msg.badEmail());
+      responder(msg.badEmail());
     } else if(!req.body.pwd) {
-      dispatch(msg.missingPwd());
+      responder(msg.missingPwd());
     } else if(!isValidPassword(req.body.pwd)) {
-      dispatch(msg.badPwd());
+      responder(msg.badPwd());
     } else {
-      controller.login(req.body.email, req.body.pwd, dispatch);
+      controller.login(req.body.email, req.body.pwd, function(err, succ) {
+        if(err) {
+          responder(err);
+        } else {
+          responder({"x-access-token": succ});
+        }
+      });
     }
   };
 }
