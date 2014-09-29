@@ -26,6 +26,7 @@ function authorize(view) {
             // handler in the chain
             req.subscriber_id = succ.subscriber_id;
             req.session_id    = succ.session_id;
+            console.log('sub: %s, sess: %s', succ.subscriber_id, succ.session_id);
             next();
           }
         });

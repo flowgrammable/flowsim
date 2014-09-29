@@ -222,7 +222,7 @@ Storage.prototype.getSession = function(skey, callback) {
       errHandler(callback, err, 'session');
     } else {
       if(result.length === 0) {
-        callback(msg.badSessionKey());
+        callback(msg.badAccessToken());
       } else {
         callback(null, result[0]);
       }
@@ -236,89 +236,8 @@ Storage.prototype.deleteSession = function(skey, callback) {
   }, function(err, result) {
     if(err) {
       errHandler(callback, err, 'session');
-    }
-  });
-};
-Storage.prototype.verifySubscriber = function(token, callback) {
-  // update where verification_token = token
-  this.database.update('subscriber', {
-    verification_token: '',
-    status: 'ACTIVE'
-  }, {
-    verification_token: { '=': token }
-  }, function(err, result) {
-    if(err) {
-      errHandler(callback, err, 'session');
     } else {
-      callback(null, result);
-    }
-  });
-};
-
-Storage.prototype.resetSubscriber = function(email, token, callback) {
-  this.database.update('subscriber', {
-    verification_token: token,
-    status: 'RESET'
-  }, {
-    email: { '=': email }
-  }, function(err, result) {
-    if(err) {
-      errHandler(callback, err, 'session');
-    } else {
-      callback(null, result);
-    }
-  });
-};
-
-Storage.prototype.updateSubscriberPassword = function(email, password, 
-  callback) {
-  this.database.update('subscriber', {
-    password: password
-  }, {
-    email: { '=': email }
-  }, function(err, result) {
-    if(err) {
-      errHandler(callback, err, 'session');
-    } else {
-      callback(null, result);
-    }
-  });
-};
-
-Storage.prototype.createSession = function(skey, subId, tmo, callback) {
-  this.database.insert('session', {
-    key: skey,
-    subscriber_id: subId,
-    timeout: tmo
-  }, function(err, result) {
-    if(err) {
-      errHandler(callback, err, 'session');
-    } else {
-      callback(null, result);
-    }
-  });
-};
-
-Storage.prototype.getSession = function(skey, callback) {
-  this.database.select('session', {
-    key: { '=': skey }
-  }, function(err, result) {
-    if(err) {
-      errHandler(callback, err, 'session');
-    } else {
-      callback(null, result);
-    }
-  });
-};
-
-Storage.prototype.deleteSession = function(skey, callback) {
-  this.database.delete('session', {
-    key: { '=': skey }
-  }, function(err, result) {
-    if(err) {
-      errHandler(callback, err, 'session');
-    } else {
-      callback(null, result);
+      callback();
     }
   });
 };

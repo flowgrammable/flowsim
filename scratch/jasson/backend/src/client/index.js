@@ -20,17 +20,18 @@ cmd
   .option('--newPassword <newPassword>', 'password for account')
   .parse(process.argv);
 
-function query(name, body, callback) {
+function query(name, headers, body, callback) {
   request({
     uri: 'https://localhost:3000/api/subscriber/' + name,
     method: 'POST',
-    rejectUnhauthorized : false,
+    headers: headers,
+    rejectUnauthorized : false,
     json: body
   }, callback);
 }
 
 function register(email, password) {
-  query('register', {
+  query('register', {}, {
     email: email,
     password: password
   }, function(err, res, body) {
@@ -43,7 +44,7 @@ function register(email, password) {
 }
 
 function verify(token) {
-  query('verify', {
+  query('verify', {}, {
     token: token
   }, function(err, res, body) {
     if(err) {
@@ -55,7 +56,7 @@ function verify(token) {
 }
 
 function forgot(email) {
-  query('forgot', {
+  query('forgot', {}, {
     email: email
   }, function(err, res, body) {
     if(err) {
@@ -67,7 +68,7 @@ function forgot(email) {
 }
 
 function login(email, password) {
-  query('login', {
+  query('login', {}, {
     email: email,
     password: password
   }, function(err, res, body) {
@@ -81,8 +82,8 @@ function login(email, password) {
 
 function logout(token) {
   query('logout', {
-    token: token
-  }, function(err, res, body) {
+    'x-access-token': token
+  }, {}, function(err, res, body) {
     if(err) {
       console.log(err);
     } else {
@@ -92,7 +93,7 @@ function logout(token) {
 }
 
 function update(email, password, newPassword) {
-  query('update', {
+  query('update', {}, {
     email: email,
     password: password,
     newPassword: newPassword

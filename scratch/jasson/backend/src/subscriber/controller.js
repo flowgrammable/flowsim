@@ -55,7 +55,11 @@ Controller.prototype.toString = fmt.toString;
  */
 Controller.prototype.authorize = function(token, callback) {
   this.storage.getSession(token, function(err, succ) {
-    callback(err, { subscriber_id: succ.sub_id, session_id: succ.id });
+    if(err) {
+      callback(err);
+    } else {
+    callback(null, { subscriber_id: succ.subscriber_id, session_id: succ.id });
+    }
   }); 
 };
 
