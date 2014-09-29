@@ -46,11 +46,11 @@ function login(view) {
     if(!req.body.email) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
-      responder(msg.badEmail());
+      responder(msg.malformedEmail());
     } else if(!req.body.password) {
-      responder(msg.missingPwd());
+      responder(msg.missingPassword());
     } else if(!isValidPassword(req.body.password)) {
-      responder(msg.badPwd());
+      responder(msg.malformedPassword());
     } else {
       view.controller.login(req.body.email, req.body.password, function(err, succ) {
         responder(err, {"x-access-token": succ});
@@ -62,11 +62,7 @@ function login(view) {
 function logout(view) {
   return function(req, res, next) {
     var responder = util.Responder(res);
-    if(req.headers['x-access-token']) {
-      view.controller.logout(req.headers['x-access-token'], responder);
-    } else {
-      responder(msg.missingAccessToken());
-    }
+    view.controller.logout(req.session_id, responder);
   };
 }
 
@@ -76,11 +72,11 @@ function register(view) {
     if(!req.body.email) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
-      responder(msg.badEmail());
+      responder(msg.malformedEmail());
     } else if(!req.body.password) {
-      responder(msg.missingPwd());
+      responder(msg.missingPassword());
     } else if(!isValidPassword(req.body.password)) {
-      responder(msg.badPwd());
+      responder(msg.malformedPassword());
     } else {
       view.controller.register(req.body.email, req.body.password,
         req.connection.remoteAddress, responder);
@@ -92,7 +88,7 @@ function verify(view) {
   return function(req, res, next) {
     var responder = util.Responder(res);
     if(!req.body.token) {
-      responder(msg.missingVerificationToken());
+      responder(msg.missingToken());
     } else {
       view.controller.verify(req.body.token, responder);
     }
@@ -105,7 +101,7 @@ function forgot(view) {
     if(!req.body.email) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
-      responder(msg.badEmail());
+      responder(msg.malformedEmail());
     } else {
       view.controller.forgot(req.body.email, responder);
     }
@@ -116,16 +112,16 @@ function update(view) {
   return function(req, res, next) {
     var responder = util.Responder(res);
     if(!req.body.oldPassword) {
-      responder(msg.missingPwd());
+      responder(msg.missingPassword());
     } else if(!isValidPassword(req.body.oldPassword)) {
-      responder(msg.badPwd());
+      responder(msg.malformedPassword());
     } else if(!req.body.newPassword) {
-      responder(msg.missingPwd());
+      responder(msg.missingNewPassword());
     } else if(!isValidPassword(req.body.newPassword)) {
-      responder(msg.badPwd());
+      responder(msg.malformedNewPassword());
     } else {
-      view.controller.update(req.subscriber_id, req.session_id, req.body.oldPassword,
-                             req.body.newPassword, responder);
+      view.controller.update(req.subscriber_id, req.session_id, 
+          req.body.oldPassword, req.body.newPassword, responder);
     }
   };
 }

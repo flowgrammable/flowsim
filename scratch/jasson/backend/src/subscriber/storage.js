@@ -66,7 +66,7 @@ function errHandler(callback, err, table) {
       break;
     case '23505':
       if(table === 'subscriber') {
-        callback(msg.emailInUse());
+        callback(msg.existingEmail());
       } else {
         callback(msg.unknownError());
       }
@@ -120,7 +120,7 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
-        callback(msg.badVerificationToken());
+        callback(msg.unknownVerificationToken());
       } else {
         callback(null, result[0]);
       }
@@ -142,7 +142,7 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
-        callback(msg.subscriberNotFound());
+        callback(msg.unknownEmail());
       } else {
         callback(null, result[0]);
       }
@@ -162,7 +162,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
-        callback(msg.badVerificationToken());
+        callback(msg.unknownVerificationToken());
       } else {
         callback(null, result[0]);
       }
@@ -222,7 +222,7 @@ Storage.prototype.getSession = function(skey, callback) {
       errHandler(callback, err, 'session');
     } else {
       if(result.length === 0) {
-        callback(msg.badAccessToken());
+        callback(msg.unknownSessionToken());
       } else {
         callback(null, result[0]);
       }

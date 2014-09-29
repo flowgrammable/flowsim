@@ -10,7 +10,7 @@ var uuid   = require('node-uuid');
 var bcrypt = require('bcrypt');
 
 var fmt = require('../utils/formatter');
-var msg = require('../utils/msg');
+var msg = require('./msg');
 var stg = require('./storage');
 
 // Default session timeout in minutes
@@ -88,7 +88,7 @@ Controller.prototype.login = function(email, pwd, callback) {
             callback(_err, token);
         });
       } else {
-        callback(msg.incorrectPwd());
+        callback(msg.invalidPassword());
       }
     }
   });
@@ -162,7 +162,7 @@ Controller.prototype.update = function(subscriber_id, session_id, oldPwd,
         hash = bcrypt.hashSync(newPwd, 10);
         that.storage.updateSubscriberPassword(subscriber_id, hash, callback);
       } else {
-        callback(msg.incorrectPwd());
+        callback(msg.invalidPassword());
       }
     }
   });
