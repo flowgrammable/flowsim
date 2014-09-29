@@ -6,7 +6,7 @@ var validator = require('validator');
 var util      = require('../server/utils');
 var msg       = require('./msg');
 
-function isValidPwd(p) {
+function isValidPassword(p) {
   var pat = /[0-9a-zA-Z_\(\){\}\[\]\^\$\.\+\-\*\/\|\!\\:;?<>='"`~@#%&,]{8,}/;
   return pat.test(p);
 }
@@ -41,6 +41,7 @@ function authorize(view) {
 
 function login(view) {
   return function(req, res, next) {
+    console.log('login-view');
     var responder = util.Responder(res);
     if(!req.body.email) {
       responder(msg.missingEmail());

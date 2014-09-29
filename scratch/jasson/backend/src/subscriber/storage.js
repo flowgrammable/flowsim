@@ -61,6 +61,9 @@ Storage.prototype.toString = fmt.toString;
 
 function errHandler(callback, err, table) {
   switch(err.code) {
+    case 'ECONNREFUSED':
+      callback(msg.unknownError());
+      break;
     case '23505':
       if(table === 'subscriber') {
         callback(msg.emailExists());
@@ -138,8 +141,10 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
       errHandler(callback, err);
     } else {
       if(result.length === 0) {
-        callback(msg.badEmail());
+        console.log('storage-0');
+        callback(msg.subscriberNotFound());
       } else {
+        console.log('storage->0');
         callback(null, result[0]);
       }
     }

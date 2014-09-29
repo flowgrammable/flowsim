@@ -69,6 +69,7 @@ Controller.prototype.authorize = function(token, callback) {
  * @param {Function} callback - standard callback
  */
 Controller.prototype.login = function(email, pwd, callback) {
+  console.log('login-controller');
   this.storage.getSubscriberByEmail(email, function(err, succ) {
     var token, currentTime;
     if(err) { 
