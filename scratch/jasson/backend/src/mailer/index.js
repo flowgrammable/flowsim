@@ -74,7 +74,7 @@ Mailer.prototype.close = function() {
  *
  */
 Mailer.prototype.mail = function(dst, sub, body, callback) {
-  transporter.sendMail({
+  this.transporter.sendMail({
     from: this.config.user,   // set the smtp from
     to: dst,                  // set the smtp to
     subject: sub,             // set the smtp subject

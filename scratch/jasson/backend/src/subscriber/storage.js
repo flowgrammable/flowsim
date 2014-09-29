@@ -62,16 +62,17 @@ Storage.prototype.toString = fmt.toString;
 function errHandler(callback, err, table) {
   switch(err.code) {
     case 'ECONNREFUSED':
-      callback(msg.unknownError());
+      callback(msg.noDatabaseConnection());
       break;
     case '23505':
       if(table === 'subscriber') {
-        callback(msg.emailExists());
+        callback(msg.emailInUse());
       } else {
         callback(msg.unknownError());
       }
       break;
     default:
+      console.log(err);
       callback(msg.unknownError(err));
       break;
   }
@@ -98,7 +99,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     status: 'CREATED'
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'subscriber');
     } else {
       callback(null, result);
     }
@@ -116,7 +117,7 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
         callback(msg.badVerificationToken());
@@ -138,7 +139,7 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
         callback(msg.subscriberNotFound());
@@ -158,7 +159,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
         callback(msg.badVerificationToken());
@@ -177,7 +178,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'subscriber');
     } else {
       callback(null, result);
     }
@@ -206,7 +207,7 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
     timeout: tmo
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }
@@ -218,7 +219,7 @@ Storage.prototype.getSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       if(result.length === 0) {
         callback(msg.badSessionKey());
@@ -234,7 +235,7 @@ Storage.prototype.deleteSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     }
   });
 };
@@ -247,7 +248,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }
@@ -262,7 +263,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }
@@ -277,7 +278,7 @@ Storage.prototype.updateSubscriberPassword = function(email, password,
     email: { '=': email }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }
@@ -291,7 +292,7 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
     timeout: tmo
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }
@@ -303,7 +304,7 @@ Storage.prototype.getSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }
@@ -315,7 +316,7 @@ Storage.prototype.deleteSession = function(skey, callback) {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }
@@ -327,7 +328,7 @@ Storage.prototype.deleteStaleSession = function(time, callback) {
     timeout: {'<': time}
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err);
+      errHandler(callback, err, 'session');
     } else {
       callback(null, result);
     }

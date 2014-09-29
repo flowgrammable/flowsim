@@ -97,26 +97,24 @@ Controller.prototype.logout = function(token, callback) {
 };
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
-  var current, token, hash;
+  var current, token, hash, that;
   current = new Date();
   token = uuid.v4();
   hash = bcrypt.hashSync(pwd, 10);
+  that = this;
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
                                 token, function(err, succ) {
-    var subject, body, current, token, hash;
+    var subject, body;
     if(err) {
-      console.log('create error');
       callback(err);
     } else {
       subject = '';
-      console.log('blah');
-      body = this.template.render('verification', {
-        baseUrl: this.server.baseUrl(),
+      body = that.template.render('verification', {
+        baseUrl: that.server.baseUrl(),
         token: token
       });
-      console.log('token: %s', token);
-      this.mailer.send(email, subject, body, callback);
+      that.mailer.mail(email, subject, body, callback);
     }
   });
 };
@@ -132,22 +130,24 @@ Controller.prototype.forgot = function(email, callback) {
   // update the subscriber state and send and email
   // or send an error
   var token = uuid.v4();
+  var that = this;
   this.storage.resetSubscriber(email, token, function(err, succ) {
     var body, subject;
     if(err) {
       callback(err);
     } else {
-      body = this.mailer.render('forgot', {
-        baseUrl: this.server.baseUrl(),
+      body = that.mailer.render('forgot', {
+        baseUrl: that.server.baseUrl(),
         token: token
       });
-      this.mailer.send(email, subject, body, callback);
+      that.mailer.send(email, subject, body, callback);
     }
   });
 };
 
 Controller.prototype.update = function(subscriber_id, session_id, oldPwd, 
                                        newPwd, callback) {
+  var that = this;
   this.storage.getSubscriberById(subscriber_id, function(err, succ) {
     var hash;
     if(err) {
@@ -155,7 +155,7 @@ Controller.prototype.update = function(subscriber_id, session_id, oldPwd,
     } else {
       if(bcrypt.compareSync(oldPwd, succ.password)) {
         hash = bcrypt.hashSync(newPwd, 10);
-        this.storage.updateSubscriberPassword(subscriber_id, hash, callback);
+        that.storage.updateSubscriberPassword(subscriber_id, hash, callback);
       } else {
         callback(msg.incorrectPwd());
       }

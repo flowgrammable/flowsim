@@ -35,6 +35,13 @@ exports.subscriberNotFound = function() {
 
 exports.emailInUse = function() {
   return {
+    system: "subscriber/storage",
+    type: "emailInUse"
+  };
+};
+
+exports.emailInUse = function() {
+  return {
     system: "subscriber/model",
     type: "emailInUse"
   };
