@@ -17,8 +17,7 @@
   "database": {
     "database": "flowsim",
     "user": "flogdev",
-    "pwd": "flogdev",
-    "dialect": "postgres",
+    "pwd": "flogdev"
   },
   "template": {
     "dir": "templates"

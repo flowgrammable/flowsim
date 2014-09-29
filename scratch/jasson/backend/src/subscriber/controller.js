@@ -112,10 +112,27 @@ Controller.prototype.logout = function(token, callback) {
 };
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
-  // create the subscriber, send a verification email
-  // or return an error
-  this.storage.createSubscriber(email, bycrypt.hashSync(pwd, 10), 
-    (new Date()).toISOString(), srcIp, uuid.v4(), callback);
+  // Grab the current time/date, create a verification token
+  var current = new Date();
+  var token = uuid.v4();
+  // Salt and hash the provided password
+  var hash = bycrypt.hashSync(pwd, 10);
+
+  // Create the subscriber entry and send the verification email
+  this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
+                                token, function(err, succ) {
+    var subject, body;
+    if(err) {
+      callback(err);
+    } else {
+      subject = '';
+      body = this.template.render('verification', {
+        baseUrl: ,
+        token: token
+      });
+      this.mailer.send(email, subject, body, callback);
+    }
+  });
 };
 
 Controller.prototype.verify = function(token, callback) {
@@ -128,7 +145,19 @@ Controller.prototype.verify = function(token, callback) {
 Controller.prototype.reset = function(email, callback) {
   // update the subscriber state and send and email
   // or send an error
-  this.storage.resetSubscriber(email, uuid.v4(), callback);
+  var token = uuid.v4();
+  this.storage.resetSubscriber(email, token, function(err, succ) {
+    var body, subject;
+    if(err) {
+      callback(err);
+    } else {
+      body = this.mailer.render('forgot', {
+        baseUrl: ,
+        token: token
+      });
+      this.mailer.send(email, subject, body, callback);
+    }
+  });
 };
 
 })();

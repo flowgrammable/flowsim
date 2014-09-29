@@ -73,23 +73,13 @@ Mailer.prototype.close = function() {
  * @returns {Mailer}
  *
  */
-Mailer.prototype.mail = function(dst, sub, body, delegate) {
+Mailer.prototype.mail = function(dst, sub, body, callback) {
   transporter.sendMail({
     from: this.config.user,   // set the smtp from
     to: dst,                  // set the smtp to
     subject: sub,             // set the smtp subject
     html: body                // set the smtp html-body
-  }, function(err, info) {
-    if(delegate && err) {
-      delegate(err);
-    } else if(delegate && info) {
-      delegate(info);
-    } else if(err) {
-      //FIXME: this needs to be something better than console
-      console.log(err);
-    }
-  });
-  return this;
+  }, callback);
 }; 
 
 Mailer.prototype.toFormatter = function(f) {

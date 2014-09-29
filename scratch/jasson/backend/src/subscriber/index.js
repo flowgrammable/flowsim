@@ -29,7 +29,6 @@ function isValidPassword(p) {
  * @returns {Function} a valid Restify HTTP request handler function
  */
 function authorize(controller) {
-  var _controller = controller;
   return function(req, res, next) {
     var responder = util.Responder(res);
     // if there is an access token attempt validation
@@ -59,7 +58,6 @@ function authorize(controller) {
 }
 
 function login(controller) {
-  var _controller = controller;
   return function(req, res, next) {
     var responder = util.Responder(res);
     if(!req.body.email) {
@@ -83,7 +81,6 @@ function login(controller) {
 }
 
 function logout(controller) {
-  var _controller = controller;
   return function(req, res, next) {
     var responder = util.Responder(res);
     if(req.headers['x-access-token']) {
@@ -100,35 +97,31 @@ function logout(controller) {
   };
 }
 
-function register(_server, _controller) {
-  var server     = _server;
-  var controller = _controller;
+function register(controller) {
   return function(req, res, next) {
-    var dispatch = util.Delegate(res);
+    var responder = util.Responder(res);
     if(!req.body.email) {
-      dispatch(msg.missingEmail());
+      responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
-      dispatch(msg.badEmail());
+      responder(msg.badEmail());
     } else if(!req.body.pwd) {
-      dispatch(msg.missingPwd());
+      responder(msg.missingPwd());
     } else if(!isValidPassword(req.body.pwd)) {
-      dispatch(msg.badPwd());
+      responder(msg.badPwd());
     } else {
       controller.register(req.body.email, req.body.pwd, dispatch);
     }
   };
 }
 
-function verify(_server, _controller) {
-  var server     = _server;
-  var controller = _controller;
+function verify(controller) {
   return function(req, res, next) {
-    var dispatch = util.Delegate(res);
+    var responder = util.Responder(res);
     if(!req.body.token) {
-      dispatch(msg.missingVerificationToken());
+      responder(msg.missingVerificationToken());
     } else if(invalid(req.body.token)) {
       // FIXME: figure out how invali token works
-      dispatch(msg.badVerificationToken());
+      responder(msg.badVerificationToken());
     } else {
       controller.verify(dispatch);
     }
@@ -136,13 +129,13 @@ function verify(_server, _controller) {
 }
 
 
-function reset(_server, _controller) {
+function reset(controller) {
   return function(req, res, next) {
-    var dispatch = util.Delegate(res);
+    var responder = util.Responder(res);
     if(!req.body.email) {
-      dispatch(msg.missingEmail());
+      responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
-      dispatch(msg.badEmail());
+      responder(msg.badEmail());
     } else {
       controller.reset(req.body.email, dispatch);
     }
