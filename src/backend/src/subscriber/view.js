@@ -126,9 +126,11 @@ function update(view) {
   };
 }
 
-function View(c) {
+function View(c, logger) {
 
   this.controller = c;
+
+  this.logger = logger;
 
   this.services = [
     {

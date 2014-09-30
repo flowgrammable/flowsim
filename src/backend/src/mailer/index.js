@@ -23,7 +23,7 @@ var name = 'mailer';
  * @param {String} config.user    - email to use for the mail service
  * @param {String} config.pwd     - passwod to use for the mail service
  */
-function Mailer(config) {
+function Mailer(config, logger) {
 
   // Grab a configuration if present ...
   // ... otherwise throw an error
@@ -32,6 +32,8 @@ function Mailer(config) {
     // FIXME: add a better error mechanism
     throw 'Mailer missing config';
   }
+
+  this.logger = logger;
 
   // initialize the nodemailer transporter
   this.transporter = nm.createTransport({

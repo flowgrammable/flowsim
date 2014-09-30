@@ -22,11 +22,13 @@ var name = 'template';
  * @param {Ojbect} config     - a template configuration object
  * @param {String} config.dir - a directory containing templates
  */
-function Template(config) {
+function Template(config, logger) {
   var dir, that;
 
   this.config = config[name];
   this.templates = {};
+
+  this.logger = logger;
 
   dir = config.basedir + '/' + this.config.dir;
 

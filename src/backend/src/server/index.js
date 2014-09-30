@@ -30,7 +30,7 @@ var defPort     = 8080;
  * @param {String} config.https.cert - location of https certificate
  */
 
-function Server(config) {
+function Server(config, logger) {
 
   var dir = config.basedir;
 
@@ -41,6 +41,8 @@ function Server(config) {
     hostname: defHostname,
     port:     defPort
   };
+
+  this.logger = logger;
 
   // Set default values in case where passed config is deficient
   this.config.address  = this.config.address  || defAddress;

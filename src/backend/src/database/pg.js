@@ -25,9 +25,11 @@ var Error = {
  * @param {String} config.user     - the username to use for the connection
  * @param {String} config.pwd      - the password to use for the connection
  */
-function Database(config) {
+function Database(config, logger) {
   this.config = config[name];
   this.config.host = this.config.host || defHost;
+
+  this.logger = logger;
 
   // set the postgres connection string
   this.setup = 'postgres://' + this.config.user + ':' + this.config.pwd + 

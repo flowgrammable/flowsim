@@ -20,7 +20,9 @@ function Subscriber(ctx) {
   this.storage    = new s.Storage(ctx.database, ctx.logger);
   this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template, 
                                      ctx.server, ctx.logger);
-  this.view       = new v.View(this.controller);
+  this.view       = new v.View(this.controller, ctx.logger);
+
+  this.logger = ctx.logger;
 }
 exports.Subscriber = Subscriber;
 

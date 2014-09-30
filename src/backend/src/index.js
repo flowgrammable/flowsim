@@ -26,12 +26,11 @@ var config     = require(prog.config || './config.json');
 config.basedir = __dirname;
 
 // Initialze global objects
-var db         = new dbs.Database(config);
-var mail       = new mlr.Mailer(config);
-var template   = new tmp.Template(config);
-var restServer = new srv.Server(config);
 var logger     = new log.Logger(config);
-
+var db         = new dbs.Database(config, logger);
+var mail       = new mlr.Mailer(config, logger);
+var template   = new tmp.Template(config, logger);
+var restServer = new srv.Server(config, logger);
 
 // Initialize the modules
 var mods = [
@@ -52,8 +51,6 @@ _.each(mods, function(mod) {
 
 // Run the server
 restServer.run();
-logger.addlog(restServer.toString());
-console.log(restServer.toString());
 
 })();
 
