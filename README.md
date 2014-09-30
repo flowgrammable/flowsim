@@ -89,13 +89,13 @@ RUNNING
 =======
 
   1) Start the server
-    > node server.js&
+    ./index.js
 
   2) Run the unit tests
     > npm test
 
   2) Generate documentation from the code base
-    > yuidoc .
+    grunt doc
 
 NOTES
 =====

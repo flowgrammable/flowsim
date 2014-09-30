@@ -10,23 +10,15 @@ GLOBAL DEPENDENCIES
 
     <install nodejs using your package manager dejour>
 
-  2) NPM - Node Package Manager
-
-    <install npm using your package manager dejour>
-
-  3) cURL - command line http client
+  2) cURL - command line http client
 
     <install curl using your package manager dejour>
 
-  4) PostgreSQL - sql database, server, and utilities
+  3) PostgreSQL - sql database, server, and utilities
 
     <install postgresql using your package manager dejour>
 
   5) Java 1.6 or higher
-
-  6) jslint
-
-    <install jslint using your package manager dejour>
 
   Dependencies we can install with npm
 
@@ -38,32 +30,46 @@ GLOBAL DEPENDENCIES
 
     sudo npm install -g grunt-cli
 
-  3) yuijs - this is a javascript documentation generator
-
-    sudo npm -g install yuidocjs
-
 LOCAL DEPENDENCIES
 ------------------
 
   1) Install local nodejs and bower dependencies
 
     cd src/backend
-    sudo npm install
+    npm install
     cd ../frontend
     bower install
 
   2) Build the ui-bootstrap bower package
 
     cd bower_components/angular-ui-bootstrap
-    sudo npm install
-    sudo npm install -g grunt-cli
-    grunt --force
+    npm install
+    grunt
     cd ../../../backend
-    sudo npm install
+    npm install
 
   3) Initialize the postreSQL database
 
-    * put instructions here
+    initdb <name of database cluster>          -- initializes a new db cluster
+    pg_ctl -D <name of database cluster> start -- starts the db process
+    createdb <name of database>                -- creates a db      (flowsim)
+    createuser <name of user>                  -- creates a db user (flogdev)
+
+PROBLEMS
+--------
+
+Sometimes your account ~/.npm/ directories loose their proper ownership. This
+can happen from excessive use of the 'sudo' command. Unless you are installing a
+package globally with the '-g' option you should not be using 'sudo'.
+
+The problem is that at some point the use of 'sudo' changed ownership of some of
+your ~/.npm/ files to root. You can change this back pretty easily with the
+following command:
+
+  sudo chown -R `whoami` ~/.npm/
+
+Now you sould be able to install local packages without any EACCESS errors
+demanding that you should be using 'sudo' when you clearly should not.
 
 UDATING DEPENDENCIES
 ---------------------
