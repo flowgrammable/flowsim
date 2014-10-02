@@ -54,12 +54,14 @@
   - set your indentation to 2 spaces
   - always use braces with conditionals and loops
   - always begin an open brace on the same line as control element
+  - always use jshint and fix all errors/warnings
 
 ##6. Variables
   - always use the var keyword for variable introduction
 
 ##7. Object closures
   - use the variable `that` for `this` closures
+  - initialize `that` immediately 
 
   ```
   SomeObject.prototype.methodX = function() {
