@@ -6,19 +6,3 @@
 
     replacing <your email> with a valid gmail account and <your password>
     with the password for that account
-
-RUNNING
-=======
-
-  1) Start the server
-    ./index.js
-
-  2) Run the unit tests
-    > npm test
-
-NOTES
-=====
-
-  Pleaes see the notes/ directory for a set of notes on the various technologies
-  used in this project.
-

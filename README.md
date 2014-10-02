@@ -114,6 +114,10 @@ finally return to the top level directory.
 
 ##Build Operations
 
+Building the frontend and the backend differ slightly. The frontend requires
+more build process due to thigns like: js/css concatentation, minification, and
+normalizing angularjs dependency injection. The details are below ...
+
 ###Building the backend
 
 There are only a few things you can build with the backend. There is a simple
@@ -125,6 +129,7 @@ directories.
 - Remove intermediates: grunt clean
 
 ###Building the frontend
+
 The frontend is slightly more complicated due to concatenating and minimizing
 js and css files. You can build a debug version of the frontend which does not
 concnatenate or minify any dependent files. A directory called debug will be
@@ -140,8 +145,18 @@ number and prevent the developer from seeing their changes. We found this
 scenario with chrome. You must disable cachien on the developer console in order
 to reliably see your changes immediately.
 
-###Updating Dependencies
+###Common npm Operations
 
-- npm update
-- bower update
+- Run all local unit tests: npm test
+- Update local npm dependencies: npm update
+- Add a new npm runtime depdendency: npm install --save <dep name>
+- Remove an npm runtime depdenency: npm uninstall --save <dep name>
+- Add a new npm development dependency: npm install --dev-save <dev dep name>
+- Remove an npm development dependency: npm uninstall --dev-save <dev dep name>
 
+##Running Flowsim
+
+Running the flowsim service is pretty simple. Assuming you have built the
+frontend and backend as well as established the database, you just need to
+configure and start the service.
+- backend/src/index.js
