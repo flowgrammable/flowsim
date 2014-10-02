@@ -51,6 +51,7 @@ _.each(mods, function(mod) {
 
 // Run the server
 restServer.run();
+console.log(restServer.toString());
 
 })();
 

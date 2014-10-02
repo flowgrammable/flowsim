@@ -8,26 +8,29 @@
 
 var fs      = require('fs');
 var restify = require('restify');
+var http    = require('http');
 var fmt     = require('../utils/formatter');
 
 var name = 'server';
 
-var defAddress  = '127.0.0.1';
-var defHostname = 'localhost';
-var defPort     = 8080;
+var defAddress    = '127.0.0.1';
+var defHostname   = 'localhost';
+var defOpenPort   = 8080;
+var defSecurePort = 8081;
 
 /**
  * Constructs a restify based HTTP server.
  *
  * @constructor
- * @param {Object} config            - a server configuration object
- * @param {String} config.basedir    - the base directory of the server
- * @param {String} [config.address]  - IP address to bind
- * @param {String} [config.hostname] - hostname to bind
- * @param {String} [config.port]     - tcp port to bind
- * @param {Object} [config.https]    - https configuration object
- * @param {String} config.https.key  - location of https private key
- * @param {String} config.https.cert - location of https certificate
+ * @param {Object} config               - a server configuration object
+ * @param {String} config.basedir       - the base directory of the server
+ * @param {String} [config.address]     - IP address to bind
+ * @param {String} [config.hostname]    - hostname to bind
+ * @param {String} [config.open_port]   - tcp port to bind
+ * @param {String} [config.secure_port] - tls port to bind
+ * @param {Object} [config.https]       - https configuration object
+ * @param {String} config.https.key     - location of https private key
+ * @param {String} config.https.cert    - location of https certificate
  */
 
 function Server(config, logger) {
@@ -37,18 +40,20 @@ function Server(config, logger) {
   // Grab a configuration if present ...
   // ... otherwise supply a default configuration
   this.config = config[name] || {
-    address:  defAddress,
-    hostname: defHostname,
-    port:     defPort
+    address:     defAddress,
+    hostname:    defHostname,
+    open_port:   defOpenPort,
+    secure_port: defSecurePort
   };
 
   this.logger = logger;
 
   // Set default values in case where passed config is deficient
-  this.config.address  = this.config.address  || defAddress;
-  this.config.hostname = this.config.hostname || defHostname;
-  this.config.port     = this.config.port     || defPort;
-  this.config.protocol = this.config.https ? 'https' : 'http';
+  this.config.address     = this.config.address     || defAddress;
+  this.config.hostname    = this.config.hostname    || defHostname;
+  this.config.open_port   = this.config.open_port   || defOpenPort;
+  this.config.secure_port = this.config.secure_port || defSecurePort;
+  this.config.protocol    = this.config.https ? 'https' : 'http';
 
   // Load credential information if present
   if(this.config.https) {
@@ -59,6 +64,14 @@ function Server(config, logger) {
   } else {
     this.creds = {};
   }
+
+  // set up the un secure redirect server
+  this.http = http.createServer(
+    function(req, res) {
+      res.writeHead(301, { Location: this.baseUrl() });
+      res.end();
+    }
+  );
 
   // Create and configure a server instance
   this.server = restify.createServer(this.creds)
@@ -71,6 +84,7 @@ function Server(config, logger) {
         directory: dir + '/' + this.config.static.directory,
         default: 'index.html'
     }));
+
   }
 
   this.running = false;
@@ -122,7 +136,8 @@ Server.prototype.addModule = function(mod) {
  * @returns {String} protocol://hostname:port
  */
 Server.prototype.baseUrl = function() {
-  return this.config.protocol + this.config.hostname + ':' + this.config.port;
+  return this.config.protocol + this.config.hostname + ':' + 
+         this.config.secure_port;
 };
 
 /**
@@ -140,7 +155,8 @@ Server.prototype.rootPath = function() {
  * @returns {Server} returns a self reference
  */
 Server.prototype.run = function() {
-  this.server.listen(this.config.port, this.config.hostname);
+  this.http.listen(this.config.open_port, this.config.hostname);
+  this.server.listen(this.config.secure_port, this.config.hostname);
   this.running = true;
   return this;
 };
@@ -155,7 +171,8 @@ Server.prototype.toFormatter = function(f) {
   f.begin('Server');
   f.addPair('Address', this.config.address);
   f.addPair('Hostname', this.config.hostname);
-  f.addPair('Port', this.config.port);
+  f.addPair('TCP Port', this.config.open_port);
+  f.addPair('TLS Port', this.config.secure_port);
   if(this.config.https) {
     f.addPair('Protocol', this.config.protocol);
     f.addPair('Key', this.config.https.key);
