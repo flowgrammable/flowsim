@@ -1,105 +1,85 @@
-flowsim
-=======
-     
-  Visualization of OpenFlow Data-plane Abstractions
 
+#Flowsim
 
-DEPENDENCIES
-============
+Flowsim is a visualization of the OpenFlow abstract data plane. The simulator is
+built using javascript, html, css, and posgres. The tool is meant to be run in a
+browser with a remote RESTful service providing data persistence.
 
-  Please see the dependencies file for information on establishing your
-  development environment.
+##Organiation
 
-SETUP
-=====
+The project is organized into the following subdirectories:
+- 3rdparty
+- doc
+- backend
+- frontend
 
-  1) Setup the database
+Our project currently uses a 3rd party tool called Flyway for SQL database
+migrations. This tool depends on java 1.6 or higher and certain environment
+variables being set. The tool is located in the '3rdparty' directory.
 
-    a. Login to the postgres user
-      
-      > sudo su - postgres
-    
-    b. Create the database and user
+Drawings and documentation about the design of the system can be found int
+'doc' directory. At the moment this is just a collection of notes and not that
+organized.
 
-      > psql
-      
-      Create the database
+The RESTful API for the service is located in the 'backend' directory. This is
+an HTTP/S server using the Restify javascript framework to modularly serve
+RESTful API services. This is our persistence layer for flowsim.
 
-        CREATE DATABASE <database name>;
+The bulk of the application runs in a modern javascript capable broswer and the
+code is located in the 'frontend' directory. The frontend relies on the
+angularjs UI framework and the bootstrap css styling library.
 
-      where
-        <database name> = flowsim
+##Global Dependencies
 
-      Create the database user
+This project has a minimal number of external dependencies. You must ensure
+these dependencies are present before attempting the installation process.
+- java 1.6 or higher
+- nodejs
+- postgresql 9.3
+- curl (optional)
 
-        CREATE USER <username> PASSWORD '<password>';
+Java is only used by the flyway migration tool. The entire site is built in
+javascript and the backend depends on nodejs to run. Persistence is provided
+through a postgresql database. Finaly, if you are doing development you may need
+the cURL command line utility. In which case now is the time to install it.This
+set of dependencies you must manually install before proceeding with the
+installation procedure.
 
-      where
-        <username> = flogdev
-        <password> = flogdev
-      
-      Quit psql
+##Installation
 
-        \q
+If a step does not explicitly tell you to use the sudo command, do not use it.
 
-    c. Modify the database server authorization file
+###Setup Procedure
 
-      > <editor> /etc/postgresql/9.3/main/pg_hba.conf
+Before installing either the frontend or backend you need a few node development
+tools; grunt-cli, and bower. Our first step is to install these as global npm
+packages using the '-g' option.
+- sudo npm install -g grunt-cli
+- sudo npm install -g bower
 
-      Add the following line
+During this process it is possible that you have accidentally changed ownership
+of some of your node package management configuration files. This will cause
+problems during subsequent steps. So as a provalactic we will ensure your
+package management configuration files are owned properly. Execute the following
+command:
+- sudo chown -R `whoami` ~/.npm
 
-        host <database name> <node username> 127.0.0.1/32 password
+###Backend Procedure
 
-      where
-        <database name> = flowsim
-        <node username> = flogdev
+- cd backend    <- change to the backend directory
+- npm install   <- install the basic node dependencies
+- cd ..         <- change back to the top level directory
 
-      Quit psql
+###Frontend Procedure
 
-        \q
+- cd frontend   <- change to the frontend directory
+- npm install   <- install the node dependencies (includes bower)
+- grunt init    <- compile all un-built dependencies
+- cd ..         <- change back to the top level directory
 
-    d. Restart the database server
+##Operation
 
-      > pg_ctlcluster 9.3 main restart
+###Updating Dependencies
 
-    e. Log back into dev user
-
-      > su - dev
-
-  3) Source the environment
-
-    > source flowsim/environment
-
-  4) Run the migrations
-
-    > flyway migrate
-
-  5) Set up the mailer config file
-
-    Remaining in the base 'flowsim/' directory, run the following command:
-
-    > echo "module.exports = { service: 'gmail', auth: { user: '<your email>', pass: '<your password>' } }" > src/backend/mailer/config.js
-
-    replacing <your email> with a valid gmail account and <your password>
-    with the password for that account
-
-  6) Go to DEPS.md and follow the instructions under "Local Dependencies"
-  
-RUNNING
-=======
-
-  1) Start the server
-    ./index.js
-
-  2) Run the unit tests
-    > npm test
-
-  2) Generate documentation from the code base
-    grunt doc
-
-NOTES
-=====
-
-  Pleaes see the notes/ directory for a set of notes on the various technologies
-  used in this project.
-
+- npm update
+- bower update
