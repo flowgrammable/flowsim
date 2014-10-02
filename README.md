@@ -66,16 +66,27 @@ command:
 
 ###Backend Procedure
 
-- cd backend    <- change to the backend directory
-- npm install   <- install the basic node dependencies
-- cd ..         <- change back to the top level directory
+The node packages for the backend install using the typical node process. Just
+change to the backend directory, use the node package manager (npm) to install
+all packages specified in the package.json file, and then return to the top
+level directory.
+
+- cd backend 
+- npm install
+- cd ..
 
 ###Frontend Procedure
 
-- cd frontend   <- change to the frontend directory
-- npm install   <- install the node dependencies (includes bower)
-- grunt init    <- compile all un-built dependencies
-- cd ..         <- change back to the top level directory
+The node packages for the frontend install using the typical node process plus
+some additional hand holding. Just change to the frontend directory, use the 
+node package manager (npm) to install all packages specified in the package.json
+file, then use a special grunt task to finish the package installation, and
+finally return to the top level directory.
+
+- cd frontend
+- npm install
+- grunt init
+- cd ..
 
 ##Operation
 
