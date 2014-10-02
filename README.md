@@ -94,6 +94,8 @@ finally return to the top level directory.
 
 ##Operation
 
+###Establish the initial database scheme
+
 ###Updating Dependencies
 
 - npm update
