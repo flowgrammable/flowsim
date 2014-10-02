@@ -2,8 +2,8 @@
 #Flowsim
 
 Flowsim is a visualization of the OpenFlow abstract data plane. The simulator is
-built using javascript, html, css, and posgres. The tool is meant to be run in a
-browser with a remote RESTful service providing data persistence.
+built using javascript, html, css, and postgres. The tool is meant to be run in 
+a browser with a remote RESTful service providing data persistence.
 
 ##Organiation
 
