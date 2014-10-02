@@ -42,9 +42,20 @@
    dependencies. An external dependency is found in node_modules or some other
    module/dependency location. Local dependencies are local to the project.
 
+   ```
    var external_dep1 = require('external_dep1');
    var external_dep2 = require('external_dep2');
    var internal_dep1 = require('./internal_dep1');
    var internal_dep2 = require('../utils/internal_dep2');
+   ```
 
+##5. Syntax things
+  - tab stops are bad, do not use them
+  - set your indentation to 2 spaces
+  - always use braces with conditionals and loops
+  - always begin an open brace on the same line as control element
+
+##6. Variables
+  - always use the var keyword for variable introduction
+  - use the variable `that` for `this` closures
 
