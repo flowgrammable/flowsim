@@ -158,5 +158,20 @@ to reliably see your changes immediately.
 
 Running the flowsim service is pretty simple. Assuming you have built the
 frontend and backend as well as established the database, you just need to
-configure and start the service.
+configure and start the service. The server configuration file is located at 
+backend/src/config.json. It is a json file that modularizes confirmation for the
+major elements of backend service.
+
+###Service configuration
+
+There are four main components of the backend service that you need to
+configure: mailer, server credentials, server bindings, and static content. The
+mailer is used to send email to users of the service to verify account ownership
+during registration and password resets. The server credentials are used to
+present and sign a TLS certificate. The server bindings help establish what IP
+addresses and ports the server binds. The static content specifies the folder of
+the static resources to server. Finally, the database component specifies the
+database connection information and credentials.
+
+###Starting the backend service
 - backend/src/index.js
