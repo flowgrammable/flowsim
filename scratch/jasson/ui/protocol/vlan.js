@@ -1,8 +1,0 @@
-
-var fgVLAN = (function(){
-
-return {
-};
-
-})();
-

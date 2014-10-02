@@ -1,8 +1,0 @@
-
-var fgUDP = (function(){
-
-return {
-};
-
-})();
-

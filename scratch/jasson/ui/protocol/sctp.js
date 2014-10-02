@@ -1,8 +1,0 @@
-
-var fgSCTP = (function(){
-
-return {
-};
-
-})();
-

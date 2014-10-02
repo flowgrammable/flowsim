@@ -1,8 +1,0 @@
-body { padding-top: 50px; }
-
-.voffset5 { margin-top: 5px }
-.voffset10 { margin-top: 10px }
-
-div.error { color: red; font-weight: bold; }
-
-.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

@@ -15,7 +15,7 @@
     },
     "static": {
       "mount": "/",
-      "directory": "static"
+      "directory": "static/"
     }
   },
   "database": {
