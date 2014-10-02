@@ -112,11 +112,36 @@ finally return to the top level directory.
 - grunt init
 - cd ..
 
-##Operation
+##Build Operations
 
+###Building the backend
 
+There are only a few things you can build with the backend. There is a simple
+grunt file that will build documentation for the backend using jsdoc, run jshint
+across existing source for static analysis, and remove inermediate files and
+directories.
+- Run static analysis: grunt -or- grunt default
+- Generate docs: grunt doc
+- Remove intermediates: grunt clean
+
+###Building the frontend
+The frontend is slightly more complicated due to concatenating and minimizing
+js and css files. You can build a debug version of the frontend which does not
+concnatenate or minify any dependent files. A directory called debug will be
+created that contains the document root of static files. The release version
+will concatenate and minify your resources. Both versions run jshint over your
+code for static analysis.
+- Build a debug version of the frontend: grunt -or- grunt debug
+- Build a release version of the frontend: grunt release
+- Remove imtermediates: grunt clean
+
+A note of caution, some browsers will cache static files when there is a large
+number and prevent the developer from seeing their changes. We found this
+scenario with chrome. You must disable cachien on the developer console in order
+to reliably see your changes immediately.
 
 ###Updating Dependencies
 
 - npm update
 - bower update
+
