@@ -62,7 +62,7 @@ of some of your node package management configuration files. This will cause
 problems during subsequent steps. So as a provalactic we will ensure your
 package management configuration files are owned properly. Execute the following
 command:
-- sudo chown -R <`whoami`> ~/.npm
+- sudo chown -R \`whoami\` ~/.npm
 
 ###Backend Procedure
 
