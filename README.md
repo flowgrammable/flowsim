@@ -47,7 +47,11 @@ installation procedure.
 
 ##Installation
 
-If a step does not explicitly tell you to use the sudo command, do not use it.
+The following is a set of procedures to finalize the installation of all
+necessary global and local node and bower dependencies. One important point to
+note is that if a step does not explicitly tell you to use the sudo command, do
+not use the sudo command. With few exceptions all steps should be taken as your
+development user.
 
 ###Setup Procedure
 
