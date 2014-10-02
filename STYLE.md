@@ -58,6 +58,8 @@
 
 ##6. Variables
   - always use the var keyword for variable introduction
+  - you almost never have a good reason for a global
+  - always place var statements at beginning of functions (never in loops)
 
 ##7. Object closures
   - use the variable `that` for `this` closures
