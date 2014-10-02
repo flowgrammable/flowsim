@@ -1,5 +1,5 @@
 
-1. Provide modular scoping
+##1. Provide modular scoping
 
    Begin and end all files/modules with an anonymous function applicaiton. This
    helps provide a uniform mechanism for all of our files/modules to have local
@@ -9,7 +9,7 @@
       ...
     })();
 
-2. Define callbacks for asynchronous use
+##2. Define callbacks for asynchronous use
 
    When providing callbacks for asynchronous functions always use the first
    parameter for error passing. Only use the second and above parameters for
@@ -23,7 +23,7 @@
       }
     }
 
-3. Use callbacks appropriately
+##3. Use callbacks appropriately
 
    When invoking callbacks that use the standard error first parameter style
    always pass null as the error value when no error is present.
@@ -34,7 +34,7 @@
    // to pass normal results
    callback(null, some_result_value);
 
-4. Nodejs import ordering
+##4. Nodejs import ordering
 
    Always import your external dependencies before you import your local 
    dependencies. An external dependency is found in node_modules or some other
