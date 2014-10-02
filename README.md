@@ -72,11 +72,31 @@ command:
 
 The node packages for the backend install using the typical node process. Just
 change to the backend directory, use the node package manager (npm) to install
-all packages specified in the package.json file, and then return to the top
-level directory.
-
+all packages specified in the package.json file.
 - cd backend 
 - npm install
+
+Now you must setup the postgres database. First, you will create a postgres
+database cluster. This is accomplished with the initdb command. Next, you will
+start the colleciton of postgres processes that manage a database instance. You
+do this with the pg_ctl command, which expects the location of the database
+cluster files. You can build your database cluser anywhere. Now that the 
+database server is running you need to create the flowsim database, this is
+accomplished with teh createdb command. Finally, you will need to create the
+development user account on the database. This account can have trivial
+username/password flogdev and flogdev. This is for development only.
+- initdb <db cluster name>
+- pg_ctl -D <db cluster name> start
+- createdb flowsim
+- createuser -P flogdev
+
+Finally, lets initialize the flowsim database scheme with flyway. First, you
+must establish the environment variables that flyway depends upon. Then you can
+run the flyway command. Running a flyway migration is necessary upon every
+versioned scheme change. Upon completion you can change back to the top level
+directory.
+- source flyway_env
+- flyway migrate
 - cd ..
 
 ###Frontend Procedure
@@ -94,7 +114,7 @@ finally return to the top level directory.
 
 ##Operation
 
-###Establish the initial database scheme
+
 
 ###Updating Dependencies
 

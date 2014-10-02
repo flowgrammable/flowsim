@@ -7,7 +7,7 @@ PWD=`pwd`
 #####################################################
 
 # flyway location
-FLYWAY=3rdparty/flyway-3.0
+FLYWAY=../3rdparty/flyway-3.0
 
 # flyway jdbc location
 FLYWAY_JAR="-jarDir=$PWD/$FLYWAY/jars"
@@ -16,7 +16,7 @@ FLYWAY_JAR="-jarDir=$PWD/$FLYWAY/jars"
 FLYWAY_URL='-url=jdbc:postgresql://localhost/flowsim'
 
 # flyway migrations locations
-FLYWAY_LOCATIONS="-locations=filesystem:$PWD/src/sql"
+FLYWAY_LOCATIONS="-locations=filesystem:$PWD/sql"
 
 # flyway username/password
 FLYWAY_USER='-user=flogdev'
