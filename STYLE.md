@@ -68,6 +68,8 @@
     // this - has no meaning in closure
     // that - user defined closure variable for 'this'
     var that = this;
+
+    // now we use an inner function that forgets about 'this'
     _.each(this.list, function(item) {
       // now we can safely refer to the object
       that.add(item);
