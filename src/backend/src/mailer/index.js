@@ -29,14 +29,16 @@ exports.Mailer = Mailer;
 
 Mailer.prototype.mail = function(dst, sub, body, callback) {
   var that = this;
-  this.mailer.messages().send({
-    from: this.config.user,
-    to: dst,
-    subject: sub,
-    text: body}, function(err, body){
-      if(err){
+  this.mailer.messages().send(
+    {
+      from: this.config.user,
+      to: dst,
+      subject: sub,
+      text: body
+    }, function(err, body){
+      if(err) {
         that.logger.error(err);
-        console.log(err);
+        //console.log(err);           <----- once you employ bunyan ... no need to use console
         callback(err);
       } else {
         callback(null, body);
