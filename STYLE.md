@@ -29,9 +29,11 @@
    always pass null as the error value when no error is present.
 
    /* to pass an error */
+
    callback(some_error_value);
 
    /* to pass normal results */
+
    callback(null, some_result_value);
 
 ##4. Nodejs import ordering
