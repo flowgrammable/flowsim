@@ -34,7 +34,7 @@
    // to pass normal results
    callback(null, some_result_value);
 
-4. Module import ordering
+4. Nodejs import ordering
 
    Always import your external dependencies before you import your local 
    dependencies. An external dependency is found in node_modules or some other

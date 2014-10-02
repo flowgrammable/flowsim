@@ -1,10 +1,4 @@
 
-SETUP
-=====
-
-  npm install
-
-
 FILES DIRS
 ------------
 - package.json    - main npm configuration
