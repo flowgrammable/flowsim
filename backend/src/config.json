@@ -21,6 +21,7 @@
   },
   "database": {
     "database": "flowsim",
+    "host": "localhost",
     "user": "flogdev",
     "pwd": "flogdev"
   },
