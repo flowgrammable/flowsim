@@ -91,3 +91,24 @@ Development
   1. Place your style sheets anywhere within src/
      - everything else is automatic
 
+TODO
+======
+
+1. Update site text
+  - landing page
+  - registration page
+  - registration success page
+  - verification email content
+  - verification landing page content
+2. Integrate $resource for rest calls
+  - registration
+  - login
+  - logout
+  - pwd reset
+3. Develop sprint-production process
+  - main branch should integrate git-pull requests
+  - update readme to account for this
+
+Other
+- add support for html2js to gruntfile.js
+- figure out a test framework and work into gruntfile
