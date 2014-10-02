@@ -57,5 +57,19 @@
 
 ##6. Variables
   - always use the var keyword for variable introduction
+
+##7. Object closures
   - use the variable `that` for `this` closures
+
+  ```
+  SomeObject.prototype.methodX = function() {
+    // this - has no meaning in closure
+    // that - user defined closure variable for 'this'
+    var that = this;
+    _.each(this.list, function(item) {
+      // now we can safely refer to the object
+      that.add(item);
+    });
+  };
+  ```
 
