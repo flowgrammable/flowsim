@@ -34,7 +34,7 @@ var defSecurePort = 8081;
  */
 
 function Server(config, logger) {
-
+  var that = this;
   var dir = config.basedir;
 
   // Grab a configuration if present ...
@@ -65,10 +65,13 @@ function Server(config, logger) {
     this.creds = {};
   }
 
-  // set up the un secure redirect server
+  // redirect all http requests to the https port
   this.http = http.createServer(
     function(req, res) {
-      res.writeHead(301, { Location: this.baseUrl() });
+      res.writeHead(301, { 
+        Location: 'https://' + that.config.hostname + ':' + 
+                  that.config.secure_port + '/'
+      });
       res.end();
     }
   );
