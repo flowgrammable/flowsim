@@ -61,6 +61,15 @@
   - you almost never have a good reason for a global
   - always place var statements at beginning of functions (never in loops)
 
+  ```
+  function() {
+    var good;
+    for(var bad=0; bad<some_number; ++bad) {
+    ...
+    }
+  }
+  ```
+
 ##7. Object closures
   - use the variable `that` for `this` closures
   - initialize `that` immediately 
