@@ -174,6 +174,8 @@ the static resources to server. Finally, the database component specifies the
 database connection information and credentials.
 
 ###Starting the backend service
+You can run either the debug or release version of the frontend. Remember the
+PEM pass phrase is 'flowsim'.
 -debug: ./backend/src/index.js -c `pwd`/config.json -d `pwd`/frontend/debug
 -release: ./backend/src/index.js -c `pwd`/config.json -d `pwd`/frontend/release
 - backend/src/index.js
