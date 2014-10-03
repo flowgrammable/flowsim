@@ -1,20 +1,26 @@
 {
-  "name": "flowsim",
+  "name": "flowsim-ui",
   "version": "0.0.1",
-  "homepage": "https://github.com/flowgrammable/flowsim",
-  "authors": [
-    "Jasson Casey <jasson@flowgrammable.com>"
-  ],
-  "description": "An OpenFlow data plane visual simulator.",
+  "description": "UI for Flowsim",
   "keywords": [
     "openflow",
     "sdn",
     "software",
     "defined",
     "networking",
-    "simulator"
+    "simulator",
+    "ui"
   ],
-  "license": "ISC",
+  "author": "Jasson Casey",
+  "license": "APSL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flowgrammable/flowsim"
+  },
+  "bugs": {
+    "url": "https://github.com/flowgrammable/flowsim/issues"
+  },
+  "homepage": "https://github.com/flowgrammable/flowsim",
   "ignore": [
     "**/.*",
     "node_modules",

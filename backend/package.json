@@ -6,6 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flowgrammable/flowsim"
+  },
+  "keywords": [
+    "openflow",
+    "sdn",
+    "software",
+    "defined",
+    "networking",
+    "simulator",
+    "REST",
+    "API"
+  ],
   "contributors": [
     {
       "name": "Jasson Casey"
@@ -24,6 +38,10 @@
     }
   ],
   "license": "APSL-2.0",
+  "bugs": {
+    "url": "https://github.com/flowgrammable/flowsim/issues"
+  },
+  "homepage": "https://github.com/flowgrammable/flowsim",
   "dependencies": {
     "bcrypt": "^0.8.0",
     "body-parser": "^1.8.1",
