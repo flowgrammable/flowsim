@@ -16,7 +16,7 @@
     },
     "static": {
       "mount": "/",
-      "directory": "static/"
+      "directory": "frontend/"
     }
   },
   "database": {
@@ -24,9 +24,6 @@
     "host": "localhost",
     "user": "flogdev",
     "pwd": "flogdev"
-  },
-  "template": {
-    "dir": "templates"
   },
   "logger": {
     "name": "flowsim"

@@ -30,7 +30,7 @@ function Template(config, logger) {
 
   this.logger = logger;
 
-  dir = config.basedir + '/' + this.config.dir;
+  dir = __dirname + '/templates';
 
   that = this;
   _.each(fs.readdirSync(dir), function(file) {

@@ -18,12 +18,13 @@ var log = require('./logger');
 // Process the command line
 prog
   .version(process.env.SERVER_VERSION)
-  .option('-c, --config [config file]', 'Specify a configuration file')
+  .option('-c, --config <config file>', 'Specify a configuration file')
+  .option('-d, --dir [root http dir]', 'Specify the root http directory')
   .parse(process.argv);
 
 // Initialize the configuration
-var config     = require(prog.config || './config.json');
-config.basedir = __dirname;
+var config     = require(prog.config);
+config.server.static.directory = prog.dir || config.server.static.directory;
 
 // Initialze global objects
 var logger     = new log.Logger(config);

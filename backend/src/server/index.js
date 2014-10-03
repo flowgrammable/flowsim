@@ -22,20 +22,20 @@ var defSecurePort = 8081;
  * Constructs a restify based HTTP server.
  *
  * @constructor
- * @param {Object} config               - a server configuration object
- * @param {String} config.basedir       - the base directory of the server
- * @param {String} [config.address]     - IP address to bind
- * @param {String} [config.hostname]    - hostname to bind
- * @param {String} [config.open_port]   - tcp port to bind
- * @param {String} [config.secure_port] - tls port to bind
- * @param {Object} [config.https]       - https configuration object
- * @param {String} config.https.key     - location of https private key
- * @param {String} config.https.cert    - location of https certificate
+ * @param {Object} config                  - a server configuration object
+ * @param {String} config.basedir          - the base directory of the server
+ * @param {String} [config.address]        - IP address to bind
+ * @param {String} [config.hostname]       - hostname to bind
+ * @param {String} [config.open_port]      - tcp port to bind
+ * @param {String} [config.secure_port]    - tls port to bind
+ * @param {Object} [config.https]          - https configuration object
+ * @param {String} config.https.key        - location of https private key
+ * @param {String} config.https.cert       - location of https certificate
+ * @param {String} config.static.directory - location of static content
  */
 
 function Server(config, logger) {
   var that = this;
-  var dir = config.basedir;
 
   // Grab a configuration if present ...
   // ... otherwise supply a default configuration
@@ -55,26 +55,29 @@ function Server(config, logger) {
   this.config.secure_port = this.config.secure_port || defSecurePort;
   this.config.protocol    = this.config.https ? 'https' : 'http';
 
+  // load the not found file
+  //this.notFound = fs.readFileSync(dir + 
+
   // Load credential information if present
   if(this.config.https) {
     this.creds = {
-      key: fs.readFileSync(dir + '/' + this.config.https.key),
-      certificate: fs.readFileSync(dir + '/' + this.config.https.cert)
+      key: fs.readFileSync(this.config.https.key),
+      certificate: fs.readFileSync(this.config.https.cert)
     };
+
+    // redirect all http requests to the https port
+    this.http = http.createServer(
+      function(req, res) {
+        res.writeHead(301, { 
+          Location: 'https://' + that.config.hostname + ':' + 
+                    that.config.secure_port + '/'
+        });
+        res.end();
+      }
+    );
   } else {
     this.creds = {};
   }
-
-  // redirect all http requests to the https port
-  this.http = http.createServer(
-    function(req, res) {
-      res.writeHead(301, { 
-        Location: 'https://' + that.config.hostname + ':' + 
-                  that.config.secure_port + '/'
-      });
-      res.end();
-    }
-  );
 
   // Create and configure a server instance
   this.server = restify.createServer(this.creds)
@@ -83,10 +86,12 @@ function Server(config, logger) {
     .use(restify.bodyParser());
 
   if(this.config.static) {
-    this.server.get(this.config.static.mount, restify.serveStatic({
-        directory: dir + '/' + this.config.static.directory,
+    this.server.get(this.config.static.mount+'.*', restify.serveStatic(
+      {
+        directory: this.config.static.directory,
         default: 'index.html'
-    }));
+      }
+    ));
 
   }
 
@@ -158,7 +163,26 @@ Server.prototype.rootPath = function() {
  * @returns {Server} returns a self reference
  */
 Server.prototype.run = function() {
-  this.http.listen(this.config.open_port, this.config.hostname);
+  var notFound;
+
+  try {
+    notFound = fs.readFileSync(this.config.static.directory + '/404.html');
+  } catch(e) {
+    if(e.code === 'ENOENT') {
+      throw new Error('File not found: ' + e.path);
+    } else {
+      throw e;
+    }
+  }
+
+  this.server.on('NotFound', function(req, res) {
+    console.log(req.url);
+    res.end(notFound);
+  });
+
+  if(this.http) {
+    this.http.listen(this.config.open_port, this.config.hostname);
+  }
   this.server.listen(this.config.secure_port, this.config.hostname);
   this.running = true;
   return this;
@@ -176,13 +200,12 @@ Server.prototype.toFormatter = function(f) {
   f.addPair('Hostname', this.config.hostname);
   f.addPair('TCP Port', this.config.open_port);
   f.addPair('TLS Port', this.config.secure_port);
+  f.addPair('Protocol', this.config.protocol);
   if(this.config.https) {
-    f.addPair('Protocol', this.config.protocol);
     f.addPair('Key', this.config.https.key);
     f.addPair('Cert', this.config.https.cert);
-  } else {
-    f.addPair('Protocol', this.config.protocol);
   }
+  f.addPair('Static', this.config.static.directory);
   f.addPair('Running', this.running);
   f.end();
   return f;
