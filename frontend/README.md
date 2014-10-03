@@ -30,10 +30,17 @@ Build Environment
 
   Build your dependencies
   =======================
-    Option 1) Build dependencies by hand ..
+    Option 1a) Build dependencies by hand ..
     - cd bower_components/angular-ui-bootstrap/
     - npm install
     - grunt
+    - cd ../..
+
+    Option 2a) On a production machine you may not have a browser
+    - cd bower_components/angular-ui-bootstrap/
+    - npm install
+    - grunt before-test
+    - grunt after-test
     - cd ../..
 
     Option 2) build dependencies with grunt
