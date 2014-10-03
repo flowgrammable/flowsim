@@ -181,9 +181,9 @@ Server.prototype.run = function() {
   });
 
   if(this.http) {
-    this.http.listen(this.config.open_port, this.config.hostname);
+    this.http.listen(this.config.open_port, this.config.address);
   }
-  this.server.listen(this.config.secure_port, this.config.hostname);
+  this.server.listen(this.config.secure_port, this.config.address);
   this.running = true;
   return this;
 };
