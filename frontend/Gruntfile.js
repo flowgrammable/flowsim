@@ -59,6 +59,9 @@ module.exports = function(grunt) {
       init: {
         command: dep.init.join('&&')
       },
+      init_nb: {
+        command: dep.init_nb.join('&&')
+      },
       debug: {
         command: [
           'http-server debug'
@@ -187,6 +190,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');    // watch files for changes
 
   grunt.registerTask('init', ['shell:init']);
+  grunt.registerTask('init-nb', ['shell:init_nb']);
   grunt.registerTask('default', ['debug']);
 
   // Debug build process

@@ -36,15 +36,18 @@ Build Environment
     - grunt
     - cd ../..
 
-    Option 2a) On a production machine you may not have a browser
+    Option 1b) by hand and no local broswer support
     - cd bower_components/angular-ui-bootstrap/
     - npm install
     - grunt before-test
     - grunt after-test
     - cd ../..
 
-    Option 2) build dependencies with grunt
+    Option 2a) build dependencies with grunt
     - grunt init
+
+    Option 2b) ... with grunt and no local browser support
+    - grunt init-nb
 
   Build the debug site
   - grunt

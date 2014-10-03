@@ -43,5 +43,12 @@
     "npm install",
     "grunt",
     "cd ../.."
+  ],
+  "init_nb": [
+    "cd bower_components/angular-ui-bootstrap/",
+    "npm install",
+    "grunt before-test",
+    "grunt after-test",
+    "cd ../.."
   ]
 }
