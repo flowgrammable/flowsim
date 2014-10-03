@@ -174,4 +174,6 @@ the static resources to server. Finally, the database component specifies the
 database connection information and credentials.
 
 ###Starting the backend service
+-debug: ./backend/src/index.js -c `pwd`/config.json -d `pwd`/frontend/debug
+-release: ./backend/src/index.js -c `pwd`/config.json -d `pwd`/frontend/release
 - backend/src/index.js
