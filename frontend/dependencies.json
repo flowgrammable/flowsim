@@ -11,6 +11,7 @@
       "bower_components/underscore/underscore.js",
       "bower_components/angular/angular.js",
       "bower_components/angular-route/angular-route.js",
+      "bower_components/angular-resource/angular-resource.js",
       "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.2.js"
     ],
     "fonts": [
@@ -31,6 +32,8 @@
       "bower_components/angular/angular.min.js.map",
       "bower_components/angular-route/angular-route.min.js",
       "bower_components/angular-route/angular-route.min.js.map",
+      "bower_components/angular-resource/angular-resource.min.js",
+      "bower_components/angular-resource/angular-resource.min.js.map",
       "bower_components/angular-ui-bootstrap/dist/ui-bootstrap-0.11.2.min.js"
     ],
     "fonts": [

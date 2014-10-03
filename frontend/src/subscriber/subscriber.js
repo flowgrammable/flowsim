@@ -1,8 +1,11 @@
 
 (function(){
 
-angular.module('fgSubscriber', [])
-  .controller('fgSubscriberCtrl', function($scope) {
+angular.module('fgSubscriber', ['ngResource'])
+  .factory('Subscriber', function($resource) {
+    return $resource('/api/subscriber/register');
+  })
+  .controller('fgSubscriberCtrl', function($scope, Subscriber) {
 
     var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var pwdPattern = /[a-zA-Z0-9_]{8,}/;
@@ -36,7 +39,10 @@ angular.module('fgSubscriber', [])
         $scope.pwd2Msg = 'Passwords do not match';
       } else {
         $scope.success = true;
-        // send a registration request
+        var sub = new Subscriber();
+        sub.email = $scope.emailAddr;
+        sub.password = $scope.pwd1;
+        sub.save();
       }
     };
 });

@@ -56,6 +56,7 @@ Controller.prototype.toString = fmt.toString;
  * @param {Function} callback - a standard callback function
  */
 Controller.prototype.authorize = function(token, callback) {
+  console.log('authorizing: ' + token);
   this.storage.getSession(token, function(err, succ) {
     if(err) {
       callback(err);
@@ -77,6 +78,7 @@ Controller.prototype.authorize = function(token, callback) {
  */
 Controller.prototype.login = function(email, pwd, callback) {
   var that = this;
+  console.log('login: ' + email);
   this.storage.getSubscriberByEmail(email, function(err, succ) {
     var token, expireTime;
     if(err) { 
@@ -98,6 +100,7 @@ Controller.prototype.login = function(email, pwd, callback) {
 
 Controller.prototype.logout = function(token, callback) {
   // if a valid session then delete the session
+  console.log('logout: ' + token);
   this.storage.deleteSession(token, callback);
 };
 
@@ -107,6 +110,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   token = uuid.v4();
   hash = bcrypt.hashSync(pwd, 10);
   that = this;
+  console.log('registering: ' + email);
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
                                 token, function(err, succ) {
@@ -129,6 +133,7 @@ Controller.prototype.verify = function(token, callback) {
   // if the verification token is valid update
   // subscriber state
   // otherwise send an error
+  console.log('verifying: ' + token);
   this.storage.verifySubscriber(token, callback);
 };
 
@@ -137,6 +142,7 @@ Controller.prototype.forgot = function(email, callback) {
   // or send an error
   var token = uuid.v4();
   var that = this;
+  console.log('forgot: ' + email);
   this.storage.resetSubscriber(email, token, function(err, succ) {
     var body, subject;
     if(err) {
@@ -155,6 +161,7 @@ Controller.prototype.forgot = function(email, callback) {
 Controller.prototype.update = function(subscriber_id, session_id, oldPwd, 
                                        newPwd, callback) {
   var that = this;
+  console.log('update: ' + subscriber_id);
   this.storage.getSubscriberById(subscriber_id, function(err, succ) {
     var hash;
     if(err) {

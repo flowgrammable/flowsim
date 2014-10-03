@@ -32,7 +32,8 @@
     "angular": "~1.2.23",
     "bootstrap": "~3.2.0",
     "angular-ui-bootstrap": "~0.11.0",
-    "angular-route": "~1.2.24"
+    "angular-route": "~1.2.24",
+    "angular-resource": "~1.2.26"
   },
   "devDependencies": {
     "underscore": "~1.7.0",
