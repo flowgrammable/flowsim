@@ -3,18 +3,26 @@
 
 angular.module('fgSubscriber', ['ngResource'])
   .factory('Subscriber', function($resource) {
-    return $resource('/api/subscriber/:op', {
+    var _x_access_token, _ops;
+    _x_access_token = '';
+    _ops = $resource('/api/subscriber/:op', {
         op: '@op'
       }, {
-        'register': { method: 'POST', params: { op: 'register' }, headers: {
-          'x-access-token': 'let-me-in'
-        }},
+        'register': { method: 'POST', params: { op: 'register' } }, 
         'verify':   { method: 'POST', params: { op: 'verify' } },
         'forgot':   { method: 'POST', params: { op: 'forgot' } },
         'login':    { method: 'POST', params: { op: 'login' } },
-        'logout':   { method: 'POST', params: { op: 'logout' } },
-        'update':   { method: 'POST', params: { op: 'update' } }
+        'logout':   { method: 'POST', params: { op: 'logout' },
+                      headers: { 'x-access-token': _x_access_token }
+        },
+        'update':   { method: 'POST', params: { op: 'update' },
+                      headers: { 'x-access-token': _x_access_token }
+        }
       });
+    return {
+      x_access_token: _x_access_token,
+      ops: _ops
+    };
   })
   .controller('fgSubscriberCtrl', function($scope, Subscriber) {
 
@@ -38,7 +46,48 @@ angular.module('fgSubscriber', ['ngResource'])
       $scope.pwd2Msg = '';
     }
 
-    $scope.createSub = function() {
+    $scope.forgot = function() {
+      Subscriber.ops.forgot({
+        email: $scope.email
+      }, function(data) {
+        if(data.error) {
+        } else {
+        }
+      });
+    };
+
+    $scope.login = function() {
+      Subscriber.ops.login({
+        email: $scope.email,
+        password: $scope.password
+      }, function(data) {
+        if(data.error) {
+        } else {
+          Subscriber.x_access_token = data.token;
+        }
+      });
+    };
+
+    $scope.logout = function() {
+      Subscriber.ops.logout({}, function(data) {
+        Subscriber.x_access_token = '';
+        if(data.error) {
+        } else {
+        }
+      });
+    };
+
+    $scope.update = function() {
+      Subscriber.ops.update({
+        password: $scope.password
+      }, function(data) {
+        if(data.error) {
+        } else {
+        }
+      });
+    };
+
+    $scope.register = function() {
       reset();
       if(!emailPattern.test($scope.emailAddr)) {
         $scope.emailError = true;
@@ -50,6 +99,20 @@ angular.module('fgSubscriber', ['ngResource'])
         $scope.pwd2Error = true;
         $scope.pwd2Msg = 'Passwords do not match';
       } else {
+        Subscriber.ops.register({
+          email:    $scope.emailAddr,
+          password: $scope.pwd1
+        }, function(data) {
+          if(data.error) {
+            console.log(data.error);
+            $scope.failure = true;
+          } else {
+            console.log(data.value);
+            $scope.success = true;
+          }
+        });
+
+        /*
         var subscriber = new Subscriber({
           email:    $scope.emailAddr,
           password: $scope.pwd1
@@ -63,6 +126,7 @@ angular.module('fgSubscriber', ['ngResource'])
             $scope.success = true;
           }
         });
+        */
       }
     };
 });
