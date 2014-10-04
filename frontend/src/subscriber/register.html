@@ -2,7 +2,7 @@
 <div class="row" ng-controller="fgSubscriberCtrl">
   <div class="col-md-6 col-md-offset-3">
 
-    <div ng-hide="success">
+    <div ng-hide="success || failure">
      <h1>New User Registration</h1>
       Welcome to Flowgrammable's OpenFlow switch simulator. We're excited to 
       share our latest work with you; however, before you get started you must 
@@ -45,6 +45,12 @@
       <h1>Verification Step</h1>
       An email has been sent to your email account. You must click on the link
       enclosed in that email to complete the verification process.
+    </div>
+    
+    <div ng-show="failure">
+      <h1>There is a great disturbance in the force!</h1>
+      We are experiencing technical difficulties, please come back and try
+      registering in a bit. Thanks!
     </div>
 
   </div>

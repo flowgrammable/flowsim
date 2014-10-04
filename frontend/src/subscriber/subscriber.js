@@ -3,14 +3,15 @@
 
 angular.module('fgSubscriber', ['ngResource'])
   .factory('Subscriber', function($resource) {
-    return $resource('/api/subscriber/:op', {}, 
-      {
-        register: { method: 'POST', params: { op: 'register' } },
-        verify:   { method: 'POST', params: { op: 'verify' } },
-        forgot:   { method: 'POST', params: { op: 'forgot' } },
-        login:    { method: 'POST', params: { op: 'login' } },
-        logout:   { method: 'POST', params: { op: 'logout' } },
-        update:   { method: 'POST', params: { op: 'update' } }
+    return $resource('/api/subscriber/:op', {
+        op: '@op'
+      }, {
+        'register': { method: 'POST', params: { op: 'register' } },
+        'verify':   { method: 'POST', params: { op: 'verify' } },
+        'forgot':   { method: 'POST', params: { op: 'forgot' } },
+        'login':    { method: 'POST', params: { op: 'login' } },
+        'logout':   { method: 'POST', params: { op: 'logout' } },
+        'update':   { method: 'POST', params: { op: 'update' } }
       });
   })
   .controller('fgSubscriberCtrl', function($scope, Subscriber) {
@@ -19,6 +20,7 @@ angular.module('fgSubscriber', ['ngResource'])
     var pwdPattern = /[a-zA-Z0-9_]{8,}/;
 
     $scope.success = false;
+    $scope.failure = false;
     $scope.emailAddr = '';
     $scope.pwd1 = '';
     $scope.pwd2 = '';
@@ -42,21 +44,22 @@ angular.module('fgSubscriber', ['ngResource'])
       } else if(!pwdPattern.test($scope.pwd1)) {
         $scope.pwd1Error = true;
         $scope.pwd1Msg = 'Bad password';
-      } else if($scope.pwd1 != $scope.pwd2) {
+      } else if($scope.pwd1 !== $scope.pwd2) {
         $scope.pwd2Error = true;
         $scope.pwd2Msg = 'Passwords do not match';
       } else {
-        var result = Subscriber.register({
+        var subscriber = new Subscriber({
           email:    $scope.emailAddr,
           password: $scope.pwd1
-        }, function(value, resHdrs) {
-          console.log('success');
-          console.log(value);
-          console.log(resHdrs);
-          $scope.success = true;
-        }, function(res) {
-          console.log('error');
-          console.log(res);
+        });
+        subscriber.$register().then(function(data) {
+          if(data.error) {
+            console.log(data.error);
+            $scope.failure = true;
+          } else {
+            console.log(data.value);
+            $scope.success = true;
+          }
         });
       }
     };
