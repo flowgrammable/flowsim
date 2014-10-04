@@ -8,6 +8,7 @@
 var pg = require('pg');
 var _  = require('underscore');
 
+
 var name    = 'database';
 var defHost = '127.0.0.1';
 
@@ -38,32 +39,34 @@ function Database(config, logger) {
 }
 exports.Database = Database;
 
-
-function dbErrorHandler(err, meta){
-  //Handle Errors and return a dBError object
-  var dbErr = {};
-  dbErr.module = 'Database';
-  dbErr.method = '';
-  dbErr.description = '';
-  dbErr.pgError = err;
-  if(meta){
-    dbErr.meta = meta;
+function dbError(method, err, meta){
+  return {
+    module: 'Database',
+    method: method,
+    pub: {},
+    error: err,
+    meta: meta || {}
   }
+}
+
+function localErrorHandler(method, err, meta){
+  //Construct error object
+  var e = dbError('Database', method, err, meta); 
   switch(err.code){
     case '23505':
-      // Handle Duplicate Error
-      dbErr.description = 'Foreign Key violation';
+      // Handle Unique Key Violation
+      e.pub = 'QueryFailure';
       break;
     case 'ECONNREFUSED':
       // Handle Connection Error
       // Maybe try to reconnect
-      dbErr.description = 'Could not connect to DB';
+      e.pub = 'ServerFailure';
       break;
     default:
-      dbErr.description = 'Unknown error';
+      e.pub = 'Unknown';
       break;
   }
-  return dbErr; 
+  return e; 
 
 }
 /**
@@ -116,7 +119,7 @@ Database.prototype.queryStmt = function(qString, callback) {
     } else {
       client.query(qString, function(err, result) {
         if(err) {
-          callback(dbErrorHandler(err, {query: qString}));
+          callback(localErrorHandler('queryStmt', err, {query: qString}));
         } else {
           callback(null, result.rows);
         }

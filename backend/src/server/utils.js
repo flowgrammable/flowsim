@@ -40,7 +40,7 @@ function _success(data) {
  */
 function _tag(err, success) {
   if(err) {
-    return _error(err);
+    return _error(err.pub);
   } else {
     return _success(success);
   }

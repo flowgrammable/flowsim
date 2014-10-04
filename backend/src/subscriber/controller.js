@@ -12,6 +12,7 @@ var bcrypt = require('bcrypt');
 var fmt = require('../utils/formatter');
 var msg = require('./msg');
 var stg = require('./storage');
+var controlError = require('../error');
 
 // Default session timeout in minutes
 var defTimeout = 180;
@@ -37,6 +38,11 @@ function Controller(s, m, t, h, l) {
   this.logger   = l; 
 }
 exports.Controller = Controller;
+
+function localErrorHandler(method, subErr){
+  var e = controlError('Subscriber', 'Controller',  method, subErr);
+  return e;
+}
 
 Controller.prototype.toFromatter = function(f) {
   f.begin('Controller');
@@ -104,26 +110,6 @@ Controller.prototype.logout = function(token, callback) {
   this.storage.deleteSession(token, callback);
 };
 
-function controllerErrorHandler(method, subErr){
-  var ctrlErr = {};
-  ctrlErr.module = 'Subscriber';
-  ctrlErr.component = 'Controller';
-  ctrlErr.componentMethod = method;
-  ctrlErr.subError = subErr;
-
-  /**
-   * Filter controller error to return friendly message to user
-   * if(ctrlErr.componentMethod == 'register'){
-   *   if(ctrlErr.subErr.componentMethod == 'createSubscriber'){
-   *     if(ctrlErr.subErr.SubError.type == 'Unique Key Violation' 
-   *         && ctrlErr.subErr.SubError.tableColumn == 'email' ){
-   *           ctrlErr.userMessage = msg.EmailInUse();
-   *     }
-   *   }
-   * }
-   */
-  return ctrlErr;
-}
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
   var current, token, hash, that;
@@ -136,11 +122,15 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
                                 token, function(err, succ) {
     var subject, body, e;
     if(err) {
-      e = controllerErrorHandler('register', err);
-      console.log(JSON.stringify(e));
+      e = localErrorHandler('register', err);
+      // need to make conditional more specific
+      if(e.pub == 'QueryFailure'){
+        e.pub = msg.existingEmail();
+      } else if(e.pub == 'ServerFailure'){
+        e.pub = msg.noDatabaseConnection();
+      } 
       callback(e);
     } else {
-      that.logger.info('Registered Subscriber: ' + email);
       subject = '';
       body = that.template.render('verification', {
         baseUrl: that.server.baseUrl(),
