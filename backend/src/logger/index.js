@@ -11,9 +11,10 @@ var fmt = require('../utils/formatter');
 var name = 'logger';
 
 function Logger(config) {
+  this.config = config[name];
 
   // initialize logger
-  this.log = bunyan.createLogger({name: config["logger"].name});
+  this.log = bunyan.createLogger({name: this.config.name});
 
 }
 exports.Logger = Logger;
