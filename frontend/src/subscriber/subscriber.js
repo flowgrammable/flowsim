@@ -3,14 +3,14 @@
 
 angular.module('fgSubscriber', ['ngResource'])
   .factory('Subscriber', function($resource) {
-    return $resource('/api/subscriber/:op', 
-      {}, {
-        { register: { method: 'POST' }, { op: 'register' } },
-        { verify:   { method: 'POST' }, { op: 'verify' } },
-        { forgot:   { method: 'POST' }, { op: 'forgot' } },
-        { login:    { method: 'POST' }, { op: 'login' } },
-        { logout:   { method: 'POST' }, { op: 'logout' } },
-        { update:   { method: 'POST' }, { op: 'update' } }
+    return $resource('/api/subscriber/:op', {}, 
+      {
+        register: { method: 'POST', params: { op: 'register' } },
+        verify:   { method: 'POST', params: { op: 'verify' } },
+        forgot:   { method: 'POST', params: { op: 'forgot' } },
+        login:    { method: 'POST', params: { op: 'login' } },
+        logout:   { method: 'POST', params: { op: 'logout' } },
+        update:   { method: 'POST', params: { op: 'update' } }
       });
   })
   .controller('fgSubscriberCtrl', function($scope, Subscriber) {
