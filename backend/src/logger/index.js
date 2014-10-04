@@ -11,6 +11,7 @@ var fmt = require('../utils/formatter');
 var name = 'logger';
 
 function Logger(config) {
+  // get our module configuration
   this.config = config[name];
 
   // initialize logger
