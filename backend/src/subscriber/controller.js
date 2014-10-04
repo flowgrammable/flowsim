@@ -146,8 +146,8 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
         baseUrl: that.server.baseUrl(),
         token: token
       });
-   //   callback(null, 'success bitch');
-      that.mailer.send(email, subject, body, callback);
+      that.mailer.send(email, subject, body);
+      callback(null, msg.success());
     }
   });
 };

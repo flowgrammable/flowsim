@@ -71,7 +71,7 @@ function MailerError(method, err){
  * @param {genericCallback} callback - a generic callback for mail results
  *
  */
-Mailer.prototype.send = function(dst, sub, body, callback) {
+Mailer.prototype.send = function(dst, sub, body) {
   var that = this;
   this.mailer.messages().send(
     {
