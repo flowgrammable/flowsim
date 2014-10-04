@@ -4,30 +4,33 @@
 var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var pwdPattern = /[a-zA-Z0-9_]{8,}/;
 
+function resetField(scope, name) {
+  scope[name].Err = false;
+  scope[name].Msg = '';
+}
+
+function checkEmail(scope, name) {
+  if(!emailPattern.test(scope[name])) {
+    scope[name].Err = true;
+    scope[name].Msg = 'Not an email address';
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function checkPassword(scope, name) {
+  if(!pwdPattern.test(scope[name])) {
+    scope[name].Error = true;
+    scope[name].Msg = 'Bad password';
+    return false;
+  } else {
+    return true;
+  }
+}
+
 angular.module('fgSubscriber', ['ngResource'])
-  .factory('Subscriber', function($resource) {
-    var _x_access_token, _ops;
-    _x_access_token = '';
-    _ops = $resource('/api/subscriber/:op', {
-        op: '@op'
-      }, {
-        'register': { method: 'POST', params: { op: 'register' } }, 
-        'verify':   { method: 'POST', params: { op: 'verify' } },
-        'forgot':   { method: 'POST', params: { op: 'forgot' } },
-        'login':    { method: 'POST', params: { op: 'login' } },
-        'logout':   { method: 'POST', params: { op: 'logout' },
-                      headers: { 'x-access-token': _x_access_token }
-        },
-        'update':   { method: 'POST', params: { op: 'update' },
-                      headers: { 'x-access-token': _x_access_token }
-        }
-      });
-    return {
-      x_access_token: _x_access_token,
-      ops: _ops
-    };
-  })
-  .controller('fgSubAuth', function($scope, Subscriber) {
+  .controller('fgSubAuth', function($scope, SubscriberRest) {
 
     $scope.logout = function() {
       Subscriber.ops.logout({}, function(data) {
@@ -39,16 +42,15 @@ angular.module('fgSubscriber', ['ngResource'])
     };
 
     $scope.update = function() {
-      if(!pwdPattern.test($scope.oldPassword)) {
-         $scope.pwdError = true;
-          $scope.pwdMsg = 'Bad password';
-      } else if(!pwdPattern.test($scope.newPassword1)) {
-         $scope.pwdError = true;
-         $scope.pwdMsg = 'Bad password';
-      } else if($scope.newPassword1 !== $scope.newPassword2) {
-         $scope.pwdError = true;
-         $scope.pwdMsg = 'Bad password';
-      } else {
+        resetField($scope, 'oldPassword');
+        resetField($scope, 'newPassword1');
+        resetField($scope, 'newPassword2');
+
+      if(checkPassword($scope, 'oldPassword') &&
+         checkPassword($scope, 'newPassword1') &&
+         checkPassword($scope, 'newPassword2') &&
+         ($scope.newPassword1 === $scope.newPassword2)) {
+
         Subscriber.ops.update({
           oldPassword: $scope.oldPassword,
           newPassword: $scope.newPassword1
@@ -61,16 +63,15 @@ angular.module('fgSubscriber', ['ngResource'])
     };
 
   })
-  .controller('fgSubLogin', function($scope, Subscriber) {
+  .controller('fgSubLogin', function($scope, SubscriberRest) {
 
     $scope.login = function() {
-      if(!emailPattern.test($scope.email)) {
-         $scope.emailError = true;
-         $scope.emailMsg = 'Invalid email address';
-      } else if(!pwdPattern.test($scope.password)) {
-         $scope.pwdError = true;
-         $scope.pwdMsg = 'Bad password';
-      } else {
+        resetField($scope, 'email');
+        resetField($scope, 'password');
+
+      if(checkEmail($scope, 'email') &&
+         checkPassword($scope, 'password')) {
+
         Subscriber.ops.login({
           email: $scope.email,
           password: $scope.password
@@ -84,10 +85,7 @@ angular.module('fgSubscriber', ['ngResource'])
     };
     
     $scope.forgot = function() {
-      if(!emailPattern.test($scope.email)) {
-        $scope.emailError = true;
-        $scope.emailMsg = 'Invalid email address';
-      } else {
+      if(checkEmail($scope, 'email')) {
         Subscriber.ops.forgot({
           email: $scope.email
         }, function(data) {
@@ -99,7 +97,7 @@ angular.module('fgSubscriber', ['ngResource'])
     };
 
   })
-  .controller('fgSubRegister', function($scope, Subscriber) {
+  .controller('fgSubRegister', function($scope, SubscriberRest) {
 
     $scope.email     = '';
     $scope.password1 = '';
@@ -108,31 +106,15 @@ angular.module('fgSubscriber', ['ngResource'])
     $scope.success = false;
     $scope.failure = false;
 
-    function reset() {
-      $scope.emailError = false;
-      $scope.emailMsg = '';
-
-      $scope.pwd1Error = false;
-      $scope.pwd1Msg = '';
-  
-      $scope.pwd2Error = false;
-      $scope.pwd2Msg = '';
-    }
-
     $scope.register = function() {
       // Reset any existing error indications
-      reset();
+      resetField($scope, 'email');
+      resetField($scope, 'password1');
+      resetField($scope, 'password2');
       // Test the input for validity
-      if(!emailPattern.test($scope.email)) {
-        $scope.emailError = true;
-        $scope.emailMsg = 'Invalid email address';
-      } else if(!pwdPattern.test($scope.password1)) {
-        $scope.pwd1Error = true;
-        $scope.pwd1Msg = 'Bad password';
-      } else if($scope.password1 !== $scope.password2) {
-        $scope.pwd2Error = true;
-        $scope.pwd2Msg = 'Passwords do not match';
-      } else {
+      if(checkEmail($scope, 'email') &&
+         checkPassword($scope, 'password1') &&
+         checkPassword($scope, 'password2')) {
         // Create a new subscriber
         Subscriber.ops.register({
           email:    $scope.email,
