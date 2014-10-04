@@ -1,7 +1,7 @@
 
 (function(){
 
-var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-     9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var pwdPattern = /[a-zA-Z0-9_]{8,}/;
 
 angular.module('fgSubscriber', ['ngResource'])
@@ -40,8 +40,14 @@ angular.module('fgSubscriber', ['ngResource'])
 
     $scope.update = function() {
       if(!pwdPattern.test($scope.oldPassword)) {
-      } else if(!pwdPattern.test($scope.newPassword1) {
+         $scope.pwdError = true;
+          $scope.pwdMsg = 'Bad password';
+      } else if(!pwdPattern.test($scope.newPassword1)) {
+         $scope.pwdError = true;
+         $scope.pwdMsg = 'Bad password';
       } else if($scope.newPassword1 !== $scope.newPassword2) {
+         $scope.pwdError = true;
+         $scope.pwdMsg = 'Bad password';
       } else {
         Subscriber.ops.update({
           oldPassword: $scope.oldPassword,
@@ -51,17 +57,17 @@ angular.module('fgSubscriber', ['ngResource'])
           } else {
           }
         });
-      };
-    }
+      }
+    };
 
   })
   .controller('fgSubLogin', function($scope, Subscriber) {
 
     $scope.login = function() {
-      if(!emailPattern.test($scope.email) {
+      if(!emailPattern.test($scope.email)) {
          $scope.emailError = true;
          $scope.emailMsg = 'Invalid email address';
-      } else if(!pwdPattern.test($scope.password) {
+      } else if(!pwdPattern.test($scope.password)) {
          $scope.pwdError = true;
          $scope.pwdMsg = 'Bad password';
       } else {
@@ -78,7 +84,7 @@ angular.module('fgSubscriber', ['ngResource'])
     };
     
     $scope.forgot = function() {
-      if(!emailPattern.test($scope.email) {
+      if(!emailPattern.test($scope.email)) {
         $scope.emailError = true;
         $scope.emailMsg = 'Invalid email address';
       } else {
