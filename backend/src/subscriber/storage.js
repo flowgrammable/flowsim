@@ -79,6 +79,16 @@ function errHandler(callback, err, table) {
   }
 }
 
+
+function storageErrorHandler(method, err){
+  var storageErr = {};
+  storageErr.module = 'Subscriber';
+  storageErr.component = 'Storage';
+  storageErr.componentMethod = method;
+  storageErr.subError = err;
+  return storageErr;
+}
+
 /**
  * Create a new row in the subscriber table.
  *
@@ -101,8 +111,8 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     status: 'CREATED'
   }, function(err, result) {
     if(err) {
-      that.logger.error(err);
-      errHandler(callback, err, 'subscriber');
+      callback(storageErrorHandler('createSubscriber', err) );
+      //errHandler(callback, err, 'subscriber');
     } else {
       callback(null, result);
     }

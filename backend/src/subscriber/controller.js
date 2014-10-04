@@ -104,19 +104,41 @@ Controller.prototype.logout = function(token, callback) {
   this.storage.deleteSession(token, callback);
 };
 
+function controllerErrorHandler(method, subErr){
+  var ctrlErr = {};
+  ctrlErr.module = 'Subscriber';
+  ctrlErr.component = 'Controller';
+  ctrlErr.componentMethod = method;
+  ctrlErr.subError = subErr;
+
+  /**
+   * Filter controller error to return friendly message to user
+   * if(ctrlErr.componentMethod == 'register'){
+   *   if(ctrlErr.subErr.componentMethod == 'createSubscriber'){
+   *     if(ctrlErr.subErr.SubError.type == 'Unique Key Violation' 
+   *         && ctrlErr.subErr.SubError.tableColumn == 'email' ){
+   *           ctrlErr.userMessage = msg.EmailInUse();
+   *     }
+   *   }
+   * }
+   */
+  return ctrlErr;
+}
+
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
   var current, token, hash, that;
   current = new Date();
   token = uuid.v4();
   hash = bcrypt.hashSync(pwd, 10);
   that = this;
-  console.log('registering: ' + email);
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
                                 token, function(err, succ) {
-    var subject, body;
+    var subject, body, e;
     if(err) {
-      callback(err);
+      e = controllerErrorHandler('register', err);
+      console.log(JSON.stringify(e));
+      callback(e);
     } else {
       that.logger.info('Registered Subscriber: ' + email);
       subject = '';
@@ -124,7 +146,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
         baseUrl: that.server.baseUrl(),
         token: token
       });
-      that.mailer.mail(email, subject, body, callback);
+      that.mailer.send(email, subject, body, callback);
     }
   });
 };

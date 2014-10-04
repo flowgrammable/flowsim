@@ -23,6 +23,7 @@ function Subscriber(ctx) {
   this.view       = new v.View(this.controller, ctx.logger);
 
   this.logger = ctx.logger;
+
 }
 exports.Subscriber = Subscriber;
 

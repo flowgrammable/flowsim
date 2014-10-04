@@ -11,13 +11,27 @@ var fmt = require('../utils/formatter');
 
 var name = 'mailer';
 
+/**
+ * Wraps a mailgun object
+ *
+ * @constructor
+ * @param {Object} config        - a mailer configuration object
+ * @param {Object} logger        - a logger object
+ *
+ */
 function Mailer(config, logger) {
   // Grab a configuration if present ...
   // ... otherwise throw an error
   this.config = config[name];
   if(!this.config) {
     // FIXME: add a better error mechanism
-    throw 'Mailer missing config';
+    throw new Error('missing mailer config');
+  }
+  if(!this.config.apiKey){
+    throw new Error('missing mailgun api key');
+  }
+  if(!this.config.domain){
+    throw new Error('missing mailgun domain');
   }
 
   this.logger = logger.log.child({module: 'mailer'});
@@ -26,8 +40,38 @@ function Mailer(config, logger) {
 }
 exports.Mailer = Mailer;
 
+function MailerError(method, err){
+  var mailErr = {};
+  mailErr.module = 'Mailer';
+  mailErr.method = method;
+  mailErr.subError = err;
+  switch(err.statusCode){
+    case '401':
+      mailErr.description = 'Invalid mailgun credentials';
+      mailErr.apiKey = Mailer.config.apiKey;
+      mailErr.domain = Mailer.config.domain;
+      break;
+    default:
+      mailErr.description = 'Unknown Error';
+      break;
+  }
+  return mailErr;
+  
+  
+}
 
-Mailer.prototype.mail = function(dst, sub, body, callback) {
+
+/**
+ * Take a subscriber email address, subject, and body
+ * and send message
+ *
+ * @param {String} dst               - subscriber email address
+ * @param {String} sub               - email subject
+ * @param {String} body              - email body
+ * @param {genericCallback} callback - a generic callback for mail results
+ *
+ */
+Mailer.prototype.send = function(dst, sub, body, callback) {
   var that = this;
   this.mailer.messages().send(
     {
@@ -37,9 +81,8 @@ Mailer.prototype.mail = function(dst, sub, body, callback) {
       text: body
     }, function(err, body){
       if(err) {
-        that.logger.error(err);
-        //console.log(err);           <----- once you employ bunyan ... no need to use console
-        callback(err);
+        //that.logger.error(e); 
+        callback(MailerError('send', err));
       } else {
         callback(null, body);
       }

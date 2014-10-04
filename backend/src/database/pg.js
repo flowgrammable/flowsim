@@ -38,6 +38,34 @@ function Database(config, logger) {
 }
 exports.Database = Database;
 
+
+function dbErrorHandler(err, meta){
+  //Handle Errors and return a dBError object
+  var dbErr = {};
+  dbErr.module = 'Database';
+  dbErr.method = '';
+  dbErr.description = '';
+  dbErr.pgError = err;
+  if(meta){
+    dbErr.meta = meta;
+  }
+  switch(err.code){
+    case '23505':
+      // Handle Duplicate Error
+      dbErr.description = 'Foreign Key violation';
+      break;
+    case 'ECONNREFUSED':
+      // Handle Connection Error
+      // Maybe try to reconnect
+      dbErr.description = 'Could not connect to DB';
+      break;
+    default:
+      dbErr.description = 'Unknown error';
+      break;
+  }
+  return dbErr; 
+
+}
 /**
  * Close all connections in the pg connection pool.
  *
@@ -58,6 +86,7 @@ Database.prototype.close = function() {
 Database.prototype.queryArgs = function(qString, args, callback) {
   pg.connect(this.setup, function(err, client, done) {
     if(err) {
+      console.log('error from pg connect');
       callback(err);
     } else {
       client.query(qString, args, function(err, result) {
@@ -87,7 +116,7 @@ Database.prototype.queryStmt = function(qString, callback) {
     } else {
       client.query(qString, function(err, result) {
         if(err) {
-          callback(err);
+          callback(dbErrorHandler(err, {query: qString}));
         } else {
           callback(null, result.rows);
         }
@@ -193,7 +222,14 @@ function mkInsert(table, fvPairs) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.insert = function(table, fvPairs, callback) {
-  this.queryStmt(mkInsert(table, fvPairs), callback);
+  this.queryStmt(mkInsert(table, fvPairs), function(err, result){
+    if(err){
+      err.method = 'Insert';
+      callback(err);
+    } else {  
+      callback();
+    }
+  });
 };
 
 /**
