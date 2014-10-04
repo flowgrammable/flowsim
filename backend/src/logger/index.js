@@ -20,8 +20,12 @@ function Logger(config) {
 }
 exports.Logger = Logger;
 
-Logger.prototype.addlog = function(message) {
+Logger.prototype.addLog = function(message) {
   this.log.info(message);
+};
+
+Logger.prototype.addChild = function(child){
+  this.log.child({module: child});
 };
 
 })();

@@ -17,12 +17,11 @@ var name = 'subscriber';
  * @param {module:logger-Logger} ctx.logger       - logger engine
  */
 function Subscriber(ctx) {
+  this.logger = ctx.logger.log.child({module: 'subscriber'});
   this.storage    = new s.Storage(ctx.database, ctx.logger);
   this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template, 
-                                     ctx.server, ctx.logger);
-  this.view       = new v.View(this.controller, ctx.logger);
-
-  this.logger = ctx.logger;
+                                     ctx.server, this.logger);
+  this.view       = new v.View(this.controller, this.logger);
 
 }
 exports.Subscriber = Subscriber;

@@ -84,7 +84,6 @@ Controller.prototype.authorize = function(token, callback) {
  */
 Controller.prototype.login = function(email, pwd, callback) {
   var that = this;
-  console.log('login: ' + email);
   this.storage.getSubscriberByEmail(email, function(err, succ) {
     var token, expireTime;
     if(err) { 
@@ -129,9 +128,10 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
       } else if(e.pub == 'ServerFailure'){
         e.pub = msg.noDatabaseConnection();
       } 
+      that.logger.error({error: e});
       callback(e);
     } else {
-      subject = '';
+      subject = 'Flowsim Verify Email Address';
       body = that.template.render('verification', {
         baseUrl: that.server.baseUrl(),
         token: token

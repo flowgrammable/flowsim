@@ -68,8 +68,8 @@ function logout(view) {
 
 function register(view) {
   return function(req, res, next) {
-    var logMessage = {ip_address: req.connection.remoteAddress, body: req.body};
-    view.logger.info({message: logMessage});
+    var logMessage = 'Registration Request from: ' + req.connection.remoteAddress;
+    view.logger.info(logMessage);
     var responder = util.Responder(res);
     if(!req.body.email) {
       responder(msg.missingEmail());
@@ -128,11 +128,11 @@ function update(view) {
   };
 }
 
-function View(c, logger) {
+function View(c, subscriberLogger) {
 
   this.controller = c;
 
-  this.logger = logger;
+  this.logger = subscriberLogger.child({component: 'view'});
 
   this.services = [
     {

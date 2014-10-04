@@ -34,7 +34,7 @@ function Mailer(config, logger) {
     throw new Error('missing mailgun domain');
   }
 
-  this.logger = logger.log.child({module: 'mailer'});
+  this.logger = logger; 
   this.mailer = mailgun({apiKey: this.config.apiKey, domain: this.config.domain});
 
 }
@@ -73,6 +73,7 @@ function MailerError(method, err){
  */
 Mailer.prototype.send = function(dst, sub, body) {
   var that = this;
+  var logString = sub + ' message sent to: ' + dst;
   this.mailer.messages().send(
     {
       from: this.config.user,
@@ -81,10 +82,9 @@ Mailer.prototype.send = function(dst, sub, body) {
       text: body
     }, function(err, body){
       if(err) {
-        //that.logger.error(e); 
-        callback(MailerError('send', err));
+        that.logger.log.error(MailerError('send', err));
       } else {
-        callback(null, body);
+        that.logger.log.info(logString);
       }
   });
 

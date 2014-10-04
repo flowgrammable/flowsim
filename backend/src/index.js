@@ -41,7 +41,7 @@ var mods = [
     mailer: mail,
     template: template,
     server: restServer,
-    logger: logger.log.child({module: 'subscriber'})
+    logger: logger
   })
 ];
 
