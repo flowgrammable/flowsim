@@ -6,7 +6,9 @@ angular.module('fgSubscriber', ['ngResource'])
     return $resource('/api/subscriber/:op', {
         op: '@op'
       }, {
-        'register': { method: 'POST', params: { op: 'register' } },
+        'register': { method: 'POST', params: { op: 'register' }, headers: {
+          'x-access-token': 'let-me-in'
+        }},
         'verify':   { method: 'POST', params: { op: 'verify' } },
         'forgot':   { method: 'POST', params: { op: 'forgot' } },
         'login':    { method: 'POST', params: { op: 'login' } },
