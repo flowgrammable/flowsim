@@ -1,6 +1,9 @@
 
 (function(){
 
+var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-     9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var pwdPattern = /[a-zA-Z0-9_]{8,}/;
+
 angular.module('fgSubscriber', ['ngResource'])
   .factory('Subscriber', function($resource) {
     var _x_access_token, _ops;
@@ -24,16 +27,80 @@ angular.module('fgSubscriber', ['ngResource'])
       ops: _ops
     };
   })
-  .controller('fgSubscriberCtrl', function($scope, Subscriber) {
+  .controller('fgSubAuth', function($scope, Subscriber) {
 
-    var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    var pwdPattern = /[a-zA-Z0-9_]{8,}/;
+    $scope.logout = function() {
+      Subscriber.ops.logout({}, function(data) {
+        Subscriber.x_access_token = '';
+        if(data.error) {
+        } else {
+        }
+      });
+    };
+
+    $scope.update = function() {
+      if(!pwdPattern.test($scope.oldPassword)) {
+      } else if(!pwdPattern.test($scope.newPassword1) {
+      } else if($scope.newPassword1 !== $scope.newPassword2) {
+      } else {
+        Subscriber.ops.update({
+          oldPassword: $scope.oldPassword,
+          newPassword: $scope.newPassword1
+        }, function(data) {
+          if(data.error) {
+          } else {
+          }
+        });
+      };
+    }
+
+  })
+  .controller('fgSubLogin', function($scope, Subscriber) {
+
+    $scope.login = function() {
+      if(!emailPattern.test($scope.email) {
+         $scope.emailError = true;
+         $scope.emailMsg = 'Invalid email address';
+      } else if(!pwdPattern.test($scope.password) {
+         $scope.pwdError = true;
+         $scope.pwdMsg = 'Bad password';
+      } else {
+        Subscriber.ops.login({
+          email: $scope.email,
+          password: $scope.password
+        }, function(data) {
+          if(data.error) {
+          } else {
+            Subscriber.x_access_token = data.token;
+          }
+        });
+      }
+    };
+    
+    $scope.forgot = function() {
+      if(!emailPattern.test($scope.email) {
+        $scope.emailError = true;
+        $scope.emailMsg = 'Invalid email address';
+      } else {
+        Subscriber.ops.forgot({
+          email: $scope.email
+        }, function(data) {
+          if(data.error) {
+          } else {
+          }
+        });
+      }
+    };
+
+  })
+  .controller('fgSubRegister', function($scope, Subscriber) {
+
+    $scope.email     = '';
+    $scope.password1 = '';
+    $scope.password2 = '';
 
     $scope.success = false;
     $scope.failure = false;
-    $scope.emailAddr = '';
-    $scope.pwd1 = '';
-    $scope.pwd2 = '';
 
     function reset() {
       $scope.emailError = false;
@@ -46,62 +113,24 @@ angular.module('fgSubscriber', ['ngResource'])
       $scope.pwd2Msg = '';
     }
 
-    $scope.forgot = function() {
-      Subscriber.ops.forgot({
-        email: $scope.email
-      }, function(data) {
-        if(data.error) {
-        } else {
-        }
-      });
-    };
-
-    $scope.login = function() {
-      Subscriber.ops.login({
-        email: $scope.email,
-        password: $scope.password
-      }, function(data) {
-        if(data.error) {
-        } else {
-          Subscriber.x_access_token = data.token;
-        }
-      });
-    };
-
-    $scope.logout = function() {
-      Subscriber.ops.logout({}, function(data) {
-        Subscriber.x_access_token = '';
-        if(data.error) {
-        } else {
-        }
-      });
-    };
-
-    $scope.update = function() {
-      Subscriber.ops.update({
-        password: $scope.password
-      }, function(data) {
-        if(data.error) {
-        } else {
-        }
-      });
-    };
-
     $scope.register = function() {
+      // Reset any existing error indications
       reset();
-      if(!emailPattern.test($scope.emailAddr)) {
+      // Test the input for validity
+      if(!emailPattern.test($scope.email)) {
         $scope.emailError = true;
         $scope.emailMsg = 'Invalid email address';
-      } else if(!pwdPattern.test($scope.pwd1)) {
+      } else if(!pwdPattern.test($scope.password1)) {
         $scope.pwd1Error = true;
         $scope.pwd1Msg = 'Bad password';
-      } else if($scope.pwd1 !== $scope.pwd2) {
+      } else if($scope.password1 !== $scope.password2) {
         $scope.pwd2Error = true;
         $scope.pwd2Msg = 'Passwords do not match';
       } else {
+        // Create a new subscriber
         Subscriber.ops.register({
-          email:    $scope.emailAddr,
-          password: $scope.pwd1
+          email:    $scope.email,
+          password: $scope.password1
         }, function(data) {
           if(data.error) {
             console.log(data.error);
