@@ -109,7 +109,7 @@ finally return to the top level directory.
 
 - cd frontend
 - npm install
-- grunt init
+- grunt init -or- grunt init-nb (no browser)
 - cd ..
 
 ##Build Operations
@@ -147,10 +147,10 @@ to reliably see your changes immediately.
 
 ###Common npm Operations
 
-- Run all local unit tests: npm test
-- Update local npm dependencies: npm update
-- Add a new npm runtime depdendency: npm install --save <dep name>
-- Remove an npm runtime depdenency: npm uninstall --save <dep name>
+- Run all local unit tests:             npm test
+- Update local npm dependencies:        npm update
+- Add a new npm runtime depdendency:    npm install --save <dep name>
+- Remove an npm runtime depdenency:     npm uninstall --save <dep name>
 - Add a new npm development dependency: npm install --dev-save <dev dep name>
 - Remove an npm development dependency: npm uninstall --dev-save <dev dep name>
 
@@ -176,6 +176,6 @@ database connection information and credentials.
 ###Starting the backend service
 You can run either the debug or release version of the frontend. Remember the
 PEM pass phrase is 'flowsim'.
--debug: ./backend/src/index.js -c `pwd`/config.json -d `pwd`/frontend/debug
--release: ./backend/src/index.js -c `pwd`/config.json -d `pwd`/frontend/release
-- backend/src/index.js
+-debug: ./backend/src/index.js -c \`pwd\`/config.json -d \`pwd\`/frontend/debug
+-release: ./backend/src/index.js -c \`pwd\`/config.json -d \`pwd\`/frontend/release
+

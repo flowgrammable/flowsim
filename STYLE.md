@@ -5,9 +5,11 @@
    helps provide a uniform mechanism for all of our files/modules to have local
    scope and not leak symbols into a calling context.
 
+    ```
     (function(){
       ...
     })();
+    ```
 
 ##2. Define callbacks for asynchronous use
 
@@ -15,6 +17,7 @@
    parameter for error passing. Only use the second and above parameters for
    passing in successful results.
 
+    ```
     function(err, result) {
       if(err) {
         //handle the error
@@ -22,6 +25,7 @@
         //hanlde the result
       }
     }
+    ```
 
 ##3. Use callbacks appropriately
 
