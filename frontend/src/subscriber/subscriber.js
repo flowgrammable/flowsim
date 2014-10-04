@@ -3,7 +3,15 @@
 
 angular.module('fgSubscriber', ['ngResource'])
   .factory('Subscriber', function($resource) {
-    return $resource('/api/subscriber/register');
+    return $resource('/api/subscriber/:op', 
+      {}, {
+        { register: { method: 'POST' }, { op: 'register' } },
+        { verify:   { method: 'POST' }, { op: 'verify' } },
+        { forgot:   { method: 'POST' }, { op: 'forgot' } },
+        { login:    { method: 'POST' }, { op: 'login' } },
+        { logout:   { method: 'POST' }, { op: 'logout' } },
+        { update:   { method: 'POST' }, { op: 'update' } }
+      });
   })
   .controller('fgSubscriberCtrl', function($scope, Subscriber) {
 
@@ -38,11 +46,18 @@ angular.module('fgSubscriber', ['ngResource'])
         $scope.pwd2Error = true;
         $scope.pwd2Msg = 'Passwords do not match';
       } else {
-        $scope.success = true;
-        var sub = new Subscriber();
-        sub.email = $scope.emailAddr;
-        sub.password = $scope.pwd1;
-        sub.save();
+        var result = Subscriber.register({
+          email:    $scope.emailAddr,
+          password: $scope.pwd1
+        }, function(value, resHdrs) {
+          console.log('success');
+          console.log(value);
+          console.log(resHdrs);
+          $scope.success = true;
+        }, function(res) {
+          console.log('error');
+          console.log(res);
+        });
       }
     };
 });
