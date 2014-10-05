@@ -13,7 +13,7 @@ function isValidPassword(p) {
 
 function authorize(view) {
   return function(req, res, next) {
-    var responder = util.Responder(res);
+    var responder = util.Responder(res, next);
 
     // if there is an access token attempt validation
     if(req.headers['x-access-token']) {
@@ -42,7 +42,7 @@ function authorize(view) {
 
 function login(view) {
   return function(req, res, next) {
-    var responder = util.Responder(res);
+    var responder = util.Responder(res, next);
     if(!req.body.email) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
@@ -61,16 +61,14 @@ function login(view) {
 
 function logout(view) {
   return function(req, res, next) {
-    var responder = util.Responder(res);
+    var responder = util.Responder(res, next);
     view.controller.logout(req.session_id, responder);
   };
 }
 
 function register(view) {
   return function(req, res, next) {
-    var logMessage = 'Registration Request from: ' + req.connection.remoteAddress;
-    view.logger.info(logMessage);
-    var responder = util.Responder(res);
+    var responder = util.Responder(res, next);
     if(!req.body.email) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
@@ -88,7 +86,7 @@ function register(view) {
 
 function verify(view) {
   return function(req, res, next) {
-    var responder = util.Responder(res);
+    var responder = util.Responder(res, next);
     if(!req.body.token) {
       responder(msg.missingToken());
     } else {
@@ -99,7 +97,7 @@ function verify(view) {
 
 function forgot(view) {
   return function(req, res, next) {
-    var responder = util.Responder(res);
+    var responder = util.Responder(res, next);
     if(!req.body.email) {
       responder(msg.missingEmail());
     } else if(!validator.isEmail(req.body.email)) {
@@ -112,7 +110,7 @@ function forgot(view) {
 
 function update(view) {
   return function(req, res, next) {
-    var responder = util.Responder(res);
+    var responder = util.Responder(res, next);
     if(!req.body.oldPassword) {
       responder(msg.missingPassword());
     } else if(!isValidPassword(req.body.oldPassword)) {

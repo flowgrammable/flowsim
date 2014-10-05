@@ -180,6 +180,13 @@ Server.prototype.run = function() {
     res.end(notFound);
   });
 
+  // log request and response after the response has been sent
+  this.server.on('after', restify.auditLogger({
+      log: this.logger.log,
+      // log request and response body 
+      body: true
+  }));
+
   if(this.http) {
     this.http.listen(this.config.open_port, this.config.address);
   }

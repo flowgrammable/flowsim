@@ -139,6 +139,28 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
 };
 
 /**
+ * Retrieve a subscriber row by subscriber_id.
+ *
+ * @param {String} subscriber_id - subscriber id
+ * @param {storageCallback} callback - 
+ */
+Storage.prototype.getSubscriberById = function(subscriber_id, callback) {
+  this.database.select('subscriber', {
+    id: { '=': subscriber_id }
+  }, function(err, result) {
+    if(err) {
+      errHandler(callback, err, 'subscriber');
+    } else {
+      if(result.length === 0) {
+        callback(msg.unknownVerificationToken());
+      } else {
+        callback(null, result[0]);
+      }
+    }
+  });
+};
+
+/**
  * Returns a subscriber row with the specified email address.
  *
  * @param {String} email - email address
@@ -194,17 +216,17 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
   });
 };
 
-Storage.prototype.updateSubscriberPassword = function(email, password, 
+Storage.prototype.updateSubscriberPassword = function(subscriber_id, password, 
   callback) {
   this.database.update('subscriber', {
     password: password
   }, {
-    email: { '=': email }
+    id: { '=': subscriber_id }
   }, function(err, result) {
     if(err) {
       
     } else {
-      callback(null, result);
+      callback(null, msg.success());
     }
   });
 };

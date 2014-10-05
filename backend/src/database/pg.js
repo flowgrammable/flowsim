@@ -51,7 +51,7 @@ function dbError(method, err, meta){
 
 function localErrorHandler(method, err, meta){
   //Construct error object
-  var e = dbError('Database', method, err, meta); 
+  var e = dbError(method, err, meta); 
   switch(err.code){
     case '23505':
       // Handle Unique Key Violation

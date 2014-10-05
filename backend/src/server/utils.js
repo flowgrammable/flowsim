@@ -57,13 +57,16 @@ function _tag(err, success) {
  * @param {Object} res - a response object
  * @return {Function} an asynchronous error/success function
  */
-function Responder(res) {
+function Responder(res, nxt) {
   var response = res;
+  var next = nxt;
   return function(err, result) {
     response.writeHead(200, {
       'Content-Type': 'application/json'
     });
     response.end(JSON.stringify(_tag(err, result)));
+    // added next so 'after' event will fire   
+    next();
   };
 }
 exports.Responder = Responder;

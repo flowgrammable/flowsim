@@ -18,11 +18,12 @@ cmd
   .option('--update <email>', 'Change the pwd of an account')
   .option('--password <password>', 'password for account')
   .option('--newPassword <newPassword>', 'password for account')
+  .option('--token <token>', 'x-access-token')
   .parse(process.argv);
 
 function query(name, headers, body, callback) {
   request({
-    uri: 'https://localhost:3000/api/subscriber/' + name,
+    uri: 'https://127.0.0.1:8081/api/subscriber/' + name,
     method: 'POST',
     headers: headers,
     rejectUnauthorized : false,
@@ -36,6 +37,7 @@ function register(email, password) {
     password: password
   }, function(err, res, body) {
     if(err) {
+      console.log('client cant connect to back');
       console.log(err);
     } else {
       console.log(body);
@@ -92,10 +94,12 @@ function logout(token) {
   });
 }
 
-function update(email, password, newPassword) {
-  query('update', {}, {
+function update(email, token, password, newPassword) {
+  query('update', {
+      'x-access-token': token
+  }, {
     email: email,
-    password: password,
+    oldPassword: password,
     newPassword: newPassword
   }, function(err, res, body) {
     if(err) {
@@ -116,8 +120,8 @@ if(cmd.register && cmd.password) {
   login(cmd.login, cmd.password);
 } else if(cmd.logout) {
   logout(cmd.logout);
-} else if(cmd.update && cmd.password && cmd.newPassword) {
-  update(cmd.update, cmd.password, cmd.newPassword);
+} else if(cmd.update && cmd.token && cmd.password && cmd.newPassword) {
+  update(cmd.update, cmd.token, cmd.password, cmd.newPassword);
 } else {
   console.log('Unknown arguments');
 }
