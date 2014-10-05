@@ -185,6 +185,7 @@ Server.prototype.run = function() {
   }
   this.server.listen(this.config.secure_port, this.config.address);
   this.running = true;
+  this.logger.log.info('Started Flowsim');
   return this;
 };
 

@@ -1,8 +1,8 @@
 {
   "mailer": {
-    "apiKey": "a",
-    "domain": "b",
-    "user": "c@c.com"
+    "apiKey": "",
+    "domain": "flowgrammable.org",
+    "user": "admin@flowgrammable.org"
   },
   "server": {
     "address": "127.0.0.1",
@@ -26,6 +26,10 @@
     "pwd": "flogdev"
   },
   "logger": {
-    "name": "flowsim"
+    "name": "flowsim",
+    "logLevel": "info",
+    "logPath": "log.txt",
+    "period" : "1w",
+    "count": 4
   }
 }

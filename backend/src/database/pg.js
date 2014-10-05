@@ -46,7 +46,7 @@ function dbError(method, err, meta){
     pub: {},
     error: err,
     meta: meta || {}
-  }
+  };
 }
 
 function localErrorHandler(method, err, meta){
