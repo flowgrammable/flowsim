@@ -10,12 +10,13 @@
       </div>
     </div>
   <p>
-  Now you can learn OpenFlow using a simple web browser. Flowsim is
-  designed to simulate a wide range of standards compliant OpenFlow
-  switch profiles. Choose a profile from any version of OpenFlow, or
-  customize your own profiles. Watch packets step through the OpenFlow
-  switch data plane's pipeline stages and learn exactly what is
-  happening.
+  Now you can learn the OpenFlow data plane using a simple web browser. Flowsim
+  is designed to simulate five different versions of the OpenFlow switch data
+  plane. Create a switch profile based on a specific version of OpenFlow.
+  Instantiate that profile and configure the resulting switch as a live OpenFlow
+  device. Step packets through each stage of the data plane of your switch, and 
+  see how the packet and your configuration interact at each stage in the
+  pipeline.
   </p>
 </div>
 
@@ -23,25 +24,25 @@
   <div class="col-md-4">
     <h3><i class="fa fa-long-arrow-right"></i> Datapath</h3>
     <p>
-    The datapath is the root abstraction of the OpenFlow data plane. All
-    other data plane abstractions are child properties of the OpenFlow datapath.
-    Control data plane fragmentation behavior by configurating the datapath.
+    Constrain a switch's data plane fragmentation and packet buffering abilities
+    through the datapath profile. Manipulate the data plane's fragmentation
+    handling behaviors through the datapath configuration.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-database"></i> Flow Table</h3>
     <p>
-    Control a flow tables default packet handling behavior through table
-    configuration. Restrict the number of flows and type of match, insturction,
-    and actions supported through a flow tables properties.
+    Determine a flow tables capabiltiess: number of flows, matching types,
+    and instruction/action types. Track table lookups and hit/miss counts.
+    Model a vendor's flow table with precise cababilities.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-list"></i> Flow</h3>
     <p>
-    Experiment with capturing and manipulating different flows through flow
-    configuration. Track additional state, view flow statistics, and manage the
-    lifecycle of a flow with this abstraction.
+    Experiment with capturing and manipulating packets through flow
+    configuration. Track flow statisitcs and manage flow lifecycle explicit 
+    explusion, inactivity timeouts, and absolute timeouts.
     </p>
   </div>
 </div>
