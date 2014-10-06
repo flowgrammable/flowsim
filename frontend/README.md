@@ -105,7 +105,6 @@ TODO
 ======
 
 1. Update site text
-  - landing page
   - registration page
   - registration success page
   - verification email content
@@ -115,9 +114,6 @@ TODO
   - login
   - logout
   - pwd reset
-3. Develop sprint-production process
-  - main branch should integrate git-pull requests
-  - update readme to account for this
 
 Other
 - add support for html2js to gruntfile.js

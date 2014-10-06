@@ -37,8 +37,12 @@ function Mailer(config, logger) {
   }
 
   this.logger = logger; 
-  this.mailer = mailgun({apiKey: this.config.apiKey, 
-                        domain: this.config.domain});
+
+  // construct the mailer
+  this.mailer = mailgun({
+    apiKey: this.config.apiKey, 
+    domain: this.config.domain
+  });
 
 }
 exports.Mailer = Mailer;
@@ -58,10 +62,7 @@ function MailerError(method, err, config){
       break;
   }
   return mailErr;
-  
-  
 }
-
 
 /**
  * Take a subscriber email address, subject, and body
@@ -77,8 +78,7 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
   var that = this;
   var e;
   var logString = sub + ' message sent to: ' + dst;
-  this.mailer.messages().send(
-    {
+  this.mailer.messages().send({
       from: this.config.user,
       to: dst,
       subject: sub,
@@ -98,6 +98,7 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
 
 Mailer.prototype.toFormatter = function(f) {
   f.begin('Mailer');
+  // should we actually out put our key? ... i've dont do this for https
   f.addPair('apiKey', this.config.apiKey);
   f.addPair('domain', this.config.domain);
   f.addPair('User', this.config.user);
