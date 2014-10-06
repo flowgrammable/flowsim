@@ -3,7 +3,7 @@
 
 var fs   = require('fs');
 var path = require('path');
-var view = require('../utils/view');
+var view = require('../binary/view');
 
 function File(name) {
   if(path.extname(name) !== '.pcap') {

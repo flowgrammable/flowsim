@@ -1,7 +1,7 @@
 
 (function(){
 
-var view = require('../utils/view');
+var view = require('../binary/view');
 
 function getModeFromMagic(mode, value) {
   var magic = parseInt('0xa1b2c3d4', 16);

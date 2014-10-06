@@ -1,8 +1,8 @@
 
 (function(){
 
-var view = require('../utils/view');
-var data   = require('../utils/data');
+var view = require('../binary/view');
+var data   = require('../binary/data');
 
 function Header() {
   this.sec    = null;
