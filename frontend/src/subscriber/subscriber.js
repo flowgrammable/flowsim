@@ -31,12 +31,10 @@ function checkPassword(scope, name) {
 
 angular.module('fgSubscriber', ['ngResource'])
   .factory('Subscriber', function($resource) {
-    var _x_access_token = '';
-    return {
-      get: function() { return _x_access_token; },
-      set: function(t) { _x_access_token = t; },
-      ops: $resource('/api/subscriber/:op', {
-          op: '@op'
+    return function(x_access_token) {
+      var _x_access_token = x_access_token || '';
+      return $resource('/api/subscriber/:op', {
+        op: '@op'
         }, {
           'register': { method: 'POST', params: { op: 'register' } },
           'verify':   { method: 'POST', params: { op: 'verify' } },
@@ -46,22 +44,26 @@ angular.module('fgSubscriber', ['ngResource'])
                         headers: { 'x-access-token': _x_access_token } },
           'update':   { method: 'POST', params: { op: 'update' },
                         headers: { 'x-access-token': _x_access_token } }
-        })
+        });
     };
   })
-  .controller('fgSubAuth', function($scope, Subscriber, $route) {
+  .controller('fgSubAuth', function($scope, Subscriber, $route, $rootScope) {
+
+    $scope.key = '';
+    $rootScope.$on('authenticated', function(event, data) {
+      $scope.key = data;
+    });
+    $rootScope.$on('unauthenticated', function() {
+      $scope.key = '';
+    });
 
     $scope.logout = function() {
-      console.log('lg: ' + Subscriber.get());
-      Subscriber.ops.logout({
-        headers: { 'x-access-token': Subscriber.get() }
-      }, {}, function(data) {
+      Subscriber($scope.key).logout({}, function(data) {
         if(data.error) {
           console.log('fail');
         } else {
           console.log('succ');
         }
-        Subscriber.set('');
         $scope.$emit('unauthenticated');
         $route.reload();
       });
@@ -77,7 +79,7 @@ angular.module('fgSubscriber', ['ngResource'])
          checkPassword($scope, 'newPassword2') &&
          ($scope.newPassword1 === $scope.newPassword2)) {
 
-        Subscriber.ops.update({
+        Subscriber().update({
           oldPassword: $scope.oldPassword,
           newPassword: $scope.newPassword1
         }, function(data) {
@@ -99,15 +101,14 @@ angular.module('fgSubscriber', ['ngResource'])
       if(checkEmail($scope, 'email') &&
          checkPassword($scope, 'password')) {
 
-        Subscriber.ops.login({
+        Subscriber().login({
           email: $scope.email,
           password: $scope.password
         }, function(data) {
           if(data.error) {
             $scope.loginFail = true;
           } else {
-            Subscriber.set(data.value['x-access-token']);
-            $scope.$emit('authenticated');
+            $scope.$emit('authenticated', data.value['x-access-token']);
             $location.path('/');
             $route.reload();
           }
@@ -119,7 +120,7 @@ angular.module('fgSubscriber', ['ngResource'])
       $scope.success = false;
       resetField($scope, 'email');
       if(checkEmail($scope, 'email')) {
-        Subscriber.ops.forgot({
+        Subscriber().forgot({
           email: $scope.email
         }, function(data) {
           if(data.error) {
@@ -150,7 +151,7 @@ angular.module('fgSubscriber', ['ngResource'])
          checkPassword($scope, 'password1') &&
          checkPassword($scope, 'password2')) {
         // Create a new subscriber
-        Subscriber.ops.register({
+        Subscriber().register({
           email:    $scope.email,
           password: $scope.password1
         }, function(data) {
@@ -182,7 +183,7 @@ angular.module('fgSubscriber', ['ngResource'])
     };
   })
   .controller('fgVerify', function($scope, $routeParams, Subscriber) {
-    Subscriber.ops.verify({
+    Subscriber().verify({
       token: $routeParams.token
     }, function(data) {
       if(data.error) {
