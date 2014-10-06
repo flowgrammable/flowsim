@@ -25,21 +25,23 @@
     <p>
     The datapath is the root abstraction of the OpenFlow data plane. All
     other data plane abstractions are child properties of the OpenFlow datapath.
-    The datapath maintains fragmentation handling and packet buffering. 
+    Control data plane fragmentation behavior by configurating the datapath.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-database"></i> Flow Table</h3>
     <p>
-    A flow table is a colleciton of flows that can be indexed in an independent
-    manner.
+    Control a flow tables default packet handling behavior through table
+    configuration. Restrict the number of flows and type of match, insturction,
+    and actions supported through a flow tables properties.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-list"></i> Flow</h3>
     <p>
-    A flow contains a set of matches, a set of instructions, and some metadata
-    that helps manage the behavior and lifecycle of the flow.
+    Experiment with capturing and manipulating different flows through flow
+    configuration. Track additional state, view flow statistics, and manage the
+    lifecycle of a flow with this abstraction.
     </p>
   </div>
 </div>
