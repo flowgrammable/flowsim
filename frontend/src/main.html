@@ -58,20 +58,17 @@
   <div class="col-md-4">
     <h3><i class="fa fa-crosshairs"></i> Match</h3>
     <p>
-    Matches are OpenFlow's fundamental packet classification mechanism.
-    Limit a switch's possible classifiers through a profile. Learn the
-    details of multi-table flow matching by single steping a packet
-    through the classification, or flow matching stage, of the OpenFlow
-    data plane pipeline.
+    Learn one of the key elements of OpenFlow by experimenting with fine and
+    course grain matching. Explore the matching limitations of each version of
+    OpenFlow and modeled vendor switches.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-bars"></i> Instruction</h3>
     <p>
-    Limit a switch's possible policies through instruction and action
-    capabilities on a profile. Learn the intracacies of instructions and
-    actions by watching them in action. See how a packet is manipulated
-    based on different instruction and action combinations.
+    Explore OpenFlow's control flow using goto's, partition matching across
+    tables with metadata, and meter flow rates using policers and shapers. Learn
+    immediate and delayed packet modification and forwarding.
     </p>
   </div>
 </div>
@@ -79,26 +76,25 @@
   <div class="col-md-4">
     <h3><i class="fa fa-rotate-right"></i> Action</h3>
     <p>
-    Limit a switch's possible policies through instruction and action
-    capabilities on a profile. Learn the intracacies of instructions and
-    actions by watching them in action. See how a packet is manipulated
-    based on different instruction and action combinations.
+    Mofify the contents of a packet, forward to a specific port, or
+    with a unqiue egress handling group. Learn how immediate packet modification
+    affects multi-table matching.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-sitemap"></i> Group</h3>
     <p>
-    Define a set of egress packet processing behaviors with a defined group. Use
-    groups to load balance across targets, select the live target from a high 
-    availability group, copy a packet to multiple destinations, or some other
-    stuff.
+    Define a set of egress packet processing behaviors. Use Load balance across
+    targets, select the live target from a high availability group, and copy a 
+    packet to multiple destinations.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-align-right"></i> Queue</h3>
     <p>
-    Utilize rich egress queueing mechanisms on a per port basis for egress
-    pcaket delivery.
+    Estblish port based queueing during profile creation. Understand OpenFlow's
+    limitaitons on queue management, and use queues as targets in output
+    actions.
     </p>
   </div>
 </div>
@@ -106,11 +102,9 @@
   <div class="col-md-4">
     <h3><i class="fa fa-dashboard"></i> Meter</h3>
     <p>
-    Defing a policing or shaping strategy to meter any type of flow in the 
-    dataplane. Use a policing strategy to limit flows to specific bandwidth
-    cielings with excessive packets being discarded. Or use shapping strategies
-    allow for bursts above a defined rate within the constraints of a specified
-    queue depth.
+    Defing a policing or shaping strategy to meter a flow. Use this strategy to
+    limit flows to target ceiling using strict discard, or allow for bursts up
+    to a certain queue depth.
     </p>
   </div>
 </div>
