@@ -172,6 +172,8 @@ angular.module('fgSubscriber', ['ngResource'])
     }, function(data) {
       if(data.error) {
         $scope.tokenFailed = true;
+        // There are actually two types of failures, come back and adjust
+        $scope.verficationMsg = 'Your token is invalid for some reason';
       } else {
         $scope.tokenVerified = true;
       }
