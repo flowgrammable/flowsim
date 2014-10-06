@@ -23,28 +23,23 @@
   <div class="col-md-4">
     <h3><i class="fa fa-long-arrow-right"></i> Datapath</h3>
     <p>
-    Ports are a fundamental abstraction in the OpenFlow protocol. Mimic
-    actual vendor switches with specific port counts and capabilities.
-    Toggle port status during simulation to see port state changes and
-    related OpenFlow messaging.
+    The datapath is the root abstraction of the OpenFlow data plane. All
+    other data plane abstractions are child properties of the OpenFlow datapath.
+    The datapath maintains fragmentation handling and packet buffering. 
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-database"></i> Flow Table</h3>
     <p>
-    Ports are a fundamental abstraction in the OpenFlow protocol. Mimic
-    actual vendor switches with specific port counts and capabilities.
-    Toggle port status during simulation to see port state changes and
-    related OpenFlow messaging.
+    A flow table is a colleciton of flows that can be indexed in an independent
+    manner.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-list"></i> Flow</h3>
     <p>
-    Ports are a fundamental abstraction in the OpenFlow protocol. Mimic
-    actual vendor switches with specific port counts and capabilities.
-    Toggle port status during simulation to see port state changes and
-    related OpenFlow messaging.
+    A flow contains a set of matches, a set of instructions, and some metadata
+    that helps manage the behavior and lifecycle of the flow.
     </p>
   </div>
 </div>
@@ -61,7 +56,7 @@
   <div class="col-md-4">
     <h3><i class="fa fa-crosshairs"></i> Match</h3>
     <p>
-    Classifiers are OpenFlow's fundamental packet matching mechanism.
+    Matches are OpenFlow's fundamental packet classification mechanism.
     Limit a switch's possible classifiers through a profile. Learn the
     details of multi-table flow matching by single steping a packet
     through the classification, or flow matching stage, of the OpenFlow
@@ -91,19 +86,17 @@
   <div class="col-md-4">
     <h3><i class="fa fa-sitemap"></i> Group</h3>
     <p>
-    Limit a switch's possible policies through instruction and action
-    capabilities on a profile. Learn the intracacies of instructions and
-    actions by watching them in action. See how a packet is manipulated
-    based on different instruction and action combinations.
+    Define a set of egress packet processing behaviors with a defined group. Use
+    groups to load balance across targets, select the live target from a high 
+    availability group, copy a packet to multiple destinations, or some other
+    stuff.
     </p>
   </div>
   <div class="col-md-4">
     <h3><i class="fa fa-align-right"></i> Queue</h3>
     <p>
-    Limit a switch's possible policies through instruction and action
-    capabilities on a profile. Learn the intracacies of instructions and
-    actions by watching them in action. See how a packet is manipulated
-    based on different instruction and action combinations.
+    Utilize rich egress queueing mechanisms on a per port basis for egress
+    pcaket delivery.
     </p>
   </div>
 </div>
@@ -111,10 +104,11 @@
   <div class="col-md-4">
     <h3><i class="fa fa-dashboard"></i> Meter</h3>
     <p>
-    Limit a switch's possible policies through instruction and action
-    capabilities on a profile. Learn the intracacies of instructions and
-    actions by watching them in action. See how a packet is manipulated
-    based on different instruction and action combinations.
+    Defing a policing or shaping strategy to meter any type of flow in the 
+    dataplane. Use a policing strategy to limit flows to specific bandwidth
+    cielings with excessive packets being discarded. Or use shapping strategies
+    allow for bursts above a defined rate within the constraints of a specified
+    queue depth.
     </p>
   </div>
 </div>
