@@ -93,6 +93,11 @@ angular.module('fgSubscriber', ['ngResource'])
   })
   .controller('fgSubLogin', function($scope, $location, $route, Subscriber) {
 
+    $scope.email = '';
+    $scope.password = '';
+    $scope.loginFail = false;
+    $scope.resetSuccess = false;
+
     $scope.login = function() {
         resetField($scope, 'email');
         resetField($scope, 'password');
@@ -116,8 +121,19 @@ angular.module('fgSubscriber', ['ngResource'])
       }
     };
     
+    $scope.resetVerify = function() {
+      Subscriber().resetVerify({
+        token: $routeParams.token
+      }, function(data) {
+        if(data.error) {
+        } else {
+        }
+      });
+    } 
+
+      
     $scope.reset = function() {
-      $scope.success = false;
+      $scope.resetSuccess = false;
       resetField($scope, 'email');
       if(checkEmail($scope, 'email')) {
         Subscriber().forgot({
@@ -156,10 +172,8 @@ angular.module('fgSubscriber', ['ngResource'])
           password: $scope.password1
         }, function(data) {
           if(data.error) {
-            console.log(data.error);
             $scope.failure = true;
           } else {
-            console.log(data.value);
             $scope.success = true;
           }
         });

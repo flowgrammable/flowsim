@@ -16,7 +16,7 @@ angular.module('flowsim', ['ngRoute', 'ui.bootstrap', 'fgSubscriber'])
       .when('/login', {
         templateUrl: 'subscriber/login.html'
       })
-      .when('/reset', {
+      .when('/reset/:token', {
         templateUrl: 'subscriber/reset.html'
       })
       .otherwise({

@@ -146,7 +146,6 @@ Controller.prototype.verify = function(token, callback) {
   // if the verification token is valid update
   // subscriber state
   // otherwise send an error
-  console.log('verifying: ' + token);
   this.storage.verifySubscriber(token, callback);
 };
 
@@ -155,18 +154,17 @@ Controller.prototype.forgot = function(email, callback) {
   // or send an error
   var token = uuid.v4();
   var that = this;
-  console.log('forgot: ' + email);
   this.storage.resetSubscriber(email, token, function(err, succ) {
     var body, subject;
     if(err) {
       callback(err);
     } else {
-      body = that.mailer.render('forgot', {
+      body = that.template.render('forgot', {
         baseUrl: that.server.baseUrl(),
         token: token
       });
-      console.log('token: %s', token);
-      that.mailer.send(email, subject, body, callback);
+      that.mailer.send(email, subject, body);
+      callback(null, msg.success());
     }
   });
 };
