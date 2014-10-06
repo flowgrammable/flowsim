@@ -165,6 +165,17 @@ angular.module('fgSubscriber', ['ngResource'])
         */
       }
     };
-});
+  })
+  .controller('fgVerify', function($scope, $routeParams, Subscriber) {
+    Subscriber.ops.verify({
+      token: $routeParams.token
+    }, function(data) {
+      if(data.error) {
+        $scope.tokenFailed = true;
+      } else {
+        $scope.tokenVerified = true;
+      }
+    });
+  });
 
 })();

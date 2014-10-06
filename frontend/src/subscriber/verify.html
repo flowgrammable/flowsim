@@ -1,13 +1,13 @@
 
-<div class="row">
+<div class="row" ng-controller="fgVerify">
   <div class="col-md-6 col-md-offset-3">
 
-  <div ng-show="verifySuccess" class="bg-success">Your Account has been verified.
+  <div ng-show="tokenVerified" class="bg-success">Your Account has been verified.
 	<br>
 	<a href="/#/login">Login</a>
 	</div>
   
-  <div ng-show="alreadyVerified" class="bg-warning">This account has already been verified.
+  <div ng-show="tokenFailed" class="bg-warning">This account has already been verified.
 	<br>
 	<a href="/#/login">Login</a>
 	</div>
