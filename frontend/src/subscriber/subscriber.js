@@ -33,8 +33,8 @@ angular.module('fgSubscriber', ['ngResource'])
   .factory('Subscriber', function($resource) {
     var _x_access_token = '';
     return {
-      get: function() { return _authToken; },
-      set: function(t) { _authToken = t; },
+      get: function() { return _x_access_token; },
+      set: function(t) { _x_access_token = t; },
       ops: $resource('/api/subscriber/:op', {
           op: '@op'
         }, {
@@ -52,7 +52,10 @@ angular.module('fgSubscriber', ['ngResource'])
   .controller('fgSubAuth', function($scope, Subscriber, $route) {
 
     $scope.logout = function() {
-      Subscriber.ops.logout({}, function(data) {
+      console.log('lg: ' + Subscriber.get());
+      Subscriber.ops.logout({
+        headers: { 'x-access-token': Subscriber.get() }
+      }, {}, function(data) {
         if(data.error) {
           console.log('fail');
         } else {
@@ -86,7 +89,7 @@ angular.module('fgSubscriber', ['ngResource'])
     };
 
   })
-  .controller('fgSubLogin', function($scope, $route, Subscriber) {
+  .controller('fgSubLogin', function($scope, $location, $route, Subscriber) {
 
     $scope.login = function() {
         resetField($scope, 'email');
@@ -103,8 +106,9 @@ angular.module('fgSubscriber', ['ngResource'])
           if(data.error) {
             $scope.loginFail = true;
           } else {
-            Subscriber.set(data.x_access_token);
+            Subscriber.set(data.value['x-access-token']);
             $scope.$emit('authenticated');
+            $location.path('/');
             $route.reload();
           }
         });
