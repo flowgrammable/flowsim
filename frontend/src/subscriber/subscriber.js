@@ -30,8 +30,8 @@ function checkPassword(scope, name) {
 }
 
 angular.module('fgSubscriber', ['ngResource'])
-  .factory('SubscriberRest', function($resource) {
-    var _authToken = '';
+  .factory('Subscriber', function($resource) {
+    var _x_access_token = '';
     return {
       get: function() { return _authToken; },
       set: function(t) { _authToken = t; },
@@ -49,7 +49,7 @@ angular.module('fgSubscriber', ['ngResource'])
         })
     };
   })
-  .controller('fgSubAuth', function($scope, SubscriberRest) {
+  .controller('fgSubAuth', function($scope, Subscriber) {
 
     $scope.logout = function() {
       Subscriber.ops.logout({}, function(data) {
@@ -82,7 +82,7 @@ angular.module('fgSubscriber', ['ngResource'])
     };
 
   })
-  .controller('fgSubLogin', function($scope, SubscriberRest) {
+  .controller('fgSubLogin', function($scope, Subscriber) {
 
     $scope.login = function() {
         resetField($scope, 'email');
@@ -116,7 +116,7 @@ angular.module('fgSubscriber', ['ngResource'])
     };
 
   })
-  .controller('fgSubRegister', function($scope, SubscriberRest) {
+  .controller('fgSubRegister', function($scope, Subscriber) {
 
     $scope.email     = '';
     $scope.password1 = '';

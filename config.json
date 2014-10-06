@@ -1,6 +1,6 @@
 {
   "mailer": {
-    "apiKey": "i",
+    "apiKey": "fake key",
     "domain": "flowgrammable.org",
     "user": "admin@flowgrammable.org"
   },

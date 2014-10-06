@@ -144,7 +144,7 @@ Server.prototype.addModule = function(mod) {
  * @returns {String} protocol://hostname:port
  */
 Server.prototype.baseUrl = function() {
-  return this.config.protocol + this.config.hostname + ':' + 
+  return this.config.protocol + '://' + this.config.hostname + ':' + 
          this.config.secure_port;
 };
 
