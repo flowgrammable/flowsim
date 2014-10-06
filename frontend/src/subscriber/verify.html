@@ -2,14 +2,15 @@
 <div class="row" ng-controller="fgVerify">
   <div class="col-md-6 col-md-offset-3">
 
-  <div ng-show="tokenVerified" class="bg-success">Your Account has been verified.
-	<br>
-	<a href="/#/login">Login</a>
+  <div ng-show="tokenVerified">
+    <h1>Verification Succeeded</h1>
+    Your account has been verified. You are either who you say your are, or you
+    can read someones eamil!
 	</div>
   
-  <div ng-show="tokenFailed" class="bg-warning">This account has already been verified.
-	<br>
-	<a href="/#/login">Login</a>
+  <div ng-show="tokenFailed">
+    <h1>Verification Failed</h1>
+    {{verificationMsg}}
 	</div>
 
   </div>
