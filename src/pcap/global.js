@@ -10,7 +10,6 @@ function getModeFromMagic(mode, value) {
   } else if(value !== magic && mode === view.LSBF) {
     return view.MSBF;
   }
-
 }
 
 function Header() {
@@ -31,24 +30,24 @@ Header.prototype.bytes = function() {
 Header.prototype._fromView = function(v) {
   var mode = view.MSBF;
   this.magicNumber  = view.readUInt32(mode)(v);
-  mode = getModeFromMagic(mode, this.magicNumber);
+  this.mode = getModeFromMagic(mode, this.magicNumber);
 
-  this.majorVersion = view.readUInt16(mode)(v, 4);
-  this.minorVersion = view.readUInt16(mode)(v, 6);
-  this.gmtOffset    = view.readUInt32(mode)(v, 8);
-  this.tsAccuracy   = view.readUInt32(mode)(v, 12);
-  this.snaplen      = view.readUInt32(mode)(v, 16);
-  this.datalink     = view.readUInt32(mode)(v, 20);
+  this.majorVersion = view.readUInt16(this.mode)(v, 4);
+  this.minorVersion = view.readUInt16(this.mode)(v, 6);
+  this.gmtOffset    = view.readUInt32(this.mode)(v, 8);
+  this.tsAccuracy   = view.readUInt32(this.mode)(v, 12);
+  this.snaplen      = view.readUInt32(this.mode)(v, 16);
+  this.datalink     = view.readUInt32(this.mode)(v, 20);
 };
 
 Header.prototype._toView = function(v) {
-  view.writeUInt32(mode)(v, this.magicNumber);
-  view.writeUInt16(mode)(v, this.magorVersion, 4);
-  view.writeUInt16(mode)(v, this.minorVersion, 6);
-  view.writeUInt32(mode)(v, this.gmtOffset, 8);
-  view.writeUInt32(mode)(v, this.tsAccuracy, 12);
-  view.writeUInt32(mode)(v, this.snaplen, 16);
-  view.writeUInt32(mode)(v, this.datalink, 20);
+  view.writeUInt32(this.mode)(v, this.magicNumber);
+  view.writeUInt16(this.mode)(v, this.magorVersion, 4);
+  view.writeUInt16(this.mode)(v, this.minorVersion, 6);
+  view.writeUInt32(this.mode)(v, this.gmtOffset, 8);
+  view.writeUInt32(this.mode)(v, this.tsAccuracy, 12);
+  view.writeUInt32(this.mode)(v, this.snaplen, 16);
+  view.writeUInt32(this.mode)(v, this.datalink, 20);
 };
 
 Header.prototype.fromView = view.decode;
