@@ -43,8 +43,8 @@ function dbError(method, err, meta){
   return {
     module: 'Database',
     method: method,
-    pub: {},
-    error: err,
+    clientMessage: {},
+    psqlError: err,
     meta: meta || {}
   };
 }
@@ -52,22 +52,7 @@ function dbError(method, err, meta){
 function localErrorHandler(method, err, meta){
   //Construct error object
   var e = dbError(method, err, meta); 
-  switch(err.code){
-    case '23505':
-      // Handle Unique Key Violation
-      e.pub = 'QueryFailure';
-      break;
-    case 'ECONNREFUSED':
-      // Handle Connection Error
-      // Maybe try to reconnect
-      e.pub = 'ServerFailure';
-      break;
-    default:
-      e.pub = 'Unknown';
-      break;
-  }
   return e; 
-
 }
 /**
  * Close all connections in the pg connection pool.
@@ -115,7 +100,7 @@ Database.prototype.queryArgs = function(qString, args, callback) {
 Database.prototype.queryStmt = function(qString, callback) {
   pg.connect(this.setup, function(err, client, done) {
     if(err) {
-      callback(err);
+      callback(localErrorHandler('queryStmt', err));
     } else {
       client.query(qString, function(err, result) {
         if(err) {
@@ -225,14 +210,7 @@ function mkInsert(table, fvPairs) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.insert = function(table, fvPairs, callback) {
-  this.queryStmt(mkInsert(table, fvPairs), function(err, result){
-    if(err){
-      err.method = 'Insert';
-      callback(err);
-    } else {  
-      callback();
-    }
-  });
+  this.queryStmt(mkInsert(table, fvPairs), callback);
 };
 
 /**
@@ -293,7 +271,7 @@ Database.prototype.select = function() {
  * @returns {String} string representation of SQL UPDATE statement
  */
 function mkUpdate(table, fvPairs, conjunct) {
-  return 'UPDATE ' + table + ' SET ' + mkAssignment(fvPairs) + ' ' + mkWhere(conjunct);
+  return 'UPDATE ' + table + ' SET ' + mkAssignment(fvPairs) + ' ' + mkWhere(conjunct) + ' RETURNING *';
 }
 
 /**
@@ -306,7 +284,7 @@ function mkUpdate(table, fvPairs, conjunct) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.update = function(table, fvPairs, conjunct, callback) {
-  this.queryStmt(mkUpdate(table, fvPairs, conjunct), callback);
+  this.queryStmt(mkUpdate(table, fvPairs, conjunct), callback); 
 };
 
 /**

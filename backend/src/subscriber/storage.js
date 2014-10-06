@@ -9,7 +9,6 @@
 var fmt = require('../utils/formatter');
 var msg = require('./msg');
 var pg  = require('../database/pg');
-var storageError = require('../error');
 /**
  * SQL result codes based on postgres definitions.
  *
@@ -38,10 +37,6 @@ function Storage(db, log) {
 }
 exports.Storage = Storage;
 
-function localErrorHandler(method, err){
-  var e = storageError('Subscriber', 'Storage', method, err);
-  return e;
-}
 
 /**
  * @param {module:formatter~Formatter} f - a properly constructed formatter
@@ -66,7 +61,7 @@ Storage.prototype.toString = fmt.toString;
  */
 
 function errHandler(callback, err, table) {
-  switch(err.code) {
+  switch(err.psqlError.code) {
     case 'ECONNREFUSED':
       callback(msg.noDatabaseConnection());
       break;
@@ -78,7 +73,6 @@ function errHandler(callback, err, table) {
       }
       break;
     default:
-      console.log(err);
       callback(msg.unknownError(err));
       break;
   }
@@ -108,8 +102,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     status: 'CREATED'
   }, function(err, result) {
     if(err) {
-      callback(localErrorHandler('createSubscriber', err));
-      //errHandler(callback, err, 'subscriber');
+      errHandler(callback, err, 'subscriber');
     } else {
       callback(null, result);
     }
@@ -193,10 +186,10 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     if(err) {
       errHandler(callback, err, 'subscriber');
     } else {
-      if(result.length === 0) {
-        callback(msg.success());
+      if(result.length === 1) {
+        callback(null, msg.success());
       } else {
-        callback(null, result[0]);
+        callback(msg.unknownVerificationToken());
       }
     }
   });

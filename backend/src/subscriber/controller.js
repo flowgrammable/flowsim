@@ -12,7 +12,6 @@ var bcrypt = require('bcrypt');
 var fmt = require('../utils/formatter');
 var msg = require('./msg');
 var stg = require('./storage');
-var controlError = require('../error');
 
 // Default session timeout in minutes
 var defTimeout = 180;
@@ -39,12 +38,8 @@ function Controller(s, m, t, h, l) {
 }
 exports.Controller = Controller;
 
-function localErrorHandler(method, subErr){
-  var e = controlError('Subscriber', 'Controller',  method, subErr);
-  return e;
-}
 
-Controller.prototype.toFromatter = function(f) {
+Controller.prototype.toFormatter = function(f) {
   f.begin('Controller');
   this.storage.toFormatter(f);
   this.mailer.toFormatter(f);
@@ -119,17 +114,10 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
                                 token, function(err, succ) {
-    var subject, body, e;
+    var subject, body;
     if(err) {
-      e = localErrorHandler('register', err);
-      // need to make conditional more specific
-      if(e.pub == 'QueryFailure'){
-        e.pub = msg.existingEmail();
-      } else if(e.pub == 'ServerFailure'){
-        e.pub = msg.noDatabaseConnection();
-      } 
-      that.logger.error({error: e});
-      callback(e);
+      that.logger.error(err);
+      callback(err);
     } else {
       subject = 'Flowsim Verify Email Address';
       body = that.template.render('verification', {
