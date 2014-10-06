@@ -16,12 +16,22 @@ angular.module('flowsim', ['ngRoute', 'ui.bootstrap', 'fgSubscriber'])
       .when('/login', {
         templateUrl: 'subscriber/login.html'
       })
+      .when('/reset', {
+        templateUrl: 'subscriber/reset.html'
+      })
       .otherwise({
         templateUrl: 'lost.html'
       });
   }])
-  .controller('flowsimCtlr', function($scope) {
+  .controller('flowsimCtlr', function($scope, $rootScope) {
     $scope.authenticated = false;
+
+    $rootScope.$on('authenticated', function() {
+      $scope.authenticated = true;
+    });
+    $rootScope.$on('unauthenticated', function() {
+      $scope.authenticated = false;
+    });
   });
 
 })();

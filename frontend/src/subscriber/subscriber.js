@@ -49,14 +49,18 @@ angular.module('fgSubscriber', ['ngResource'])
         })
     };
   })
-  .controller('fgSubAuth', function($scope, Subscriber) {
+  .controller('fgSubAuth', function($scope, Subscriber, $route) {
 
     $scope.logout = function() {
       Subscriber.ops.logout({}, function(data) {
-        Subscriber.x_access_token = '';
         if(data.error) {
+          console.log('fail');
         } else {
+          console.log('succ');
         }
+        Subscriber.set('');
+        $scope.$emit('unauthenticated');
+        $route.reload();
       });
     };
 
@@ -82,11 +86,12 @@ angular.module('fgSubscriber', ['ngResource'])
     };
 
   })
-  .controller('fgSubLogin', function($scope, Subscriber) {
+  .controller('fgSubLogin', function($scope, $route, Subscriber) {
 
     $scope.login = function() {
         resetField($scope, 'email');
         resetField($scope, 'password');
+        $scope.loginFail = false;
 
       if(checkEmail($scope, 'email') &&
          checkPassword($scope, 'password')) {
@@ -96,20 +101,26 @@ angular.module('fgSubscriber', ['ngResource'])
           password: $scope.password
         }, function(data) {
           if(data.error) {
+            $scope.loginFail = true;
           } else {
-            Subscriber.x_access_token = data.token;
+            Subscriber.set(data.x_access_token);
+            $scope.$emit('authenticated');
+            $route.reload();
           }
         });
       }
     };
     
-    $scope.forgot = function() {
+    $scope.reset = function() {
+      $scope.success = false;
+      resetField($scope, 'email');
       if(checkEmail($scope, 'email')) {
         Subscriber.ops.forgot({
           email: $scope.email
         }, function(data) {
           if(data.error) {
           } else {
+            $scope.success = true;
           }
         });
       }

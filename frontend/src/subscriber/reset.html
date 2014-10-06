@@ -1,8 +1,7 @@
 
-<div class="row">
+<div class="row" ng-contorller="fgSubLogin">
   <div class="col-md-6 col-md-offset-3">
 
-    <div ng-hide="forgotSuccess">
       <h1>Password Reset Process</h1>
 
       Please enter your email address and click on reset. We will send you an
@@ -14,19 +13,17 @@
         <div class="form-group">
           <label for="emailAddr">Email Address</label>
           <input type="email" class="form-control" id="emailAddr" 
-                placeholder="Enter email" ng-model="emailAddr">
-            <div class="error" ng-show="badEmail">
-              <span>Please enter a valid email address.</span>
+                placeholder="Enter email" ng-model="email">
+            <div class="error" ng-show="email.Error">
+              <span>
+                {{email.Msg}}
+              </span>
             </div>
-						<div class="error" ng-show="subscriberNotFound">
-							<span>An account with that email does not exist.</span>
-						</div>
         </div>
         <a href="" class="btn btn-default" ng-click="reset()">Reset</a>
       </form>
-    </div>
 
-    <div ng-show="forgotSuccess">
+    <div ng-show="success">
       <h1>Verification Step</h1>
       A password reset email has been sent to you. You must click on the link
       enclosed in that email to complete the reset process.
