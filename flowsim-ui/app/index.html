@@ -25,7 +25,8 @@
     <!-- Add your site or application content here -->
     <div class="container">
 
-      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation"
+        ng-controller="MenuCtrl">
         <div class="container">
           <div class="navbar-header">
             <a class="navbar-brand" href="#">
@@ -35,8 +36,9 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li>
-              <a href="http://www.flowgrammable.org">OpenFlow</a>
+              <li><a href="http://www.flowgrammable.org">OpenFlow</a></li>
+              <li ng-show="authenticated">
+                <a href="#subscriber/update">Account</a>
               </li>
             </ul>
             <form class="navbar-form navbar-right" role="form" 
@@ -48,7 +50,8 @@
                 Register
               </a>
             </form>
-            <form class="navbar-form navbar-right" role="form" ng-show="false">
+            <form class="navbar-form navbar-right" role="form"
+                  ng-show="authenticated">
               <a href="#" class="btn btn-success" ng-click="logout()">
                 Logout
               </a>
@@ -120,6 +123,7 @@
         <script src="scripts/controllers/reset.js"></script>
         <script src="scripts/controllers/verify.js"></script>
         <script src="scripts/controllers/update.js"></script>
+        <script src="scripts/controllers/menu.js"></script>
         <!-- endbuild -->
 </body>
 </html>

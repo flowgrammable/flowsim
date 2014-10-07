@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('LoginCtrl', function ($scope, Subscriber) {
+  .controller('LoginCtrl', function ($scope, $route, $location, Subscriber) {
 
     function clearInputs() {
       $scope.email = '';
@@ -27,7 +27,10 @@ angular.module('flowsimUiApp')
       $scope.emailMsg    = Subscriber.validateEmail($scope.email);
       $scope.passwordMsg = Subscriber.validatePassword($scope.password);
       if(!$scope.emailMsg.length && !$scope.passwordMsg.length) {
+        $scope.$emit('subscriberAuth', true);
         clearInputs();
+        $location.path('/');
+        $route.reload();
       }
     };
   });
