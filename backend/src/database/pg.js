@@ -100,7 +100,7 @@ Database.prototype.queryArgs = function(qString, args, callback) {
 Database.prototype.queryStmt = function(qString, callback) {
   pg.connect(this.setup, function(err, client, done) {
     if(err) {
-      callback(localErrorHandler('queryStmt', err));
+      callback(localErrorHandler('pg.connect', err));
     } else {
       client.query(qString, function(err, result) {
         if(err) {
@@ -198,7 +198,8 @@ function mkInsert(table, fvPairs) {
     _fields.push(key);
     _values.push(value);
   });
-  return _head + ' ' + mkFields(_fields) + ' ' + mkValues(_values);
+  return _head + ' ' + mkFields(_fields) + ' ' + mkValues(_values) +
+    'RETURNING *';
 }
 
 /**

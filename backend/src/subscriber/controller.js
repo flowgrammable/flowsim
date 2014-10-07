@@ -82,6 +82,7 @@ Controller.prototype.login = function(email, pwd, callback) {
   this.storage.getSubscriberByEmail(email, function(err, succ) {
     var token, expireTime;
     if(err) { 
+      that.logger.error(err);
       callback(err); 
     } else {
       if(bcrypt.compareSync(pwd, succ.password)) {
@@ -134,7 +135,13 @@ Controller.prototype.verify = function(token, callback) {
   // if the verification token is valid update
   // subscriber state
   // otherwise send an error
-  this.storage.verifySubscriber(token, callback);
+  this.storage.verifySubscriber(token, function(err, result){
+    if(err){
+      that.logger.error(err);
+    } else {
+      callback(null, result);
+    }
+  });
 };
 
 Controller.prototype.forgot = function(email, callback) {

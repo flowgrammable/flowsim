@@ -234,7 +234,7 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
     if(err) {
       errHandler(callback, err, 'session');
     } else {
-      callback(null, result);
+      callback(null, result[0].key);
     }
   });
 };

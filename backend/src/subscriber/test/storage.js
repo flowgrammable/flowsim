@@ -4,6 +4,7 @@ var assert = require('assert');
 
 var pg = require('../../database/pg');
 var st = require('./../storage');
+var msg = require('../msg');
 
 var db = new pg.Database({database:{
   user: 'flogdev',
@@ -32,6 +33,11 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
 
   // Delete all subscribers from db before running tests
   before(function(){
+    db.delete('session', {}, function(err, result){
+      if(err){
+        console.log('delete all sessions error: ', err);
+      }
+    });
     db.delete('subscriber', {}, function(err, result){
       if(err){
         console.log('delete all subscribers error:', err);
@@ -40,13 +46,13 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
     });
   });
 
-  it('should return [] on successful insert', function(done){
+  it('should return [{id, email, etc}] on successful insert', function(done){
     store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
       function(err, result){
         if(err){
           console.log('createSub error', err);
         } else {
-          assert.equal(0, result.length);
+          assert.equal(result.length, 1);
           done();
         }
     });
@@ -54,65 +60,94 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
 
   it('should set subscriber status to CREATED', function(done){
     store.getSubscriberByToken(ts.token, function(err, result){
-      assert.equal('CREATED', result.value[0].status);
+      assert.equal(result.status, 'CREATED');
       done();
     });
   });
 
-  it('should return error code 23505 for duplicate insert', function(done){
-    store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
-      function(err, result){
-          assert.equal('23505', err.code);
-          done();
-    });
-   });
-
-   it('should return error code 22001 for email length greater than 128', 
-     function(done){
-     store.createSubscriber(genString(129), ts.password, ts.date, ts.ip, uuid.v4(),
-      function(err, result){
-          assert.equal('22001', err.code);
-          done();
-     });
-   });
-
-  it('should return error code 22P02 for invalid IP address syntax',
-      function(done){
-      store.createSubscriber(ts.email, ts.password, ts.date, '01.1.1', uuid.v4(),
-        function(err, result){
-          assert.equal('22P02', err.code);
-          done();
-        });
-  });
-          
-  it('should return error code 22P02 for invalid IP address type',
-      function(done){
-      store.createSubscriber(ts.email, ts.password, ts.date, 10 , uuid.v4(),
-        function(err, result){
-          assert.equal('42804', err.code);
-          done();
-        });
-  });
-
-  it('should return error code 22001 for token length greater than 36',
+  it('should return msg.existingEmail() on duplicate registration', 
     function(done){
-    store.createSubscriber('b@b', ts.password, ts.date, ts.ip, genString(37),
-      function(err, result){
-        assert.equal('22001', err.code);
+      store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
+        function(err, result){
+            assert.equal(err.type, 'existingEmail');
+            done();
+      });
+    });
+ 
+});
+
+describe('.verifySubscriber(token, cb)', function(){
+
+  it('should return msg.success on successful verification', function(done){
+    store.verifySubscriber(ts.token, function(err, result){
+      assert.equal(result, '');
+      done();
+    });
+  });
+
+  it('should set subscriber status to ACTIVE', function(done){
+    store.getSubscriberByEmail(ts.email, function(err, result){
+      assert.equal(result.status, 'ACTIVE');
+      done();
+    });
+  });
+
+  it('should return unknownVerificationToken() on 2nd verification try',
+    function(done){
+      store.verifySubscriber(ts.token, function(err, result){
+        assert.equal(err.type, 'unknownVerificationToken');
         done();
+      });
+  });
+
+
+  it('should return unknownVerificationToken() for a bad token',
+    function(done){
+      store.verifySubscriber('', function(err, result){
+        assert.equal(err.type, 'unknownVerificationToken');
+        done();
+      });
+  });
+});
+
+describe('.getSubscriberByEmail(email, cb)', function(){
+  
+  it('should return an array with a single subscriber', function(done){
+    store.getSubscriberByEmail(ts.email, function(err, result){
+      assert.equal(result.email, ts.email);
+      done();
     });
   });
 
-  it('should return error code 22023 for invalid date type',
-    function(done){
-    store.createSubscriber('c@c', ts.password, new Date(), ts.ip, genString(37),
+  it('should return a msg.unknownEmail for invalid email', function(done){
+    store.getSubscriberByEmail('nope', function(err, result){
+      assert.equal(err.type, 'unknownEmail');
+      done();
+    });
+  });
+
+});
+
+describe('.createSession(token, subscriberId, expireTime, cb)', function(){
+  var subID;
+  var token = uuid.v4();
+  var expireTime = new Date((new Date()).getTime() + 1 * 60000);
+
+  before(function(){
+    store.getSubscriberByEmail(ts.email, function(err, result){
+      subID = result.id;
+    });
+  });
+
+  it('should return a x-auth token', function(done){
+    store.createSession(token, subID, expireTime.toISOString(),
       function(err, result){
-        assert.equal('22023', err.code);
+        assert.equal(result.length, 36);
         done();
     });
   });
 });
-
+/*
 describe('.getSubscriberByToken(token, cb)', function(){
 
   it('should return an array of subscribers', function(done){
@@ -131,24 +166,6 @@ describe('.getSubscriberByToken(token, cb)', function(){
 
 });
 
-describe('.getSubscriberByEmail(email, cb)', function(){
-  
-  it('should return an array with a single subscriber', function(done){
-    store.getSubscriberByEmail(ts.email, function(err, result){
-      assert.equal(1, result.value.length);
-      assert.equal(ts.email, result.value[0].email);
-      done();
-    });
-  });
-
-  it('should return an empty array if sub does not exist', function(done){
-    store.getSubscriberByEmail('nope', function(err, result){
-      assert.equal(0, result.value.length);
-      done();
-    });
-  });
-
-});
 
 describe('.verifySubscriber(token, cb)', function(){
 
@@ -203,6 +220,6 @@ describe('.updateSubscriberPassword(email, password, cb)', function(){
       done();
     });
   });
-});
+}); */
 });
 db.close();  
