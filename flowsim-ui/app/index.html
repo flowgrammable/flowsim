@@ -5,10 +5,12 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/png" href="favicon.png">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -23,10 +25,58 @@
     <!-- Add your site or application content here -->
     <div class="container">
 
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              <img style="Max-height: 25px;" src="images/logo.png" 
+                   alt="Flowgrammable">
+            </a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li>
+              <a href="http://www.flowgrammable.org">OpenFlow</a>
+              </li>
+            </ul>
+            <form class="navbar-form navbar-right" role="form" 
+                  ng-hide="authenticated">
+              <a href="#subscriber/login" class="btn btn-success">
+                Login
+              </a>
+              <a href="#subscriber/register" class="btn btn-success">
+                Register
+              </a>
+            </form>
+            <form class="navbar-form navbar-right" role="form" ng-show="false">
+              <a href="#" class="btn btn-success" ng-click="logout()">
+                Logout
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+      
       <div ng-view=""></div>
 
-    </div>
+      <hr>
+      <footer>
+        <p class="pull-right">&copy; Flowgrammable 2014</p>
+        <a target="_blank" href="https://linkedin.com/company/3337804">
+          <i class="fa fa-linkedin"></i>
+        </a>
+        <a target="_blank" href="https://facebook.com/flowgrammable">
+          <i class="fa fa-facebook"></i>
+        </a>
+        <a target="_blank" href ="https://twitter.com/flowgrammable">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a target="_blank" href="https://google.com/+Flowgrammable">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </footer>
 
+    </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -35,7 +85,9 @@
        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-       ga('create', 'UA-XXXXX-X');
+       ga('create', 'UA-54747655-1');
+       ga('require', 'displayfeatures');
+       ga('require', 'linkid', 'linkid.js');
        ga('send', 'pageview');
     </script>
 
@@ -54,6 +106,7 @@
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
