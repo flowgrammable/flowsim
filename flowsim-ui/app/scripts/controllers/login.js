@@ -19,6 +19,7 @@ angular.module('flowsimUiApp')
     function clearErrors() {
       $scope.emailMsg = '';
       $scope.passwordMsg = '';
+      $scope.errorMsg = '';
     }
     clearErrors();
 
@@ -27,10 +28,17 @@ angular.module('flowsimUiApp')
       $scope.emailMsg    = Subscriber.validateEmail($scope.email);
       $scope.passwordMsg = Subscriber.validatePassword($scope.password);
       if(!$scope.emailMsg.length && !$scope.passwordMsg.length) {
-        $scope.$emit('subscriberAuth', true);
+        Subscriber.login($scope.email, $scope.password, function(err, result) {
+          if(err) {
+            $scope.errorMsg = err.message;
+            console.log(err.details);
+          } else {
+            $scope.$emit('subscriberAuth', true);
+            $location.path('/');
+            $route.reload();
+          }
+        });
         clearInputs();
-        $location.path('/');
-        $route.reload();
       }
     };
   });

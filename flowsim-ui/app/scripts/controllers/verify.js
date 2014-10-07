@@ -9,5 +9,18 @@
  */
 angular.module('flowsimUiApp')
   .controller('VerifyCtrl', function ($scope, $routeParams, Subscriber) {
-    var token = $routeParams.token;
+
+    function clearErrors() {
+      $scope.errorMsg = '';
+    }
+    clearErrors();
+
+    Subscriber.verify($routeParams.token, function(err, result) {
+      if(err) {
+        $scope.errorMsg = err.message;
+        console.log(err.details);
+      } else {
+        $scope.success = true;
+      }
+    });
   });

@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MenuCtrl', function ($scope, $rootScope) {
+  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber) {
     $scope.authenticated = false;
 
     $rootScope.$on('subscriberAuth', function(event, data) {
@@ -23,5 +23,7 @@ angular.module('flowsimUiApp')
 
     $scope.logout = function() {
       $scope.authenticated = false;
-    }
+      Subscriber.logout(function(err, result) {
+      });
+    };
   });

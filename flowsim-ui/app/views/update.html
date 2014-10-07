@@ -44,10 +44,8 @@
       enclosed in that email to complete the verification process.
     </div>
     
-    <div ng-show="failure">
-      <h1>There is a great disturbance in the force!</h1>
-      We are experiencing technical difficulties, please come back and try
-      registering in a bit. Thanks!
+    <div class="error" ng-show="errorMsg.length">
+      {{errorMsg}}
     </div>
 
   </div>

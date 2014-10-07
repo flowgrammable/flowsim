@@ -29,22 +29,6 @@ angular
         controller: 'LoginCtrl'
       })
       .when('/subscriber/register', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
-      })
-      .when('/subscriber/reset', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
-      })
-      .when('/subscriber/verify/:token', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
-      })
-      .when('/subscriber/login', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
-      })
-      .when('/subscriber/register', {
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl'
       })
@@ -52,7 +36,7 @@ angular
         templateUrl: 'views/reset.html',
         controller: 'ResetCtrl'
       })
-      .when('/subscriber/verify', {
+      .when('/subscriber/verify/:token', {
         templateUrl: 'views/verify.html',
         controller: 'VerifyCtrl'
       })

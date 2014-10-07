@@ -21,6 +21,7 @@ angular.module('flowsimUiApp')
       $scope.emailMsg     = '';
       $scope.password1Msg = '';
       $scope.password2Msg = '';
+      $scope.errorMsg     = '';
     }
     clearErrors();
 
@@ -32,7 +33,16 @@ angular.module('flowsimUiApp')
                             '' : 'Passwords do not match';
       if(!$scope.emailMsg.length && !$scope.password1Msg.length && 
          !$scope.password2Msg.length) {
-        clearInputs();
+        Subscriber.register($scope.email, $scope.password1,
+          function(err, result) {
+            if(err) {
+              $scope.errorMsg = err.message;
+              console.log(err.details);
+            } else {
+              $scope.success = true;
+            }
+            clearInputs();
+          });
       }
     };
   });

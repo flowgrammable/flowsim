@@ -19,8 +19,9 @@ angular.module('flowsimUiApp')
     
     function clearErrors() {
       $scope.oldPasswordMsg = '';
-      $scope.password1Msg = '';
-      $scope.password2Msg = '';
+      $scope.password1Msg   = '';
+      $scope.password2Msg   = '';
+      $scope.errormsg       = '';
     }
     clearErrors();
 
@@ -33,6 +34,15 @@ angular.module('flowsimUiApp')
 
       if(!$scope.oldPasswordMsg.length && !$scope.password1Msg.length && 
          !$scope.password2Msg.length) {
+        Subscriber.update($scope.oldPassword, $scope.password1,
+          function(err, result) {
+            if(err) {
+              $scope.errorMsg = err.message;
+              console.log(err.detail);
+            } else {
+              $scope.success = true;
+            }
+          });
         clearInputs();
       }
     };
