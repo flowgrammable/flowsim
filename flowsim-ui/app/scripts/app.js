@@ -24,6 +24,42 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/subscriber/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/subscriber/register', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/subscriber/reset', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/subscriber/verify', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/subscriber/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/subscriber/register', {
+        templateUrl: 'views/register.html',
+        controller: 'RegisterCtrl'
+      })
+      .when('/subscriber/reset', {
+        templateUrl: 'views/reset.html',
+        controller: 'ResetCtrl'
+      })
+      .when('/subscriber/verify', {
+        templateUrl: 'views/verify.html',
+        controller: 'VerifyCtrl'
+      })
+      .when('/subscriber/update', {
+        templateUrl: 'views/update.html',
+        controller: 'UpdateCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
