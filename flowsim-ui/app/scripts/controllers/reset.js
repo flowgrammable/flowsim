@@ -8,9 +8,23 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('ResetCtrl', function ($scope) {
-    $scope.email = '';
+  .controller('ResetCtrl', function ($scope, Subscriber) {
+
+    function clearInputs() {
+      $scope.email = '';
+    }
+    clearInputs();
+
+    function clearErrors() {
+      $scope.emailMsg = '';
+    }
+    clearErrors();
 
     $scope.reset = function() {
+      clearErrors();
+      $scope.emailMsg = Subscriber.validateEmail($scope.email);
+      if(!$scope.emailMsg.length) {
+        clearInputs();
+      }
     };
   });

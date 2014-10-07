@@ -8,6 +8,6 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('VerifyCtrl', function ($scope, $routeParams) {
+  .controller('VerifyCtrl', function ($scope, $routeParams, Subscriber) {
     var token = $routeParams.token;
   });
