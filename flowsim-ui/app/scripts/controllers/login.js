@@ -9,9 +9,12 @@
  */
 angular.module('flowsimUiApp')
   .controller('LoginCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+    $scope.email = '';
+    $scope.emailMsg = '';
+    $scope.password = '';
+    $scope.passwordMsg = '';
+
+    $scope.login = function() {
+
+    }
   });

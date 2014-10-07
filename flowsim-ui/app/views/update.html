@@ -1,1 +1,54 @@
-<p>This is the update view.</p>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+     <h1>Password Update</h1>
+      Please enter your old password and your desired new password twice.
+
+      <hr>
+
+      <form name="updateForm" novalidate role="form">
+        <div class="form-group">
+          <label for="oldPpassword">Password</label>
+          <input name="oldPassword" type="password" class="form-control" 
+                 id="oldPassword" placeholder="Password" ng-model="oldPassword"
+                 required>
+          <div class="error" ng-show="oldPasswordMsg.length">
+            <span>{{oldPasswordMsg}}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password1">Password</label>
+          <input name="password1" type="password" class="form-control" 
+                 id="password1" placeholder="Password" ng-model="password1" 
+                 required>
+          <div class="error" ng-show="password1Msg.length">
+            <span>{{password1Msg}}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password2">Retype Password</label>
+          <input name="password2" type="password" class="form-control" 
+                 id="password2" placeholder="Retype Password" ng-model="password2"
+                 required>
+          <div class="error" ng-show="password2Msg.length">
+            <span>{{password2Msg}}</span>
+          </div>
+        </div>
+        <a href="" class="btn btn-default" ng-click="register()">Register</a>
+      </form>
+
+    <div ng-show="success">
+      <h1>Verification Step</h1>
+      An email has been sent to your email account. You must click on the link
+      enclosed in that email to complete the verification process.
+    </div>
+    
+    <div ng-show="failure">
+      <h1>There is a great disturbance in the force!</h1>
+      We are experiencing technical difficulties, please come back and try
+      registering in a bit. Thanks!
+    </div>
+
+  </div>
+</div>

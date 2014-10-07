@@ -36,7 +36,7 @@ angular
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
       })
-      .when('/subscriber/verify', {
+      .when('/subscriber/verify/:token', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
       })

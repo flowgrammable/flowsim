@@ -8,10 +8,6 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('VerifyCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('VerifyCtrl', function ($scope, $routeParams) {
+    var token = $routeParams.token;
   });

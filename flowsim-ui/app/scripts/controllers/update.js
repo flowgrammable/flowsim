@@ -9,9 +9,10 @@
  */
 angular.module('flowsimUiApp')
   .controller('UpdateCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+    $scope.oldPassword = '';
+    $scope.password1 = '';
+    $scope.password2 = '';
+
+    $scope.update = function() {
+    };
   });
