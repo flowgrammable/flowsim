@@ -272,9 +272,9 @@ Storage.prototype.getSession = function(skey, callback) {
   });
 };
 
-Storage.prototype.deleteSession = function(sessionToken, callback) {
+Storage.prototype.deleteSession = function(sessionID, callback) {
   this.database.delete('session', {
-    key: { '=': sessionToken }
+    id: { '=': sessionID }
   }, function(err, result) {
     if(err) {
       errHandler(callback, err, 'session');
