@@ -57,6 +57,6 @@ angular.module('flowsimUiApp')
     this.Payloads = [];
     this.create = function() {
       return new ARP();
-    }
+    };
   });
 

@@ -17,7 +17,7 @@ angular.module('flowsimUiApp')
         getOptions: '&',    // callback for node construction tree
         createNode: '&',    // callback for creating a node
         saveStack: '&'      // callback for persisting changes
-      }, controller: function($scope, $rootScope) {
+      }, controller: function($scope) {
                 
         $scope.stack    = [];
         $scope.nodeType = '';  // input type to create node
@@ -41,8 +41,7 @@ angular.module('flowsimUiApp')
        };
 
        // Delete the node from the top of the stack
-       $scope.delNode = function(pos) {
-         var lastName;
+       $scope.delNode = function() {
          $scope.stack.pop();
          $scope.options = $scope.getOptions()($scope.stack); 
        };

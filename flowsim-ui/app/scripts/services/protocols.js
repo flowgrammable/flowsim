@@ -55,16 +55,16 @@ angular.module('flowsimUiApp')
 
     var Payloads = {
       Ethernet: ETHERNET.Payloads,
-      VLAN: VLAN.Payloads,
-      ARP: ARP.Payloads,
-      MPLS: MPLS.Payloads,
-      IPv4: IPV4.Payloads,
-      IPv6: IPV6.Payloads,
-      ICMPv4: ICMPV4.Payloads,
-      ICMPv6: ICMPV6.Payloads,
-      TCP: TCP.Payloads,
-      UDP: UDP.Payloads,
-      SCTP: SCTP.Payloads
+      VLAN:     VLAN.Payloads,
+      ARP:      ARP.Payloads,
+      MPLS:     MPLS.Payloads,
+      IPv4:     IPV4.Payloads,
+      IPv6:     IPV6.Payloads,
+      ICMPv4:   ICMPV4.Payloads,
+      ICMPv6:   ICMPV6.Payloads,
+      TCP:      TCP.Payloads,
+      UDP:      UDP.Payloads,
+      SCTP:     SCTP.Payloads
     };
 
     this.createPacket = function(name) {
@@ -82,43 +82,31 @@ angular.module('flowsimUiApp')
     this.createProtocol = function(name) {
       switch(name) {
         case 'Ethernet':
-          return Ethernet.create();
-          break;
+          return ETHERNET.create();
         case 'VLAN':
           return VLAN.create();
-          break;
         case 'MPLS':
           return MPLS.create();
-          break;
         case 'ARP':
           return ARP.create();
-          break;
         case 'IPv4':
           return IPV4.create();
-          break;
         case 'IPv6':
           return IPV6.create();
-          break;
         case 'ICMPv4':
           return ICMPV4.create();
-          break;
         case 'ICMPv6':
           return ICMPV6.create();
-          break;
         case 'TCP':
           return TCP.create();
-          break;
         case 'UDP':
           return UDP.create();
-          break;
         case 'SCTP':
           return SCTP.create();
-          break;
         default:
           return null;
-          break;
       }
-    }
+    };
 
   });
 

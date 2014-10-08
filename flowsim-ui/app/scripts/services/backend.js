@@ -23,7 +23,7 @@ angular.module('flowsimUiApp')
     function request(that, method, path, data, callback) {
       $http[method](path, data, {
         headers: { 'x-access-token': that._xAccessToken } 
-        }).success(function(data, status) {
+        }).success(function(data) {
           unwrap(data, callback);
         }).error(function(data, status) {
           callback({
@@ -46,17 +46,17 @@ angular.module('flowsimUiApp')
       request(this, 'get', path, data, callback);
     };
 
-    this.post = function() {
+    this.post = function(path, data, callback) {
       request(this, 'post', path, data, callback);
     };
 
-    this.update = function() {
+    this.update = function(path, data, callback) {
       request(this, 'put', path, data, callback);
     };
 
-    this.delete = function() {
+    this.delete = function(path, data, callback) {
       request(this, 'delete', path, data, callback);
-    }
+    };
 
   });
 

@@ -58,7 +58,6 @@ angular.module('flowsimUiApp')
     };
 
     this.login = function(email, password, callback) {
-      var that = this;
       Backend.post('/api/subscriber/login', {
           email: email,
           password: password
@@ -75,7 +74,6 @@ angular.module('flowsimUiApp')
     };
       
     this.logout = function(callback) {
-      var that = this;
       Backend.post('/api/subscriber/logout', {}, function(err, result) {
         Backend.deauthorize();
         callback(err, result);

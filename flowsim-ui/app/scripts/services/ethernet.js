@@ -21,7 +21,8 @@ function Ethernet() {
   }, {
     name: 'Typelen',
     value: 0,
-    test: function() { return true; },
+    test: function() { return true; }
+  }];
 }
 
 Ethernet.prototype.bytes = function() { 
