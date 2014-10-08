@@ -51,6 +51,12 @@ Packet.prototype.items = function() {
 angular.module('flowsimUiApp')
   .service('Protocols', function protocols() {
 
+    var macPattern = /([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}/;
+
+    function validMac(mac) {
+      return macPattern.test(mac);
+    }
+
     var Payloads = {
       Ethernet: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
       VLAN: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
@@ -86,12 +92,12 @@ angular.module('flowsimUiApp')
       this.attrs = [ {
         name: 'Src',
         value: '00:00:00:00:00:00',
-        test: function() { return true; },
+        test: validMac,
         tip: 'Ethernet source MAC address'
       }, {
         name: 'Dst',
         value: '00:00:00:00:00:00',
-        test: function() { return false; },
+        test: validMac,
         tip: 'Ethernet destination MAC address'
       }, {
         name: 'Typelen',
@@ -112,7 +118,7 @@ angular.module('flowsimUiApp')
       }, {
         name: 'SHA',
         value: '00:00:00:00:00:00',
-        test: function() { return true; },
+        test: validMac,
         tip: 'Source hardware address'
       }, {
         name: 'SPA',
@@ -122,7 +128,7 @@ angular.module('flowsimUiApp')
       }, {
         name: 'THA',
         value: '00:00:00:00:00:00',
-        test: function() { return true; },
+        test: validMac,
         tip: 'Target hardware address'
       }, {
         name: 'TPA',
