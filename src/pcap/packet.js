@@ -18,10 +18,18 @@ Header.prototype.bytes = function() {
 };
 
 Header.prototype._fromView = function(v) {
-  this.sec    = view.readUInt32(this.mode)(v);
-  this.usec   = view.readUInt32(this.mode)(v, 4);
-  this.caplen = view.readUInt32(this.mode)(v, 8);
-  this.len    = view.readUInt32(this.mode)(v, 12);
+  if (v.bytes() >= 16) {
+    this.sec    = view.readUInt32(this.mode)(v);
+    this.usec   = view.readUInt32(this.mode)(v, 4);
+    this.caplen = view.readUInt32(this.mode)(v, 8);
+    this.len    = view.readUInt32(this.mode)(v, 12);
+  }
+  else {
+    this.sec    = null;
+    this.usec   = null;
+    this.caplen = null;
+    this.len    = null;
+  }
 };
 
 Header.prototype._toView = function(v) {
