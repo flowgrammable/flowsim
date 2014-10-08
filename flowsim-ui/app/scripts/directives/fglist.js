@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
     return {
       restrict: 'E',                      // HTML Element
       transclude: true,                   // Copy element body in
-      templateUrl: 'fglist.html',         // Location of template
+      templateUrl: 'views/fglist.html',         // Location of template
       scope: {
         onAdd: '&',                       // callback for adding item
         onDel: '&',                       // callback for deleting item
