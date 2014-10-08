@@ -60,6 +60,8 @@ tools; grunt-cli, and bower. Our first step is to install these as global npm
 packages using the '-g' option.
 - sudo npm install -g grunt-cli
 - sudo npm install -g bower
+- sudo npm install -g yo
+- sudo npm install -g generator-angular
 
 During this process it is possible that you have accidentally changed ownership
 of some of your node package management configuration files. This will cause
