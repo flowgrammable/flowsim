@@ -31,7 +31,11 @@ angular.module('flowsimUiApp')
       }
     };
 
-    this.backend = Backend;
+    // Provide a mapping to the undrelying serve http methods
+    this.httpGet    = Backend.get;
+    this.httpPost   = Backend.post;
+    this.httpUpdate = Backend.update;
+    this.httpDelete = Backend.delete;
 
     this.register = function(email, password, callback) {
       Backend.post('/api/subscriber/register', {

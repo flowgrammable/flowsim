@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
   .service('Packet', function Packet(Subscriber) {
 
     this.get = function(callback) {
-      Subscriber.backend.get('/api/packet', {}, function(err, result) {
+      Subscriber.httpGet('/api/packet', {}, function(err, result) {
         callback(err, result);
       });
     };
@@ -20,10 +20,6 @@ angular.module('flowsimUiApp')
     };
 
     this.add = function(name) {
-
-      // Add the name
-      this.names[name] = true;
-      packets.push(name);
     };
 
     this.del = function(pos) {
@@ -39,6 +35,7 @@ angular.module('flowsimUiApp')
     };
 
     this.save = function(name) {
+      name;
     };
 
   });

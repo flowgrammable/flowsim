@@ -50,7 +50,7 @@ angular.module('flowsimUiApp')
         
         $scope.addItem = function() {
           $scope.errorMsg = $scope.onAdd()($scope.itemName);
-          if($scope.errorMsg.length) {
+          if(!$scope.errorMsg.length) {
             $scope.items.push($scope.itemName);
             $scope.shiftFocus($scope.items.length-1);
             $scope.clearState();

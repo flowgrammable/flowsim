@@ -19,7 +19,8 @@ angular.module('flowsimUiApp')
     
     Packet.get(function(err, result) {
       if(err) {
-        $scope.errorMsg = err.message;
+        // uncomment to work in rest init
+        //$scope.errorMsg = err.message;
         console.log(err.details);
       } else {
         $scope.packets = result.packets;
@@ -53,6 +54,15 @@ angular.module('flowsimUiApp')
       if(name in $scope.packets) {
         delete $scope.packets[name];
       }
+    };
+
+    $scope.getProtocols = function() {
+    };
+
+    $scope.createProtocol = function() {
+    };
+
+    $scope.savePacket = function() {
     };
     
   });
