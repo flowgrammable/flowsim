@@ -1,5 +1,11 @@
 'use strict';
 
+function UDP() {
+}
+
+UDP.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.UDP
@@ -9,5 +15,8 @@
  */
 angular.module('flowsimUiApp')
   .service('UDP', function UDP() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [];
+    this.create = function() {
+      return new UDP();
+    };
   });

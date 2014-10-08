@@ -1,5 +1,11 @@
 'use strict';
 
+function IPv6() {
+}
+
+IPv6.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.IPV6
@@ -9,5 +15,13 @@
  */
 angular.module('flowsimUiApp')
   .service('IPV6', function IPV6() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [
+      'ICMPv6',
+      'TCP',
+      'UDP',
+      'SCTP'
+    ];
+    this.create = function() {
+      return new IPv6();
+    };
   });

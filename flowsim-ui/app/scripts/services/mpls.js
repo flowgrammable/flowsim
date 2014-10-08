@@ -1,5 +1,11 @@
 'use strict';
 
+function MPLS() {
+}
+
+MPLS.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.MPLS
@@ -9,5 +15,8 @@
  */
 angular.module('flowsimUiApp')
   .service('MPLS', function MPLS() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [];
+    this.create = function() {
+      return new MPLS();
+    };
   });

@@ -1,5 +1,11 @@
 'use strict';
 
+function TCP() {
+}
+
+TCP.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.TCP
@@ -9,5 +15,8 @@
  */
 angular.module('flowsimUiApp')
   .service('TCP', function TCP() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [];
+    this.create = function() {
+      return new TCP();
+    };
   });

@@ -1,5 +1,11 @@
 'use strict';
 
+function ICMPv4() {
+}
+
+ICMPv4.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.ICMPV4
@@ -9,5 +15,8 @@
  */
 angular.module('flowsimUiApp')
   .service('ICMPV4', function ICMPV4() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [];
+    this.create = function() {
+      return new ICMPv4();
+    };
   });

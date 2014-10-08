@@ -1,5 +1,11 @@
 'use strict';
 
+function VLAN() {
+}
+
+VLAN.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.VLAN
@@ -9,5 +15,14 @@
  */
 angular.module('flowsimUiApp')
   .service('VLAN', function VLAN() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [
+      'VLAN',
+      'MPLS',
+      'ARP',
+      'IPv4',
+      'IPv6'
+    ];
+    this.create = function() {
+      return new VLAN();
+    };
   });

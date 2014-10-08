@@ -1,5 +1,11 @@
 'use strict';
 
+function IPv4() {
+}
+
+IPv4.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.IPV4
@@ -9,5 +15,13 @@
  */
 angular.module('flowsimUiApp')
   .service('IPV4', function IPV4() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [
+      'ICMPv4',
+      'TCP',
+      'UDP',
+      'SCTP'
+    ];
+    this.create = function() {
+      return new IPv4();
+    };
   });

@@ -53,28 +53,22 @@ angular.module('flowsimUiApp')
     function protocols(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4, ICMPV6, 
       TCP, UDP, SCTP) {
 
-    var macPattern = /([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}/;
-
-    function validMac(mac) {
-      return macPattern.test(mac);
-    }
-
     var Payloads = {
-      Ethernet: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
-      VLAN: ['VLAN', 'ARP', 'MPLS', 'IPv4', 'IPv6'],
-      ARP: [],
-      MPLS: [],
-      IPv4: ['ICMPv4', 'TCP', 'UDP', 'SCTP'],
-      IPv6: ['ICMPv6', 'TCP', 'UDP', 'SCTP'],
-      ICMPv4: [],
-      ICMPv6: [],
-      TCP: [],
-      UDP: [],
-      SCTP: []
+      Ethernet: ETHERNET.Payloads,
+      VLAN: VLAN.Payloads,
+      ARP: ARP.Payloads,
+      MPLS: MPLS.Payloads,
+      IPv4: IPV4.Payloads,
+      IPv6: IPV6.Payloads,
+      ICMPv4: ICMPV4.Payloads,
+      ICMPv6: ICMPV6.Payloads,
+      TCP: TCP.Payloads,
+      UDP: UDP.Payloads,
+      SCTP: SCTP.Payloads
     };
 
     this.createPacket = function(name) {
-      return new Packet(name, new this.Ethernet());
+      return new Packet(name, ETHERNET.create());
     };
 
     this.getOptions = function(name) {
@@ -86,61 +80,45 @@ angular.module('flowsimUiApp')
     };
 
     this.createProtocol = function(name) {
-      return new this[name];
+      switch(name) {
+        case 'Ethernet':
+          return Ethernet.create();
+          break;
+        case 'VLAN':
+          return VLAN.create();
+          break;
+        case 'MPLS':
+          return MPLS.create();
+          break;
+        case 'ARP':
+          return ARP.create();
+          break;
+        case 'IPv4':
+          return IPV4.create();
+          break;
+        case 'IPv6':
+          return IPV6.create();
+          break;
+        case 'ICMPv4':
+          return ICMPV4.create();
+          break;
+        case 'ICMPv6':
+          return ICMPV6.create();
+          break;
+        case 'TCP':
+          return TCP.create();
+          break;
+        case 'UDP':
+          return UDP.create();
+          break;
+        case 'SCTP':
+          return SCTP.create();
+          break;
+        default:
+          return null;
+          break;
+      }
     }
 
-    this.Ethernet = function() {
-      this.name = 'Ethernet';
-      this.attrs = [ {
-        name: 'Src',
-        value: '00:00:00:00:00:00',
-        test: validMac,
-        tip: 'Ethernet source MAC address'
-      }, {
-        name: 'Dst',
-        value: '00:00:00:00:00:00',
-        test: validMac,
-        tip: 'Ethernet destination MAC address'
-      }, {
-        name: 'Typelen',
-        value: 0,
-        test: function() { return true; },
-        tip: 'Ethernet type/length'
-      }];
-    };
-    this.Ethernet.prototype.bytes = function() { return 14; };
-
-    this.ARP = function() {
-      this.name = 'ARP';
-      this.attrs = [{
-        name: 'Opcode',
-        value: 0,
-        test: function() { return true; },
-        tip: 'ARP message type'
-      }, {
-        name: 'SHA',
-        value: '00:00:00:00:00:00',
-        test: validMac,
-        tip: 'Source hardware address'
-      }, {
-        name: 'SPA',
-        value: '0.0.0.0',
-        test: function() { return true; },
-        tip: 'Source protocol address'
-      }, {
-        name: 'THA',
-        value: '00:00:00:00:00:00',
-        test: validMac,
-        tip: 'Target hardware address'
-      }, {
-        name: 'TPA',
-        value: '0.0.0.0',
-        test: function() { return true; },
-        tip: 'Target protocol address'
-      }];
-    };
-    this.ARP.prototype.bytes = function() {
-      return 28;
-    };
-
   });
+

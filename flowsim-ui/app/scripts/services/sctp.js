@@ -1,5 +1,11 @@
 'use strict';
 
+function SCTP() {
+}
+
+SCTP.prototype.bytes = function() {
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.SCTP
@@ -9,5 +15,8 @@
  */
 angular.module('flowsimUiApp')
   .service('SCTP', function SCTP() {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+    this.Payloads = [];
+    this.create = function() {
+      return new SCTP();
+    };
   });
