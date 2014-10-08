@@ -210,6 +210,23 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
   });
 };
 
+Storage.prototype.updateSubscriberPasswordByToken = function(token, password, 
+  callback) {
+  this.database.update('subscriber', {
+    password: password,
+    status: 'ACTIVE'
+  }, {
+    verification_token: { '=': token },
+    status: { '=': 'RESET' }
+  }, function(err, result) {
+    if(err) {
+      errHandler(callback, err, 'subscriber'); 
+    } else {
+      callback(null, msg.success());
+    }
+  });
+};
+
 Storage.prototype.updateSubscriberPassword = function(subscriber_id, password, 
   callback) {
   this.database.update('subscriber', {
@@ -218,7 +235,7 @@ Storage.prototype.updateSubscriberPassword = function(subscriber_id, password,
     id: { '=': subscriber_id }
   }, function(err, result) {
     if(err) {
-      
+      errHandler(callback, err, 'subscriber'); 
     } else {
       callback(null, msg.success());
     }

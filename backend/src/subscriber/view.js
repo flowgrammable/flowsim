@@ -95,7 +95,7 @@ function verify(view) {
   };
 }
 
-function reset(view) {
+function forgot(view) {
   return function(req, res, next) {
     var responder = util.Responder(res, next);
     if(!req.body.email) {
@@ -104,6 +104,21 @@ function reset(view) {
       responder(msg.malformedEmail());
     } else {
       view.controller.reset(req.body.email, responder);
+    }
+  };
+}
+
+function reset(view) {
+  return function(req, res, next) {
+    var responder = util.Responder(res, next);
+    if(!req.body.token) {
+      responder(msg.missingToken());
+    } else if(!req.body.password) {
+      responder(msg.missingPassword());
+    } else if(!validator.malformedPassword(req.body.password)) {
+      responder(msg.malformedEmail());
+    } else {
+      view.controller.reset(req.body.token, req.body.password, responder);
     }
   };
 }
@@ -153,6 +168,10 @@ function View(c, subscriberLogger) {
       method: 'post',
       path: 'verify',
       handler: verify(this)
+    }, {
+      method: 'post',
+      path: 'forgot',
+      handler: forgot(this)
     }, {
       method: 'post',
       path: 'reset',

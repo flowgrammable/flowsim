@@ -145,7 +145,7 @@ Controller.prototype.verify = function(token, callback) {
   });
 };
 
-Controller.prototype.reset = function(email, callback) {
+Controller.prototype.forgot = function(email, callback) {
   // update the subscriber state and send and email
   // or send an error
   var token = uuid.v4();
@@ -163,6 +163,11 @@ Controller.prototype.reset = function(email, callback) {
       callback(null, msg.success());
     }
   });
+};
+
+Controller.prototype.reset = function(token, password, callback) {
+  var hash = bcrypt.hashSync(password, 10);
+  this.storage.updateSubscriberPasswordByToken(token, hash, callback);
 };
 
 Controller.prototype.update = function(subscriber_id, session_id, oldPwd, 
