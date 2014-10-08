@@ -49,7 +49,9 @@ Packet.prototype.items = function() {
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Protocols', function protocols() {
+  .service('Protocols', 
+    function protocols(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4, ICMPV6, 
+      TCP, UDP, SCTP) {
 
     var macPattern = /([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}/;
 
