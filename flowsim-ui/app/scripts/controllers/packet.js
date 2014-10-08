@@ -51,7 +51,7 @@ angular.module('flowsimUiApp')
       } else if(name in $scope.packets) {
         return 'Name exists';
       } else {
-        $scope.packets[name] = $scope.packet;
+        $scope.packets[name] = Protocols.createPacket(name);
         $scope.setPacket(name);
         return '';
       }
