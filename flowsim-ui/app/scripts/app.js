@@ -48,6 +48,14 @@ angular
         templateUrl: 'views/forgot.html',
         controller: 'ForgotCtrl'
       })
+      .when('/packet', {
+        templateUrl: 'views/packet.html',
+        controller: 'PacketCtrl'
+      })
+      .when('/packet', {
+        templateUrl: 'views/packet.html',
+        controller: 'PacketCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

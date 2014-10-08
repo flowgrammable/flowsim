@@ -36,6 +36,9 @@
           </div>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+              <li ng-show="authenticated">
+                <a href="#packet">Packet</a>
+              </li>
               <li><a href="http://www.flowgrammable.org">OpenFlow</a></li>
               <li ng-show="authenticated">
                 <a href="#subscriber/update">Account</a>
@@ -125,6 +128,9 @@
         <script src="scripts/controllers/update.js"></script>
         <script src="scripts/controllers/menu.js"></script>
         <script src="scripts/controllers/forgot.js"></script>
+        <script src="scripts/controllers/packet.js"></script>
+        <script src="scripts/directives/fglist.js"></script>
+        <script src="scripts/directives/fgstack.js"></script>
         <!-- endbuild -->
 </body>
 </html>
