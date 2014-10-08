@@ -1,9 +1,17 @@
 'use strict';
     
-var macPattern = /([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}/;
+var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
 
-function validMac(mac) {
-  return macPattern.test(mac);
+var Payloads = {
+  'VLAN': 0x8100,
+  'MPLS': 0x8847,
+  'ARP':  0x0806,
+  'IPv4': 0x0800,
+  'IPv6': 0x86dd
+};
+
+function isMAC(addr) {
+  return macPattern.test(addr);
 }
 
 function _Ethernet() {
@@ -11,22 +19,31 @@ function _Ethernet() {
   this.attrs = [ {
     name: 'Src',
     value: '00:00:00:00:00:00',
-    test: validMac,
+    test: isMAC,
     tip: 'Ethernet source MAC address'
   }, {
     name: 'Dst',
     value: '00:00:00:00:00:00',
-    test: validMac,
+    test: isMAC,
     tip: 'Ethernet destination MAC address'
   }, {
     name: 'Typelen',
     value: 0,
-    test: function() { return true; }
+    test: fgConstraints.isUInt(0, 0xffff),
+    tip: 'Ethernet type/length of payload'
   }];
 }
 
 _Ethernet.prototype.bytes = function() { 
   return 14; 
+};
+
+_Ethernet.prototype.setPayload = function(name) {
+  this.attrs[2].value = Payloads[name] || 0;
+};
+
+_Ethernet.prototype.clearPayload = function() {
+  this.attrs[2].value = 0;
 };
 
 /**
@@ -43,12 +60,6 @@ angular.module('flowsimUiApp')
       return new _Ethernet();
     };
 
-    this.Payloads = [
-      'VLAN',
-      'MPLS',
-      'ARP',
-      'IPv4',
-      'IPv6'
-    ];
+    this.Payloads = Object.keys(Payloads);
 
   });

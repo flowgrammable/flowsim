@@ -2,11 +2,21 @@
 
 function _ICMPv6() {
   this.name = 'ICMPv6';
-  this.attrs = [];
+  this.attrs = [{
+    name: 'Type',
+    value: 0,
+    test: fgConstraints.isUInt(0, 0xff),
+    tip: 'ICMP message type'
+  }, {
+    name: 'Code',
+    value: 0,
+    test: fgConstraints.isUInt(0, 0xff),
+    tip: 'ICMP message code'
+  }];
 }
 
 _ICMPv6.prototype.bytes = function() {
-  return 0;
+  return 4; //+ addition things
 };
 
 /**

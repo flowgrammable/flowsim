@@ -1,14 +1,15 @@
 'use strict';
 
-var macPattern = /([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}/;
-var ipv4Pattern = /([0-9]{1,3}\.){3}[0-9]{1,3}/;
+var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
+var ipv4Pattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
 
-function validMac(mac) {
-  return macPattern.test(mac);
+function isMAC(addr) {
+  return macPattern.test(addr);
 }
 
-function validIPv4(ipv4) {
-  return ipv4Pattern.test(ipv4);
+function isIPv4(ipv4) {
+  return ipv4Pattern.test(ipv4) && 
+         _.every(ipv4.split('.'), fgConstraints.isUInt(0, 255));
 }
 
 function _ARP() {
@@ -16,27 +17,27 @@ function _ARP() {
   this.attrs = [{
     name: 'Opcode',
     value: 0,
-    test: function() { return true; },
+    test: fgConstraints.isUInt(0, 1),
     tip: 'ARP message type'
   }, {
     name: 'SHA',
     value: '00:00:00:00:00:00',
-    test: validMac,
+    test: isMAC,
     tip: 'Source hardware address'
   }, {
     name: 'SPA',
     value: '0.0.0.0',
-    test: validIPv4,
+    test: isIPv4,
     tip: 'Source protocol address'
   }, {
     name: 'THA',
     value: '00:00:00:00:00:00',
-    test: validMac,
+    test: isMAC,
     tip: 'Target hardware address'
   }, {
     name: 'TPA',
     value: '0.0.0.0',
-    test: validIPv4,
+    test: isIPv4,
     tip: 'Target protocol address'
   }];
 }

@@ -2,11 +2,21 @@
 
 function _SCTP() {
   this.name = 'SCTP';
-  this.attrs = [];
+  this.attrs = [{
+    name: 'Src',
+    value: 0,
+    test: fgConstraints.isUInt(0, 0xffff),
+    tip: 'Source port'
+  }, {
+    name: 'Dst',
+    value: 0,
+    test: fgConstraints.isUInt(0, 0xffff),
+    tip: 'Destination port'
+  }];
 }
 
 _SCTP.prototype.bytes = function() {
-  return 0;
+  return 12;
 };
 
 /**

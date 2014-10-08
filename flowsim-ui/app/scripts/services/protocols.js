@@ -8,17 +8,25 @@ function Packet(name, protocol) {
 }
 
 Packet.prototype.push = function(protocol) {
-  console.log(protocol);
+  var top = this.top();
   this.length += 1;
+  if(top) {
+    top.setPayload(protocol.name);
+  }
   this._payload.push(protocol);
   this._bytes += protocol.bytes();
 };
 
 Packet.prototype.pop = function() {
-  if(this._payload.length) {
+  var top = this.top();
+  if(top) {
     this.length -= 1;
-    this._bytes -= this._payload[this._payload.length-1].bytes();
+    this._bytes -= top.bytes();
     this._payload.splice(this._payload.length-1);
+  }
+  top = this.top();
+  if(top) {
+    top.clearPayload();
   }
 };
 

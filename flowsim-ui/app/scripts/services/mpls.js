@@ -2,11 +2,26 @@
 
 function _MPLS() {
   this.name = 'MPLS';
-  this.attrs = [];
+  this.attrs = [{
+    name: 'Label',
+    value: 0,
+    test: fgConstraints.isUInt(0, 0x0fffff),
+    tip: 'MPLS Label'
+  }, {
+    name: 'TC',
+    value: 0,
+    test: fgConstraints.isUInt(0, 7),
+    tip: 'Traffic Control'
+  }, {
+    name: 'BoS',
+    value: 0,
+    test: fgConstraints.isUInt(0, 1),
+    tip: 'Botom of Stack'
+  }];
 }
 
 _MPLS.prototype.bytes = function() {
-  return 0;
+  return 4;
 };
 
 /**

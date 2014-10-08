@@ -2,7 +2,17 @@
 
 function _TCP() {
   this.name = 'TCP';
-  this.attrs = [];
+  this.attrs = [{
+    name: 'Src',
+    value: 0,
+    test: fgConstraints.isUInt(0, 0xffff),
+    tip: 'Source port'
+  }, {
+    name: 'Dst',
+    value: 0,
+    test: fgConstraints.isUInt(0, 0xffff),
+    tip: 'Destination port'
+  }];
 }
 
 _TCP.prototype.bytes = function() {
