@@ -31,6 +31,8 @@ angular.module('flowsimUiApp')
       }
     };
 
+    this.backend = Backend;
+
     this.register = function(email, password, callback) {
       Backend.post('/api/subscriber/register', {
         email: email,

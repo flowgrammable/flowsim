@@ -20,11 +20,10 @@ angular.module('flowsimUiApp')
       }
     }
 
-    function request(method, path, data, callback) {
-      var that = this;
+    function request(that, method, path, data, callback) {
       $http[method](path, data, {
-        headers: { 'x-access-token': that._xAccessToken } }, 
-        ).success(function(data, status) {
+        headers: { 'x-access-token': that._xAccessToken } 
+        }).success(function(data, status) {
           unwrap(data, callback);
         }).error(function(data, status) {
           callback({
@@ -44,19 +43,19 @@ angular.module('flowsimUiApp')
     };
 
     this.get = function(path, data, callback) {
-      request('get', path, data, callback);
+      request(this, 'get', path, data, callback);
     };
 
     this.post = function() {
-      request('post', path, data, callback);
+      request(this, 'post', path, data, callback);
     };
 
     this.update = function() {
-      request('put', path, data, callback);
+      request(this, 'put', path, data, callback);
     };
 
     this.delete = function() {
-      request('delete', path, data, callback);
+      request(this, 'delete', path, data, callback);
     }
 
   });

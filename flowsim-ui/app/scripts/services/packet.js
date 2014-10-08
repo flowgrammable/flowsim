@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
   .service('Packet', function Packet(Subscriber) {
 
     this.get = function(callback) {
-      Subscriber.request('get', 'packet', {}, function(err, result) {
+      Subscriber.backend.get('/api/packet', {}, function(err, result) {
         callback(err, result);
       });
     };
