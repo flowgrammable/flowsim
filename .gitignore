@@ -2,5 +2,6 @@ node_modules/*
 bower_components/*
 *.swp
 .DS_store
+.config.json
 running.json
 log.txt
