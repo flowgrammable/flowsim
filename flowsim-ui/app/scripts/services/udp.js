@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 function _UDP() {
   this.name = 'UDP';
   this.attrs = [{
@@ -33,3 +35,6 @@ angular.module('flowsimUiApp')
       return new _UDP();
     };
   });
+
+})();
+

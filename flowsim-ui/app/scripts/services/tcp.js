@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 function _TCP() {
   this.name = 'TCP';
   this.attrs = [{
@@ -33,3 +35,6 @@ angular.module('flowsimUiApp')
       return new _TCP();
     };
   });
+
+})();
+

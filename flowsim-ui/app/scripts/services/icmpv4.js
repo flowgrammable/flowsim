@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 function _ICMPv4() {
   this.name = 'ICMPv4';
   this.attrs = [{
@@ -33,3 +35,6 @@ angular.module('flowsimUiApp')
       return new _ICMPv4();
     };
   });
+
+})();
+

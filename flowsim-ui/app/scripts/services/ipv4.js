@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 var ipv4Pattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
 
 function isIPv4(ipv4) {
@@ -70,3 +72,6 @@ angular.module('flowsimUiApp')
       return new _IPv4();
     };
   });
+
+})();
+

@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
 var ipv4Pattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
 
@@ -60,4 +62,6 @@ angular.module('flowsimUiApp')
       return new _ARP();
     };
   });
+
+})();
 

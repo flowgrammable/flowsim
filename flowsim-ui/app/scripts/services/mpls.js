@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 function _MPLS() {
   this.name = 'MPLS';
   this.attrs = [{
@@ -38,3 +40,6 @@ angular.module('flowsimUiApp')
       return new _MPLS();
     };
   });
+
+})();
+

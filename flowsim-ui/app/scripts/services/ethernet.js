@@ -1,4 +1,6 @@
 'use strict';
+
+(function() {
     
 var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
 
@@ -28,7 +30,7 @@ function _Ethernet() {
     tip: 'Ethernet destination MAC address'
   }, {
     name: 'Typelen',
-    value: 0,
+    value: '0',
     test: fgConstraints.isUInt(0, 0xffff),
     tip: 'Ethernet type/length of payload'
   }];
@@ -39,11 +41,11 @@ _Ethernet.prototype.bytes = function() {
 };
 
 _Ethernet.prototype.setPayload = function(name) {
-  this.attrs[2].value = Payloads[name] || 0;
+  this.attrs[2].value = (Payloads[name] || 0).toString(16);
 };
 
 _Ethernet.prototype.clearPayload = function() {
-  this.attrs[2].value = 0;
+  this.attrs[2].value = '0';
 };
 
 /**
@@ -63,3 +65,6 @@ angular.module('flowsimUiApp')
     this.Payloads = Object.keys(Payloads);
 
   });
+
+})();
+

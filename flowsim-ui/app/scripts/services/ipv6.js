@@ -1,5 +1,7 @@
 'use strict';
 
+(function(){
+
 var ipv6Pattern = /^[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}$/;
 
 function isIPv6(addr) {
@@ -79,3 +81,6 @@ angular.module('flowsimUiApp')
       return new _IPv6();
     };
   });
+
+})();
+
