@@ -48,14 +48,14 @@
   
   <div style="text-align:center">
     <button type="button" class="btn btn-primary btn-sm" 
-      ng-disabled="{{!stackDirty}}" ng-click="save()">
+      ng-class="{'disabled': !dirty}" ng-click="save()">
       Save
     </button>
     <button type="button" class="btn btn-primary btn-sm" 
-      ng-disabled="{{!stackDirty}}" ng-click="revert()">
+      ng-class="{'disabled': !dirty}" ng-click="revert()">
       Revert
     </button>
   </div>
-  
+
 </div>
 

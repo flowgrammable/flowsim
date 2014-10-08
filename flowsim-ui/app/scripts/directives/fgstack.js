@@ -18,7 +18,8 @@ angular.module('flowsimUiApp')
         createNode: '&',    // callback for creating a node
         saveStack: '&'      // callback for persisting changes
       }, controller: function($scope) {
-                
+         
+        $scope.dirty    = false;
         $scope.stack    = [];
         $scope.nodeType = '';  // input type to create node
         $scope.options  = [];  // input select options
@@ -37,6 +38,7 @@ angular.module('flowsimUiApp')
            $scope.stack.push(node); 
            $scope.nodeType = '';
            $scope.options = $scope.getOptions()($scope.stack); 
+           $scope.dirty = true;
          }
        };
 
@@ -44,6 +46,14 @@ angular.module('flowsimUiApp')
        $scope.delNode = function() {
          $scope.stack.pop();
          $scope.options = $scope.getOptions()($scope.stack); 
+       };
+
+       $scope.save = function() {
+         $scope.dirty = false;
+       };
+
+       $scope.revert = function() {
+         $scope.dirty = false;
        };
 
       }
