@@ -86,6 +86,7 @@ angular.module('flowsimUiApp')
     };
 
     this.login = function(email, password, callback) {
+      var that = this;
       this.post('subscriber/login', {
           email: email,
           password: password
@@ -93,7 +94,7 @@ angular.module('flowsimUiApp')
           if(err) {
             callback(err);
           } else if(result['x-access-token']){
-            this._xAccessToken = result['x-access-token'];
+            that._xAccessToken = result['x-access-token'];
             callback(null, true);
           } else {
             callback('No access token');
@@ -102,8 +103,9 @@ angular.module('flowsimUiApp')
     };
       
     this.logout = function(callback) {
+      var that = this;
       this.post('subscriber/logout', {}, function(err, result) {
-        this._xAccessToken = '';
+        that._xAccessToken = '';
         callback(err, result);
       });
     };

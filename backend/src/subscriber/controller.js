@@ -135,6 +135,7 @@ Controller.prototype.verify = function(token, callback) {
   // if the verification token is valid update
   // subscriber state
   // otherwise send an error
+  var that = this;
   this.storage.verifySubscriber(token, function(err, result){
     if(err){
       that.logger.error(err);
@@ -144,7 +145,7 @@ Controller.prototype.verify = function(token, callback) {
   });
 };
 
-Controller.prototype.forgot = function(email, callback) {
+Controller.prototype.reset = function(email, callback) {
   // update the subscriber state and send and email
   // or send an error
   var token = uuid.v4();
@@ -154,7 +155,7 @@ Controller.prototype.forgot = function(email, callback) {
     if(err) {
       callback(err);
     } else {
-      body = that.template.render('forgot', {
+      body = that.template.render('reset', {
         baseUrl: that.server.baseUrl(),
         token: token
       });

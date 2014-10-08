@@ -95,7 +95,7 @@ function verify(view) {
   };
 }
 
-function forgot(view) {
+function reset(view) {
   return function(req, res, next) {
     var responder = util.Responder(res, next);
     if(!req.body.email) {
@@ -103,7 +103,7 @@ function forgot(view) {
     } else if(!validator.isEmail(req.body.email)) {
       responder(msg.malformedEmail());
     } else {
-      view.controller.forgot(req.body.email, responder);
+      view.controller.reset(req.body.email, responder);
     }
   };
 }
@@ -155,8 +155,8 @@ function View(c, subscriberLogger) {
       handler: verify(this)
     }, {
       method: 'post',
-      path: 'forgot',
-      handler: forgot(this)
+      path: 'reset',
+      handler: reset(this)
     }, {
       method: 'post',
       path: 'update',
