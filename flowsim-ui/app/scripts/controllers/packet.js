@@ -1,5 +1,6 @@
 'use strict';
 
+
 /**
  * @ngdoc function
  * @name flowsimUiApp.controller:PacketCtrl
@@ -8,7 +9,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('PacketCtrl', function ($scope, Packet) {
+  .controller('PacketCtrl', function ($scope, Packet, Protocols) {
     // Method to add a new packet
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
@@ -21,6 +22,10 @@ angular.module('flowsimUiApp')
       if(err) {
         // uncomment to work in rest init
         //$scope.errorMsg = err.message;
+        // this is temporary
+        $scope.packets['test'] = Protocols.createPacket('test');
+        $scope.$broadcast('initList', ['test']);
+        $scope.setPacket('test');
         console.log(err.details);
       } else {
         $scope.packets = result.packets;
@@ -33,6 +38,9 @@ angular.module('flowsimUiApp')
     $scope.setPacket = function(name) {
       if(name in $scope.packets) {
         $scope.packet = $scope.packets[name];
+        $scope.$broadcast('setStack', $scope.packet);
+      } else {
+        $scope.packet = null;
       }
     };
     
@@ -43,8 +51,8 @@ angular.module('flowsimUiApp')
       } else if(name in $scope.packets) {
         return 'Name exists';
       } else {
-        $scope.packet = Packet.create(name);
         $scope.packets[name] = $scope.packet;
+        $scope.setPacket(name);
         return '';
       }
     };
@@ -56,10 +64,12 @@ angular.module('flowsimUiApp')
       }
     };
 
-    $scope.getProtocols = function() {
+    $scope.getProtocols = function(packet) {
+      return Protocols.getOptions(packet.top().name);
     };
 
-    $scope.createProtocol = function() {
+    $scope.createProtocol = function(name) {
+      return Protocols.createProtocol(name);
     };
 
     $scope.savePacket = function() {

@@ -19,13 +19,13 @@ angular.module('flowsimUiApp')
         saveStack: '&'      // callback for persisting changes
       }, controller: function($scope, $rootScope) {
                 
-        $scope.stack = [];
-        $scope.nodeType = '';       // input type to create node
-        $scope.options = [];        // input select options
+        $scope.stack    = [];
+        $scope.nodeType = '';  // input type to create node
+        $scope.options  = [];  // input select options
 
         // Update the current display
         $scope.$on('setStack', function(ev, data) {
-          $scope.stack = data.stack;
+          $scope.stack = data;
           $scope.options = $scope.getOptions()(data);
         });
 

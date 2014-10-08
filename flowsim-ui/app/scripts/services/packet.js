@@ -35,7 +35,6 @@ angular.module('flowsimUiApp')
     };
 
     this.save = function(name) {
-      name;
     };
 
   });
