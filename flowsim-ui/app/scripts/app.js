@@ -32,7 +32,7 @@ angular
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl'
       })
-      .when('/subscriber/reset', {
+      .when('/subscriber/reset/:token', {
         templateUrl: 'views/reset.html',
         controller: 'ResetCtrl'
       })
@@ -43,6 +43,10 @@ angular
       .when('/subscriber/update', {
         templateUrl: 'views/update.html',
         controller: 'UpdateCtrl'
+      })
+      .when('/subscriber/forgot', {
+        templateUrl: 'views/forgot.html',
+        controller: 'ForgotCtrl'
       })
       .otherwise({
         redirectTo: '/'

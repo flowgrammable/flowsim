@@ -73,8 +73,9 @@ angular.module('flowsimUiApp')
       }, callback);
     };
 
-    this.reset = function(email, callback) {
+    this.reset = function(token, email, callback) {
       this.post('subscriber/reset', {
+        token: token,
         email: email
       }, callback);
     };
