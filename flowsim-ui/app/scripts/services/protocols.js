@@ -16,7 +16,7 @@ Packet.prototype.push = function(protocol) {
 Packet.prototype.pop = function() {
   if(this._payload.length) {
     this.length -= 1;
-    this._bytes -= this.payload[this._payload.length-1].bytes();
+    this._bytes -= this._payload[this._payload.length-1].bytes();
     this._payload.splice(this._payload.length-1);
   }
 };
@@ -91,10 +91,10 @@ angular.module('flowsimUiApp')
       }, {
         name: 'Dst',
         value: '00:00:00:00:00:00',
-        test: function() { return true; },
+        test: function() { return false; },
         tip: 'Ethernet destination MAC address'
       }, {
-        name: 'Type-len',
+        name: 'Typelen',
         value: 0,
         test: function() { return true; },
         tip: 'Ethernet type/length'

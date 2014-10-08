@@ -33,10 +33,10 @@ angular.module('flowsimUiApp')
        $scope.addNode = function() {
          var node;
          if($scope.nodeType.length > 0) {
-           node = $scope.createNode($scope.nodeType);
+           node = $scope.createNode()($scope.nodeType);
            $scope.stack.push(node); 
            $scope.nodeType = '';
-           $scope.options = $scope.getOptions($scope.stack); 
+           $scope.options = $scope.getOptions()($scope.stack); 
          }
        };
 
@@ -44,7 +44,7 @@ angular.module('flowsimUiApp')
        $scope.delNode = function(pos) {
          var lastName;
          $scope.stack.pop();
-         $scope.options = $scope.getOptions($scope.stack); 
+         $scope.options = $scope.getOptions()($scope.stack); 
        };
 
       }
