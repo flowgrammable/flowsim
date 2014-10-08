@@ -29,7 +29,7 @@ function _VLAN() {
     tip: 'VLAN Tag Identifier'
   }, {
     name: 'TypeLen',
-    value: '0',
+    value: '0x0000',
     test: fgConstraints.isUInt(0, 0xffff),
     tip: 'Ethernet type or length of payload'
   }];
@@ -40,11 +40,11 @@ _VLAN.prototype.bytes = function() {
 };
 
 _VLAN.prototype.setPayload = function(name) {
-  this.attrs[3].value = (Payloads[name] || 0).toString(16);
+  this.attrs[3].value = '0x' + (Payloads[name] || 0).toString(16);
 };
 
 _VLAN.prototype.clearPayload = function() {
-  this.attrs[3].value = '0';
+  this.attrs[3].value = '0x0000';
 };
 
 /**
