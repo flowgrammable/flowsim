@@ -272,14 +272,18 @@ Storage.prototype.getSession = function(skey, callback) {
   });
 };
 
-Storage.prototype.deleteSession = function(sid, callback) {
+Storage.prototype.deleteSession = function(sessionToken, callback) {
   this.database.delete('session', {
-    id: { '=': sid }
+    key: { '=': sessionToken }
   }, function(err, result) {
     if(err) {
       errHandler(callback, err, 'session');
     } else {
-      callback();
+      if(result.length === 1){
+        callback(null, msg.success());
+      } else {
+        callback(msg.unknownSessionToken());
+      }
     }
   });
 };

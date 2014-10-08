@@ -90,6 +90,9 @@ Controller.prototype.login = function(email, pwd, callback) {
         expireTime = new Date((new Date()).getTime() + defTimeout * 60000);
         that.storage.createSession(token, succ.id, expireTime.toISOString(),
           function(_err, _succ) {
+            if(_err){
+              that.logger.error(_err);
+            }
             callback(_err, token);
         });
       } else {
@@ -138,6 +141,7 @@ Controller.prototype.verify = function(token, callback) {
   var that = this;
   this.storage.verifySubscriber(token, function(err, result){
     if(err){
+      callback(err);
       that.logger.error(err);
     } else {
       callback(null, result);

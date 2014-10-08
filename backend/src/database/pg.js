@@ -72,9 +72,10 @@ Database.prototype.close = function() {
  * @param {genericCallback} callback - a generic callback for query results
  */
 Database.prototype.queryArgs = function(qString, args, callback) {
+  var that = this;
   pg.connect(this.setup, function(err, client, done) {
     if(err) {
-      console.log('error from pg connect');
+      that.logger.error('error from pg connect');
       callback(err);
     } else {
       client.query(qString, args, function(err, result) {
@@ -297,7 +298,7 @@ Database.prototype.update = function(table, fvPairs, conjunct, callback) {
  * @returns {String} string representation of SQL DELETE statement
  */
 function mkDelete(table, conjunct) {
-  return 'DELETE FROM ' + table + ' ' + mkWhere(conjunct);
+  return 'DELETE FROM ' + table + ' ' + mkWhere(conjunct) + 'RETURNING *';
 }
 
 /**
