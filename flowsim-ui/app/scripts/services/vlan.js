@@ -1,9 +1,12 @@
 'use strict';
 
-function VLAN() {
+function _VLAN() {
+  this.name = 'VLAN';
+  this.attrs = [];
 }
 
-VLAN.prototype.bytes = function() {
+_VLAN.prototype.bytes = function() {
+  return 4;
 };
 
 /**
@@ -23,6 +26,6 @@ angular.module('flowsimUiApp')
       'IPv6'
     ];
     this.create = function() {
-      return new VLAN();
+      return new _VLAN();
     };
   });

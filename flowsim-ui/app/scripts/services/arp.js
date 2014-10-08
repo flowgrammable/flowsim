@@ -1,6 +1,6 @@
 'use strict';
 
-var macPattern = /([a-fA-F0-9]{2}(-|:)){5}[a-fA-F0-9]{2}/;
+var macPattern = /([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}/;
 var ipv4Pattern = /([0-9]{1,3}\.){3}[0-9]{1,3}/;
 
 function validMac(mac) {
@@ -8,10 +8,10 @@ function validMac(mac) {
 }
 
 function validIPv4(ipv4) {
-  return ipv4Pattern(ipv4);
+  return ipv4Pattern.test(ipv4);
 }
 
-function ARP() {
+function _ARP() {
   this.name = 'ARP';
   this.attrs = [{
     name: 'Opcode',
@@ -41,7 +41,7 @@ function ARP() {
   }];
 }
 
-ARP.prototype.bytes = function() {
+_ARP.prototype.bytes = function() {
   return 28;
 };
 
@@ -56,7 +56,7 @@ angular.module('flowsimUiApp')
   .service('ARP', function ARP() {
     this.Payloads = [];
     this.create = function() {
-      return new ARP();
+      return new _ARP();
     };
   });
 

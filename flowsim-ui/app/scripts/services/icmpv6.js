@@ -1,9 +1,12 @@
 'use strict';
 
-function ICMPv6() {
+function _ICMPv6() {
+  this.name = 'ICMPv6';
+  this.attrs = [];
 }
 
-ICMPv6.prototype.bytes = function() {
+_ICMPv6.prototype.bytes = function() {
+  return 0;
 };
 
 /**
@@ -17,6 +20,6 @@ angular.module('flowsimUiApp')
   .service('ICMPV6', function ICMPV6() {
     this.Payloads = [];
     this.create = function() {
-      return new ICMPv6();
+      return new _ICMPv6();
     };
   });

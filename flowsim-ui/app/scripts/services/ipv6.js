@@ -1,9 +1,12 @@
 'use strict';
 
-function IPv6() {
+function _IPv6() {
+  this.name = 'IPv6';
+  this.attrs = [];
 }
 
-IPv6.prototype.bytes = function() {
+_IPv6.prototype.bytes = function() {
+  return 0;
 };
 
 /**
@@ -22,6 +25,6 @@ angular.module('flowsimUiApp')
       'SCTP'
     ];
     this.create = function() {
-      return new IPv6();
+      return new _IPv6();
     };
   });

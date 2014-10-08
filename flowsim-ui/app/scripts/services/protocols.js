@@ -8,6 +8,7 @@ function Packet(name, protocol) {
 }
 
 Packet.prototype.push = function(protocol) {
+  console.log(protocol);
   this.length += 1;
   this._payload.push(protocol);
   this._bytes += protocol.bytes();

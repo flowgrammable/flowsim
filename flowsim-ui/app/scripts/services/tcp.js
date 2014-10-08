@@ -1,9 +1,12 @@
 'use strict';
 
-function TCP() {
+function _TCP() {
+  this.name = 'TCP';
+  this.attrs = [];
 }
 
-TCP.prototype.bytes = function() {
+_TCP.prototype.bytes = function() {
+  return 20;
 };
 
 /**
@@ -17,6 +20,6 @@ angular.module('flowsimUiApp')
   .service('TCP', function TCP() {
     this.Payloads = [];
     this.create = function() {
-      return new TCP();
+      return new _TCP();
     };
   });

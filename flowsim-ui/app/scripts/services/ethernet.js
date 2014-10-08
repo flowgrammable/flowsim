@@ -6,7 +6,7 @@ function validMac(mac) {
   return macPattern.test(mac);
 }
 
-function Ethernet() {
+function _Ethernet() {
   this.name = 'Ethernet';
   this.attrs = [ {
     name: 'Src',
@@ -25,7 +25,7 @@ function Ethernet() {
   }];
 }
 
-Ethernet.prototype.bytes = function() { 
+_Ethernet.prototype.bytes = function() { 
   return 14; 
 };
 
@@ -40,7 +40,7 @@ angular.module('flowsimUiApp')
   .service('ETHERNET', function ETHERNET() {
 
     this.create = function() {
-      return new Ethernet();
+      return new _Ethernet();
     };
 
     this.Payloads = [

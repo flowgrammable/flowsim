@@ -1,9 +1,12 @@
 'use strict';
 
-function UDP() {
+function _UDP() {
+  this.name = 'UDP';
+  this.attrs = [];
 }
 
-UDP.prototype.bytes = function() {
+_UDP.prototype.bytes = function() {
+  return 8;
 };
 
 /**
@@ -17,6 +20,6 @@ angular.module('flowsimUiApp')
   .service('UDP', function UDP() {
     this.Payloads = [];
     this.create = function() {
-      return new UDP();
+      return new _UDP();
     };
   });

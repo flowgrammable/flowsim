@@ -1,9 +1,12 @@
 'use strict';
 
-function SCTP() {
+function _SCTP() {
+  this.name = 'SCTP';
+  this.attrs = [];
 }
 
-SCTP.prototype.bytes = function() {
+_SCTP.prototype.bytes = function() {
+  return 0;
 };
 
 /**
@@ -17,6 +20,6 @@ angular.module('flowsimUiApp')
   .service('SCTP', function SCTP() {
     this.Payloads = [];
     this.create = function() {
-      return new SCTP();
+      return new _SCTP();
     };
   });

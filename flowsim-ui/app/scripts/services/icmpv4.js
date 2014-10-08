@@ -1,9 +1,12 @@
 'use strict';
 
-function ICMPv4() {
+function _ICMPv4() {
+  this.name = 'ICMPv4';
+  this.attrs = [];
 }
 
-ICMPv4.prototype.bytes = function() {
+_ICMPv4.prototype.bytes = function() {
+  return 0;
 };
 
 /**
@@ -17,6 +20,6 @@ angular.module('flowsimUiApp')
   .service('ICMPV4', function ICMPV4() {
     this.Payloads = [];
     this.create = function() {
-      return new ICMPv4();
+      return new _ICMPv4();
     };
   });

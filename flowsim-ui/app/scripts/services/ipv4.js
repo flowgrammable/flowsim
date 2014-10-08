@@ -1,9 +1,12 @@
 'use strict';
 
-function IPv4() {
+function _IPv4() {
+  this.name = 'IPv4';
+  this.attrs = [];
 }
 
-IPv4.prototype.bytes = function() {
+_IPv4.prototype.bytes = function() {
+  return 0;
 };
 
 /**
@@ -22,6 +25,6 @@ angular.module('flowsimUiApp')
       'SCTP'
     ];
     this.create = function() {
-      return new IPv4();
+      return new _IPv4();
     };
   });

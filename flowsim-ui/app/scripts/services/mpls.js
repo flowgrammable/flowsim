@@ -1,9 +1,12 @@
 'use strict';
 
-function MPLS() {
+function _MPLS() {
+  this.name = 'MPLS';
+  this.attrs = [];
 }
 
-MPLS.prototype.bytes = function() {
+_MPLS.prototype.bytes = function() {
+  return 0;
 };
 
 /**
@@ -17,6 +20,6 @@ angular.module('flowsimUiApp')
   .service('MPLS', function MPLS() {
     this.Payloads = [];
     this.create = function() {
-      return new MPLS();
+      return new _MPLS();
     };
   });
