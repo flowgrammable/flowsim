@@ -128,11 +128,12 @@ describe('.getSubscriberByEmail(email, cb)', function(){
 
 });
 
+var sessToken;
 describe('.createSession(token, subscriberId, expireTime, cb)', function(){
   var subID;
   var token = uuid.v4();
   var expireTime = new Date((new Date()).getTime() + 1 * 60000);
-
+  
   before(function(){
     store.getSubscriberByEmail(ts.email, function(err, result){
       subID = result.id;
@@ -142,10 +143,28 @@ describe('.createSession(token, subscriberId, expireTime, cb)', function(){
   it('should return a x-auth token', function(done){
     store.createSession(token, subID, expireTime.toISOString(),
       function(err, result){
+        sessToken = result;
         assert.equal(result.length, 36);
         done();
     });
   });
+
+});
+
+describe('.deleteSession(token, callback)', function(){
+  it('should return success msg on deletion', function(done){
+    store.deleteSession(sessToken, function(err, result){
+      assert.equal(result, '');
+      done();
+    });
+  }); 
+  
+  it('on duplicated deletion', function(done){
+    store.deleteSession(sessToken, function(err, result){
+      assert.equal(err.type, 'unknownSessionToken');
+      done();
+    });
+  }); 
 });
 /*
 describe('.getSubscriberByToken(token, cb)', function(){
