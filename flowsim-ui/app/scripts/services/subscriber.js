@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Subscriber', function Subscriber($http) {
+  .service('Subscriber', function Subscriber(Backend) {
 
     this._xAccessToken = '';
 
@@ -31,71 +31,36 @@ angular.module('flowsimUiApp')
       }
     };
 
-    function unwrap(res, callback) {
-      if(res.error) {
-        callback(res.error);
-      } else {
-        callback(null, res.value);
-      }
-    }
-
-    this.post = function(path, data, callback) {
-      if(this._xAccessToken) {
-        $http.post('/api/' + path, data, { 
-          headers: { 'x-access-token': this._xAccessToken } 
-        }).success(function(data, status) {
-          unwrap(data, callback);
-        }).error(function(data, status) {
-          callback({
-            message: 'We are having trouble contacting the server, please try' +
-                     'again soon!',
-            details: status + ' : ' + data
-          });
-        });
-      } else {
-        $http.post('/api/' + path, data
-        ).success(function(data, status) {
-          unwrap(data, callback);
-        }).error(function(data, status) {
-          callback({
-            message: 'We are having trouble contacting the server, please try' +
-                     'again soon!',
-            details: status + ' : ' + data
-          });
-        });
-      }
-    };
-    
     this.register = function(email, password, callback) {
-      this.post('subscriber/register', {
+      Backend.post('/api/subscriber/register', {
         email: email,
         password: password
       }, callback);
     };
 
     this.reset = function(token, email, callback) {
-      this.post('subscriber/reset', {
+      Backend.post('/api/subscriber/reset', {
         token: token,
         email: email
       }, callback);
     };
 
     this.verify = function(token, callback) {
-      this.post('subscriber/verify', {
+      Backend.post('/api/subscriber/verify', {
         token: token
       }, callback);
     };
 
     this.login = function(email, password, callback) {
       var that = this;
-      this.post('subscriber/login', {
+      Backend.post('/api/subscriber/login', {
           email: email,
           password: password
         }, function(err, result) {
           if(err) {
             callback(err);
           } else if(result['x-access-token']){
-            that._xAccessToken = result['x-access-token'];
+            Backend.authorize(result['x-access-token']);
             callback(null, true);
           } else {
             callback('No access token');
@@ -105,14 +70,14 @@ angular.module('flowsimUiApp')
       
     this.logout = function(callback) {
       var that = this;
-      this.post('subscriber/logout', {}, function(err, result) {
-        that._xAccessToken = '';
+      Backend.post('/api/subscriber/logout', {}, function(err, result) {
+        Backend.deauthorize();
         callback(err, result);
       });
     };
 
     this.update = function(oldPassword, password, callback) {
-      this.post('subscriber/update', {
+      Backend.post('/api/subscriber/update', {
         oldPassword: oldPassword,
         newPassword: password
       }, callback);

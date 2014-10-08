@@ -14,6 +14,7 @@ angular.module('flowsimUiApp')
       transclude: true,                   // Copy element body in
       templateUrl: 'views/fglist.html',         // Location of template
       scope: {
+        onInit: '&',                      // callback for initializing items
         onAdd: '&',                       // callback for adding item
         onDel: '&',                       // callback for deleting item
         onSet: '&'                        // callback for changing item focus
@@ -21,9 +22,8 @@ angular.module('flowsimUiApp')
 
       controller: function($scope) {
         $scope.itemName = '';             // input name to create item
-        $scope.focus = -1;                // item with current focus
-        $scope.errorOccurred = false;     // input name error state
-        $scope.errorMessage = '';         // input name error message
+        $scope.focus    = -1;                // item with current focus
+        $scope.errorMsg = '';         // input name error message
         
         $scope.items = [];                // display list of items
         $scope.init = false;              // dislay list initialization state
@@ -38,10 +38,9 @@ angular.module('flowsimUiApp')
 
         $scope.clearState = function() {
           $scope.itemName = '';
-          $scope.errorOccurred = false;
-          $scope.errorMessage = '';
+          $scope.errorMsg = '';
         };
-        
+
         $scope.shiftFocus = function(pos) {
           if(pos >= -1 && pos < $scope.items.length) {
             $scope.focus = pos;                   // Update the local focus
@@ -50,15 +49,12 @@ angular.module('flowsimUiApp')
         };
         
         $scope.addItem = function() {
-          var result = $scope.onAdd()($scope.itemName);
-          if(result == 'success') {
+          $scope.errorMsg = $scope.onAdd()($scope.itemName);
+          if($scope.errorMsg.length) {
             $scope.items.push($scope.itemName);
             $scope.shiftFocus($scope.items.length-1);
             $scope.clearState();
-          } else {
-            $scope.errorOccurred = true;
-            $scope.errorMessage = result;
-          }
+          } 
         };
         
         $scope.delItem = function(pos) {

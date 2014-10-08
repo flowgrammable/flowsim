@@ -6,6 +6,9 @@
     <fg-list on-add="addPacket" on-del="delPacket" on-set="setPacket">
       Packets
     </fg-list>
+    <div class="error" ng-show="errorMsg.length">
+      {{errorMsg}}
+    </div>
   </div>
   
   <!-- Use the custom packet widget for displaying packet details -->
