@@ -165,6 +165,7 @@ Server.prototype.rootPath = function() {
 Server.prototype.run = function() {
   var notFound;
 
+  /*
   try {
     notFound = fs.readFileSync(this.config.static.directory + '/404.html');
   } catch(e) {
@@ -174,10 +175,14 @@ Server.prototype.run = function() {
       throw e;
     }
   }
+  */
 
   this.server.on('NotFound', function(req, res) {
     console.log(req.url);
-    res.end(notFound);
+    res.end({ error: {
+      message: 'Bad request',
+      details: req.method + ' ' + req.url 
+    }});
   });
 
   // log request and response after the response has been sent

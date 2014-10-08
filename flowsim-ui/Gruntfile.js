@@ -136,6 +136,7 @@ module.exports = function (grunt) {
         files: [{
           dot: true,
           src: [
+            'dist',
             '.tmp',
             '<%= yeoman.dist %>/{,*/}*',
             '!<%= yeoman.dist %>/.git*'
@@ -388,7 +389,7 @@ module.exports = function (grunt) {
     'connect:test',
     'karma'
   ]);
-
+  
   grunt.registerTask('build', [
     'clean:dist',
     'wiredep',

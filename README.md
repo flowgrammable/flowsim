@@ -11,7 +11,7 @@ The project is organized into the following subdirectories:
 - 3rdparty
 - doc
 - backend
-- frontend
+- flowsim-ui
 
 Our project currently uses a 3rd party tool called Flyway for SQL database
 migrations. This tool depends on java 1.6 or higher and certain environment
@@ -26,7 +26,7 @@ an HTTP/S server using the Restify javascript framework to modularly serve
 RESTful API services. This is our persistence layer for flowsim.
 
 The bulk of the application runs in a modern javascript capable broswer and the
-code is located in the 'frontend' directory. The frontend relies on the
+code is located in the 'flowsim-ui' directory. The frontend relies on the
 angularjs UI framework and the bootstrap css styling library.
 
 ##Global Dependencies
@@ -107,9 +107,9 @@ node package manager (npm) to install all packages specified in the package.json
 file, then use a special grunt task to finish the package installation, and
 finally return to the top level directory.
 
-- cd frontend
+- cd flowsim-ui
 - npm install
-- grunt init -or- grunt init-nb (no browser)
+- bower install
 - cd ..
 
 ##Build Operations
@@ -128,7 +128,7 @@ directories.
 - Generate docs: grunt doc
 - Remove intermediates: grunt clean
 
-###Building the frontend
+###Building flowsim-ui
 
 The frontend is slightly more complicated due to concatenating and minimizing
 js and css files. You can build a debug version of the frontend which does not
@@ -136,9 +136,11 @@ concnatenate or minify any dependent files. A directory called debug will be
 created that contains the document root of static files. The release version
 will concatenate and minify your resources. Both versions run jshint over your
 code for static analysis.
-- Build a debug version of the frontend: grunt -or- grunt debug
-- Build a release version of the frontend: grunt release
-- Remove imtermediates: grunt clean
+- Locally serve a debug version:     grunt serve
+- Locally serve the release version: grunt serve:dist
+- Build and test the release distro: grunt
+- Build the release distribution:    grunt build
+- Remove imtermediates:              grunt clean
 
 A note of caution, some browsers will cache static files when there is a large
 number and prevent the developer from seeing their changes. We found this
@@ -149,9 +151,9 @@ to reliably see your changes immediately.
 
 - Run all local unit tests:             npm test
 - Update local npm dependencies:        npm update
-- Add a new npm runtime depdendency:    npm install --save <dep name>
+- Add a new npm runtime depdendency:    npm install   --save <dep name>
 - Remove an npm runtime depdenency:     npm uninstall --save <dep name>
-- Add a new npm development dependency: npm install --dev-save <dev dep name>
+- Add a new npm development dependency: npm install   --dev-save <dev dep name>
 - Remove an npm development dependency: npm uninstall --dev-save <dev dep name>
 
 ##Running Flowsim
@@ -176,6 +178,6 @@ database connection information and credentials.
 ###Starting the backend service
 You can run either the debug or release version of the frontend. Remember the
 PEM pass phrase is 'flowsim'.
--debug: ./backend/src/index.js -c \`pwd\`/config.json -d \`pwd\`/frontend/debug
--release: ./backend/src/index.js -c \`pwd\`/config.json -d \`pwd\`/frontend/release
+-debug: .. i'm not surehow to do this yet
+-release: ./backend/src/index.js -c \`pwd\`/config.json -d \`pwd\`/flowsim-ui/dist
 
