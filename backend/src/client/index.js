@@ -13,6 +13,7 @@ cmd
   .option('--register <email>', 'Register an account')
   .option('--verify <token>', 'Verify an account')
   .option('--forgot <email>', 'Reset the pwd of an account')
+  .option('--reset <token>', 'Update forgotten password')
   .option('--login <email> ', 'login to an account')
   .option('--logout <token>', 'logout of an account')
   .option('--update <email>', 'Change the pwd of an account')
@@ -69,6 +70,19 @@ function forgot(email) {
   });
 }
 
+function reset(token, password) {
+  query('reset', {}, {
+    token: token,
+    password: password
+  }, function(err, res, body){
+    if(err) {
+      console.log(err);
+    } else {
+      console.log(body);
+    }
+  });
+}
+
 function login(email, password) {
   query('login', {}, {
     email: email,
@@ -116,6 +130,8 @@ if(cmd.register && cmd.password) {
   verify(cmd.verify);
 } else if(cmd.forgot) {
   forgot(cmd.forgot);
+} else if(cmd.reset && cmd.password) {
+  reset(cmd.reset, cmd.password);
 } else if(cmd.login && cmd.password) {
   login(cmd.login, cmd.password);
 } else if(cmd.logout) {
