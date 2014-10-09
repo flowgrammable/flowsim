@@ -8,42 +8,48 @@ exports.success = function() {
 exports.missingEmail = function() {
   return {
     system: 'subscriber/view',
-    type: 'missingEmail'
+    type: 'missingEmail',
+    message: 'Email address is required'
   };
 };
 
 exports.malformedEmail = function() {
   return {
     system: 'subscriber/view',
-    type: 'malformedEmail'
+    type: 'malformedEmail',
+    message: 'Email entered is not valid'
   };
 };
 
 exports.existingEmail = function() {
   return {
     system: 'subscriber/storage',
-    type: 'existingEmail'
+    type: 'existingEmail',
+    message: 'A user with this email already exists'
   };
 };
 
 exports.unknownEmail = function() {
   return {
     system: 'subscriber/storage',
-    type: 'unknownEmail'
+    type: 'unknownEmail',
+    message: 'A user has not registered with that email'
   };
 };
 
 exports.missingPassword = function() {
   return {
     system: 'subscriber/view',
-    type: 'missingPassword'
+    type: 'missingPassword',
+    message: 'A password is required'
   };
 };
 
 exports.malformedPassword = function() {
   return {
     system: 'subscriber/view',
-    type: 'malformedPassword'
+    type: 'malformedPassword',
+    message: 'A valid password is 8-16 characters'
   };
 };
 
@@ -51,6 +57,7 @@ exports.invalidPassword = function() {
   return {
     system: 'subscriber/controller',
     type: 'invalidPassword'
+    message: 'Invalid Password'
   };
 };
 
@@ -58,13 +65,15 @@ exports.missingNewPassword = function() {
   return {
     system: 'subscriber/view',
     type: 'missingNewPassword'
+    message: 'Must enter a new password'
   };
 };
 
 exports.malformedNewPassword = function() {
   return {
     system: 'subscriber/view',
-    type: 'malformedNewPassword'
+    type: 'malformedNewPassword',
+    message: 'A valid password is 8-16 characters'
   };
 };
 
@@ -105,4 +114,3 @@ exports.unknownVerificationToken = function() {
 };
 
 })();
-
