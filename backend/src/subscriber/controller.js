@@ -34,7 +34,7 @@ function Controller(s, m, t, h, l) {
   this.mailer   = m;
   this.template = t;
   this.server   = h;
-  this.logger   = l; 
+  this.logger   = l;
 }
 exports.Controller = Controller;
 
@@ -64,7 +64,7 @@ Controller.prototype.authorize = function(token, callback) {
     } else {
     callback(null, { subscriber_id: succ.subscriber_id, session_id: succ.id });
     }
-  }); 
+  });
 };
 
 /**
@@ -81,9 +81,9 @@ Controller.prototype.login = function(email, pwd, callback) {
   var that = this;
   this.storage.getSubscriberByEmail(email, function(err, succ) {
     var token, expireTime;
-    if(err) { 
+    if(err) {
       that.logger.error(err);
-      callback(err); 
+      callback(err);
     } else {
       if(bcrypt.compareSync(pwd, succ.password)) {
         token = uuid.v4();
@@ -103,12 +103,17 @@ Controller.prototype.login = function(email, pwd, callback) {
   });
 };
 
+/**
+ * Given a session id attempt to remove session entry from database.
+ *
+ * @param {Integer} sessionID - session entry id
+ * @param {Function} callback - standard callback
+ */
 Controller.prototype.logout = function(sessionID, callback) {
   // if a valid session then delete the session
   console.log('logout: ' + sessionID);
   this.storage.deleteSession(sessionID, callback);
 };
-
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
   var current, token, hash, that;
@@ -117,7 +122,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   hash = bcrypt.hashSync(pwd, 10);
   that = this;
   // Create the subscriber entry and send the verification email
-  this.storage.createSubscriber(email, hash, current.toISOString(), srcIp, 
+  this.storage.createSubscriber(email, hash, current.toISOString(), srcIp,
                                 token, function(err, succ) {
     var subject, body;
     if(err) {
@@ -135,6 +140,12 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   });
 };
 
+/**
+ * Given a token attempt the verify the subscriber associated with it.
+ *
+ * @param {String} token - verification token
+ * @param {Function} callback - standard callback
+ */
 Controller.prototype.verify = function(token, callback) {
   // if the verification token is valid update
   // subscriber state
@@ -150,6 +161,13 @@ Controller.prototype.verify = function(token, callback) {
   });
 };
 
+/**
+ * Given an email attempt to reset subscriber password. A reset token is
+ * generated and sent in an email to subscriber.
+ *
+ * @param {String} email - subscriber email address
+ * @param {Function} callback - standard callback
+ */
 Controller.prototype.forgot = function(email, callback) {
   // update the subscriber state and send and email
   // or send an error
@@ -171,10 +189,17 @@ Controller.prototype.forgot = function(email, callback) {
   });
 };
 
+/**
+ * Given a reset token and password attempt to update subscriber password.
+ * The subscriber state is moved to 'ACTIVE'
+ *
+ * @param {String} email - subscriber email address
+ * @param {Function} callback - standard callback
+ */
 Controller.prototype.reset = function(token, password, callback) {
   var hash = bcrypt.hashSync(password, 10);
   var that = this;
-  this.storage.updateSubscriberPasswordByToken(token, hash, 
+  this.storage.updateSubscriberPasswordByToken(token, hash,
     function(err, result){
       if(err){
         that.logger.error(err);
@@ -185,7 +210,7 @@ Controller.prototype.reset = function(token, password, callback) {
   });
 };
 
-Controller.prototype.update = function(subscriber_id, session_id, oldPwd, 
+Controller.prototype.update = function(subscriber_id, session_id, oldPwd,
                                        newPwd, callback) {
   var that = this;
   console.log('update: ' + subscriber_id);
@@ -205,4 +230,3 @@ Controller.prototype.update = function(subscriber_id, session_id, oldPwd,
 };
 
 })();
-
