@@ -167,6 +167,8 @@ describe('.deleteSession(sessionID, callback)', function(){
     });
   }); 
 });
+
+
 /*
 describe('.getSubscriberByToken(token, cb)', function(){
 
@@ -207,39 +209,47 @@ describe('.verifySubscriber(token, cb)', function(){
     });
   });
 });
-
+*/
 describe('.resetSubscriber(email, token, cb)', function(){
 
-  it('should return an empty array on successful update', function(done){
+  it('should return msg.success() on successful reset', function(done){
     store.resetSubscriber(ts.email, 'resetToken', function(err, result){
-      assert.equal(0, result.value.length);
+      assert.equal(result, '');
       done();
     });
   });
 
   it('should set subscriber status to RESET', function(done){
     store.getSubscriberByEmail(ts.email, function(err, result){
-      assert.equal('RESET', result.value[0].status);
+      assert.equal('RESET', result.status);
       done();
     });
   });
 });
 
-describe('.updateSubscriberPassword(email, password, cb)', function(){
+describe('.updateSubscriberPasswordByToken(token, hash, cb)', function(){
     
-  it('should return \'value\' on success', function(done){
-    store.updateSubscriberPassword(ts.email, 'newpassword', function(err, result){
-      assert.equal(0, result.value.length);
+  it('should return msg.success() on success', function(done){
+    store.updateSubscriberPasswordByToken('resetToken', 'newpassword', function(err, result){
+      assert.equal(result, '');
       done();
     });
   });
 
   it('should update subscriber password', function(done){
     store.getSubscriberByEmail(ts.email, function(err, result){
-      assert.equal('newpassword', result.value[0].password);
+      assert.equal(result.password, 'newpassword');
       done();
     });
   });
-}); */
+
+  it('should return msg.unknownVerificationToken() for invalid token',
+    function(done){
+      store.updateSubscriberPasswordByToken('', 'newpass', function(err, result){
+        assert.equal(err.type, 'unknownVerificationToken');
+        done();
+      });
+   });
+}); 
 });
 db.close();  

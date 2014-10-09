@@ -103,7 +103,7 @@ function forgot(view) {
     } else if(!validator.isEmail(req.body.email)) {
       responder(msg.malformedEmail());
     } else {
-      view.controller.reset(req.body.email, responder);
+      view.controller.forgot(req.body.email, responder);
     }
   };
 }
@@ -115,7 +115,7 @@ function reset(view) {
       responder(msg.missingToken());
     } else if(!req.body.password) {
       responder(msg.missingPassword());
-    } else if(!validator.malformedPassword(req.body.password)) {
+    } else if(!isValidPassword(req.body.password)) {
       responder(msg.malformedEmail());
     } else {
       view.controller.reset(req.body.token, req.body.password, responder);

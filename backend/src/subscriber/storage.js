@@ -205,7 +205,11 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
     if(err) {
       errHandler(callback, err, 'subscriber');
     } else {
-      callback(null, result);
+      if(result.length === 1){
+        callback(null, msg.success());
+      } else {
+        callback(msg.unknownEmail());
+      }
     }
   });
 };
@@ -222,7 +226,11 @@ Storage.prototype.updateSubscriberPasswordByToken = function(token, password,
     if(err) {
       errHandler(callback, err, 'subscriber'); 
     } else {
-      callback(null, msg.success());
+      if(result.length === 1){
+        callback(null, msg.success());
+      } else {
+        callback(msg.unknownVerificationToken());
+      }
     }
   });
 };

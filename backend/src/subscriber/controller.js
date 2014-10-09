@@ -158,6 +158,7 @@ Controller.prototype.forgot = function(email, callback) {
   this.storage.resetSubscriber(email, token, function(err, succ) {
     var body, subject;
     if(err) {
+      that.logger.error(err);
       callback(err);
     } else {
       body = that.template.render('reset', {
@@ -165,14 +166,23 @@ Controller.prototype.forgot = function(email, callback) {
         token: token
       });
       that.mailer.send(email, subject, body);
-      callback(null, msg.success());
+      callback(null, result);
     }
   });
 };
 
 Controller.prototype.reset = function(token, password, callback) {
   var hash = bcrypt.hashSync(password, 10);
-  this.storage.updateSubscriberPasswordByToken(token, hash, callback);
+  var that = this;
+  this.storage.updateSubscriberPasswordByToken(token, hash, 
+    function(err, result){
+      if(err){
+        that.logger.error(err);
+        callback(err);
+      } else {
+        callback(null, result);
+      }
+  });
 };
 
 Controller.prototype.update = function(subscriber_id, session_id, oldPwd, 
