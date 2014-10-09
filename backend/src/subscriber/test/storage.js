@@ -46,13 +46,13 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
     });
   });
 
-  it('should return [{id, email, etc}] on successful insert', function(done){
+  it('should return {id, email, etc} on successful insert', function(done){
     store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
       function(err, result){
         if(err){
           console.log('createSub error', err);
         } else {
-          assert.equal(result.length, 1);
+          assert.equal(result.email, ts.email);
           done();
         }
     });
@@ -128,39 +128,40 @@ describe('.getSubscriberByEmail(email, cb)', function(){
 
 });
 
-var sessToken;
+var sessID;
 describe('.createSession(token, subscriberId, expireTime, cb)', function(){
   var subID;
   var token = uuid.v4();
   var expireTime = new Date((new Date()).getTime() + 1 * 60000);
   
-  before(function(){
+  before(function(done){
     store.getSubscriberByEmail(ts.email, function(err, result){
       subID = result.id;
+      done();
     });
   });
 
   it('should return a x-auth token', function(done){
     store.createSession(token, subID, expireTime.toISOString(),
       function(err, result){
-        sessToken = result;
-        assert.equal(result.length, 36);
+        sessID = result.id;
+        assert.equal(result.key, token);
         done();
     });
   });
 
 });
 
-describe('.deleteSession(token, callback)', function(){
+describe('.deleteSession(sessionID, callback)', function(){
   it('should return success msg on deletion', function(done){
-    store.deleteSession(sessToken, function(err, result){
+    store.deleteSession(sessID, function(err, result){
       assert.equal(result, '');
       done();
     });
   }); 
   
   it('on duplicated deletion', function(done){
-    store.deleteSession(sessToken, function(err, result){
+    store.deleteSession(sessID, function(err, result){
       assert.equal(err.type, 'unknownSessionToken');
       done();
     });

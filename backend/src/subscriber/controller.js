@@ -89,11 +89,12 @@ Controller.prototype.login = function(email, pwd, callback) {
         token = uuid.v4();
         expireTime = new Date((new Date()).getTime() + defTimeout * 60000);
         that.storage.createSession(token, succ.id, expireTime.toISOString(),
-          function(_err, _succ) {
+          function(_err, session) {
             if(_err){
               that.logger.error(_err);
+              callback(_err);
             }
-            callback(_err, token);
+            callback(null, session.key);
         });
       } else {
         callback(msg.invalidPassword());
@@ -102,10 +103,10 @@ Controller.prototype.login = function(email, pwd, callback) {
   });
 };
 
-Controller.prototype.logout = function(token, callback) {
+Controller.prototype.logout = function(sessionID, callback) {
   // if a valid session then delete the session
-  console.log('logout: ' + token);
-  this.storage.deleteSession(token, callback);
+  console.log('logout: ' + sessionID);
+  this.storage.deleteSession(sessionID, callback);
 };
 
 
