@@ -13,6 +13,7 @@ var mlr = require('./mailer');
 var tmp = require('./template');
 var srv = require('./server');
 var sub = require('./subscriber');
+//var pac = require('./packet');
 var log = require('./logger');
 
 // Process the command line
@@ -55,4 +56,3 @@ restServer.run();
 console.log(restServer.toString());
 
 })();
-
