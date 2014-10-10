@@ -56,7 +56,7 @@ exports.malformedPassword = function() {
 exports.invalidPassword = function() {
   return {
     system: 'subscriber/controller',
-    type: 'invalidPassword'
+    type: 'invalidPassword',
     message: 'Invalid Password'
   };
 };
@@ -64,8 +64,8 @@ exports.invalidPassword = function() {
 exports.missingNewPassword = function() {
   return {
     system: 'subscriber/view',
-    type: 'missingNewPassword'
-    message: 'Must enter a new password'
+    type: 'missingNewPassword',
+    message: 'Missing new password'
   };
 };
 

@@ -24,7 +24,7 @@ function genString(n){
 // Create test subscriber
 var d = new Date();
 var dISO = d.toISOString();
-var ts = { email: 'testSub@mail.com', password: '123', 
+var ts = { email: 'testSub@mail.com', password: '123',
     date: dISO, ip: '1.1.1.1', token: uuid.v4() };
 
 
@@ -47,7 +47,7 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
   });
 
   it('should return {id, email, etc} on successful insert', function(done){
-    store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
+    store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token,
       function(err, result){
         if(err){
           console.log('createSub error', err);
@@ -65,15 +65,15 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
     });
   });
 
-  it('should return msg.existingEmail() on duplicate registration', 
+  it('should return msg.existingEmail() on duplicate registration',
     function(done){
-      store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token, 
+      store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token,
         function(err, result){
             assert.equal(err.type, 'existingEmail');
             done();
       });
     });
- 
+
 });
 
 describe('.verifySubscriber(token, cb)', function(){
@@ -111,7 +111,7 @@ describe('.verifySubscriber(token, cb)', function(){
 });
 
 describe('.getSubscriberByEmail(email, cb)', function(){
-  
+
   it('should return an array with a single subscriber', function(done){
     store.getSubscriberByEmail(ts.email, function(err, result){
       assert.equal(result.email, ts.email);
@@ -133,7 +133,7 @@ describe('.createSession(token, subscriberId, expireTime, cb)', function(){
   var subID;
   var token = uuid.v4();
   var expireTime = new Date((new Date()).getTime() + 1 * 60000);
-  
+
   before(function(done){
     store.getSubscriberByEmail(ts.email, function(err, result){
       subID = result.id;
@@ -158,58 +158,36 @@ describe('.deleteSession(sessionID, callback)', function(){
       assert.equal(result, '');
       done();
     });
-  }); 
-  
+  });
+
   it('on duplicated deletion', function(done){
     store.deleteSession(sessID, function(err, result){
       assert.equal(err.type, 'unknownSessionToken');
       done();
     });
-  }); 
+  });
 });
 
 
-/*
+
 describe('.getSubscriberByToken(token, cb)', function(){
 
   it('should return an array of subscribers', function(done){
     store.getSubscriberByToken(ts.token, function(err, result){
-      assert.equal(result.value[0].email, ts.email);
+      assert.equal(result.email, ts.email);
       done();
     });
   });
 
   it('should return an empty array if sub does not exist', function(done){
     store.getSubscriberByToken('madeup', function(err, result){
-      assert.equal(0, result.value.length );
+      assert.equal(err.type, 'unknownVerificationToken' );
       done();
     });
   });
 
 });
 
-
-describe('.verifySubscriber(token, cb)', function(){
-
-  it('should return an empty array on successful update', function(done){
-    store.verifySubscriber(ts.token, function(err, result){
-      assert.equal(0, result.value.length);
-      done();
-    });
-  });
-  
-  it('should update subscriber status to ACTIVE', function(done){
-    store.getSubscriberByEmail(ts.email, function(err, result){
-      if(err){
-        console.log(err);
-      } else {
-        assert.equal('ACTIVE', result.value[0].status);
-        done();
-      }
-    });
-  });
-});
-*/
 describe('.resetSubscriber(email, token, cb)', function(){
 
   it('should return msg.success() on successful reset', function(done){
@@ -228,7 +206,7 @@ describe('.resetSubscriber(email, token, cb)', function(){
 });
 
 describe('.updateSubscriberPasswordByToken(token, hash, cb)', function(){
-    
+
   it('should return msg.success() on success', function(done){
     store.updateSubscriberPasswordByToken('resetToken', 'newpassword', function(err, result){
       assert.equal(result, '');
@@ -250,6 +228,6 @@ describe('.updateSubscriberPasswordByToken(token, hash, cb)', function(){
         done();
       });
    });
-}); 
 });
-db.close();  
+});
+db.close();
