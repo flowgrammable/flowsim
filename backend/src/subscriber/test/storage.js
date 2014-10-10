@@ -69,7 +69,7 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
     function(done){
       store.createSubscriber(ts.email, ts.password, ts.date, ts.ip, ts.token,
         function(err, result){
-            assert.equal(err.type, 'existingEmail');
+            assert.equal(err.detail.type, 'existingEmail');
             done();
       });
     });
@@ -78,15 +78,8 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
 
 describe('.verifySubscriber(token, cb)', function(){
 
-  it('should return msg.success on successful verification', function(done){
+  it('should return updated row on successful verification', function(done){
     store.verifySubscriber(ts.token, function(err, result){
-      assert.equal(result, '');
-      done();
-    });
-  });
-
-  it('should set subscriber status to ACTIVE', function(done){
-    store.getSubscriberByEmail(ts.email, function(err, result){
       assert.equal(result.status, 'ACTIVE');
       done();
     });
@@ -95,7 +88,7 @@ describe('.verifySubscriber(token, cb)', function(){
   it('should return unknownVerificationToken() on 2nd verification try',
     function(done){
       store.verifySubscriber(ts.token, function(err, result){
-        assert.equal(err.type, 'unknownVerificationToken');
+        assert.equal(err.detail.type, 'unknownVerificationToken');
         done();
       });
   });
@@ -104,7 +97,7 @@ describe('.verifySubscriber(token, cb)', function(){
   it('should return unknownVerificationToken() for a bad token',
     function(done){
       store.verifySubscriber('', function(err, result){
-        assert.equal(err.type, 'unknownVerificationToken');
+        assert.equal(err.detail.type, 'unknownVerificationToken');
         done();
       });
   });
@@ -121,7 +114,7 @@ describe('.getSubscriberByEmail(email, cb)', function(){
 
   it('should return a msg.unknownEmail for invalid email', function(done){
     store.getSubscriberByEmail('nope', function(err, result){
-      assert.equal(err.type, 'unknownEmail');
+      assert.equal(err.detail.type, 'unknownEmail');
       done();
     });
   });
@@ -162,7 +155,7 @@ describe('.deleteSession(sessionID, callback)', function(){
 
   it('on duplicated deletion', function(done){
     store.deleteSession(sessID, function(err, result){
-      assert.equal(err.type, 'unknownSessionToken');
+      assert.equal(err.detail.type, 'unknownSessionToken');
       done();
     });
   });
@@ -181,7 +174,7 @@ describe('.getSubscriberByToken(token, cb)', function(){
 
   it('should return an empty array if sub does not exist', function(done){
     store.getSubscriberByToken('madeup', function(err, result){
-      assert.equal(err.type, 'unknownVerificationToken' );
+      assert.equal(err.detail.type, 'unknownVerificationToken' );
       done();
     });
   });
@@ -190,32 +183,19 @@ describe('.getSubscriberByToken(token, cb)', function(){
 
 describe('.resetSubscriber(email, token, cb)', function(){
 
-  it('should return msg.success() on successful reset', function(done){
+  it('should return updated subscriber row on successful reset', function(done){
     store.resetSubscriber(ts.email, 'resetToken', function(err, result){
-      assert.equal(result, '');
+      assert.equal(result.status, 'RESET');
       done();
     });
   });
 
-  it('should set subscriber status to RESET', function(done){
-    store.getSubscriberByEmail(ts.email, function(err, result){
-      assert.equal('RESET', result.status);
-      done();
-    });
-  });
 });
 
 describe('.updateSubscriberPasswordByToken(token, hash, cb)', function(){
 
-  it('should return msg.success() on success', function(done){
+  it('should return updated subscriber row on success', function(done){
     store.updateSubscriberPasswordByToken('resetToken', 'newpassword', function(err, result){
-      assert.equal(result, '');
-      done();
-    });
-  });
-
-  it('should update subscriber password', function(done){
-    store.getSubscriberByEmail(ts.email, function(err, result){
       assert.equal(result.password, 'newpassword');
       done();
     });
@@ -224,7 +204,7 @@ describe('.updateSubscriberPasswordByToken(token, hash, cb)', function(){
   it('should return msg.unknownVerificationToken() for invalid token',
     function(done){
       store.updateSubscriberPasswordByToken('', 'newpass', function(err, result){
-        assert.equal(err.type, 'unknownVerificationToken');
+        assert.equal(err.detail.type, 'unknownVerificationToken');
         done();
       });
    });

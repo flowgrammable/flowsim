@@ -88,9 +88,9 @@ function errHandler(callback, err, table) {
  * @param {String} date - date of registration
  * @param {String} ip - client ip address used for registration
  * @param {String} token - unique id for subscriber verification
- * @param {storageCallback} - callback function to use 
+ * @param {storageCallback} - callback function to use
  */
-Storage.prototype.createSubscriber = function(email, password, date, ip, token, 
+Storage.prototype.createSubscriber = function(email, password, date, ip, token,
                                               callback) {
   var that = this;
   this.database.insert('subscriber', {
@@ -113,7 +113,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
  * Retrieve a subscriber row by the verification token.
  *
  * @param {String} token - subscriber verification token
- * @param {storageCallback} callback - 
+ * @param {storageCallback} callback -
  */
 Storage.prototype.getSubscriberByToken = function(token, callback) {
   this.database.select('subscriber', {
@@ -135,7 +135,7 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
  * Retrieve a subscriber row by subscriber_id.
  *
  * @param {String} subscriber_id - subscriber id
- * @param {storageCallback} callback - 
+ * @param {storageCallback} callback -
  */
 Storage.prototype.getSubscriberById = function(subscriber_id, callback) {
   this.database.select('subscriber', {
@@ -144,10 +144,10 @@ Storage.prototype.getSubscriberById = function(subscriber_id, callback) {
     if(err) {
       errHandler(callback, err, 'subscriber');
     } else {
-      if(result.length === 0) {
-        callback(msg.unknownVerificationToken());
-      } else {
+      if(result.length === 1) {
         callback(null, result[0]);
+      } else {
+        callback(msg.unknownSubscriber());
       }
     }
   });
@@ -175,6 +175,14 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
   });
 };
 
+/**
+ * Update status field in subscriber row to 'ACTIVE'
+ *
+ * @param {String} token - verification token
+ * @param {Function} callback - standard callback
+ *
+ */
+
 Storage.prototype.verifySubscriber = function(token, callback) {
   // update where verification_token = token
   this.database.update('subscriber', {
@@ -187,7 +195,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1) {
-        callback(null, msg.success());
+        callback(null, result[0]);
       } else {
         callback(msg.unknownVerificationToken());
       }
@@ -195,6 +203,14 @@ Storage.prototype.verifySubscriber = function(token, callback) {
   });
 };
 
+/**
+ * Update status field in subscriber row to 'RESET'
+ *
+ * @param {String} email - subscriber email
+ * @param {String} token - verification token
+ * @param {Function} callback - standard callback
+ *
+ */
 Storage.prototype.resetSubscriber = function(email, token, callback) {
   this.database.update('subscriber', {
     verification_token: token,
@@ -206,7 +222,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1){
-        callback(null, msg.success());
+        callback(null, result[0]);
       } else {
         callback(msg.unknownEmail());
       }
@@ -214,7 +230,16 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
   });
 };
 
-Storage.prototype.updateSubscriberPasswordByToken = function(token, password, 
+/**
+ * Given a reset token select subscriber row by token and update password field
+ * with password.
+ *
+ * @param {String} token - reset token
+ * @param {String} password - new password
+ * @param {Function} callback - standard callback
+ *
+ */
+Storage.prototype.updateSubscriberPasswordByToken = function(token, password,
   callback) {
   this.database.update('subscriber', {
     password: password,
@@ -224,10 +249,10 @@ Storage.prototype.updateSubscriberPasswordByToken = function(token, password,
     status: { '=': 'RESET' }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err, 'subscriber'); 
+      errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1){
-        callback(null, msg.success());
+        callback(null, result[0]);
       } else {
         callback(msg.unknownVerificationToken());
       }
@@ -235,7 +260,16 @@ Storage.prototype.updateSubscriberPasswordByToken = function(token, password,
   });
 };
 
-Storage.prototype.updateSubscriberPassword = function(subscriber_id, password, 
+/**
+ * Given a subscriber_id select subscriber row by id and update password field
+ * with password.
+ *
+ * @param {Integer} subscriber_id - subscriber row id
+ * @param {String} password - new password
+ * @param {Function} callback - standard callback
+ *
+ */
+Storage.prototype.updateSubscriberPassword = function(subscriber_id, password,
   callback) {
   this.database.update('subscriber', {
     password: password
@@ -243,13 +277,26 @@ Storage.prototype.updateSubscriberPassword = function(subscriber_id, password,
     id: { '=': subscriber_id }
   }, function(err, result) {
     if(err) {
-      errHandler(callback, err, 'subscriber'); 
+      errHandler(callback, err, 'subscriber');
     } else {
-      callback(null, msg.success());
+      if(result.length === 1){
+        callback(null, result[0]);
+      } else {
+        callback(null, msg.unknownSubscriber());
+      }
     }
   });
 };
 
+/**
+ * Insert session row into database
+ *
+ * @param {String} skey - session key
+ * @param {Integer} subId - subscriber id
+ * @param {Date} tmo - session expiration date
+ * @param {Function} callback - standard callback
+ *
+ */
 Storage.prototype.createSession = function(skey, subId, tmo, callback) {
   this.database.insert('session', {
     key: skey,
@@ -264,6 +311,13 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
   });
 };
 
+/**
+ * Retrieve a session by session key
+ *
+ * @param {String} skey - session key
+ * @param {Function} callback - standard callback
+ *
+ */
 Storage.prototype.getSession = function(skey, callback) {
   this.database.select('session', {
     key: { '=': skey }
@@ -280,6 +334,13 @@ Storage.prototype.getSession = function(skey, callback) {
   });
 };
 
+/**
+ * Delete a session by session id
+ *
+ * @param {Integer} sessionID - session id
+ * @param {Function} callback - standard callback
+ *
+ */
 Storage.prototype.deleteSession = function(sessionID, callback) {
   this.database.delete('session', {
     id: { '=': sessionID }
@@ -296,6 +357,13 @@ Storage.prototype.deleteSession = function(sessionID, callback) {
   });
 };
 
+/**
+ * Delete a stale session by time
+ *
+ * @param {Date} time - current date
+ * @param {Function} callback - standard callback
+ *
+ */
 Storage.prototype.deleteStaleSession = function(time, callback) {
   this.database.delete('session', {
     timeout: {'<': time}
@@ -303,11 +371,9 @@ Storage.prototype.deleteStaleSession = function(time, callback) {
     if(err) {
       errHandler(callback, err, 'session');
     } else {
-      callback(null, result);
+      callback(null, msg.success());
     }
   });
 };
 
 })();
-
-

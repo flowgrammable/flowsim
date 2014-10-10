@@ -153,8 +153,8 @@ Controller.prototype.verify = function(token, callback) {
   var that = this;
   this.storage.verifySubscriber(token, function(err, result){
     if(err){
-      callback(err);
       that.logger.error(err);
+      callback(err);
     } else {
       callback(null, result);
     }
@@ -210,8 +210,20 @@ Controller.prototype.reset = function(token, password, callback) {
   });
 };
 
-Controller.prototype.update = function(subscriber_id, session_id, oldPwd,
-                                       newPwd, callback) {
+/**
+ * Given a subscriber_id, old password, and new password attempt the update the
+ * subscriber password with the new password. This involves first retrieving
+ * the subscriber, second confirm old password is valid, and third updating
+ * subscriber entry in database with the new password
+ *
+ * @param {Integer} subscriber_id - subscriber id
+ * @param {String} oldPwd - subscriber's old password
+ * @param {String} newPwd - subscriber's new password
+ * @param {Function} callback - standard callback
+ */
+
+Controller.prototype.update = function(subscriber_id, oldPwd, newPwd, callback)
+{
   var that = this;
   console.log('update: ' + subscriber_id);
   this.storage.getSubscriberById(subscriber_id, function(err, succ) {

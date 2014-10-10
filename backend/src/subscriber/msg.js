@@ -7,109 +7,152 @@ exports.success = function() {
 
 exports.missingEmail = function() {
   return {
-    system: 'subscriber/view',
-    type: 'missingEmail',
-    message: 'Email address is required'
+    message: 'Email address is required',
+    detail: {
+      system: 'subscriber/view',
+      type: 'missingEmail'
+    }
   };
 };
 
 exports.malformedEmail = function() {
   return {
-    system: 'subscriber/view',
-    type: 'malformedEmail',
-    message: 'Email entered is not valid'
+    message: 'Email entered is not valid',
+    detail: {
+      system: 'subscriber/view',
+      type: 'malformedEmail'
+    }
+  };
+};
+
+exports.unknownSubscriber = function() {
+  return {
+    message: 'Subscriber does not exist',
+    detail: {
+      system: 'subscriber/storage',
+      type: 'unknownSubscriber'
+    }
   };
 };
 
 exports.existingEmail = function() {
   return {
-    system: 'subscriber/storage',
-    type: 'existingEmail',
-    message: 'A user with this email already exists'
+    message: 'A user with this email already exists',
+    detail: {
+      system: 'subscriber/storage',
+      type: 'existingEmail'
+    }
   };
 };
 
 exports.unknownEmail = function() {
   return {
-    system: 'subscriber/storage',
-    type: 'unknownEmail',
-    message: 'A user has not registered with that email'
+    message: 'A user has not registered with that email',
+    detail: {
+      system: 'subscriber/storage',
+      type: 'unknownEmail'
+    }
   };
 };
 
 exports.missingPassword = function() {
   return {
-    system: 'subscriber/view',
-    type: 'missingPassword',
-    message: 'A password is required'
+    message: 'A password is required',
+    detail: {
+      system: 'subscriber/view',
+      type: 'missingPassword'
+    }
   };
 };
 
 exports.malformedPassword = function() {
   return {
-    system: 'subscriber/view',
-    type: 'malformedPassword',
-    message: 'A valid password is 8-16 characters'
+    message: 'A valid password is 8-16 characters',
+    detail: {
+      system: 'subscriber/view',
+      type: 'missingPassword'
+    }
   };
 };
 
 exports.invalidPassword = function() {
   return {
-    system: 'subscriber/controller',
-    type: 'invalidPassword',
-    message: 'Invalid Password'
+    message: 'Invalid Password',
+    detail: {
+      system: 'subscriber/controller',
+      type: 'invalidPassword'
+    }
   };
 };
 
 exports.missingNewPassword = function() {
   return {
-    system: 'subscriber/view',
-    type: 'missingNewPassword',
-    message: 'Missing new password'
+    message: 'Missing new password',
+    detail: {
+      system: 'subscriber/view',
+      type: 'missingNewPassword'
+    }
   };
 };
 
 exports.malformedNewPassword = function() {
   return {
-    system: 'subscriber/view',
-    type: 'malformedNewPassword',
-    message: 'A valid password is 8-16 characters'
+    message: 'A valid password is 8-16 characters',
+    detail: {
+      system: 'subscriber/view',
+      type: 'malformedNewPassword'
+    }
   };
 };
 
 exports.noDatabaseConnection = function() {
   return {
-    system: 'subscriber/storage',
-    type: 'noDatabaseConnection'
+    message: 'Database failed',
+    detail: {
+      system: 'subscriber/storage',
+      type: 'noDatabaseConnection'
+    }
   };
 };
 
 exports.unknownError = function(err) {
   return {
-    system: '*/*',
-    type: 'unknownError',
-    err: err
+    message: 'An unknown error occured',
+    detail: {
+      system: '*/*',
+      type: 'unknownError',
+      err: err
+    }
   };
 };
 
 exports.unknownSessionToken = function() {
   return {
-    system: 'subscriber/storage',
-    type: 'unknownSessionToken'
+    message: 'Session token has expired',
+    detail: {
+      system: 'subscriber/storage',
+      type: 'unknownSessionToken'
+    }
   };
 };
 
 exports.missingToken = function() {
   return {
-    system: 'subscriber/view',
-    type: 'missingToken'
+    message: 'User is not authenticated',
+    detail: {
+      system: 'subscriber/view',
+      type: 'missingToken'
+    }
   };
 };
 
 exports.unknownVerificationToken = function() {
   return {
-    system: 'subscriber/storage',
-    type: 'unknownVerificationToken'
+    message: 'Token does not exist',
+    detail: {
+      system: 'subscriber/storage',
+      type: 'unknownVerificationToken'
+    }
   };
 };
 
