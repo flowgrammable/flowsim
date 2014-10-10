@@ -57,12 +57,13 @@ Controller.prototype.toString = fmt.toString;
  * @param {Function} callback - a standard callback function
  */
 Controller.prototype.authorize = function(token, callback) {
-  console.log('authorizing: ' + token);
-  this.storage.getSession(token, function(err, succ) {
+  var that = this;
+  this.storage.getSession(token, function(err, sess) {
     if(err) {
+      that.logger.error(err);
       callback(err);
     } else {
-    callback(null, { subscriber_id: succ.subscriber_id, session_id: succ.id });
+    callback(null, { subscriber_id: sess.subscriber_id, session_id: sess.id });
     }
   });
 };
@@ -79,25 +80,32 @@ Controller.prototype.authorize = function(token, callback) {
  */
 Controller.prototype.login = function(email, pwd, callback) {
   var that = this;
-  this.storage.getSubscriberByEmail(email, function(err, succ) {
+  this.storage.getSubscriberByEmail(email, function(err, sub) {
     var token, expireTime;
     if(err) {
       that.logger.error(err);
       callback(err);
     } else {
-      if(bcrypt.compareSync(pwd, succ.password)) {
-        token = uuid.v4();
-        expireTime = new Date((new Date()).getTime() + defTimeout * 60000);
-        that.storage.createSession(token, succ.id, expireTime.toISOString(),
-          function(_err, session) {
-            if(_err){
-              that.logger.error(_err);
-              callback(_err);
-            }
-            callback(null, session.key);
-        });
-      } else {
-        callback(msg.invalidPassword());
+      //check to see subscriber is ACTIVE before allowing login
+      if(sub.status == 'ACTIVE'){
+        if(bcrypt.compareSync(pwd, sub.password)) {
+          token = uuid.v4();
+          expireTime = new Date((new Date()).getTime() + defTimeout * 60000);
+          that.storage.createSession(token, sub.id, expireTime.toISOString(),
+            function(_err, session) {
+              if(_err){
+                that.logger.error(_err);
+                callback(_err);
+              }
+              callback(null, session.key);
+            });
+        } else {
+          callback(msg.invalidPassword());
+        }
+      } else if(sub.status == 'CREATED') {
+        callback(msg.subscriberNotVerified(email));
+      } else if(sub.status == 'RESET'){
+        callback(msg.subscriberReset(email));
       }
     }
   });
@@ -111,8 +119,15 @@ Controller.prototype.login = function(email, pwd, callback) {
  */
 Controller.prototype.logout = function(sessionID, callback) {
   // if a valid session then delete the session
-  console.log('logout: ' + sessionID);
-  this.storage.deleteSession(sessionID, callback);
+  var that = this;
+  this.storage.deleteSession(sessionID, function(err, result){
+    if(err){
+      that.logger.error(err);
+      callback(err);
+    } else {
+      callback(null, result);
+    }
+    });
 };
 
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
@@ -123,7 +138,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   that = this;
   // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp,
-                                token, function(err, succ) {
+                                token, function(err, sub) {
     var subject, body;
     if(err) {
       that.logger.error(err);
@@ -151,12 +166,16 @@ Controller.prototype.verify = function(token, callback) {
   // subscriber state
   // otherwise send an error
   var that = this;
-  this.storage.verifySubscriber(token, function(err, result){
+  this.storage.verifySubscriber(token, function(err, sub){
     if(err){
       that.logger.error(err);
       callback(err);
     } else {
-      callback(null, result);
+      if(sub.status == 'ACTIVE'){
+        callback(null, msg.success());
+      } else {
+        callback(msg.unknownVerificationToken());
+      }
     }
   });
 };
@@ -173,7 +192,7 @@ Controller.prototype.forgot = function(email, callback) {
   // or send an error
   var token = uuid.v4();
   var that = this;
-  this.storage.resetSubscriber(email, token, function(err, succ) {
+  this.storage.resetSubscriber(email, token, function(err, sub) {
     var body, subject;
     if(err) {
       that.logger.error(err);
@@ -184,7 +203,7 @@ Controller.prototype.forgot = function(email, callback) {
         token: token
       });
       that.mailer.send(email, subject, body);
-      callback(null, result);
+      callback(null, msg.success());
     }
   });
 };
@@ -200,12 +219,12 @@ Controller.prototype.reset = function(token, password, callback) {
   var hash = bcrypt.hashSync(password, 10);
   var that = this;
   this.storage.updateSubscriberPasswordByToken(token, hash,
-    function(err, result){
+    function(err, sub){
       if(err){
         that.logger.error(err);
         callback(err);
       } else {
-        callback(null, result);
+        callback(null, msg.success());
       }
   });
 };
@@ -225,15 +244,23 @@ Controller.prototype.reset = function(token, password, callback) {
 Controller.prototype.update = function(subscriber_id, oldPwd, newPwd, callback)
 {
   var that = this;
-  console.log('update: ' + subscriber_id);
-  this.storage.getSubscriberById(subscriber_id, function(err, succ) {
+  this.storage.getSubscriberById(subscriber_id, function(err, sub) {
     var hash;
     if(err) {
+      that.logger.error(err);
       callback(err);
     } else {
-      if(bcrypt.compareSync(oldPwd, succ.password)) {
+      if(bcrypt.compareSync(oldPwd, sub.password)) {
         hash = bcrypt.hashSync(newPwd, 10);
-        that.storage.updateSubscriberPassword(subscriber_id, hash, callback);
+        that.storage.updateSubscriberPassword(subscriber_id, hash,
+          function(err, sub){
+            if(err){
+              that.logger.error(err);
+              callback(err);
+            } else {
+              callback(null, msg.success());
+            }
+          });
       } else {
         callback(msg.invalidPassword());
       }

@@ -65,7 +65,7 @@ function Responder(res, nxt) {
       'Content-Type': 'application/json'
     });
     response.end(JSON.stringify(_tag(err, result)));
-    // added next so 'after' event will fire   
+    // added next so 'after' event will fire
     next();
   };
 }
@@ -88,4 +88,3 @@ exports.requiresAuth = function(callback) {
 };
 
 })();
-

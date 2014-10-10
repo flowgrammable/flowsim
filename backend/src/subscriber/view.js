@@ -14,7 +14,6 @@ function isValidPassword(p) {
 function authorize(view) {
   return function(req, res, next) {
     var responder = util.Responder(res, next);
-
     // if there is an access token attempt validation
     if(req.headers['x-access-token']) {
       view.controller.authorize(req.headers['x-access-token'],
@@ -22,7 +21,7 @@ function authorize(view) {
           if(err) {
             responder(err);
           } else {
-            // set the appropriate credentials and call the next 
+            // set the appropriate credentials and call the next
             // handler in the chain
             req.subscriber_id = succ.subscriber_id;
             req.session_id    = succ.session_id;
@@ -31,10 +30,8 @@ function authorize(view) {
           }
         });
     } else {
-      // set the request as unauthorized adn call the next 
+      // set the request as unauthorized adn call the next
       // handler in the chain
-      req.subscriber_id = -1;
-      req.session_id    = -1;
       return next();
     }
   };
@@ -116,7 +113,7 @@ function reset(view) {
     } else if(!req.body.password) {
       responder(msg.missingPassword());
     } else if(!isValidPassword(req.body.password)) {
-      responder(msg.malformedEmail());
+      responder(msg.malformedPassword());
     } else {
       view.controller.reset(req.body.token, req.body.password, responder);
     }
@@ -135,7 +132,7 @@ function update(view) {
     } else if(!isValidPassword(req.body.newPassword)) {
       responder(msg.malformedNewPassword());
     } else {
-      view.controller.update(req.subscriber_id, req.session_id, 
+      view.controller.update(req.subscriber_id,
           req.body.oldPassword, req.body.newPassword, responder);
     }
   };
@@ -180,10 +177,9 @@ function View(c, subscriberLogger) {
       method: 'post',
       path: 'update',
       handler: util.requiresAuth(update(this))
-    } 
+    }
   ];
 }
 exports.View = View;
 
 })();
-

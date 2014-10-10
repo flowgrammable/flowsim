@@ -25,12 +25,33 @@ exports.malformedEmail = function() {
   };
 };
 
+exports.subscriberNotVerified = function(email) {
+  return {
+    message: 'This email address has not been verified',
+    detail: {
+      system: 'subscriber/controller',
+      type: 'subscriberNotVerified',
+      email: email
+    }
+  };
+};
+
 exports.unknownSubscriber = function() {
   return {
     message: 'Subscriber does not exist',
     detail: {
       system: 'subscriber/storage',
       type: 'unknownSubscriber'
+    }
+  };
+};
+
+exports.subscriberReset = function(email){
+  return {
+    message: 'This account password has been reset, check your email',
+    detail: {
+      system: 'subscriber/storage',
+      type: 'subscriberReset'
     }
   };
 };
@@ -70,7 +91,7 @@ exports.malformedPassword = function() {
     message: 'A valid password is 8-16 characters',
     detail: {
       system: 'subscriber/view',
-      type: 'missingPassword'
+      type: 'malformedPassword'
     }
   };
 };

@@ -282,7 +282,7 @@ Storage.prototype.updateSubscriberPassword = function(subscriber_id, password,
       if(result.length === 1){
         callback(null, result[0]);
       } else {
-        callback(null, msg.unknownSubscriber());
+        callback(msg.unknownSubscriber());
       }
     }
   });
