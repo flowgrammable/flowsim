@@ -1,14 +1,3 @@
-/*
-* internal error
-* invalid packet name
-* packet already exists
-* invalid bytes
-* protocol does not exist
-* bad protocol sequence
-* field does not exist
-* bad valud
-*/
-
 
 (function(){
 
@@ -23,8 +12,8 @@ exports.invalidPacketName = function() {
       system: 'packet/view',
       type: 'invalidPacketName'
     }
-  }
-}
+  };
+};
 
 exports.missingPacketName = function() {
   return {
@@ -63,8 +52,8 @@ exports.missingProtocols = function() {
       system: 'packet/view',
       type: 'missingProtocols'
     }
-  }
-}
+  };
+};
 
 exports.missingProtocol = function() {
   return {
@@ -73,8 +62,8 @@ exports.missingProtocol = function() {
       system: 'packet/view',
       type: 'missingProtocol'
     }
-  }
-}
+  };
+};
 
 exports.missingProtocolName = function() {
   return {
@@ -103,8 +92,8 @@ exports.missingProtocolBytes = function() {
       system: 'packet/view',
       type: 'missingProtocolBytes'
     }
-  }
-}
+  };
+};
 
 exports.invalidProtocolBytes = function() {
   return {
@@ -123,8 +112,8 @@ exports.missingProtocolFields = function() {
       system: 'packet/view',
       type: 'missingProtocolFields'
     }
-  }
-}
+  };
+};
 
 exports.invalidFieldType = function() {
   return {
@@ -133,7 +122,36 @@ exports.invalidFieldType = function() {
       system: 'packet/view',
       type: 'invalidFieldType'
     }
-  }
-}
+  };
+};
 
+exports.badProtocolSequence = function() {
+  return {
+    message: 'Bad Protocol Sequence',
+    detail: {
+      system: 'packet/view',
+      type: 'badProtocolSequence'
+    }
+  };
+};
+
+exports.unknownProtocol = function() {
+  return {
+    message: 'Unknown Protocol',
+    detail: {
+      system: 'packet/view',
+      type: 'unknownProtocol'
+    }
+  };
+};
+
+exports.badValue = function(msg){
+  return {
+    message: 'Bad value for ' + msg,
+    detail: {
+      system: 'packet/view',
+      type: 'badValue'
+    }
+  };
+};
 })();
