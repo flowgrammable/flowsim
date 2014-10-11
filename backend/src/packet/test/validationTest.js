@@ -5,9 +5,11 @@ var requestBody = "{\"name\": \"packet1\", " +
                   " \"bytes\": 3, " +
                   "  \"protocols\": ["+
                   "   {\"name\": \"Ethernet\", "+
-                  "    \"bytes\": 14, "+
-                  "    \"fields\": [{\"ip\": \"3\" }, {\"ip2\": \"4\" }] },"+
-                  "   {\"name\": \"Ethernet\"}]}";
+                  "    \"bytes\": 12, "+
+                  "    \"fields\": [{\"Src\": \"ff:ff:ff:ff:ff:ff\" }, "+
+                  "     {\"Dst\": \"aa:aa:aa:aa:aa:aa\" }, "+
+                  "     {\"Typelen\": \"0x8101\"} ] }"+
+                  "   ]}";
 
 var p = JSON.parse(requestBody);
 pktValidator.validatePacket(p, function(err, result){

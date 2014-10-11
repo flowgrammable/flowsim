@@ -30,8 +30,8 @@ function validateStructure(packet, cb){
     cb(msg.invalidBytes());
   } else if(!packet.protocols){
     cb(msg.missingProtocols());
-  } else {
-    validateProtocolStructure(packet.protocols, cb);
+  } else if(!validateProtocolStructure(packet.protocols, cb)){
+    cb(null, packet);
   }
 }
 
@@ -74,7 +74,37 @@ function validateProtocols(protocols, cb){
     cb(msg.badProtocolSequence());
   } else{
     //handle protocol validation
+    validateEthernet(protocols, cb);
   }
+}
+
+var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
+function validMac(address){
+  return macPattern.test(address);
+}
+
+
+var types = ["0x8100", "0x8847", "0x0806", "0x0800", "0x86dd"];
+function validType(type){
+  return types.indexOf(type) > -1;
+}
+
+function validateEthernet(protocols, cb){
+  // need to check that all fields are present
+  var bytes = protocols[0].bytes;
+  var src = protocols[0].fields[0].Src;
+  var dst = protocols[0].fields[1].Dst;
+  var type = protocols[0].fields[2].Typelen;
+  if(bytes != 14){
+    cb(msg.badValue('ethernet bytes ' + bytes));
+  }else if(!validMac(src)){
+    cb(msg.badValue('Ethernet Src Address ' + src));
+  } else if(!validMac(dst)){
+    cb(msg.badValue('Ethernet Dst Address ' + dst));
+  } else if(!validType(type)){
+    cb(msg.badValue('Ethernet Typelen ' + type));
+  }
+
 }
 
 exports.validatePacket = validatePacket;
