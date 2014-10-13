@@ -37,7 +37,7 @@ exports.missingBytes = function() {
 
 exports.invalidBytes = function() {
   return {
-    message: 'Bytes must be a number',
+    message: 'Bytes must be a integer',
     detail: {
       system: 'packet/view',
       type: 'missingBytes'
@@ -125,12 +125,12 @@ exports.invalidFieldType = function() {
   };
 };
 
-exports.badProtocolSequence = function() {
+exports.badProtocolSequence = function(msg) {
   return {
-    message: 'Bad Protocol Sequence',
+    message: 'Bad Protocol Sequence :' + msg,
     detail: {
       system: 'packet/view',
-      type: 'badProtocolSequence'
+      type: 'badProtocolSequence',
     }
   };
 };
@@ -141,6 +141,16 @@ exports.unknownProtocol = function() {
     detail: {
       system: 'packet/view',
       type: 'unknownProtocol'
+    }
+  };
+};
+
+exports.missingField = function(msg){
+  return {
+    message: 'Missing Field: ' + msg,
+    detail: {
+      system: 'packet/view',
+      type: 'missingField'
     }
   };
 };

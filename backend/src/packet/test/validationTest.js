@@ -1,21 +1,36 @@
-var pktValidator = require('../utils');
+var utils = require('../utils');
 
 console.log('started test');
 var requestBody = "{\"name\": \"packet1\", " +
                   " \"bytes\": 3, " +
                   "  \"protocols\": ["+
-                  "   {\"name\": \"Ethernet\", "+
+                  "   {\"name\": \"Ehernet\", "+
                   "    \"bytes\": 12, "+
                   "    \"fields\": [{\"Src\": \"ff:ff:ff:ff:ff:ff\" }, "+
                   "     {\"Dst\": \"aa:aa:aa:aa:aa:aa\" }, "+
-                  "     {\"Typelen\": \"0x8101\"} ] }"+
+                  "     {\"Typelen\": \"0x8100\"} ] }"+
                   "   ]}";
 
-var p = JSON.parse(requestBody);
-pktValidator.validatePacket(p, function(err, result){
+//var p = JSON.parse(requestBody);
+
+var p = {name: "packet1",
+        bytes: 3,
+        protocols: [
+        {name: "Ethernet",
+        bytes: 12,
+        fields: [{
+          Src: "ff:ff:ff:ff:ff:ff"
+        },{
+          Dst: "aa:aa:aa:aa:aa:aa"
+        }, {
+          Typelen: "8100"
+        }]}
+        ]};
+
+var errMsg = utils.validatePacket(p, function(err, result){
   if(err){
-  console.log('invalid packet');
+    console.log(err);
   } else {
-  console.log('valid packet');
+    console.log('valid packet');
   }
 });

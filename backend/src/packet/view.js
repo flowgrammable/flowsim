@@ -11,9 +11,9 @@ var pktUtils   = require('./utils');
 function createPacket(view) {
   return function(req, res, next) {
     var responder = util.Responder(res, next);
-    pktUtils.validatePacket(req.body, function(errMsg, result){
+    pktUtils.validatePacket(req.body, function(err, result){
       if(err){
-        responder(errMsg);
+        responder(err);
       } else {
         //send packet to createPacket Controller
       }
