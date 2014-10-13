@@ -9,6 +9,8 @@ function validatePacket(packet, cb){
     cb(msg.missingPacketName());
   } else if(typeof packet.name !== 'string'){
     cb(msg.invalidPacketName());
+  } else if(packet.name.length < 2 ){
+    cb(msg.badValue('Packet name must be atleast 2 chars'));
   } else if(!packet.bytes){
     cb(msg.missingBytes());
   } else if(typeof packet.bytes !== 'number'){

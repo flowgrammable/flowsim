@@ -19,6 +19,8 @@ function validate(protocols, cb){
   // need to check that all fields are present
   var ethernet = protocols[0];
   protocols.shift();
+  console.log('after shift');
+  console.log('ethernet', ethernet);
   if(ethernet.bytes != 14){
     cb(msg.badValue('Ethernet Bytes'));
   } else if(!ethernet.fields[0].Src){
@@ -33,8 +35,9 @@ function validate(protocols, cb){
     cb(msg.missingField('Ethernet Typelen'));
   } else if(!validType(ethernet.fields[2].Typelen)){
     cb(msg.badValue('Ethernet Typelen'));
-  } else if( protocols.length >= 1){
-    switch(protocols[0].name){
+  } else if(protocols.length >= 1){
+    console.log('in last elef');
+    switch(protocols[1].name){
       case 'VLAN':
         vlan.validate(protocols, cb);
         break;
@@ -55,6 +58,7 @@ function validate(protocols, cb){
           break;
     }
   } else {
+    console.log('hit callback');
     cb(null, msg.success());
   }
 

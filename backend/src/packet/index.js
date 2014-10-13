@@ -4,6 +4,8 @@
 var _ = require('underscore');
 
 var v = require('./view');
+var s = require('./storage');
+var c = require('./controller');
 
 var name = 'packet';
 
@@ -15,8 +17,10 @@ var name = 'packet';
  * @param {module:logger-Logger} ctx.logger       - logger engine
  */
 function Packet(ctx) {
-  this.logger = ctx.logger.log.child({module: 'logger'});
-  this.view       = new v.View(/*this.controller,*/ this.logger);
+  this.logger     = ctx.logger.log.child({module: 'logger'});
+  this.storage    = new s.Storage(ctx.database, ctx.logger);
+  this.controller = new c.Controller(this.storage, ctx.server, this.logger);
+  this.view       = new v.View(this.controller, this.logger);
 
 }
 exports.Packet = Packet;

@@ -56,7 +56,7 @@ function Server(config, logger) {
   this.config.protocol    = this.config.https ? 'https' : 'http';
 
   // load the not found file
-  //this.notFound = fs.readFileSync(dir + 
+  //this.notFound = fs.readFileSync(dir +
 
   // Load credential information if present
   if(this.config.https) {
@@ -68,8 +68,8 @@ function Server(config, logger) {
     // redirect all http requests to the https port
     this.http = http.createServer(
       function(req, res) {
-        res.writeHead(301, { 
-          Location: 'https://' + that.config.hostname + ':' + 
+        res.writeHead(301, {
+          Location: 'https://' + that.config.hostname + ':' +
                     that.config.secure_port + '/'
         });
         res.end();
@@ -144,7 +144,7 @@ Server.prototype.addModule = function(mod) {
  * @returns {String} protocol://hostname:port
  */
 Server.prototype.baseUrl = function() {
-  return this.config.protocol + '://' + this.config.hostname + ':' + 
+  return this.config.protocol + '://' + this.config.hostname + ':' +
          this.config.secure_port;
 };
 
@@ -181,14 +181,14 @@ Server.prototype.run = function() {
     console.log(req.url);
     res.end({ error: {
       message: 'Bad request',
-      details: req.method + ' ' + req.url 
+      details: req.method + ' ' + req.url
     }});
   });
 
   // log request and response after the response has been sent
   this.server.on('after', restify.auditLogger({
       log: this.logger.log,
-      // log request and response body 
+      // log request and response body
       body: true
   }));
 
@@ -232,4 +232,3 @@ Server.prototype.toFormatter = function(f) {
 Server.prototype.toString = fmt.toString;
 
 })();
-

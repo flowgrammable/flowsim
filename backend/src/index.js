@@ -13,7 +13,7 @@ var mlr = require('./mailer');
 var tmp = require('./template');
 var srv = require('./server');
 var sub = require('./subscriber');
-//var pac = require('./packet');
+var pac = require('./packet');
 var log = require('./logger');
 
 // Process the command line
@@ -41,6 +41,12 @@ var mods = [
     database: db,
     mailer: mail,
     template: template,
+    server: restServer,
+    logger: logger
+  }),
+  new pac.Packet({
+    configuration: config,
+    database: db,
     server: restServer,
     logger: logger
   })

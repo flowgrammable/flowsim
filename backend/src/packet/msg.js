@@ -15,6 +15,16 @@ exports.invalidPacketName = function() {
   };
 };
 
+exports.existingPacket = function() {
+  return {
+    message: 'A packet with this name already exists',
+    detail: {
+      system: 'packet/storage',
+      type: 'existingPacket'
+    }
+  }
+}
+
 exports.missingPacketName = function() {
   return {
     message: 'Packet name is required',
@@ -40,7 +50,7 @@ exports.invalidBytes = function() {
     message: 'Bytes must be a integer',
     detail: {
       system: 'packet/view',
-      type: 'missingBytes'
+      type: 'invalidBytes'
     }
   };
 };
@@ -77,7 +87,7 @@ exports.missingProtocolName = function() {
 
 exports.invalidProtocolName = function() {
   return {
-    message: 'Invalid Protocol Name',
+    message: 'Protocol Name must be string',
     detail: {
       system: 'packet/view',
       type: 'invalidProtocolName'

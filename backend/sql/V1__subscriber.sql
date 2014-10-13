@@ -29,3 +29,11 @@ CREATE TABLE session
   -- ip INET NOT NULL                               -- ip used for session
 );
 
+-- create the primary packet table
+CREATE TABLE packet
+(
+  id SERIAL PRIMARY KEY,                         -- internal id uses for sub
+  subscriber_id INTEGER references subscriber(id) NOT NULL, -- reference to sub
+  name VARCHAR(60) NOT NULL UNIQUE,                                -- packet name
+  packet VARCHAR NOT NULL                                   -- packet
+);
