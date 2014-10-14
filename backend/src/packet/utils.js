@@ -11,8 +11,6 @@ function validatePacket(packet, reqPacketName, cb){
     cb(msg.invalidPacketName());
   } else if(packet.name.length < 2 ){
     cb(msg.badValue('Packet name must be atleast 2 chars'));
-  } else if(packet.name !== reqPacketName){
-    cb(msg.badValue('Packet url name must equal packet body name'));
   } else if(!packet.bytes){
     cb(msg.missingBytes());
   } else if(typeof packet.bytes !== 'number'){

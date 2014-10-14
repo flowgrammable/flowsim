@@ -92,4 +92,17 @@ Controller.prototype.detail = function(subscriber_id, packetName, cb){
   })
 }
 
+Controller.prototype.update = function(subscriber_id, packetName, packet, cb){
+  var that = this;
+  this.storage.updatePacket(subscriber_id, packetName, packet,
+    function(err, pkt){
+      if(err){
+        that.logger.err(err);
+        cb(err);
+      } else {
+        cb(null, msg.success());
+      }
+  });
+}
+
 })();

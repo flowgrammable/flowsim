@@ -138,4 +138,24 @@ Storage.prototype.getPacketByName = function(subscriber_id, packetName,
     });
 };
 
+Storage.prototype.updatePacket = function(subscriber_id, packetName, packet,
+  callback){
+  var that = this;
+  var pktString = JSON.stringify(packet);
+  this.database.update('packet', {
+    name: packet.name,
+    packet: pktString
+  }, {
+    subscriber_id: { '=': subscriber_id },
+    name: { '=' : packetName}
+  }, function(err, packet){
+      if(err){
+        that.logger.err(err);
+        errHandler(callback, err, 'packet');
+      } else {
+        callback(null, packet);
+      }
+  });
+};
+
 })();

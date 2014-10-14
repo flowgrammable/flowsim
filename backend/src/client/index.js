@@ -20,12 +20,17 @@ cmd
   .option('--password <password>', 'password for account')
   .option('--newPassword <newPassword>', 'password for account')
   .option('--token <token>', 'x-access-token')
+  .option('--packet <token>', 'add packet')
+  .option('--listpacket <token>', 'list packets')
+  .option('--getpacket <token>', 'get packet detail')
+  .option('--name <name>', 'packet name')
+  .option('--updatepacket <token>', 'update packet detail')
   .parse(process.argv);
 
-function query(name, headers, body, callback) {
+function query(name, type, headers, body, callback) {
   request({
-    uri: 'https://127.0.0.1:8081/api/subscriber/' + name,
-    method: 'POST',
+    uri: 'https://127.0.0.1:8081/api/' + name,
+    method: type,
     headers: headers,
     rejectUnauthorized : false,
     json: body
@@ -33,7 +38,7 @@ function query(name, headers, body, callback) {
 }
 
 function register(email, password) {
-  query('register', {}, {
+  query('subscriber/register', 'POST', {}, {
     email: email,
     password: password
   }, function(err, res, body) {
@@ -47,7 +52,7 @@ function register(email, password) {
 }
 
 function verify(token) {
-  query('verify', {}, {
+  query('subscriber/verify', 'POST', {}, {
     token: token
   }, function(err, res, body) {
     if(err) {
@@ -59,7 +64,7 @@ function verify(token) {
 }
 
 function forgot(email) {
-  query('forgot', {}, {
+  query('subscriber/forgot', 'POST', {}, {
     email: email
   }, function(err, res, body) {
     if(err) {
@@ -71,7 +76,7 @@ function forgot(email) {
 }
 
 function reset(token, password) {
-  query('reset', {}, {
+  query('subscriber/reset', 'POST', {}, {
     token: token,
     password: password
   }, function(err, res, body){
@@ -84,7 +89,7 @@ function reset(token, password) {
 }
 
 function login(email, password) {
-  query('login', {}, {
+  query('subscriber/login', 'POST', {}, {
     email: email,
     password: password
   }, function(err, res, body) {
@@ -97,7 +102,7 @@ function login(email, password) {
 }
 
 function logout(token) {
-  query('logout', {
+  query('subscriber/logout', 'POST', {
     'x-access-token': token
   }, {}, function(err, res, body) {
     if(err) {
@@ -109,7 +114,7 @@ function logout(token) {
 }
 
 function update(email, token, password, newPassword) {
-  query('update', {
+  query('subscriber/update', 'POST', {
       'x-access-token': token
   }, {
     email: email,
@@ -117,6 +122,97 @@ function update(email, token, password, newPassword) {
     newPassword: newPassword
   }, function(err, res, body) {
     if(err) {
+      console.log(err);
+    } else {
+      console.log(body);
+    }
+  });
+}
+
+function makeName()
+{
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 5; i++ )
+   text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
+function createPacket(token){
+  var name = makeName();
+  query('packet/'+name, 'POST', {
+    'x-access-token': token
+  }, {
+    name: name,
+    bytes: 20,
+    protocols:[{
+      name: 'Ethernet',
+      bytes: 14,
+      fields: [{
+        Src: 'aa:aa:aa:aa:aa:aa'
+      },{
+        Dst: 'bb:bb:bb:bb:bb:bb'
+      },{
+        Typelen: '0x8100'
+      }]
+    }]
+  }, function(err, res, body){
+    if(err){
+      console.log(err);
+    } else {
+      console.log(body);
+    }
+  })
+}
+
+
+function listPacket(token){
+  query('packet', 'GET', {
+    'x-access-token': token
+  }, {}, function(err, res, body){
+    if(err){
+      console.log(err);
+    } else {
+      console.log(body);
+    }
+  })
+}
+
+function getPacket(token, pktname){
+  query('packet/'+pktname, 'GET', {
+    'x-access-token': token
+  }, {}, function(err, res, body){
+    if(err){
+      console.log(err);
+    } else {
+      console.log(body);
+    }
+  });
+}
+
+function updatePacket(token, pktname){
+  var name = makeName();
+  query('packet/'+pktname, 'PUT', {
+    'x-access-token': token
+  }, {
+
+    name: name,
+    bytes: 20,
+    protocols:[{
+      name: 'Ethernet',
+      bytes: 14,
+      fields: [{
+        Src: 'aa:aa:aa:aa:aa:aa'
+      },{
+        Dst: 'bb:bb:bb:bb:bb:bb'
+      },{
+        Typelen: '0x8100'
+      }]
+    }]
+  }, function(err, res, body){
+    if(err){
       console.log(err);
     } else {
       console.log(body);
@@ -138,9 +234,16 @@ if(cmd.register && cmd.password) {
   logout(cmd.logout);
 } else if(cmd.update && cmd.token && cmd.password && cmd.newPassword) {
   update(cmd.update, cmd.token, cmd.password, cmd.newPassword);
+} else if(cmd.packet){
+  createPacket(cmd.packet);
+} else if(cmd.listpacket){
+  listPacket(cmd.listpacket);
+} else if(cmd.getpacket && cmd.name){
+  getPacket(cmd.getpacket, cmd.name);
+} else if(cmd.updatepacket && cmd.name){
+  updatePacket(cmd.updatepacket, cmd.name);
 } else {
   console.log('Unknown arguments');
 }
 
 })();
-
