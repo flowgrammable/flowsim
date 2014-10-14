@@ -10,18 +10,17 @@ var pktUtils   = require('./utils');
 
 function create(view) {
   return function(req, res, next) {
-    console.log('hit create view');
     var responder = util.Responder(res, next);
-    var packet = {};
-    console.log(req.body);
-    pktUtils.validatePacket(req.body, function(err, result){
+    var packet = {name: req.body.name , bytes: req.body.bytes,
+      protocols: req.body.protocols};
+
+    //lightly sanitize send packet to createPacket Controller
+    //TODO: rework validation
+    pktUtils.validatePacket(req.body, req.params.packetName,
+      function(err, result){
       if(err){
         responder(err);
       } else {
-        //lightly sanitize send packet to createPacket Controller
-        packet.name = req.body.name;
-        packet.bytes = req.body.bytes;
-        packet.protocols = req.body.protocols;
         view.controller.create(req.subscriber_id, packet, responder);
       }
     });
@@ -30,8 +29,22 @@ function create(view) {
 
 function list(view){
   return function(req, res, next){
-    console.log('hit list view');
+    var responder = util.Responder(res, next);
     view.controller.list(req.subscriber_id, responder);
+  }
+}
+
+function detail(view){
+  return function(req, res, next){
+    var responder = util.Responder(res, next);
+    view.controller.detail(req.subscriber_id, req.params.packetName, responder);
+  }
+}
+
+function update(view){
+  return function(req, res, next){
+    var responder = util.Responder(res, next);
+    view.controller.detail(req.subscriber_id, req.params.packetName, responder);
   }
 }
 
@@ -44,12 +57,20 @@ function View(c, packetLogger) {
   this.services = [
     {
       method: 'post',
-      path: '',
+      path: '/:packetName',
       handler: util.requiresAuth(create(this))
     } , {
       method: 'get',
       path: '',
       handler: util.requiresAuth(list(this))
+    } , {
+      method: 'get',
+      path: '/:packetName',
+      handler: util.requiresAuth(detail(this))
+    } , {
+      method: 'put',
+      path: '/:packetName',
+      handler: util.requiresAuth(update(this))
     }
   ];
 }

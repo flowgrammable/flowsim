@@ -4,13 +4,15 @@ var _   = require('underscore');
 
 var eth = require('./ethernet');
 
-function validatePacket(packet, cb){
+function validatePacket(packet, reqPacketName, cb){
   if(!packet.name){
     cb(msg.missingPacketName());
   } else if(typeof packet.name !== 'string'){
     cb(msg.invalidPacketName());
   } else if(packet.name.length < 2 ){
     cb(msg.badValue('Packet name must be atleast 2 chars'));
+  } else if(packet.name !== reqPacketName){
+    cb(msg.badValue('Packet url name must equal packet body name'));
   } else if(!packet.bytes){
     cb(msg.missingBytes());
   } else if(typeof packet.bytes !== 'number'){
@@ -59,7 +61,7 @@ function validateFieldStructure(fields, cb){
 function validateProtocols(protocols, cb){
   if(protocols[0].name !== 'Ethernet'){
     cb(msg.badProtocolSequence());
-  } else{
+  } else {
     eth.validate(protocols, cb);
   }
 }

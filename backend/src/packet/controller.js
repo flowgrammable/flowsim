@@ -56,7 +56,7 @@ Controller.prototype.toString = fmt.toString;
 Controller.prototype.create = function(subscriber_id, packet, cb)
 {
   var that = this;
-  console.log('in controller create');
+  // Check if packet name already exists for subscriber
   this.storage.createPacket(subscriber_id, packet,
     function(err, packet) {
       if(err) {
@@ -79,5 +79,17 @@ Controller.prototype.list = function(subscriber_id, cb){
     }
   });
 };
+
+Controller.prototype.detail = function(subscriber_id, packetName, cb){
+  var that = this;
+  this.storage.getPacketByName(subscriber_id, packetName, function(err, packet){
+    if(err) {
+      that.logger.err(err);
+      cb(err);
+    } else {
+      cb(null, packet);
+    }
+  })
+}
 
 })();

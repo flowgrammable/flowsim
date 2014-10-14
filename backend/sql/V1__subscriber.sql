@@ -34,6 +34,7 @@ CREATE TABLE packet
 (
   id SERIAL PRIMARY KEY,                         -- internal id uses for sub
   subscriber_id INTEGER references subscriber(id) NOT NULL, -- reference to sub
-  name VARCHAR(60) NOT NULL UNIQUE,                                -- packet name
-  packet VARCHAR NOT NULL                                   -- packet
+  name VARCHAR(60) NOT NULL,                                -- packet name
+  packet JSON NOT NULL,                                     -- packet
+  unique(subscriber_id, name)                             -- name unique to sub
 );

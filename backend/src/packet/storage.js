@@ -12,7 +12,7 @@ var pg  = require('../database/pg');
 /**
  * SQL result codes based on postgres definitions.
  *
- * @memberof module:subscriber~Storage
+ * @memberof module:packet~Storage
  * @readonly
  * @enum {String}
  */
@@ -23,7 +23,7 @@ var Codes = {
 };
 
 /**
- * The Storage object provides a simplified interface for the subscriber
+ * The Storage object provides a simplified interface for the packet
  * tables in the database.
  *
  * @constructor
@@ -92,15 +92,15 @@ function errHandler(callback, err, table) {
 Storage.prototype.createPacket = function(subscriber_id, packet,
                                               callback) {
   var that = this;
+  var pktString = JSON.stringify(packet);
   this.database.insert('packet', {
     subscriber_id: subscriber_id,
     name: packet.name,
-    packet: packet
+    packet: pktString
   }, function(err, result) {
     if(err) {
       errHandler(callback, err, 'packet');
     } else {
-      console.log(result);
       callback(null, result[0]);
     }
   });
@@ -108,15 +108,34 @@ Storage.prototype.createPacket = function(subscriber_id, packet,
 
 Storage.prototype.listPackets = function(subscriber_id, callback){
   var that = this;
-  this.database.select('packet', ['packet'], {
+  var packetList = {names:[]};
+  this.database.select('packet', ['name'], {
     subscriber_id: {'=' : subscriber_id }}, function(err, result){
       if(err){
+        that.logger.error(err);
         errHandler(callback, err, 'packet');
       } else {
-      console.log(result);
-      callback(null, result);
+        for(var i in result){
+          packetList.names.push(result[i].name)
+        }
+        callback(null, packetList);
       }
     });
-}
+};
+
+Storage.prototype.getPacketByName = function(subscriber_id, packetName,
+  callback){
+  var that = this;
+  this.database.select('packet', ['packet'], {
+    subscriber_id: {'=' : subscriber_id },
+    name: {'=' : packetName} }, function(err, packetList){
+      if(err){
+        that.logger.err(err);
+        errHandler(callback, err, 'packet');
+      } else {
+        callback(null, packetList[0].packet);
+      }
+    });
+};
 
 })();
