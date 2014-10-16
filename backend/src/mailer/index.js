@@ -36,11 +36,11 @@ function Mailer(config, logger) {
     throw new Error('Mailer: missing config.user');
   }
 
-  this.logger = logger; 
+  this.logger = logger.addLog(name);
 
   // construct the mailer
   this.mailer = mailgun({
-    apiKey: this.config.apiKey, 
+    apiKey: this.config.apiKey,
     domain: this.config.domain
   });
 
@@ -86,15 +86,15 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
     }, function(err, result){
       if(err) {
         e = MailerError('send', err, that.config);
-        that.logger.log(e);
+        that.logger.error(e);
         callback(e);
       } else {
-        that.logger.log(logString);
+        that.logger.info(logString);
         callback(null, result);
       }
   });
 
-}; 
+};
 
 Mailer.prototype.toFormatter = function(f) {
   f.begin('Mailer');
@@ -108,4 +108,3 @@ Mailer.prototype.toFormatter = function(f) {
 Mailer.prototype.toString = fmt.toString;
 
 })();
-

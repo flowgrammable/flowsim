@@ -30,10 +30,10 @@ function Database(config, logger) {
   this.config = config[name];
   this.config.host = this.config.host || defHost;
 
-  this.logger = logger;
+  this.logger = logger.addLog(name);
 
   // set the postgres connection string
-  this.setup = 'postgres://' + this.config.user + ':' + this.config.pwd + 
+  this.setup = 'postgres://' + this.config.user + ':' + this.config.pwd +
                '@' + this.config.host + '/' + this.config.database;
 
 }
@@ -51,8 +51,8 @@ function dbError(method, err, meta){
 
 function localErrorHandler(method, err, meta){
   //Construct error object
-  var e = dbError(method, err, meta); 
-  return e; 
+  var e = dbError(method, err, meta);
+  return e;
 }
 /**
  * Close all connections in the pg connection pool.
@@ -80,14 +80,15 @@ Database.prototype.queryArgs = function(qString, args, callback) {
     } else {
       client.query(qString, args, function(err, result) {
         if(err) {
+          that.logger.error(err);
           callback(err);
         } else {
           callback(null, result.rows);
-        } 
+        }
         // release the connection back to the pool
         done();
       });
-    } 
+    }
   });
 };
 
@@ -99,12 +100,15 @@ Database.prototype.queryArgs = function(qString, args, callback) {
  * @param {genericCallback} callback - a generic callback for query results
  */
 Database.prototype.queryStmt = function(qString, callback) {
+  var that = this;
   pg.connect(this.setup, function(err, client, done) {
     if(err) {
+      that.logger.error(err);
       callback(localErrorHandler('pg.connect', err));
     } else {
       client.query(qString, function(err, result) {
         if(err) {
+          that.logger.error(err);
           callback(localErrorHandler('queryStmt', err, {query: qString}));
         } else {
           callback(null, result.rows);
@@ -112,7 +116,7 @@ Database.prototype.queryStmt = function(qString, callback) {
         // release the connection back to the pool
         done();
       });
-    } 
+    }
   });
 };
 
@@ -204,7 +208,7 @@ function mkInsert(table, fvPairs) {
 }
 
 /**
- * Inserts a new object into a specified table using the object's keys as SQL 
+ * Inserts a new object into a specified table using the object's keys as SQL
  * fields and the corresponding values as SQL VALUES.
  *
  * @param {String} table      - the target table for insertion
@@ -216,12 +220,12 @@ Database.prototype.insert = function(table, fvPairs, callback) {
 };
 
 /**
- * Creates a valid SQL select statement given a table, fields to select, 
+ * Creates a valid SQL select statement given a table, fields to select,
  * and a conjunction of field/values to screen against.
  *
  * @param {String} table    - the target table for insertion
  * @param {Array(String)} fields - a list of fields to present in the results
- * @param {Object} conjunct - a conjunction of field/value pairs to filter 
+ * @param {Object} conjunct - a conjunction of field/value pairs to filter
  * @returns {String} string representation of SQL SELECT statement
  */
 function mkSelect(table, fields, conjunct) {
@@ -264,7 +268,7 @@ Database.prototype.select = function() {
 
 /**
  * Create a valid SQL statement that udpates a set of specified fields with new
- * values in the specified table that match the supplied conjunction of 
+ * values in the specified table that match the supplied conjunction of
  * filed/value pairs.
  *
  * @param {String} table    - target table for selection
@@ -286,7 +290,7 @@ function mkUpdate(table, fvPairs, conjunct) {
  * @param {CallBack} callback - callback function to use
  */
 Database.prototype.update = function(table, fvPairs, conjunct, callback) {
-  this.queryStmt(mkUpdate(table, fvPairs, conjunct), callback); 
+  this.queryStmt(mkUpdate(table, fvPairs, conjunct), callback);
 };
 
 /**
@@ -294,7 +298,7 @@ Database.prototype.update = function(table, fvPairs, conjunct, callback) {
  * database where the conjunct fields match.
  *
  * @param {String} table    - target table of operation
- * @param {Object} conjunct - set of field/value pairs 
+ * @param {Object} conjunct - set of field/value pairs
  * @returns {String} string representation of SQL DELETE statement
  */
 function mkDelete(table, conjunct) {
@@ -314,4 +318,3 @@ Database.prototype.delete = function(table, conjunct, callback) {
 };
 
 })();
-

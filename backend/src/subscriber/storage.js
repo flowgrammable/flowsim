@@ -102,6 +102,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
     status: 'CREATED'
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       callback(null, result[0]);
@@ -116,10 +117,12 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
  * @param {storageCallback} callback -
  */
 Storage.prototype.getSubscriberByToken = function(token, callback) {
+  var that = this;
   this.database.select('subscriber', {
     verification_token: { '=': token }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
@@ -138,10 +141,12 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
  * @param {storageCallback} callback -
  */
 Storage.prototype.getSubscriberById = function(subscriber_id, callback) {
+  var that = this;
   this.database.select('subscriber', {
     id: { '=': subscriber_id }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1) {
@@ -160,10 +165,12 @@ Storage.prototype.getSubscriberById = function(subscriber_id, callback) {
  * @param {Function} callback - standard callback
  */
 Storage.prototype.getSubscriberByEmail = function(email, callback) {
+  var that = this;
   this.database.select('subscriber', {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 0) {
@@ -184,6 +191,7 @@ Storage.prototype.getSubscriberByEmail = function(email, callback) {
  */
 
 Storage.prototype.verifySubscriber = function(token, callback) {
+  var that = this;
   // update where verification_token = token
   this.database.update('subscriber', {
     status: 'ACTIVE'
@@ -192,6 +200,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
     status:             { '=': 'CREATED' }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1) {
@@ -212,6 +221,7 @@ Storage.prototype.verifySubscriber = function(token, callback) {
  *
  */
 Storage.prototype.resetSubscriber = function(email, token, callback) {
+  var that = this;
   this.database.update('subscriber', {
     verification_token: token,
     status: 'RESET'
@@ -219,6 +229,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
     email: { '=': email }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1){
@@ -241,6 +252,7 @@ Storage.prototype.resetSubscriber = function(email, token, callback) {
  */
 Storage.prototype.updateSubscriberPasswordByToken = function(token, password,
   callback) {
+  var that = this;
   this.database.update('subscriber', {
     password: password,
     status: 'ACTIVE'
@@ -249,6 +261,7 @@ Storage.prototype.updateSubscriberPasswordByToken = function(token, password,
     status: { '=': 'RESET' }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1){
@@ -271,12 +284,14 @@ Storage.prototype.updateSubscriberPasswordByToken = function(token, password,
  */
 Storage.prototype.updateSubscriberPassword = function(subscriber_id, password,
   callback) {
+  var that = this;
   this.database.update('subscriber', {
     password: password
   }, {
     id: { '=': subscriber_id }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'subscriber');
     } else {
       if(result.length === 1){
@@ -298,12 +313,14 @@ Storage.prototype.updateSubscriberPassword = function(subscriber_id, password,
  *
  */
 Storage.prototype.createSession = function(skey, subId, tmo, callback) {
+  var that = this;
   this.database.insert('session', {
     key: skey,
     subscriber_id: subId,
     timeout: tmo
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'session');
     } else {
       callback(null, result[0]);
@@ -319,10 +336,12 @@ Storage.prototype.createSession = function(skey, subId, tmo, callback) {
  *
  */
 Storage.prototype.getSession = function(skey, callback) {
+  var that = this;
   this.database.select('session', {
     key: { '=': skey }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'session');
     } else {
       if(result.length === 0) {
@@ -342,10 +361,12 @@ Storage.prototype.getSession = function(skey, callback) {
  *
  */
 Storage.prototype.deleteSession = function(sessionID, callback) {
+  var that = this;
   this.database.delete('session', {
     id: { '=': sessionID }
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'session');
     } else {
       if(result.length === 1){
@@ -365,10 +386,12 @@ Storage.prototype.deleteSession = function(sessionID, callback) {
  *
  */
 Storage.prototype.deleteStaleSession = function(time, callback) {
+  var that = this;
   this.database.delete('session', {
     timeout: {'<': time}
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'session');
     } else {
       callback(null, msg.success());
