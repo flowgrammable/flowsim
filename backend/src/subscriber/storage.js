@@ -63,7 +63,7 @@ Storage.prototype.toString = fmt.toString;
 function errHandler(callback, err, table) {
   switch(err.psqlError.code) {
     case 'ECONNREFUSED':
-      callback(msg.noDatabaseConnection());
+      callback(msg.unknownError(err));
       break;
     case '23505':
       if(table === 'subscriber') {

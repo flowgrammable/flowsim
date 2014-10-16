@@ -61,6 +61,7 @@ Controller.prototype.authorize = function(token, callback) {
   this.storage.getSession(token, function(err, sess) {
     if(err) {
       that.logger.error(err);
+      delete err.detail.err;
       callback(err);
     } else {
     callback(null, { subscriber_id: sess.subscriber_id, session_id: sess.id });
@@ -84,6 +85,7 @@ Controller.prototype.login = function(email, pwd, callback) {
     var token, expireTime;
     if(err) {
       that.logger.error(err);
+      delete err.detail.err;
       callback(err);
     } else {
       //check to see subscriber is ACTIVE before allowing login
@@ -95,6 +97,7 @@ Controller.prototype.login = function(email, pwd, callback) {
             function(_err, session) {
               if(_err){
                 that.logger.error(_err);
+                delete err.detail.err;
                 callback(_err);
               }
               callback(null, session.key);
@@ -123,6 +126,7 @@ Controller.prototype.logout = function(sessionID, callback) {
   this.storage.deleteSession(sessionID, function(err, result){
     if(err){
       that.logger.error(err);
+      delete err.detail.err;
       callback(err);
     } else {
       callback(null, result);
@@ -142,6 +146,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
     var subject, body;
     if(err) {
       that.logger.error(err);
+      delete err.detail.err;
       callback(err);
     } else {
       subject = 'Flowsim Verify Email Address';
@@ -169,6 +174,7 @@ Controller.prototype.verify = function(token, callback) {
   this.storage.verifySubscriber(token, function(err, sub){
     if(err){
       that.logger.error(err);
+      delete err.detail.err;
       callback(err);
     } else {
       if(sub.status == 'ACTIVE'){
@@ -196,6 +202,7 @@ Controller.prototype.forgot = function(email, callback) {
     var body, subject;
     if(err) {
       that.logger.error(err);
+      delete err.detail.err;
       callback(err);
     } else {
       body = that.template.render('reset', {
@@ -222,6 +229,7 @@ Controller.prototype.reset = function(token, password, callback) {
     function(err, sub){
       if(err){
         that.logger.error(err);
+        delete err.detail.err;
         callback(err);
       } else {
         callback(null, msg.success());
@@ -248,6 +256,7 @@ Controller.prototype.update = function(subscriber_id, oldPwd, newPwd, callback)
     var hash;
     if(err) {
       that.logger.error(err);
+      delete err.detail.err;
       callback(err);
     } else {
       if(bcrypt.compareSync(oldPwd, sub.password)) {
@@ -256,6 +265,7 @@ Controller.prototype.update = function(subscriber_id, oldPwd, newPwd, callback)
           function(err, sub){
             if(err){
               that.logger.error(err);
+              delete err.detail.err;
               callback(err);
             } else {
               callback(null, msg.success());

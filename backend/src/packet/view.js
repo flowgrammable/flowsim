@@ -34,14 +34,14 @@ function list(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
     view.controller.list(req.subscriber_id, responder);
-  }
+  };
 }
 
 function detail(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
     view.controller.detail(req.subscriber_id, req.params.packetName, responder);
-  }
+  };
 }
 
 function update(view){
@@ -60,7 +60,7 @@ function update(view){
           packet, responder);
       }
     });
-  }
+  };
 }
 
 function View(c, packetLogger) {

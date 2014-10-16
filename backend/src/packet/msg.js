@@ -22,8 +22,8 @@ exports.existingPacket = function() {
       system: 'packet/storage',
       type: 'existingPacket'
     }
-  }
-}
+  };
+};
 
 exports.missingPacketName = function() {
   return {

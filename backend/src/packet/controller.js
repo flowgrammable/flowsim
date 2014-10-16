@@ -89,8 +89,8 @@ Controller.prototype.detail = function(subscriber_id, packetName, cb){
     } else {
       cb(null, packet);
     }
-  })
-}
+  });
+};
 
 Controller.prototype.update = function(subscriber_id, packetName, packet, cb){
   var that = this;
@@ -103,6 +103,6 @@ Controller.prototype.update = function(subscriber_id, packetName, packet, cb){
         cb(null, msg.success());
       }
   });
-}
+};
 
 })();

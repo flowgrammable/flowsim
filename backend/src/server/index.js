@@ -86,13 +86,14 @@ function Server(config, logger) {
     .use(restify.bodyParser());
 
   if(this.config.static) {
+    /*
     this.server.get(this.config.static.mount+'.*', restify.serveStatic(
       {
         directory: this.config.static.directory,
         default: 'index.html'
       }
     ));
-
+    */
   }
 
   this.running = false;
@@ -179,10 +180,11 @@ Server.prototype.run = function() {
 
   this.server.on('NotFound', function(req, res) {
     console.log(req.url);
-    res.end({ error: {
+    var body = JSON.stringify({ error: {
       message: 'Bad request',
       details: req.method + ' ' + req.url
     }});
+    res.end(body);
   });
 
   // log request and response after the response has been sent

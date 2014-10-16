@@ -36,6 +36,7 @@ function query(name, type, headers, body, callback) {
     json: body
   }, callback);
 }
+exports.query = query;
 
 function register(email, password) {
   query('subscriber/register', 'POST', {}, {
@@ -43,13 +44,13 @@ function register(email, password) {
     password: password
   }, function(err, res, body) {
     if(err) {
-      console.log('client cant connect to back');
       console.log(err);
     } else {
       console.log(body);
     }
   });
 }
+
 
 function verify(token) {
   query('subscriber/verify', 'POST', {}, {
@@ -164,7 +165,7 @@ function createPacket(token){
     } else {
       console.log(body);
     }
-  })
+  });
 }
 
 
@@ -177,7 +178,7 @@ function listPacket(token){
     } else {
       console.log(body);
     }
-  })
+  });
 }
 
 function getPacket(token, pktname){

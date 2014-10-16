@@ -116,7 +116,7 @@ Storage.prototype.listPackets = function(subscriber_id, callback){
         errHandler(callback, err, 'packet');
       } else {
         for(var i in result){
-          packetList.names.push(result[i].name)
+          packetList.names.push(result[i].name);
         }
         callback(null, packetList);
       }
