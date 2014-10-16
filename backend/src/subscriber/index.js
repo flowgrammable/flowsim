@@ -17,9 +17,9 @@ var name = 'subscriber';
  * @param {module:logger-Logger} ctx.logger       - logger engine
  */
 function Subscriber(ctx) {
-  this.logger = ctx.logger.log.child({module: 'subscriber'});
-  this.storage    = new s.Storage(ctx.database, ctx.logger);
-  this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template, 
+  this.logger = ctx.logger.addLog(name);
+  this.storage    = new s.Storage(ctx.database, this.logger);
+  this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template,
                                      ctx.server, this.logger);
   this.view       = new v.View(this.controller, this.logger);
 
@@ -43,4 +43,3 @@ Subscriber.prototype.load = function(server) {
 };
 
 })();
-

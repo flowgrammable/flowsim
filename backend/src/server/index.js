@@ -46,7 +46,7 @@ function Server(config, logger) {
     secure_port: defSecurePort
   };
 
-  this.logger = logger;
+  this.logger = logger.addLog(name);
 
   // Set default values in case where passed config is deficient
   this.config.address     = this.config.address     || defAddress;
@@ -118,6 +118,7 @@ exports.Server = Server;
  * @returns {Server} a reference to the object instance
  */
 Server.prototype.addHandler = function(method, path, handler) {
+  this.logger.info('Adding Handler: %s %s', method, path);
   switch(method) {
     case 'post':
     case 'get':
@@ -189,7 +190,7 @@ Server.prototype.run = function() {
 
   // log request and response after the response has been sent
   this.server.on('after', restify.auditLogger({
-      log: this.logger.log,
+      log: this.logger,
       // log request and response body
       body: true
   }));
@@ -199,7 +200,7 @@ Server.prototype.run = function() {
   }
   this.server.listen(this.config.secure_port, this.config.address);
   this.running = true;
-  this.logger.log.info('Started Flowsim');
+  this.logger.info('Started Flowsim');
   return this;
 };
 
