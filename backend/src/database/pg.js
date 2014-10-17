@@ -30,7 +30,7 @@ function Database(config, logger) {
   this.config = config[name];
   this.config.host = this.config.host || defHost;
 
-  this.logger = logger;
+  this.logger = logger.addLog(name);
 
   // set the postgres connection string
   this.setup = 'postgres://' + this.config.user + ':' + this.config.pwd +

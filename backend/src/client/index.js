@@ -151,13 +151,11 @@ function createPacket(token){
     protocols:[{
       name: 'Ethernet',
       bytes: 14,
-      fields: [{
-        Src: 'aa:aa:aa:aa:aa:aa'
-      },{
-        Dst: 'bb:bb:bb:bb:bb:bb'
-      },{
-        Typelen: '0x8100'
-      }]
+      fields: {
+        src: 'aa:aa:aa:aa:aa:aa',
+        dst: 'bb:bb:bb:bb:bb:bb',
+        typelen: '0x8100'
+      }
     }]
   }, function(err, res, body){
     if(err){
@@ -204,13 +202,11 @@ function updatePacket(token, pktname){
     protocols:[{
       name: 'Ethernet',
       bytes: 14,
-      fields: [{
-        Src: 'aa:aa:aa:aa:aa:aa'
-      },{
-        Dst: 'bb:bb:bb:bb:bb:bb'
-      },{
-        Typelen: '0x8100'
-      }]
+      fields: {
+        src: 'aa:aa:aa:aa:aa:aa',
+        dst: 'bb:bb:bb:bb:bb:bb',
+        typelen: '0x8100'
+        }
     }]
   }, function(err, res, body){
     if(err){

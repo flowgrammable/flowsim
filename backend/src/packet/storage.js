@@ -99,6 +99,7 @@ Storage.prototype.createPacket = function(subscriber_id, packet,
     packet: pktString
   }, function(err, result) {
     if(err) {
+      that.logger.error(err);
       errHandler(callback, err, 'packet');
     } else {
       callback(null, result[0]);
@@ -130,7 +131,7 @@ Storage.prototype.getPacketByName = function(subscriber_id, packetName,
     subscriber_id: {'=' : subscriber_id },
     name: {'=' : packetName} }, function(err, packetList){
       if(err){
-        that.logger.err(err);
+        that.logger.error(err);
         errHandler(callback, err, 'packet');
       } else {
         callback(null, packetList[0].packet);
@@ -150,7 +151,7 @@ Storage.prototype.updatePacket = function(subscriber_id, packetName, packet,
     name: { '=' : packetName}
   }, function(err, packet){
       if(err){
-        that.logger.err(err);
+        that.logger.error(err);
         errHandler(callback, err, 'packet');
       } else {
         callback(null, packet);

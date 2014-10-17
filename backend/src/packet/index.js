@@ -17,8 +17,8 @@ var name = 'packet';
  * @param {module:logger-Logger} ctx.logger       - logger engine
  */
 function Packet(ctx) {
-  this.logger     = ctx.logger.log.child({module: 'logger'});
-  this.storage    = new s.Storage(ctx.database, ctx.logger);
+  this.logger     = ctx.logger.addLog(name);
+  this.storage    = new s.Storage(ctx.database, this.logger);
   this.controller = new c.Controller(this.storage, ctx.server, this.logger);
   this.view       = new v.View(this.controller, this.logger);
 

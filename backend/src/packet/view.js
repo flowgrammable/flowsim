@@ -49,7 +49,7 @@ function update(view){
         responder(err);
       } else {
         view.controller.update(req.subscriber_id,
-          packet, responder);
+          req.params.packetName, packet, responder);
       }
     });
   };
