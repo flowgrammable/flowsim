@@ -5,6 +5,18 @@ exports.success = function() {
   return '';
 };
 
+//Packet Structure msgs
+
+exports.missingPacketName = function() {
+  return {
+    message: 'Packet name is required',
+    detail: {
+      system: 'packet/view',
+      type: 'missingName'
+    }
+  };
+};
+
 exports.invalidPacketName = function() {
   return {
     message: 'Packet name is not valid',
@@ -21,16 +33,6 @@ exports.existingPacket = function() {
     detail: {
       system: 'packet/storage',
       type: 'existingPacket'
-    }
-  };
-};
-
-exports.missingPacketName = function() {
-  return {
-    message: 'Packet name is required',
-    detail: {
-      system: 'packet/view',
-      type: 'missingName'
     }
   };
 };
@@ -95,9 +97,9 @@ exports.invalidProtocolName = function() {
   };
 };
 
-exports.missingProtocolBytes = function() {
+exports.missingProtocolBytes = function(proto) {
   return {
-    message: 'Missing protocol bytes',
+    message: 'Missing protocol bytes for ' + proto,
     detail: {
       system: 'packet/view',
       type: 'missingProtocolBytes'
@@ -105,9 +107,9 @@ exports.missingProtocolBytes = function() {
   };
 };
 
-exports.invalidProtocolBytes = function() {
+exports.invalidProtocolBytes = function(proto) {
   return {
-    message: 'Invalid protocol bytes',
+    message: 'Invalid protocol bytes for ' + proto,
     detail: {
       system: 'packet/view',
       type: 'invalidProtocolBytes'
@@ -115,9 +117,9 @@ exports.invalidProtocolBytes = function() {
   };
 };
 
-exports.missingProtocolFields = function() {
+exports.missingProtocolsFields = function(proto) {
   return {
-    message: 'Missing Protocol Fields',
+    message: 'Missing Protocol Fields for ' + proto,
     detail: {
       system: 'packet/view',
       type: 'missingProtocolFields'
@@ -125,9 +127,9 @@ exports.missingProtocolFields = function() {
   };
 };
 
-exports.invalidFieldType = function() {
+exports.invalidFieldType = function(proto, field) {
   return {
-    message: 'Field must be string',
+    message: proto +' ' + field + ' field must be string',
     detail: {
       system: 'packet/view',
       type: 'invalidFieldType'
@@ -137,7 +139,7 @@ exports.invalidFieldType = function() {
 
 exports.badProtocolSequence = function(msg) {
   return {
-    message: 'Bad Protocol Sequence :' + msg,
+    message: msg,
     detail: {
       system: 'packet/view',
       type: 'badProtocolSequence',
@@ -155,9 +157,9 @@ exports.unknownProtocol = function() {
   };
 };
 
-exports.missingField = function(msg){
+exports.missingField = function(proto, field){
   return {
-    message: 'Missing Field: ' + msg,
+    message: proto + ' is missing ' + field + 'field',
     detail: {
       system: 'packet/view',
       type: 'missingField'
@@ -167,11 +169,32 @@ exports.missingField = function(msg){
 
 exports.badValue = function(msg){
   return {
-    message: 'Bad value for ' + msg,
+    message: msg,
     detail: {
       system: 'packet/view',
       type: 'badValue'
     }
   };
 };
+
+exports.missingProtocolFields = function(protoName, fields){
+  return {
+    message: protoName + ' must have ' + fields + ' fields',
+    detail: {
+      system: 'packet/view',
+      type: 'missingFields'
+    }
+  };
+};
+
+exports.invalidProtocolFields = function(msg){
+  return {
+    message: 'Protocol Fields must be a list',
+    detail: {
+      system: 'packet/view',
+      type: 'invalidProtocolFields'
+    }
+  };
+};
+
 })();

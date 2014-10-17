@@ -11,15 +11,11 @@ var pktUtils   = require('./utils');
 function create(view) {
   return function(req, res, next) {
     var responder = util.Responder(res, next);
-    var packet = {name: req.body.name , bytes: req.body.bytes,
-      protocols: req.body.protocols};
-    if(packet.name !== req.params.packetName){
+    if(req.body.name !== req.params.packetName){
       responder(msg.badValue('Packet url name must equal packet body name'));
     } else {
-    //lightly sanitize send packet to createPacket Controller
-    //TODO: rework validation
-    pktUtils.validatePacket(req.body, req.params.packetName,
-      function(err, result){
+    pktUtils.validatePacket(req.body,
+      function(err, packet){
       if(err){
         responder(err);
       } else {
@@ -47,16 +43,12 @@ function detail(view){
 function update(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
-    var packet = {name: req.body.name , bytes: req.body.bytes,
-      protocols: req.body.protocols};
-
-    //TODO: rework validation
-    pktUtils.validatePacket(req.body, req.params.packetName,
-      function(err, result){
+    pktUtils.validatePacket(req.body,
+      function(err, packet){
       if(err){
         responder(err);
       } else {
-        view.controller.update(req.subscriber_id, req.params.packetName,
+        view.controller.update(req.subscriber_id,
           packet, responder);
       }
     });
