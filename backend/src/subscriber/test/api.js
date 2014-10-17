@@ -45,6 +45,53 @@ describe('/register', function(){
     });
   });
 
+  var malformedSub = {email:'notaemail', password: 'apassword'};
+  it('should return msg.malformedEmail() for malformed email', function(done){
+    client.query('subscriber/register', 'POST', {}, malformedSub, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert.equal(body.error.message, msg.malformedEmail().message);
+        done();
+      }
+    });
+  });
+
+});
+
+describe('Logging in with a subscriber in CREATED state', function(){
+
+  before(function(done){
+    testUtils.clearTables(['packet', 'session', 'subscriber'],
+      function(err, result){
+        if(err){
+          console.log(err);
+        } else {
+          var subscriber = {email:'coltonchojnacki@gmail.com', password: 'testpass'};
+          client.query('subscriber/register', 'POST', {}, subscriber, function(err, res, body){
+            if(err){
+              console.log(err);
+            } else {
+              assert(body.value);
+              done();
+            }
+          });
+        }
+      });
+  });
+
+  it('should result in msg.subscriberNotVerified()', function(done){
+    var login = {email:'coltonchojnacki@gmail.com', password: 'testpass'};
+    client.query('subscriber/login', 'POST', {}, login, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert.equal(body.error.message, msg.subscriberNotVerified().message);
+        done();
+      }
+    });
+  });
+
 });
 
 });
