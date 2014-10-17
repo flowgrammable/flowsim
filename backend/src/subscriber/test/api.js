@@ -155,7 +155,7 @@ var verificationToken;
         verificationToken = result.verification_token;
         done();
       }
-    })
+    });
   });
 
   it('successful verification should result in msg.success()', function(done){
@@ -267,7 +267,7 @@ describe('/login', function(){
       if(err){
         console.log(err);
       } else {
-        assert.equal(body.error.message, msg.subscriberReset().message)
+        assert.equal(body.error.message, msg.subscriberReset().message);
         done();
       }
     });

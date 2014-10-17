@@ -35,7 +35,7 @@ function validateProtocol(reqBody, packet, cb){
   } else {
     errMsg = validateProtoFields(reqBody.protocols[0].fields, validProto);
     if(errMsg){
-      cb(errMsg)
+      cb(errMsg);
     } else {
       packet.protocols.push(validProto);
       reqBody.protocols.shift();

@@ -177,7 +177,7 @@ exports.badValue = function(msg){
   };
 };
 
-exports.missingProtocolFields = function(protoName, fields){
+exports.missingProtocolNumber = function(protoName, fields){
   return {
     message: protoName + ' must have ' + fields + ' fields',
     detail: {
