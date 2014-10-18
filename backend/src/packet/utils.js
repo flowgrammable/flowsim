@@ -3,6 +3,8 @@ var msg = require('./msg');
 var _   = require('underscore');
 
 var eth = require('./ethernet');
+var ip4 = require('./ipv4');
+var tcp = require('./tcp');
 
 function validatePacket(reqBody, cb){
   var packet = {};
@@ -114,13 +116,9 @@ function validateProtoFields(reqBodyFields, validProto){
 }
 
 var protocols = {
-    'Ethernet':eth.ethernet()
+    'Ethernet':eth.ethernet(),
+    'IPv4': ip4.ipv4(),
+    'TCP': tcp.tcp()
 };
-
-
-
-
-
-
 
 exports.validatePacket = validatePacket;

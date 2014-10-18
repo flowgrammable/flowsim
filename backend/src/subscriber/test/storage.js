@@ -5,15 +5,18 @@ var assert = require('assert');
 var pg = require('../../database/pg');
 var st = require('./../storage');
 var msg = require('../msg');
+var logger = require('../../logger/loggerStub');
+var log = new logger.Logger();
+var utils = require('../../test/utils');
 
 var db = new pg.Database({database:{
   user: 'flogdev',
   pwd: 'flogdev',
   host: 'localhost',
   database: 'flowsim'
-}});
+}}, log);
 
-var store = new st.Storage(db);
+var store = new st.Storage(db, log);
 
 function genString(n){
   var y = '';
@@ -32,18 +35,14 @@ describe('Storage', function(){
 describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
 
   // Delete all subscribers from db before running tests
-  before(function(){
-    db.delete('session', {}, function(err, result){
+  before(function(done){
+    utils.clearTables(['packet', 'session', 'subscriber'], function(err, res){
       if(err){
-        console.log('delete all sessions error: ', err);
-      }
-    });
-    db.delete('subscriber', {}, function(err, result){
-      if(err){
-        console.log('delete all subscribers error:', err);
+        console.log(err);
       } else {
-       }
-    });
+        done();
+      }
+    })
   });
 
   it('should return {id, email, etc} on successful insert', function(done){

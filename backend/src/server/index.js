@@ -180,7 +180,6 @@ Server.prototype.run = function() {
   */
 
   this.server.on('NotFound', function(req, res) {
-    console.log(req.url);
     var body = JSON.stringify({ error: {
       message: 'Bad request',
       details: req.method + ' ' + req.url

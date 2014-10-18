@@ -1,48 +1,41 @@
+(function(){
+var validator = require('validator');
 
-function validEcn(ecn){
-  return true;
+var dscpPattern = /^0x[0-3][a-fA-F0-9]$/;
+
+
+exports.isdscp = function(addr) {
+  return dscpPattern.test(addr);
+};
+
+var ecnPattern = /^0x0[0-3]$/;
+
+exports.isecn = function(type) {
+  return ecnPattern.test(type);
+};
+
+var protoPattern = /^0x[a-fA-F0-9]{4}$/;
+
+exports.isProto = function(proto){
+  return protoPattern.test(proto);
+};
+
+exports.isIPaddress = function(address){
+  return validator.isIP(address, 4);
 }
 
-function validDscp(dscp){
-  return true;
-}
+exports.ipv4 = function(){
+  return {
+        bytes: 20,
+        fields: {
+          'dscp' : this.isdscp,
+          'ecn' : this.isecn,
+          'proto': this.isProto,
+          'src' : this.isIPaddress,
+          'dst' : this.isIPaddress
+          },
+        sequence: ['ICMPv4', 'TCP', 'UDP', 'SCTP']
+  };
+};
 
-function validate(protocols, cb){
-  var ipv4 = protocols[0];
-  protocols.shift();
-  if(ipv4.bytes !== 20){
-    cb(msg.badValue('IPv4 Bytes'));
-  } else if(!ipv4.fields[0].dscp){
-    cb(msg.missingField('ipv4 dscp'));
-  } else if(!validDscp(ipv4.fields[0].dscp)){
-    cb(msg.badValue('IPv4 dscp'));
-  } else if(!ipv4.fields[1].ecn){
-    cb(msg.missingField('IPv4 ecn'));
-  } else if(!validEcn(ipv4.fields[1].ecn)){
-    cb(msg.badValue('IPv4 ecn'));
-  } else if(!ipv4.fields[2].proto){
-    cb(msg.missingField('IPv4 proto'));
-  } else if(!validProto(ipv4.fields[2].proto)){
-    cb(msg.badValue('IPv4 Proto'));
-  } else if(!ipv4.fields[3].src){
-    cb(msg.missingField('IPv4 Source'));
-  } else if(!validIP(ipv4.fields[3].src)){
-    cb(msg.badValue('IPv4 Source'));
-  } else if(!ipv4.fields[4].dst){
-    cb(msg.missingField('IPv4 Dst'));
-  } else if(!validIP(ipv4.fields[4].dst)){
-    cb(msg.badValue('IPv4 Destination'));
-  } else if(protocols.length >= 1){
-    switch(protocols[0].name){
-      case 'TCP':
-        tcp.validate(protocols, cb);
-        break;
-      default:
-        cb(msg.badProtocolSequence(sequenceMessage));
-        break;
-    }
-  } else {
-    cb(null, msg.success());
-  }
-}
-exports.validate = validate;
+})();

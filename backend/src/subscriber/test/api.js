@@ -18,7 +18,7 @@ var db = new pg.Database({database:{
 
 var store = new st.Storage(db);
 
-var testEmail = 'coltonchojnacki@gmail.com';
+var testEmail = '';
 
 var url = 'https://127.0.0.1:8081/api/';
 
