@@ -10,6 +10,7 @@ var fs      = require('fs');
 var restify = require('restify');
 var http    = require('http');
 var fmt     = require('../utils/formatter');
+var filter   = require('./logfilter');
 
 var name = 'server';
 
@@ -188,10 +189,15 @@ Server.prototype.run = function() {
   });
 
   // log request and response after the response has been sent
-  this.server.on('after', restify.auditLogger({
+/*  this.server.on('after', restify.auditLogger({
       log: this.logger,
       // log request and response body
       body: true
+  })); */
+
+  this.server.on('after', filter.auditLogger({
+    log: this.logger,
+    body: true
   }));
 
   if(this.http) {
