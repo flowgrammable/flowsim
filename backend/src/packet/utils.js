@@ -5,8 +5,17 @@ var msg = require('./msg');
 var _   = require('underscore');
 
 var eth = require('./ethernet');
+var vla = require('./vlan');
+var arp = require('./arp');
+var mpl = require('./mpls');
+var ip6 = require('./ipv6');
 var ip4 = require('./ipv4');
 var tcp = require('./tcp');
+var udp = require('./udp');
+var sctp = require('./sctp');
+var icmp4 = require('./icmpv4');
+var icmp6 = require('./icmpv6');
+
 
 function validatePacket(reqBody, cb){
   var packet = {};
@@ -119,8 +128,16 @@ function validateProtoFields(reqBodyFields, validProto){
 
 var protocols = {
     'Ethernet':eth.ethernet(),
+    'VLAN':vla.vlan(),
+    'ARP':arp.arp(),
+    'MPLS':mpl.mpls(),
+    'IPv6': ip6.ipv6(),
     'IPv4': ip4.ipv4(),
-    'TCP': tcp.tcp()
+    'TCP': tcp.tcp(),
+    'UDP': udp.udp(),
+    'SCTP': sctp.sctp(),
+    'ICMPv4': icmp4.icmpv4(),
+    'ICMPv6': icmp6.icmpv6()
 };
 
 exports.validatePacket = validatePacket;

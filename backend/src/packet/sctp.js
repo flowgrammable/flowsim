@@ -6,9 +6,9 @@ exports.isPort = function(port){
   return num >= 0 && num <= 65535;
 };
 
-exports.tcp = function(){
+exports.sctp = function(){
   return {
-        bytes: 20,
+        bytes: 12,
         fields: {
           'src' : this.isPort,
           'dst' : this.isPort

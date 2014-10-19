@@ -3,7 +3,6 @@ var validator = require('validator');
 
 var dscpPattern = /^0x[0-3][a-fA-F0-9]$/;
 
-
 exports.isdscp = function(addr) {
   return dscpPattern.test(addr);
 };
@@ -20,21 +19,25 @@ exports.isProto = function(proto){
   return protoPattern.test(proto);
 };
 
-exports.isIPaddress = function(address){
-  return validator.isIP(address, 4);
+var ipv6Pattern = /^[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}$/;
+
+exports.isIPv6 = function(addr) {
+  return ipv6Pattern.test(addr);
 };
 
-exports.ipv4 = function(){
+exports.ipv6 = function(){
   return {
-        bytes: 20,
+        bytes: 40,
         fields: {
           'dscp' : this.isdscp,
           'ecn' : this.isecn,
           'proto': this.isProto,
-          'src' : this.isIPaddress,
-          'dst' : this.isIPaddress
+          'src' : this.isIPv6,
+          'dst' : this.isIPv6,
+          'flabel' : this.isIPv6,
+          'exthdr' : this.isIPv6
           },
-        sequence: ['ICMPv4', 'TCP', 'UDP', 'SCTP']
+        sequence: ['ICMPv6', 'TCP', 'UDP', 'SCTP']
   };
 };
 
