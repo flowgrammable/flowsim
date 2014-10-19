@@ -80,6 +80,8 @@ function Server(config, logger) {
     this.creds = {};
   }
 
+
+
   // Create and configure a server instance
   this.server = restify.createServer(this.creds)
     .use(restify.jsonp())
@@ -87,14 +89,14 @@ function Server(config, logger) {
     .use(restify.bodyParser());
 
   if(this.config.static) {
-    /*
+
     this.server.get(this.config.static.mount+'.*', restify.serveStatic(
       {
         directory: this.config.static.directory,
         default: 'index.html'
       }
     ));
-    */
+    
   }
 
   this.running = false;
@@ -180,6 +182,12 @@ Server.prototype.run = function() {
   }
   */
 
+  this.server.on('after', filter.auditLogger({
+    log: this.logger,
+    body: true
+  }));
+
+
   this.server.on('NotFound', function(req, res) {
     var body = JSON.stringify({ error: {
       message: 'Bad request',
@@ -188,15 +196,11 @@ Server.prototype.run = function() {
     res.end(body);
   });
 
-  this.server.on('after', filter.auditLogger({
-    log: this.logger,
-    body: true
-  }));
-
   if(this.http) {
     this.http.listen(this.config.open_port, this.config.address);
   }
   this.server.listen(this.config.secure_port, this.config.address);
+
   this.running = true;
   this.logger.info('Started Flowsim');
   return this;

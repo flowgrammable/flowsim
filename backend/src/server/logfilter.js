@@ -13,7 +13,12 @@ var bunyan = require('bunyan');
 var filterBodyFields = [
   'password',
   'oldPassword',
-  'newPassword'];
+  'newPassword',
+  'x-access-token'];
+
+var filterHeaderFields = [
+  'x-access-token'
+];
 
 function auditLogger(options) {
     assert(options, 'options');
@@ -36,7 +41,17 @@ function auditLogger(options) {
                 });
                 // filter body fields
                 _.each(filterBodyFields, function(field){
-                  delete req.body[field];
+                  if(req.body){
+                    if(req.body[field]){
+                      req.body[field] = 'FILTERED';
+                    }
+                  }
+                });
+                // filter header fields
+                _.each(filterHeaderFields, function(headerField){
+                  if(req.headers[headerField]){
+                    req.headers[headerField] = 'FILTERED';
+                  }
                 });
                 return ({
                     method: req.method,
@@ -54,13 +69,21 @@ function auditLogger(options) {
                 if (!res)
                     return (false);
 
-
                 var body;
                 if (options.body === true) {
                     if (res._body instanceof HttpError) {
                         body = res._body.body;
                     } else {
                         body = res._body;
+                        _.each(filterBodyFields, function(bodyField){
+                          if(body){
+                            if(body.value){
+                              if(body.value[bodyField]){
+                                body.value[bodyField] = 'FILTERED';
+                              }
+                            }
+                          }
+                        });
                     }
                 }
 
@@ -78,7 +101,6 @@ function auditLogger(options) {
         var latency = res.get('Response-Time');
         if (typeof (latency) !== 'number')
             latency = Date.now() - req._time;
-
         var obj = {
             remoteAddress: req.connection.remoteAddress,
             remotePort: req.connection.remotePort,

@@ -34,7 +34,7 @@ function Controller(s, m, t, h, l) {
   this.mailer   = m;
   this.template = t;
   this.server   = h;
-  this.logger   = l;
+  this.logger   = l.child({component: 'controller'});
 }
 exports.Controller = Controller;
 

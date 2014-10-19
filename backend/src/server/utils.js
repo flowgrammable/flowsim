@@ -61,10 +61,9 @@ function Responder(res, nxt) {
   var response = res;
   var next = nxt;
   return function(err, result) {
-    response.writeHead(200, {
-      'Content-Type': 'application/json'
-    });
-    response.end(JSON.stringify(_tag(err, result)));
+    response.header('Content-Type', 'application.json');
+    response.send(200, _tag(err, result));
+
     // added next so 'after' event will fire
     next();
   };
@@ -76,7 +75,7 @@ exports.requiresAuth = function(callback) {
     if(req.subscriber_id && req.session_id) {
       callback(req, res, next);
     } else {
-      res.writeHead(200, {
+      res.writeHead('200', {
         'Content-Type': 'application/json'
       });
       res.end(JSON.stringify(_error({

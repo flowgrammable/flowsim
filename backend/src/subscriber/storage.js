@@ -32,7 +32,7 @@ var Codes = {
 
 function Storage(db, log) {
   this.database = db;
-  this.logger   = log;
+  this.logger   = log.child({component: 'storage'});
   //this.database.loadLocalModels(__dirname);
 }
 exports.Storage = Storage;
