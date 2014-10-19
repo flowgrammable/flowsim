@@ -188,13 +188,6 @@ Server.prototype.run = function() {
     res.end(body);
   });
 
-  // log request and response after the response has been sent
-/*  this.server.on('after', restify.auditLogger({
-      log: this.logger,
-      // log request and response body
-      body: true
-  })); */
-
   this.server.on('after', filter.auditLogger({
     log: this.logger,
     body: true

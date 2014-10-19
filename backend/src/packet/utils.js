@@ -1,3 +1,5 @@
+(function(){
+
 var assert = require('assert');
 var msg = require('./msg');
 var _   = require('underscore');
@@ -122,3 +124,5 @@ var protocols = {
 };
 
 exports.validatePacket = validatePacket;
+
+})();

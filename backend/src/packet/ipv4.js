@@ -22,7 +22,7 @@ exports.isProto = function(proto){
 
 exports.isIPaddress = function(address){
   return validator.isIP(address, 4);
-}
+};
 
 exports.ipv4 = function(){
   return {

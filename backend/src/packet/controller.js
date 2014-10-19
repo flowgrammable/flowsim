@@ -9,10 +9,6 @@
 
 var fmt = require('../utils/formatter');
 var msg = require('./msg');
-var stg = require('./storage');
-
-// Default session timeout in minutes
-var defTimeout = 180;
 
 /**
  * A controller containins the primary business logic for all packet module
@@ -20,11 +16,9 @@ var defTimeout = 180;
  * and provides an interface for each of its public service offerings.
  *
  * @constructor
- * @param {Object} context          - wrapper of necessary services
- * @param {Object} context.database - database engine
- * @param {Object} context.mailer   - SMTP engine
- * @param {Object} context.template - template engine
- * @param {Object} context.logger   - logger engine
+ * @param {Object} s          - packet storage
+ * @param {Object} h          - server
+ * @param {Object} l          - logger engine
  */
 
 function Controller(s, h, l) {
@@ -46,13 +40,13 @@ Controller.prototype.toFormatter = function(f) {
 Controller.prototype.toString = fmt.toString;
 
 /**
- * Given a subscriber_id,
+ * Given a subscriber_id and packet attempt to store the packet
+ * in the database.
  *
  * @param {Integer} subscriber_id - subscriber id
- * @param {String} packet - a subscriber packet
+ * @param {Object} packet - a subscriber packet
  * @param {Function} callback - standard callback
  */
-
 Controller.prototype.create = function(subscriber_id, packet, cb)
 {
   var that = this;
@@ -68,6 +62,13 @@ Controller.prototype.create = function(subscriber_id, packet, cb)
   });
 };
 
+/**
+ * Given a subscriber_id return a list of packet names that belong
+ * to the subscriber.
+ *
+ * @param {Integer} subscriber_id - id of subscriber
+ * @param {Function} callback - a standard callback function
+ */
 Controller.prototype.list = function(subscriber_id, cb){
   var that = this;
   this.storage.listPackets(subscriber_id, function(err, packets){
@@ -80,6 +81,14 @@ Controller.prototype.list = function(subscriber_id, cb){
   });
 };
 
+/**
+ * Given a subscriber_id and packet name attempt to retrieve the details
+ * of the packet.
+ *
+ * @param {Integer} subscriber_id - id of subscriber
+ * @param {String} packetName - name of packet to get details for
+ * @param {Function} callback - a standard callback function
+ */
 Controller.prototype.detail = function(subscriber_id, packetName, cb){
   var that = this;
   this.storage.getPacketByName(subscriber_id, packetName, function(err, packet){
@@ -92,6 +101,15 @@ Controller.prototype.detail = function(subscriber_id, packetName, cb){
   });
 };
 
+/**
+ * Given a subscriber_id, packet name, and packet attempt to update a packet
+ * with the provided packet
+ *
+ * @param {Integer} subscriber_id - id of subscriber
+ * @param {String} packetName - name of packet to update
+ * @param {Object} packet - updated packet
+ * @param {Function} callback - a standard callback function
+ */
 Controller.prototype.update = function(subscriber_id, packetName, packet, cb){
   var that = this;
   this.storage.updatePacket(subscriber_id, packetName, packet,

@@ -42,7 +42,7 @@ describe('.createSubscriber(email, password, date, ip, token, cb)', function(){
       } else {
         done();
       }
-    })
+    });
   });
 
   it('should return {id, email, etc} on successful insert', function(done){
