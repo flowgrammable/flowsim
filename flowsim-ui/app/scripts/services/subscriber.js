@@ -72,7 +72,7 @@ angular.module('flowsimUiApp')
           }
         });
     };
-      
+
     this.logout = function(callback) {
       Backend.post('/api/subscriber/logout', {}, function(err, result) {
         Backend.deauthorize();

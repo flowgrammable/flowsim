@@ -16,7 +16,7 @@ angular.module('flowsimUiApp')
       $scope.password2 = '';
     }
     clearInputs();
-    
+
     function clearErrors() {
       $scope.oldPasswordMsg = '';
       $scope.password1Msg   = '';
@@ -29,10 +29,10 @@ angular.module('flowsimUiApp')
       clearErrors();
       $scope.oldPasswordMsg = Subscriber.validatePassword($scope.oldPassword);
       $scope.password1Msg   = Subscriber.validatePassword($scope.password1);
-      $scope.password2Msg   = $scope.password1 === $scope.password2 ? 
+      $scope.password2Msg   = $scope.password1 === $scope.password2 ?
                               '' : 'Passwords do not match';
 
-      if(!$scope.oldPasswordMsg.length && !$scope.password1Msg.length && 
+      if(!$scope.oldPasswordMsg.length && !$scope.password1Msg.length &&
          !$scope.password2Msg.length) {
         Subscriber.update($scope.oldPassword, $scope.password1,
           function(err, result) {

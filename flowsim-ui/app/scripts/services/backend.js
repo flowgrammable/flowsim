@@ -16,13 +16,13 @@ angular.module('flowsimUiApp')
       if(data.error) {
         callback(data.error);
       } else {
-        return data.value;
+        callback(null, data.value);
       }
     }
 
     function request(that, method, path, data, callback) {
       $http[method](path, data, {
-        headers: { 'x-access-token': that._xAccessToken } 
+        headers: { 'x-access-token': that._xAccessToken }
         }).success(function(data) {
           unwrap(data, callback);
         }).error(function(data, status) {
@@ -59,4 +59,3 @@ angular.module('flowsimUiApp')
     };
 
   });
-

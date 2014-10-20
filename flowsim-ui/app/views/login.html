@@ -8,7 +8,7 @@
     our latest work with you; however, you must be logged in to use our tools.
 
     <hr>
-    <form name="loginForm" novalidate role="form">
+    <form ng-submit="login()" name="loginForm" novalidate role="form">
       <div class="form-group">
         <label for="email">Email Address</label>
         <input name="email" type="email" class="form-control" id="email"
@@ -27,7 +27,8 @@
           <span>{{passwordMsg}}</span>
         </div>
       </div>
-      <a href="" class="btn btn-default" ng-click="login()">Login</a>
+      <!-- <a href="" class="btn btn-default" ng-click="login()">Login</a> -->
+      <button type="submit" class="btn btn-default"> Login </button>
     </form>
 
     <div class="error" ng-show="errorMsg.length">
@@ -36,4 +37,3 @@
 
   </div>
 </div>
-
