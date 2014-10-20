@@ -13,12 +13,13 @@ angular.module('flowsimUiApp')
     // Method to add a new packet
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
-    
+
     $scope.packets  = {};
     $scope.packet   = null;
     $scope.errorMsg = '';
-    
-    Packet.get(function(err, result) {
+    $scope.packetNames = [];
+
+     Packet.get(function(err, result) {
       if(err) {
         // uncomment to work in rest init
         //$scope.errorMsg = err.message;
@@ -28,22 +29,36 @@ angular.module('flowsimUiApp')
         $scope.setPacket('test');
         console.log(err.details);
       } else {
-        $scope.packets = result.packets;
-        $scope.$broadcast('initList', _.map($scope.packets, function(packet) {
-          return packet.name;
+        //$scope.packets = result.packets;
+        $scope.packetNames = result.names;
+        //$scope.$broadcast('initList', _.map($scope.packets, function(packet) {
+      //    return packet.name;
+      //  }));
+        $scope.$broadcast('initList', _.map($scope.packetNames, function(name){
+          return name;
         }));
       }
     });
 
     $scope.setPacket = function(name) {
-      if(name in $scope.packets) {
-        $scope.packet = $scope.packets[name];
-        $scope.$broadcast('setStack', $scope.packet);
+    if(/*name in $scope.packetNames[name]*/ true) {
+
+        Packet.getDetail(name, function(err, result){
+          if(err){
+            console.log(err);
+          } else {
+            console.log(result);
+            $scope.packet = result;
+            $scope.$broadcast('setStack', $scope.packet.protocols);
+          }
+        });
+      //  $scope.packet = $scope.packets[name];
+      //  $scope.$broadcast('setStack', $scope.packet);
       } else {
         $scope.packet = null;
       }
     };
-    
+
     $scope.addPacket = function(name) {
       var tmp;
       if(!packetName.test(name)) {
@@ -74,6 +89,5 @@ angular.module('flowsimUiApp')
 
     $scope.savePacket = function() {
     };
-    
-  });
 
+  });

@@ -88,16 +88,7 @@ function Server(config, logger) {
     .use(restify.gzipResponse())
     .use(restify.bodyParser());
 
-  if(this.config.static) {
 
-    this.server.get(this.config.static.mount+'.*', restify.serveStatic(
-      {
-        directory: this.config.static.directory,
-        default: 'index.html'
-      }
-    ));
-    
-  }
 
   this.running = false;
 }
@@ -195,6 +186,17 @@ Server.prototype.run = function() {
     }});
     res.end(body);
   });
+
+  if(this.config.static) {
+
+    this.server.get(this.config.static.mount+'.*', restify.serveStatic(
+      {
+        directory: this.config.static.directory,
+        default: 'index.html'
+      }
+    ));
+
+}
 
   if(this.http) {
     this.http.listen(this.config.open_port, this.config.address);

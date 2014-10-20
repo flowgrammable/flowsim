@@ -93,7 +93,7 @@ Controller.prototype.detail = function(subscriber_id, packetName, cb){
   var that = this;
   this.storage.getPacketByName(subscriber_id, packetName, function(err, packet){
     if(err) {
-      that.logger.err(err);
+      that.logger.error(err);
       cb(err);
     } else {
       cb(null, packet);

@@ -134,7 +134,11 @@ Storage.prototype.getPacketByName = function(subscriber_id, packetName,
         that.logger.error(err);
         errHandler(callback, err, 'packet');
       } else {
-        callback(null, packetList[0].packet);
+        if(packetList.length === 1){
+          callback(null, packetList[0].packet);
+        } else {
+          callback(msg.packetDoesNotExist(packetName));
+        }
       }
     });
 };

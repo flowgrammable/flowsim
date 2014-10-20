@@ -28,6 +28,7 @@ function create(view) {
 
 function list(view){
   return function(req, res, next){
+    console.log('hit list view');
     var responder = util.Responder(res, next);
     view.controller.list(req.subscriber_id, responder);
   };
@@ -64,7 +65,7 @@ function View(c, packetLogger) {
   this.services = [
     {
       method: 'post',
-      path: ':packetName',
+      path: '/:packetName',
       handler: util.requiresAuth(create(this))
     } , {
       method: 'get',
@@ -72,11 +73,11 @@ function View(c, packetLogger) {
       handler: util.requiresAuth(list(this))
     } , {
       method: 'get',
-      path: ':packetName',
+      path: '/:packetName',
       handler: util.requiresAuth(detail(this))
     } , {
       method: 'put',
-      path: ':packetName',
+      path: '/:packetName',
       handler: util.requiresAuth(update(this))
     }
   ];

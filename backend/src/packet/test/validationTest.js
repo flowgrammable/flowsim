@@ -15,22 +15,37 @@ var requestBody = "{\"name\": \"packet1\", " +
 
 var p = {name: "packet1",
         bytes: 3,
-        protocols: [
-        {name: "Ethernet",
-        bytes: 12,
-        fields: [{
-          Src: "ff:ff:ff:ff:ff:ff"
+        protocols: [{
+          name: "Ethernet",
+          bytes: 14,
+          fields: {
+            src: "ff:ff:ff:ff:ff:ff",
+            dst: "aa:aa:aa:aa:aa:aa",
+            typelen: "0x8100"
+          }},{
+          name: "IPv4",
+          bytes: 20,
+          fields: {
+            dscp: '0x3f',
+            ecn: '0x03',
+            proto: '0xffff',
+            src: '10.0.0.1',
+            dst: '10.0.0.2'
+          }
         },{
-          Dst: "aa:aa:aa:aa:aa:aa"
-        }, {
-          Typelen: "8100"
-        }]}
-        ]};
+          name: "TCP",
+          bytes: 8,
+          fields: {
+            src: "100",
+            dst: "200"
+        }}]};
 
-var errMsg = utils.validatePacket(p, function(err, result){
+var errMsg = utils.validatePacket(p, function(err, packet){
   if(err){
     console.log(err);
   } else {
+
     console.log('valid packet');
+    console.log(packet.protocols);
   }
 });

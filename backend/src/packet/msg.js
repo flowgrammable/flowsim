@@ -7,6 +7,16 @@ exports.success = function() {
 
 //Packet Structure msgs
 
+exports.packetDoesNotExist = function(name) {
+  return {
+    message: 'A packet with the name: ' + name + ' does not exist',
+    detail: {
+      system: 'packet/storage',
+      type: 'packetDoesNotExist'
+    }
+  };
+};
+
 exports.missingPacketName = function() {
   return {
     message: 'Packet name is required',

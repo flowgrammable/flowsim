@@ -10,6 +10,12 @@
 angular.module('flowsimUiApp')
   .service('Packet', function Packet(Subscriber) {
 
+    this.getDetail = function(packetName, callback){
+      Subscriber.httpGet('/api/packet/'+packetName, {}, function(err, result){
+        callback(err, result);
+      });
+    };
+
     this.get = function(callback) {
       Subscriber.httpGet('/api/packet', {}, function(err, result) {
         callback(err, result);

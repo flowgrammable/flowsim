@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
   .service('Backend', function backend($http) {
 
     this._xAccessToken = '';
-
+    var that = this;
     function unwrap(data, callback) {
       if(data.error) {
         callback(data.error);
@@ -23,16 +23,18 @@ angular.module('flowsimUiApp')
     function request(that, method, path, data, callback) {
       $http[method](path, data, {
         headers: { 'x-access-token': that._xAccessToken }
-        }).success(function(data) {
-          unwrap(data, callback);
-        }).error(function(data, status) {
-          callback({
-            details: status + ' : ' + data,
+          }).success(function(data) {
+              unwrap(data, callback);
+            }).error(function(data, status) {
+              callback({
+                details: status + ' : ' + data,
             message: 'We are having trouble contacting the server, please try' +
-                     'again soon!'
-          });
+                          'again soon!'
+            });
         });
-    }
+
+      }
+
 
     this.authorize = function(token) {
       this._xAccessToken = token;
@@ -43,7 +45,19 @@ angular.module('flowsimUiApp')
     };
 
     this.get = function(path, data, callback) {
-      request(this, 'get', path, data, callback);
+      console.log('xaccess token: ', that);
+      //request(that, 'get', path, data, callback);
+      $http.get(path,{
+        headers: { 'x-access-token': that._xAccessToken }
+          }).success(function(data) {
+             unwrap(data, callback);
+           }).error(function(data, status) {
+             callback({
+               details: status + ' : ' + data,
+               message: 'We are having trouble contacting the server, please try' +
+                        'again soon!'
+             });
+        });
     };
 
     this.post = function(path, data, callback) {
