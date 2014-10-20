@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-    
+
 var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
 
 var Payloads = {
@@ -36,8 +36,8 @@ function _Ethernet() {
   }];
 }
 
-_Ethernet.prototype.bytes = function() { 
-  return 14; 
+_Ethernet.prototype.bytes = function() {
+  return 14;
 };
 
 _Ethernet.prototype.setPayload = function(name) {
@@ -58,8 +58,8 @@ _Ethernet.prototype.clearPayload = function() {
 angular.module('flowsimUiApp')
   .service('ETHERNET', function ETHERNET() {
 
-    this.create = function() {
-      return new _Ethernet();
+    this.create = function(fields) {
+      return new _Ethernet(fields);
     };
 
     this.Payloads = Object.keys(Payloads);
@@ -67,4 +67,3 @@ angular.module('flowsimUiApp')
   });
 
 })();
-

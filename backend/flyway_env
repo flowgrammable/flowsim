@@ -32,4 +32,5 @@ alias flyway="$FLYWAY/flyway $FLYWAY_CFG"
 # Node Server Configuration
 #####################################################
 
-SERVER_VERSION=0.1.0
+SERVER_VERSION=1.1.0
+

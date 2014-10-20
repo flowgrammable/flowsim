@@ -19,43 +19,46 @@ angular.module('flowsimUiApp')
     $scope.errorMsg = '';
     $scope.packetNames = [];
 
-     Packet.get(function(err, result) {
+    $scope.bodyPacket = {};
+
+    Packet.get(function(err, result) {
       if(err) {
         // uncomment to work in rest init
         //$scope.errorMsg = err.message;
         // this is temporary
-        $scope.packets['test'] = Protocols.createPacket('test');
-        $scope.$broadcast('initList', ['test']);
-        $scope.setPacket('test');
-        console.log(err.details);
+        //$scope.packets['test'] = Protocols.createPacket('test');
+        $scope.$broadcast('initList', [$scope.bodyPacket.name]);
+        $scope.setPacket($scope.bodyPacket.name);
+        //console.log(err.details);
       } else {
-        //$scope.packets = result.packets;
         $scope.packetNames = result.names;
-        //$scope.$broadcast('initList', _.map($scope.packets, function(packet) {
-      //    return packet.name;
-      //  }));
-        $scope.$broadcast('initList', _.map($scope.packetNames, function(name){
+        $scope.$broadcast('initList', _.map($scope.packetNames, function(name) {
           return name;
         }));
+
+
       }
     });
 
-    $scope.setPacket = function(name) {
-    if(/*name in $scope.packetNames[name]*/ true) {
+    $scope.loadPacket = function(packet){
+      var pack = Protocols.loadPacket(packet);
+      $scope.packets[packet.name] = pack;
+      $scope.packet = pack;
+      $scope.$broadcast('setStack', $scope.packet);
+    };
 
+    $scope.setPacket = function(name) {
+    if(!$scope.packets[name]) {
         Packet.getDetail(name, function(err, result){
           if(err){
             console.log(err);
           } else {
-            console.log(result);
-            $scope.packet = result;
-            $scope.$broadcast('setStack', $scope.packet.protocols);
+            $scope.bodyPacket = result;
+            $scope.loadPacket($scope.bodyPacket);
           }
         });
-      //  $scope.packet = $scope.packets[name];
-      //  $scope.$broadcast('setStack', $scope.packet);
       } else {
-        $scope.packet = null;
+        $scope.$broadcast('setStack', $scope.packets[name]);
       }
     };
 

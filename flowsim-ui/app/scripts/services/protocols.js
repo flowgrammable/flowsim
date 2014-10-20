@@ -58,8 +58,8 @@ Packet.prototype.items = function() {
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Protocols', 
-    function protocols(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4, ICMPV6, 
+  .service('Protocols',
+    function protocols(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4, ICMPV6,
       TCP, UDP, SCTP) {
 
     var Payloads = {
@@ -78,6 +78,34 @@ angular.module('flowsimUiApp')
 
     this.createPacket = function(name) {
       return new Packet(name, ETHERNET.create());
+    };
+
+    function loadProtocol(payloadAttrs, fields){
+      for(var y in payloadAttrs){
+        var fieldName = payloadAttrs[y].name.toLowerCase();
+        if(fields[fieldName]){
+          payloadAttrs[y].value = fields[fieldName];
+        }
+
+      }
+    }
+
+    this.loadPacket = function(packetBody) {
+      var pack = new Packet(packetBody.name);
+      console.log('packetBody', packetBody);
+      pack._bytes = packetBody.bytes;
+      for (var x in packetBody.protocols){
+        switch(packetBody.protocols[x].name){
+          case 'Ethernet':
+            pack.push(new ETHERNET.create());
+            loadProtocol(pack._payload[pack.length - 1].attrs,
+              packetBody.protocols[x].fields);
+            break;
+          default:
+            break;
+        }
+      }
+      return pack;
     };
 
     this.getOptions = function(name) {
@@ -118,4 +146,3 @@ angular.module('flowsimUiApp')
     };
 
   });
-
