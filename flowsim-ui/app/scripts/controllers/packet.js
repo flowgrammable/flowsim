@@ -14,71 +14,58 @@ angular.module('flowsimUiApp')
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
 
-    $scope.packets  = {};
     $scope.packet   = null;
     $scope.errorMsg = '';
-    $scope.packetNames = [];
+    $scope.names = {};
 
-    $scope.bodyPacket = {};
-
-    Packet.get(function(err, result) {
+    // get the list of packets
+    Packet.getNames(function(err, result) {
       if(err) {
-        // uncomment to work in rest init
-        //$scope.errorMsg = err.message;
-        // this is temporary
-        //$scope.packets['test'] = Protocols.createPacket('test');
-        $scope.$broadcast('initList', [$scope.bodyPacket.name]);
-        $scope.setPacket($scope.bodyPacket.name);
-        //console.log(err.details);
+        console.log(err.details);
       } else {
-        $scope.packetNames = result.names;
-        $scope.$broadcast('initList', _.map($scope.packetNames, function(name) {
-          return name;
+        $scope.names = result;
+        $scope.$broadcast('initList', _.map($scope.names, function(n) {
+          return n.name;
         }));
-
-
       }
     });
 
-    $scope.loadPacket = function(packet){
-      var pack = Protocols.loadPacket(packet);
-      $scope.packets[packet.name] = pack;
-      $scope.packet = pack;
-      $scope.$broadcast('setStack', $scope.packet);
-    };
-
+    // function for changing the focus state of the controller
     $scope.setPacket = function(name) {
-    if(!$scope.packets[name]) {
-        Packet.getDetail(name, function(err, result){
-          if(err){
-            console.log(err);
+      if(name === undefined) {
+        $scope.packet = null;
+        $scope.$broadcast('setStack', $scope.packet);
+      } else {
+        Packet.get(name, function(err, result) {
+          if(err) {
+            console.log(err.details);
           } else {
-            $scope.bodyPacket = result;
-            $scope.loadPacket($scope.bodyPacket);
+            $scope.packet = result;
+            $scope.$broadcast('setStack', $scope.packet);
           }
         });
-      } else {
-        $scope.$broadcast('setStack', $scope.packets[name]);
       }
     };
 
+    // function for constructing a new packet
     $scope.addPacket = function(name) {
       var tmp;
       if(!packetName.test(name)) {
         return 'Bad name';
-      } else if(name in $scope.packets) {
+      } else if(name in $scope.names) {
         return 'Name exists';
       } else {
-        $scope.packets[name] = Protocols.createPacket(name);
-        $scope.setPacket(name);
+        $scope.names[name] = true;
+        $scope.packet = Packet.create(name);
         return '';
       }
     };
 
     // Method to delete a packet
     $scope.delPacket = function(name) {
-      if(name in $scope.packets) {
-        delete $scope.packets[name];
+      if(name in $scope.names) {
+        delete $scope.names[name];
+        Packet.destroy(name);
       }
     };
 

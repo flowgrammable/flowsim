@@ -53,6 +53,22 @@ angular
         templateUrl: 'views/packet.html',
         controller: 'PacketCtrl'
       })
+      .when('/switch/match', {
+        templateUrl: 'views/match.html',
+        controller: 'MatchCtrl'
+      })
+      .when('/profile', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl'
+      })
+      .when('/switch', {
+        templateUrl: 'views/switch.html',
+        controller: 'SwitchCtrl'
+      })
+      .when('/simulation', {
+        templateUrl: 'views/simulation.html',
+        controller: 'SimulationCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

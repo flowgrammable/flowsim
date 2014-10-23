@@ -24,8 +24,16 @@ prog
   .parse(process.argv);
 
 // Initialize the configuration
-var config     = require(prog.config);
-config.server.static.directory = prog.dir || config.server.static.directory;
+var config = require(prog.config);
+if(prog.dir) {
+  if(config.server.static) {
+    config.server.static.directory = prog.dir;
+  } else {
+    config.server.static = {
+      directory: prog.dir
+    };
+  }
+}
 
 // Initialze global objects
 var logger     = new log.Logger(config);

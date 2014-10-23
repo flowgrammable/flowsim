@@ -8,7 +8,9 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Packet', function Packet(Subscriber) {
+  .service('Packet', function Packet(Subscriber, Protocols) {
+
+    this.packets = {};
 
     this.getDetail = function(packetName, callback){
       Subscriber.httpGet('/api/packet/'+packetName, {}, function(err, result){
@@ -16,29 +18,35 @@ angular.module('flowsimUiApp')
       });
     };
 
-    this.get = function(callback) {
+    this.get = function(name, callback) {
+      if(name in this.packets) {
+        callback(null, this.packets[name]);
+      } else {
+        Subscriber.httpGet('/api/packet/'+name, {}, function(err, result) {
+          if(err) {
+            callback(err);
+          } else {
+            this.packets[name] = result;
+            callback(null, result);
+          }
+        });
+      }
+    };
+
+    this.getNames = function(callback) {
       Subscriber.httpGet('/api/packet', {}, function(err, result) {
         callback(err, result);
       });
     };
 
     this.create = function(name) {
+      this.packets[name] = Protocols.createPacket(name);
+      return this.packets[name];
     };
 
-    this.add = function(name) {
-    };
-
-    this.del = function(pos) {
-      var tmp;
-       // Validate the array position
-      if(pos >= -1 && pos < this.packets.length) {
-        // remove the references
-        tmp = this.packets.splice(pos, 1);
-        if(tmp.name in this.names) {
-          delete this.names[tmp.name];
-        }
-      }
-    };
+    this.destroy = function(name) {
+      delete this.packets[name];
+    }
 
     this.save = function(name) {
     };

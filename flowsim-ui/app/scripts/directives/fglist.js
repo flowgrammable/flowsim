@@ -43,6 +43,7 @@ angular.module('flowsimUiApp')
 
         $scope.shiftFocus = function(pos) {
           if(pos >= -1 && pos < $scope.items.length) {
+            $scope.clearState();
             $scope.focus = pos;                   // Update the local focus
             $scope.onSet()($scope.items[pos]);    // Update the parent with name
           }
@@ -53,7 +54,6 @@ angular.module('flowsimUiApp')
           if(!$scope.errorMsg.length) {
             $scope.items.push($scope.itemName);
             $scope.shiftFocus($scope.items.length-1);
-            $scope.clearState();
           } 
         };
         
@@ -63,10 +63,12 @@ angular.module('flowsimUiApp')
             item = $scope.items.splice(pos, 1); 
             if(pos < $scope.focus) {
               $scope.shiftFocus($scope.focus-1);
-            } else if(pos <= $scope.focus) {
-              $scope.shiftFocus($scope.focus);
             }
+            if(pos == $scope.focus && pos == $scope.items.length) {
+              $scope.shiftFocus($scope.focus-1);
+            } 
             $scope.onDel()(item);
+            $scope.clearState();
           }
         };
       }

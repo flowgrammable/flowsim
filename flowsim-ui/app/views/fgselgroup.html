@@ -1,0 +1,22 @@
+
+<accordion-group>
+   
+  <accordion-heading>
+    {{heading}}
+  </accordion-heading>
+    
+  <div class="container-fluid pagination-centered clearfix">
+    <span ng-repeat="elem in elements">
+      <button type="button" class="btn btn-primary btn-xs" 
+              ng-class="{active: elem.visible}"
+              ng-click="toggleElem($index)" style="margin-bottom:3px">
+        {{elem.name}}
+      </button>
+    </span>
+  </div>
+    
+  <fg-label-input ng-repeat="elem in elements" item="elem">
+  </fg-label-input>
+    
+</accordion-group>
+

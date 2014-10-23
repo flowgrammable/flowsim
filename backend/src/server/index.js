@@ -10,7 +10,7 @@ var fs      = require('fs');
 var restify = require('restify');
 var http    = require('http');
 var fmt     = require('../utils/formatter');
-var filter   = require('./logfilter');
+var filter  = require('./logfilter');
 
 var name = 'server';
 
@@ -56,9 +56,6 @@ function Server(config, logger) {
   this.config.secure_port = this.config.secure_port || defSecurePort;
   this.config.protocol    = this.config.https ? 'https' : 'http';
 
-  // load the not found file
-  //this.notFound = fs.readFileSync(dir +
-
   // Load credential information if present
   if(this.config.https) {
     this.creds = {
@@ -80,15 +77,11 @@ function Server(config, logger) {
     this.creds = {};
   }
 
-
-
   // Create and configure a server instance
   this.server = restify.createServer(this.creds)
     .use(restify.jsonp())
     .use(restify.gzipResponse())
     .use(restify.bodyParser());
-
-
 
   this.running = false;
 }
@@ -140,8 +133,8 @@ Server.prototype.addModule = function(mod) {
  * @returns {String} protocol://hostname:port
  */
 Server.prototype.baseUrl = function() {
-  return this.config.protocol + '://' + this.config.hostname + ':' +
-         this.config.secure_port;
+  var bp = this.https ? this.config.secure_port : this.config.open_port;
+  return this.config.protocol + '://' + this.config.hostname + ':' + bp;
 };
 
 /**
@@ -161,18 +154,6 @@ Server.prototype.rootPath = function() {
 Server.prototype.run = function() {
   var notFound;
 
-  /*
-  try {
-    notFound = fs.readFileSync(this.config.static.directory + '/404.html');
-  } catch(e) {
-    if(e.code === 'ENOENT') {
-      throw new Error('File not found: ' + e.path);
-    } else {
-      throw e;
-    }
-  }
-  */
-
   this.server.on('after', filter.auditLogger({
     log: this.logger,
     body: true
@@ -188,19 +169,19 @@ Server.prototype.run = function() {
   });
 
   if(this.config.static) {
-
     this.server.get(this.config.static.mount+'.*', restify.serveStatic(
       {
         directory: this.config.static.directory,
         default: 'index.html'
       }
     ));
-
 }
 
+  // start the http redirector if needed
   if(this.http) {
     this.http.listen(this.config.open_port, this.config.address);
   }
+  // start the primary server
   this.server.listen(this.config.secure_port, this.config.address);
 
   this.running = true;
@@ -219,13 +200,17 @@ Server.prototype.toFormatter = function(f) {
   f.addPair('Address', this.config.address);
   f.addPair('Hostname', this.config.hostname);
   f.addPair('TCP Port', this.config.open_port);
-  f.addPair('TLS Port', this.config.secure_port);
+  if(this.config.https) {
+    f.addPair('TLS Port', this.config.secure_port);
+  }
   f.addPair('Protocol', this.config.protocol);
   if(this.config.https) {
     f.addPair('Key', this.config.https.key);
     f.addPair('Cert', this.config.https.cert);
   }
-  f.addPair('Static', this.config.static.directory);
+  if(this.config.static) {
+    f.addPair('Static', this.config.static.directory);
+  }
   f.addPair('Running', this.running);
   f.end();
   return f;

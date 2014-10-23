@@ -21,6 +21,10 @@
       </accordion-heading>
   
       <!-- Print a label and input box for each field -->
+      <fg-label-input ng-repeat="elem in node.attrs" item="elem">
+      </fg-label-input>
+
+      <!--
       <div class="input-group" ng-repeat="attr in node.attrs"
            ng-class="{'has-error': !attr.test(attr.value)}">
         <span class="input-group-addon" style="width:80px"
@@ -29,6 +33,7 @@
         </span>
         <input type="text" class="form-control" ng-model="attr.value">
       </div>
+      -->
 
     </accordion-group>
   </accordion>
