@@ -39,7 +39,16 @@
               <li ng-show="authenticated">
                 <a href="#packet">Packet</a>
               </li>
-              <li><a href="http://www.flowgrammable.org">OpenFlow</a></li>
+              <li ng-show="authenticated">
+                <a href="#profile">Profile</a>
+              </li>
+              <li ng-show="authenticated">
+                <a href="#switch">Switch</a>
+              </li>
+              <li ng-show="authenticated">
+                <a href="#simulation">Simulation</a>
+              </li>
+              <!--<li><a href="http://www.flowgrammable.org">OpenFlow</a></li>-->
               <li ng-show="authenticated">
                 <a href="#subscriber/update">Account</a>
               </li>
@@ -146,6 +155,15 @@
         <script src="scripts/services/tcp.js"></script>
         <script src="scripts/services/udp.js"></script>
         <script src="scripts/services/sctp.js"></script>
+        <script src="scripts/directives/fglabelinput.js"></script>
+        <script src="scripts/directives/fggroup.js"></script>
+        <script src="scripts/directives/fgselgroup.js"></script>
+        <script src="scripts/controllers/profile.js"></script>
+        <script src="scripts/controllers/switch.js"></script>
+        <script src="scripts/controllers/simulation.js"></script>
+        <script src="scripts/directives/fgtabs.js"></script>
+        <script src="scripts/services/profile.js"></script>
+        <script src="scripts/services/switch.js"></script>
         <!-- endbuild -->
 </body>
 </html>

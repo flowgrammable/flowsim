@@ -27,7 +27,9 @@ angular.module('flowsimUiApp')
         // Update the current display
         $scope.$on('setStack', function(ev, data) {
           $scope.stack = data;
-          $scope.options = $scope.getOptions()(data);
+          if(data) {
+            $scope.options = $scope.getOptions()(data);
+          }
         });
 
         // Add a new Node type to the back of the stack

@@ -1,0 +1,48 @@
+
+<div class="row">
+
+  <div class="col-md-2">
+    <fg-list on-add="addProfile" on-del="delProfile" on-set="setProfile">
+      Profiles
+      <div class="error" ng-show="errorMsg.length">
+        {{errorMsg}}
+      </div>
+    </fg-list>
+  </div>
+
+  <div class="col-md-10">
+    <h4>Capabilities</h4>
+
+    <ul class="nav nav-tabs" role="tablist">
+      <li ng-class="{active: focus=='datapath'}">
+        <a href="" ng-click="focus='datapath'">Datapath</a>
+      </li>
+      <li ng-class="{active: focus=='ports'}">
+        <a href="" ng-click="focus='ports'">Ports</a>
+      </li>
+      <li ng-class="{active: focus=='groups'}">
+        <a href="" ng-click="focus='groups'">Groups</a>
+      </li>
+      <li ng-class="{active: focus=='tables'}">
+        <a href="" ng-click="focus='tables'">Tables</a>
+      </li>
+      <li ng-class="{active: focus=='meters'}">
+        <a href="" ng-click="focus='meters'">Meters</a>
+      </li>
+    </ul>
+
+    <ng-include ng-show="focus=='datapath'" src="'views/profile/datapath.html'">
+    </ng-include>
+    <ng-include ng-show="focus=='ports'" src="'views/profile/ports.html'">
+    </ng-include>
+    <ng-include ng-show="focus=='groups'" src="'views/profile/groups.html'">
+    </ng-include>
+    <ng-include ng-show="focus=='tables'" src="'views/profile/tables.html'">
+    </ng-include>
+    <ng-include ng-show="focus=='meters'" src="'views/profile/meters.html'">
+    </ng-include>
+
+  </div>
+
+</div>
+
