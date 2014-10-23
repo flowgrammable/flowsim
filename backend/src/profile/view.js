@@ -5,7 +5,7 @@ var validator = require('validator');
 
 var util      = require('../server/utils');
 var msg       = require('./msg');
-
+var profUtils = require('./utils');
 
 function create(view) {
   return function(req, res, next) {
@@ -13,7 +13,7 @@ function create(view) {
     if(req.body.name !== req.params.profileName){
       responder(msg.badValue('Profile url name must equal profile body name'));
     } else {
-    pktUtils.validateProfile(req.body,
+    profUtils.validateProfile(req.body,
       function(err, profile){
       if(err){
         responder(err);
@@ -27,7 +27,6 @@ function create(view) {
 
 function list(view){
   return function(req, res, next){
-    console.log('hit list view');
     var responder = util.Responder(res, next);
     view.controller.list(req.subscriber_id, responder);
   };
@@ -43,7 +42,7 @@ function detail(view){
 function update(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
-    pktUtils.validateProfile(req.body,
+    profUtils.validateProfile(req.body,
       function(err, profile){
       if(err){
         responder(err);
