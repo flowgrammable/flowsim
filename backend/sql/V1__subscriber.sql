@@ -38,3 +38,13 @@ CREATE TABLE packet
   packet JSON NOT NULL,                                     -- packet
   unique(subscriber_id, name)                             -- name unique to sub
 );
+
+-- create the primary profile table
+CREATE TABLE profile
+(
+  id SERIAL PRIMARY KEY,                        -- internal id uses for sub
+  subscriber_id INTEGER references subscriber(id) NOT NULL, -- ref to sub
+  name VARCHAR(60) NOT NULL,                                -- profile name
+  profile JSON NOT NULL,                                    -- profile
+  unique(subscriber_id, name)                              -- name unique to sub
+);
