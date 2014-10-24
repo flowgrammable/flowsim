@@ -29,7 +29,7 @@ cmd
 
 function query(name, type, headers, body, callback) {
   request({
-    uri: 'https://127.0.0.1:8081/api/' + name,
+    uri: 'http://127.0.0.1:8080/api/' + name,
     method: type,
     headers: headers,
     rejectUnauthorized : false,
