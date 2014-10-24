@@ -13,6 +13,13 @@ Logger.prototype.addLog = function(){
   return this.log;
 };
 
+Logger.prototype.child = function(){
+  this.log = bunyan.createLogger({
+    name: 'stub'
+  });
+  return this.log;
+};
+
 Logger.prototype.error = function(){
 
 };

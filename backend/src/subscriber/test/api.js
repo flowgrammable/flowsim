@@ -7,6 +7,8 @@ var testUtils = require('../../test/utils');
 var msg = require('../msg');
 var st = require('./../storage');
 var pg = require('../../database/pg');
+var logger = require('../../logger/loggerStub');
+var log = new logger.Logger();
 
 
 var db = new pg.Database({database:{
@@ -14,18 +16,32 @@ var db = new pg.Database({database:{
   pwd: 'flogdev',
   host: 'localhost',
   database: 'flowsim'
-}});
+}}, log);
 
-var store = new st.Storage(db);
+var store = new st.Storage(db, log);
 
+// Provide a test email address
 var testEmail = '';
 
 var url = 'https://127.0.0.1:8081/api/';
 
+/*
+ * Subscriber Test Suite
+ *
+ * This test suite covers /api/subscriber
+ */
 describe('/api/subscriber', function(){
-  // Delete all subscribers, sessions, and packets from db before running tests
+
+  /*
+   * Before testing can begin the database must be cleared of entries
+   * from the following tables:
+   * - subscriber
+   * - session
+   * - packet
+   * - profile
+   */
   before(function(done){
-    testUtils.clearTables(['packet', 'session', 'subscriber'],
+    testUtils.clearTables(['profile','packet', 'session', 'subscriber'],
       function(err, result){
         if(err){
           console.log(err);
@@ -35,8 +51,25 @@ describe('/api/subscriber', function(){
       });
   });
 
+/**
+ * Subscriber Registration Tests
+ *   1. Subscriber can register sucessfully
+ *   2. Subscriber cannot register same email twice
+ *   3. Subscriber cannot register with a malformed email address
+ *   4. Subscriber cannot register with a malformed password
+ */
 describe('/register', function(){
 
+  /*
+   *  1. Subscriber can register successfully
+   *
+   *  A subscriber should be able to successfully register an account by
+   *  performing a HTTP POST request to /api/subscriber/register
+   *
+   *  HTTP Request Body: {email: "valid@email.com", password: "aValidPassword"}
+   *
+   *  Expected Response: {value:{}}
+   */
   var subscriber = {email:testEmail, password: 'testpass'};
   it('should return msg.success() on user registration', function(done){
     client.query('subscriber/register', 'POST', {}, subscriber, function(err, res, body){

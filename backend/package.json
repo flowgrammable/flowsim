@@ -57,10 +57,11 @@
   },
   "devDependencies": {
     "grunt": "^0.4.5",
-    "request": "^2.44.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-jsdoc": "^0.5.7",
-    "jshint": "^2.5.5"
+    "jshint": "^2.5.5",
+    "mocha": "^2.0.1",
+    "request": "^2.44.0"
   }
 }
