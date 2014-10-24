@@ -1,0 +1,59 @@
+.rnn-holder {
+  margin: 40px;
+  float: left;
+}
+.rnn-holder .rnn-total-bytes {
+  text-align: center;
+  border: 1px solid black;
+  border-width: 1px 1px 0;
+  line-height: 1.0;
+  font-style: italic;
+}
+.rnn-holder .rnn-total-bytes .rnn-total-bytes-val {
+  display: inline-block;
+  padding: 0 5px;
+  position: relative;
+  top: -0.5em;
+  background: white;
+}
+.rnn-holder .rnn-stack .rnn-item {
+  float: left;
+  text-align: center;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-bytes {
+  font-style: italic;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-title {
+  float: left;
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 300;
+  font-family: Arial;
+  color: white;
+  background: #42a0bb;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-connection {
+  margin: 0 auto;
+  position: relative;
+  left: 6px;
+  top: 28px;
+  width: 14px;
+  border: 2px solid #c0224e;
+  border-width: 0 0 2px 2px;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-fields-holder {
+  text-align: left;
+  margin: 0 auto;
+  margin-top: 26px;
+  position: relative;
+  left: 25px;
+  width: 14px;
+  overflow: visible;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-field {
+  font-size: 12px;
+  white-space: nowrap;
+  line-height: 1.0;
+}
