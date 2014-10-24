@@ -1,9 +1,9 @@
 
 <div class="input-group input-group-sm" 
-     ng-class="{'has-error': !item.test(item.value)}"
-     ng-show="item.visible">
+     ng-class="{'has-error': !item.test(item.value)}">
+     <!--ng-show="item.visible">-->
   <span class="input-group-addon" tooltip="{{item.tip}}" 
-        tooltip-popup-delay='1000'>
+        tooltip-popup-delay='1000' style="width:100px">
     {{item.name}}
   </span>
   <input type="text" class="form-control" ng-model="item.value">
