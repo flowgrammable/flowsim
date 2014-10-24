@@ -175,14 +175,14 @@ Server.prototype.run = function() {
         default: 'index.html'
       }
     ));
-}
+  }
 
   // start the http redirector if needed
   if(this.http) {
     this.http.listen(this.config.open_port, this.config.address);
   }
   // start the primary server
-  this.server.listen(this.config.secure_port, this.config.address);
+  this.server.listen(this.http ? this.config.secure_port : this.config.open_port, this.config.address);
 
   this.running = true;
   this.logger.info('Started Flowsim');
