@@ -27,6 +27,17 @@ exports.missingField = function(name){
   };
 };
 
+exports.profileErrors = function(fieldErrors){
+  return {
+    message: 'Profile is invalid',
+    detail: {
+      system: 'profile/view',
+      type: 'invalidProfile',
+      fields: fieldErrors
+    }
+  };
+};
+
 exports.invalidFieldType = function(fieldName, type){
   return {
     message: fieldName + ' must be of type ' + type,

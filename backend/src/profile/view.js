@@ -14,11 +14,11 @@ function create(view) {
       responder(msg.badValue('Profile url name must equal profile body name'));
     } else {
     profUtils.validateProfile(req.body,
-      function(err, profile){
+      function(err, result){
       if(err){
         responder(err);
       } else {
-        view.controller.create(req.subscriber_id, profile, responder);
+        view.controller.create(req.subscriber_id, req.body, responder);
       }
     });
     }
@@ -43,12 +43,12 @@ function update(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
     profUtils.validateProfile(req.body,
-      function(err, profile){
+      function(err, result){
       if(err){
         responder(err);
       } else {
         view.controller.update(req.subscriber_id,
-          req.params.profileName, profile, responder);
+          req.params.profileName, req.body, responder);
       }
     });
   };

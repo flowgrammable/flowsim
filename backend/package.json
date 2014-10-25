@@ -48,12 +48,13 @@
     "bunyan": "^1.0.1",
     "commander": "^2.3.0",
     "ejs": "^1.0.0",
+    "mailgun-js": "~0.6.5",
     "node-uuid": "^1.4.1",
     "pg": "^3.4.2",
     "restify": "^2.8.2",
+    "schema-inspector": "^1.4.9",
     "underscore": "^1.7.0",
-    "validator": "^3.18.1",
-    "mailgun-js": "~0.6.5"
+    "validator": "^3.18.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
