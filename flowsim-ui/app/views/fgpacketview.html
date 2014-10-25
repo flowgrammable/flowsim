@@ -1,10 +1,12 @@
 
 <div class="rnn-holder">
-  <div class="rnn-total-bytes">
+  <div class="rnn-total-bytes"
+       ng-show="packet.protocols && packet.protocols.length">
     <span class="rnn-total-bytes-val">{{stackData.bytes()}}B</span>
   </div>
   <div class="rnn-stack">
-    <div class="rnn-item" ng-repeat="protocol in stackData._payload">
+    <div class="rnn-item" ng-repeat="protocol in stackData._payload" 
+          style="width: {{protocol.width}}%;">
       <div class="rnn-bytes">{{protocol.bytes()}}B</div>
       <div class="rnn-title {{$last?'rnn-last-protocol':''}}">
         {{protocol.name}}
