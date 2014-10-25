@@ -134,7 +134,7 @@ Server.prototype.addModule = function(mod) {
  */
 Server.prototype.baseUrl = function() {
   var bp = this.https ? this.config.secure_port : this.config.open_port;
-  return this.config.protocol + '://' + this.config.hostname + ':' + bp;
+  return this.config.protocol + '://' + this.config.hostname;// + ':' + bp;
 };
 
 /**
