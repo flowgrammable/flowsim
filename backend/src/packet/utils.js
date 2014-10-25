@@ -20,17 +20,17 @@ var icmp6 = require('./icmpv6');
 function validatePacket(reqBody, cb){
   var packet = {};
   if(!reqBody.name){
-    cb(msg.missingPacketName());
+    cb(msg.missingField('name'));
   } else if(typeof reqBody.name !== 'string'){
-    cb(msg.invalidPacketName());
+    cb(msg.invalidType('name', 'string'));
   } else if(reqBody.name.length < 2 ){
     cb(msg.badValue('Packet name must be atleast 2 chars'));
   } else if(!reqBody.bytes){
-    cb(msg.missingBytes());
+    cb(msg.missingField('bytes'));
   } else if(typeof reqBody.bytes !== 'number'){
-    cb(msg.invalidBytes());
+    cb(msg.invalidType('bytes', 'number'));
   } else if(!reqBody.protocols){
-    cb(msg.missingProtocols());
+    cb(msg.missingField('protocols[]'));
   } else {
     packet.name = reqBody.name;
     packet.bytes = reqBody.bytes;
@@ -76,9 +76,9 @@ function validateProtoHeader(proto, validProto, packet){
   if(typeof protoCheck === 'undefined'){
     return msg.badValue(proto.name + ' is not a valid protocol');
   } else if(!proto.name){
-    return msg.missingprotocolName();
+    return msg.missingField('protocol name');
   } else if(typeof proto.name !== 'string'){
-    return msg.invalidProtocolName();
+    return msg.invalidType('protocol name', 'string');
   } else if(packet.protocols.length === 0 && proto.name !== 'Ethernet'){
     return msg.badProtocolSequence('First protocol must be Ethernet');
   } else if(!validSequence(proto.name, packet)){
@@ -86,13 +86,13 @@ function validateProtoHeader(proto, validProto, packet){
     protocols[packet.protocols[packet.protocols.length - 1].name].sequence;
     return msg.badProtocolSequence(seqMsg);
   } else if(!proto.bytes){
-    return msg.missingProtocolBytes(proto.name);
+    return msg.missingField('bytes');
   } else if(typeof proto.bytes !== 'number'){
-    return msg.invalidProtocolBytes(proto.name);
+    return msg.invalidType('bytes', 'number');
   } else if(!proto.fields){
-    return msg.missingProtocolsFields(proto.name);
+    return msg.missingField('fields[]');
   } else if(typeof proto.fields !== 'object'){
-    return msg.invalidProtocolFields(proto.name);
+    return msg.invalidType('fields[]', 'array');
   } else if(_.size(proto.fields) !== _.size(protoCheck.fields)){
     return msg.missingProtocolNumber(protoName, _.size(protoCheck.fields));
   } else if(proto.bytes !== protoCheck.bytes){
@@ -111,10 +111,10 @@ function validateProtoFields(reqBodyFields, validProto){
   validProto.fields = {};
   for (var field in fieldCheck){
     if(!reqBodyFields[field]){
-      fieldErrMsg = msg.missingField(validProto.name, field);
+      fieldErrMsg = msg.missingProtoField(validProto.name, field);
       break;
     } else if(typeof reqBodyFields[field] !== 'string'){
-      fieldErrMsg = msg.invalidFieldType(validProto.name, field);
+      fieldErrMsg = msg.invalidProtoFieldType(validProto.name, field);
       break;
     } else if(!fieldCheck[field](reqBodyFields[field])){
       fieldErrMsg = msg.badValue(validProto.name + ' ' + field +' field' +
