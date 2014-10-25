@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .controller('MenuCtrl', function ($scope, $rootScope, Subscriber) {
-    $scope.authenticated = true;
+    $scope.authenticated = false;
 
     $rootScope.$on('subscriberAuth', function(event, data) {
       console.log('auth');
