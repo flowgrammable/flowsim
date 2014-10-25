@@ -80,7 +80,7 @@ function View(c, profileLogger) {
     } , {
       method: 'del',
       path: '/:profileName',
-      handler: util.requiresAuth(delete(this))
+      handler: util.requiresAuth(remove(this))
     }
   ];
 }

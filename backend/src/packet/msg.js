@@ -30,7 +30,7 @@ exports.missingField = function(field) {
 exports.invalidType = function(field, type) {
   return {
     message: field +' field requires type to be ' + type,
-    detail {
+    detail: {
       system: 'packet/view',
       type: invalidType
     }

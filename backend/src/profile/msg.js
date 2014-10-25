@@ -45,8 +45,8 @@ exports.invalidFieldType = function(fieldName, type){
       system: 'profile/view',
       type: 'invalidFieldType'
     }
-  }
-}
+  };
+};
 
 exports.badValue = function(msg){
   return {

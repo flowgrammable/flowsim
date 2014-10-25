@@ -41,7 +41,7 @@ function createFieldError(error){
   return {
     name: error.property.substring(2),
     type: error.message ? error.message : 'missingField'
-  }
+  };
 }
 
 
