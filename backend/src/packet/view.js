@@ -65,7 +65,7 @@ function View(c, packetLogger) {
   this.services = [
     {
       method: 'post',
-      path: '/:packetName',
+      path: ':packetName',
       handler: util.requiresAuth(create(this))
     } , {
       method: 'get',
@@ -73,11 +73,11 @@ function View(c, packetLogger) {
       handler: util.requiresAuth(list(this))
     } , {
       method: 'get',
-      path: '/:packetName',
+      path: ':packetName',
       handler: util.requiresAuth(detail(this))
     } , {
       method: 'put',
-      path: '/:packetName',
+      path: ':packetName',
       handler: util.requiresAuth(update(this))
     }
   ];

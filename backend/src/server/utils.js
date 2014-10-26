@@ -61,7 +61,7 @@ function Responder(res, nxt) {
   var response = res;
   var next = nxt;
   return function(err, result) {
-    response.header('Content-Type', 'application.json');
+    response.header('Content-Type', 'application/json');
     response.send(200, _tag(err, result));
 
     // added next so 'after' event will fire
