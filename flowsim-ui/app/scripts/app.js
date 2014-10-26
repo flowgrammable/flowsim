@@ -12,6 +12,7 @@ angular
   .module('flowsimUiApp', [
     'ngResource',
     'ngRoute',
+    'ngAnimate',
     'ngSanitize',
     'ui.bootstrap'
   ])
