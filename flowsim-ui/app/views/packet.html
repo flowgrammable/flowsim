@@ -2,7 +2,7 @@
 <div class="row">
 
   <!-- Use the List Widget to manage packet names -->
-  <div class="col-md-2 col-md-offset-1">
+  <div class="col-md-3">
     <fg-list on-add="addPacket" on-del="delPacket" on-set="setPacket"
              on-init="getPackets">
       Packets
@@ -20,14 +20,14 @@
   </div>
   
   <!-- Use the custom packet widget for displaying packet details -->
-  <div class="col-md-4">
+  <div class="col-md-5">
     <h4>Packet View</h4>
       <fg-packet-view packet="packet" width="100%"></fg-packet-view>
     </img>
   </div>
   
   <!-- Use the Stack Widget to manage packet payloads -->
-  <div class="col-md-3">
+  <div class="col-md-4">
     <fg-stack get-options="getProtocols" create-node="createProtocol" 
               set-dirty="setDirty">
       Packet Payloads

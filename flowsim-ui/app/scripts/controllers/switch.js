@@ -14,7 +14,7 @@ angular.module('flowsimUiApp')
     $scope.focus = 'datapath';
 
     $scope.getSwitches = function(callback) {
-      Packet.getNames(callback);
+      Switch.getNames(callback);
     };
 
     $scope.addSwitch = function(name) {

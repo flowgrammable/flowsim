@@ -45,7 +45,7 @@ function Profile() {
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Profile', function profile() {
+  .factory('Profile', function(Subscriber) {
 
     var init = false;
     var names = [];
@@ -55,7 +55,7 @@ angular.module('flowsimUiApp')
       if(name in profiles) {
         callback(null, profiles[name]);
       } else {
-        Subscriber.httpGet('/api/profile/' name, {}, function(err, result) {
+        Subscriber.httpGet('/api/profile/'+name, {}, function(err, result) {
           if(err) {
             callback(err);
           } else {
@@ -79,7 +79,7 @@ angular.module('flowsimUiApp')
 
     function create(name) {
         profiles[name] = {};
-        profiles.name.dirty = true;
+        profiles[name].dirty = true;
         return profiles[name];
     }
 

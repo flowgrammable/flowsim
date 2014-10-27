@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Switch', function _switch() {
+  .factory('Switch', function(Subscriber) {
     var switches = {};
 
     function get(name, callback) {

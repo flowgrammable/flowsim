@@ -15,7 +15,7 @@ angular.module('flowsimUiApp')
     $scope.focus = 'datapath';
 
     $scope.getProfiles = function(callback) {
-      Packet.getNames(callback);
+      Profile.getNames(callback);
     };
 
 
