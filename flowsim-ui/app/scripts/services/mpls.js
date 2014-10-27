@@ -2,6 +2,10 @@
 
 (function(){
 
+var Payloads = {
+  'Payload': 0
+};
+
 function _MPLS() {
   this.name = 'MPLS';
   this.attrs = [{
@@ -26,6 +30,9 @@ _MPLS.prototype.bytes = function() {
   return 4;
 };
 
+_MPLS.prototype.setPayload = function(name) {};
+_MPLS.prototype.clearPayload = function() {}
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.MPLS
@@ -35,7 +42,7 @@ _MPLS.prototype.bytes = function() {
  */
 angular.module('flowsimUiApp')
   .service('MPLS', function MPLS() {
-    this.Payloads = [];
+    this.Payloads = Object.keys(Payloads);
     this.create = function() {
       return new _MPLS();
     };

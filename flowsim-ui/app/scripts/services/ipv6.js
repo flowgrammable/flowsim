@@ -12,7 +12,8 @@ var Payloads = {
   'ICMPv6': 1,
   'TCP'   : 6,
   'UDP'   : 17,
-  'SCTP'  : 132
+  'SCTP'  : 132,
+  'Payload' : 0
 };
 
 function _IPv6() {

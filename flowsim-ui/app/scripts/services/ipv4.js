@@ -13,7 +13,8 @@ var Payloads = {
   'ICMPv4': 1,
   'TCP'   : 6,
   'UDP'   : 17,
-  'SCTP'  : 132
+  'SCTP'  : 132,
+  'Payload' : 0
 };
 
 function _IPv4() {

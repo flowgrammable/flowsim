@@ -2,6 +2,10 @@
 
 (function(){
 
+var Payloads = {
+ 'Payload': 0
+};
+
 function _TCP() {
   this.name = 'TCP';
   this.attrs = [{
@@ -21,6 +25,9 @@ _TCP.prototype.bytes = function() {
   return 20;
 };
 
+_TCP.prototype.setPayload = function() {};
+_TCP.prototype.clearPayload = function() {};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.TCP
@@ -30,7 +37,7 @@ _TCP.prototype.bytes = function() {
  */
 angular.module('flowsimUiApp')
   .service('TCP', function TCP() {
-    this.Payloads = [];
+    this.Payloads = Object.keys(Payloads);
     this.create = function() {
       return new _TCP();
     };

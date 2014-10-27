@@ -60,7 +60,7 @@ Packet.prototype.items = function() {
 angular.module('flowsimUiApp')
   .service('Protocols',
     function protocols(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4, ICMPV6,
-      TCP, UDP, SCTP) {
+      TCP, UDP, SCTP, PAYLOAD) {
 
     var Payloads = {
       Ethernet: ETHERNET.Payloads,
@@ -89,6 +89,10 @@ angular.module('flowsimUiApp')
 
       }
     }
+
+    this.attach = function(packet) {
+      // we need an attach and a strip of the object type
+    };
 
     this.loadPacket = function(packetBody) {
       var pack = new Packet(packetBody.name);
@@ -140,6 +144,8 @@ angular.module('flowsimUiApp')
           return UDP.create();
         case 'SCTP':
           return SCTP.create();
+        case 'Payload':
+          return PAYLOAD.create();
         default:
           return null;
       }

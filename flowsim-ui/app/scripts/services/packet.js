@@ -12,6 +12,7 @@ angular.module('flowsimUiApp')
 
     this.packets = {};
 
+    // how is this differnet than this.get?
     this.getDetail = function(packetName, callback){
       Subscriber.httpGet('/api/packet/'+packetName, {}, function(err, result){
         callback(err, result);
@@ -27,6 +28,7 @@ angular.module('flowsimUiApp')
             callback(err);
           } else {
             this.packets[name] = result;
+            Protocols.attachPacket(result);
             callback(null, result);
           }
         });
@@ -41,6 +43,7 @@ angular.module('flowsimUiApp')
 
     this.create = function(name) {
       this.packets[name] = Protocols.createPacket(name);
+      this.packets[name].dirty = true;
       return this.packets[name];
     };
 

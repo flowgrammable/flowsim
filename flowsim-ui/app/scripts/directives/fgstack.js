@@ -16,7 +16,7 @@ angular.module('flowsimUiApp')
       scope: {
         getOptions: '&',    // callback for node construction tree
         createNode: '&',    // callback for creating a node
-        saveStack: '&'      // callback for persisting changes
+        setDirty: '&'      // callback for persisting changes
       }, controller: function($scope) {
          
         $scope.dirty    = false;
@@ -50,13 +50,11 @@ angular.module('flowsimUiApp')
          $scope.options = $scope.getOptions()($scope.stack); 
        };
 
-       $scope.save = function() {
-         $scope.dirty = false;
-       };
-
-       $scope.revert = function() {
-         $scope.dirty = false;
-       };
+      $scope.$watch('stack', function() {
+        if($scope.stack.length) {
+          $scope.setDirty()();
+        }
+      }, true);
 
       }
     };

@@ -22,6 +22,8 @@ angular.module('flowsimUiApp')
           if (!scope.packet || !scope.packet._payload) {
             return;
           }
+
+          console.log('paylaod: ' + scope.packet.bytes());
                     
           //Vertical indents between field blocks (text lines count)
           var linesBetweenFieldBlocks = 1;

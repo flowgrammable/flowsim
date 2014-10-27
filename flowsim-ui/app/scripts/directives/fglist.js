@@ -27,7 +27,7 @@ angular.module('flowsimUiApp')
         
         $scope.items = [];                // display list of items
         $scope.init = false;              // dislay list initialization state
-        
+
         $scope.$on('initList', function(event, data) {
           $scope.items = data;
           $scope.init = true;

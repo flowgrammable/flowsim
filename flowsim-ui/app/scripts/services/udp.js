@@ -2,6 +2,10 @@
 
 (function(){
 
+var Payloads = {
+ 'Payload': 0
+};
+
 function _UDP() {
   this.name = 'UDP';
   this.attrs = [{
@@ -21,6 +25,9 @@ _UDP.prototype.bytes = function() {
   return 8;
 };
 
+_UDP.prototype.setPayload = function() {};
+_UDP.prototype.clearPayload = function() {};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.UDP
@@ -30,7 +37,7 @@ _UDP.prototype.bytes = function() {
  */
 angular.module('flowsimUiApp')
   .service('UDP', function UDP() {
-    this.Payloads = [];
+    this.Payloads = Object.keys(Payloads);
     this.create = function() {
       return new _UDP();
     };

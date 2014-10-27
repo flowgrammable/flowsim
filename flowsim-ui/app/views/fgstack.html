@@ -24,17 +24,6 @@
       <fg-label-input ng-repeat="elem in node.attrs" item="elem">
       </fg-label-input>
 
-      <!--
-      <div class="input-group" ng-repeat="attr in node.attrs"
-           ng-class="{'has-error': !attr.test(attr.value)}">
-        <span class="input-group-addon" style="width:80px"
-              tooltip="{{attr.tip}}" tooltip-popup-delay='1000'>
-          {{attr.name}}
-        </span>
-        <input type="text" class="form-control" ng-model="attr.value">
-      </div>
-      -->
-
     </accordion-group>
   </accordion>
 
@@ -50,7 +39,8 @@
   </div>
   
   <br>
-  
+ 
+  <!--
   <div style="text-align:center">
     <button type="button" class="btn btn-primary btn-sm" 
       ng-class="{'disabled': !dirty}" ng-click="save()">
@@ -61,6 +51,7 @@
       Revert
     </button>
   </div>
+  -->
 
 </div>
 

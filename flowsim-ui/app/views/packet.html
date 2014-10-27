@@ -9,6 +9,13 @@
     <div class="error" ng-show="errorMsg.length">
       {{errorMsg}}
     </div>
+
+    <div style="text-align:center">
+      <button type="button" class="btn btn-primary btn-sm" 
+              ng-class="{'disabled': !dirty}" ng-click="save()">
+        Save
+      </button>
+    </div>
   </div>
   
   <!-- Use the custom packet widget for displaying packet details -->
@@ -21,7 +28,7 @@
   <!-- Use the Stack Widget to manage packet payloads -->
   <div class="col-md-3">
     <fg-stack get-options="getProtocols" create-node="createProtocol" 
-              save-stack="savePacket">
+              set-dirty="setDirty">
       Packet Payloads
     </fg-stack>
   </div>
