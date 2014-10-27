@@ -45,8 +45,6 @@ angular.module('flowsimUiApp')
     };
 
     this.get = function(path, data, callback) {
-      console.log('xaccess token: ', that);
-      //request(that, 'get', path, data, callback);
       $http.get(path,{
         headers: { 'x-access-token': that._xAccessToken }
           }).success(function(data) {

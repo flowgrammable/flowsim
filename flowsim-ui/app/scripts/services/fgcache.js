@@ -53,8 +53,6 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in cache)) { cache[type] = {}; }
 
-      console.log('type: ' + typeof(cache[type]));
-
       if(Object.keys(cache[type]).length) {
         callback(null, Object.keys(cache[type]));
       } else {
@@ -70,6 +68,7 @@ angular.module('flowsimUiApp')
 
       cache[type][name] = service.create(name);
       cache[type][name].local = true;
+      cache[type][name].dirty = true;
       return cache[type][name];
     }
 

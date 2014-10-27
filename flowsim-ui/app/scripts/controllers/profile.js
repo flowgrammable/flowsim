@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('ProfileCtrl', function ($scope, Profile) {
+  .controller('ProfileCtrl', function ($scope, fgCache, Profile) {
 
     $scope.names = {};
     $scope.profile = null;
@@ -16,7 +16,7 @@ angular.module('flowsimUiApp')
     $scope.dirty = false;
 
     $scope.getProfiles = function(callback) {
-      Profile.getNames(callback);
+      fgCache.getNames('profile', callback);
     };
 
 
@@ -26,7 +26,7 @@ angular.module('flowsimUiApp')
       } else if(name.length == 0) {
         return 'Invalid name';
       } else {
-        $scope.profile = Profile.create(name);
+        $scope.profile = fgCache.create('profile', name, Profile);
         $scope.names[name] = true;
         $scope.dirty = true;
         return '';
@@ -34,8 +34,9 @@ angular.module('flowsimUiApp')
     };
 
     $scope.delProfile = function(name) {
-      Profile.destroy(name);
+      fgCache.destroy('profile', name);
       delete $scope.names[name];
+      $scope.dirty = !fgCache.sync();
     };
 
     $scope.setProfile = function(name) {
@@ -43,7 +44,7 @@ angular.module('flowsimUiApp')
         $scope.profile = null;
         $scope.$broadcast('setProfile', null);
       } else {
-        Profile.get(name, function(err, result) {
+        fgCache.get('profile', name, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {
@@ -55,8 +56,14 @@ angular.module('flowsimUiApp')
     };
 
     $scope.save = function() {
-      Profile.save();
-      $scope.dirty = false;
+      fgCache.save(function(err, result) {
+        if(err) {
+          $scope.dirty = true;
+          console.log(err.details)
+        } else {
+          scope.dirty = false;
+        }
+      });
     };
 
   });

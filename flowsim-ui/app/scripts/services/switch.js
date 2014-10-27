@@ -12,8 +12,7 @@ angular.module('flowsimUiApp')
 
     function create(name) {
       return {
-        name: name,
-        dirty: true
+        name: name
       };
     }
 
