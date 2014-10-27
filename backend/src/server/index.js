@@ -11,6 +11,7 @@ var restify = require('restify');
 var http    = require('http');
 var fmt     = require('../utils/formatter');
 var filter  = require('./logfilter');
+var msg     = require('./msg');
 
 var name = 'server';
 
@@ -60,7 +61,7 @@ function Server(config, logger) {
   if(this.config.https) {
     this.creds = {
       key: fs.readFileSync(this.config.https.key),
-      certificate: fs.readFileSync(this.config.https.cert)
+      certificate: fs.readFileSync(this.config.https.cert),
     };
 
     // redirect all http requests to the https port
@@ -68,7 +69,7 @@ function Server(config, logger) {
       function(req, res) {
         res.writeHead(301, {
           Location: 'https://' + that.config.hostname + ':' +
-                    that.config.secure_port + '/'
+                    that.config.secure_port + req.url
         });
         res.end();
       }
@@ -154,18 +155,20 @@ Server.prototype.rootPath = function() {
 Server.prototype.run = function() {
   var notFound;
 
-  this.server.on('after', filter.auditLogger({
+  // Log all request before hitting handler
+  this.server.pre(filter.requestLogger({
     log: this.logger,
     body: true
   }));
 
+  // Log response after request hits handler
+  this.server.on('after', filter.responseLogger({
+    log: this.logger,
+    body: true
+  }));
 
   this.server.on('NotFound', function(req, res) {
-    var body = JSON.stringify({ error: {
-      message: 'Bad request',
-      details: req.method + ' ' + req.url
-    }});
-    res.end(body);
+    res.end(msg.routeDoesNotExist(req.url));
   });
 
   if(this.config.static) {
