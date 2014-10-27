@@ -26,7 +26,7 @@ angular.module('flowsimUiApp')
           }
         });
       }
-    };
+    }
 
     function getNames(callback) {
       if(Object.keys(packets).length) {
@@ -36,13 +36,13 @@ angular.module('flowsimUiApp')
           callback(err, result);
         });
       }
-    };
+    }
 
     function create(name) {
       packets[name] = Protocols.createPacket(name);
       packets[name].dirty = true;
       return packets[name];
-    };
+    }
 
     function destroy(name) {
       delete packets[name];
