@@ -32,8 +32,9 @@ angular.module('flowsimUiApp')
     };
 
     $scope.delSwitch = function(name) {
-      $scope.dirty |= fgCache.destroy('switch', name);
+      fgCache.destroy('switch', name);
       delete $scope.names[name];
+      $scope.dirty = !fgCache.sync();
     };
 
     $scope.setSwitch = function(name) {

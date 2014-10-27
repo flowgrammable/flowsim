@@ -11,7 +11,24 @@ angular.module('flowsimUiApp')
   .factory('fgCache', function(Subscriber) {
 
     var cache = {};
+    var flush = {};
 
+    function sync() {
+      var state = true;
+      _.each(cache, function(_cache, type) {
+        _.each(_cache, function(value, key) {
+          if(value.local || value.dirty) {
+            state = false;
+          }
+        });
+      });
+      _.each(cache, function(_cache, type) {
+        if(Object.keys(_cache).length) {
+          state = false;
+        }
+      });
+      return state;
+    }
 
     function get(type, name, callback) {
       // initialize the cache
@@ -25,7 +42,6 @@ angular.module('flowsimUiApp')
             callback(err);
           } else {
             cache[type][name] = result;
-            cache[type][name].remote = true;
             //Protocols.attachPacket(result);
             callback(null, result);
           }
@@ -54,68 +70,67 @@ angular.module('flowsimUiApp')
 
       cache[type][name] = service.create(name);
       cache[type][name].local = true;
-      cache[type][name].dirty = true;
       return cache[type][name];
     }
 
     function destroy(type, name) {
       // initialize the cache
       if(!(type in cache)) { cache[type] = {}; }
+      if(!(type in flush)) { flush[type] = {}; }
 
       // was never saved
       if(cache[type][name].local) {
         delete cache[type][name];
-        return false;
       } else {
-        cache[type][name].dirty   = true;
-        cache[type][name].destroy = true;
-        return true;
+        flush[type][name] = cache[type][name];
+        delete cache[type][name];
       }
     }
 
     function save(callback) {
       _.each(cache, function(_cache, type) {
         _.each(_cache, function(value, key) {
-          if(value.dirty) {
-            if(value.local) {
-              Subscriber.httpPost('/api/'+type+'/'+key, value, 
+          if(value.local) {
+            Subscriber.httpPost('/api/'+type+'/'+key, value, 
+                                function(err, result) {
+              if(err) {
+                callback(err);
+              } else {
+                value.local = false;
+                value.dirty = false;
+                callback(null);
+              }
+            });
+          } else if(value.dirty) {
+            Subscriber.httpUpdate('/api/'+type+'/'+key, value,
                                   function(err, result) {
-                if(err) {
-                  callback(err);
-                } else {
-                  value.dirty = false;
-                  value.local = false;
-                  value.remote = true;
-                  callback(null);
-                }
-              });
-            } else if(value.remote) {
-              Subscriber.httpUpdate('/api/'+type+'/'+key, value, 
-                                    function(err, result) {
-                if(err) {
-                  callback(err);
-                } else {
-                  value.dirty = false;
-                  callback(null);
-                }
-              });
-            } else if(value.destroy) {
-              Subscriber.httpDelete('/api/'+type+'/'+key, {}, 
-                                    function(err, result) {
-                if(err) {
-                  callback(err);
-                } else {
-                  delete cache[type][key];
-                  callback(null);
-                }
-              });
-            }
+              if(err) {
+                callback(err);
+              } else {
+                value.dirty = false;
+                callback(null);
+              }
+            });
           }
+        });
+      });
+
+      _.each(flush, function(_flush, type) {
+        _.each(_flush, function(value, key) {
+          Subscriber.httpDelete('/api/'+type+'/'+key, {},
+                                function(err, result) {
+            if(err) {
+              callback(err);
+            } else {
+              callback(null);
+            }
+          });
         });
       });
     }
 
     return {
+      sync: sync,
       get: get,
       getNames: getNames,
       create: create,
