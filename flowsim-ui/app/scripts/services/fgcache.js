@@ -15,16 +15,17 @@ angular.module('flowsimUiApp')
 
     function get(type, name, callback) {
       // initialize the cache
-      if(!type in cache) { cache[type] = {}; }
+      if(!(type in cache)) { cache[type] = {}; }
 
       if(name in cache[type]) {
         callback(null, cache[type][name]);
       } else {
-        Subscriber.httpGet('/api/'+type'/'+name, {}, function(err, result) {
+        Subscriber.httpGet('/api/'+type+'/'+name, {}, function(err, result) {
           if(err) {
             callback(err);
           } else {
             cache[type][name] = result;
+            cache[type][name].remote = true;
             //Protocols.attachPacket(result);
             callback(null, result);
           }
@@ -34,7 +35,9 @@ angular.module('flowsimUiApp')
 
     function getNames(type, callback) {
       // initialize the cache
-      if(!type in cache) { cache[type] = {}; }
+      if(!(type in cache)) { cache[type] = {}; }
+
+      console.log('type: ' + typeof(cache[type]));
 
       if(Object.keys(cache[type]).length) {
         callback(null, Object.keys(cache[type]));
@@ -47,40 +50,55 @@ angular.module('flowsimUiApp')
 
     function create(type, name, service) {
       // initialize the cache
-      if(!type in cache) { cache[type] = {}; }
+      if(!(type in cache)) { cache[type] = {}; }
 
       cache[type][name] = service.create(name);
+      cache[type][name].local = true;
       cache[type][name].dirty = true;
-      return cahce[type][name];
+      return cache[type][name];
     }
 
     function destroy(type, name) {
       // initialize the cache
-      if(!type in cache) { cache[type] = {}; }
+      if(!(type in cache)) { cache[type] = {}; }
 
-      delete cache[type][name];
-      Subscriber.httpDelete('/api/'+type+'/'+name, {}, function(err, result) {
-        if(err) {
-          console.log(err.details);
-        } else {
-        }
-      });
+      cache[type][name].destroy = true;
     }
 
     function save() {
-      // initialize the cache
-      if(!type in cache) { cache[type] = {}; }
-
       _.each(cache, function(_cache, type) {
         _.each(_cache, function(value, key) {
           if(value.dirty) {
-            Subscriber.httpUpdate('/api/'+type+'/'+key, value, 
+            if(value.local) {
+              Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                   function(err, result) {
-              if(err) {
-                console.log(err.details);
-              } else {
-                value.dirty = false;
-              }
+                if(err) {
+                  console.log(err.details);
+                } else {
+                  value.dirty = false;
+                  value.local = false;
+                  value.remote = true;
+                }
+              });
+            } else if(value.remote) {
+              Subscriber.httpUpdate('/api/'+type+'/'+key, value, 
+                                    function(err, result) {
+                if(err) {
+                  console.log(err.details);
+                } else {
+                  value.dirty = false;
+                }
+              });
+            } else if(value.destroy) {
+              Subscriber.httpDelete('/api/'+type+'/'+key, {}, 
+                                    function(err, result) {
+                if(err) {
+                  console.log(err.details);
+                } else {
+                  delete cache[type][key];
+                }
+              });
+            }
           }
         });
       });
