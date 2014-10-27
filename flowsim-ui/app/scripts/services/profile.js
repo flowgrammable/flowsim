@@ -51,32 +51,68 @@ angular.module('flowsimUiApp')
     var names = [];
     var profiles = {};
 
-    return {
-      create: function(name) {
-        profiles[name] = {
-          name: name
-        };
-        return profiles[name];
-      },
-      destroy: function(name) {
-        if(name in profiles) {
-          delete profiles[name];
-        }
-      },
-      get: function(name) {
-        return name in profiles ? profiles[name] : null;
-      },
-      getNames: function(callback) {
-        if(!init) {
-          // get teh list from server
-          //names = result;
-          names = [];
-          init = true;
-        }
-        callback(null, names);
-      },
-      save: function(callback) {
-
+    function get(name, callback) {
+      if(name in profiles) {
+        callback(null, profiles[name]);
+      } else {
+        Subscriber.httpGet('/api/profile/' name, {}, function(err, result) {
+          if(err) {
+            callback(err);
+          } else {
+            profiles[name] = result;
+            // attach
+            callback(null, result);
+          }
+        });
       }
+    }
+
+    function getNames(callback) {
+      if(Object.keys(profiles).length) {
+        callback(null, Object.keys(profiles));
+      } else {
+        Subscriber.httpGet('/api/profile', {}, function(err, result) {
+          callback(err, result);
+        });
+      }
+    }
+
+    function create(name) {
+        profiles[name] = {};
+        profiles.name.dirty = true;
+        return profiles[name];
+    }
+
+    function destroy(name) {
+      delete profiles[name];
+      Subscriber.httpDelete('/api/packet/'+name, {}, function(err, result) {
+        if(err) {
+          console.log(err.details);
+        } else {
+        }
+      });
+    }
+
+    function save() {
+      _.each(profiles, function(value, key) {
+        if(value.dirty) {
+          Subscriber.httpUpdate('/api/profile/'+key, value,
+                                function(err, result) {
+            if(err) {
+              console.log(err.details);
+            } else {
+              value.dirty = false;
+            }
+          });
+        }
+      });
+    }
+
+    return {
+      get: get,
+      getNames: getNames,
+      create: create,
+      destroy: destroy,
+      save: save
     };
   });
