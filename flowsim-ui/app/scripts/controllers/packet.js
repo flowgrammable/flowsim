@@ -9,7 +9,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('PacketCtrl', function ($scope, Packet, Protocols) {
+  .controller('PacketCtrl', function ($scope, Packet, Protocols, $rootScope) {
     // Method to add a new packet
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
@@ -19,17 +19,10 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.dirty = false;
 
-    // get the list of packets
-    Packet.getNames(function(err, result) {
-      if(err) {
-        console.log(err.details);
-      } else {
-        $scope.names = result;
-        $scope.$broadcast('initList', _.map($scope.names, function(n) {
-          return n.name;
-        }));
-      }
-    });
+    // get a list of packets
+    $scope.getPackets = function(callback) {
+      Packet.getNames(callback);
+    };
 
     // function for changing the focus state of the controller
     $scope.setPacket = function(name) {

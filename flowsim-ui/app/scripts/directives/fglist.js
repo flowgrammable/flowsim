@@ -28,14 +28,6 @@ angular.module('flowsimUiApp')
         $scope.items = [];                // display list of items
         $scope.init = false;              // dislay list initialization state
 
-        $scope.$on('initList', function(event, data) {
-          $scope.items = data;
-          $scope.init = true;
-          if(data.length > 0) {
-            $scope.shiftFocus(0);
-          }
-        });
-
         $scope.clearState = function() {
           $scope.itemName = '';
           $scope.errorMsg = '';
@@ -71,6 +63,18 @@ angular.module('flowsimUiApp')
             $scope.clearState();
           }
         };
+        
+        $scope.onInit()(function(err, result) {
+          if(err) {
+            console.log(err.details);
+          } else {
+            $scope.items = result;
+            if(result.length > 0) {
+              $scope.shiftFocus(0);
+            }
+          }
+        });
+
       }
     };
   });

@@ -14,6 +14,11 @@ angular.module('flowsimUiApp')
     $scope.profile = null;
     $scope.focus = 'datapath';
 
+    $scope.getProfiles = function(callback) {
+      Packet.getNames(callback);
+    };
+
+
     $scope.addProfile = function(name) {
       if(name in $scope.names) {
         return 'Name exists';
@@ -47,15 +52,4 @@ angular.module('flowsimUiApp')
       }
     };
 
-    // load the profile names we have
-    Profile.getNames(function(err, result) {
-      if(err) {
-        $scope.errorMsg = err;
-      } else {
-        $scope.names = result;
-        $scope.$broadcast('initList', _.map($scope.names, function(n) {
-          return n.name;
-        }));
-      }
-    });
   });

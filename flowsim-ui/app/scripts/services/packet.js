@@ -29,9 +29,13 @@ angular.module('flowsimUiApp')
     };
 
     function getNames(callback) {
-      Subscriber.httpGet('/api/packet', {}, function(err, result) {
-        callback(err, result);
-      });
+      if(Object.keys(packets).length) {
+        callback(null, Object.keys(packets));
+      } else {
+        Subscriber.httpGet('/api/packet', {}, function(err, result) {
+          callback(err, result);
+        });
+      }
     };
 
     function create(name) {

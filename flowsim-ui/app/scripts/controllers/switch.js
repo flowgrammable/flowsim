@@ -13,6 +13,10 @@ angular.module('flowsimUiApp')
     $scope._switch = null;
     $scope.focus = 'datapath';
 
+    $scope.getSwitches = function(callback) {
+      Packet.getNames(callback);
+    };
+
     $scope.addSwitch = function(name) {
       if(name in $scope.names) {
         return 'Name exists';
@@ -46,14 +50,5 @@ angular.module('flowsimUiApp')
       }
     };
 
-    Switch.getNames(function(err, result) {
-      if(err) {
-        $scope.errorMsg = err;
-      } else {
-        $scope.names = result;
-        $scope.$broadcast('initList', _.map($scope.names, function(n) {
-          return n.name;
-        }));
-      }
-    });
   });
+

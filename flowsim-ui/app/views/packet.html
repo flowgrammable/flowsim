@@ -3,7 +3,8 @@
 
   <!-- Use the List Widget to manage packet names -->
   <div class="col-md-2 col-md-offset-1">
-    <fg-list on-add="addPacket" on-del="delPacket" on-set="setPacket">
+    <fg-list on-add="addPacket" on-del="delPacket" on-set="setPacket"
+             on-init="getPackets">
       Packets
     </fg-list>
     <div class="error" ng-show="errorMsg.length">
