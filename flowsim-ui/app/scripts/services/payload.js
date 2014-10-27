@@ -13,7 +13,7 @@ function _Payload() {
 };
 
 _Payload.prototype.bytes = function() {
-  return this.attrs[0].value;
+  return this._bytes;
 };
 
 angular.module('flowsimUiApp')

@@ -12,6 +12,7 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope._switch = null;
     $scope.focus = 'datapath';
+    $scope.dirty = false;
 
     $scope.getSwitches = function(callback) {
       Switch.getNames(callback);
@@ -25,6 +26,7 @@ angular.module('flowsimUiApp')
       } else { 
         $scope._switch = Switch.create(name);
         $scope.names[name] = true;
+        $scope.dirty = true;
         return '';
       }
     };
@@ -48,6 +50,11 @@ angular.module('flowsimUiApp')
           }
         });
       }
+    };
+
+    $scope.save = function() {
+      Switch.save();
+      $scope.dirty = false;
     };
 
   });

@@ -54,7 +54,7 @@ angular.module('flowsimUiApp')
     }
 
     function save() {
-      _.each(switchess, function(value, key) {
+      _.each(switches, function(value, key) {
         if(value.dirty) {
           Subscriber.httpUpdate('/api/switch/'+key, value,
                                 function(err, result) {

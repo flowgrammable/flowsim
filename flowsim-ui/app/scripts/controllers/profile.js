@@ -13,6 +13,7 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.profile = null;
     $scope.focus = 'datapath';
+    $scope.dirty = false;
 
     $scope.getProfiles = function(callback) {
       Profile.getNames(callback);
@@ -27,6 +28,7 @@ angular.module('flowsimUiApp')
       } else {
         $scope.profile = Profile.create(name);
         $scope.names[name] = true;
+        $scope.dirty = true;
         return '';
       }
     };
@@ -50,6 +52,11 @@ angular.module('flowsimUiApp')
           }
         });
       }
+    };
+
+    $scope.save = function() {
+      Profile.save();
+      $scope.dirty = false;
     };
 
   });
