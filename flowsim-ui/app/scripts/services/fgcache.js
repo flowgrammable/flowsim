@@ -45,11 +45,11 @@ angular.module('flowsimUiApp')
       }
     }
 
-    function create(type, name) {
+    function create(type, name, service) {
       // initialize the cache
       if(!type in cache) { cache[type] = {}; }
 
-      cache[type][name] = //Protocols.createPacket(name);
+      cache[type][name] = service.create(name);
       cache[type][name].dirty = true;
       return cahce[type][name];
     }
