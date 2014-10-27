@@ -23,8 +23,6 @@ angular.module('flowsimUiApp')
             return;
           }
 
-          console.log('paylaod: ' + scope.packet.bytes());
-                    
           //Vertical indents between field blocks (text lines count)
           var linesBetweenFieldBlocks = 1;
           

@@ -12,22 +12,15 @@ angular.module('flowsimUiApp')
 
     var packets = {};
 
-    // how is this differnet than this.get?
-    function getDetail(packetName, callback){
-      Subscriber.httpGet('/api/packet/'+packetName, {}, function(err, result){
-        callback(err, result);
-      });
-    };
-
     function get(name, callback) {
-      if(name in this.packets) {
-        callback(null, this.packets[name]);
+      if(name in packets) {
+        callback(null, packets[name]);
       } else {
         Subscriber.httpGet('/api/packet/'+name, {}, function(err, result) {
           if(err) {
             callback(err);
           } else {
-            this.packets[name] = result;
+            packets[name] = result;
             Protocols.attachPacket(result);
             callback(null, result);
           }
@@ -49,9 +42,27 @@ angular.module('flowsimUiApp')
 
     function destroy(name) {
       delete packets[name];
+      Subscriber.httpDelete('/api/packet/'+name, {}, function(err, result) {
+        if(err) {
+          console.log(err.details);
+        } else {
+        }
+      });
     }
 
-    function save(name) {
+    function save() {
+      _.each(packets, function(value, key) {
+        if(value.dirty) {
+          Subscriber.httpUpdate('/api/packet/'+key, value, 
+                                function(err, result) {
+            if(err) {
+              console.log(err.details);
+            } else {
+              value.dirty = false;
+            }
+          });
+        }
+      });
     };
 
     return {

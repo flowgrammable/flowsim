@@ -19,7 +19,6 @@ angular.module('flowsimUiApp')
         setDirty: '&'      // callback for persisting changes
       }, controller: function($scope) {
          
-        $scope.dirty    = false;
         $scope.stack    = [];
         $scope.nodeType = '';  // input type to create node
         $scope.options  = [];  // input select options
@@ -40,7 +39,6 @@ angular.module('flowsimUiApp')
            $scope.stack.push(node); 
            $scope.nodeType = '';
            $scope.options = $scope.getOptions()($scope.stack); 
-           $scope.dirty = true;
          }
        };
 

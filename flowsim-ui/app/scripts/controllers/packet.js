@@ -17,7 +17,6 @@ angular.module('flowsimUiApp')
     $scope.packet   = null;
     $scope.errorMsg = '';
     $scope.names = {};
-
     $scope.dirty = false;
 
     // get the list of packets
@@ -49,7 +48,10 @@ angular.module('flowsimUiApp')
       }
     };
 
-    $scope.setDirty = function() { $scope.dirty = true; };
+    $scope.setDirty = function() { 
+      $scope.dirty = true;
+      $scope.packet.dirty = true;
+    };
 
     // function for constructing a new packet
     $scope.addPacket = function(name) {
@@ -62,6 +64,7 @@ angular.module('flowsimUiApp')
         $scope.names[name] = true;
         $scope.packet = Packet.create(name);
         $scope.dirty = true;
+        $scope.packet.dirty = true;
         return '';
       }
     };
@@ -83,6 +86,7 @@ angular.module('flowsimUiApp')
     };
 
     $scope.save = function(callback) {
+      Packet.save();
       $scope.dirty = false;
     };
 
