@@ -68,7 +68,7 @@ angular.module('flowsimUiApp')
       request(this, 'put', path, data, callback);
     };
 
-    this.delete = function(path, data, callback) {
+    this._delete = function(path, data, callback) {
       request(this, 'delete', path, data, callback);
     };
 

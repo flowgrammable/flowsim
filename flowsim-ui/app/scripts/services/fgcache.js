@@ -62,7 +62,13 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in cache)) { cache[type] = {}; }
 
-      cache[type][name].destroy = true;
+      // was never saved
+      if(cache[type][name].local) {
+        delete cache[type][name];
+      } else {
+        cache[type][name].dirty   = true;
+        cache[type][name].destroy = true;
+      }
     }
 
     function save() {

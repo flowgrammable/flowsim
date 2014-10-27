@@ -36,7 +36,7 @@ angular.module('flowsimUiApp')
     this.httpGet    = Backend.get;
     this.httpPost   = Backend.post;
     this.httpUpdate = Backend.update;
-    this.httpDelete = Backend.delete;
+    this.httpDelete = Backend._delete;
 
     this.register = function(email, password, callback) {
       Backend.post('/api/subscriber/register', {
