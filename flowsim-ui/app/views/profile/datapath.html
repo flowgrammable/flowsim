@@ -5,17 +5,22 @@
 
       <accordion-group>
         <accordion-heading>
-          stuff
+          Datapath
         </accordion-heading>
-          <fg-label-input>
+          <fg-label-input ng-repeat="item in datapath" item="item">
           </fg-label-input>
       </accordion-group>
       
       <accordion-group>
         <accordion-heading>
-          Datapath
+          Tables
         </accordion-heading>
-        stuff
+      </accordion-group>
+      
+      <accordion-group>
+        <accordion-heading>
+          Ports
+        </accordion-heading>
       </accordion-group>
 
   </div>
@@ -23,9 +28,8 @@
   <div class="col-md-4">
       <accordion-group>
         <accordion-heading>
-          Datapath
+          Meters
         </accordion-heading>
-        stuff
       </accordion-group>
   </div>
   <div class="col-md-4">

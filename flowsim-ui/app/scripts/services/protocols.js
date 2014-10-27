@@ -1,10 +1,13 @@
 'use strict';
 
 function Packet(name, protocol) {
-  this.name     = name;
-  this.length   = protocol !== undefined ? 1 : 0;
-  this._bytes   = protocol !== undefined ? protocol.bytes() : 0;
-  this._payload = protocol !== undefined ? [protocol] : [];
+  if(typeof name === 'string') {
+    this.name     = name;
+    this.length   = protocol !== undefined ? 1 : 0;
+    this._bytes   = protocol !== undefined ? protocol.bytes() : 0;
+    this._payload = protocol !== undefined ? [protocol] : [];
+  } else {
+  }
 }
 
 Packet.prototype.push = function(protocol) {
@@ -91,7 +94,7 @@ angular.module('flowsimUiApp')
     }
 
     this.attach = function(packet) {
-      // we need an attach and a strip of the object type
+
     };
 
     this.loadPacket = function(packetBody) {

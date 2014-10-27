@@ -8,18 +8,18 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Packet', function Packet(Subscriber, Protocols) {
+  .factory('Packet', function(Subscriber, Protocols) {
 
-    this.packets = {};
+    var packets = {};
 
     // how is this differnet than this.get?
-    this.getDetail = function(packetName, callback){
+    function getDetail(packetName, callback){
       Subscriber.httpGet('/api/packet/'+packetName, {}, function(err, result){
         callback(err, result);
       });
     };
 
-    this.get = function(name, callback) {
+    function get(name, callback) {
       if(name in this.packets) {
         callback(null, this.packets[name]);
       } else {
@@ -35,23 +35,31 @@ angular.module('flowsimUiApp')
       }
     };
 
-    this.getNames = function(callback) {
+    function getNames(callback) {
       Subscriber.httpGet('/api/packet', {}, function(err, result) {
         callback(err, result);
       });
     };
 
-    this.create = function(name) {
-      this.packets[name] = Protocols.createPacket(name);
-      this.packets[name].dirty = true;
-      return this.packets[name];
+    function create(name) {
+      packets[name] = Protocols.createPacket(name);
+      packets[name].dirty = true;
+      return packets[name];
     };
 
-    this.destroy = function(name) {
-      delete this.packets[name];
+    function destroy(name) {
+      delete packets[name];
     }
 
-    this.save = function(name) {
+    function save(name) {
+    };
+
+    return {
+      get: get,
+      getNames: getNames,
+      create: create,
+      destroy: destroy,
+      save: save
     };
 
   });
