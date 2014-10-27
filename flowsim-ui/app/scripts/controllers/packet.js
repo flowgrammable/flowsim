@@ -9,19 +9,41 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('PacketCtrl', function ($scope, Packet, Protocols, $rootScope) {
+  .controller('PacketCtrl', function ($scope, fgCache, Packet, Protocols, $rootScope) {
     // Method to add a new packet
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
 
+    $scope.names = {};
     $scope.packet   = null;
     $scope.errorMsg = '';
-    $scope.names = {};
     $scope.dirty = false;
 
     // get a list of packets
     $scope.getPackets = function(callback) {
-      Packet.getNames(callback);
+      fgCache.getNames('packet', callback);
+    };
+    
+    // function for constructing a new packet
+    $scope.addPacket = function(name) {
+      var tmp;
+      if(!packetName.test(name)) {
+        return 'Bad name';
+      } else if(name in $scope.names) {
+        return 'Name exists';
+      } else {
+        $scope.packet = fgCache.create('packet', name, Packet);
+        $scope.names[name] = true;
+        $scope.dirty = true;
+        return '';
+      }
+    };
+    
+    // Method to delete a packet
+    $scope.delPacket = function(name) {
+      fgCache.destroy('packet', name);
+      delete $scope.names[name];
+      $scope.dirty = !fgCache.sync();
     };
 
     // function for changing the focus state of the controller
@@ -30,7 +52,7 @@ angular.module('flowsimUiApp')
         $scope.packet = null;
         $scope.$broadcast('setStack', $scope.packet);
       } else {
-        Packet.get(name, function(err, result) {
+        fgCache.get('packet', name, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {
@@ -40,34 +62,21 @@ angular.module('flowsimUiApp')
         });
       }
     };
+    
+    $scope.save = function(callback) {
+      fgCache.save(function(err, result) {
+        if(err) {
+          $scope.dirty = true;
+          console.log(err.details)
+        } else {
+          scope.dirty = false;
+        }
+      });
+    };
 
     $scope.setDirty = function() { 
       $scope.dirty = true;
       $scope.packet.dirty = true;
-    };
-
-    // function for constructing a new packet
-    $scope.addPacket = function(name) {
-      var tmp;
-      if(!packetName.test(name)) {
-        return 'Bad name';
-      } else if(name in $scope.names) {
-        return 'Name exists';
-      } else {
-        $scope.names[name] = true;
-        $scope.packet = Packet.create(name);
-        $scope.dirty = true;
-        $scope.packet.dirty = true;
-        return '';
-      }
-    };
-
-    // Method to delete a packet
-    $scope.delPacket = function(name) {
-      if(name in $scope.names) {
-        delete $scope.names[name];
-        Packet.destroy(name);
-      }
     };
 
     $scope.getProtocols = function(packet) {
@@ -76,11 +85,6 @@ angular.module('flowsimUiApp')
 
     $scope.createProtocol = function(name) {
       return Protocols.createProtocol(name);
-    };
-
-    $scope.save = function(callback) {
-      Packet.save();
-      $scope.dirty = false;
     };
 
   });

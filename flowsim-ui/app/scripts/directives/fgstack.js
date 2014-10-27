@@ -49,7 +49,7 @@ angular.module('flowsimUiApp')
        };
 
       $scope.$watch('stack', function() {
-        if($scope.stack.length) {
+        if($scope.stack && $scope.stack.length) {
           $scope.setDirty()();
         }
       }, true);
