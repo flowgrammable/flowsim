@@ -65,13 +65,15 @@ angular.module('flowsimUiApp')
       // was never saved
       if(cache[type][name].local) {
         delete cache[type][name];
+        return false;
       } else {
         cache[type][name].dirty   = true;
         cache[type][name].destroy = true;
+        return true;
       }
     }
 
-    function save() {
+    function save(callback) {
       _.each(cache, function(_cache, type) {
         _.each(_cache, function(value, key) {
           if(value.dirty) {
@@ -79,29 +81,32 @@ angular.module('flowsimUiApp')
               Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                   function(err, result) {
                 if(err) {
-                  console.log(err.details);
+                  callback(err);
                 } else {
                   value.dirty = false;
                   value.local = false;
                   value.remote = true;
+                  callback(null);
                 }
               });
             } else if(value.remote) {
               Subscriber.httpUpdate('/api/'+type+'/'+key, value, 
                                     function(err, result) {
                 if(err) {
-                  console.log(err.details);
+                  callback(err);
                 } else {
                   value.dirty = false;
+                  callback(null);
                 }
               });
             } else if(value.destroy) {
               Subscriber.httpDelete('/api/'+type+'/'+key, {}, 
                                     function(err, result) {
                 if(err) {
-                  console.log(err.details);
+                  callback(err);
                 } else {
                   delete cache[type][key];
+                  callback(null);
                 }
               });
             }

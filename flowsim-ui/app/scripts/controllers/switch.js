@@ -32,8 +32,7 @@ angular.module('flowsimUiApp')
     };
 
     $scope.delSwitch = function(name) {
-      fgCache.destroy('switch', name);
-      $scope.dirty = true;
+      $scope.dirty |= fgCache.destroy('switch', name);
       delete $scope.names[name];
     };
 
@@ -54,8 +53,14 @@ angular.module('flowsimUiApp')
     };
 
     $scope.save = function() {
-      fgCache.save();
-      $scope.dirty = false;
+      fgCache.save(function(err, result) {
+        if(err) {
+          $scope.dirty = true;
+          console.log(err.details)
+        } else {
+          scope.dirty = false;
+        }
+      });
     };
 
   });
