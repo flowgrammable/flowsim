@@ -64,6 +64,12 @@
               </a>
             </form>
             <form class="navbar-form navbar-right" role="form"
+                  ng-show="fgCache.dirty">
+              <a href="" class="btn btn-success" ng-click="fgCache.save()">
+                Save
+              </a>
+            </form>
+            <form class="navbar-form navbar-right" role="form"
                   ng-show="authenticated">
               <a href="#" class="btn btn-success" ng-click="logout()">
                 Logout

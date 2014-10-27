@@ -8,10 +8,11 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('fgCache', function(Subscriber) {
+  .factory('fgCache', function(Subscriber, $rootScope) {
 
     var cache = {};
     var flush = {};
+    var dirty = false;
 
     function sync() {
       var state = true;
@@ -69,6 +70,7 @@ angular.module('flowsimUiApp')
       cache[type][name] = service.create(name);
       cache[type][name].local = true;
       cache[type][name].dirty = true;
+      dirty = true;
       return cache[type][name];
     }
 
@@ -84,15 +86,22 @@ angular.module('flowsimUiApp')
         flush[type][name] = cache[type][name];
         delete cache[type][name];
       }
+      if(sync()) {
+        dirty = false;
+      } else {
+        dirty = true;
+      }
     }
 
     function save(callback) {
+      dirty = false;
       _.each(cache, function(_cache, type) {
         _.each(_cache, function(value, key) {
           if(value.local) {
             Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                 function(err, result) {
               if(err) {
+                dirty = true;
                 callback(err);
               } else {
                 value.local = false;
@@ -104,6 +113,7 @@ angular.module('flowsimUiApp')
             Subscriber.httpUpdate('/api/'+type+'/'+key, value,
                                   function(err, result) {
               if(err) {
+                dirty = true;
                 callback(err);
               } else {
                 value.dirty = false;
@@ -119,6 +129,7 @@ angular.module('flowsimUiApp')
           Subscriber.httpDelete('/api/'+type+'/'+key, {},
                                 function(err, result) {
             if(err) {
+              dirty = true;
               callback(err);
             } else {
               callback(null);
