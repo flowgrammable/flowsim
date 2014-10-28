@@ -1,10 +1,10 @@
 
 /**
- * @module profile
+ * @module switch
  * @requires module:utils~Formatter module:utils
  */
 
-(/** @lends module:profile */function(){
+(/** @lends module:switch */function(){
 
 var fmt = require('../utils/formatter');
 var msg = require('./msg');
@@ -12,13 +12,13 @@ var pg  = require('../database/pg');
 /**
  * SQL result codes based on postgres definitions.
  *
- * @memberof module:profile~Storage
+ * @memberof module:switch~Storage
  * @readonly
  * @enum {String}
  */
 
 /**
- * The Storage object provides a simplified interface for the profile
+ * The Storage object provides a simplified interface for the switch
  * tables in the database.
  *
  * @constructor
@@ -63,8 +63,8 @@ function errHandler(callback, err, table) {
     case '23505':
       if(table === 'subscriber') {
         callback(msg.existingEmail());
-      } else if(table === 'profile') {
-        callback(msg.existingProfile());
+      } else if(table === 'switch') {
+        callback(msg.existingSwitch());
       } else {
         callback(msg.unknownError());
       }
@@ -78,98 +78,98 @@ function errHandler(callback, err, table) {
 
 
 /**
- * Create a new row in the profile table.
+ * Create a new row in the switch table.
  *
  * @param {Integer} subscriber_id - subscriber id
- * @param {String} profile - profile json string
+ * @param {String} switch - switch json string
  * @param {storageCallback} - callback function to use
  */
-Storage.prototype.createProfile = function(subscriber_id, profile,
+Storage.prototype.createSwitch = function(subscriber_id, _switch,
                                               callback) {
   var that = this;
-  var pktString = JSON.stringify(profile);
-  this.database.insert('profile', {
+  var pktString = JSON.stringify(_switch);
+  this.database.insert('switch', {
     subscriber_id: subscriber_id,
-    name: profile.name,
-    profile: pktString
+    name: _switch.name,
+    _switch: pktString
   }, function(err, result) {
     if(err) {
       that.logger.error(err);
-      errHandler(callback, err, 'profile');
+      errHandler(callback, err, 'switch');
     } else {
       callback(null, result[0]);
     }
   });
 };
 
-Storage.prototype.listProfiles = function(subscriber_id, callback){
+Storage.prototype.listSwitches = function(subscriber_id, callback){
   var that = this;
-  var profileList = {names:[]};
-  this.database.select('profile', ['name'], {
+  var _switchList = {names:[]};
+  this.database.select('switch', ['name'], {
     subscriber_id: {'=' : subscriber_id }}, function(err, result){
       if(err){
         that.logger.error(err);
-        errHandler(callback, err, 'profile');
+        errHandler(callback, err, 'switch');
       } else {
         for(var i in result){
-          profileList.names.push(result[i].name);
+          _switchList.names.push(result[i].name);
         }
-        callback(null, profileList);
+        callback(null, _switchList);
       }
     });
 };
 
-Storage.prototype.getProfileByName = function(subscriber_id, profileName,
+Storage.prototype.getSwitchByName = function(subscriber_id, _switchName,
   callback){
   var that = this;
-  this.database.select('profile', ['profile'], {
+  this.database.select('switch', ['_switch'], {
     subscriber_id: {'=' : subscriber_id },
-    name: {'=' : profileName} }, function(err, profileList){
+    name: {'=' : _switchName} }, function(err, _switchList){
       if(err){
         that.logger.error(err);
-        errHandler(callback, err, 'profile');
+        errHandler(callback, err, 'switch');
       } else {
-        if(profileList.length === 1){
-          callback(null, profileList[0].profile);
+        if(_switchList.length === 1){
+          callback(null, _switchList[0]._switch);
         } else {
-          callback(msg.profileDoesNotExist(profileName));
+          callback(msg.switchDoesNotExist(_switchName));
         }
       }
     });
 };
 
-Storage.prototype.updateProfile = function(subscriber_id, profileName, profile,
+Storage.prototype.updateSwitch = function(subscriber_id, _switchName, _switch,
   callback){
   var that = this;
-  var pktString = JSON.stringify(profile);
-  this.database.update('profile', {
-    name: profile.name,
-    profile: pktString
+  var pktString = JSON.stringify(_switch);
+  this.database.update('switch', {
+    name: _switch.name,
+    _switch: pktString
   }, {
     subscriber_id: { '=': subscriber_id },
-    name: { '=' : profileName}
-  }, function(err, profile){
+    name: { '=' : _switchName}
+  }, function(err, _switch){
       if(err){
         that.logger.error(err);
-        errHandler(callback, err, 'profile');
+        errHandler(callback, err, 'switch');
       } else {
-        callback(null, profile);
+        callback(null, _switch);
       }
   });
 };
 
-Storage.prototype.removeProfile = function(subscriber_id, profileName,
+Storage.prototype.removeSwitch = function(subscriber_id, _switchName,
   callback){
     var that = this;
-    this.database.delete('profile', {
+    this.database.delete('switch', {
       subscriber_id: { '=': subscriber_id },
-      name: { '=' : profileName}
-    }, function(err, profile){
+      name: { '=' : _switchName}
+    }, function(err, result){
       if(err){
         that.logger.error(err);
-        errhandler(callback, err, 'profile');
+        errhandler(callback, err, 'switch');
       } else {
-        callback(null, profile);
+        callback(null, result);
       }
     });
 };
