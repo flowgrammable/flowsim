@@ -163,4 +163,19 @@ Storage.prototype.updatePacket = function(subscriber_id, packetName, packet,
   });
 };
 
+Storage.prototype.removePacket = function(subscriber_id, packetName, callback){
+  var that = this;
+  this.database.delete('packet', {
+    subscriber_id: { '=': subscriber_id },
+    name: { '=' : packetName}
+  }, function(err, packet){
+    if(err){
+      that.logger.error(err);
+      errHandler(callback, err, 'packet')
+    } else {
+      callback(null, packet);
+    }
+  });
+};
+
 })();

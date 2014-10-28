@@ -123,4 +123,25 @@ Controller.prototype.update = function(subscriber_id, packetName, packet, cb){
   });
 };
 
+/**
+ * Given a subscriber_id and packet name attempt to delete packet
+ * from database
+ *
+ * @param {Integer} subscriber_id - id of subscriber
+ * @param {String} packetName - name of packet to delete
+ * @param {Function} callback - a standard callback function
+ */
+Controller.prototype._remove = function(subscriber_id, packetName, cb){
+  var that = this;
+  this.storage.removePacket(subscriber_id, packetName,
+    function(err, pkt){
+      if(err){
+        that.logger.error(err);
+        cb(err);
+      } else {
+        cb(null, msg.success());
+      }
+    });
+};
+
 })();

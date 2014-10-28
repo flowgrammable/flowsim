@@ -111,7 +111,7 @@ Server.prototype.addHandler = function(method, path, handler) {
     case 'post':
     case 'get':
     case 'put':
-    case 'delete':
+    case 'del':
       this.server[method](this.rootPath() + path, handler);
       break;
     case '*':

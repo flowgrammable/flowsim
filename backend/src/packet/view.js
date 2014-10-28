@@ -28,7 +28,6 @@ function create(view) {
 
 function list(view){
   return function(req, res, next){
-    console.log('hit list view');
     var responder = util.Responder(res, next);
     view.controller.list(req.subscriber_id, responder);
   };
@@ -56,6 +55,14 @@ function update(view){
   };
 }
 
+function _remove(view){
+  return function(req, res, next){
+    var responder = util.Responder(res, next);
+    view.controller._remove(req.subscriber_id, req.params.packetName,
+      responder);
+  };
+}
+
 function View(c, packetLogger) {
 
   this.controller = c;
@@ -79,6 +86,10 @@ function View(c, packetLogger) {
       method: 'put',
       path: ':packetName',
       handler: util.requiresAuth(update(this))
+    } , {
+      method: 'del',
+      path: ':packetName',
+      handler: util.requiresAuth(_remove(this))
     }
   ];
 }
