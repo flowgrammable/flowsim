@@ -53,7 +53,13 @@ angular.module('flowsimUiApp')
       };
     }
 
+    function setVersion(profile, version) {
+      console.log('version: '+version);
+    }
+
     return {
-      create: create
+      create: create,
+      setVersion: setVersion
     };
+
   });

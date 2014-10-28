@@ -15,6 +15,17 @@ angular.module('flowsimUiApp')
     $scope.focus = 'datapath';
     $scope.dirty = false;
 
+    $scope.set = function(idx) {
+      Profile.setVersion($scope.profile, idx);
+    };
+    $scope.versions = [
+      'OpenFlow 1.0',
+      'OpenFlow 1.1',
+      'OpenFlow 1.2',
+      'OpenFlow 1.3',
+      'OpenFlow 1.4'
+    ];
+
     $scope.getProfiles = function(callback) {
       fgCache.getNames('profile', callback);
     };

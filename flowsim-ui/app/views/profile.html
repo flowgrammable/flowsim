@@ -20,35 +20,46 @@
 
   <div class="col-md-10">
     <h4>Capabilities</h4>
+    <div ng-show="profile">
 
-    <ul class="nav nav-tabs" role="tablist">
-      <li ng-class="{active: focus=='datapath'}">
-        <a href="" ng-click="focus='datapath'">Datapath</a>
-      </li>
-      <li ng-class="{active: focus=='ports'}">
-        <a href="" ng-click="focus='ports'">Ports</a>
-      </li>
-      <li ng-class="{active: focus=='groups'}">
-        <a href="" ng-click="focus='groups'">Groups</a>
-      </li>
-      <li ng-class="{active: focus=='tables'}">
-        <a href="" ng-click="focus='tables'">Tables</a>
-      </li>
-      <li ng-class="{active: focus=='meters'}">
-        <a href="" ng-click="focus='meters'">Meters</a>
-      </li>
-    </ul>
+      <ul class="nav nav-tabs" role="tablist">
+        <li ng-class="{active: focus=='datapath'}">
+          <a href="" ng-click="focus='datapath'">Datapath</a>
+        </li>
+        <li ng-class="{active: focus=='ports'}">
+          <a href="" ng-click="focus='ports'">Ports</a>
+        </li>
+        <li ng-class="{active: focus=='groups'}">
+          <a href="" ng-click="focus='groups'">Groups</a>
+        </li>
+        <li ng-class="{active: focus=='tables'}">
+          <a href="" ng-click="focus='tables'">Tables</a>
+        </li>
+        <li ng-class="{active: focus=='meters'}">
+          <a href="" ng-click="focus='meters'">Meters</a>
+        </li>
+      </ul>
 
-    <ng-include ng-show="focus=='datapath'" src="'views/profile/datapath.html'">
-    </ng-include>
-    <ng-include ng-show="focus=='ports'" src="'views/profile/ports.html'">
-    </ng-include>
-    <ng-include ng-show="focus=='groups'" src="'views/profile/groups.html'">
-    </ng-include>
-    <ng-include ng-show="focus=='tables'" src="'views/profile/tables.html'">
-    </ng-include>
-    <ng-include ng-show="focus=='meters'" src="'views/profile/meters.html'">
-    </ng-include>
+      <br>
+      <span ng-repeat="v in versions">
+        <button type="button" class="btn btn-primary" 
+                ng-click="set($index)">
+          {{v}}
+        </button>
+    </span>
+        
+      <ng-include ng-show="focus=='datapath'" src="'views/profile/datapath.html'">
+      </ng-include>
+      <ng-include ng-show="focus=='ports'" src="'views/profile/ports.html'">
+      </ng-include>
+      <ng-include ng-show="focus=='groups'" src="'views/profile/groups.html'">
+      </ng-include>
+      <ng-include ng-show="focus=='tables'" src="'views/profile/tables.html'">
+      </ng-include>
+      <ng-include ng-show="focus=='meters'" src="'views/profile/meters.html'">
+      </ng-include>
+
+  </div>
 
   </div>
 
