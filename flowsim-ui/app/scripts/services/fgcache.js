@@ -70,8 +70,9 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in post)) { post[type] = {}; }
 
-      post[type][name] = service.create(name);
+      post[type][name]      = service.create(name);
       post[type][name+'UI'] = service.createUI(name);
+      post[type][name+'UI'].dirty = true;
       dirty = true;
       return {
         base: post[type][name+'UI'],
@@ -104,7 +105,7 @@ angular.module('flowsimUiApp')
             Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                 function(err, result) {
               if(err) {
-                dirty       = true;
+                dirty = true;
                 callback(err);
               } else {
                 update[type][key] = post[type][key];

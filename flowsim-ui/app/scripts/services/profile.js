@@ -37,9 +37,7 @@ function Profile(name) {
 function ProfileUI(name, obj) {
   this.name = name;
   if(obj === undefined) {
-    this.dirty = true;
   } else {
-    this.dirty = false;
   }
 }
 
