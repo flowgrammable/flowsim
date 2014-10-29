@@ -60,8 +60,8 @@ angular.module('flowsimUiApp')
       return new Profile(name);
     }
 
-    function createUI(obj) {
-      return new ProfileUI(obj);
+    function createUI(name, obj) {
+      return new ProfileUI(name, obj);
     }
 
     function setVersion(profile, version) {

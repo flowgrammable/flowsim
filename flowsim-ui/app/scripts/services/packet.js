@@ -32,8 +32,8 @@ angular.module('flowsimUiApp')
       return new Packet(name);
     }
 
-    function createUI(name) {
-      return new PacketUI(name);
+    function createUI(name, obj) {
+      return new PacketUI(name, obj);
     }
 
     return {
