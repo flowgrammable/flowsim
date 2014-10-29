@@ -1,8 +1,34 @@
 
-<form role="form">
-  <div class="form-group">
-    <label for="datapathId">Identifier</label>
-    <input type="text" class="form-control" id="datapathId" 
-           placeholder="Enter email">
+<div class="row">
+  <div class="col-md-6 col-md-offset-1">
+
+    <form role="form">
+  
+      <div class="form-group">
+        <label for="datapathId">Identifier</label>
+        <input type="text" class="form-control" id="datapathId" 
+               placeholder="00:00:00:00:00:00:00:00" style="width: 180px">
+      </div>
+
+      <div class="form-group">
+        <label for="n_buffers">Buffers</label>
+        <input type="text" class="form-control" id="n_buffers" 
+               placeholder="1024" style="width: 100px">
+      </div>
+      
+      <div class="form-group">
+        <label for="n_tables">Tables</label>
+        <input type="text" class="form-control" id="n_tables" 
+               placeholder="256" style="width: 50px">
+      </div>
+      
+      <div class="form-group">
+        <label for="ip_reassembly">IP Reassembly</label>
+        <input type="checkbox" id="ip_reassembly"/>
+      </div>
+      
+    </form>
+
   </div>
+</div>
 

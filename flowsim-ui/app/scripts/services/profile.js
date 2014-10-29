@@ -37,6 +37,18 @@ function Profile() {
   this.meters = new Meters();
 }
 
+function ProfileUI(obj) {
+  if(obj === undefined) {
+    this.dirty = true;
+  } else {
+    this.dirty = false;
+  }
+}
+
+ProfileUI.prototype.toBase = function() {
+  return new Profile();
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.profile
@@ -53,12 +65,17 @@ angular.module('flowsimUiApp')
       };
     }
 
+    function createUI(obj) {
+      return new ProfileUI(obj);
+    }
+
     function setVersion(profile, version) {
       console.log('version: '+version);
     }
 
     return {
       create: create,
+      createUI: createUI,
       setVersion: setVersion
     };
 
