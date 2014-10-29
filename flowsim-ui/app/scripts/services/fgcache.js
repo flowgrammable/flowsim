@@ -113,7 +113,9 @@ angular.module('flowsimUiApp')
               } else {
                 value.dirty = false;
                 update[type][key] = post[type][key];
+                update[type][key+'UI'] = post[type][key+'UI'];
                 delete post[type][key];
+                delete post[type][key+'UI'];
                 callback(null);
               }
             });
