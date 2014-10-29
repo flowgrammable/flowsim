@@ -43,7 +43,7 @@ angular.module('flowsimUiApp')
             callback(err);
           } else {
             cache[type][name] = result;
-            //cache[type][name+'UI'] = service.createUI(result);
+            //cache[type][name+'UI'] = service.createUI(name, result);
             callback(null, result);
           }
         });
@@ -68,6 +68,7 @@ angular.module('flowsimUiApp')
       if(!(type in cache)) { cache[type] = {}; }
 
       cache[type][name] = service.create(name);
+      cache[type][name+'UI'] = service.createUI(name);
       cache[type][name].local = true;
       cache[type][name].dirty = true;
       dirty = true;
