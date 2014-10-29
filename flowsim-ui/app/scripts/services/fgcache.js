@@ -19,6 +19,7 @@ angular.module('flowsimUiApp')
 
     var dirty = false;
 
+    /*
     function sync() {
       var state = true;
       _.each(cache, function(_cache, type) {
@@ -35,6 +36,7 @@ angular.module('flowsimUiApp')
       });
       return state;
     }
+    */
 
     function get(type, name, service, callback) {
       // initialize the cache
@@ -48,7 +50,7 @@ angular.module('flowsimUiApp')
             callback(err);
           } else {
             update[type][name] = result;
-            //cache[type][name+'UI'] = service.createUI(name, result);
+            update[type][name+'UI'] = service.createUI(name, result);
             callback(null, result);
           }
         });
@@ -73,27 +75,24 @@ angular.module('flowsimUiApp')
       if(!(type in post)) { post[type] = {}; }
 
       post[type][name] = service.create(name);
-      //post[type][name+'UI'] = service.createUI(name);
+      post[type][name+'UI'] = service.createUI(name);
       dirty = true;
-      return post[type][name];
+      return post[type][name+'UI'];
     }
 
     function destroy(type, name) {
       // initialize the cache
-      if(!(type in cache)) { cache[type] = {}; }
-      if(!(type in flush)) { flush[type] = {}; }
+      if(!(type in post))    { post[type] = {}; }
+      if(!(type in destroy)) { destroy[type] = {}; }
 
       // was never saved
-      if(cache[type][name].local) {
-        delete cache[type][name];
+      if(post[type][name]) {
+        delete post[type][name];
+        delete post[type][name+'UI'];
       } else {
-        flush[type][name] = cache[type][name];
-        delete cache[type][name];
-      }
-      if(sync()) {
-        dirty = false;
-      } else {
-        dirty = true;
+        destroy[type][name] = post[type][name];
+        delete post[type][name];
+        delete post[type][name+'UI'];
       }
     }
 
