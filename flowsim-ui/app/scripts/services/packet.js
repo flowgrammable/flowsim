@@ -12,11 +12,8 @@ function Packet(name) {
   this.name = name;
 }
 
-function PacketUI(name, obj) {
-  this.name = name;
-  if(obj === undefined) {
-  } else {
-  }
+function PacketUI(pkt) {
+  this.name = pkt.name;
 }
 
 PacketUI.prototype.toBase = function() {
@@ -32,8 +29,8 @@ angular.module('flowsimUiApp')
       return new Packet(name);
     }
 
-    function createUI(name, obj) {
-      return new PacketUI(name, obj);
+    function createUI(pkt) {
+      return new PacketUI(pkt);
     }
 
     return {

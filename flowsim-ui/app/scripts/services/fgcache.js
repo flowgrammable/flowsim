@@ -43,7 +43,7 @@ angular.module('flowsimUiApp')
             callback(err);
           } else {
             update[type][name] = result;
-            update[type][name+'UI'] = service.createUI(name, result);
+            update[type][name+'UI'] = service.createUI(result);
             callback(null, {
               base: update[type][name],
               ui: udpate[type][name+'UI']
@@ -71,7 +71,7 @@ angular.module('flowsimUiApp')
       if(!(type in post)) { post[type] = {}; }
 
       post[type][name]      = service.create(name);
-      post[type][name+'UI'] = service.createUI(name);
+      post[type][name+'UI'] = service.createUI(post[type][name]);
       post[type][name+'UI'].dirty = true;
       dirty = true;
       return {
