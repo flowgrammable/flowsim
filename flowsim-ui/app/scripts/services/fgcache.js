@@ -38,16 +38,16 @@ angular.module('flowsimUiApp')
 
     function get(type, name, service, callback) {
       // initialize the cache
-      if(!(type in cache)) { cache[type] = {}; }
+      if(!(type in update)) { update[type] = {}; }
 
-      if(name in cache[type]) {
-        callback(null, cache[type][name]);
+      if(name in update[type]) {
+        callback(null, udpate[type][name]);
       } else {
         Subscriber.httpGet('/api/'+type+'/'+name, {}, function(err, result) {
           if(err) {
             callback(err);
           } else {
-            cache[type][name] = result;
+            update[type][name] = result;
             //cache[type][name+'UI'] = service.createUI(name, result);
             callback(null, result);
           }
