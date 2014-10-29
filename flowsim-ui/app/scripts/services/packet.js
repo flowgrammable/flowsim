@@ -94,7 +94,6 @@ function PacketUI(pkt) {
   this.name = pkt.name;
   this.bytes = pkt.bytes;
   this.protocols = _.map(pkt.protocols, function(p) {
-    console.log('pkt name:', p.name);
     return new ProtocolUI(p.name);
   });
 }
