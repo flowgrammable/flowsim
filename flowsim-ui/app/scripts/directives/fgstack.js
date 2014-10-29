@@ -32,8 +32,6 @@ angular.module('flowsimUiApp')
             name = $scope.stack.length ? 
                       $scope.stack[$scope.stack.length-1].name
                       : '';
-           console.log('yo: ' + name);
-            console.log('zo: ' + $scope.getOptions()(name));
             $scope.options = $scope.getOptions()(name);
           }
         });
@@ -47,6 +45,7 @@ angular.module('flowsimUiApp')
            $scope.nodeType = '';
            name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name
                                       : '';
+           console.log($scope.stack);
            console.log('yo: ' + name);
            console.log('zo: ' + $scope.getOptions()(name));
            $scope.options = $scope.getOptions()(name);

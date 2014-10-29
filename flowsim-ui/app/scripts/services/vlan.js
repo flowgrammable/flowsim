@@ -1,7 +1,5 @@
 'use strict';
 
-(function(){
-
 angular.module('flowsimUiApp')
   .service('VLAN', function(fgConstraints, fgUI) {
 
@@ -74,9 +72,8 @@ VLAN_UI.prototype.clearPayload = function() {
     this.create = function() {
       return new VLAN();
     };
-    this.createUI = function(){
-      return new VLAN();
+    this.createUI = function(vlan){
+      return new VLAN_UI(vlan);
     };
   });
 
-})();

@@ -26,35 +26,34 @@ var Protocols = {
   Payload: PAYLOAD
 };
 
-function dispatch(name, method) {
-  console.log('dispatch name:', name);
-  console.log('name length', name.length);
+function dispatch(name, method, p) {
+  console.log('dispatch name:', name + '-' + method);
   switch(name) {
     case ETHERNET.name:
       console.log('hit ethernet case');
-      return ETHERNET[method]();
+      return ETHERNET[method](p);
     case VLAN.name:
-      return VLAN[method]();
+      return VLAN[method](p);
     case MPLS.name:
-      return MPLS[method]();
+      return MPLS[method](p);
     case ARP.name:
-      return ARP[method]();
+      return ARP[method](p);
     case IPV4.name:
-      return IPV4[method]();
+      return IPV4[method](p);
     case IPV6.name:
-      return IPV6[method]();
+      return IPV6[method](p);
     case ICMPV4.name:
-      return ICMPV4[method]();
+      return ICMPV4[method](p);
     case ICMPV6.name:
-      return ICMPV6[method]();
+      return ICMPV6[method](p);
     case TCP.name:
-      return TCP[method]();
+      return TCP[method](p);
     case UDP.name:
-      return UDP[method]();
+      return UDP[method](p);
     case SCTP.name:
-      return SCTP[method]();
+      return SCTP[method](p);
     case PAYLOAD.name:
-      return PAYLOAD[method]();
+      return PAYLOAD[method](p);
     default:
       return null;
   }
@@ -64,8 +63,8 @@ function Protocol(name) {
   return dispatch(name, 'create');
 }
 
-function ProtocolUI(name) {
-  return dispatch(name, 'createUI');
+function ProtocolUI(p) {
+  return dispatch(p.name, 'createUI', p);
 }
 
 function Packet(name) {
@@ -93,7 +92,7 @@ function PacketUI(pkt) {
   this.name = pkt.name;
   this.bytes = pkt.bytes;
   this.protocols = _.map(pkt.protocols, function(p) {
-    return new ProtocolUI(p.name);
+    return new ProtocolUI(p);
   });
 }
 

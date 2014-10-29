@@ -18,59 +18,72 @@ function isMAC(addr) {
   return macPattern.test(addr);
 }
 
-function _Ethernet(fields) {
+function Ethernet() {
   this.name = 'Ethernet';
-  this.attrs = [ {
-    name: 'Src',
-    value: fields ? fields.src : '00:00:00:00:00:00',
-    test: isMAC,
-    tip: 'Ethernet source MAC address'
-  }, {
-    name: 'Dst',
-    value: fields ? fields.dst : '00:00:00:00:00:00',
-    test: isMAC,
-    tip: 'Ethernet destination MAC address'
-  }, {
-    name: 'Typelen',
-    value: fields ? fields.typelen : '0x0000',
-    test: fgConstraints.isUInt(0, 0xffff),
-    tip: 'Ethernet type/length of payload'
-  }];
+  this.bytes = 14;
+  this.fields = {
+    src: '00:00:00:00:00:00',
+    dst: '00:00:00:00:00:00',
+    typelen: 0x0800
+  };
 }
 
-_Ethernet.prototype.bytes = function() {
-  return 14;
-};
+function Ethernet_UI(eth) {
+  this.name = eth.name;
+  this.bytes = eth.bytes;
+  this.attrs = _.map(eth.fields, function(value, key) {
+    switch(key) {
+      case 'src':
+        return {
+          name: key,
+          value: value,
+          test: isMAC,
+          tip: 'Ethernet source MAC address'
+        };
+      case 'dst':
+        return {
+          name: key,
+          value: value,
+          test: isMAC,
+          tip: 'Ethernet destination MAC address'
+        };
+      case 'typelen':
+        return {
+          name: key,
+          value: '0x'+value.toString(16),
+          test: fgConstraints.isUInt(0, 0xffff),
+          tip: 'Ethernet type/length of payload'
+        };
+      default:
+        return {
+          name: key,
+          value: value,
+          test: function() { return true; },
+          tip: 'Unknown'
+        };
+    }
+  });
+}
 
-_Ethernet.prototype.setPayload = function(name) {
+Ethernet_UI.prototype.setPayload = function(name) {
   this.attrs[2].value = '0x' + (Payloads[name] || 0).toString(16);
 };
 
-_Ethernet.prototype.clearPayload = function() {
+Ethernet_UI.prototype.clearPayload = function() {
   this.attrs[2].value = '0x0000';
 };
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.ETHERNET
- * @description
- * # ETHERNET
- * Service in the flowsimUiApp.
- */
+  
+this.name = 'Ethernet';
+this.create = function() {
+  return new Ethernet();
+};
 
-    this.name = 'Ethernet';
-
-    this.create = function() {
-      return new _Ethernet();
-    };
-
-    this.createUI = function(fields) {
-      console.log('createUI called');
-      return new _Ethernet(fields);
-    };
-
-    this.Payloads = Object.keys(Payloads);
-
-  });
+this.createUI = function(fields) {
+  console.log('createUI called');
+  return new Ethernet_UI(fields);
+};
+  
+this.Payloads = Object.keys(Payloads);
 
 });
