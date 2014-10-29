@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
 
     var post    = {};     // (base,UI) ready for HTTP POST
     var update  = {};     // (base,UI) ready for HTTP UPDATE
-    var destroy = {};     // base ready for HTTP DELETE
+    var _delete = {};     // base ready for HTTP DELETE
 
     // Server synchronization state
     // ... from operations: create, update failure, delete
@@ -85,14 +85,14 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in post))    { post[type] = {}; }
       if(!(type in update))  { update[type] = {}; }
-      if(!(type in destroy)) { destroy[type] = {}; }
+      if(!(type in _delete)) { _delete[type] = {}; }
 
       // was never saved
       if(post[type][name]) {
         delete post[type][name];
         delete post[type][name+'UI'];
       } else if(update[type][name]) {
-        destroy[type][name] = update[type][name];
+        _delete[type][name] = update[type][name];
         delete update[type][name];
         delete update[type][name+'UI'];
       }
@@ -138,15 +138,15 @@ angular.module('flowsimUiApp')
           }
         });
       });
-      _.each(destroy, function(_destroy, type) {
-        _.each(_destroy, function(value, key) {
+      _.each(_delete, function(__delete, type) {
+        _.each(__delete, function(value, key) {
           Subscriber.httpDelete('/api/'+type+'/'+key, {},
                                 function(err, result) {
             if(err) {
               dirty = true;
               callback(err);
             } else {
-              delete destroy[type][key];
+              delete _delete[type][key];
               callback(null);
             }
           });

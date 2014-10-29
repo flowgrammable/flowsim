@@ -41,8 +41,6 @@ angular.module('flowsimUiApp')
 
     // Method to delete a packet
     $scope.delPacket = function(name) {
-      console.log(Object.keys(fgCache));
-      console.log(fgCache.destroy);
       fgCache.destroy('packet', name);
       delete $scope.names[name];
     };
