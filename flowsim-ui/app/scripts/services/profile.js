@@ -34,11 +34,8 @@ function Profile(name) {
   this.name = name;
 }
 
-function ProfileUI(name, obj) {
-  this.name = name;
-  if(obj === undefined) {
-  } else {
-  }
+function ProfileUI(profile) {
+  this.name = profile.name;
 }
 
 ProfileUI.prototype.toBase = function() {
@@ -60,8 +57,8 @@ angular.module('flowsimUiApp')
       return new Profile(name);
     }
 
-    function createUI(name, obj) {
-      return new ProfileUI(name, obj);
+    function createUI(profile) {
+      return new ProfileUI(profile);
     }
 
     function setVersion(profile, version) {

@@ -12,12 +12,8 @@ function Switch(name) {
   this.name = name;
 }
 
-function SwitchUI(name, obj) {
-  this.name = name;
-  if(obj === undefined) {
-  } else {
-    // Switch type
-  }
+function SwitchUI(sw) {
+  this.name = sw.name;
 }
 
 SwitchUI.prototype.toBase = function() {
@@ -32,8 +28,8 @@ angular.module('flowsimUiApp')
       return new Switch(name);
     }
 
-    function createUI(name, obj) {
-      return new SwitchUI(name, obj);
+    function createUI(sw) {
+      return new SwitchUI(sw);
     }
 
     return {
