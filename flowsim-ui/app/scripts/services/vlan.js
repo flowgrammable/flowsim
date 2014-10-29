@@ -11,40 +11,49 @@ var Payloads = {
  'Payload': 0
 };
 
-function _VLAN() {
-  this.name = 'VLAN';
-  this.attrs = [{
-    name: 'PCP',
-    value: '0',
-    test: fgConstraints.isUInt(0, 7),
-    tip: 'VLAN Priority Code Point'
-  }, {
-    name: 'DEI',
-    value: '0',
-    test: fgConstraints.isUInt(0,1),
-    tip: 'VLAN Drop Eligibility Indicator'
-  }, {
-    name: 'VLAN ID',
-    value: '0',
-    test: fgConstraints.isUInt(0, 0x0fff),
-    tip: 'VLAN Tag Identifier'
-  }, {
-    name: 'TypeLen',
-    value: '0x0000',
-    test: fgConstraints.isUInt(0, 0xffff),
-    tip: 'Ethernet type or length of payload'
-  }];
+function VLAN(name) {
+  this.name = name;
+  this.bytes = 4;
+  this.fields = {
+    pcp: 0,
+    dei: 0,
+    vlan_id: 0,
+    typelen: 0
+  };
 }
 
-_VLAN.prototype.bytes = function() {
-  return 4;
-};
+function VLAN_UI(name, vlan) {
+  this.name = name;
+  this.bytes = 4;
+  this.attrs = _.map(vlan.fields, function(value, key) {
+    switch(key) {
+      case 'pcp':
+        return mkLabelInput(key, value, fgConstraints.isUInt(0,7), 
+                            'VLAN Priority Code Point');
+      case 'dei':
+        return mkLabelInput(key, value, fgConstraints.isUInt(0,3), 
+                            '');
+      case 'vlan_id'
+        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0x0fff), 
+                            'VLAN Tag Identifier');
+      case 'typelen'
+        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0xffff), 
+                            'Ethernet type or length of payload');
 
-_VLAN.prototype.setPayload = function(name) {
+  });
+}
+
+VLAN_UI.prototype.toBase = function() {
+  var result = new VLAN(this.name);
+  result.fields = fgUI.stripLabelInputs(this.attrs);
+  return result;
+}
+
+VLAN_UI.prototype.setPayload = function(name) {
   this.attrs[3].value = '0x' + (Payloads[name] || 0).toString(16);
 };
 
-_VLAN.prototype.clearPayload = function() {
+VLAN_UI.prototype.clearPayload = function() {
   this.attrs[3].value = '0x0000';
 };
 
@@ -56,14 +65,14 @@ _VLAN.prototype.clearPayload = function() {
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('VLAN', function VLAN() {
+  .service('VLAN', function() {
     this.name = 'VLAN';
     this.Payloads = Object.keys(Payloads);
     this.create = function() {
-      return new _VLAN();
+      return new VLAN();
     };
     this.createUI = function(){
-      return new _VLAN();
+      return new VLAN();
     };
   });
 
