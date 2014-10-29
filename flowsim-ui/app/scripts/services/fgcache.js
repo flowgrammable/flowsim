@@ -94,11 +94,7 @@ angular.module('flowsimUiApp')
         destroy[type][name] = update[type][name];
         delete update[type][name];
         delete update[type][name+'UI'];
-      } else {
-        destroy[type][name] = post[type][name];
-        delete post[type][name];
-        delete post[type][name+'UI'];
-      }
+      } 
     }
 
     function save(callback) {
