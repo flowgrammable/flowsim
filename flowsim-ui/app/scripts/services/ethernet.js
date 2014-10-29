@@ -17,21 +17,21 @@ function isMAC(addr) {
   return macPattern.test(addr);
 }
 
-function _Ethernet() {
+function _Ethernet(fields) {
   this.name = 'Ethernet';
   this.attrs = [ {
     name: 'Src',
-    value: '00:00:00:00:00:00',
+    value: fields ? fields.src : '00:00:00:00:00:00',
     test: isMAC,
     tip: 'Ethernet source MAC address'
   }, {
     name: 'Dst',
-    value: '00:00:00:00:00:00',
+    value: fields ? fields.dst : '00:00:00:00:00:00',
     test: isMAC,
     tip: 'Ethernet destination MAC address'
   }, {
     name: 'Typelen',
-    value: '0x0000',
+    value: fields ? fields.typelen : '0x0000',
     test: fgConstraints.isUInt(0, 0xffff),
     tip: 'Ethernet type/length of payload'
   }];
@@ -59,7 +59,14 @@ _Ethernet.prototype.clearPayload = function() {
 angular.module('flowsimUiApp')
   .service('ETHERNET', function ETHERNET() {
 
-    this.create = function(fields) {
+    this.name = 'Ethernet';
+
+    this.create = function() {
+      return new _Ethernet();
+    };
+
+    this.createUI = function(fields) {
+      console.log('createUI called');
       return new _Ethernet(fields);
     };
 

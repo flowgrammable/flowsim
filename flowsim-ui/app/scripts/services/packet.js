@@ -9,8 +9,8 @@
  */
 
 angular.module('flowsimUiApp')
-  .factory('Packet', function(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV6,
-                              TCP, UDP, SCTP, PAYLOAD) {
+  .factory('Packet', function(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4,
+                            ICMPV6, TCP, UDP, SCTP, PAYLOAD) {
 
 var Protocols = {
   Ethernet: ETHERNET,
@@ -27,8 +27,11 @@ var Protocols = {
 };
 
 function dispatch(name, method) {
+  console.log('dispatch name:', name);
+  console.log('name length', name.length);
   switch(name) {
     case ETHERNET.name:
+      console.log('hit ethernet case');
       return ETHERNET[method]();
     case VLAN.name:
       return VLAN[method]();
@@ -69,7 +72,7 @@ function Packet(name) {
   this.name = name;
   this.bytes = 0;
   this.protocols = [
-    ETHERNET.create();
+    ETHERNET.create()
   ];
 }
 
@@ -86,12 +89,31 @@ Packet.prototype.pop = function() {
   this.prototocols.splice(this.protocols.length-1);
 };
 
+
+
 function PacketUI(pkt) {
   this.name = pkt.name;
-  this.bytes = pkt.bytes;
-  this.protocols = _.map(pkt.protocols, function(p) {
-    return new ProtocolUI(p);
+  this._bytes = pkt.bytes;
+
+//  this.protocols = _.map(pkt.protocols, function(p) {
+//    return new ProtocolUI(p);
+//  });
+  this._payload = _.map(pkt.protocols, function(p) {
+    console.log('pkt name:', p.name);
+    return new ProtocolUI(p.name);
   });
+}
+
+PacketUI.prototype.bytes = function() {
+  return this._bytes;
+}
+
+PacketUI.prototype.top = function() {
+  if(this._payload.length) {
+    return this._payload[this._payload.length-1];
+  } else {
+    return null;
+  }
 }
 
 PacketUI.prototype.toBase = function() {
@@ -112,13 +134,15 @@ function createUI(pkt) {
   return new PacketUI(pkt);
 }
 
-function getPayloads(protocol) {
-  if(protocol in Protocols) {
-    return Protocols[protocol].Payloads;
+function getPayloads(name) {
+  console.log('getpaylodas name:', name);
+  if(name in Protocols) {
+    return Protocols[name];
   } else {
     return [];
   }
 }
+
 
 return {
   create: create,

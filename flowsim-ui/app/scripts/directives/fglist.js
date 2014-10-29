@@ -24,7 +24,7 @@ angular.module('flowsimUiApp')
         $scope.itemName = '';             // input name to create item
         $scope.focus    = -1;                // item with current focus
         $scope.errorMsg = '';         // input name error message
-        
+
         $scope.items = [];                // display list of items
         $scope.init = false;              // dislay list initialization state
 
@@ -40,30 +40,30 @@ angular.module('flowsimUiApp')
             $scope.onSet()($scope.items[pos]);    // Update the parent with name
           }
         };
-        
+
         $scope.addItem = function() {
           $scope.errorMsg = $scope.onAdd()($scope.itemName);
           if(!$scope.errorMsg.length) {
             $scope.items.push($scope.itemName);
             $scope.shiftFocus($scope.items.length-1);
-          } 
+          }
         };
-        
+
         $scope.delItem = function(pos) {
           var item;
           if(pos >= -1 && pos < $scope.items.length) {
-            item = $scope.items.splice(pos, 1); 
+            item = $scope.items.splice(pos, 1);
             if(pos < $scope.focus) {
               $scope.shiftFocus($scope.focus-1);
             }
             if(pos == $scope.focus && pos == $scope.items.length) {
               $scope.shiftFocus($scope.focus-1);
-            } 
+            }
             $scope.onDel()(item);
             $scope.clearState();
           }
         };
-        
+
         $scope.onInit()(function(err, result) {
           if(err) {
             console.log(err.details);
@@ -78,4 +78,3 @@ angular.module('flowsimUiApp')
       }
     };
   });
-

@@ -52,7 +52,7 @@ angular.module('flowsimUiApp')
         $scope.packet = null;
         $scope.$broadcast('setStack', $scope.packet);
       } else {
-        fgCache.get('packet', name, function(err, result) {
+        fgCache.get('packet', name, Packet, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {
@@ -67,7 +67,7 @@ angular.module('flowsimUiApp')
       fgCache.save(function(err, result) {
         if(err) {
           $scope.dirty = true;
-          console.log(err.details)
+          console.log(err.details);
         } else {
           scope.dirty = false;
         }
@@ -80,7 +80,8 @@ angular.module('flowsimUiApp')
     };
 
     $scope.getProtocols = function(packet) {
-      return Protocols.getOptions(packet.top().name);
+      //return Protocols.getOptions(packet.top().name);
+      return Packet.getPayloads(packet.top().name);
     };
 
     $scope.createProtocol = function(name) {

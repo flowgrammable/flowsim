@@ -15,8 +15,8 @@ angular.module('flowsimUiApp')
     var destroy = {};     // base ready for HTTP DELETE
 
     // Server synchronization state
-    // ... from operations: create, update failure, delete 
-    var dirty = false;   
+    // ... from operations: create, update failure, delete
+    var dirty = false;
 
     /* get - retrieve a list of names from the cahce or server
      */
@@ -57,7 +57,7 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in update)) { update[type] = {}; }
 
-      itf(Object.keys(update[type]).length) {
+      if(Object.keys(update[type]).length) {
         callback(null, Object.keys(update[type]));
       } else {
         Subscriber.httpGet('/api/'+type, {}, function(err, result) {
@@ -74,8 +74,9 @@ angular.module('flowsimUiApp')
       post[type][name+'UI'] = service.createUI(post[type][name]);
       post[type][name+'UI'].dirty = true;
       dirty = true;
+      console.log('post', post);
       return {
-        base: post[type][name+'UI'],
+        base: post[type][name],
         ui: post[type][name+'UI']
       };
     }
@@ -94,7 +95,7 @@ angular.module('flowsimUiApp')
         destroy[type][name] = update[type][name];
         delete update[type][name];
         delete update[type][name+'UI'];
-      } 
+      }
     }
 
     function save(callback) {
@@ -102,7 +103,7 @@ angular.module('flowsimUiApp')
       _.each(post, function(_post, type) {
         _.each(post, function(value, key) {
           post[type][key] = post[type][key+'UI'].toBase();
-            Subscriber.httpPost('/api/'+type+'/'+key, value, 
+            Subscriber.httpPost('/api/'+type+'/'+key, value,
                                 function(err, result) {
               if(err) {
                 dirty = true;
@@ -113,6 +114,8 @@ angular.module('flowsimUiApp')
                 update[type][key+'UI'].dirty = false;
                 delete post[type][key];
                 delete post[type][key+'UI'];
+                console.log('post after save:',post);
+                console.log('update after save:', update);
                 callback(null);
               }
             });
@@ -152,7 +155,6 @@ angular.module('flowsimUiApp')
     }
 
     return {
-      sync: sync,
       get: get,
       getNames: getNames,
       create: create,
