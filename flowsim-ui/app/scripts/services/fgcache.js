@@ -31,7 +31,7 @@ angular.module('flowsimUiApp')
       return state;
     }
 
-    function get(type, name, callback) {
+    function get(type, name, service, callback) {
       // initialize the cache
       if(!(type in cache)) { cache[type] = {}; }
 
@@ -43,7 +43,7 @@ angular.module('flowsimUiApp')
             callback(err);
           } else {
             cache[type][name] = result;
-            //Protocols.attachPacket(result);
+            //cache[type][name+'UI'] = service.createUI(result);
             callback(null, result);
           }
         });
