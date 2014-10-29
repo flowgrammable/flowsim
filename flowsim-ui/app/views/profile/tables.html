@@ -1,32 +1,31 @@
 
-<div class="container">
-<table class="table table-header-rotated">
+<br>
+<div style="text-align: center">
+<div class="btn-group">
+  <button type="button" class="btn btn-default" ng-class="{'active': $index==activeProto}"
+          ng-repeat="protocol in protocols" ng-click="showProto($index)">
+    {{protocol.name}}
+  </button>
+</div>
+</div>
+
+<table class="table table-hover">
   <thead>
   <tr>
-    <th><div><span>Table Id</span></div></th>
-    <th><div><span>Max Entries</span></div></th>
-    <th class="rotate-45"><div><span>Match Eth.src</span></div></th>
-    <th class="rotate-45"><div><span>Match Eth.dst</span></div></th>
-    <th class="rotate-45"><div><span>Match Eth.typelen</span></div></th>
-    <th class="rotate-45"><div><span>Match VLAN.pcp</span></div></th>
-    <th class="rotate-45"><div><span>Match VLAN.vid</span></div></th>
-    <th class="rotate-45"><div><span>Instruction</span></div></th>
-    <th class="rotate-45"><div><span>Action</span></div></th>
+    <td>Table Id</td>
+    <td>Max Entries</td>
+    <td ng-repeat="attr in protocols[activeProto].attrs">
+      {{attr.name}}
+    </td>
   </tr>
   </thead>
   <tbody>
   <tr>
     <td>0</td>
-    <td>1024</td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
-    <td><input type="checkbox"></td>
+    <td><input type="text" value="1024"/></td>
+    <td ng-repeat="attr in protocols[activeProto].attrs">
+      <input type="{{attr.type}}" ng-model="attr.value"/>
+    </td>
   </tr>
   </tbody>
 </table>
-</div>
-

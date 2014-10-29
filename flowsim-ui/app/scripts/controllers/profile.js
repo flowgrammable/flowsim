@@ -18,6 +18,8 @@ angular.module('flowsimUiApp')
     $scope.set = function(idx) {
       Profile.setVersion($scope.profile, idx);
     };
+
+    $scope.activeVer = 0;
     $scope.versions = [
       'OpenFlow 1.0',
       'OpenFlow 1.1',
@@ -25,6 +27,84 @@ angular.module('flowsimUiApp')
       'OpenFlow 1.3',
       'OpenFlow 1.4'
     ];
+
+    $scope.activeProto = 0;
+    $scope.protocols = [{
+      name: 'Internal',
+      attrs: [{
+        name: 'In Port',
+        type: 'checkbox',
+        value: true,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'In Port Mask',
+        type: 'text',
+        value: 0,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'Metadata',
+        type: 'checkbox',
+        value: true,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'Metadata Mask',
+        type: 'text',
+        value: 0,
+        test: function() { return true; },
+        tip: ''
+      }]
+    }, {
+      name: 'Ethernet',
+      attrs: [{
+      }]
+    }, {
+      name: 'VLAN',
+      attrs: [{
+      }]
+    }, {
+      name: 'ARP',
+      attrs: [{
+      }]
+    }, {
+      name: 'MPLS',
+      attrs: [{
+      }]
+    }, {
+      name: 'IPv4',
+      attrs: [{
+      }]
+    }, {
+      name: 'IPv6',
+      attrs: [{
+      }]
+    }, {
+      name: 'ICMPv4',
+      attrs: [{
+      }]
+    }, {
+      name: 'ICMPv6',
+      attrs: [{
+      }]
+    }, {
+      name: 'TCP',
+      attrs: [{
+      }]
+    }, {
+      name: 'UDP',
+      attrs: [{
+      }]
+    }, {
+      name: 'SCTP',
+      attrs: [{
+      }]
+    }];
+
+    $scope.showProto = function(idx) {
+      $scope.activeProto = idx;
+    };
 
     $scope.getProfiles = function(callback) {
       fgCache.getNames('profile', callback);
