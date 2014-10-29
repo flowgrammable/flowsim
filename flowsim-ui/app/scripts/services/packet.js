@@ -7,15 +7,33 @@
  * # Packet
  * Service in the flowsimUiApp.
  */
+
+function Packet(name) {
+  this.name = name;
+}
+
+function PacketUI(name, obj) {
+  this.name = name;
+  if(obj === undefined) {
+  } else {
+  }
+}
+
+PacketUI.prototype.toBase = function() {
+  var result = new Packet(this.name);
+  // do sutff
+  return result;
+}
+
 angular.module('flowsimUiApp')
   .factory('Packet', function(Protocols) {
 
     function create(name) {
-      return new Protocols.createPacket(name);
+      return new Packet(name);
     }
 
     function createUI(name) {
-      return new Protocols.createUI();
+      return new PacketUI();
     }
 
     return {
