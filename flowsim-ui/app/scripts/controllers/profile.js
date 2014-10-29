@@ -38,7 +38,7 @@ angular.module('flowsimUiApp')
         test: function() { return true; },
         tip: ''
       }, {
-        name: 'In Port Mask',
+        name: 'Mask',
         type: 'text',
         value: 0,
         test: function() { return true; },
@@ -50,7 +50,7 @@ angular.module('flowsimUiApp')
         test: function() { return true; },
         tip: ''
       }, {
-        name: 'Metadata Mask',
+        name: 'Mask',
         type: 'text',
         value: 0,
         test: function() { return true; },
@@ -59,6 +59,41 @@ angular.module('flowsimUiApp')
     }, {
       name: 'Ethernet',
       attrs: [{
+        name: 'Src',
+        type: 'checkbox',
+        value: true,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'Mask',
+        type: 'text',
+        value: 0,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'Dst',
+        type: 'checkbox',
+        value: true,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'Mask',
+        type: 'text',
+        value: 0,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'Typelen',
+        type: 'checkbox',
+        value: true,
+        test: function() { return true; },
+        tip: ''
+      }, {
+        name: 'Mask',
+        type: 'text',
+        value: 0,
+        test: function() { return true; },
+        tip: ''
       }]
     }, {
       name: 'VLAN',

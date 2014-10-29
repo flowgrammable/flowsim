@@ -1,39 +1,8 @@
 
-<div class="row">
-  <accordion close-others="false">
-  <div class="col-md-4">
-
-      <accordion-group>
-        <accordion-heading>
-          Datapath
-        </accordion-heading>
-          <fg-label-input ng-repeat="item in datapath" item="item">
-          </fg-label-input>
-      </accordion-group>
-      
-      <accordion-group>
-        <accordion-heading>
-          Tables
-        </accordion-heading>
-      </accordion-group>
-      
-      <accordion-group>
-        <accordion-heading>
-          Ports
-        </accordion-heading>
-      </accordion-group>
-
+<form role="form">
+  <div class="form-group">
+    <label for="datapathId">Identifier</label>
+    <input type="text" class="form-control" id="datapathId" 
+           placeholder="Enter email">
   </div>
-
-  <div class="col-md-4">
-      <accordion-group>
-        <accordion-heading>
-          Meters
-        </accordion-heading>
-      </accordion-group>
-  </div>
-  <div class="col-md-4">
-  </div>
-  </accordion>
-</div>
 

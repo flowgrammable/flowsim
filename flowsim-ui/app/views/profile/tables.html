@@ -1,30 +1,28 @@
 
-<br>
-<div style="text-align: center">
-<div class="btn-group">
-  <button type="button" class="btn btn-default" ng-class="{'active': $index==activeProto}"
-          ng-repeat="protocol in protocols" ng-click="showProto($index)">
-    {{protocol.name}}
-  </button>
-</div>
-</div>
-
-<table class="table table-hover">
+<table class="table table-hover table-condensed table-striped">
   <thead>
   <tr>
-    <td>Table Id</td>
+    <td>Identifier</td>
+    <td>Name</td>
     <td>Max Entries</td>
-    <td ng-repeat="attr in protocols[activeProto].attrs">
-      {{attr.name}}
-    </td>
+    <td>Table Stats</td>
+    <td>Flow Stats</td>
+    <td>Flow Capabilities</td>
   </tr>
   </thead>
   <tbody>
   <tr>
     <td>0</td>
     <td><input type="text" value="1024"/></td>
-    <td ng-repeat="attr in protocols[activeProto].attrs">
-      <input type="{{attr.type}}" ng-model="attr.value"/>
+    <td><input type="text" value=""/></td>
+    <td><input type="checkbox" value="true"/></td>
+    <td><input type="checkbox" value="true"/></td>
+    <td>
+      <div class="btn-group btn-group-xs">
+        <button type="button" class="btn btn-default">Match</button>
+        <button type="button" class="btn btn-default">Instruction</button>
+        <button type="button" class="btn btn-default">Action</button>
+      </div>
     </td>
   </tr>
   </tbody>
