@@ -54,7 +54,7 @@ ProfileUI.prototype.toBase = function() {
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Profile', function(Subscriber) {
+  .factory('Profile', function() {
 
     function create(name) {
       return new Profile(name);

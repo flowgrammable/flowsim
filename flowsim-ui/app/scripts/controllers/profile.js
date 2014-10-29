@@ -152,7 +152,7 @@ angular.module('flowsimUiApp')
       } else if(name.length == 0) {
         return 'Invalid name';
       } else {
-        $scope.profile = fgCache.create('profile', name, Profile);
+        $scope.profile = fgCache.create('profile', name, Profile).ui;
         $scope.names[name] = true;
         $scope.dirty = true;
         return '';
@@ -174,7 +174,7 @@ angular.module('flowsimUiApp')
           if(err) {
             console.log(err.details);
           } else {
-            $scope.profile = result;
+            $scope.profile = result.ui;
             $scope.$broadcast('setProfile', $scope.profile);
           }
         });

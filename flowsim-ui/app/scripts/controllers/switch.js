@@ -24,7 +24,7 @@ angular.module('flowsimUiApp')
       } else if(name.length == 0) {
         return 'Invalid name'; 
       } else { 
-        $scope._switch = fgCache.create('switch', name, Switch);
+        $scope._switch = fgCache.create('switch', name, Switch).ui;
         $scope.names[name] = true;
         $scope.dirty = true;
         return '';
@@ -34,7 +34,6 @@ angular.module('flowsimUiApp')
     $scope.delSwitch = function(name) {
       fgCache.destroy('switch', name);
       delete $scope.names[name];
-      $scope.dirty = !fgCache.sync();
     };
 
     $scope.setSwitch = function(name) {
@@ -46,7 +45,7 @@ angular.module('flowsimUiApp')
           if(err) {
             console.log(err.details);
           } else {
-            $scope._switch = result;
+            $scope._switch = result.ui;
             $scope.$broadcast('setSwitch', $scope._switch);
           }
         });
