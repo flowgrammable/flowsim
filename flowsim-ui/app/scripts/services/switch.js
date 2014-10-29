@@ -20,6 +20,11 @@ function SwitchUI(name, obj) {
   }
 }
 
+SwitchUI.prototype.toBase = function() {
+  var result = new Switch(this.name);
+  return result;
+};
+
 angular.module('flowsimUiApp')
   .factory('Switch', function() {
 
