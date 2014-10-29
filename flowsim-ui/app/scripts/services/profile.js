@@ -43,7 +43,8 @@ function ProfileUI(obj) {
 }
 
 ProfileUI.prototype.toBase = function() {
-  return new Profile();
+  var result = new Profile();
+  return result;
 };
 
 /**
