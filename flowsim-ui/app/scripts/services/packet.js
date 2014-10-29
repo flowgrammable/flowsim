@@ -26,65 +26,43 @@ var Protocols = {
   Payload: PAYLOAD
 };
 
-function Protocol(name) {
+function dispatch(name, method) {
   switch(name) {
     case ETHERNET.name:
-      return ETHERNET.create();
+      return ETHERNET[method]();
     case VLAN.name:
-      return VLAN.create();
+      return VLAN[method]();
     case MPLS.name:
-      return MPLS.create();
+      return MPLS[method]();
     case ARP.name:
-      return ARP.create();
+      return ARP[method]();
     case IPV4.name:
-      return IPV4.create();
+      return IPV4[method]();
     case IPV6.name:
-      return IPV6.create();
+      return IPV6[method]();
     case ICMPV4.name:
-      return ICMPV4.create();
+      return ICMPV4[method]();
     case ICMPV6.name:
-      return ICMPV6.create();
+      return ICMPV6[method]();
     case TCP.name:
-      return TCP.create();
+      return TCP[method]();
     case UDP.name:
-      return UDP.create();
+      return UDP[method]();
     case SCTP.name:
-      return SCTP.create();
+      return SCTP[method]();
     case PAYLOAD.name:
-      return PAYLOAD.create();
+      return PAYLOAD[method]();
     default:
       return null;
   }
 }
 
-function ProtocolUI(protocol) {
-  switch(name) {
-    case ETHERNET.name:
-      return ETHERNET.createUI(protocol);
-    case VLAN.name:
-      return VLAN.createUI(protocol);
-    case MPLS.name:
-      return MPLS.createUI(protocol);
-    case ARP.name:
-      return ARP.createUI(protocol);
-    case IPV4.name:
-      return IPV4.createUI(protocol);
-    case IPV6.name:
-      return IPV6.createUI(protocol);
-    case ICMPV4.name:
-      return ICMPV4.createUI(protocol);
-    case ICMPV6.name:
-      return ICMPV6.createUI(protocol);
-    case TCP.name:
-      return TCP.createUI(protocol);
-    case UDP.name:
-      return UDP.createUI(protocol);
-    case SCTP.name:
-      return SCTP.createUI(protocol);
-    case PAYLOAD.name:
-      return PAYLOAD.createUI(protocol);
-    default:
-      return null;
+function Protocol(name) {
+  return dispatch(name, 'create');
+}
+
+function ProtocolUI(name) {
+  return dispatch(name, 'createUI');
 }
 
 function Packet(name) {
