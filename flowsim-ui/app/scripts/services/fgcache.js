@@ -68,9 +68,8 @@ angular.module('flowsimUiApp')
       if(!(type in cache)) { cache[type] = {}; }
 
       cache[type][name] = service.create(name);
-      cache[type][name+'UI'] = service.createUI(name);
+      //cache[type][name+'UI'] = service.createUI(name);
       cache[type][name].local = true;
-      cache[type][name].dirty = true;
       dirty = true;
       return cache[type][name];
     }
@@ -99,13 +98,13 @@ angular.module('flowsimUiApp')
       _.each(cache, function(_cache, type) {
         _.each(_cache, function(value, key) {
           if(value.local) {
+            delete value.local;
             Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                 function(err, result) {
               if(err) {
                 dirty = true;
                 callback(err);
               } else {
-                value.local = false;
                 value.dirty = false;
                 callback(null);
               }
