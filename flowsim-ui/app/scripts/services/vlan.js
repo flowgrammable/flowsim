@@ -57,11 +57,14 @@ _VLAN.prototype.clearPayload = function() {
  */
 angular.module('flowsimUiApp')
   .service('VLAN', function VLAN() {
+    this.name = 'VLAN';
     this.Payloads = Object.keys(Payloads);
     this.create = function() {
+      return new _VLAN();
+    };
+    this.createUI = function(){
       return new _VLAN();
     };
   });
 
 })();
-
