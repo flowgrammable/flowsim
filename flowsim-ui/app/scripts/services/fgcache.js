@@ -12,6 +12,11 @@ angular.module('flowsimUiApp')
 
     var cache = {};
     var flush = {};
+
+    var post    = {};
+    var update  = {};
+    var destroy = {};
+
     var dirty = false;
 
     function sync() {
