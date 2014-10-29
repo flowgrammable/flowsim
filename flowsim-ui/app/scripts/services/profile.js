@@ -30,11 +30,8 @@ function Ports() {
   this.none       = true;
 }
 
-function Profile() {
-  this.datapath = new Datapath();
-  this.ports = new Ports();
-  this.groups = new Groups();
-  this.meters = new Meters();
+function Profile(name) {
+  this.name = name;
 }
 
 function ProfileUI(obj) {
@@ -60,9 +57,7 @@ angular.module('flowsimUiApp')
   .factory('Profile', function(Subscriber) {
 
     function create(name) {
-      return {
-        name: name
-      };
+      return new Profile(name);
     }
 
     function createUI(obj) {
