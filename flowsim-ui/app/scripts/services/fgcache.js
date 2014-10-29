@@ -10,40 +10,33 @@
 angular.module('flowsimUiApp')
   .factory('fgCache', function(Subscriber, $rootScope) {
 
-    var cache = {};
-    var flush = {};
+    var post    = {};     // (base,UI) ready for HTTP POST
+    var update  = {};     // (base,UI) ready for HTTP UPDATE
+    var destroy = {};     // base ready for HTTP DELETE
 
-    var post    = {};
-    var update  = {};
-    var destroy = {};
+    // Server synchronization state
+    // ... from operations: create, update failure, delete 
+    var dirty = false;   
 
-    var dirty = false;
-
-    /*
-    function sync() {
-      var state = true;
-      _.each(cache, function(_cache, type) {
-        _.each(_cache, function(value, key) {
-          if(value.local || value.dirty) {
-            state = false;
-          }
-        });
-      });
-      _.each(cache, function(_cache, type) {
-        if(Object.keys(_cache).length) {
-          state = false;
-        }
-      });
-      return state;
-    }
-    */
-
+    /* get - retrieve a list of names from the cahce or server
+     */
     function get(type, name, service, callback) {
-      // initialize the cache
+
+      // Initialize the retrievable caches
+      if(!(type in post))   { post[type] = {}; }
       if(!(type in update)) { update[type] = {}; }
 
-      if(name in update[type]) {
-        callback(null, udpate[type][name]);
+      //  Return the object if local or get from server
+      if(name in post[type]) {
+        callback(null, {
+          base: post[type][name],
+          ui: post[type][name+'UI']
+        });
+      } else if(name in update[type]) {
+        callback(null, {
+          base: update[type][name],
+          ui: udpate[type][name+'UI']
+        });
       } else {
         Subscriber.httpGet('/api/'+type+'/'+name, {}, function(err, result) {
           if(err) {
@@ -51,7 +44,10 @@ angular.module('flowsimUiApp')
           } else {
             update[type][name] = result;
             update[type][name+'UI'] = service.createUI(name, result);
-            callback(null, result);
+            callback(null, {
+              base: update[type][name],
+              ui: udpate[type][name+'UI']
+            });
           }
         });
       }
