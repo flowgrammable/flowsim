@@ -73,7 +73,10 @@ angular.module('flowsimUiApp')
       post[type][name] = service.create(name);
       post[type][name+'UI'] = service.createUI(name);
       dirty = true;
-      return post[type][name+'UI'];
+      return {
+        base: post[type][name+'UI'],
+        ui: post[type][name+'UI']
+      };
     }
 
     function destroy(type, name) {
