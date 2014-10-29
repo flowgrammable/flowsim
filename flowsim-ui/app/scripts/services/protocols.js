@@ -79,10 +79,6 @@ angular.module('flowsimUiApp')
       SCTP:     SCTP.Payloads
     };
 
-    this.createPacket = function(name) {
-      return new Packet(name, ETHERNET.create());
-    };
-
     function loadProtocol(payloadAttrs, fields){
       for(var y in payloadAttrs){
         var fieldName = payloadAttrs[y].name.toLowerCase();
@@ -92,10 +88,6 @@ angular.module('flowsimUiApp')
 
       }
     }
-
-    this.attach = function(packet) {
-
-    };
 
     this.loadPacket = function(packetBody) {
       var pack = new Packet(packetBody.name);
@@ -113,45 +105,6 @@ angular.module('flowsimUiApp')
         }
       }
       return pack;
-    };
-
-    this.getOptions = function(name) {
-      if(name in Payloads) {
-        return Payloads[name];
-      } else {
-        return [];
-      }
-    };
-
-    this.createProtocol = function(name) {
-      switch(name) {
-        case 'Ethernet':
-          return ETHERNET.create();
-        case 'VLAN':
-          return VLAN.create();
-        case 'MPLS':
-          return MPLS.create();
-        case 'ARP':
-          return ARP.create();
-        case 'IPv4':
-          return IPV4.create();
-        case 'IPv6':
-          return IPV6.create();
-        case 'ICMPv4':
-          return ICMPV4.create();
-        case 'ICMPv6':
-          return ICMPV6.create();
-        case 'TCP':
-          return TCP.create();
-        case 'UDP':
-          return UDP.create();
-        case 'SCTP':
-          return SCTP.create();
-        case 'Payload':
-          return PAYLOAD.create();
-        default:
-          return null;
-      }
     };
 
   });

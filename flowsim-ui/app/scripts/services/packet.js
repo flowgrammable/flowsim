@@ -134,9 +134,18 @@ function createUI(pkt) {
   return new PacketUI(pkt);
 }
 
+function getPayloads(protocol) {
+  if(protocol in Protocols) {
+    return Protocols[protocol].Payloads;
+  } else {
+    return [];
+  }
+}
+
 return {
   create: create,
-  createUI: createUI
+  createUI: createUI,
+  getPayloads: getPayloads
 };
 
 });
