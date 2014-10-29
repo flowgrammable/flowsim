@@ -98,10 +98,8 @@ angular.module('flowsimUiApp')
 
     function save(callback) {
       dirty = false;
-      _.each(cache, function(_cache, type) {
-        _.each(_cache, function(value, key) {
-          if(value.local) {
-            delete value.local;
+      _.each(post, function(_post, type) {
+        _.each(post, function(value, key) {
             Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                 function(err, result) {
               if(err) {
@@ -113,7 +111,11 @@ angular.module('flowsimUiApp')
                 callback(null);
               }
             });
-          } else if(value.dirty) {
+        });
+      });
+      _.each(update, function(_update, type) {
+        _.each(_update, function(value, key) {
+          if(value.dirty) {
             Subscriber.httpUpdate('/api/'+type+'/'+key, value,
                                   function(err, result) {
               if(err) {
@@ -128,8 +130,8 @@ angular.module('flowsimUiApp')
         });
       });
 
-      _.each(flush, function(_flush, type) {
-        _.each(_flush, function(value, key) {
+      _.each(destroy, function(_destroy, type) {
+        _.each(_destroy, function(value, key) {
           Subscriber.httpDelete('/api/'+type+'/'+key, {},
                                 function(err, result) {
             if(err) {
