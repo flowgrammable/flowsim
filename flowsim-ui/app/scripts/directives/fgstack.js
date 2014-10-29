@@ -25,28 +25,41 @@ angular.module('flowsimUiApp')
 
         // Update the current display
         $scope.$on('setStack', function(ev, data) {
+          var name;
           console.log('current setstack,', data);
           $scope.stack = data;
           if(data) {
-            $scope.options = $scope.getOptions()(data);
+            name = $scope.stack.length ? 
+                      $scope.stack[$scope.stack.length-1].name
+                      : '';
+           console.log('yo: ' + name);
+            console.log('zo: ' + $scope.getOptions()(name));
+            $scope.options = $scope.getOptions()(name);
           }
         });
 
         // Add a new Node type to the back of the stack
        $scope.addNode = function() {
-         var node;
-         if($scope.nodeType.length > 0) {
+         var node, name;
+         if($scope.nodeType.length) {
            node = $scope.createNode()($scope.nodeType);
            $scope.stack.push(node);
            $scope.nodeType = '';
-           $scope.options = $scope.getOptions()($scope.stack);
+           name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name
+                                      : '';
+           console.log('yo: ' + name);
+           console.log('zo: ' + $scope.getOptions()(name));
+           $scope.options = $scope.getOptions()(name);
          }
        };
 
        // Delete the node from the top of the stack
        $scope.delNode = function() {
+         var name;
          $scope.stack.pop();
-         $scope.options = $scope.getOptions()($scope.stack);
+         name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name 
+                                    : '';
+         $scope.options = $scope.getOptions()(name);
        };
 
       $scope.$watch('stack', function() {

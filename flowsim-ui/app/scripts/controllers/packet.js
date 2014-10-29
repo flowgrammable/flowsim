@@ -41,9 +41,10 @@ angular.module('flowsimUiApp')
 
     // Method to delete a packet
     $scope.delPacket = function(name) {
+      console.log(Object.keys(fgCache));
+      console.log(fgCache.destroy);
       fgCache.destroy('packet', name);
       delete $scope.names[name];
-      $scope.dirty = !fgCache.sync();
     };
 
     // function for changing the focus state of the controller
@@ -57,7 +58,7 @@ angular.module('flowsimUiApp')
             console.log(err.details);
           } else {
             $scope.packet = result.ui;
-            $scope.$broadcast('setStack', $scope.packet);
+            $scope.$broadcast('setStack', $scope.packet.protocols);
           }
         });
       }
@@ -79,13 +80,12 @@ angular.module('flowsimUiApp')
       $scope.packet.dirty = true;
     };
 
-    $scope.getProtocols = function(packet) {
-      //return Protocols.getOptions(packet.top().name);
-      return Packet.getPayloads(packet.top().name);
+    $scope.getProtocols = function(name) {
+      return Packet.getPayloads(name);
     };
 
     $scope.createProtocol = function(name) {
-      return Protocols.createProtocol(name);
+      return Packet.createProtocolUI(name);
     };
 
   });

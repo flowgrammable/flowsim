@@ -89,7 +89,6 @@ Packet.prototype.pop = function() {
   this.prototocols.splice(this.protocols.length-1);
 };
 
-
 function PacketUI(pkt) {
   this.name = pkt.name;
   this.bytes = pkt.bytes;
@@ -107,6 +106,9 @@ PacketUI.prototype.toBase = function() {
   return result;
 }
 
+PacketUI.prototype.top = function() {
+  return this.protocols.length ? this.protocols[this.protocols.length-1] : null;
+}
 
 function create(name) {
   return new Packet(name);
@@ -117,9 +119,8 @@ function createUI(pkt) {
 }
 
 function getPayloads(name) {
-  console.log('getpaylodas name:', name);
   if(name in Protocols) {
-    return Protocols[name];
+    return Protocols[name].Payloads;
   } else {
     return [];
   }
@@ -129,6 +130,8 @@ function getPayloads(name) {
 return {
   create: create,
   createUI: createUI,
+  createProtocol: Protocol,
+  createProtocolUI: ProtocolUI,
   getPayloads: getPayloads
 };
 
