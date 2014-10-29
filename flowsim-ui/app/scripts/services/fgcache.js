@@ -61,7 +61,7 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in update)) { update[type] = {}; }
 
-      if(Object.keys(update[type]).length) {
+      itf(Object.keys(update[type]).length) {
         callback(null, Object.keys(update[type]));
       } else {
         Subscriber.httpGet('/api/'+type, {}, function(err, result) {
@@ -90,7 +90,7 @@ angular.module('flowsimUiApp')
       if(post[type][name]) {
         delete post[type][name];
         delete post[type][name+'UI'];
-      } else if {
+      } else if(update[type][name]) {
         destroy[type][name] = update[type][name];
         delete update[type][name];
         delete update[type][name+'UI'];
