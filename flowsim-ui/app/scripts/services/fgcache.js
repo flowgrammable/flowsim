@@ -102,7 +102,8 @@ angular.module('flowsimUiApp')
             Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                 function(err, result) {
               if(err) {
-                dirty = true;
+                value.local = true;
+                dirty       = true;
                 callback(err);
               } else {
                 value.dirty = false;
