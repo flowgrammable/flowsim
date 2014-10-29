@@ -48,3 +48,13 @@ CREATE TABLE profile
   profile JSON NOT NULL,                                    -- profile
   unique(subscriber_id, name)                              -- name unique to sub
 );
+
+-- create the primary switch table
+CREATE TABLE switch 
+(
+  id SERIAL PRIMARY KEY,                        -- internal id uses for sub
+  subscriber_id INTEGER references subscriber(id) NOT NULL, -- ref to sub
+  name VARCHAR(60) NOT NULL,                                -- switch name
+  _switch JSON NOT NULL,                                    -- switch 
+  unique(subscriber_id, name)                              -- name unique to sub
+);

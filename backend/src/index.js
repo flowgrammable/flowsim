@@ -14,6 +14,8 @@ var tmp = require('./template');
 var srv = require('./server');
 var sub = require('./subscriber');
 var pac = require('./packet');
+var pro = require('./profile');
+var swi = require('./switch');
 var log = require('./logger');
 
 // Process the command line
@@ -53,6 +55,18 @@ var mods = [
     logger: logger
   }),
   new pac.Packet({
+    configuration: config,
+    database: db,
+    server: restServer,
+    logger: logger
+  }),
+  new pro.Profile({
+    configuration: config,
+    database: db,
+    server: restServer,
+    logger: logger
+  }),
+  new swi.Switch({
     configuration: config,
     database: db,
     server: restServer,

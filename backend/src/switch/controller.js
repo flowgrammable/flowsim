@@ -1,22 +1,22 @@
 
 /**
- * @module profile
+ * @module switch
  * @requires module:utils~Formatter module:storage
  */
 
-(/** @lends module:profile */function(){
+(/** @lends module:switch */function(){
 
 
 var fmt = require('../utils/formatter');
 var msg = require('./msg');
 
 /**
- * A controller containins the primary business logic for all profile module
+ * A controller containins the primary business logic for all switch module
  * services. It is constructed with references to necessary external services
  * and provides an interface for each of its public service offerings.
  *
  * @constructor
- * @param {Object} s          - profile storage
+ * @param {Object} s          - switch storage
  * @param {Object} h          - server
  * @param {Object} l          - logger engine
  */
@@ -40,19 +40,19 @@ Controller.prototype.toFormatter = function(f) {
 Controller.prototype.toString = fmt.toString;
 
 /**
- * Given a subscriber_id and profile attempt to store the profile
+ * Given a subscriber_id and switch attempt to store the switch
  * in the database.
  *
  * @param {Integer} subscriber_id - subscriber id
- * @param {Object} profile - a subscriber profile
+ * @param {Object} switch - a subscriber switch
  * @param {Function} callback - standard callback
  */
-Controller.prototype.create = function(subscriber_id, profile, cb)
+Controller.prototype.create = function(subscriber_id, _switch, cb)
 {
   var that = this;
-  // Check if profile name already exists for subscriber
-  this.storage.createProfile(subscriber_id, profile,
-    function(err, profile) {
+  // Check if switch name already exists for subscriber
+  this.storage.createSwitch(subscriber_id, _switch,
+    function(err, result) {
       if(err) {
         that.logger.error(err);
         cb(err);
@@ -63,7 +63,7 @@ Controller.prototype.create = function(subscriber_id, profile, cb)
 };
 
 /**
- * Given a subscriber_id return a list of profile names that belong
+ * Given a subscriber_id return a list of switch names that belong
  * to the subscriber.
  *
  * @param {Integer} subscriber_id - id of subscriber
@@ -71,49 +71,49 @@ Controller.prototype.create = function(subscriber_id, profile, cb)
  */
 Controller.prototype.list = function(subscriber_id, cb){
   var that = this;
-  this.storage.listProfiles(subscriber_id, function(err, profiles){
+  this.storage.listSwitches(subscriber_id, function(err, switches){
     if(err) {
       that.logger.err(err);
       cb(err);
     } else {
-      cb(null, profiles);
+      cb(null, switches);
     }
   });
 };
 
 /**
- * Given a subscriber_id and profile name attempt to retrieve the details
- * of the profile.
+ * Given a subscriber_id and switch name attempt to retrieve the details
+ * of the switch.
  *
  * @param {Integer} subscriber_id - id of subscriber
- * @param {String} profileName - name of profile to get details for
+ * @param {String} switchName - name of switch to get details for
  * @param {Function} callback - a standard callback function
  */
-Controller.prototype.detail = function(subscriber_id, profileName, cb){
+Controller.prototype.detail = function(subscriber_id, _switchName, cb){
   var that = this;
-  this.storage.getProfileByName(subscriber_id, profileName, function(err, profile){
+  this.storage.getSwitchByName(subscriber_id, _switchName, function(err, result){
     if(err) {
       that.logger.error(err);
       cb(err);
     } else {
-      cb(null, profile);
+      cb(null, result);
     }
   });
 };
 
 /**
- * Given a subscriber_id, profile name, and profile attempt to update a profile
- * with the provided profile
+ * Given a subscriber_id, switch name, and switch attempt to update a switch
+ * with the provided switch
  *
  * @param {Integer} subscriber_id - id of subscriber
- * @param {String} profileName - name of profile to update
- * @param {Object} profile - updated profile
+ * @param {String} switchName - name of switch to update
+ * @param {Object} switch - updated switch
  * @param {Function} callback - a standard callback function
  */
-Controller.prototype.update = function(subscriber_id, profileName, profile, cb){
+Controller.prototype.update = function(subscriber_id, _switchName, _switch, cb){
   var that = this;
-  this.storage.updateProfile(subscriber_id, profileName, profile,
-    function(err, pkt){
+  this.storage.updateSwitch(subscriber_id, _switchName, _switch,
+    function(err, result){
       if(err){
         that.logger.error(err);
         cb(err);
@@ -124,15 +124,15 @@ Controller.prototype.update = function(subscriber_id, profileName, profile, cb){
 };
 
 /**
- * Given a subscriber_id and profile name attempt to remove profile
+ * Given a subscriber_id and switch name attempt to remove switch
  * from database
  *
  * @param {Integer} subscriber_id - id of subscriber
  * @param {Function} callback - a standard callback function
  */
-Controller.prototype._remove = function(subscriber_id, profileName, cb){
+Controller.prototype._remove = function(subscriber_id, _switchName, cb){
   var that = this;
-  this.storage.removeProfile(subscriber_id, profileName, function(err, result){
+  this.storage.removeSwitch(subscriber_id, _switchName, function(err, result){
     if(err){
       that.logger.error(err);
       cb(err);
