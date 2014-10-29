@@ -83,12 +83,17 @@ angular.module('flowsimUiApp')
     function destroy(type, name) {
       // initialize the cache
       if(!(type in post))    { post[type] = {}; }
+      if(!(type in update))  { update[type] = {}; }
       if(!(type in destroy)) { destroy[type] = {}; }
 
       // was never saved
       if(post[type][name]) {
         delete post[type][name];
         delete post[type][name+'UI'];
+      } else if {
+        destroy[type][name] = update[type][name];
+        delete update[type][name];
+        delete update[type][name+'UI'];
       } else {
         destroy[type][name] = post[type][name];
         delete post[type][name];
