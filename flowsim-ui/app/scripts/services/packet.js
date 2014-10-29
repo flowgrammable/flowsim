@@ -90,7 +90,9 @@ function ProtocolUI(protocol) {
 function Packet(name) {
   this.name = name;
   this.bytes = 0;
-  this.protocols = [];
+  this.protocols = [
+    ETHERNET.create();
+  ];
 }
 
 Packet.prototype.push = function(protocol) {
