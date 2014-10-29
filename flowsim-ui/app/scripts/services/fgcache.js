@@ -121,7 +121,7 @@ angular.module('flowsimUiApp')
         _.each(_update, function(value, key) {
           if(update[type][key+'UI'].dirty) {
             update[type][key] = update[type][key+'UI'].toBase();
-            Subscriber.httpUpdate('/api/'+type+'/'+key, value,
+            Subscriber.httpUpdate('/api/'+type+'/'+key, update[type][key],
                                   function(err, result) {
               if(err) {
                 dirty = true;
