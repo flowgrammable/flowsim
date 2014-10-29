@@ -23,7 +23,7 @@ angular.module('flowsimUiApp')
     $scope.getPackets = function(callback) {
       fgCache.getNames('packet', callback);
     };
-    
+
     // function for constructing a new packet
     $scope.addPacket = function(name) {
       var tmp;
@@ -32,13 +32,13 @@ angular.module('flowsimUiApp')
       } else if(name in $scope.names) {
         return 'Name exists';
       } else {
-        $scope.packet = fgCache.create('packet', name, Packet);
+        $scope.packet = fgCache.create('packet', name, Packet).ui;
         $scope.names[name] = true;
         $scope.dirty = true;
         return '';
       }
     };
-    
+
     // Method to delete a packet
     $scope.delPacket = function(name) {
       fgCache.destroy('packet', name);
@@ -56,13 +56,13 @@ angular.module('flowsimUiApp')
           if(err) {
             console.log(err.details);
           } else {
-            $scope.packet = result;
+            $scope.packet = result.ui;
             $scope.$broadcast('setStack', $scope.packet);
           }
         });
       }
     };
-    
+
     $scope.save = function(callback) {
       fgCache.save(function(err, result) {
         if(err) {
@@ -74,7 +74,7 @@ angular.module('flowsimUiApp')
       });
     };
 
-    $scope.setDirty = function() { 
+    $scope.setDirty = function() {
       $scope.dirty = true;
       $scope.packet.dirty = true;
     };
@@ -88,4 +88,3 @@ angular.module('flowsimUiApp')
     };
 
   });
-
