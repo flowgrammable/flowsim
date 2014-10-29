@@ -90,30 +90,13 @@ Packet.prototype.pop = function() {
 };
 
 
-
 function PacketUI(pkt) {
   this.name = pkt.name;
-  this._bytes = pkt.bytes;
-
-//  this.protocols = _.map(pkt.protocols, function(p) {
-//    return new ProtocolUI(p);
-//  });
-  this._payload = _.map(pkt.protocols, function(p) {
+  this.bytes = pkt.bytes;
+  this.protocols = _.map(pkt.protocols, function(p) {
     console.log('pkt name:', p.name);
     return new ProtocolUI(p.name);
   });
-}
-
-PacketUI.prototype.bytes = function() {
-  return this._bytes;
-}
-
-PacketUI.prototype.top = function() {
-  if(this._payload.length) {
-    return this._payload[this._payload.length-1];
-  } else {
-    return null;
-  }
 }
 
 PacketUI.prototype.toBase = function() {
