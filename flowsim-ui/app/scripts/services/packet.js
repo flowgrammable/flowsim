@@ -33,7 +33,7 @@ angular.module('flowsimUiApp')
     }
 
     function createUI(name) {
-      return new PacketUI();
+      return new PacketUI(name);
     }
 
     return {
