@@ -103,11 +103,12 @@ angular.module('flowsimUiApp')
             Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                 function(err, result) {
               if(err) {
-                value.local = true;
                 dirty       = true;
                 callback(err);
               } else {
                 value.dirty = false;
+                update[type][key] = post[type][key];
+                delete post[type][key];
                 callback(null);
               }
             });
@@ -129,7 +130,6 @@ angular.module('flowsimUiApp')
           }
         });
       });
-
       _.each(destroy, function(_destroy, type) {
         _.each(_destroy, function(value, key) {
           Subscriber.httpDelete('/api/'+type+'/'+key, {},
@@ -138,6 +138,7 @@ angular.module('flowsimUiApp')
               dirty = true;
               callback(err);
             } else {
+              delete destroy[type][key];
               callback(null);
             }
           });
