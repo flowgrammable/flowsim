@@ -101,6 +101,7 @@ angular.module('flowsimUiApp')
       dirty = false;
       _.each(post, function(_post, type) {
         _.each(post, function(value, key) {
+          post[type][key] = post[type][key+'UI'].toBase();
             Subscriber.httpPost('/api/'+type+'/'+key, value, 
                                 function(err, result) {
               if(err) {
@@ -120,6 +121,7 @@ angular.module('flowsimUiApp')
       _.each(update, function(_update, type) {
         _.each(_update, function(value, key) {
           if(value.dirty) {
+            update[type][key] = update[type][key+'UI'].toBase();
             Subscriber.httpUpdate('/api/'+type+'/'+key, value,
                                   function(err, result) {
               if(err) {
