@@ -108,9 +108,9 @@ angular.module('flowsimUiApp')
                 dirty       = true;
                 callback(err);
               } else {
-                value.dirty = false;
                 update[type][key] = post[type][key];
                 update[type][key+'UI'] = post[type][key+'UI'];
+                update[type][key+'UI'].dirty = false;
                 delete post[type][key];
                 delete post[type][key+'UI'];
                 callback(null);
@@ -120,7 +120,7 @@ angular.module('flowsimUiApp')
       });
       _.each(update, function(_update, type) {
         _.each(_update, function(value, key) {
-          if(value.dirty) {
+          if(update[type][key+'UI'].dirty) {
             update[type][key] = update[type][key+'UI'].toBase();
             Subscriber.httpUpdate('/api/'+type+'/'+key, value,
                                   function(err, result) {
@@ -128,7 +128,7 @@ angular.module('flowsimUiApp')
                 dirty = true;
                 callback(err);
               } else {
-                value.dirty = false;
+                update[type][key+'UI'].dirty = false;
                 callback(null);
               }
             });
