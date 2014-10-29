@@ -70,13 +70,12 @@ angular.module('flowsimUiApp')
 
     function create(type, name, service) {
       // initialize the cache
-      if(!(type in cache)) { cache[type] = {}; }
+      if(!(type in post)) { post[type] = {}; }
 
-      cache[type][name] = service.create(name);
-      //cache[type][name+'UI'] = service.createUI(name);
-      cache[type][name].local = true;
+      post[type][name] = service.create(name);
+      //post[type][name+'UI'] = service.createUI(name);
       dirty = true;
-      return cache[type][name];
+      return post[type][name];
     }
 
     function destroy(type, name) {
