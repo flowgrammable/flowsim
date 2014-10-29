@@ -19,14 +19,14 @@ function mkLabelInput(name, value, test, tip) {
 
 function stripLabelInputs(lis) {
   var result = {};
-  return _.each(lis, function(item) {
+  _.each(lis, function(item) {
     result[li.name] = li.value;
-  }
+  });
   return result;
 }
 
 angular.module('flowsimUiApp')
-  .factory('fgUi', function() {
+  .factory('fgUI', function() {
     return {
       mkLabelInput: mkLabelInput,
       stripLabelInputs: stripLabelInputs

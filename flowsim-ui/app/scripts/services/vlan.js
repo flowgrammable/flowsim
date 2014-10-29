@@ -2,6 +2,9 @@
 
 (function(){
 
+angular.module('flowsimUiApp')
+  .service('VLAN', function(fgConstraints, fgUI) {
+
 var Payloads = {
  'VLAN': 0x8100,
  'MPLS': 0x8847,
@@ -33,13 +36,15 @@ function VLAN_UI(name, vlan) {
       case 'dei':
         return mkLabelInput(key, value, fgConstraints.isUInt(0,3), 
                             '');
-      case 'vlan_id'
+      case 'vlan_id':
         return mkLabelInput(key, value, fgConstraints.isUInt(0, 0x0fff), 
                             'VLAN Tag Identifier');
-      case 'typelen'
+      case 'typelen':
         return mkLabelInput(key, value, fgConstraints.isUInt(0, 0xffff), 
                             'Ethernet type or length of payload');
-
+      default:
+        return mkLabelInput(key, value, function(){ return true; }, 'Unknown');
+    }
   });
 }
 
@@ -64,8 +69,6 @@ VLAN_UI.prototype.clearPayload = function() {
  * # VLAN
  * Service in the flowsimUiApp.
  */
-angular.module('flowsimUiApp')
-  .service('VLAN', function() {
     this.name = 'VLAN';
     this.Payloads = Object.keys(Payloads);
     this.create = function() {

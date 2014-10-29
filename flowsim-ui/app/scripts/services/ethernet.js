@@ -1,6 +1,7 @@
 'use strict';
 
-(function() {
+angular.module('flowsimUiApp')
+  .service('ETHERNET', function ETHERNET(fgConstraints) {
 
 var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
 
@@ -56,8 +57,6 @@ _Ethernet.prototype.clearPayload = function() {
  * # ETHERNET
  * Service in the flowsimUiApp.
  */
-angular.module('flowsimUiApp')
-  .service('ETHERNET', function ETHERNET() {
 
     this.name = 'Ethernet';
 
@@ -74,4 +73,4 @@ angular.module('flowsimUiApp')
 
   });
 
-})();
+});

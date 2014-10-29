@@ -1,7 +1,8 @@
 
-var fgConstraints = (function() {
-
-function _isUInt(lb, ub) {
+angular.module('flowsimUiApp')
+  .service('fgConstraints', function fgConstraints() {
+        
+function isUInt(lb, ub) {
   var decPat = /^[0-9]+$/;
   var hexPat = /^0x[0-9a-fA-F]+$/;
   return function(val) {
@@ -25,8 +26,8 @@ function _isUInt(lb, ub) {
 }
 
 return {
-  isUInt: _isUInt
+  isUInt: isUInt
 };
 
-})();
+});
 
