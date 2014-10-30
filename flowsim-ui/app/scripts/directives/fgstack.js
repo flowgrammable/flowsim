@@ -26,8 +26,8 @@ angular.module('flowsimUiApp')
         // Update the current display
         $scope.$on('setStack', function(ev, data) {
           var name;
-          $scope.stack = data;
           if(data) {
+            $scope.stack = data;
             name = $scope.stack.length ? 
                       $scope.stack[$scope.stack.length-1].name
                       : '';
@@ -48,17 +48,19 @@ angular.module('flowsimUiApp')
          }
        };
 
-       // Delete the node from the top of the stack
-       $scope.delNode = function() {
-         var name;
-         $scope.stack.pop();
-         name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name 
+      // Delete the node from the top of the stack
+      $scope.delNode = function() {
+        var name;
+        if($scope.stack.length) {
+          $scope.stack.pop();
+          name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name 
                                     : '';
-         $scope.options = $scope.getOptions()(name);
-       };
+          $scope.options = $scope.getOptions()(name);
+        }
+      };
 
       $scope.$watch('stack', function() {
-        if($scope.stack && $scope.stack.length) {
+        if($scope.stack.length) {
           $scope.setDirty()();
         }
       }, true);

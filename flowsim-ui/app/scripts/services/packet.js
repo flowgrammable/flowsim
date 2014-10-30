@@ -111,8 +111,6 @@ PacketUI.prototype.toBase = function() {
   var result = new Packet(this.name);
   result.bytes = this.bytes;
   result.protocols = _.map(this.protocols, function(pUI) {
-    console.log('pui: ' + Object.keys(pUI));
-    console.log(pUI.name);
     return pUI.toBase();
   });
   return result;
