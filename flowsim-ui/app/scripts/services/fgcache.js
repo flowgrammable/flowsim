@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('fgCache', function(Subscriber, $rootScope) {
+  .factory('fgCache', function(Subscriber) {
 
     var post    = {};     // (base,UI) ready for HTTP POST
     var update  = {};     // (base,UI) ready for HTTP UPDATE
@@ -35,7 +35,7 @@ angular.module('flowsimUiApp')
       } else if(name in update[type]) {
         callback(null, {
           base: update[type][name],
-          ui: udpate[type][name+'UI']
+          ui: update[type][name+'UI']
         });
       } else {
         Subscriber.httpGet('/api/'+type+'/'+name, {}, function(err, result) {
@@ -46,7 +46,7 @@ angular.module('flowsimUiApp')
             update[type][name+'UI'] = service.createUI(result);
             callback(null, {
               base: update[type][name],
-              ui: udpate[type][name+'UI']
+              ui: update[type][name+'UI']
             });
           }
         });
@@ -104,7 +104,7 @@ angular.module('flowsimUiApp')
         _.each(post, function(value, key) {
           post[type][key] = post[type][key+'UI'].toBase();
             Subscriber.httpPost('/api/'+type+'/'+key, value,
-                                function(err, result) {
+                                function(err) {
               if(err) {
                 dirty = true;
                 callback(err);
@@ -126,7 +126,7 @@ angular.module('flowsimUiApp')
           if(update[type][key+'UI'].dirty) {
             update[type][key] = update[type][key+'UI'].toBase();
             Subscriber.httpUpdate('/api/'+type+'/'+key, update[type][key],
-                                  function(err, result) {
+                                  function(err) {
               if(err) {
                 dirty = true;
                 callback(err);
@@ -141,7 +141,7 @@ angular.module('flowsimUiApp')
       _.each(_delete, function(__delete, type) {
         _.each(__delete, function(value, key) {
           Subscriber.httpDelete('/api/'+type+'/'+key, {},
-                                function(err, result) {
+                                function(err) {
             if(err) {
               dirty = true;
               callback(err);

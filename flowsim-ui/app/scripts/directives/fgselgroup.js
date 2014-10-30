@@ -18,7 +18,7 @@ angular.module('flowsimUiApp')
       controller: function($scope) {
         $scope.toggleElem = function(idx) {
           $scope.elements[idx].visible = !$scope.elements[idx].visible;
-        }
+        };
       }
     };
   });

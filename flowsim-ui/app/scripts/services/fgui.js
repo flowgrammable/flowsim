@@ -17,10 +17,10 @@ function mkLabelInput(name, value, test, tip) {
   };
 }
 
-function stripLabelInputs(lis) {
+function stripLabelInputs(inputs) {
   var result = {};
-  _.each(lis, function(item) {
-    result[li.name] = li.value;
+  _.each(inputs, function(item) {
+    result[item.name] = item.value;
   });
   return result;
 }

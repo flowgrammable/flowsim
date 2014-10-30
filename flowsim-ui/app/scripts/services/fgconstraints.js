@@ -1,3 +1,5 @@
+'use strict';
+
 
 angular.module('flowsimUiApp')
   .service('fgConstraints', function fgConstraints() {

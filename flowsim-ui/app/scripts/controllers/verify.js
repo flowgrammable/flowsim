@@ -15,7 +15,7 @@ angular.module('flowsimUiApp')
     }
     clearErrors();
 
-    Subscriber.verify($routeParams.token, function(err, result) {
+    Subscriber.verify($routeParams.token, function(err) {
       if(err) {
         $scope.errorMsg = err.message;
         console.log(err.details);

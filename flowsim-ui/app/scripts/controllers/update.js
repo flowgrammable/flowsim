@@ -35,7 +35,7 @@ angular.module('flowsimUiApp')
       if(!$scope.oldPasswordMsg.length && !$scope.password1Msg.length &&
          !$scope.password2Msg.length) {
         Subscriber.update($scope.oldPassword, $scope.password1,
-          function(err, result) {
+          function(err) {
             if(err) {
               $scope.errorMsg = err.message;
               console.log(err.detail);
