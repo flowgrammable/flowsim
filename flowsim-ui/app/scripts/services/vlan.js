@@ -53,7 +53,7 @@ VLAN_UI.prototype.toBase = function() {
   var result = new VLAN(this.name);
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
-}
+};
 
 VLAN_UI.prototype.setPayload = function(name) {
   this.attrs[3].value = '0x' + (Payloads[name] || 0).toString(16);

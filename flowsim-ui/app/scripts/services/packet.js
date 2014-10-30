@@ -59,21 +59,22 @@ function dispatch(name, method, p) {
   }
 }
 
-function Protocol(name) {
+function createProtocol(name) {
   return dispatch(name, 'create');
 }
 
-function ProtocolUI(p) {
-  if(typeof p === 'string')
+function createProtocolUI(p) {
+  if(typeof p === 'string') {
     return dispatch(p, 'createUI');
-  else
+  } else {
     return dispatch(p.name, 'createUI');
+  }
 }
 
 function Packet(name) {
   this.name = name;
   this.protocols = [
-    Protocol(ETHERNET.name)
+    createProtocol(ETHERNET.name)
   ];
   this.bytes = this.protocols[0].bytes;
 }
@@ -84,8 +85,9 @@ Packet.prototype.push = function(protocol) {
 };
 
 Packet.prototype.pop = function() {
-  if(this.protocols.length === 0)
+  if(this.protocols.length === 0) {
     return;
+  }
 
   this.bytes -= this.protocols[this.protocols.length-1].bytes;
   this.prototocols.splice(this.protocols.length-1);
@@ -95,7 +97,7 @@ function PacketUI(pkt) {
   this.name = pkt.name;
   this.bytes = pkt.bytes;
   this.protocols = _.map(pkt.protocols, function(p) {
-    return ProtocolUI(p);
+    return createProtocolUI(p);
   });
 }
 
@@ -106,11 +108,11 @@ PacketUI.prototype.toBase = function() {
     return pUI.toBase();
   });
   return result;
-}
+};
 
 PacketUI.prototype.top = function() {
   return this.protocols.length ? this.protocols[this.protocols.length-1] : null;
-}
+};
 
 function create(name) {
   return new Packet(name);
@@ -132,8 +134,8 @@ function getPayloads(name) {
 return {
   create: create,
   createUI: createUI,
-  createProtocol: Protocol,
-  createProtocolUI: ProtocolUI,
+  createProtocol: createProtocol,
+  createProtocolUI: createProtocolUI,
   getPayloads: getPayloads
 };
 
