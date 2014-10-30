@@ -14,12 +14,7 @@ angular.module('flowsimUiApp')
     var update  = {};     // (base,UI) ready for HTTP UPDATE
     var _delete = {};     // base ready for HTTP DELETE
 
-    // Server synchronization state
-    // ... from operations: create, update failure, delete
-    //var dirty = false;
-
-    /* get - retrieve a list of names from the cahce or server
-     */
+    /* get - retrieve a list of names from the cahce or server */
     function get(type, name, service, callback) {
 
       // Initialize the retrievable caches
@@ -87,7 +82,7 @@ angular.module('flowsimUiApp')
     }
 
     function isDirty() {
-      var postDirty, updateDirty, destroyDirty;
+      var postDirty, updateDirty, deleteDirty;
 
       // If there is anything to post we are dirty
       postDirty = _.some(post, function(type) {
@@ -103,15 +98,15 @@ angular.module('flowsimUiApp')
       });
 
       // If there is anything to delete we are dirty
-      destroyDirty = _.some(destroy, function(type) {
+      deleteDirty = _.some(_delete, function(type) {
         return Object.keys(type).length > 0;
       });
 
       // If anything is dirty the cache is dirty
-      return postDirty || updateDirty || destoryDirty;
+      return postDirty || updateDirty || deleteDirty;
     }
 
-    function save(callback) {
+    function save() {
       //dirty = false;
       _.each(post, function(_post, type) {
         _.each(_post, function(value, key) {
@@ -119,13 +114,11 @@ angular.module('flowsimUiApp')
             Subscriber.httpPost('/api/'+type+'/'+key, obj,
                                 function(err) {
               if(err) {
-                //dirty = true;
-                callback(err);
+                console.log(err.details);
               } else {
                 update[type][key] = post[type][key];
                 update[type][key].dirty = false;
                 delete post[type][key];
-                callback(null, isDirty());
               }
             });
         });
@@ -138,11 +131,9 @@ angular.module('flowsimUiApp')
             Subscriber.httpUpdate('/api/'+type+'/'+key, obj,
                                   function(err) {
               if(err) {
-                //dirty = true;
-                callback(err);
+                console.log(err.details);
               } else {
                 update[type][key].dirty = false;
-                callback(null, isDirty());
               }
             });
           }
@@ -153,11 +144,9 @@ angular.module('flowsimUiApp')
           Subscriber.httpDelete('/api/'+type+'/'+key, {},
                                 function(err) {
             if(err) {
-              //dirty = true;
-              callback(err);
+              console.log(err.details);
             } else {
               delete _delete[type][key];
-              callback(null, isDirty());
             }
           });
         });
@@ -169,6 +158,7 @@ angular.module('flowsimUiApp')
       getNames: getNames,
       create: create,
       destroy: destroy,
+      isDirty: isDirty,
       save: save
     };
   });

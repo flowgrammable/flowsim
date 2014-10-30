@@ -9,7 +9,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('PacketCtrl', function ($scope, fgCache, Packet) {
+  .controller('PacketCtrl', function ($scope, fgCache, Packet, $rootScope) {
     // Method to add a new packet
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
@@ -17,7 +17,6 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.packet   = null;
     $scope.errorMsg = '';
-    $scope.dirty = false;
 
     // get a list of packets
     $scope.getPackets = function(callback) {
@@ -41,6 +40,11 @@ angular.module('flowsimUiApp')
     // Method to delete a packet
     $scope.delPacket = function(name) {
       fgCache.destroy('packet', name);
+      if(fgCache.isDirty()) {
+        $scope.setDirty();
+      } else {
+        $scope.setClean();
+      }
       delete $scope.names[name];
     };
 
@@ -74,13 +78,11 @@ angular.module('flowsimUiApp')
     };
 
     $scope.setDirty = function() {
-      $scope.dirty = true;
-      console.log('dirty');
+      $rootScope.$broadcast('dirtyCache');
     };
 
     $scope.setClean = function() {
-      $scope.dirty = false;
-      console.log('clean');
+      $rootScope.$broadcast('cleanCache');
     };
 
     $scope.getProtocols = function(name) {

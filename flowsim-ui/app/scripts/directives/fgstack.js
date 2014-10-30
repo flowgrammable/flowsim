@@ -19,6 +19,7 @@ angular.module('flowsimUiApp')
         setDirty: '&'      // callback for persisting changes
       }, controller: function($scope) {
 
+        $scope.prev_len = 0;
         $scope.stack    = [];
         $scope.nodeType = '';  // input type to create node
         $scope.options  = [];  // input select options
@@ -60,9 +61,11 @@ angular.module('flowsimUiApp')
       };
 
       $scope.$watch('stack', function() {
-        if($scope.stack.length) {
+        if($scope.prev_len && $scope.stack.length) {
+          $scope.prev_len = $scope.stack.length;
           $scope.setDirty()();
-        }
+        } 
+        $scope.prev_len = $scope.stack.length;
       }, true);
 
       }
