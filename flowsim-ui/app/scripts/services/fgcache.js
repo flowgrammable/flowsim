@@ -51,7 +51,11 @@ angular.module('flowsimUiApp')
         callback(null, Object.keys(update[type]));
       } else {
         Subscriber.httpGet('/api/'+type, {}, function(err, result) {
-          callback(err, result.names);
+          if(err) {
+            callback(err);
+          } else {
+            callback(null, result.names);
+           }
         });
       }
     }
@@ -80,6 +84,31 @@ angular.module('flowsimUiApp')
         _delete[type][name] = update[type][name];
         delete update[type][name];
       }
+    }
+
+    function isDirty() {
+      var postDirty, updateDirty, destroyDirty;
+
+      // If there is anything to post we are dirty
+      postDirty = _.some(post, function(type) {
+        return Object.keys(type).length > 0;
+      });
+     
+      // If there is any update that is dirty we are dirty
+      updateDirty = false;
+      _.each(update, function(_update, type) {
+        updateDirty |= _.some(_update, function(value) {
+          return value.dirty;
+        });
+      });
+
+      // If there is anything to delete we are dirty
+      destroyDirty = _.some(destroy, function(type) {
+        return Object.keys(type).length > 0;
+      });
+
+      // If anything is dirty the cache is dirty
+      return postDirty || updateDirty || destoryDirty;
     }
 
     function save(callback) {
