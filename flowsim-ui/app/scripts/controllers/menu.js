@@ -26,30 +26,13 @@ angular.module('flowsimUiApp')
       fgCache.save();
     }
 
-    $scope.$on('$locationChangeStart', function(event, next, current) {
-      var nextUrl, curUrl, dialog;
-      nextUrl = document.createElement('a');
-      curUrl = document.createElement('a');
-      nextUrl.href = next;
-      curUrl.href = current;
-
-      if($scope.prev_host.length && $scope.dirty &&
-         (curUrl.host !== nextUrl.host)) {
-        event.preventDefault();
-        dialog = $modal.open({
-          templateUrl: 'views/dialog/unsaved.html',
-          controller: 'DialogUnsavedCtrl',
-          size: 'sm'
-        });
-        dialog.result.then(function () {
-          $location.url(next);
-          $route.reload();
-        });
+    window.onbeforeunload = function() {
+      if($scope.dirty) {
+        return 'You have unsaved changes, are you sure you wish to leave without saving?';
+      } else {
+        return;
       }
-      else if($scope.prev_host.length === 0) {
-        $scope.prev_host = nextUrl.hostname;
-      }
-    });
+    };
 
     $rootScope.$on('dirtyCache', function() {
       $scope.dirty = true;
