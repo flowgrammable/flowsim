@@ -15,7 +15,7 @@
       <!-- Print the heading and delete button if last element -->
       <accordion-heading>
         {{node.name}}
-        <span ng-if="$last && $index!=0"
+        <span ng-if="$last && $index!==0"
               class="glyphicon glyphicon-minus-sign pull-right" 
               ng-click="delNode($index)"></span>
       </accordion-heading>

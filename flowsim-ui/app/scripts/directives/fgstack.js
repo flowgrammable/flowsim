@@ -32,6 +32,7 @@ angular.module('flowsimUiApp')
                       $scope.stack[$scope.stack.length-1].name
                       : '';
             $scope.options = $scope.getOptions()(name);
+            console.log('a');
           }
         });
 
