@@ -139,6 +139,7 @@ angular.module('flowsimUiApp')
               }
             });
           }
+          }
         });
       });
       _.each(_delete, function(__delete, type) {
