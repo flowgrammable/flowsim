@@ -8,17 +8,15 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache) {
+  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache, $location) {
     $scope.authenticated = true;
     $scope.dirty = false;
 
     $rootScope.$on('subscriberAuth', function() {
-      console.log('auth');
       $scope.authenticated = true;
     });
 
     $rootScope.$on('subscriberDeauth', function() {
-      console.log('deauth');
       $scope.authenticated = false;
     });
 
@@ -26,13 +24,24 @@ angular.module('flowsimUiApp')
       fgCache.save();
     }
 
+    $scope.$on('$locationChangeStart', function(event, next, current) {
+      var url = document.createElement('a');
+      url.href = next;
+      console.log('current: ' + $location.host());
+      console.log('next: ' + url.hostname);
+      if($scope.dirty && url.hostname !== $location.host()) {
+        console.log('going to prevent default');
+        event.preventDefault();
+      } else {
+        console.log('not going to prevent default');
+      }
+    });
+
     $rootScope.$on('dirtyCache', function() {
-      console.log('dirtyCache');
       $scope.dirty = true;
     });
     
     $rootScope.$on('cleanCache', function() {
-      console.log('cleanCache');
       $scope.dirty = false;
     });
 
