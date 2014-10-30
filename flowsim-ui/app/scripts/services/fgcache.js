@@ -102,7 +102,7 @@ angular.module('flowsimUiApp')
       dirty = false;
       _.each(post, function(_post, type) {
         _.each(_post, function(value, key) {
-          if(key.indexOf('-UI', key.length - '-UI'.length) === -1) {
+          if(key.indexOf('UI', key.length - 'UI'.length) === -1) {
             post[type][key] = post[type][key+'UI'].toBase();
             Subscriber.httpPost('/api/'+type+'/'+key, value,
                                 function(err) {
@@ -125,7 +125,7 @@ angular.module('flowsimUiApp')
       });
       _.each(update, function(_update, type) {
         _.each(_update, function(value, key) {
-          if(key.indexOf('-UI', key.length - '-UI'.length) === -1) {
+          if(key.indexOf('UI', key.length - 'UI'.length) === -1) {
           if(update[type][key+'UI'].dirty) {
             update[type][key] = update[type][key+'UI'].toBase();
             Subscriber.httpUpdate('/api/'+type+'/'+key, update[type][key],
