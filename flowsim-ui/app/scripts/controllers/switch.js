@@ -12,7 +12,6 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope._switch = null;
     $scope.focus = 'datapath';
-    $scope.dirty = false;
 
     $scope.getSwitches = function(callback) {
       fgCache.getNames('switch', callback);
@@ -26,14 +25,18 @@ angular.module('flowsimUiApp')
       } else {
         $scope._switch = fgCache.create('switch', name, Switch);
         $scope.names[name] = true;
-        $scope.dirty = true;
+        $scope.setDirty();
         return '';
       }
     };
 
     $scope.delSwitch = function(name) {
       fgCache.destroy('switch', name);
-      $scope.dirty = true;
+      if(fgCache.isDirty()) {
+        $scope.setDirty();
+      } else {
+        $scope.setClean();
+      }
       delete $scope.names[name];
     };
 
@@ -53,14 +56,12 @@ angular.module('flowsimUiApp')
       }
     };
 
-    $scope.save = function() {
-      fgCache.save(function(err) {
-        if(err) {
-          $scope.dirty = true;
-        } else {
-          $scope.dirty = false;
-        }
-      });
+    $scope.setDirty = function() {
+      $rootScope.$broadcast('dirtyCache');
+    };
+          
+    $scope.setClean = function() {
+      $rootScope.$broadcast('cleanCache');
     };
 
   });

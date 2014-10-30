@@ -65,18 +65,6 @@ angular.module('flowsimUiApp')
       }
     };
 
-    $scope.save = function() {
-      fgCache.save(function(err, dirty) {
-        if(err) {
-          console.log(err.details);
-        } else if (dirty) {
-          $scope.setDirty();
-        } else {
-          $scope.setClean();
-        }
-      });
-    };
-
     $scope.setDirty = function() {
       $rootScope.$broadcast('dirtyCache');
     };

@@ -8,12 +8,11 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('ProfileCtrl', function ($scope, fgCache, Profile) {
+  .controller('ProfileCtrl', function ($scope, fgCache, Profile, $rootScope) {
 
     $scope.names = {};
     $scope.profile = null;
     $scope.focus = 'datapath';
-    $scope.dirty = false;
 
     $scope.set = function(idx) {
       Profile.setVersion($scope.profile, idx);
@@ -154,13 +153,18 @@ angular.module('flowsimUiApp')
       } else {
         $scope.profile = fgCache.create('profile', name, Profile).ui;
         $scope.names[name] = true;
-        $scope.dirty = true;
+        $scope.setDirty();
         return '';
       }
     };
 
     $scope.delProfile = function(name) {
       fgCache.destroy('profile', name);
+      if(fgCache.isDirty()) {
+        $scope.setDirty();
+      } else {
+        $scope.setClean();
+      }
       delete $scope.names[name];
     };
 
@@ -180,15 +184,12 @@ angular.module('flowsimUiApp')
       }
     };
 
-    $scope.save = function() {
-      fgCache.save(function(err) {
-        if(err) {
-          $scope.dirty = true;
-          console.log(err.details);
-        } else {
-          $scope.dirty = false;
-        }
-      });
+    $scope.setDirty = function() {
+      $rootScope.$broadcast('dirtyCache');
+    };
+    
+    $scope.setClean = function() {
+      $rootScope.$broadcast('cleanCache');
     };
 
   });
