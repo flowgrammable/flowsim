@@ -8,9 +8,11 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache, $location) {
+  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache, 
+                                    $location, $modal, $route) {
     $scope.authenticated = true;
     $scope.dirty = false;
+    $scope.prev_host = '';
 
     $rootScope.$on('subscriberAuth', function() {
       $scope.authenticated = true;
@@ -25,15 +27,27 @@ angular.module('flowsimUiApp')
     }
 
     $scope.$on('$locationChangeStart', function(event, next, current) {
-      var url = document.createElement('a');
-      url.href = next;
-      console.log('current: ' + $location.host());
-      console.log('next: ' + url.hostname);
-      if($scope.dirty && url.hostname !== $location.host()) {
-        console.log('going to prevent default');
+      var nextUrl, curUrl, dialog;
+      nextUrl = document.createElement('a');
+      curUrl = document.createElement('a');
+      nextUrl.href = next;
+      curUrl.href = current;
+
+      if($scope.prev_host.length && $scope.dirty &&
+         (curUrl.host !== nextUrl.host)) {
         event.preventDefault();
-      } else {
-        console.log('not going to prevent default');
+        dialog = $modal.open({
+          templateUrl: 'views/dialog/unsaved.html',
+          controller: 'DialogUnsavedCtrl',
+          size: 'sm'
+        });
+        dialog.result.then(function () {
+          $location.url(next);
+          $route.reload();
+        });
+      }
+      else if($scope.prev_host.length === 0) {
+        $scope.prev_host = nextUrl.hostname;
       }
     });
 
