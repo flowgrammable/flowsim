@@ -8,22 +8,25 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache) {
+  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber) {
     $scope.authenticated = true;
 
-    $rootScope.$on('subscriberAuth', function(event, data) {
+    $rootScope.$on('subscriberAuth', function() {
       console.log('auth');
       $scope.authenticated = true;
     });
 
-    $rootScope.$on('subscriberDeauth', function(event, data) {
+    $rootScope.$on('subscriberDeauth', function() {
       console.log('deauth');
       $scope.authenticated = false;
     });
 
     $scope.logout = function() {
       $scope.authenticated = false;
-      Subscriber.logout(function(err, result) {
+      Subscriber.logout(function(err) {
+        if(err) {
+          console.log(err.details);
+        }
       });
     };
   });

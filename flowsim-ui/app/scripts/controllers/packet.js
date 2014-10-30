@@ -9,7 +9,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('PacketCtrl', function ($scope, fgCache, Packet, Protocols, $rootScope) {
+  .controller('PacketCtrl', function ($scope, fgCache, Packet) {
     // Method to add a new packet
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
@@ -26,7 +26,6 @@ angular.module('flowsimUiApp')
 
     // function for constructing a new packet
     $scope.addPacket = function(name) {
-      var tmp;
       if(!packetName.test(name)) {
         return 'Bad name';
       } else if(name in $scope.names) {
@@ -62,13 +61,13 @@ angular.module('flowsimUiApp')
       }
     };
 
-    $scope.save = function(callback) {
-      fgCache.save(function(err, result) {
+    $scope.save = function() {
+      fgCache.save(function(err) {
         if(err) {
           $scope.dirty = true;
           console.log(err.details);
         } else {
-          scope.dirty = false;
+          $scope.dirty = false;
         }
       });
     };

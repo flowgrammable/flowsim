@@ -25,7 +25,7 @@ angular.module('flowsimUiApp')
       clearErrors();
       $scope.emailMsg = Subscriber.validateEmail($scope.email);
       if(!$scope.emailMsg.length) {
-        Subscriber.reset($scope.email, function(err, result) {
+        Subscriber.reset($scope.email, function(err) {
           if(err) {
             $scope.errorMsg = err.message;
             console.log(err.details);
