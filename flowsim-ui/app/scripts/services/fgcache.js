@@ -74,7 +74,6 @@ angular.module('flowsimUiApp')
       post[type][name+'UI'] = service.createUI(post[type][name]);
       post[type][name+'UI'].dirty = true;
       dirty = true;
-      console.log('post', post);
       return {
         base: post[type][name],
         ui: post[type][name+'UI']
@@ -115,8 +114,6 @@ angular.module('flowsimUiApp')
                 update[type][key+'UI'].dirty = false;
                 delete post[type][key];
                 delete post[type][key+'UI'];
-                console.log('post after save:',post);
-                console.log('update after save:', update);
                 callback(null);
               }
             });

@@ -82,9 +82,7 @@ angular.module('flowsimUiApp')
     };
 
     $scope.createProtocol = function(name) {
-      var protocol = Packet.createProtocolUI(name);
-      $scope.packet.push(protocol);
-      return protocol;
+      return Packet.createProtocolUI(name);
     };
 
   });

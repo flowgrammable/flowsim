@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('ETHERNET', function ETHERNET(fgConstraints) {
+  .service('ETHERNET', function ETHERNET(fgConstraints, fgUI) {
 
 var NAME = 'Ethernet';
 
@@ -68,6 +68,13 @@ function Ethernet_UI(eth) {
   });
 }
 
+Ethernet_UI.prototype.toBase = function() {
+  var result = new Ethernet();
+  result.name = this.name;
+  result.bytes = this.bytes;
+  result.protocols = fgUI.stripLabelInputs(this.attrs);
+};
+
 Ethernet_UI.prototype.setPayload = function(name) {
   this.attrs[2].value = '0x' + (Payloads[name] || 0).toString(16);
 };
@@ -83,7 +90,6 @@ this.create = function() {
 };
 
 this.createUI = function(eth) {
-  console.log('createUI called');
   return new Ethernet_UI(eth);
 };
   

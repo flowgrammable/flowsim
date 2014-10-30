@@ -26,10 +26,8 @@ angular.module('flowsimUiApp')
         // Update the current display
         $scope.$on('setStack', function(ev, data) {
           var name;
-          console.log('current setstack,', data);
           $scope.stack = data;
           if(data) {
-            console.log(data);
             name = $scope.stack.length ? 
                       $scope.stack[$scope.stack.length-1].name
                       : '';
@@ -46,9 +44,6 @@ angular.module('flowsimUiApp')
            $scope.nodeType = '';
            name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name
                                       : '';
-           console.log($scope.stack);
-           console.log('yo: ' + name);
-           console.log('zo: ' + $scope.getOptions()(name));
            $scope.options = $scope.getOptions()(name);
          }
        };

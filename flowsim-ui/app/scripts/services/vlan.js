@@ -50,7 +50,9 @@ function VLAN_UI(vlan) {
 }
 
 VLAN_UI.prototype.toBase = function() {
-  var result = new VLAN(this.name);
+  var result = new VLAN();
+  result.name = this.name;
+  result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
 };
