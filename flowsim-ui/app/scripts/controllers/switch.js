@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchCtrl', function ($scope, fgCache, Switch) {
+  .controller('SwitchCtrl', function ($scope, fgCache, Switch, $rootScope) {
     $scope.names = {};
     $scope._switch = null;
     $scope.focus = 'datapath';
