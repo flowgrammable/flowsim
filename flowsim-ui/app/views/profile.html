@@ -13,46 +13,35 @@
 
   <div class="col-md-10">
     <div style="text-align:center">
-    <span ng-repeat="v in versions">
-      <button type="button" class="btn btn-primary btn-xs" 
-              ng-click="set($index)">
-        {{v}}
-      </button>
-    </span>
-  </div>
-  <br>
+      <span ng-repeat="v in versions">
+        <button type="button" class="btn btn-primary btn-xs" 
+                ng-click="set($index)">
+          {{v}}
+        </button>
+      </span>
+    </div>
+
+    <br>
+
     <div ng-show="profile">
-
-      <ul class="nav nav-tabs" role="tablist">
-        <li ng-class="{active: focus=='datapath'}">
-          <a href="" ng-click="focus='datapath'">Datapath</a>
-        </li>
-        <li ng-class="{active: focus=='ports'}">
-          <a href="" ng-click="focus='ports'">Port</a>
-        </li>
-        <li ng-class="{active: focus=='groups'}">
-          <a href="" ng-click="focus='groups'">Group</a>
-        </li>
-        <li ng-class="{active: focus=='tables'}">
-          <a href="" ng-click="focus='tables'">Table</a>
-        </li>
-        <li ng-class="{active: focus=='meters'}">
-          <a href="" ng-click="focus='meters'">Meter</a>
-        </li>
-      </ul>
-
-      <ng-include ng-show="focus=='datapath'" src="'views/profile/datapath.html'">
-      </ng-include>
-      <ng-include ng-show="focus=='ports'" src="'views/profile/ports.html'">
-      </ng-include>
-      <ng-include ng-show="focus=='groups'" src="'views/profile/groups.html'">
-      </ng-include>
-      <ng-include ng-show="focus=='tables'" src="'views/profile/tables.html'">
-      </ng-include>
-      <ng-include ng-show="focus=='meters'" src="'views/profile/meters.html'">
-      </ng-include>
-
-  </div>
+      <tabset>
+        <tab heading="Datapath">
+          <ng-include src="'views/profile/datapath.html'"></ng-include>
+        </tab>
+        <tab heading="Ports">
+          <ng-include src="'views/profile/ports.html'"></ng-include>
+        </tab>
+        <tab heading="Groups">
+          <ng-include src="'views/profile/groups.html'"></ng-include>
+        </tab>
+        <tab heading="Tables">
+          <ng-include src="'views/profile/tables.html'"></ng-include>
+        </tab>
+        <tab heading="Meters">
+          <ng-include src="'views/profile/meters.html'"></ng-include>
+        </tab>
+    </tabset>
+    </div>
 
   </div>
 

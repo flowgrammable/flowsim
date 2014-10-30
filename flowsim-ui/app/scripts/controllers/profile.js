@@ -12,7 +12,6 @@ angular.module('flowsimUiApp')
 
     $scope.names = {};
     $scope.profile = null;
-    $scope.focus = 'datapath';
 
     $scope.set = function(idx) {
       Profile.setVersion($scope.profile, idx);

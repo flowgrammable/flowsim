@@ -11,7 +11,6 @@ angular.module('flowsimUiApp')
   .controller('SwitchCtrl', function ($scope, fgCache, Switch, $rootScope) {
     $scope.names = {};
     $scope._switch = null;
-    $scope.focus = 'datapath';
 
     $scope.getSwitches = function(callback) {
       fgCache.getNames('switch', callback);

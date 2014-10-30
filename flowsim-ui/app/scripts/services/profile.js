@@ -35,7 +35,11 @@ function Profile(name) {
 }
 
 function ProfileUI(profile) {
-  this.name = profile.name;
+  if(typeof profile === 'string') {
+    this.name = profile.name;
+  } else {
+    this.name = profile.name;
+  }
 }
 
 ProfileUI.prototype.toBase = function() {
