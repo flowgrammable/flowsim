@@ -33,7 +33,7 @@ angular.module('flowsimUiApp')
       } else {
         $scope.packet = fgCache.create('packet', name, Packet);
         $scope.names[name] = true;
-        $scope.dirty = true;
+        $scope.setDirty();
         return '';
       }
     };
@@ -62,19 +62,25 @@ angular.module('flowsimUiApp')
     };
 
     $scope.save = function() {
-      fgCache.save(function(err) {
+      fgCache.save(function(err, dirty) {
         if(err) {
-          $scope.dirty = true;
           console.log(err.details);
+        } else if (dirty) {
+          $scope.setDirty();
         } else {
-          $scope.dirty = false;
+          $scope.setClean();
         }
       });
     };
 
     $scope.setDirty = function() {
       $scope.dirty = true;
-      $scope.packet.dirty = true;
+      console.log('dirty');
+    };
+
+    $scope.setClean = function() {
+      $scope.dirty = false;
+      console.log('clean');
     };
 
     $scope.getProtocols = function(name) {
