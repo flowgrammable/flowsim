@@ -41,7 +41,7 @@ angular.module('flowsimUiApp')
         $scope._switch = null;
         $scope.$broadcast('setSwitch', null);
       } else {
-        fgCache.get('switch', name, function(err, result) {
+        fgCache.get('switch', name, Switch, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {

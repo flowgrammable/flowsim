@@ -170,7 +170,7 @@ angular.module('flowsimUiApp')
         $scope.profile = null;
         $scope.$broadcast('setProfile', null);
       } else {
-        fgCache.get('profile', name, function(err, result) {
+        fgCache.get('profile', name, Profile, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {
