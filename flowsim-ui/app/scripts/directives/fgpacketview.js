@@ -19,7 +19,7 @@ angular.module('flowsimUiApp')
         fieldLineHeight = 12; //px
                
         scope.$watch('packet', function(){
-          if (!scope.packet || !scope.packet._payload) {
+          if (!scope.packet || !scope.packet.protocols) {
             return;
           }
 
@@ -31,28 +31,28 @@ angular.module('flowsimUiApp')
           var curFieldBlockYOffsetLines = 3;
 
           //Reverse loop since the top block is at the end
-          for(i=scope.packet._payload.length-1; i>=0; i--) {
+          for(i=scope.packet.protocols.length-1; i>=0; i--) {
                         
             //Calculating block width in % (in proportion to bytes)
-            scope.packet._payload[i].width = 
-              scope.packet._payload[i].bytes()*100.0/scope.packet.bytes();
+            scope.packet.protocols.width = 
+              scope.packet.protocols[i].bytes*100.0/scope.packet.bytes;
            
-            if (scope.packet._payload[i].attrs && 
-                scope.packet._payload[i].attrs.length) {
+            if (scope.packet.protocols[i].attrs && 
+                scope.packet.protocols[i].attrs.length) {
               
               //Heigh of fields block
-              scope.packet._payload[i].fieldBlockHeight = 
-                scope.packet._payload[i].attrs.length*fieldLineHeight;
+              scope.packet.protocols[i].fieldBlockHeight = 
+                scope.packet.protocols[i].attrs.length*fieldLineHeight;
 
               //Distance from center of fields block down to stack of protocols
               //(height of the connecting line)
-              scope.packet._payload[i].fieldBlockYOffset = 
+              scope.packet.protocols[i].fieldBlockYOffset = 
                 curFieldBlockYOffsetLines*fieldLineHeight + 
-                scope.packet._payload[i].fieldBlockHeight/2;
+                scope.packet.protocols[i].fieldBlockHeight/2;
 
               //Next block moves down
               curFieldBlockYOffsetLines += 
-                scope.packet._payload[i].attrs.length + 
+                scope.packet.protocols[i].attrs.length + 
                 linesBetweenFieldBlocks;
             }
           }

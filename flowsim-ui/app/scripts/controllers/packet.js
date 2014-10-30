@@ -48,7 +48,7 @@ angular.module('flowsimUiApp')
     $scope.setPacket = function(name) {
       if(name === undefined) {
         $scope.packet = null;
-        $scope.$broadcast('setStack', $scope.packet);
+        $scope.$broadcast('setStack', []);
       } else {
         fgCache.get('packet', name, Packet, function(err, result) {
           if(err) {
