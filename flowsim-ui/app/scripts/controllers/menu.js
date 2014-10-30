@@ -26,7 +26,7 @@ angular.module('flowsimUiApp')
       fgCache.save();
     }
 
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function(event) {
       if($scope.dirty) {
         return 'You have unsaved changes, are you sure you wish to leave without saving?';
       } else {
