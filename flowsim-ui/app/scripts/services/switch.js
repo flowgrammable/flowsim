@@ -7,13 +7,19 @@
  * # switch
  * Service in the flowsimUiApp.
  */
+angular.module('flowsimUiApp')
+  .factory('Switch', function(){
 
 function Switch(name) {
   this.name = name;
 }
 
-function SwitchUI(sw) {
-  this.name = sw.name;
+function SwitchUI(swi) {
+  if(typeof swi === 'string'){
+    this.name = swi;
+  } else {
+    this.name = swi.name;
+  }
 }
 
 SwitchUI.prototype.toBase = function() {
@@ -21,19 +27,17 @@ SwitchUI.prototype.toBase = function() {
   return result;
 };
 
-angular.module('flowsimUiApp')
-  .factory('Switch', function() {
+function create(name) {
+    return new Switch(name);
+}
 
-    function create(name) {
-      return new Switch(name);
-    }
+function createUI(swi) {
+  return new SwitchUI(swi);
+}
 
-    function createUI(sw) {
-      return new SwitchUI(sw);
-    }
+return {
+    create: create,
+    createUI: createUI
+};
 
-    return {
-      create: create,
-      createUI: createUI
-    };
-  });
+});

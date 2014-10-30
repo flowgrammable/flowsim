@@ -51,7 +51,7 @@ angular.module('flowsimUiApp')
         callback(null, Object.keys(update[type]));
       } else {
         Subscriber.httpGet('/api/'+type, {}, function(err, result) {
-          callback(err, result);
+          callback(err, result.names);
         });
       }
     }
@@ -76,6 +76,7 @@ angular.module('flowsimUiApp')
       if(post[type][name]) {
         delete post[type][name];
       } else if(update[type][name]) {
+        dirty = true;
         _delete[type][name] = update[type][name];
         delete update[type][name];
       }

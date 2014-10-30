@@ -22,9 +22,9 @@ angular.module('flowsimUiApp')
       if(name in $scope.names) {
         return 'Name exists';
       } else if(name.length === 0) {
-        return 'Invalid name'; 
-      } else { 
-        $scope._switch = fgCache.create('switch', name, Switch).ui;
+        return 'Invalid name';
+      } else {
+        $scope._switch = fgCache.create('switch', name, Switch);
         $scope.names[name] = true;
         $scope.dirty = true;
         return '';
@@ -33,6 +33,7 @@ angular.module('flowsimUiApp')
 
     $scope.delSwitch = function(name) {
       fgCache.destroy('switch', name);
+      $scope.dirty = true;
       delete $scope.names[name];
     };
 
@@ -56,7 +57,6 @@ angular.module('flowsimUiApp')
       fgCache.save(function(err) {
         if(err) {
           $scope.dirty = true;
-          console.log(err.details);
         } else {
           $scope.dirty = false;
         }
@@ -64,4 +64,3 @@ angular.module('flowsimUiApp')
     };
 
   });
-

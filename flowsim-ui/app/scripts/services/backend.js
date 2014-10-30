@@ -8,10 +8,10 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Backend', function backend($http) {
+  .factory('Backend', function backend($http) {
 
-    this._xAccessToken = '';
-    var that = this;
+    var xAccessToken = '';
+
     function unwrap(data, callback) {
       if(data.error) {
         callback(data.error);
@@ -22,7 +22,7 @@ angular.module('flowsimUiApp')
 
     function request(that, method, path, data, callback) {
       $http[method](path, data, {
-        headers: { 'x-access-token': that._xAccessToken }
+        headers: { 'x-access-token': xAccessToken }
           }).success(function(data) {
               unwrap(data, callback);
             }).error(function(data, status) {
@@ -36,17 +36,17 @@ angular.module('flowsimUiApp')
       }
 
 
-    this.authorize = function(token) {
-      this._xAccessToken = token;
+    function authorize(token){
+      xAccessToken = token;
+    }
+
+    function deauthorize() {
+      xAccessToken = '';
     };
 
-    this.deauthorize = function() {
-      this._xAccessToken = '';
-    };
-
-    this.get = function(path, data, callback) {
+    function get(path, data, callback){
       $http.get(path,{
-        headers: { 'x-access-token': that._xAccessToken }
+        headers: { 'x-access-token': xAccessToken }
           }).success(function(data) {
              unwrap(data, callback);
            }).error(function(data, status) {
@@ -56,18 +56,38 @@ angular.module('flowsimUiApp')
                         'again soon!'
              });
         });
-    };
+    }
 
-    this.post = function(path, data, callback) {
+    function post(path, data, callback){
       request(this, 'post', path, data, callback);
-    };
+    }
 
-    this.update = function(path, data, callback) {
+    function update(path, data, callback){
       request(this, 'put', path, data, callback);
-    };
+    }
 
-    this._delete = function(path, data, callback) {
-      request(this, 'delete', path, data, callback);
+    function _delete(path, data, callback){
+      $http.delete(path, {
+        headers: { 'x-access-token': xAccessToken }
+          }).success(function(data) {
+              unwrap(data, callback);
+            }).error(function(data, status) {
+              callback({
+                details: status + ' : ' + data,
+            message: 'We are having trouble contacting the server, please try' +
+                          'again soon!'
+            });
+        });
+    }
+
+    return {
+      authorize: authorize,
+      deauthorize: deauthorize,
+      get: get,
+      post: post,
+      update: update,
+      _delete: _delete,
+      xAccessToken: xAccessToken
     };
 
   });
