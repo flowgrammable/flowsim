@@ -48,7 +48,7 @@ angular.module('flowsimUiApp')
           if(err) {
             console.log(err.details);
           } else {
-            $scope._switch = result.ui;
+            $scope._switch = result;
             $scope.$broadcast('setSwitch', $scope._switch);
           }
         });

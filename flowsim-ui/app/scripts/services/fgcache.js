@@ -64,7 +64,9 @@ angular.module('flowsimUiApp')
 
       post[type][name] = service.createUI(name);
       post[type][name].dirty = true;
-      //dirty = true;
+      console.log('c: '+post[type][name]);
+      console.log('t: '+type);
+      console.log('n: '+name);
       return post[type][name];
     }
 

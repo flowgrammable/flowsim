@@ -62,6 +62,7 @@ angular.module('flowsimUiApp')
     }
 
     function createUI(profile) {
+      console.log('creating');
       return new ProfileUI(profile);
     }
 
