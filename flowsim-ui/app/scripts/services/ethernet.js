@@ -72,7 +72,8 @@ Ethernet_UI.prototype.toBase = function() {
   var result = new Ethernet();
   result.name = this.name;
   result.bytes = this.bytes;
-  result.protocols = fgUI.stripLabelInputs(this.attrs);
+  result.fields = fgUI.stripLabelInputs(this.attrs);
+  return result;
 };
 
 Ethernet_UI.prototype.setPayload = function(name) {

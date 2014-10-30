@@ -94,11 +94,17 @@ Packet.prototype.pop = function() {
 };
 
 function PacketUI(pkt) {
-  this.name = pkt.name;
-  this.bytes = pkt.bytes;
-  this.protocols = _.map(pkt.protocols, function(p) {
-    return createProtocolUI(p);
-  });
+  if(typeof pkt === 'string') {
+    this.name = pkt;
+    this.protocols = [createProtocolUI(ETHERNET.name)];
+    this.bytes = this.protocols[0].bytes;
+  } else {
+    this.name = pkt.name;
+    this.bytes = pkt.bytes;
+    this.protocols = _.map(pkt.protocols, function(p) {
+      return createProtocolUI(p);
+    });
+  }
 }
 
 PacketUI.prototype.toBase = function() {

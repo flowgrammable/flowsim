@@ -28,26 +28,16 @@ angular.module('flowsimUiApp')
 
       //  Return the object if local or get from server
       if(name in post[type]) {
-        callback(null, {
-          base: post[type][name],
-          ui: post[type][name+'UI']
-        });
+        callback(null, post[type][name]);
       } else if(name in update[type]) {
-        callback(null, {
-          base: update[type][name],
-          ui: update[type][name+'UI']
-        });
+        callback(null, update[type][name]);
       } else {
         Subscriber.httpGet('/api/'+type+'/'+name, {}, function(err, result) {
           if(err) {
             callback(err);
           } else {
-            update[type][name] = result;
-            update[type][name+'UI'] = service.createUI(result);
-            callback(null, {
-              base: update[type][name],
-              ui: update[type][name+'UI']
-            });
+            update[type][name] = service.createUI(result);
+            callback(null, update[type][name]);
           }
         });
       }
@@ -70,14 +60,10 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in post)) { post[type] = {}; }
 
-      post[type][name]      = service.create(name);
-      post[type][name+'UI'] = service.createUI(post[type][name]);
-      post[type][name+'UI'].dirty = true;
+      post[type][name] = service.createUI(name);
+      post[type][name].dirty = true;
       dirty = true;
-      return {
-        base: post[type][name],
-        ui: post[type][name+'UI']
-      };
+      return post[type][name];
     }
 
     function destroy(type, name) {
@@ -89,11 +75,9 @@ angular.module('flowsimUiApp')
       // was never saved
       if(post[type][name]) {
         delete post[type][name];
-        delete post[type][name+'UI'];
       } else if(update[type][name]) {
         _delete[type][name] = update[type][name];
         delete update[type][name];
-        delete update[type][name+'UI'];
       }
     }
 
@@ -101,41 +85,36 @@ angular.module('flowsimUiApp')
       dirty = false;
       _.each(post, function(_post, type) {
         _.each(_post, function(value, key) {
-          if(key.indexOf('UI', key.length - 'UI'.length) === -1) {
-            post[type][key] = post[type][key+'UI'].toBase();
-            Subscriber.httpPost('/api/'+type+'/'+key, value,
+          var obj = post[type][key].toBase();
+            Subscriber.httpPost('/api/'+type+'/'+key, obj,
                                 function(err) {
               if(err) {
                 dirty = true;
                 callback(err);
               } else {
                 update[type][key] = post[type][key];
-                update[type][key+'UI'] = post[type][key+'UI'];
-                update[type][key+'UI'].dirty = false;
+                update[type][key].dirty = false;
                 delete post[type][key];
-                delete post[type][key+'UI'];
                 callback(null);
               }
             });
-          }
         });
       });
       _.each(update, function(_update, type) {
         _.each(_update, function(value, key) {
-          if(key.indexOf('UI', key.length - 'UI'.length) === -1) {
-          if(update[type][key+'UI'].dirty) {
-            update[type][key] = update[type][key+'UI'].toBase();
-            Subscriber.httpUpdate('/api/'+type+'/'+key, update[type][key],
+          var obj;
+          if(update[type][key].dirty) {
+            obj = update[type][key].toBase();
+            Subscriber.httpUpdate('/api/'+type+'/'+key, obj,
                                   function(err) {
               if(err) {
                 dirty = true;
                 callback(err);
               } else {
-                update[type][key+'UI'].dirty = false;
+                update[type][key].dirty = false;
                 callback(null);
               }
             });
-          }
           }
         });
       });

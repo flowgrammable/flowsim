@@ -31,7 +31,7 @@ angular.module('flowsimUiApp')
       } else if(name in $scope.names) {
         return 'Name exists';
       } else {
-        $scope.packet = fgCache.create('packet', name, Packet).ui;
+        $scope.packet = fgCache.create('packet', name, Packet);
         $scope.names[name] = true;
         $scope.dirty = true;
         return '';
@@ -54,7 +54,7 @@ angular.module('flowsimUiApp')
           if(err) {
             console.log(err.details);
           } else {
-            $scope.packet = result.ui;
+            $scope.packet = result;
             $scope.$broadcast('setStack', $scope.packet.protocols);
           }
         });
