@@ -17,13 +17,12 @@ angular.module('flowsimUiApp')
       fgCache.getNames('switch', callback);
     };
 
-    $scope.addSwitch = function(name) {
+    $scope.addSwitch = function(name, callback) {
       if(name in $scope.names) {
-        return 'Name exists';
+        callback('Name exists');
       } else if(name.length === 0) {
-        return 'Invalid name';
+        callback('Invalid name');
       } else {
-
         fgCache.getNames('profile', function(err, result) {
           if(err) {
             console.log(err.details);
@@ -38,7 +37,7 @@ angular.module('flowsimUiApp')
                 }
               }
             }).result.then(function(profileName) {
-              console.log('from: '+profileName);
+              callback(null);
               $scope._switch = fgCache.create('switch', name, Switch);
               $scope.names[name] = true;
               $scope.setDirty();

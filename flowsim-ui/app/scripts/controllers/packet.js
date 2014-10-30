@@ -24,16 +24,16 @@ angular.module('flowsimUiApp')
     };
 
     // function for constructing a new packet
-    $scope.addPacket = function(name) {
+    $scope.addPacket = function(name, callback) {
       if(!packetName.test(name)) {
-        return 'Bad name';
+        callback('Bad name');
       } else if(name in $scope.names) {
-        return 'Name exists';
+        callback('Name exists');
       } else {
+        callback(null);
         $scope.packet = fgCache.create('packet', name, Packet);
         $scope.names[name] = true;
         $scope.setDirty();
-        return '';
       }
     };
 

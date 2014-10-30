@@ -144,17 +144,17 @@ angular.module('flowsimUiApp')
     };
 
 
-    $scope.addProfile = function(name) {
+    $scope.addProfile = function(name, callback) {
       if(name in $scope.names) {
-        return 'Name exists';
+        callback('Name exists');
       } else if(name.length === 0) {
-        return 'Invalid name';
+        callback('Invalid name');
       } else {
+        callback(null);
         $scope.profile = fgCache.create('profile', name, Profile);
         console.log($scope.profile);
         $scope.names[name] = true;
         $scope.setDirty();
-        return '';
       }
     };
 

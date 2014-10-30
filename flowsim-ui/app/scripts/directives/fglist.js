@@ -42,11 +42,21 @@ angular.module('flowsimUiApp')
         };
 
         $scope.addItem = function() {
+          $scope.onAdd()($scope.itemName, function(err) {
+            if(err) {
+              $scope.erroMsg = err;
+            } else {
+              $scope.items.push($scope.itemName);
+              $scope.shiftFocus($scope.items.length-1);
+            }
+          });
+          /*
           $scope.errorMsg = $scope.onAdd()($scope.itemName);
           if(!$scope.errorMsg.length) {
             $scope.items.push($scope.itemName);
             $scope.shiftFocus($scope.items.length-1);
           }
+          */
         };
 
         $scope.delItem = function(pos) {
