@@ -64,13 +64,11 @@
               </a>
             </form>
             <form class="navbar-form navbar-right" role="form"
-                  ng-show="dirty">
-              <a href="" class="btn btn-success" ng-click="save()">
+                  ng-show="authenticated">
+              <a href="" ng-show="dirty" class="btn btn-success" 
+                         ng-click="save()">
                 Save
               </a>
-            </form>
-            <form class="navbar-form navbar-right" role="form"
-                  ng-show="authenticated">
               <a href="#" class="btn btn-success" ng-click="logout()">
                 Logout
               </a>
