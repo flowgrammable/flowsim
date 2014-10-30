@@ -34,7 +34,7 @@ angular.module('flowsimUiApp')
       if(!$scope.emailMsg.length && !$scope.password1Msg.length && 
          !$scope.password2Msg.length) {
         Subscriber.register($scope.email, $scope.password1,
-          function(err, result) {
+          function(err) {
             if(err) {
               $scope.errorMsg = err.message;
               console.log(err.details);

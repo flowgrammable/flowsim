@@ -29,7 +29,7 @@ angular.module('flowsimUiApp')
       $scope.password2Msg = Subscriber.validatePassword($scope.password2);
       if(!$scope.password1Msg.length && !$scope.password2Msg.length) {
         Subscriber.reset($routeParams.token, $scope.password1, 
-          function(err, result) {
+          function(err) {
             if(err) {
               $scope.errorMsg = err.message;
               console.log(err.details);

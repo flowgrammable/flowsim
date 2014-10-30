@@ -21,7 +21,7 @@ angular.module('flowsimUiApp')
     $scope.addSwitch = function(name) {
       if(name in $scope.names) {
         return 'Name exists';
-      } else if(name.length == 0) {
+      } else if(name.length === 0) {
         return 'Invalid name'; 
       } else { 
         $scope._switch = fgCache.create('switch', name, Switch).ui;
@@ -53,12 +53,12 @@ angular.module('flowsimUiApp')
     };
 
     $scope.save = function() {
-      fgCache.save(function(err, result) {
+      fgCache.save(function(err) {
         if(err) {
           $scope.dirty = true;
-          console.log(err.details)
+          console.log(err.details);
         } else {
-          scope.dirty = false;
+          $scope.dirty = false;
         }
       });
     };
