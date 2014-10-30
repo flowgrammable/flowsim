@@ -162,7 +162,6 @@ angular.module('flowsimUiApp')
     $scope.delProfile = function(name) {
       fgCache.destroy('profile', name);
       delete $scope.names[name];
-      $scope.dirty = !fgCache.sync();
     };
 
     $scope.setProfile = function(name) {
