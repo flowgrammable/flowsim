@@ -95,7 +95,7 @@ angular.module('flowsimUiApp')
       // If there is any update that is dirty we are dirty
       updateDirty = false;
       _.each(update, function(_update, type) {
-        updateDirty |= _.some(_update, function(value) {
+        updateDirty = updateDirty || _.some(_update, function(value) {
           return value.dirty;
         });
       });
