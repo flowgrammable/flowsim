@@ -27,13 +27,12 @@ var Protocols = {
 };
 
 function dispatch(name, method, p) {
-  console.log('dispatch name:', name + '-' + method);
   switch(name) {
     case ETHERNET.name:
-      console.log('hit ethernet case');
       return ETHERNET[method](p);
     case VLAN.name:
       return VLAN[method](p);
+      /*
     case MPLS.name:
       return MPLS[method](p);
     case ARP.name:
@@ -54,6 +53,7 @@ function dispatch(name, method, p) {
       return SCTP[method](p);
     case PAYLOAD.name:
       return PAYLOAD[method](p);
+      */
     default:
       return null;
   }
@@ -64,15 +64,18 @@ function Protocol(name) {
 }
 
 function ProtocolUI(p) {
-  return dispatch(p.name, 'createUI', p);
+  if(typeof p === 'string')
+    return dispatch(p, 'createUI');
+  else
+    return dispatch(p.name, 'createUI');
 }
 
 function Packet(name) {
   this.name = name;
-  this.bytes = 0;
   this.protocols = [
-    ETHERNET.create()
+    Protocol(ETHERNET.name)
   ];
+  this.bytes = this.protocols[0].bytes;
 }
 
 Packet.prototype.push = function(protocol) {
@@ -92,7 +95,7 @@ function PacketUI(pkt) {
   this.name = pkt.name;
   this.bytes = pkt.bytes;
   this.protocols = _.map(pkt.protocols, function(p) {
-    return new ProtocolUI(p);
+    return ProtocolUI(p);
   });
 }
 

@@ -3,6 +3,8 @@
 angular.module('flowsimUiApp')
   .service('ETHERNET', function ETHERNET(fgConstraints) {
 
+var NAME = 'Ethernet';
+
 var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
 
 var Payloads = {
@@ -19,17 +21,18 @@ function isMAC(addr) {
 }
 
 function Ethernet() {
-  this.name = 'Ethernet';
+  this.name = NAME;
   this.bytes = 14;
   this.fields = {
     src: '00:00:00:00:00:00',
     dst: '00:00:00:00:00:00',
-    typelen: 0x0800
+    typelen: 0
   };
 }
 
 function Ethernet_UI(eth) {
-  this.name = eth.name;
+  eth = eth === undefined ? new Ethernet() : eth;
+  this.name = NAME;
   this.bytes = eth.bytes;
   this.attrs = _.map(eth.fields, function(value, key) {
     switch(key) {
@@ -74,14 +77,14 @@ Ethernet_UI.prototype.clearPayload = function() {
 };
 
   
-this.name = 'Ethernet';
+this.name = NAME;
 this.create = function() {
   return new Ethernet();
 };
 
-this.createUI = function(fields) {
+this.createUI = function(eth) {
   console.log('createUI called');
-  return new Ethernet_UI(fields);
+  return new Ethernet_UI(eth);
 };
   
 this.Payloads = Object.keys(Payloads);

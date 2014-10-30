@@ -29,6 +29,7 @@ angular.module('flowsimUiApp')
           console.log('current setstack,', data);
           $scope.stack = data;
           if(data) {
+            console.log(data);
             name = $scope.stack.length ? 
                       $scope.stack[$scope.stack.length-1].name
                       : '';

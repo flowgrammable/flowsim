@@ -3,6 +3,8 @@
 angular.module('flowsimUiApp')
   .service('VLAN', function(fgConstraints, fgUI) {
 
+var NAME = 'VLAN';
+
 var Payloads = {
  'VLAN': 0x8100,
  'MPLS': 0x8847,
@@ -12,8 +14,8 @@ var Payloads = {
  'Payload': 0
 };
 
-function VLAN(name) {
-  this.name = name;
+function VLAN() {
+  this.name = NAME;
   this.bytes = 4;
   this.fields = {
     pcp: 0,
@@ -23,8 +25,9 @@ function VLAN(name) {
   };
 }
 
-function VLAN_UI(name, vlan) {
-  this.name = name;
+function VLAN_UI(vlan) {
+  vlan = vlan === undefined ? new VLAN() : vlan;
+  this.name = NAME;
   this.bytes = 4;
   this.attrs = _.map(vlan.fields, function(value, key) {
     switch(key) {
@@ -67,7 +70,7 @@ VLAN_UI.prototype.clearPayload = function() {
  * # VLAN
  * Service in the flowsimUiApp.
  */
-    this.name = 'VLAN';
+    this.name = NAME;
     this.Payloads = Object.keys(Payloads);
     this.create = function() {
       return new VLAN();
