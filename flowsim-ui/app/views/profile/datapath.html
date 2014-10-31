@@ -1,33 +1,74 @@
 
+<br>
+
 <div class="row">
-  <div class="col-md-6 col-md-offset-1">
+  <div class="col-md-4 col-md-offset-1">
 
-    <form role="form">
-  
-      <div class="form-group">
-        <label for="datapathId">Identifier</label>
-        <input type="text" class="form-control" id="datapathId" 
-               placeholder="00:00:00:00:00:00:00:00" style="width: 180px">
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:110px">Datapath ID</div>
+        <input class="form-control" type="text" style="width:200px"
+               placeholder="00:00:00:00:00:00:00:00">
       </div>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox">
+          IP Reassembly
+      </label>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:110px">Buffer Count</div>
+        <input class="form-control" type="text" style="width:200px"
+               placeholder="1024">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:110px">Table Count</div>
+        <input class="form-control" type="text" style="width:200px"
+               placeholder="256">
+      </div>
+    </div>
+  </div>
+</div>
 
-      <div class="form-group">
-        <label for="n_buffers">Buffers</label>
-        <input type="text" class="form-control" id="n_buffers" 
-               placeholder="1024" style="width: 100px">
+<hr>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:200px">Manufacturer Description</div>
+        <textarea class="form-control" rows="3" style="width:300px"></textarea>
       </div>
-      
-      <div class="form-group">
-        <label for="n_tables">Tables</label>
-        <input type="text" class="form-control" id="n_tables" 
-               placeholder="256" style="width: 50px">
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:200px">Hardware Description</div>
+        <textarea class="form-control" rows="3" style="width:300px"></textarea>
       </div>
-      
-      <div class="form-group">
-        <label for="ip_reassembly">IP Reassembly</label>
-        <input type="checkbox" id="ip_reassembly"/>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:200px">Software Description</div>
+        <textarea class="form-control" rows="3" style="width:300px"></textarea>
       </div>
-      
-    </form>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:200px">Serial Number</div>
+        <input class="form-control" type="text" placeholder="256"  style="width:300px">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:200px">Dataplane Description</div>
+        <textarea class="form-control" rows="3" style="width:300px"></textarea>
+      </div>
+    </div>
 
   </div>
 </div>
