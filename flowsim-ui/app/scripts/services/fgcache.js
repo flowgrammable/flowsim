@@ -90,7 +90,7 @@ angular.module('flowsimUiApp')
       postDirty = _.some(post, function(type) {
         return Object.keys(type).length > 0;
       });
-     
+
       // If there is any update that is dirty we are dirty
       updateDirty = false;
       _.each(update, function(_update, type) {
@@ -155,12 +155,19 @@ angular.module('flowsimUiApp')
       });
     }
 
+    function clear() {
+      post = {};
+      update = {};
+      _delete = {};
+    }
+
     return {
       get: get,
       getNames: getNames,
       create: create,
       destroy: destroy,
       isDirty: isDirty,
-      save: save
+      save: save,
+      clear: clear
     };
   });

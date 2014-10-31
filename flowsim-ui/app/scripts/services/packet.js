@@ -27,6 +27,7 @@ var Protocols = {
 };
 
 function dispatch(name, method, p) {
+  console.log('name, method, p', name, method, p);
   switch(name) {
     case ETHERNET.name:
       return ETHERNET[method](p);
@@ -66,7 +67,7 @@ function createProtocolUI(p) {
   if(typeof p === 'string') {
     return dispatch(p, 'createUI');
   } else {
-    return dispatch(p.name, 'createUI');
+    return dispatch(p.name, 'createUI', p);
   }
 }
 

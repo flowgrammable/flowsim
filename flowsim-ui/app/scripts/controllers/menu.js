@@ -10,7 +10,7 @@
 angular.module('flowsimUiApp')
   .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache,
                                     $location, $modal, $route) {
-    $scope.authenticated = true;
+    $scope.authenticated = false;
     $scope.dirty = false;
     $scope.prev_host = '';
 
@@ -45,6 +45,7 @@ angular.module('flowsimUiApp')
 
     $scope.logout = function() {
       $scope.authenticated = false;
+      fgCache.clear();
       Subscriber.logout(function(err) {
         if(err) {
           console.log(err.details);

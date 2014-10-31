@@ -33,6 +33,7 @@ function _IPV4() {
 }
 
 function _IPV4_UI(ipv4){
+  ipv4 = ipv4 === undefined ? new _IPV4() : ipv4;
   this.name = NAME;
   this.bytes = ipv4.bytes;
   this.attrs = _.map(ipv4.fields, function(value, key){
@@ -41,21 +42,21 @@ function _IPV4_UI(ipv4){
         return {
           name: key,
           value: value,
-          test: fgConstraints.isUint(0, 0x3f),
+          test: fgConstraints.isUInt(0, 0x3f),
           tip: 'Differentiated Services Code Type'
         };
       case 'ecn':
         return {
           name: key,
           value: value,
-          test: fgConstraints.isUint(0, 0x03),
+          test: fgConstraints.isUInt(0, 0x03),
           tip: 'Explicit Congestion Notification'
         };
       case 'proto':
         return {
           name: key,
           value: value,
-          test: fgConstraints.isUint(0, 255),
+          test: fgConstraints.isUInt(0, 255),
           tip: 'Protocol'
         };
       case 'src':

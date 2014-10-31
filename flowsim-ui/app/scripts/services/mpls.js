@@ -29,21 +29,21 @@ function _MPLS_UI(mpls){
         return {
           name: key,
           value: value,
-          test: fgConstriants.isUInt(0, 0x0fffff),
+          test: fgConstraints.isUInt(0, 0x0fffff),
           tip: 'MPLS Label'
         };
       case 'tc':
         return {
           name: key,
           value: value,
-          test: fgConstriants.isUInt(0, 7),
+          test: fgConstraints.isUInt(0, 7),
           tip: 'Traffic Control'
         };
       case 'bos':
         return {
           name: key,
           value: value,
-          test: fgConstriants.isUInt(0, 0x0fffff),
+          test: fgConstraints.isUInt(0, 0x0fffff),
           tip: 'Bottom of Stack'
         };
       default:
