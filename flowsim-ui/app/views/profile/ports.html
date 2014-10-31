@@ -9,7 +9,7 @@
     <div class="form-group">
       <div class="input-group">
         <div class="input-group-addon">Port Count</div>
-        <input class="form-control" type="text" ng-model="portCount">
+        <input class="form-control" type="text" ng-model="ports.n_ports">
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-click="buildPorts()">
             Update
@@ -117,7 +117,7 @@
     <th>Medium</th>
   </thead>
   <tbody>
-  <tr ng-repeat="port in ports">
+  <tr ng-repeat="port in ports.ports">
     <td>{{$index}}</td>
     <td>
       <input class="form-control" type="text" ng-model="port.mac">

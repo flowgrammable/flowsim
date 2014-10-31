@@ -26,6 +26,24 @@ angular.module('flowsimUiApp')
       'OpenFlow 1.4'
     ];
 
+    $scope.datapath = {
+      id: '01:23:45:67:89:ab',
+      ip_reassembly: true,
+      n_buffers: 1024,
+      n_tables: 256,
+
+      mfr_desc: '',
+      hw_desc: '',
+      sw_desc: '',
+      serial_num: '',
+      dp_desc: ''
+    };
+
+    $scope.ports = {
+      n_ports: 24,
+      ports: []
+    };
+
     $scope.activeProto = 0;
     $scope.protocols = [{
       name: 'Internal',

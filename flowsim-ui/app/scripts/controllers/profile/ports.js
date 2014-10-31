@@ -29,9 +29,6 @@ function mkPort(id) {
 angular.module('flowsimUiApp')
   .controller('ProfilePortsCtrl', function ($scope) {
 
-    $scope.portCount = 24;
-    $scope.ports = [];
-
     $scope.Speeds = [{
       label: '10 Mbps',
       value: '10_mbps'
@@ -70,22 +67,17 @@ angular.module('flowsimUiApp')
 
     $scope.buildPorts = function() {
       var i, base;
-      console.log('ports.len: ' + $scope.ports.length);
-      console.log('new len: ' + $scope.portCount);
-      $scope.portCount = 2;
       // If a contraction, shorten the end
-      if($scope.portCount < $scope.ports.length) {
-        $scope.ports.splice($scope.portCount, 
-                            $scope.ports.length - $scope.portCount);
-        console.log('drop: ' + $scope.ports.length);
-      } else if($scope.portCount > $scope.ports.length) {
+      if($scope.ports.n_ports < $scope.ports.ports.length) {
+        $scope.ports.ports.splice($scope.ports.n_ports, 
+                                  $scope.ports.ports.length - $scope.ports.n_ports);
+      } else if($scope.ports.n_ports > $scope.ports.ports.length) {
       // otherwise append
-        base = $scope.ports.length;
-        for(i=base; i < $scope.portCount; ++i) {
-          $scope.ports.push(mkPort(base+i));
+        base = $scope.ports.ports.length;
+        for(i=base; i < $scope.ports.n_ports; ++i) {
+          $scope.ports.ports.push(mkPort(base+i));
         }
       }
-        console.log($scope.ports);
     };
     $scope.buildPorts();
 
