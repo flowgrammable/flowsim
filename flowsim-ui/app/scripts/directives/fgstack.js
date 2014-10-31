@@ -61,10 +61,10 @@ angular.module('flowsimUiApp')
       };
 
       $scope.$watch('stack', function() {
-        if($scope.prev_len && $scope.stack.length) {
+        //if($scope.prev_len && $scope.stack.length) {
           $scope.prev_len = $scope.stack.length;
           $scope.setDirty()();
-        } 
+        //} 
         $scope.prev_len = $scope.stack.length;
       }, true);
 

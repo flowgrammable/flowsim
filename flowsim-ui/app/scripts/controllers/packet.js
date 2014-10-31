@@ -66,6 +66,7 @@ angular.module('flowsimUiApp')
     };
 
     $scope.setDirty = function() {
+      $scope.packet.dirty = true;
       $rootScope.$broadcast('dirtyCache');
     };
 
