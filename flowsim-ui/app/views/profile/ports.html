@@ -69,23 +69,27 @@
   <tr ng-repeat="port in ports.ports">
     <td>{{$index}}</td>
     <td>
-      <input class="form-control" type="text" ng-model="port.mac">
+      <input class="form-control" type="text" ng-model="port.mac"
+             tooltip="{{macTip}}"  
+             ng-class="{'has-error': !macTest(port.mac)}">
     </td>
     <td>
-      <input class="form-control" type="text" ng-model="port.name">
+      <input class="form-control" type="text" ng-model="port.name"
+             tooltip="{{nameTip}}"
+             ng-class="{'has-error': !nameTest(port.name)}">
     </td>
     <td>
-      <select class="form-control" ng-model="port.speed" 
+      <select class="form-control" tooltip="{{speedTip}}" ng-model="port.speed" 
               ng-options="speed.value as speed.label for speed in Speeds">
       </select>
     </td>
     <td>
-      <select class="form-control" ng-model="port.mode"
+      <select class="form-control" tooltip="{{modeTip}}" ng-model="port.mode"
               ng-options="mode.value as mode.label for mode in Modes">
       </select>
     </td>
     <td>
-      <select class="form-control" ng-model="port.medium"
+      <select class="form-control" tooltip="{{mediumTip}}" ng-model="port.medium"
               ng-options="medium as medium for medium in Mediums">
       </select>
     </td>

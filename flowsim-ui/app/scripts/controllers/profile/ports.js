@@ -29,6 +29,15 @@ function mkPort(id) {
 angular.module('flowsimUiApp')
   .controller('ProfilePortsCtrl', function ($scope) {
 
+    $scope.macTest = function() {
+      return true;
+    };
+    $scope.nameTest = function() {
+      return true;
+    };
+    $scope.macTip = '';
+    $scope.nameTip = '';
+
     $scope.Speeds = [{
       label: '10 Mbps',
       value: '10_mbps'
@@ -52,6 +61,8 @@ angular.module('flowsimUiApp')
       value: '1_tbps'
     }];
 
+    $scope.speedTip = '';
+
     $scope.Modes = [{
       label: 'Half Duplex',
       value: 'half_duplex'
@@ -59,11 +70,15 @@ angular.module('flowsimUiApp')
       label: 'Full Duplex',
       value: 'full_duplex'
     }];
+
+    $scope.modeTip = '';
     
     $scope.Mediums = [
       'Copper',
       'Fiber'
     ];
+
+    $scope.mediumTip = '';
 
     $scope.buildPorts = function() {
       var i, base;
