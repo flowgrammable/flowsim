@@ -43,10 +43,16 @@ angular.module('flowsimUiApp')
       }, callback);
     };
 
-    this.reset = function(token, email, callback) {
+    this.forgot = function(email, callback) {
+      Backend.post('/api/subscriber/forgot', {
+        email: email
+      }, callback);
+    };
+
+    this.reset = function(token, newPassword, callback) {
       Backend.post('/api/subscriber/reset', {
         token: token,
-        email: email
+        password: newPassword
       }, callback);
     };
 

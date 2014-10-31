@@ -8,27 +8,36 @@
 
       <hr>
 
-      <form ng-submit="reset()" role="form" ng-hide="sent">
+      <form ng-submit="reset()" role="form" ng-show="!success">
         <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" class="form-control" id="email"
-                 placeholder="Enter email" ng-model="email">
-            <div class="error" ng-show="emailMsg.length">
-              <span>{{emailMsg}}</span>
-            </div>
+          <label for="password1">Password</label>
+          <input name="password1" type="password" class="form-control"
+                 id="password1" placeholder="Password" ng-model="password1"
+                 required>
+          <div class="error" ng-show="password1Msg.length">
+            <span>{{password1Msg}}</span>
+          </div>
         </div>
-        <a href="" class="btn btn-default" ng-click="reset()">Reset</a>
+        <div class="form-group">
+          <label for="password2">Retype Password</label>
+          <input name="password2" type="password" class="form-control"
+                 id="password2" placeholder="Retype Password" ng-model="password2"
+                 required>
+          <div class="error" ng-show="password2Msg.length">
+            <span>{{password2Msg}}</span>
+          </div>
+        </div>
+
+        <a href="" class="btn btn-default" ng-show="!success" ng-click="reset()">Reset</a>
       </form>
+      <div class="error" ng-show="errorMsg.length">
+        {{errorMsg}}
+      </div>
     </div>
     <div ng-show="success">
       <h1>Reset Success</h1>
       Your password has been successfully updated. You may now log in using your
       new credentials.
     </div>
-
-    <div class="error" ng-show="errorMsg.length">
-      {{errorMsg}}
-    </div>
-
   </div>
 </div>
