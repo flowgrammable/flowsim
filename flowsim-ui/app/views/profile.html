@@ -12,6 +12,10 @@
   </div>
 
   <div class="col-md-10">
+
+    <div ng-show="profile">
+
+    <!--
     <div style="text-align:center">
       <span ng-repeat="v in versions">
         <button type="button" class="btn btn-primary btn-xs" 
@@ -20,10 +24,32 @@
         </button>
       </span>
     </div>
+    -->
+
+    <div class="row">
+      <div class="col-md-4">
+        <h4>Minimum OpenFlow Version: 1.2</h4>
+      </div>
+      <div class="col-md-2">
+        <div class="input-group" style="width:220px">
+          <select class="form-control">
+            <option>OpenFlow 1.0</option>
+            <option>OpenFlow 1.1</option>
+            <option>OpenFlow 1.2</option>
+            <option>OpenFlow 1.3</option>
+            <option>OpenFlow 1.4</option>
+          </select>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              Preselect
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
 
     <br>
 
-    <div ng-show="profile">
       <tabset>
         <tab heading="Datapath">
           <ng-include src="'views/profile/datapath.html'"></ng-include>
