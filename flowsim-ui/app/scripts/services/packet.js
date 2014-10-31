@@ -41,7 +41,7 @@ function dispatch(name, method, p) {
       return IPV4[method](p);
     case IPV6.name:
       return IPV6[method](p);
-/*    case ICMPV4.name:
+    case ICMPV4.name:
       return ICMPV4[method](p);
     case ICMPV6.name:
       return ICMPV6[method](p);
@@ -53,7 +53,6 @@ function dispatch(name, method, p) {
       return SCTP[method](p);
     case PAYLOAD.name:
       return PAYLOAD[method](p);
-      */
     default:
       return null;
   }

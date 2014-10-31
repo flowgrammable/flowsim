@@ -1,40 +1,53 @@
 'use strict';
 
-(function(){
+angular.module('flowsimUiApp')
+  .service('ICMPV6', function(fgUI, fgConstraints){
+
+var NAME = 'ICMPv6';
 
 function _ICMPv6() {
-  this.name = 'ICMPv6';
-  this.attrs = [{
-    name: 'Type',
-    value: 0,
-    test: fgConstraints.isUInt(0, 0xff),
-    tip: 'ICMP message type'
-  }, {
-    name: 'Code',
-    value: 0,
-    test: fgConstraints.isUInt(0, 0xff),
-    tip: 'ICMP message code'
-  }];
+  this.name = NAME;
+  this.bytes = 4;
+  this.fields = {
+    type: 0,
+    code: 0
+  };
 }
 
-_ICMPv6.prototype.bytes = function() {
-  return 4; //+ addition things
+function _ICMPV6_UI(icmpv6){
+  icmpv6 = icmpv6 === undefined ? new _ICMPV6() : icmpv6;
+  this.name = NAME;
+  this.bytes = 4;
+  this.attrs = _.map(icmpv6.fields, function(value, key){
+    switch(key){
+      case 'type':
+        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xff),
+                                        'ICMP message type');
+      case 'code':
+        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xff),
+                                        'ICMP message code');
+      default:
+        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
+    }
+  });
+}
+
+_ICMPV6_UI.prototype.toBase = function() {
+  var result = new _ICMPV6();
+  result.name = this.name;
+  result.bytes = this.bytes;
+  result.fields = fgUI.stripLabelInputs(this.attrs);
+  return result;
+}
+
+this.name = NAME;
+
+this.create = function() {
+      return new _ICMPv6();
 };
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.ICMPV6
- * @description
- * # ICMPV6
- * Service in the flowsimUiApp.
- */
-angular.module('flowsimUiApp')
-  .service('ICMPV6', function ICMPV6() {
-    this.Payloads = [];
-    this.create = function() {
-      return new _ICMPv6();
-    };
-  });
+this.createUI = function(icmpv6){
+  return new _ICMPV6_UI(icmp);
+}
 
-})();
-
+});
