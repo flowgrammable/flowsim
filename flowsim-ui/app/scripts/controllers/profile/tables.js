@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('ProfileTableCtrl', function ($scope) {
+  .controller('ProfileTablesCtrl', function ($scope) {
     $scope.match = function() {
       console.log('match');
     };
