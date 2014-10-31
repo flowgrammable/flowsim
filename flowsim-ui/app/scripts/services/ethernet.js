@@ -26,7 +26,7 @@ function Ethernet() {
   this.fields = {
     src: '00:00:00:00:00:00',
     dst: '00:00:00:00:00:00',
-    typelen: 0
+    typelen: '0x0'
   };
 }
 
@@ -53,7 +53,7 @@ function Ethernet_UI(eth) {
       case 'typelen':
         return {
           name: key,
-          value: '0x'+value.toString(16),
+          value: value.toString(16),
           test: fgConstraints.isUInt(0, 0xffff),
           tip: 'Ethernet type/length of payload'
         };
@@ -84,7 +84,6 @@ Ethernet_UI.prototype.clearPayload = function() {
   this.attrs[2].value = '0x0000';
 };
 
-  
 this.name = NAME;
 
 this.isMAC = isMAC;
@@ -97,7 +96,7 @@ this.create = function() {
 this.createUI = function(eth) {
   return new Ethernet_UI(eth);
 };
-  
+
 this.Payloads = Object.keys(Payloads);
 
 });

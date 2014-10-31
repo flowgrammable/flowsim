@@ -58,6 +58,7 @@ angular.module('flowsimUiApp')
           if(err) {
             console.log(err.details);
           } else {
+            $scope.names[result.name] = true;
             $scope.packet = result;
             $scope.$broadcast('setStack', $scope.packet.protocols);
           }
@@ -66,11 +67,13 @@ angular.module('flowsimUiApp')
     };
 
     $scope.setDirty = function() {
+      if($scope.packet !== null){
       $scope.packet.dirty = true;
       $scope.packet.bytes = 0;
       _.each($scope.packet.protocols, function(value, key){
         $scope.packet.bytes += value.bytes;
       })
+      }
       $rootScope.$broadcast('dirtyCache');
     };
 

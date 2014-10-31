@@ -45,7 +45,7 @@ angular.module('flowsimUiApp')
           $scope.onAdd()($scope.itemName, function(err) {
             if(err) {
               $scope.itemName = '';
-              $scope.erroMsg = err;
+              $scope.errorMsg = err;
             } else {
               $scope.items.push($scope.itemName);
               $scope.shiftFocus($scope.items.length-1);
