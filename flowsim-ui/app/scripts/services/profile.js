@@ -40,13 +40,22 @@ TIPS.datapath = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',
   n_buffers: 'Number of packets that can be buffered for controller',
-  n_tables: 'Number of flow tables available'
+  n_tables: 'Number of flow tables available',
+  mfr_desc: '',
+  hw_desc: '',
+  serial_num: '',
+  dp_desc: ''
 };
 
 TESTS.datapath = {
   datapath_id: function() { return true; },
   n_buffers: fgConstraints.isUInt(0, 0xffff),
-  n_tables: fgConstraints.isUInt(1, 256) 
+  n_tables: fgConstraints.isUInt(1, 256),
+  mfr_desc: function(v) { return !v || v.length <= 256 ; },
+  hw_desc: function(v) { return !v || v.length <= 256; },
+  sw_desc: function(v) { return !v || v.length <= 256; },
+  serial_num: function(v) { return !v || v.length <= 32; },
+  dp_desc: function(v) { return !v || v.length <= 256; }
 };
 
 DatapathUI.prototype.toBase = function() {
