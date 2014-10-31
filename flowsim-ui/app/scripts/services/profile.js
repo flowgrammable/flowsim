@@ -6,34 +6,38 @@ angular.module('flowsimUiApp')
 var TIPS = {};
 var TESTS = {};
 
-function Datapath() {
+function Datapath(dp) {
+
+  if(dp) {
+    this.datapath_id   = dp.datapath_id;
+    this.ip_reassembly = dp.ip_reassembly;
+    this.n_buffers     = dp.n_buffers;
+    this.n_tables      = dp.n_tables;
+
+    this.mfc_desc   = dp.mfc_desc;
+    this.hw_desc    = dp.hw_desc;
+    this.sw_desc    = dp.sw_desc;
+    this.serial_num = dp.serial_num;
+    this.dp_desc    = dp.dp_desc;
+  } else {
   // Capabilities
-  this.datapath_id   = '01:23:45:67:89:ab'; // <- need a better answer than this
-  this.n_buffers     = 1024;
-  this.n_tables      = 256;
-  this.ip_reassembly = true;
+    this.datapath_id   = '01:23:45:67:89:ab'; // <- need a better answer than t
+    this.n_buffers     = 1024;
+    this.n_tables      = 256;
+    this.ip_reassembly = true;
 
-  // Descriptions
-  this.mfr_description = '';
-  this.hw_description  = '';
-  this.sw_description  = '';
-  this.serial_num      = '';
-  this.dp_description  = '';
+    // Descriptions
+    this.mfr_description = '';
+    this.hw_description  = '';
+    this.sw_description  = '';
+    this.serial_num      = '';
+    this.dp_description  = '';
+  }
 }
+var DatapathUI = Datapath;
 
-function DatapathUI(dp) {
-  dp = dp ? dp : new Datapath();
-
-  this.datapath_id   = dp.datapath_id;
-  this.ip_reassembly = dp.ip_reassembly;
-  this.n_buffers     = dp.n_buffers;
-  this.n_tables      = dp.n_tables;
-
-  this.mfc_desc   = dp.mfc_desc;
-  this.hw_desc    = dp.hw_desc;
-  this.sw_desc    = dp.sw_desc;
-  this.serial_num = dp.serial_num;
-  this.dp_desc    = dp.dp_desc;
+DatapathUI.prototype.toBase = function() {
+  return new Datapath(this);
 }
 
 TIPS.datapath = {
@@ -58,38 +62,24 @@ TESTS.datapath = {
   dp_desc: function(v) { return !v || v.length <= 256; }
 };
 
-DatapathUI.prototype.toBase = function() {
-  var result = new Datapath();
-  result.datapath_id   = this.datapath_id;
-  result.ip_reassembly = this.ip_reassembly;
-  result.n_buffers     = this.n_buffers;
-  result.n_tables      = this.n_tables;
+function Port(p) {
+  if(p) {
+  }
+  if() {
+    this.port_id = p
+    this.mac     = mac ? mac : '00:00:00:00:00:00';
+    this.name    = name ? name : 'eth' + id;
+    this.speed   = speed ? speed : '1_gbps';
+    this.mode    = mode ? mode : 'full_duplex';
+    this.medium  = medium ? medium : 'Copper';
+  } else if(p) {
 
-  result.mfc_desc   = this.mfc_desc;
-  result.hw_desc    = this.hw_desc;
-  result.sw_desc    = this.sw_desc;
-  result.serial_num = this.serial_num;
-  return result;
-};
-
-function Port(id, mac, name, speed, mode, medium) {
-  this.port_id = id
-  this.mac     = mac ? mac : '00:00:00:00:00:00';
-  this.name    = name ? name : 'eth' + id;
-  this.speed   = speed ? speed : '1_gbps';
-  this.mode    = mode ? mode : 'full_duplex';
-  this.medium  = medium ? medium : 'Copper';
-}
-
-function PortUI(port) {
-  port = port ? port : new Port();
-
-  this.port_id = port.port_id;
-  this.mac     = port.mac;
-  this.name    = port.name;
-  this.speed   = port.speed;
-  this.mode    = port.mode;
-  this.medium  = port.medium;
+  this.port_id = p.port_id;
+  this.mac     = p.mac;
+  this.name    = p.name;
+  this.speed   = p.speed;
+  this.mode    = p.mode;
+  this.medium  = p.medium;
 }
 
 PortUI.prototype.toBase = function() {
