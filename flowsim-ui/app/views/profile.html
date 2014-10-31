@@ -49,7 +49,8 @@
 
       <tabset>
         <tab heading="Datapath">
-          <ng-include src="'views/profile/datapath.html'"></ng-include>
+          <ng-include ng-controller="ProfileDatapathCtrl"
+                      src="'views/profile/datapath.html'"></ng-include>
         </tab>
         <tab heading="Ports">
           <ng-include ng-controller="ProfilePortsCtrl" 
@@ -57,13 +58,16 @@
           </ng-include>
         </tab>
         <tab heading="Groups">
-          <ng-include src="'views/profile/groups.html'"></ng-include>
+          <ng-include ng-controller="ProfileGroupsCtrl"
+                      src="'views/profile/groups.html'"></ng-include>
         </tab>
         <tab heading="Tables">
-          <ng-include src="'views/profile/tables.html'"></ng-include>
+          <ng-include ng-controller="ProfileTablesCtrl"
+                      src="'views/profile/tables.html'"></ng-include>
         </tab>
         <tab heading="Meters">
-          <ng-include src="'views/profile/meters.html'"></ng-include>
+          <ng-include ng-controller="ProfileMetersCtrl"
+                      src="'views/profile/meters.html'"></ng-include>
         </tab>
     </tabset>
     </div>
