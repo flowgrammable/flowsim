@@ -41,7 +41,38 @@ angular.module('flowsimUiApp')
 
     $scope.ports = {
       n_ports: 24,
-      ports: []
+      ports: [],
+      vports: [{
+        name: 'port_stats',
+        value: true
+      }, {
+        name: 'in_port',
+        value: true,
+      }, {
+        name: 'table:',
+        value: true,
+      }, {
+        name: 'normal',
+        value: true,
+      }, {
+        name: 'any',
+        value: true,
+      }, {
+        name: 'flood',
+        value: true,
+      }, {
+        name: 'all',
+        value: true,
+      }, {
+        name: 'controller',
+        value: true,
+      }, {
+        name: 'local',
+        value: true,
+      }, {
+        name: 'none',
+        value: true
+      }]
     };
 
     $scope.activeProto = 0;
