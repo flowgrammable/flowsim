@@ -28,10 +28,14 @@ angular.module('flowsimUiApp')
       $scope.password1Msg = Subscriber.validatePassword($scope.password1);
       $scope.password2Msg = Subscriber.validatePassword($scope.password2);
       if(!$scope.password1Msg.length && !$scope.password2Msg.length) {
-        Subscriber.reset($routeParams.token, $scope.password1, 
+        Subscriber.reset($routeParams.token, $scope.password1,
           function(err) {
             if(err) {
-              $scope.errorMsg = err.message;
+              if(err.detail.type === 'unknownVerificationToken'){
+                $scope.errorMsg = 'Rest token has expired'
+              } else {
+                $scope.errorMsg = err.message;
+              }
               console.log(err.details);
             } else {
               $scope.success = true;
@@ -41,4 +45,3 @@ angular.module('flowsimUiApp')
         }
     };
   });
-
