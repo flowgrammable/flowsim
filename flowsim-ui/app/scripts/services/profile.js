@@ -7,8 +7,8 @@ var TIPS = {};
 var TESTS = {};
 
 function Datapath(dp) {
-
-  if(dp) {
+  // Copy constructor
+  if(dp && dp instanceof Datapath) {
     this.datapath_id   = dp.datapath_id;
     this.ip_reassembly = dp.ip_reassembly;
     this.n_buffers     = dp.n_buffers;
@@ -19,9 +19,10 @@ function Datapath(dp) {
     this.sw_desc    = dp.sw_desc;
     this.serial_num = dp.serial_num;
     this.dp_desc    = dp.dp_desc;
-  } else {
-  // Capabilities
-    this.datapath_id   = '01:23:45:67:89:ab'; // <- need a better answer than t
+  } 
+  // Default constructor
+  else {
+    this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
     this.n_buffers     = 1024;
     this.n_tables      = 256;
     this.ip_reassembly = true;
@@ -34,11 +35,13 @@ function Datapath(dp) {
     this.dp_description  = '';
   }
 }
-var DatapathUI = Datapath;
 
-DatapathUI.prototype.toBase = function() {
+Datapath.prototype.clone = function() {
   return new Datapath(this);
-}
+};
+
+var DatapathUI = Datapath;
+DatapathUI.prototype.toBase = Datapath.prototype.clone;
 
 TIPS.datapath = {
   datapath_id: 'Unique id of the datapath',
@@ -53,60 +56,60 @@ TIPS.datapath = {
 
 TESTS.datapath = {
   datapath_id: function() { return true; },
-  n_buffers: fgConstraints.isUInt(0, 0xffff),
-  n_tables: fgConstraints.isUInt(1, 256),
-  mfr_desc: function(v) { return !v || v.length <= 256 ; },
-  hw_desc: function(v) { return !v || v.length <= 256; },
-  sw_desc: function(v) { return !v || v.length <= 256; },
-  serial_num: function(v) { return !v || v.length <= 32; },
-  dp_desc: function(v) { return !v || v.length <= 256; }
+  n_buffers:   fgConstraints.isUInt(0, 0xffff),
+  n_tables:    fgConstraints.isUInt(1, 256),
+  mfr_desc:    function(v) { return !v || v.length <= 256 ; },
+  hw_desc:     function(v) { return !v || v.length <= 256; },
+  sw_desc:     function(v) { return !v || v.length <= 256; },
+  serial_num:  function(v) { return !v || v.length <= 32; },
+  dp_desc:     function(v) { return !v || v.length <= 256; }
 };
 
 function Port(p) {
-  if(p) {
+  // Copy constructor
+  if(p && p instanceof Port) {
+    this.port_id = p.port_id;
+    this.mac     = p.mac;
+    this.name    = p.name;
+    this.speed   = p.speed;
+    this.mode    = p.mode;
+    this.medium  = p.medium;
+  } else {
+    if(p && typeof p === 'number') {
+      this.port_id = p;
+    } else {
+      this.port_id = 0
+    }
+    this.mac    = '00:00:00:00:00:00';
+    this.name   = 'eth' + this.port_id;
+    this.speed  = '1_gbps';
+    this.mode   = 'full_duplex';
+    this.medium = 'Copper';
   }
-  if() {
-    this.port_id = p
-    this.mac     = mac ? mac : '00:00:00:00:00:00';
-    this.name    = name ? name : 'eth' + id;
-    this.speed   = speed ? speed : '1_gbps';
-    this.mode    = mode ? mode : 'full_duplex';
-    this.medium  = medium ? medium : 'Copper';
-  } else if(p) {
-
-  this.port_id = p.port_id;
-  this.mac     = p.mac;
-  this.name    = p.name;
-  this.speed   = p.speed;
-  this.mode    = p.mode;
-  this.medium  = p.medium;
 }
 
-PortUI.prototype.toBase = function() {
-  var result= new Port();
-  result.mac = port.mac;
-  this.name = port.name;
-  this.speed = port.speed;
-  this.mode = port.mode;
-  this.medium = port.medium;
-  return result;
-}
-
-PortUI.TIPS = {
-  port_id: '',
-  mac: '',
-  name: '',
-  speed: '',
-  mode: '',
-  medium: ''
+Port.prototype.clone = function() {
+  return new Port(this);
 };
 
-PortUI.TESTS = {
+var PortUI              = Port;
+PortUI.prototype.toBase = Port.prototype.clone;
+
+TIPS.port = {
+  port_id: 'Ethernet port identifier',
+  mac:     'MAC address used by port in spanning tree',
+  name:    'display name of the port',
+  speed:   'physical layer speed of port',
+  mode:    'physical layer transmission mode',
+  medium:  'physical layer medium of port'
+};
+
+TESTS.port = {
   mac: ETHERNET.isMac,
   name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v) }
 };
 
-PortUI.SPEEDS = [{
+var SPEEDS = [{
   label: '10 Mbps',
   value: '10_mbps'
 }, {
@@ -129,7 +132,7 @@ PortUI.SPEEDS = [{
   value: '1_tbps'
 }];
 
-PortUI.MODES = [{
+var MODES = [{
   label: 'Half Duplex',
   value: 'half_duplex'
 }, {
@@ -137,95 +140,85 @@ PortUI.MODES = [{
   value: 'full_duplex'
 }];
 
-PortUI.MEDIUMS = [
+var MEDIUMS = [
   'Copper',
   'Fiber'
 ];
 
-function Ports() {
-  this.n_ports = 24;
-  this.ports = _.map(_.range(this.n_ports), function(idx) {
-    return new Port(idx);
-  });
-  this.vports = {
-    port_stats: true,
-    stp:        false,
-    in_port:    true,
-    table:      true,
-    normal:     true,
-    flood:      true,
-    all:        true,
-    controller: true,
-    local:      true,
-    any:        true,
-    none:       true
-  };
-}
-
-function PortsUI(ports) {
-  ports = ports === undefined ? new Ports() : ports;
-  this.n_ports = ports.n_ports;
-  this.ports = _.map(ports.ports, function(port) {
-    return new Port(port);
-  });
-  this.vports = _.map(ports.vports, function(value, key) {
-    return {
-      name: key,
-      value: value
+function Ports(ports) {
+  if(ports && ports instanceof Ports) {
+    this.n_ports = ports.n_ports;
+    this.ports = _.map(ports.ports, function(port) {
+      return new Port(port);
+    });
+    this.vports = _.clone(ports.vports);
+  } else {
+    if(ports && typeof ports === 'number'){
+      this.n_ports = ports;
+    }
+    this.ports = _.map(_.range(this.n_ports), function(idx) {
+      return new Port(idx);
+    });
+    this.vports = {
+      port_stats: true,
+      stp:        false,
+      in_port:    true,
+      table:      true,
+      normal:     true,
+      flood:      true,
+      all:        true,
+      controller: true,
+      local:      true,
+      any:        true,
+      none:       true
     };
-  });
+  }
 }
 
-PortsUI.prototype.toBase = function() {
-  var result = new Ports();
-  result.n_ports = this.n_ports;
-  result.ports = _.map(this.ports, function(port) {
-    return port.toBase();
-  });
-  result.vports = this.vports;
-  return result;
-};
-
-function Meters() {
+Ports.prototype.clone = function() {
+  return new Ports(this);
 }
 
-function MetersUI(m) {
-  if(m) {
+var PortsUI              = Ports;
+PortsUI.prototype.toBase = Ports.prototype.clone;
+
+function Meters(meters) {
+  if(meters && meters instanceof Meters) {
+  } else {
+  }
+}
+Meters.prototype.clone = function() {
+  return new Meters(this);
+}
+
+var MetersUI = Meters;
+MetersUI.prototype.toBase = Meters.prototype.clone;
+
+function Tables(tables) {
+  if(tables && tables instanceof Tables) {
   } else {
   }
 }
 
-MetersUI.prototype.toBase = function() {
-  var result = new Meters();
-  return result;
-};
-
-function Tables() {
+Tables.prototype.clone = function() {
+  return new Tables(this);
 }
 
-function TablesUI(t) {
-  if(t) {
+var TablesUI = Tables;
+TablesUI.prototype.toBase = Tables.prototype.clone;
+
+function Groups(groups) {
+  if(groups && groups instanceof Groups) {
   } else {
   }
 }
 
-TablesUI.prototype.toBase = function() {
-  var result = new Tables();
-  return result;
-};
-
-function Groups() {
-}
-function GroupsUI(g) {
-  if(g) {
-  } else {
-  }
+Groups.prototype.clone = function() {
+  return new Groups(this);
 }
 
-GroupsUI.prototype.toBase = function() {
-  var result = new Groups();
-  return result;
-};
+var GroupsUI              = Groups;
+GroupsUI.prototype.toBase = Groups.prototype.clone;
 
 function Profile(name) {
   this.name = name;
