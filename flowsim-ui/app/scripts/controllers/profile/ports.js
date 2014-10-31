@@ -1,9 +1,18 @@
 'use strict';
 
+function twoZs(v) {
+  var val = v.toString(16);
+  if(val.length < 2) {
+    return '0' + val;
+  } else {
+    return val;
+  }
+}
+
 function mkPort(id) {
   return {
-    mac: '00:00:00:00:00:00',
-    name: id,
+    mac: '00:00:00:00:00:' + twoZs(id),
+    name: 'eth'+id,
     speed: '1_gbps',
     mode: 'full_duplex',
     medium: 'Copper'
@@ -61,10 +70,14 @@ angular.module('flowsimUiApp')
 
     $scope.buildPorts = function() {
       var i, base;
+      console.log('ports.len: ' + $scope.ports.length);
+      console.log('new len: ' + $scope.portCount);
+      $scope.portCount = 2;
       // If a contraction, shorten the end
       if($scope.portCount < $scope.ports.length) {
         $scope.ports.splice($scope.portCount, 
                             $scope.ports.length - $scope.portCount);
+        console.log('drop: ' + $scope.ports.length);
       } else if($scope.portCount > $scope.ports.length) {
       // otherwise append
         base = $scope.ports.length;
@@ -72,6 +85,7 @@ angular.module('flowsimUiApp')
           $scope.ports.push(mkPort(base+i));
         }
       }
+        console.log($scope.ports);
     };
     $scope.buildPorts();
 

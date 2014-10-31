@@ -9,48 +9,61 @@
     <div class="form-group">
       <div class="input-group">
         <div class="input-group-addon">Port Count</div>
-        <input class="form-control" type="text" ng-model="portCount"
-               ng-changed="buildPorts">
+        <input class="form-control" type="text" ng-model="portCount">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-click="buildPorts()">
+            Update
+          </button>
+        </span>
       </div>
     </div>
 
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Virtual Ports</h3>
+      </div>
+      <div class="panel-body">
 
-    <div class="checkbox">
-      <label>
-        <input type="checkbox">
-        Port Statistics
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox">
-        Ingress Port
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox">
-        Table
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox">
-        Normal
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox">
-        Any
-      </label>
-    </div>
+        <div class="row">
+          <div class="col-md-6">
 
-  </div>
-  <div class="col-md-2">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox">
+                Port Statistics
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox">
+                Ingress Port
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox">
+                Table
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox">
+                Normal
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox">
+                Any
+              </label>
+            </div>
+
+          </div>
+          <div class="col-md-6">
+
     <div class="checkbox">
       <label>
         <input type="checkbox">
@@ -82,6 +95,12 @@
       </label>
     </div>
 
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -89,8 +108,8 @@
 
 <table class="table table-striped">
   <thead>
-    <th>Port Id</td>
-    <th>Hw Addr</th>
+    <th>Id</td>
+    <th>Address</th>
     <th>Name</th>
     <th>Speed</th>
     <th>Mode</th>
@@ -107,20 +126,17 @@
     </td>
     <td>
       <select class="form-control" ng-model="port.speed" 
-              ng-options="speed.label for speed in Speeds">
-        <option value="">-- choose speed --</option>
+              ng-options="speed.value as speed.label for speed in Speeds">
       </select>
     </td>
     <td>
       <select class="form-control" ng-model="port.mode"
-              ng-options="mode.label for mode in Modes">
-        <option value="">-- choose mode --</option>
+              ng-options="mode.value as mode.label for mode in Modes">
       </select>
     </td>
     <td>
       <select class="form-control" ng-model="port.medium"
-              ng-options="medium in Mediums">
-        <option value="">-- choose medium --</option>
+              ng-options="medium as medium for medium in Mediums">
       </select>
     </td>
 
