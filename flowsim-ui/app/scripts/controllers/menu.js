@@ -8,9 +8,9 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache, 
+  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache,
                                     $location, $modal, $route) {
-    $scope.authenticated = true;
+    $scope.authenticated = false;
     $scope.dirty = false;
     $scope.prev_host = '';
 
@@ -24,6 +24,7 @@ angular.module('flowsimUiApp')
 
     $scope.save = function() {
       fgCache.save();
+      $scope.dirty = false;
     }
 
     window.onbeforeunload = function(event) {
@@ -37,7 +38,7 @@ angular.module('flowsimUiApp')
     $rootScope.$on('dirtyCache', function() {
       $scope.dirty = true;
     });
-    
+
     $rootScope.$on('cleanCache', function() {
       $scope.dirty = false;
     });

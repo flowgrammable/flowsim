@@ -29,7 +29,7 @@ angular.module('flowsimUiApp')
           var name;
           if(data) {
             $scope.stack = data;
-            name = $scope.stack.length ? 
+            name = $scope.stack.length ?
                       $scope.stack[$scope.stack.length-1].name
                       : '';
             $scope.options = $scope.getOptions()(name);
@@ -54,17 +54,17 @@ angular.module('flowsimUiApp')
         var name;
         if($scope.stack.length) {
           $scope.stack.pop();
-          name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name 
+          name = $scope.stack.length ? $scope.stack[$scope.stack.length-1].name
                                     : '';
           $scope.options = $scope.getOptions()(name);
         }
       };
 
       $scope.$watch('stack', function() {
-        //if($scope.prev_len && $scope.stack.length) {
+        if($scope.stack.length) {
           $scope.prev_len = $scope.stack.length;
           $scope.setDirty()();
-        //} 
+        }
         $scope.prev_len = $scope.stack.length;
       }, true);
 

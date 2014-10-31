@@ -17,6 +17,16 @@ exports.switchDoesNotExist = function(name) {
   };
 };
 
+exports.existingSwitch = function(name) {
+  return {
+    message: 'A switch with the name: ' + name + ' already exists',
+    detail: {
+      system: 'switch/storage',
+      type: 'switchAlreadyExists'
+    }
+  };
+};
+
 exports.missingField = function(name){
   return {
     message: 'Switch is missing '+name+' field',

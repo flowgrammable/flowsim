@@ -14,14 +14,7 @@ function create(view) {
     if(req.body.name !== req.params.packetName){
       responder(msg.badValue('Packet url name must equal packet body name'));
     } else {
-    pktUtils.validatePacket(req.body,
-      function(err, packet){
-      if(err){
-        responder(err);
-      } else {
-        view.controller.create(req.subscriber_id, packet, responder);
-      }
-    });
+      view.controller.create(req.subscriber_id, req.body, responder);
     }
   };
 }
@@ -43,15 +36,15 @@ function detail(view){
 function update(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
-    pktUtils.validatePacket(req.body,
+  /*  pktUtils.validatePacket(req.body,
       function(err, packet){
       if(err){
         responder(err);
-      } else {
+      } else { */
         view.controller.update(req.subscriber_id,
-          req.params.packetName, packet, responder);
-      }
-    });
+          req.params.packetName, req.body, responder);
+    /*  }
+  }); */
   };
 }
 
