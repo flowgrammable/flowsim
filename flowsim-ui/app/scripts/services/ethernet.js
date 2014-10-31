@@ -86,6 +86,10 @@ Ethernet_UI.prototype.clearPayload = function() {
 
   
 this.name = NAME;
+
+this.isMAC = isMAC;
+this.macTip = 'Ethernet MAC Address';
+
 this.create = function() {
   return new Ethernet();
 };

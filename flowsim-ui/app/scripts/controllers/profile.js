@@ -13,11 +13,9 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.profile = null;
 
-    $scope.set = function(idx) {
-      Profile.setVersion($scope.profile, idx);
-    };
+    $scope.tips = Profile.tips;
+    $scope.tests = Profile.tests;
 
-    $scope.activeVer = 0;
     $scope.versions = [
       'OpenFlow 1.0',
       'OpenFlow 1.1',
@@ -25,19 +23,6 @@ angular.module('flowsimUiApp')
       'OpenFlow 1.3',
       'OpenFlow 1.4'
     ];
-
-    $scope.datapath = {
-      id: '01:23:45:67:89:ab',
-      ip_reassembly: true,
-      n_buffers: 1024,
-      n_tables: 256,
-
-      mfr_desc: '',
-      hw_desc: '',
-      sw_desc: '',
-      serial_num: '',
-      dp_desc: ''
-    };
 
     $scope.ports = {
       n_ports: 24,
@@ -75,115 +60,6 @@ angular.module('flowsimUiApp')
       }]
     };
 
-    $scope.activeProto = 0;
-    $scope.protocols = [{
-      name: 'Internal',
-      attrs: [{
-        name: 'In Port',
-        type: 'checkbox',
-        value: true,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Mask',
-        type: 'text',
-        value: 0,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Metadata',
-        type: 'checkbox',
-        value: true,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Mask',
-        type: 'text',
-        value: 0,
-        test: function() { return true; },
-        tip: ''
-      }]
-    }, {
-      name: 'Ethernet',
-      attrs: [{
-        name: 'Src',
-        type: 'checkbox',
-        value: true,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Mask',
-        type: 'text',
-        value: 0,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Dst',
-        type: 'checkbox',
-        value: true,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Mask',
-        type: 'text',
-        value: 0,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Typelen',
-        type: 'checkbox',
-        value: true,
-        test: function() { return true; },
-        tip: ''
-      }, {
-        name: 'Mask',
-        type: 'text',
-        value: 0,
-        test: function() { return true; },
-        tip: ''
-      }]
-    }, {
-      name: 'VLAN',
-      attrs: [{
-      }]
-    }, {
-      name: 'ARP',
-      attrs: [{
-      }]
-    }, {
-      name: 'MPLS',
-      attrs: [{
-      }]
-    }, {
-      name: 'IPv4',
-      attrs: [{
-      }]
-    }, {
-      name: 'IPv6',
-      attrs: [{
-      }]
-    }, {
-      name: 'ICMPv4',
-      attrs: [{
-      }]
-    }, {
-      name: 'ICMPv6',
-      attrs: [{
-      }]
-    }, {
-      name: 'TCP',
-      attrs: [{
-      }]
-    }, {
-      name: 'UDP',
-      attrs: [{
-      }]
-    }, {
-      name: 'SCTP',
-      attrs: [{
-      }]
-    }];
-
     $scope.showProto = function(idx) {
       $scope.activeProto = idx;
     };
@@ -199,11 +75,11 @@ angular.module('flowsimUiApp')
       } else if(name.length === 0) {
         callback('Invalid name');
       } else {
-        callback(null);
         $scope.profile = fgCache.create('profile', name, Profile);
         console.log($scope.profile);
         $scope.names[name] = true;
         $scope.setDirty();
+        callback(null);
       }
     };
 
