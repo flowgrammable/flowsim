@@ -1,5 +1,5 @@
 
-<table class="table table-hover table-condensed table-striped">
+<table class="table table-hover table-condensed table-striped" ng-controller="ProfileTableCtrl">
   <thead>
   <tr>
     <td>Identifier</td>
@@ -19,9 +19,15 @@
     <td><input type="checkbox" value="true"/></td>
     <td>
       <div class="btn-group btn-group-xs">
-        <button type="button" class="btn btn-default">Match</button>
-        <button type="button" class="btn btn-default">Instruction</button>
-        <button type="button" class="btn btn-default">Instruction Miss</button>
+        <button type="button" class="btn btn-default" ng-click="match()">
+          Match
+        </button>
+        <button type="button" class="btn btn-default" ng-click="instruction()">
+          Instruction
+        </button>
+        <button type="button" class="btn btn-default" ng-click="instrucitonMiss()">
+          Instruction Miss
+        </button>
       </div>
     </td>
   </tr>
