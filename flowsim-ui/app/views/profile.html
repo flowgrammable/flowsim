@@ -52,7 +52,9 @@
           <ng-include src="'views/profile/datapath.html'"></ng-include>
         </tab>
         <tab heading="Ports">
-          <ng-include src="'views/profile/ports.html'"></ng-include>
+          <ng-include ng-controller="ProfilePortsCtrl" 
+                      src="'views/profile/ports.html'">
+          </ng-include>
         </tab>
         <tab heading="Groups">
           <ng-include src="'views/profile/groups.html'"></ng-include>

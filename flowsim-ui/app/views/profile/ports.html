@@ -9,7 +9,8 @@
     <div class="form-group">
       <div class="input-group">
         <div class="input-group-addon">Port Count</div>
-        <input class="form-control" type="text" placeholder="24">
+        <input class="form-control" type="text" ng-model="portCount"
+               ng-changed="buildPorts">
       </div>
     </div>
 
@@ -96,35 +97,30 @@
     <th>Medium</th>
   </thead>
   <tbody>
-  <tr>
-    <td>1</td>
+  <tr ng-repeat="port in ports">
+    <td>{{$index}}</td>
     <td>
-      <input class="form-control" type="text" placeholder="00:00:00:00:00:00">
+      <input class="form-control" type="text" ng-model="port.mac">
     </td>
     <td>
-      <input class="form-control" type="text" placeholder="">
+      <input class="form-control" type="text" ng-model="port.name">
     </td>
     <td>
-      <select class="form-control">
-        <option>10 Mbps</option>
-        <option>100 Mbps</option>
-        <option>1 Gbps</option>
-        <option>10 Gbps</option>
-        <option>40 Gbps</option>
-        <option>100 Gbps</option>
-        <option>1 Tbps</option>
+      <select class="form-control" ng-model="port.speed" 
+              ng-options="speed.label for speed in Speeds">
+        <option value="">-- choose speed --</option>
       </select>
     </td>
     <td>
-      <select class="form-control">
-        <option>Half Duplex</option>
-        <option>Full Duplex</option>
+      <select class="form-control" ng-model="port.mode"
+              ng-options="mode.label for mode in Modes">
+        <option value="">-- choose mode --</option>
       </select>
     </td>
     <td>
-      <select class="form-control">
-        <option>Copper</option>
-        <option>Fiber</option>
+      <select class="form-control" ng-model="port.medium"
+              ng-options="medium in Mediums">
+        <option value="">-- choose medium --</option>
       </select>
     </td>
 
