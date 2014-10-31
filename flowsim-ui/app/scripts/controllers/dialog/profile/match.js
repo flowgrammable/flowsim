@@ -8,10 +8,14 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('DialogProfileMatchCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('DialogProfileMatchCtrl', function ($scope, $modalInstance, 
+                                                  matchCaps) {
+    $scope.matchCaps = matchCaps;
+
+    $scope.ok = function() {
+      $modalInstance.close($scope.matchCaps);
+    };
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
   });
