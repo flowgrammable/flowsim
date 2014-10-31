@@ -30,10 +30,10 @@ angular.module('flowsimUiApp')
       } else if(name in $scope.names) {
         callback('Name exists');
       } else {
-        callback(null);
         $scope.packet = fgCache.create('packet', name, Packet);
         $scope.names[name] = true;
         $scope.setDirty();
+        callback(null);
       }
     };
 

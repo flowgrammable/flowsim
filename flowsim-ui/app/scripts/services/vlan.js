@@ -32,16 +32,16 @@ function VLAN_UI(vlan) {
   this.attrs = _.map(vlan.fields, function(value, key) {
     switch(key) {
       case 'pcp':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,7), 
+        return mkLabelInput(key, value, fgConstraints.isUInt(0,7),
                             'VLAN Priority Code Point');
       case 'dei':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,3), 
+        return mkLabelInput(key, value, fgConstraints.isUInt(0,3),
                             '');
       case 'vlan_id':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0x0fff), 
+        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0x0fff),
                             'VLAN Tag Identifier');
       case 'typelen':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0xffff), 
+        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0xffff),
                             'Ethernet type or length of payload');
       default:
         return mkLabelInput(key, value, function(){ return true; }, 'Unknown');
@@ -72,13 +72,14 @@ VLAN_UI.prototype.clearPayload = function() {
  * # VLAN
  * Service in the flowsimUiApp.
  */
-    this.name = NAME;
-    this.Payloads = Object.keys(Payloads);
-    this.create = function() {
-      return new VLAN();
-    };
-    this.createUI = function(vlan){
-      return new VLAN_UI(vlan);
-    };
-  });
+this.name = NAME;
+this.Payloads = Object.keys(Payloads);
+this.create = function() {
+  return new VLAN();
+};
 
+this.createUI = function(vlan){
+  return new VLAN_UI(vlan);
+};
+
+});

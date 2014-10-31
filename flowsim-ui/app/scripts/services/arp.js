@@ -1,6 +1,9 @@
 'use strict';
 
-(function(){
+angular.module('flowsimUiApp')
+  .service('ARP', function ARP(fgConstraints, fgUI) {
+
+var NAME = 'ARP';
 
 var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
 var ipv4Pattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
@@ -10,58 +13,89 @@ function isMAC(addr) {
 }
 
 function isIPv4(ipv4) {
-  return ipv4Pattern.test(ipv4) && 
+  return ipv4Pattern.test(ipv4) &&
          _.every(ipv4.split('.'), fgConstraints.isUInt(0, 255));
 }
 
-function _ARP() {
-  this.name = 'ARP';
-  this.attrs = [{
-    name: 'Opcode',
-    value: 0,
-    test: fgConstraints.isUInt(0, 1),
-    tip: 'ARP message type'
-  }, {
-    name: 'SHA',
-    value: '00:00:00:00:00:00',
-    test: isMAC,
-    tip: 'Source hardware address'
-  }, {
-    name: 'SPA',
-    value: '0.0.0.0',
-    test: isIPv4,
-    tip: 'Source protocol address'
-  }, {
-    name: 'THA',
-    value: '00:00:00:00:00:00',
-    test: isMAC,
-    tip: 'Target hardware address'
-  }, {
-    name: 'TPA',
-    value: '0.0.0.0',
-    test: isIPv4,
-    tip: 'Target protocol address'
-  }];
+function ARP() {
+  this.name = NAME;
+  this.bytes = 28;
+  this.fields = {
+    opcode: 0,
+    sha: '00:00:00:00:00:00',
+    spa: '0.0.0.0',
+    tha: '00:00:00:00:00:00',
+    tpa: '0.0.0.0'
+  };
 }
 
-_ARP.prototype.bytes = function() {
-  return 28;
+function ARP_UI(arp) {
+  arp = arp === undefined ? new ARP() : arp;
+  this.name = NAME;
+  this.bytes = arp.bytes;
+  this.attrs = _.map(arp.fields, function(value, key) {
+    switch(key){
+      case 'opcode':
+        return {
+          name: key,
+          value: value,
+          test: fgConstraints.isUInt(0,1),
+          tip: 'ARP message type'
+        };
+      case 'sha':
+        return {
+          name: key,
+          value: value,
+          test: isMAC,
+          tipe: 'Source hardware address'
+        };
+      case 'spa':
+        return {
+          name: key,
+          value: value,
+          test: isIPv4,
+          tip: 'Source Protocol Address'
+        };
+      case 'tha':
+        return {
+          name: key,
+          value: value,
+          test: isMAC,
+          tip: 'Target hardware address'
+        };
+      case 'tpa':
+        return {
+          name: key,
+          value: value,
+          test: isIPv4,
+          tip: 'Target protocol address'
+        };
+      default:
+        return {
+          name: key,
+          value: value,
+          test: function() { return true; },
+          tip: 'Unknown'
+        };
+    }
+  });
+}
+
+ARP_UI.prototype.toBase = function() {
+  var result = new ARP();
+  result.name = this.name;
+  result.bytes = this.bytes;
+  result.fields = fgUI.stripLabelInputs(this.attrs);
+  return result;
 };
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.ARP
- * @description
- * # ARP
- * Service in the flowsimUiApp.
- */
-angular.module('flowsimUiApp')
-  .service('ARP', function ARP() {
-    this.Payloads = [];
-    this.create = function() {
-      return new _ARP();
-    };
-  });
+this.name = NAME;
+this.create = function() {
+  return new ARP();
+};
 
-})();
+this.createUI = function(arp) {
+  return new ARP_UI(arp);
+};
 
+});

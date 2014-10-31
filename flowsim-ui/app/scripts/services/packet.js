@@ -32,16 +32,15 @@ function dispatch(name, method, p) {
       return ETHERNET[method](p);
     case VLAN.name:
       return VLAN[method](p);
-      /*
     case MPLS.name:
-      return MPLS[method](p);
+     return MPLS[method](p);
     case ARP.name:
       return ARP[method](p);
     case IPV4.name:
       return IPV4[method](p);
     case IPV6.name:
       return IPV6[method](p);
-    case ICMPV4.name:
+/*    case ICMPV4.name:
       return ICMPV4[method](p);
     case ICMPV6.name:
       return ICMPV6[method](p);

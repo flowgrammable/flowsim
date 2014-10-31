@@ -1,52 +1,88 @@
 'use strict';
 
-(function(){
+angular.module('flowsimUiApp')
+  .service('MPLS', function MPLS(fgConstraints, fgUI){
+
+var NAME = 'MPLS';
 
 var Payloads = {
   'Payload': 0
 };
 
 function _MPLS() {
-  this.name = 'MPLS';
-  this.attrs = [{
-    name: 'Label',
-    value: 0,
-    test: fgConstraints.isUInt(0, 0x0fffff),
-    tip: 'MPLS Label'
-  }, {
-    name: 'TC',
-    value: 0,
-    test: fgConstraints.isUInt(0, 7),
-    tip: 'Traffic Control'
-  }, {
-    name: 'BoS',
-    value: 0,
-    test: fgConstraints.isUInt(0, 1),
-    tip: 'Botom of Stack'
-  }];
+  this.name = NAME;
+  this.bytes = 4;
+  this.fields = {
+    label: 0,
+    tc: 0,
+    bos: 0
+  };
 }
 
-_MPLS.prototype.bytes = function() {
-  return 4;
+function _MPLS_UI(mpls){
+  mpls = mpls === undefined ? new _MPLS() : mpls;
+  this.name = NAME;
+  this.bytes = mpls.bytes;
+  this.attrs = _.map(mpls.fields, function(value, key){
+    switch(key) {
+      case 'label':
+        return {
+          name: key,
+          value: value,
+          test: fgConstriants.isUInt(0, 0x0fffff),
+          tip: 'MPLS Label'
+        };
+      case 'tc':
+        return {
+          name: key,
+          value: value,
+          test: fgConstriants.isUInt(0, 7),
+          tip: 'Traffic Control'
+        };
+      case 'bos':
+        return {
+          name: key,
+          value: value,
+          test: fgConstriants.isUInt(0, 0x0fffff),
+          tip: 'Bottom of Stack'
+        };
+      default:
+        return {
+          name: key,
+          value: value,
+          test: function() { return true; },
+          tip: 'Unknown'
+        };
+    }
+  });
+}
+
+_MPLS_UI.prototype.toBase = function () {
+  var result = new _MPLS();
+  result.name = this.name;
+  result.bytes = this.bytes;
+  result.fields = fgUI.stripLabelInputs(this.attrs);
+  return result;
 };
 
-_MPLS.prototype.setPayload = function(name) {};
-_MPLS.prototype.clearPayload = function() {}
+_MPLS_UI.prototype.setPayload = function(name) {
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.MPLS
- * @description
- * # MPLS
- * Service in the flowsimUiApp.
- */
-angular.module('flowsimUiApp')
-  .service('MPLS', function MPLS() {
-    this.Payloads = Object.keys(Payloads);
-    this.create = function() {
-      return new _MPLS();
-    };
-  });
+};
 
-})();
+_MPLS_UI.prototype.clearPayload = function() {
 
+};
+
+this.name = NAME;
+
+this.create = function () {
+  return new _MPLS();
+};
+
+this.createUI = function(mpls) {
+  return new _MPLS_UI(mpls);
+};
+
+this.Payloads = Object.keys(Payloads);
+
+});
