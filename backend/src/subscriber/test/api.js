@@ -436,6 +436,7 @@ var passResetToken;
 });
 
 describe('/update', function(){
+  
   it('should return error when no old password is present', function(done){
     var update = {oldPassword: '', newPassword: 'newpassword'};
     client.query('subscriber/update', 'POST', {}, update, function(err, res, body){
@@ -443,6 +444,42 @@ describe('/update', function(){
         console.log(err);
       } else {
         assert.equal(body.error.message, msg.missingPassword().message);
+        done();
+      }
+    });
+  });
+  
+  it('should return error when old password is malformed', function(done){
+    var update = {oldPassword: 'mal', newPassword: 'newpassword'};
+    client.query('subscriber/update', 'POST', {}, update, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert.equal(body.error.message, msg.malformedPassword().message);
+        done();
+      }
+    });
+  });
+  
+  it('should return error when no new password is present', function(done){
+    var update = {oldPassword: 'testpass', newPassword: ''};
+    client.query('subscriber/update', 'POST', {}, update, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert.equal(body.error.message, msg.missingNewPassword().message);
+        done();
+      }
+    });
+  });
+  
+  it('should return error when new password is malformed', function(done){
+    var update = {oldPassword: 'testpass', newPassword: 'mal'};
+    client.query('subscriber/update', 'POST', {}, update, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert.equal(body.error.message, msg.malformedNewPassword().message);
         done();
       }
     });
