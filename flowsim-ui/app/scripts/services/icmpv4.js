@@ -1,40 +1,54 @@
 'use strict';
 
-(function(){
+angular.module('flowsimUiApp')
+  .service('ICMPV4', function(fgUI, fgConstraints){
 
-function _ICMPv4() {
-  this.name = 'ICMPv4';
-  this.attrs = [{
-    name: 'Type',
-    value: 0,
-    test: fgConstraints.isUInt(0, 0xff),
-    tip: 'ICMP message type'
-  }, {
-    name: 'Code',
-    value: 0,
-    test: fgConstraints.isUInt(0, 0xff),
-    tip: 'ICMP message code'
-  }];
+var NAME = 'ICMPv4';
+
+function _ICMPV4() {
+  this.name = NAME;
+  this.bytes = 4;
+  this.fields = {
+    type: 0,
+    code: 0
+  };
 }
 
-_ICMPv4.prototype.bytes = function() {
-  return 4; // + size of payload
+function _ICMPV4_UI(icmpv4){
+  icmpv4 = icmpv4 === undefined ? new _ICMPV4() : icmpv4;
+  this.name = NAME;
+  this.bytes = 4;
+  this.attrs = _.map(icmpv4.fields, function(value, key){
+    switch(key){
+      case 'type':
+        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xff),
+                                        'ICMP message type');
+      case 'code':
+        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0xff),
+                                        'ICMP message code');
+      default:
+        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
+    }
+  });
+}
+
+_ICMPV4_UI.prototype.toBase = function() {
+  var result = new _ICMPV4();
+  result.name = this.name;
+  result.bytes = this.bytes;
+  result.fields = fgUI.stripLabelInputs(this.attrs);
+  return result;
+}
+
+this.name = NAME;
+
+this.create = function() {
+  return new _ICMPV4();
 };
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.ICMPV4
- * @description
- * # ICMPV4
- * Service in the flowsimUiApp.
- */
-angular.module('flowsimUiApp')
-  .service('ICMPV4', function ICMPV4() {
-    this.Payloads = [];
-    this.create = function() {
-      return new _ICMPv4();
-    };
-  });
+this.createUI = function(icmpv4){
+  return new _ICMPV4_UI(icmp);
+};
 
-})();
 
+});
