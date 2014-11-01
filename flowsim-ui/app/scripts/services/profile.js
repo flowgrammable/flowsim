@@ -274,7 +274,10 @@ ProfileUI.prototype.toBase = function() {
       createUI: createUI,
       setVersion: setVersion,
       tips: TIPS,
-      tests: TESTS
+      tests: TESTS,
+      speeds: SPEEDS,
+      mediums: MEDIUMS,
+      modes: MODES
     };
 
 });
