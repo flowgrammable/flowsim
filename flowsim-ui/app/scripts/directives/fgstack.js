@@ -26,6 +26,7 @@ angular.module('flowsimUiApp')
 
         // Update the current display
         $scope.$on('setStack', function(ev, data) {
+          console.log('inside setStack');
           var name;
           if(data) {
             $scope.stack = data;
