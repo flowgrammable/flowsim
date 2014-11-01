@@ -60,6 +60,7 @@ angular.module('flowsimUiApp')
           } else {
             $scope.names[result.name] = true;
             $scope.packet = result;
+            console.log('setStack: ' + $scope.packet.protocols);
             $scope.$broadcast('setStack', $scope.packet.protocols);
           }
         });
