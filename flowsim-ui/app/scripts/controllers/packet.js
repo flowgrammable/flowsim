@@ -11,6 +11,7 @@
 angular.module('flowsimUiApp')
   .controller('PacketCtrl', function ($scope, fgCache, Packet, $rootScope) {
     // Method to add a new packet
+    console.log('packet controller');
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
 

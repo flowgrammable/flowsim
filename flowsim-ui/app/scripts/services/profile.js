@@ -156,7 +156,7 @@ function Ports(ports) {
     if(ports && typeof ports === 'number'){
       this.n_ports = ports;
     } else {
-      this.ports = 24;
+      this.n_ports = 24;
     }
     this.ports = _.map(_.range(this.n_ports), function(idx) {
       return new Port(idx);
@@ -183,6 +183,17 @@ Ports.prototype.clone = function() {
 
 var PortsUI              = Ports;
 PortsUI.prototype.toBase = Ports.prototype.clone;
+
+PortsUI.prototype.rebuild = function() {
+  var i;
+  if(this.n_ports < this.ports.length) {
+    this.ports.splice(this.n_ports, this.ports.length-this.n_ports);
+  } else {
+    for(i=this.ports.length; i<this.n_ports; ++i) {
+      this.ports.push(new Port(i));
+    }
+  }
+};
 
 function Meters(meters) {
   if(meters && meters instanceof Meters) {
@@ -222,36 +233,31 @@ Groups.prototype.clone = function() {
 var GroupsUI              = Groups;
 GroupsUI.prototype.toBase = Groups.prototype.clone;
 
-function Profile(name) {
-  console.log('Profile');
-  this.name = name;
-  this.datapath = new Datapath();
-  this.ports    = new Ports();
-  this.meters   = new Meters();
-  this.tables   = new Tables();
-  this.groups   = new Groups();
+function Profile(p) {
+  if(p && p instanceof Profile) {
+    this.name     = p.name;
+    this.datapath = new Datapath(p.datapath);
+    this.ports    = new Ports(p.ports);
+    this.meters   = new Meters(p.meters);
+    this.tables   = new Tables(p.tables);
+    this.groups   = new Groups(p.groups);
+  } else if(p) {
+    this.name = p;
+    this.datapath = new Datapath();
+    this.ports    = new Ports();
+    this.meters   = new Meters();
+    this.tables   = new Tables();
+    this.groups   = new Groups();
+  } else {
+    throw 'Bad construction: Profile';
+  }
 }
-
-function ProfileUI(profile) {
-  console.log('ProfileUI');
-  profile = typeof profile === 'string' ? new Profile(profile) : profile;
-  this.name = profile.name;
-  this.datapath = new DatapathUI(profile.datapath);
-  this.ports    = new PortsUI(profile.ports);
-  this.meters   = new MetersUI(profile.meters);
-  this.tables   = new TablesUI(profile.tables);
-  this.groups   = new GroupsUI(profile.groups);
-}
-
-ProfileUI.prototype.toBase = function() {
-  var result = new Profile(this.name);
-  result.datapath = this.datapath.toBase();
-  result.ports = this.ports.toBase();
-  result.meters = this.meters.toBase();
-  result.tables = this.tables.toBase();
-  result.groups = this.groups.toBase();
-  return result;
+Profile.prototype.clone = function() {
+  return new Profile(this);
 };
+
+var ProfileUI = Profile;
+ProfileUI.prototype.toBase = Profile.prototype.clone;
 
 /**
  * @ngdoc service
@@ -277,8 +283,11 @@ ProfileUI.prototype.toBase = function() {
       create: create,
       createUI: createUI,
       setVersion: setVersion,
-      tips: TIPS,
-      tests: TESTS
+      TIPS: TIPS,
+      TESTS: TESTS,
+      MEDIUMS: MEDIUMS,
+      MODES: MODES,
+      SPEEDS: SPEEDS
     };
 
 });

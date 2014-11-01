@@ -17,7 +17,11 @@ angular.module('flowsimUiApp')
         getOptions: '&',    // callback for node construction tree
         createNode: '&',    // callback for creating a node
         setDirty: '&'      // callback for persisting changes
-      }, controller: function($scope) {
+      }, link: function(scope) {
+        console.log('fgstack link');
+      }, 
+      controller: function($scope) {
+        console.log('fgstack controller');
 
         $scope.prev_len = 0;
         $scope.stack    = [];
