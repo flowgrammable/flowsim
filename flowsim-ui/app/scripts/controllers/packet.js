@@ -11,13 +11,13 @@
 angular.module('flowsimUiApp')
   .controller('PacketCtrl', function ($scope, fgCache, Packet, $rootScope) {
     // Method to add a new packet
-    console.log('packet controller');
 
     var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
 
     $scope.names = {};
     $scope.packet   = null;
     $scope.errorMsg = '';
+    $scope.options = [];
 
     // get a list of packets
     $scope.getPackets = function(callback) {
@@ -32,6 +32,7 @@ angular.module('flowsimUiApp')
         callback('Name exists');
       } else {
         $scope.packet = fgCache.create('packet', name, Packet);
+        $scope.options = $scope.getProtocols($scope.packet.protocols[0].name);
         $scope.names[name] = true;
         $scope.setDirty();
         callback(null);
@@ -61,7 +62,6 @@ angular.module('flowsimUiApp')
           } else {
             $scope.names[result.name] = true;
             $scope.packet = result;
-            console.log('setStack: ' + $scope.packet.protocols);
             $scope.$broadcast('setStack', $scope.packet.protocols);
           }
         });
@@ -88,7 +88,19 @@ angular.module('flowsimUiApp')
     };
 
     $scope.createProtocol = function(name) {
-      return Packet.createProtocolUI(name);
+      if($scope.packet) {
+        var protocol = Packet.createProtocolUI(name);
+        $scope.packet.protocols.push(protocol);
+        $scope.options = $scope.getProtocols(protocol.name);
+      }
     };
+    $scope.popProtocol = function() {
+      var len = $scope.packet.protocols.length;
+      if($scope.packet && len > 1) {
+        $scope.stack.protocols.splice(len, 1);
+        $scope.options = $scope.getProtocols(
+            $scope.stack.protocols[length-2].name);
+      }
+    }
 
   });

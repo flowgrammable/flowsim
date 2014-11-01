@@ -22,7 +22,8 @@
   <!-- Use the Stack Widget to manage packet payloads -->
   <div class="col-md-4 col-md-offset-1">
     <fg-stack get-options="getProtocols" create-node="createProtocol" 
-              set-dirty="setDirty">
+              set-dirty="setDirty" stack="packet.protocols" options="options"
+              pop-node="popProtocol">
       Packet Payloads
     </fg-stack>
   </div>
