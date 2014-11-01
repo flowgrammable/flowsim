@@ -41,11 +41,12 @@ angular.module('flowsimUiApp')
     function getNames(type, callback) {
       var result;
       // initialize the cache
-      if(!(type in post))   { post[type] = {}; }
+      if(!(type in post))   { post[type]   = {}; }
       if(!(type in update)) { update[type] = {}; }
 
       if(Object.keys(update[type]).length) {
         result = Object.keys(post[type]);
+        console.log('what is this: '+result.concat(Object.keys(update[type])));
         callback(null, result.concat(Object.keys(update[type])));
       } else {
         Subscriber.httpGet('/api/'+type, {}, function(err, result) {

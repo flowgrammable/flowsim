@@ -13,11 +13,11 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.profile = null;
 
-    $scope.tips = Profile.tips;
-    $scope.tests = Profile.tests;
-    $scope.speeds = Profile.speeds;
-    $scope.mediums = Profile.mediums;
-    $scope.modes = Profile.modes;
+    $scope.tips = Profile.TIPS;
+    $scope.tests = Profile.TESTS;
+    $scope.mediums = Profile.MEDIUMS;
+    $scope.modes = Profile.MODES;
+    $scope.speeds = Profile.SPEEDS;
 
     $scope.versions = [
       'OpenFlow 1.0',
@@ -26,42 +26,6 @@ angular.module('flowsimUiApp')
       'OpenFlow 1.3',
       'OpenFlow 1.4'
     ];
-
-    $scope.ports = {
-      n_ports: 24,
-      ports: [],
-      vports: [{
-        name: 'port_stats',
-        value: true
-      }, {
-        name: 'in_port',
-        value: true,
-      }, {
-        name: 'table:',
-        value: true,
-      }, {
-        name: 'normal',
-        value: true,
-      }, {
-        name: 'any',
-        value: true,
-      }, {
-        name: 'flood',
-        value: true,
-      }, {
-        name: 'all',
-        value: true,
-      }, {
-        name: 'controller',
-        value: true,
-      }, {
-        name: 'local',
-        value: true,
-      }, {
-        name: 'none',
-        value: true
-      }]
-    };
 
     $scope.showProto = function(idx) {
       $scope.activeProto = idx;
@@ -79,7 +43,18 @@ angular.module('flowsimUiApp')
         callback('Invalid name');
       } else {
         $scope.profile = fgCache.create('profile', name, Profile);
-        console.log($scope.profile);
+        console.log($scope.profile.ports);
+        console.log($scope.profile.ports.vports);
+        $scope.names[name] = true;
+        $scope.setDirty();
+        callback(null);
+      }
+    };
+
+    $scope.delProfile = function(name) {
+      fgCache.destroy('profile', name);
+      if(fgCache.isDirty()) {
+        $scope.setDirty();
         $scope.names[name] = true;
         $scope.setDirty();
         callback(null);

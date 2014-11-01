@@ -19,8 +19,11 @@ angular.module('flowsimUiApp')
         onDel: '&',                       // callback for deleting item
         onSet: '&'                        // callback for changing item focus
       },
-
+      link: function(scope) {
+        console.log('fglist link');
+      },
       controller: function($scope) {
+        console.log('fglist controller');
         $scope.itemName = '';             // input name to create item
         $scope.focus    = -1;                // item with current focus
         $scope.errorMsg = '';         // input name error message

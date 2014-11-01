@@ -17,7 +17,11 @@ angular.module('flowsimUiApp')
         getOptions: '&',    // callback for node construction tree
         createNode: '&',    // callback for creating a node
         setDirty: '&'      // callback for persisting changes
-      }, controller: function($scope) {
+      }, link: function(scope) {
+        console.log('fgstack link');
+      }, 
+      controller: function($scope) {
+        console.log('fgstack controller');
 
         $scope.prev_len = 0;
         $scope.stack    = [];
@@ -25,6 +29,7 @@ angular.module('flowsimUiApp')
         $scope.options  = [];  // input select options
 
         // Update the current display
+        console.log('registering setstack');
         $scope.$on('setStack', function(ev, data) {
           var name;
           if(data) {
