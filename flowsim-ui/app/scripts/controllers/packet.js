@@ -52,9 +52,9 @@ angular.module('flowsimUiApp')
 
     // function for changing the focus state of the controller
     $scope.setPacket = function(name) {
+      var len;
       if(name === undefined) {
         $scope.packet = null;
-        $scope.$broadcast('setStack', []);
       } else {
         fgCache.get('packet', name, Packet, function(err, result) {
           if(err) {
@@ -62,7 +62,9 @@ angular.module('flowsimUiApp')
           } else {
             $scope.names[result.name] = true;
             $scope.packet = result;
-            $scope.$broadcast('setStack', $scope.packet.protocols);
+            len = $scope.packet.protocols.length;
+            $scope.options = $scope.getProtocols(
+              $scope.packet.protocols[len-1].name);
           }
         });
       }
