@@ -97,9 +97,9 @@ angular.module('flowsimUiApp')
     $scope.popProtocol = function() {
       var len = $scope.packet.protocols.length;
       if($scope.packet && len > 1) {
-        $scope.stack.protocols.splice(len, 1);
+        $scope.packet.protocols.splice(len-1, 1);
         $scope.options = $scope.getProtocols(
-            $scope.stack.protocols[length-2].name);
+            $scope.packet.protocols[len-2].name);
       }
     }
 
