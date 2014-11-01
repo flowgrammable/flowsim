@@ -7,34 +7,32 @@ var NAME = 'Payload';
 
 function _Payload() {
   this.name = NAME;
-  this.bytes = 0;
   this.fields = {
     bytes: 0
   };
+  this.bytes = this.fields.bytes;
 }
 
 function _Payload_UI(payload){
   payload = payload === undefined ? new _Payload() : payload;
+  var x = this;
   this.name = NAME;
-  this.bytes = 0;
-  this.attrs = _.map(payload.fields, function(value, key){
-    switch(key){
-      case 'bytes':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Arbitrary payload size in bytes');
-      default:
-        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
-    }
-  });
+  this.attrs = [{
+      name: 'bytes',
+      value: payload.fields.bytes,
+      test: function(){return true;},
+      tip: 'Payload bytes'}];
+  this.bytes = this.attrs[0].value;
 }
 
 _Payload_UI.prototype.toBase = function() {
   var result = new _Payload();
   result.name = this.name;
   result.fields = fgUI.stripLabelInputs(this.attrs);
-  result.bytes = result.fields.bytes;
+  result.bytes = parseInt(this.attrs[0].value);
   return result;
 }
+
 
 this.name = NAME;
 
