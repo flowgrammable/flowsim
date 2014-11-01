@@ -155,6 +155,8 @@ function Ports(ports) {
   } else {
     if(ports && typeof ports === 'number'){
       this.n_ports = ports;
+    } else {
+      this.ports = 24;
     }
     this.ports = _.map(_.range(this.n_ports), function(idx) {
       return new Port(idx);
@@ -221,6 +223,7 @@ var GroupsUI              = Groups;
 GroupsUI.prototype.toBase = Groups.prototype.clone;
 
 function Profile(name) {
+  console.log('Profile');
   this.name = name;
   this.datapath = new Datapath();
   this.ports    = new Ports();
@@ -230,6 +233,7 @@ function Profile(name) {
 }
 
 function ProfileUI(profile) {
+  console.log('ProfileUI');
   profile = typeof profile === 'string' ? new Profile(profile) : profile;
   this.name = profile.name;
   this.datapath = new DatapathUI(profile.datapath);

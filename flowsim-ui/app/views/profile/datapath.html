@@ -58,7 +58,8 @@
       <div class="input-group"
             ng-class="{'has-error':
             !tests.datapath.mfr_desc(profile.datapath.mfr_desc)}">
-        <div class="input-group-addon" style="width:200px">
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.datapath.mfr_desc}}">
           Manufacturer Description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
@@ -69,7 +70,8 @@
       <div class="input-group"
            ng-class="{'has-error':
             !tests.datapath.hw_desc(profile.datapath.hw_desc)}">
-        <div class="input-group-addon" style="width:200px">
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.datapath.hw_desc}}">
           Hardware Description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
@@ -80,7 +82,8 @@
       <div class="input-group"
             ng-class="{'has-error':
             !tests.datapath.sw_desc(profile.datapath.sw_desc)}">
-        <div class="input-group-addon" style="width:200px">
+        <div class="input-group-addon" style="width:200px"
+          tooltip="{{tips.datapath.sw_desc}}">
           Software Description</div>
         <textarea class="form-control" rows="3" style="width:300px"
                   ng-model="profile.datapath.sw_desc"></textarea>
@@ -90,7 +93,9 @@
       <div class="input-group"
             ng-class="{'has-error':
             !tests.datapath.serial_num(profile.datapath.serial_num)}">
-        <div class="input-group-addon" style="width:200px">Serial Number</div>
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.datapath.serial_num}}">
+          Serial Number</div>
         <input class="form-control" type="text" style="width:300px"
                ng-model="profile.datapath.serial_num">
       </div>
@@ -99,7 +104,8 @@
       <div class="input-group"
             ng-class="{'has-error':
             !tests.datapath.dp_desc(profile.datapath.dp_desc)}">
-        <div class="input-group-addon" style="width:200px">
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.datapath.dp_desc}}">
           Dataplane Description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
