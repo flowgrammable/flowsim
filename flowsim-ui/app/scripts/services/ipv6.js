@@ -19,7 +19,7 @@ var Payloads = {
   'Payload' : 0
 };
 
-function _IPv6() {
+function _IPV6() {
   this.name = NAME;
   this.bytes = 40;
   this.fields = {
@@ -107,11 +107,11 @@ _IPV6_UI.prototype.toBase = function() {
   return result;
 };
 
-_IPv6.prototype.setPayload = function(name) {
+_IPV6.prototype.setPayload = function(name) {
   this.attrs[2].value = Payloads[name] || 0;
 };
 
-_IPv6.prototype.clearPayload = function(name) {
+_IPV6.prototype.clearPayload = function(name) {
   this.attrs[2].value = 0;
 };
 

@@ -5,7 +5,7 @@ angular.module('flowsimUiApp')
 
 var NAME = 'ICMPv6';
 
-function _ICMPv6() {
+function _ICMPV6() {
   this.name = NAME;
   this.bytes = 4;
   this.fields = {
@@ -47,7 +47,7 @@ this.create = function() {
 };
 
 this.createUI = function(icmpv6){
-  return new _ICMPV6_UI(icmp);
+  return new _ICMPV6_UI(icmpv6);
 }
 
 });

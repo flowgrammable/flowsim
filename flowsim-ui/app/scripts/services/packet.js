@@ -18,6 +18,7 @@ var Protocols = {
   ARP: ARP,
   MPLS: MPLS,
   IPv4: IPV4,
+  IPv6: IPV6,
   ICMPv4: ICMPV4,
   ICMPv6: ICMPV6,
   TCP: TCP,
@@ -27,7 +28,6 @@ var Protocols = {
 };
 
 function dispatch(name, method, p) {
-  console.log('name, method, p', name, method, p);
   switch(name) {
     case ETHERNET.name:
       return ETHERNET[method](p);
