@@ -40,6 +40,10 @@ _ICMPV6_UI.prototype.toBase = function() {
   return result;
 }
 
+_ICMPV6_UI.prototype.setPayload = function() {
+  return true;
+}
+
 this.name = NAME;
 
 this.create = function() {

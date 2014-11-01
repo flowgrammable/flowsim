@@ -70,7 +70,7 @@ _MPLS_UI.prototype.toBase = function () {
 };
 
 _MPLS_UI.prototype.setPayload = function(name) {
-
+  
 };
 
 _MPLS_UI.prototype.clearPayload = function() {

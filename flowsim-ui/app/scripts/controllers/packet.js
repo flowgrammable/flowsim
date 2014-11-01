@@ -90,7 +90,9 @@ angular.module('flowsimUiApp')
     };
 
     $scope.createProtocol = function(name) {
+      var len = $scope.packet.protocols.length;
       if($scope.packet) {
+        $scope.packet.protocols[len-1].setPayload(name);
         var protocol = Packet.createProtocolUI(name);
         $scope.packet.protocols.push(protocol);
         $scope.options = $scope.getProtocols(protocol.name);

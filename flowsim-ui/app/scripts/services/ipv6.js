@@ -107,11 +107,11 @@ _IPV6_UI.prototype.toBase = function() {
   return result;
 };
 
-_IPV6.prototype.setPayload = function(name) {
+_IPV6_UI.prototype.setPayload = function(name) {
   this.attrs[2].value = Payloads[name] || 0;
 };
 
-_IPV6.prototype.clearPayload = function(name) {
+_IPV6_UI.prototype.clearPayload = function(name) {
   this.attrs[2].value = 0;
 };
 

@@ -89,6 +89,10 @@ ARP_UI.prototype.toBase = function() {
   return result;
 };
 
+ARP_UI.prototype.setPayload = function() {
+
+};
+
 this.name = NAME;
 this.create = function() {
   return new ARP();

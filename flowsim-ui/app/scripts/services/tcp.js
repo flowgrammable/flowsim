@@ -45,6 +45,10 @@ _TCP_UI.prototype.toBase = function() {
   return result;
 }
 
+_TCP_UI.prototype.setPayload = function() {
+  return true;
+}
+
 this.name = NAME;
 this.Payloads = Object.keys(Payloads);
 this.create = function() {

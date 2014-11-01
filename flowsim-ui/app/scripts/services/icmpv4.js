@@ -40,6 +40,10 @@ _ICMPV4_UI.prototype.toBase = function() {
   return result;
 }
 
+_ICMPV4_UI.prototype.setPayload = function() {
+  return true;
+}
+
 this.name = NAME;
 
 this.create = function() {
@@ -47,7 +51,7 @@ this.create = function() {
 };
 
 this.createUI = function(icmpv4){
-  return new _ICMPV4_UI(icmp);
+  return new _ICMPV4_UI(icmpv4);
 };
 
 
