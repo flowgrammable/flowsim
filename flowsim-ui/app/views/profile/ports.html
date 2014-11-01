@@ -4,21 +4,18 @@
 <div class="row">
   <div class="col-md-6 text-center">
 
-    <img src="images/switch.png" alt="Responsive image">
-
     <div class="form-group">
       <div class="input-group">
         <div class="input-group-addon">Port Count</div>
-        <input class="form-control" type="text" 
+        <input class="form-control" type="text" style="max-width:100px"
                ng-model="profile.ports.n_ports">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" 
-                  ng-click="profile.ports.rebuild()">
-            Update
-          </button>
-        </span>
+    <button class="btn btn-primary" ng-click="profile.ports.rebuild()">
+      Update
+    </button>
       </div>
     </div>
+    
+    <img src="images/switch.png" alt="Responsive image">
 
   </div>
 
