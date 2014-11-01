@@ -25,8 +25,8 @@ angular.module('flowsimUiApp')
         $scope.options  = [];  // input select options
 
         // Update the current display
+        console.log('registering setstack');
         $scope.$on('setStack', function(ev, data) {
-          console.log('inside setStack');
           var name;
           if(data) {
             $scope.stack = data;
