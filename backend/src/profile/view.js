@@ -13,14 +13,14 @@ function create(view) {
     if(req.body.name !== req.params.profileName){
       responder(msg.badValue('Profile url name must equal profile body name'));
     } else {
-    profUtils.validateProfile(req.body,
+/*    profUtils.validateProfile(req.body,
       function(err, result){
       if(err){
         responder(err);
-      } else {
+      } else { */
         view.controller.create(req.subscriber_id, req.body, responder);
-      }
-    });
+      /*}
+    });*/
     }
   };
 }
@@ -42,15 +42,15 @@ function detail(view){
 function update(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
-    profUtils.validateProfile(req.body,
+  /*  profUtils.validateProfile(req.body,
       function(err, result){
       if(err){
         responder(err);
-      } else {
+      } else { */
         view.controller.update(req.subscriber_id,
           req.params.profileName, req.body, responder);
-      }
-    });
+    /*  }
+  }); */
   };
 }
 
