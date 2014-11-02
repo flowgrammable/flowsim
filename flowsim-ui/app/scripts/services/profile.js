@@ -18,7 +18,7 @@ function Datapath(dp) {
     this.sw_desc    = dp.sw_desc;
     this.serial_num = dp.serial_num;
     this.dp_desc    = dp.dp_desc;
-  } 
+  }
   // Default constructor
   else {
     this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
@@ -293,8 +293,8 @@ function Tables(tables) {
     this.tables = _.map(tables.tables, function(t) { return new Table(t); });
   } else {
     this.n_tables = 8;
-    this.tables = _.map(_.range(this.n_tables), function(id) { 
-      return new Table(id); 
+    this.tables = _.map(_.range(this.n_tables), function(id) {
+      return new Table(id);
     });
   }
 }
