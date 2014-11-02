@@ -1,4 +1,22 @@
 
+<br>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon">Table Count</div>
+        <input class="form-control" type="text"
+               style="max-width:100px"
+               ng-model="profile.tables.n_tables">
+          <button class="btn btn-primary" ng-click="profile.tables.rebuild()">
+            Update
+          </button>
+        </div>
+      </div>
+  </div>
+</div>
+
 <table class="table table-hover table-condensed table-striped">
   <thead>
   <tr>

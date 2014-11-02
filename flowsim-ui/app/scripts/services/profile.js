@@ -186,7 +186,9 @@ PortsUI.prototype.toBase = Ports.prototype.clone;
 
 PortsUI.prototype.rebuild = function() {
   var i;
-  if(this.n_ports < this.ports.length) {
+  if(this.n_ports === this.ports.length) {
+    return;
+  } else if(this.n_ports < this.ports.length) {
     this.ports.splice(this.n_ports, this.ports.length-this.n_ports);
   } else {
     for(i=this.ports.length; i<this.n_ports; ++i) {
@@ -231,12 +233,25 @@ function Tables(tables) {
     this.n_tables = tables.n_tables;
     this.tables = _.map(tables.tables, function(t) { return new Table(t); });
   } else {
-    this.n_tables = 256;
+    this.n_tables = 8;
     this.tables = _.map(_.range(this.n_tables), function(id) { 
       return new Table(id); 
     });
   }
 }
+
+Tables.prototype.rebuild = function() {
+  var i;
+  if(this.n_tables === this.tables.length) {
+    return;
+  } else if(this.n_tables < this.tables.length) {
+    this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
+  } else {
+    for(i=this.tables.length; i<this.n_tables; ++i) {
+      this.tables.push(new Table(i));
+    }
+  }
+};
 
 TIPS.tables = {};
 TESTS.tables = {};
