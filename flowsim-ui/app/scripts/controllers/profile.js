@@ -43,8 +43,6 @@ angular.module('flowsimUiApp')
         callback('Invalid name');
       } else {
         $scope.profile = fgCache.create('profile', name, Profile);
-        console.log($scope.profile.ports);
-        console.log($scope.profile.ports.vports);
         $scope.names[name] = true;
         $scope.setDirty();
         callback(null);
