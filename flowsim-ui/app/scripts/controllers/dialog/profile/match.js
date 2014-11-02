@@ -9,11 +9,11 @@
  */
 angular.module('flowsimUiApp')
   .controller('DialogProfileMatchCtrl', function ($scope, $modalInstance, 
-                                                  matchCaps) {
-    $scope.matchCaps = matchCaps;
+                                                  match) {
+    $scope.match = match;
 
     $scope.ok = function() {
-      $modalInstance.close($scope.matchCaps);
+      $modalInstance.close($scope.match);
     };
     $scope.cancel = function() {
       $modalInstance.dismiss('cancel');

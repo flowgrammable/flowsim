@@ -205,6 +205,17 @@ Meters.prototype.clone = function() {
 var MetersUI = Meters;
 MetersUI.prototype.toBase = Meters.prototype.clone;
 
+function Match(match) {
+  if(match && match instanceof Match) {
+  } else {
+  }
+}
+
+TIPS.match = {
+};
+TESTS.match = {
+};
+
 function Table(table) {
   if(table && table instanceof Table) {
     this.table_id    = table.table_id;
@@ -212,12 +223,14 @@ function Table(table) {
     this.max_entries = table.max_entries;
     this.table_stats = table.table_stats;
     this.flow_stats  = table.flow_stats;
+    this.match       = new Match(table.match);
   } else {
     this.table_id    = table;
     this.name        = 'table' + this.table_id;
     this.max_entries = 256;
     this.table_stats = true;
     this.flow_stats  = true;
+    this.match       = new Match();
   }
 }
 

@@ -8,7 +8,8 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('ProfileCtrl', function ($scope, fgCache, Profile, $rootScope) {
+  .controller('ProfileCtrl', function($scope, fgCache, Profile, $rootScope,
+                                      $modal) {
 
     $scope.names = {};
     $scope.profile = null;
@@ -94,12 +95,24 @@ angular.module('flowsimUiApp')
     };
 
     $scope.match = function(idx) {
+      $modal.open({
+        templateUrl: 'views/dialog/profile/match.html',
+        controller: 'DialogProfileMatchCtrl',
+        size: 'lg',
+        resolve: {
+          match: function () {
+            return $scope.profile.tables.tables[idx].match;
+          }
+        }
+      }).result.then(function (match) {
+         $scope.profile.tables.tables[idx].match = match;
+      });
     };
 
     $scope.instruction = function(idx) {
     };
 
-    $scope.miss = function = function(idx) {
+    $scope.miss = function(idx) {
     }
 
   });
