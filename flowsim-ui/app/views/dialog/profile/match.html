@@ -3,7 +3,29 @@
   <h3 class="modal-title">Match Capabilities</h3>
 </div>
 <div class="modal-body">
-  stuff
+
+  <table class="table table-striped">
+    <thead>
+      <th>Match Type</th>
+      <th>Enabled</th>
+      <th>Wildcard</th>
+      <th>Maskable</th>
+      <th>Mask</th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="(key, val) in match">
+        <td>{{key}}</td>
+        <td><input type="checkbox" ng-model="val.enabled"></td>
+        <td><input type="checkbox" ng-model="val.wildcardable"></td>
+        <td><input type="checkbox" ng-model="val.maskable"></td>
+        <td>
+          <input class="form-control" type="text" ng-model="val.mask"
+                 style="width:150px" ng-disabled="!val.maskable">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
 </div>
 <div class="modal-footer">
   <button class="btn btn-primary" ng-click="ok()">Ok</button>

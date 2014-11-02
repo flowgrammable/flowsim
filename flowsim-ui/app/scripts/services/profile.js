@@ -205,9 +205,23 @@ Meters.prototype.clone = function() {
 var MetersUI = Meters;
 MetersUI.prototype.toBase = Meters.prototype.clone;
 
+function createMatch(w, mb, mk) {
+  return {
+    enabled: true,
+    wildcardable: w,
+    maskable: mb,
+    mask: mk
+  }
+}
+
 function Match(match) {
   if(match && match instanceof Match) {
+    this.in_port = _.clone(match.in_port);
   } else {
+    this.in_port     = createMatch(true, false, 0);
+    this.eth_src     = createMatch(true, true, '0xffffffffffff');
+    this.eth_dst     = createMatch(true, true, '0xffffffffffff');
+    this.eth_typelen = createMatch(true, true, '0xffffffffffff');
   }
 }
 
@@ -246,7 +260,7 @@ function Table(table) {
     this.table_stats = table.table_stats;
     this.flow_stats  = table.flow_stats;
     this.match       = new Match(table.match);
-    this.instruction = new Insturction(table.insturction);
+    this.instruction = new Instruction(table.insturction);
     this.miss        = new Miss(table.miss);
   } else {
     this.table_id    = table;
