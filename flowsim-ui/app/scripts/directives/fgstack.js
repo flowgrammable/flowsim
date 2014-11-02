@@ -27,7 +27,7 @@ angular.module('flowsimUiApp')
         //$scope.stack    = [];
         $scope.nodeType = '';  // input type to create node
         //$scope.options  = [];  // input select options
-
+        var val = 0;
         // Update the current display
         /*
         $scope.$on('setStack', function(ev, data) {
@@ -73,6 +73,14 @@ angular.module('flowsimUiApp')
       $scope.$watch('stack', function() {
         if($scope.loaded) {
           $scope.setDirty()();
+          if($scope.stack.slice(-1)[0].name === 'Payload'){
+              val = parseInt($scope.stack.slice(-1)[0].attrs[0].value);
+              if(isNaN(val)){
+                $scope.stack.slice(-1)[0].bytes = 0;
+              } else {
+                $scope.stack.slice(-1)[0].bytes = val;
+              }
+          }
         }
         if($scope.stack){
           $scope.loaded = true;

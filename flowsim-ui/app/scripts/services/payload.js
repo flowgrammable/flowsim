@@ -20,7 +20,7 @@ function _Payload_UI(payload){
   this.attrs = [{
       name: 'bytes',
       value: payload.fields.bytes,
-      test: function(){return true;},
+      test: function(){return fgConstraints.isUInt(0, 0xffff); },
       tip: 'Payload bytes'}];
   this.bytes = this.attrs[0].value;
 }
