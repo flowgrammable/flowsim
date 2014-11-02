@@ -18,7 +18,7 @@ function Datapath(dp) {
     this.sw_desc    = dp.sw_desc;
     this.serial_num = dp.serial_num;
     this.dp_desc    = dp.dp_desc;
-  } 
+  }
   // Default constructor
   else {
     this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
@@ -246,7 +246,7 @@ function Table(table) {
     this.table_stats = table.table_stats;
     this.flow_stats  = table.flow_stats;
     this.match       = new Match(table.match);
-    this.instruction = new Insturction(table.insturction);
+    this.instruction = new Instruction(table.insturction);
     this.miss        = new Miss(table.miss);
   } else {
     this.table_id    = table;
@@ -279,8 +279,8 @@ function Tables(tables) {
     this.tables = _.map(tables.tables, function(t) { return new Table(t); });
   } else {
     this.n_tables = 8;
-    this.tables = _.map(_.range(this.n_tables), function(id) { 
-      return new Table(id); 
+    this.tables = _.map(_.range(this.n_tables), function(id) {
+      return new Table(id);
     });
   }
 }
