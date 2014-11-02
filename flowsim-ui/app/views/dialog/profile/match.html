@@ -6,22 +6,24 @@
 
   <table class="table table-striped">
     <thead>
-      <th>Match Type</th>
+      <th>Protocol</th>
+      <th>Field</th>
       <th>Enabled</th>
       <th>Wildcard</th>
       <th>Maskable</th>
       <th>Mask</th>
     </thead>
     <tbody>
-      <tr ng-repeat="(key, val) in match">
-        <td><div tooltip="{{tips[key]}}">{{key}}</div></td>
-        <td><input type="checkbox" ng-model="val.enabled"></td>
-        <td><input type="checkbox" ng-model="val.wildcardable"></td>
-        <td><input type="checkbox" ng-model="val.maskable"></td>
+      <tr ng-repeat="m in match.fields">
+        <td>{{m.protocol}}</td>
+        <td><div tooltip="{{tips[m.key]}}">{{m.field}}</div></td>
+        <td><input type="checkbox" ng-model="m.enabled"></td>
+        <td><input type="checkbox" ng-model="m.wildcardable"></td>
+        <td><input type="checkbox" ng-model="m.maskable"></td>
         <td>
-          <div ng-class="{'has-error': !tests[key](val.mask)}">
-          <input class="form-control" type="text" ng-model="val.mask"
-                 style="width:150px" ng-disabled="!val.maskable">
+          <div ng-class="{'has-error': !tests[m.key](m.mask)}">
+          <input class="form-control" type="text" ng-model="m.mask"
+                 style="width:150px" ng-disabled="!m.maskable">
           </div>
         </td>
       </tr>

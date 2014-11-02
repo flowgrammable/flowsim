@@ -205,23 +205,28 @@ Meters.prototype.clone = function() {
 var MetersUI = Meters;
 MetersUI.prototype.toBase = Meters.prototype.clone;
 
-function createMatch(w, mb, mk) {
+function createMatch(protocol, field, key, wildcard, maskable, mask) {
   return {
+    protocol: protocol,
+    field: field,
+    key: key,
     enabled: true,
-    wildcardable: w,
-    maskable: mb,
-    mask: mk
-  }
+    wildcardable: wildcard,
+    maskable: maskable,
+    mask: mask
+  };
 }
 
 function Match(match) {
   if(match && match instanceof Match) {
-    this.in_port = _.clone(match.in_port);
+    this.fields = _.map(match.fields, function(f) { return _.clone(f); });
   } else {
-    this.in_port     = createMatch(true, false, 0);
-    this.eth_src     = createMatch(true, true, '0xffffffffffff');
-    this.eth_dst     = createMatch(true, true, '0xffffffffffff');
-    this.eth_typelen = createMatch(true, true, '0xffff');
+    this.fields = [
+      createMatch('Ingress', 'Port', 'in_port', true, false, 0),
+      createMatch('Ethernet', 'Src', 'eth_src', true, true, '0xffffffffffff'),
+      createMatch('Ethernet', 'Dst', 'eth_dst', true, true, '0xffffffffffff'),
+      createMatch('Ethernet', 'Type/Len', 'eth_typelen', true, false, '0xffff')
+    ];
   }
 }
 
