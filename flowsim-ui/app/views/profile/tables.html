@@ -11,12 +11,24 @@
   </tr>
   </thead>
   <tbody>
-  <tr>
-    <td>0</td>
-    <td><input type="text" value="1024"/></td>
-    <td><input type="text" value=""/></td>
-    <td><input type="checkbox" value="true"/></td>
-    <td><input type="checkbox" value="true"/></td>
+  <tr ng-repeat="table in profile.tables.tables">
+    <td>{{table.table_id}}</td>
+    <td>
+      <input class="form-control" type="text" ng-model="table.name"
+             tooltip="{{tips.table.name}}"  
+             ng-class="{'has-error': !tests.table.name(table.name)}">
+    </td>
+    <td>
+      <input class="form-control" type="text" ng-model="table.max_entries"
+             tooltip="{{tips.table.max_entries}}"  
+             ng-class="{'has-error': !tests.table.max_entries(table.max_entries)}">
+    </td>
+    <td>
+      <input type="checkbox" ng-model="table.table_stats">
+    </td>
+    <td>
+      <input type="checkbox" ng-model="table.flow_stats">
+    </td>
     <td>
       <div class="btn-group btn-group-xs">
         <button type="button" class="btn btn-default" ng-click="match()">

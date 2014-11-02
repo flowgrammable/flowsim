@@ -207,18 +207,39 @@ Meters.prototype.clone = function() {
 var MetersUI = Meters;
 MetersUI.prototype.toBase = Meters.prototype.clone;
 
-function Tables(tables) {
-  if(tables && tables instanceof Tables) {
+function Table(table) {
+  if(table && table instanceof Table) {
+    this.table_id    = table.table_id;
+    this.name        = table.name;
+    this.max_entries = table.max_entries;
+    this.table_stats = table.table_stats;
+    this.flow_stats  = table.flow_stats;
   } else {
+    this.table_id    = table;
+    this.name        = 'table' + this.table_id;
+    this.max_entries = 256;
+    this.table_stats = true;
+    this.flow_stats  = true;
   }
 }
 
-Tables.prototype.clone = function() {
-  return new Tables(this);
+TIPS.table = {};
+TESTS.table = {};
+
+function Tables(tables) {
+  if(tables && tables instanceof Tables) {
+    this.n_tables = tables.n_tables;
+    this.tables = _.map(tables.tables, function(t) { return new Table(t); });
+  } else {
+    this.n_tables = 256;
+    this.tables = _.map(_.range(this.n_tables), function(id) { 
+      return new Table(id); 
+    });
+  }
 }
 
-var TablesUI = Tables;
-TablesUI.prototype.toBase = Tables.prototype.clone;
+TIPS.tables = {};
+TESTS.tables = {};
 
 function Groups(groups) {
   if(groups && groups instanceof Groups) {
