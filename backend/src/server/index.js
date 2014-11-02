@@ -55,31 +55,10 @@ function Server(config, logger) {
   this.config.hostname    = this.config.hostname    || defHostname;
   this.config.open_port   = this.config.open_port   || defOpenPort;
   this.config.secure_port = this.config.secure_port || defSecurePort;
-  this.config.protocol    = this.config.https ? 'https' : 'http';
-
-  // Load credential information if present
-  if(this.config.https) {
-    this.creds = {
-      key: fs.readFileSync(this.config.https.key),
-      certificate: fs.readFileSync(this.config.https.cert),
-    };
-
-    // redirect all http requests to the https port
-    this.http = http.createServer(
-      function(req, res) {
-        res.writeHead(301, {
-          Location: 'https://' + that.config.hostname + ':' +
-                    that.config.secure_port + req.url
-        });
-        res.end();
-      }
-    );
-  } else {
-    this.creds = {};
-  }
+  this.config.protocol    = this.config.production ? 'https' : 'http';
 
   // Create and configure a server instance
-  this.server = restify.createServer(this.creds)
+  this.server = restify.createServer()
     .use(restify.jsonp())
     .use(restify.gzipResponse())
     .use(restify.bodyParser());
@@ -180,12 +159,8 @@ Server.prototype.run = function() {
     ));
   }
 
-  // start the http redirector if needed
-  if(this.http) {
-    this.http.listen(this.config.open_port, this.config.address);
-  }
   // start the primary server
-  this.server.listen(this.http ? this.config.secure_port : this.config.open_port, this.config.address);
+  this.server.listen(this.config.open_port, this.config.address);
 
   this.running = true;
   this.logger.info('Started Flowsim');
