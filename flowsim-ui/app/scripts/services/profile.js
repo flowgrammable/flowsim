@@ -245,11 +245,29 @@ TESTS.match = {
 
 function Instruction(ins) {
   if(ins && ins instanceof Instruction) {
+    this.apply = ins.apply;
+    this.clear = ins.clear;
+    this.write = ins.write;
+    this.metadata = ins.metadata;
+    this.meter = ins.meter;
+    this.goto_ = ins.goto_;
   } else {
+    this.apply    = true;
+    this.clear    = true;
+    this.write    = true;
+    this.metadata = true;
+    this.meter    = true;
+    this.goto_    = true;
   }
 }
 
 TIPS.instruction = {
+  apply: '',
+  clear: '',
+  write: '',
+  metadata: '',
+  meter: '',
+  goto_: ''
 };
 TESTS.instruction = {
 };

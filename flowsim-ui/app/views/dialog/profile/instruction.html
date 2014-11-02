@@ -5,26 +5,146 @@
 
 <div class="modal-body">
 
+  <div class="row">
+  <div class="col-md-2">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="instruction.apply">
+        Apply
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="instruction.clear">
+        Clear
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="instruction.write">
+        Write
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="instruction.metadata">
+        Metadata
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="instruction.meter">
+        Meter
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="instruction.goto_">
+        Goto
+      </label>
+    </div>
+  </div>
+  
+  <div class="col-md-3">
+    <div class="panel panel-default" ng-show="instruction.apply">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Ethernet
+        </h3>
+      </div>
+      <!-- Table -->
+      <div class="list-group">
+        <div class="list-group-item">
+          Src
+          <button class="button btn-primary btn-xs">set</button>
+        </div>
+        <div class="list-group-item">
+          Dst 
+          <span class="glyphicon glyphicon-pencil"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <accordion>
+      <accordion-group heading="Ethernet">
+        <div class="list-group" style="width:100%;">
+          <a href="" class="list-group-item">
+            Src
+            <span class="glyphicon glyphicon-pencil pull-right"></span>
+          </a>
+          <a href="" class="list-group-item">
+            Dst
+            <span class="glyphicon glyphicon-pencil pull-right"></span>
+          </a>
+          <a href="" class="list-group-item">
+            Type/Length
+            <span class="glyphicon glyphicon-pencil pull-right"></span>
+          </a>
+        </div>
+      </accordion-group>
+      <accordion-group heading="MPLS">
+        <div class="list-group">
+          <a href="" class="list-group-item">
+            Label
+            <span class="glyphicon glyphicon-pencil pull-right"></span>
+            <span class="glyphicon glyphicon-plus"></span>
+            <span class="glyphicon glyphicon-minus"></span>
+          </a>
+          <a href="" class="list-group-item">
+            Push Label
+            <span class="badge">enabled</span>
+          </a>
+          <a href="" class="list-group-item">
+            Pop Label
+            <span class="badge">disabled</span>
+          </a>
+        </div>
+      </accordion-group>
+      <accordion-group heading="ARP">
+      </accordion-group>
+    </accordion>
+  </div>
+
+  <div class="col-md-3">
+    <div class="panel panel-default" ng-show="instruction.goto_">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Goto
+        </h3>
+      </div>
+      <!-- Table -->
+    </div>
+  </div>
+
+  <!--
   <accordion>
-    <accordion-group heading="Apply">
-      Apply restrictions
-    </accordion-group>
-    <accordion-group heading="Clear">
-      Clear restrictions
-    </accordion-group>
-    <accordion-group heading="Write">
-      Write restrictions
-    </accordion-group>
-    <accordion-group heading="Metadata">
-      metadata restrctions
-    </accordion-group>
-    <accordion-group heading="Meter">
-      Meter restrictions
-    </accordion-group>
-    <accordion-group heading="Goto">
-      Table restrictions
-    </accordion-group>
+      <div class="col-md-3">
+        <accordion-group heading="Apply">
+          <table class="table table-striped">
+            <tr><td>Output</td></tr>
+            <tr><td>Group</td></tr>
+            <tr><td>Ethernet.src=</td></tr>
+            <tr><td>Ethernet.dst=</td></tr>
+            <tr><td>Ethernet.typelen=</td></tr>
+          </table>
+        </accordion-group>
+      </div>
+      <div class="col-md-3">
+        <accordion-group heading="Write">
+          Write restrictions
+        </accordion-group>
+      </div>
+      <div class="col-md-3">
+        <accordion-group heading="Goto">
+          Table restrictions
+        </accordion-group>
+      </div>
   </accordion>
+  -->
 
 </div>
 
