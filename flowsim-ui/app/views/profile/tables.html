@@ -22,26 +22,26 @@
 <table class="table table-hover table-condensed table-striped">
   <thead>
   <tr>
-    <th tooltip="{{tips.table.table_id}}">Identifier</th>
-    <th tooltip="{{tips.table.name}}">Name</th>
-    <th tooltip="{{tips.table.max_entries}}">Max Entries</th>
-    <th tooltip="{{tips.table.table_stats}}">Table Stats</th>
-    <th tooltip="{{tips.table.flow_stats}}">Flow Stats</th>
-    <th tooltip="{{tips.table.flow_caps}}">Flow Capabilities</th>
+    <th>Identifier</th>
+    <th>Name</th>
+    <th>Max Entries</th>
+    <th>Table Stats</th>
+    <th>Flow Stats</th>
+    <th>Flow Capabilities</th>
   </tr>
   </thead>
   <tbody>
   <tr ng-repeat="table in profile.tables.tables">
     <td>{{table.table_id}}</td>
     <td>
-      <div class="form-group"
+      <div class="form-group" tooltip="{{tips.table.name}}"
            ng-class="{'has-error': !tests.table.name(table.name)}">
         <input class="form-control" type="text" ng-model="table.name" 
                style="width:100px">
       </div>
     </td>
     <td>
-      <div class="form-group" 
+      <div class="form-group" tooltip="{{tips.table.max_entries}}"
            ng-class="{'has-error': !tests.table.max_entries(table.max_entries)}">
         <input class="form-control" type="text" ng-model="table.max_entries"
                style="width:60px">
