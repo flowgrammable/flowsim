@@ -110,9 +110,33 @@ angular.module('flowsimUiApp')
     };
 
     $scope.instruction = function(idx) {
+      $modal.open({
+        templateUrl: 'views/dialog/profile/instruction.html',
+        controller: 'DialogProfileInstructionCtrl',
+        size: 'lg',
+        resolve: {
+          instruction: function () {
+            return $scope.profile.tables.tables[idx].instruction;
+          }
+        }
+      }).result.then(function (instruction) {
+         $scope.profile.tables.tables[idx].instruction = instruction;
+      });
     };
 
     $scope.miss = function(idx) {
+      $modal.open({
+        templateUrl: 'views/dialog/profile/miss.html',
+        controller: 'DialogProfileMissCtrl',
+        size: 'lg',
+        resolve: {
+          miss: function() {
+            return $scope.profile.tables.tables[idx].miss;
+          }
+        }
+      }).result.then(function(miss) {
+         $scope.profile.tables.tables[idx].miss = miss;
+      });
     }
 
   });

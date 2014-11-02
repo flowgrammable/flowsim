@@ -216,6 +216,28 @@ TIPS.match = {
 TESTS.match = {
 };
 
+function Instruction(ins) {
+  if(ins && ins instanceof Instruction) {
+  } else {
+  }
+}
+
+TIPS.instruction = {
+};
+TESTS.instruction = {
+};
+
+function Miss(miss) {
+  if(miss && miss instanceof Miss) {
+  } else {
+  }
+}
+
+TIPS.miss = {
+};
+TESTS.miss = {
+};
+
 function Table(table) {
   if(table && table instanceof Table) {
     this.table_id    = table.table_id;
@@ -224,6 +246,8 @@ function Table(table) {
     this.table_stats = table.table_stats;
     this.flow_stats  = table.flow_stats;
     this.match       = new Match(table.match);
+    this.instruction = new Insturction(table.insturction);
+    this.miss        = new Miss(table.miss);
   } else {
     this.table_id    = table;
     this.name        = 'table' + this.table_id;
@@ -231,6 +255,8 @@ function Table(table) {
     this.table_stats = true;
     this.flow_stats  = true;
     this.match       = new Match();
+    this.instruction = new Instruction();
+    this.miss        = new Miss();
   }
 }
 

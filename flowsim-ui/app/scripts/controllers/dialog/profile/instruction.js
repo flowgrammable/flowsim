@@ -8,10 +8,16 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('DialogProfileInstructionCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('DialogProfileInstructionCtrl', function ($scope, $modalInstance, 
+                                                        instruction) {
+    $scope.instruction = instruction;
+
+    $scope.ok = function() {
+      $modalInstance.close($scope.instruction);
+    };
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
+
   });
