@@ -1,8 +1,0 @@
-
-var fgMPLS = (function(){
-
-return {
-};
-
-})();
-

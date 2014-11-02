@@ -1,0 +1,75 @@
+
+<div class="row">
+
+  <div class="col-md-2">
+    <fg-list on-add="addProfile" on-del="delProfile" on-set="setProfile"
+             on-init="getProfiles">
+      Profiles
+      <div class="error" ng-show="errorMsg.length">
+        {{errorMsg}}
+      </div>
+    </fg-list>
+  </div>
+
+  <div class="col-md-10">
+
+    <div ng-show="profile">
+
+    <!--
+    <div style="text-align:center">
+      <span ng-repeat="v in versions">
+        <button type="button" class="btn btn-primary btn-xs" 
+                ng-click="set($index)">
+          {{v}}
+        </button>
+      </span>
+    </div>
+    -->
+
+    <div class="row">
+      <div class="col-md-2 col-md-offset-4">
+        <div class="input-group" style="width:250px">
+          <select class="form-control">
+            <option>OpenFlow 1.0</option>
+            <option>OpenFlow 1.1</option>
+            <option>OpenFlow 1.2</option>
+            <option>OpenFlow 1.3</option>
+            <option>OpenFlow 1.4</option>
+          </select>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              Initialize Profile
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+      <tabset>
+        <tab heading="Datapath">
+          <ng-include src="'views/profile/datapath.html'"></ng-include>
+        </tab>
+        <tab heading="Ports">
+          <ng-include src="'views/profile/ports.html'"></ng-include>
+        </tab>
+        <tab heading="Tables">
+          <ng-include ng-controller="ProfileTablesCtrl"
+                      src="'views/profile/tables.html'"></ng-include>
+        </tab>
+        <tab heading="Groups">
+          <ng-include ng-controller="ProfileGroupsCtrl"
+                      src="'views/profile/groups.html'"></ng-include>
+        </tab>
+        <tab heading="Meters">
+          <ng-include ng-controller="ProfileMetersCtrl"
+                      src="'views/profile/meters.html'"></ng-include>
+        </tab>
+    </tabset>
+    </div>
+
+  </div>
+
+</div>
+

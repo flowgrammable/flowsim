@@ -1,0 +1,35 @@
+{
+  "mailer": {
+    "apiKey": "fake key",
+    "domain": "flowgrammable.org",
+    "user": "admin@flowgrammable.org"
+  },
+  "server": {
+    "address": "127.0.0.1",
+    "hostname": "localhost",
+    "open_port": 8080,
+    "secure_port": 8081,
+    "root": "/api",
+    "https": {
+      "key": "keys/dev.key",
+      "cert": "keys/localhost.crt"
+    },
+    "static": {
+      "mount": "/",
+      "directory": "frontend/"
+    }
+  },
+  "database": {
+    "database": "flowsim",
+    "host": "localhost",
+    "user": "flogdev",
+    "pwd": "flogdev"
+  },
+  "logger": {
+    "name": "flowsim",
+    "logLevel": "info",
+    "logPath": "log.txt",
+    "period" : "1w",
+    "count": 4
+  }
+}

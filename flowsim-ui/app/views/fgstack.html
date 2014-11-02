@@ -1,0 +1,44 @@
+
+<h4 ng-transclude>
+  <!-- transclude the list title -->
+</h4>
+
+<h5 ng-hide="stack.length">
+  No items selected for display.
+</h5>
+
+<div ng-show="stack.length">
+
+  <accordion close-others="true">
+    <accordion-group ng-repeat="node in stack">
+
+      <!-- Print the heading and delete button if last element -->
+      <accordion-heading>
+        {{node.name}}
+        <span ng-if="$last && $index!==0"
+              class="glyphicon glyphicon-minus-sign pull-right" 
+              ng-click="delNode($index)"></span>
+      </accordion-heading>
+  
+      <!-- Print a label and input box for each field -->
+      <fg-label-input ng-repeat="elem in node.attrs" item="elem">
+      </fg-label-input>
+
+    </accordion-group>
+  </accordion>
+
+  <div class="input-group">
+    <select class="form-control" ng-model="nodeType">
+      <option ng-repeat="name in options">{{name}}</option>
+    </select>
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button" ng-click="addNode()">
+        Add
+      </button>
+    </span>
+  </div>
+  
+  <br>
+ 
+</div>
+

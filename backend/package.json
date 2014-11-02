@@ -1,0 +1,68 @@
+{
+  "name": "flowsim-server",
+  "version": "0.0.1",
+  "description": "REST engine for Flowsim",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flowgrammable/flowsim"
+  },
+  "keywords": [
+    "openflow",
+    "sdn",
+    "software",
+    "defined",
+    "networking",
+    "simulator",
+    "REST",
+    "API"
+  ],
+  "contributors": [
+    {
+      "name": "Jasson Casey"
+    },
+    {
+      "name": "Colton Chojnacki"
+    },
+    {
+      "name": "Oron Hazi"
+    },
+    {
+      "name": "Thomas Wynn"
+    },
+    {
+      "name": "Ashish Jain"
+    }
+  ],
+  "license": "APSL-2.0",
+  "bugs": {
+    "url": "https://github.com/flowgrammable/flowsim/issues"
+  },
+  "homepage": "https://github.com/flowgrammable/flowsim",
+  "dependencies": {
+    "bcrypt": "^0.8.0",
+    "body-parser": "^1.8.1",
+    "bunyan": "^1.0.1",
+    "commander": "^2.3.0",
+    "ejs": "^1.0.0",
+    "mailgun-js": "~0.6.5",
+    "node-uuid": "^1.4.1",
+    "pg": "^3.4.2",
+    "restify": "^2.8.2",
+    "schema-inspector": "^1.4.9",
+    "underscore": "^1.7.0",
+    "validator": "^3.18.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-jsdoc": "^0.5.7",
+    "jshint": "^2.5.5",
+    "mocha": "^2.0.1",
+    "request": "^2.44.0"
+  }
+}

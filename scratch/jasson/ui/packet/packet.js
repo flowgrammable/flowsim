@@ -1,7 +1,0 @@
-
-(function(){
-
-angular.module('fgPktMgr', []);
-
-})();
-

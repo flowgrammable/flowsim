@@ -1,0 +1,25 @@
+
+<div class="rnn-holder" style="width: {{width}};">
+  <div class="rnn-total-bytes" 
+       ng-show="packet.protocols && packet.protocols.length">
+    <span class="rnn-total-bytes-val">{{packet.bytes}}B</span>
+  </div>
+  <div class="rnn-stack">
+    <div class="rnn-item" ng-repeat="protocol in packet.protocols" 
+         style="width: {{protocol.width}}%;">
+      <div class="rnn-bytes">{{protocol.bytes}}B</div>
+      <div class="rnn-title">{{protocol.name}}</div>
+      <div class="rnn-connection" 
+           style="height: {{protocol.fieldBlockYOffset}}px;" 
+           ng-show="protocol.attrs && protocol.attrs.length"></div>
+      <div class="rnn-fields-holder" 
+           style="top:{{-protocol.fieldBlockHeight/2}}px" 
+           ng-show="protocol.attrs && protocol.attrs.length">
+        <div class="rnn-field" ng-repeat="field in protocol.attrs">
+          {{field.name}}: {{field.value}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

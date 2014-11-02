@@ -1,8 +1,0 @@
-
-var fgTCP = (function(){
-
-return {
-};
-
-})();
-

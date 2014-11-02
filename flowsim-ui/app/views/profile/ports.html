@@ -1,0 +1,152 @@
+
+<br>
+
+<div class="row">
+  <div class="col-md-6 text-center">
+
+    <div class="form-group">
+      <div class="input-group">
+        <div class="input-group-addon">Port Count</div>
+        <input class="form-control" type="text" style="max-width:100px"
+               ng-model="profile.ports.n_ports">
+    <button class="btn btn-primary" ng-click="profile.ports.rebuild()">
+      Update
+    </button>
+      </div>
+    </div>
+    
+    <img src="images/switch.png" alt="Responsive image">
+
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Virtual Ports</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.port_stats">
+                Port Statistics
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.stp">
+                STP
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.in_port">
+                Ingress Port
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.table">
+                Table
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.normal">
+                Normal
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.none">
+                None
+              </label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.flood">
+                Flood
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.all">
+                All
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.controller">
+                Controller
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.local">
+                Local
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="profile.ports.vports.any">
+                Any
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Port Properties</h3>
+<hr>
+
+<table class="table table-striped">
+  <thead>
+    <th>Id</td>
+    <th>Address</th>
+    <th>Name</th>
+    <th>Speed</th>
+    <th>Mode</th>
+    <th>Medium</th>
+  </thead>
+  <tbody>
+  <tr ng-repeat="port in profile.ports.ports">
+    <td>{{$index}}</td>
+    <td>
+      <input class="form-control" type="text" ng-model="port.mac"
+             tooltip="{{tips.port.mac}}"  
+             ng-class="{'has-error': !tests.port.mac(port.mac)}">
+    </td>
+    <td>
+      <input class="form-control" type="text" ng-model="port.name"
+             tooltip="{{tips.port.name}}"
+             ng-class="{'has-error': !tests.port.name(port.name)}">
+    </td>
+    <td>
+      <select class="form-control" tooltip="{{tips.port.speed}}" i
+              ng-model="port.speed" 
+              ng-options="speed.value as speed.label for speed in speeds">
+      </select>
+    </td>
+    <td>
+      <select class="form-control" tooltip="{{tips.port.mode}}" 
+              ng-model="port.mode"
+              ng-options="mode.value as mode.label for mode in modes">
+      </select>
+    </td>
+    <td>
+      <select class="form-control" tooltip="{{tips.port.medium}}" 
+              ng-model="port.medium"
+              ng-options="medium as medium for medium in mediums">
+      </select>
+    </td>
+
+  </tr>
+  </tbody>
+</table>
+

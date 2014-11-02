@@ -1,0 +1,194 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/fgPacketView.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="flowsimUiApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div class="container" ng-controller="MainCtrl">
+
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation"
+        ng-controller="MenuCtrl">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              <img style="Max-height: 25px;" src="images/logo.png" 
+                   alt="Flowgrammable">
+            </a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li ng-show="authenticated">
+                <a href="#packet">Packet</a>
+              </li>
+              <li ng-show="authenticated">
+                <a href="#profile">Profile</a>
+              </li>
+              <li ng-show="authenticated">
+                <a href="#switch">Switch</a>
+              </li>
+              <li ng-show="authenticated">
+                <a href="#simulation">Simulation</a>
+              </li>
+              <!--<li><a href="http://www.flowgrammable.org">OpenFlow</a></li>-->
+              <li ng-show="authenticated">
+                <a href="#subscriber/update">Account</a>
+              </li>
+            </ul>
+            <form class="navbar-form navbar-right" role="form" 
+                  ng-hide="authenticated">
+              <a href="#subscriber/login" class="btn btn-success">
+                Login
+              </a>
+              <a href="#subscriber/register" class="btn btn-success">
+                Register
+              </a>
+            </form>
+            <form class="navbar-form navbar-right" role="form"
+                  ng-show="authenticated">
+              <a href="" ng-show="dirty" class="btn btn-success" 
+                         ng-click="save()">
+                Save
+              </a>
+              <a href="#" class="btn btn-success" ng-click="logout()">
+                Logout
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div ng-view=""></div>
+
+      <hr>
+      <footer>
+        <p class="pull-right">&copy; Flowgrammable 2014</p>
+        <a target="_blank" href="https://linkedin.com/company/3337804">
+          <i class="fa fa-linkedin"></i>
+        </a>
+        <a target="_blank" href="https://facebook.com/flowgrammable">
+          <i class="fa fa-facebook"></i>
+        </a>
+        <a target="_blank" href ="https://twitter.com/flowgrammable">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a target="_blank" href="https://google.com/+Flowgrammable">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </footer>
+
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-54747655-1');
+       ga('require', 'displayfeatures');
+       ga('require', 'linkid', 'linkid.js');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/services/subscriber.js"></script>
+        <script src="scripts/controllers/register.js"></script>
+        <script src="scripts/controllers/reset.js"></script>
+        <script src="scripts/controllers/verify.js"></script>
+        <script src="scripts/controllers/update.js"></script>
+        <script src="scripts/controllers/menu.js"></script>
+        <script src="scripts/controllers/forgot.js"></script>
+        <script src="scripts/controllers/packet.js"></script>
+        <script src="scripts/directives/fglist.js"></script>
+        <script src="scripts/directives/fgstack.js"></script>
+        <script src="scripts/services/fgconstraints.js"></script>
+        <script src="scripts/services/packet.js"></script>
+        <script src="scripts/services/backend.js"></script>
+        <script src="scripts/services/protocols.js"></script>
+        <script src="scripts/services/ethernet.js"></script>
+        <script src="scripts/services/vlan.js"></script>
+        <script src="scripts/services/arp.js"></script>
+        <script src="scripts/services/mpls.js"></script>
+        <script src="scripts/services/ipv4.js"></script>
+        <script src="scripts/services/ipv6.js"></script>
+        <script src="scripts/services/icmpv4.js"></script>
+        <script src="scripts/services/icmpv6.js"></script>
+        <script src="scripts/services/tcp.js"></script>
+        <script src="scripts/services/udp.js"></script>
+        <script src="scripts/services/sctp.js"></script>
+        <script src="scripts/services/payload.js"></script>
+        <script src="scripts/directives/fglabelinput.js"></script>
+        <script src="scripts/directives/fggroup.js"></script>
+        <script src="scripts/directives/fgselgroup.js"></script>
+        <script src="scripts/controllers/profile.js"></script>
+        <script src="scripts/controllers/switch.js"></script>
+        <script src="scripts/controllers/simulation.js"></script>
+        <script src="scripts/directives/fgtabs.js"></script>
+        <script src="scripts/services/profile.js"></script>
+        <script src="scripts/services/switch.js"></script>
+        <script src="scripts/directives/fgpacketview.js"></script>
+        <script src="scripts/services/fgcache.js"></script>
+        <script src="scripts/services/fglabelinput.js"></script>
+        <script src="scripts/services/fgui.js"></script>
+        <script src="scripts/services/fgconstraints.js"></script>
+        <script src="scripts/controllers/dialog/switch.js"></script>
+        <script src="scripts/controllers/profile/tables.js"></script>
+        <script src="scripts/controllers/dialog/profile/match.js"></script>
+        <script src="scripts/controllers/dialog/profile/instruction.js"></script>
+        <script src="scripts/controllers/dialog/profile/instructionmiss.js"></script>
+        <script src="scripts/controllers/profile/meters.js"></script>
+        <script src="scripts/controllers/profile/groups.js"></script>
+        <script src="scripts/controllers/switch/datapath.js"></script>
+        <script src="scripts/controllers/switch/ports.js"></script>
+        <script src="scripts/controllers/switch/tables.js"></script>
+        <script src="scripts/controllers/switch/groups.js"></script>
+        <script src="scripts/controllers/switch/meters.js"></script>
+        <script src="scripts/filters/take.js"></script>
+        <!-- endbuild -->
+</body>
+</html>

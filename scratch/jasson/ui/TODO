@@ -1,9 +1,0 @@
-
-1. Figure out how to concat, place, and source files
-2. Figure out how to attach ng-annotate and uglify
-3. Figure out how to unit test and integrate unit tests
-4. Figure out how to do inline code documentation and integrate
-
-FIXME
-
-1. Not sure why packet/packet.js is not initializing fgPacket

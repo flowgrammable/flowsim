@@ -1,0 +1,13 @@
+
+<h4 ng-transclude>
+  <!-- transclude the list title -->
+</h4>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li ng-repeat="item in items" ng-class="{active: $index==focus}">
+    <a href="" ng-click="focus=$index">
+      {{item.name}}
+    </a>
+  </li>
+</ul>
+

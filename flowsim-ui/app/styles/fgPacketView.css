@@ -1,0 +1,89 @@
+.rnn-holder {
+  margin: 40px 0 0;
+}
+.rnn-holder .ng-move,
+.rnn-holder .ng-enter,
+.rnn-holder .ng-leave {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+}
+.rnn-holder .ng-leave.ng-leave-active,
+.rnn-holder .ng-move,
+.rnn-holder .ng-enter {
+  opacity: 0;
+}
+.rnn-holder .ng-leave {
+    display: block;
+    width: 0!important;
+    max-width: 0!important;
+}
+.rnn-holder .ng-leave,
+.rnn-holder .ng-move.ng-move-active,
+.rnn-holder .ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.rnn-holder .rnn-total-bytes {
+  text-align: center;
+  border: 1px solid black;
+  border-width: 1px 1px 0;
+  line-height: 1.0;
+  font-style: italic;
+}
+.rnn-holder .rnn-total-bytes .rnn-total-bytes-val {
+  display: inline-block;
+  padding: 0 5px;
+  position: relative;
+  top: -0.5em;
+  background: white;
+}
+.rnn-holder .rnn-stack {
+  display: table;
+  width: 100%;
+}
+.rnn-holder .rnn-stack .rnn-item {
+  display: table-cell;
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+  text-align: center;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-bytes {
+  font-style: italic;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-title {
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 300;
+  font-family: Arial;
+  color: white;
+  background: #42a0bb;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-connection {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+  margin: 0 auto;
+  position: relative;
+  left: 6px;
+  width: 14px;
+  border: 2px solid #c0224e;
+  border-width: 0 0 2px 2px;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-fields-holder {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+  text-align: left;
+  margin: 0 auto;
+  margin-top: -2px;
+  position: relative;
+  left: 25px;
+  width: 14px;
+  overflow: visible;
+}
+.rnn-holder .rnn-stack .rnn-item .rnn-field {
+  -webkit-transition: all linear 0.5s;
+  transition: all linear 0.5s;
+  font-size: 12px;
+  white-space: nowrap;
+  line-height: 1.0;
+}

@@ -1,0 +1,38 @@
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+    <h1>Login</h1>
+
+    Welcome to Flowgrammable's OpenFlow switch simulator. We're excited to share
+    our latest work with you; however, you must be logged in to use our tools.
+
+    <hr>
+    <form ng-submit="login()" name="loginForm" novalidate role="form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input name="email" type="email" class="form-control" id="email"
+               placeholder="Enter email" ng-model="email" required>
+        <div class="error" ng-show="emailMsg.length">
+          <span>{{emailMsg}}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password
+          <a href="#subscriber/forgot">(Forgot Password)</a>
+        </label>
+        <input name="password" type="password" class="form-control" id="password"
+               placeholder="Password" ng-model="password" required>
+        <div class="error" ng-show="passwordMsg.length">
+          <span>{{passwordMsg}}</span>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-default"> Login </button>
+    </form>
+
+    <div class="error" ng-show="errorMsg.length">
+      {{errorMsg}}
+    </div>
+
+  </div>
+</div>
