@@ -14,13 +14,15 @@
     </thead>
     <tbody>
       <tr ng-repeat="(key, val) in match">
-        <td>{{key}}</td>
+        <td><div tooltip="{{tips[key]}}">{{key}}</div></td>
         <td><input type="checkbox" ng-model="val.enabled"></td>
         <td><input type="checkbox" ng-model="val.wildcardable"></td>
         <td><input type="checkbox" ng-model="val.maskable"></td>
         <td>
+          <div ng-class="{'has-error': !tests[key](val.mask)}">
           <input class="form-control" type="text" ng-model="val.mask"
                  style="width:150px" ng-disabled="!val.maskable">
+          </div>
         </td>
       </tr>
     </tbody>

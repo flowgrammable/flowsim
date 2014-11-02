@@ -102,6 +102,8 @@ angular.module('flowsimUiApp')
         controller: 'DialogProfileMatchCtrl',
         size: 'lg',
         resolve: {
+          tips: function() { return $scope.tips.match; },
+          tests: function() { return $scope.tests.match; },
           match: function () {
             return $scope.profile.tables.tables[idx].match;
           }
@@ -117,6 +119,8 @@ angular.module('flowsimUiApp')
         controller: 'DialogProfileInstructionCtrl',
         size: 'lg',
         resolve: {
+          tips: function() { return $scope.tips.instruction; },
+          tests: function() { return $scope.tests.instruction; },
           instruction: function () {
             return $scope.profile.tables.tables[idx].instruction;
           }
@@ -132,6 +136,8 @@ angular.module('flowsimUiApp')
         controller: 'DialogProfileMissCtrl',
         size: 'lg',
         resolve: {
+          tips: function() { return $scope.tips.miss; },
+          tests: function() { return $scope.tests.miss; },
           miss: function() {
             return $scope.profile.tables.tables[idx].miss;
           }

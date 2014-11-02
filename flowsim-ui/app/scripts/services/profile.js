@@ -18,7 +18,7 @@ function Datapath(dp) {
     this.sw_desc    = dp.sw_desc;
     this.serial_num = dp.serial_num;
     this.dp_desc    = dp.dp_desc;
-  }
+  } 
   // Default constructor
   else {
     this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
@@ -221,13 +221,21 @@ function Match(match) {
     this.in_port     = createMatch(true, false, 0);
     this.eth_src     = createMatch(true, true, '0xffffffffffff');
     this.eth_dst     = createMatch(true, true, '0xffffffffffff');
-    this.eth_typelen = createMatch(true, true, '0xffffffffffff');
+    this.eth_typelen = createMatch(true, true, '0xffff');
   }
 }
 
 TIPS.match = {
+  in_port: 'Match on ingress port',
+  eth_src: 'Match on Ethernet source address',
+  eth_dst: 'Match on Ethernet destination address',
+  eth_typelen: 'Match on Ethernet type/length field'
 };
 TESTS.match = {
+  in_port: fgConstraints.isUInt(0, 0xffffffff),
+  eth_src: fgConstraints.isUInt(0, 0xffffffffffff),
+  eth_dst: fgConstraints.isUInt(0, 0xffffffffffff),
+  eth_typelen: fgConstraints.isUInt(0, 0xffff)
 };
 
 function Instruction(ins) {
@@ -293,8 +301,8 @@ function Tables(tables) {
     this.tables = _.map(tables.tables, function(t) { return new Table(t); });
   } else {
     this.n_tables = 8;
-    this.tables = _.map(_.range(this.n_tables), function(id) {
-      return new Table(id);
+    this.tables = _.map(_.range(this.n_tables), function(id) { 
+      return new Table(id); 
     });
   }
 }
