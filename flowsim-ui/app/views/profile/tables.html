@@ -2,12 +2,12 @@
 <table class="table table-hover table-condensed table-striped">
   <thead>
   <tr>
-    <td>Identifier</td>
-    <td>Name</td>
-    <td>Max Entries</td>
-    <td>Table Stats</td>
-    <td>Flow Stats</td>
-    <td>Flow Capabilities</td>
+    <th>Identifier</th>
+    <th>Name</th>
+    <th>Max Entries</th>
+    <th>Table Stats</th>
+    <th>Flow Stats</th>
+    <th>Flow Capabilities</th>
   </tr>
   </thead>
   <tbody>
@@ -15,12 +15,12 @@
     <td>{{table.table_id}}</td>
     <td>
       <input class="form-control" type="text" ng-model="table.name"
-             tooltip="{{tips.table.name}}"  
+             tooltip="{{tips.table.name}}" style="width:100px" 
              ng-class="{'has-error': !tests.table.name(table.name)}">
     </td>
     <td>
       <input class="form-control" type="text" ng-model="table.max_entries"
-             tooltip="{{tips.table.max_entries}}"  
+             tooltip="{{tips.table.max_entries}}" style="width:60px" 
              ng-class="{'has-error': !tests.table.max_entries(table.max_entries)}">
     </td>
     <td>
