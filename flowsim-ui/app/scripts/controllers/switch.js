@@ -22,6 +22,8 @@ angular.module('flowsimUiApp')
         callback('Name exists');
       } else if(name.length === 0) {
         callback('Invalid name');
+      } else if(!/^[a-zA-Z_][a-zA-Z_0-9]*$/.test(name)) {
+        callback('Invalid name');
       } else {
         fgCache.getNames('profile', function(err, result) {
           if(err) {

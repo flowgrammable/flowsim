@@ -42,6 +42,8 @@ angular.module('flowsimUiApp')
         callback('Name exists');
       } else if(name.length === 0) {
         callback('Invalid name');
+      } else if(!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
+        callback('Invalid name');
       } else {
         $scope.profile = fgCache.create('profile', name, Profile);
         $scope.names[name] = true;
