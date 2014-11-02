@@ -93,4 +93,13 @@ angular.module('flowsimUiApp')
       $rootScope.$broadcast('cleanCache');
     };
 
+    $scope.match = function(idx) {
+    };
+
+    $scope.instruction = function(idx) {
+    };
+
+    $scope.miss = function = function(idx) {
+    }
+
   });
