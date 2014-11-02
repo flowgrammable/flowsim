@@ -46,6 +46,7 @@
   </div>
   
   <div class="col-md-3">
+    <h4>Apply</h4>
     <div class="panel panel-default" ng-show="instruction.apply">
       <!-- Default panel contents -->
       <div class="panel-heading">
@@ -57,17 +58,18 @@
       <div class="list-group">
         <div class="list-group-item">
           Src
-          <button class="button btn-primary btn-xs">set</button>
+          <span class="glyphicon glyphicon-pencil pull-right"></span>
         </div>
         <div class="list-group-item">
           Dst 
-          <span class="glyphicon glyphicon-pencil"></span>
+          <span class="glyphicon glyphicon-pencil pull-right"></span>
         </div>
       </div>
     </div>
   </div>
 
   <div class="col-md-3">
+    <h4>Write</h4>
     <accordion>
       <accordion-group heading="Ethernet">
         <div class="list-group" style="width:100%;">
@@ -88,17 +90,15 @@
       <accordion-group heading="MPLS">
         <div class="list-group">
           <a href="" class="list-group-item">
-            Label
+            Label write
             <span class="glyphicon glyphicon-pencil pull-right"></span>
-            <span class="glyphicon glyphicon-plus"></span>
-            <span class="glyphicon glyphicon-minus"></span>
           </a>
           <a href="" class="list-group-item">
-            Push Label
+            Label push
             <span class="badge">enabled</span>
           </a>
           <a href="" class="list-group-item">
-            Pop Label
+            Label pop
             <span class="badge">disabled</span>
           </a>
         </div>
@@ -109,6 +109,7 @@
   </div>
 
   <div class="col-md-3">
+    <h4>Goto</h4>
     <div class="panel panel-default" ng-show="instruction.goto_">
       <!-- Default panel contents -->
       <div class="panel-heading">
