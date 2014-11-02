@@ -3,13 +3,15 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <div class="form-group">
+    <div class="form-group"
+      ng-class="{'has-error':!tests.tables.n_tables(profile.tables.n_tables)}">
       <div class="input-group">
-        <div class="input-group-addon">Table Count</div>
-        <input class="form-control" type="text"
-               style="max-width:100px"
+        <div class="input-group-addon" tooltip="{{tips.tables.n_tables}}">
+          Table Count
+        </div>
+        <input class="form-control" type="text" style="max-width:100px"
                ng-model="profile.tables.n_tables">
-          <button class="btn btn-primary" ng-click="profile.tables.rebuild()">
+               <button class="btn btn-primary" ng-click="profile.tables.rebuild()">
             Update
           </button>
         </div>
@@ -20,26 +22,30 @@
 <table class="table table-hover table-condensed table-striped">
   <thead>
   <tr>
-    <th>Identifier</th>
-    <th>Name</th>
-    <th>Max Entries</th>
-    <th>Table Stats</th>
-    <th>Flow Stats</th>
-    <th>Flow Capabilities</th>
+    <th tooltip="{{tips.table.table_id}}">Identifier</th>
+    <th tooltip="{{tips.table.name}}">Name</th>
+    <th tooltip="{{tips.table.max_entries}}">Max Entries</th>
+    <th tooltip="{{tips.table.table_stats}}">Table Stats</th>
+    <th tooltip="{{tips.table.flow_stats}}">Flow Stats</th>
+    <th tooltip="{{tips.table.flow_caps}}">Flow Capabilities</th>
   </tr>
   </thead>
   <tbody>
   <tr ng-repeat="table in profile.tables.tables">
     <td>{{table.table_id}}</td>
     <td>
-      <input class="form-control" type="text" ng-model="table.name"
-             tooltip="{{tips.table.name}}" style="width:100px" 
-             ng-class="{'has-error': !tests.table.name(table.name)}">
+      <div class="form-group"
+           ng-class="{'has-error': !tests.table.name(table.name)}">
+        <input class="form-control" type="text" ng-model="table.name" 
+               style="width:100px">
+      </div>
     </td>
     <td>
-      <input class="form-control" type="text" ng-model="table.max_entries"
-             tooltip="{{tips.table.max_entries}}" style="width:60px" 
-             ng-class="{'has-error': !tests.table.max_entries(table.max_entries)}">
+      <div class="form-group" 
+           ng-class="{'has-error': !tests.table.max_entries(table.max_entries)}">
+        <input class="form-control" type="text" ng-model="table.max_entries"
+               style="width:60px">
+      </div>
     </td>
     <td>
       <input type="checkbox" ng-model="table.table_stats">

@@ -12,7 +12,6 @@ function Datapath(dp) {
     this.datapath_id   = dp.datapath_id;
     this.ip_reassembly = dp.ip_reassembly;
     this.n_buffers     = dp.n_buffers;
-    this.n_tables      = dp.n_tables;
 
     this.mfc_desc   = dp.mfc_desc;
     this.hw_desc    = dp.hw_desc;
@@ -24,7 +23,6 @@ function Datapath(dp) {
   else {
     this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
     this.n_buffers     = 1024;
-    this.n_tables      = 256;
     this.ip_reassembly = true;
 
     // Descriptions
@@ -47,7 +45,6 @@ TIPS.datapath = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',
   n_buffers: 'Number of packets that can be buffered for controller',
-  n_tables: 'Number of flow tables available',
   mfr_desc: '',
   hw_desc: '',
   serial_num: '',
@@ -57,7 +54,6 @@ TIPS.datapath = {
 TESTS.datapath = {
   datapath_id: function() { return true; },
   n_buffers:   fgConstraints.isUInt(0, 0xffff),
-  n_tables:    fgConstraints.isUInt(1, 256),
   mfr_desc:    function(v) { return !v || v.length <= 256 ; },
   hw_desc:     function(v) { return !v || v.length <= 256; },
   sw_desc:     function(v) { return !v || v.length <= 256; },
@@ -225,8 +221,18 @@ function Table(table) {
   }
 }
 
-TIPS.table = {};
-TESTS.table = {};
+TIPS.table = {
+  table_id: 'Unique table identifier',
+  name: 'Descriptive name for flow table type',
+  max_entries: 'Maximum flows supported',
+  table_stats: 'Ability of table to record lookup statistics',
+  flow_stats: 'Ability of flow to record match statistics',
+  flow_caps: 'Match, Instruction, and Actions to support'
+};
+TESTS.table = {
+  name: function(n) { return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(n); },
+  max_entries: fgConstraints.isUInt(0,0xffffffff)
+};
 
 function Tables(tables) {
   if(tables && tables instanceof Tables) {
@@ -253,8 +259,12 @@ Tables.prototype.rebuild = function() {
   }
 };
 
-TIPS.tables = {};
-TESTS.tables = {};
+TIPS.tables = {
+  n_tables: 'Number of flow tables available'
+};
+TESTS.tables = {
+  n_tables: fgConstraints.isUInt(0,0xff)
+};
 
 function Groups(groups) {
   if(groups && groups instanceof Groups) {
