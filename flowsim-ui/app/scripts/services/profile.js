@@ -433,17 +433,32 @@ TESTS.groups   = Groups.TESTS;
     function openflow_1_1(p) {
       // openflow preseelect 1.1 code goes here
       console.log('preselecting 1.1');
+      p.datapath.openflow_1_1();
+      p.ports.openflow_1_1();
+      //p.tables.openflow_1_1();
+      p.meters.openflow_1_1();
+      p.groups.openflow_1_1();
       p.ports.table = true;
       return p
     }
     function openflow_1_2(p) {
       // openflow preseelect 1.2 code goes here
       console.log('preselecting 1.2');
+      p.datapath.openflow_1_2();
+      p.ports.openflow_1_2();
+      //p.tables.openflow_1_2();
+      p.meters.openflow_1_2();
+      p.groups.openflow_1_2();
       return p
     }
     function openflow_1_3(p) {
       // openflow preseelect 1.3 code goes here
       console.log('preselecting 1.3');
+      p.datapath.openflow_1_3();
+      p.ports.openflow_1_3();
+      //p.tables.openflow_1_3();
+      p.meters.openflow_1_3();
+      p.groups.openflow_1_3();
       return p
     }
     function openflow_1_4(p) {
@@ -451,7 +466,7 @@ TESTS.groups   = Groups.TESTS;
       console.log('preselecting 1.4');
       p.datapath.openflow_1_4();
       p.ports.openflow_1_4();
-      p.tables.openflow_1_4();
+      //p.tables.openflow_1_4();
       p.meters.openflow_1_4();
       p.groups.openflow_1_4();
       return p
