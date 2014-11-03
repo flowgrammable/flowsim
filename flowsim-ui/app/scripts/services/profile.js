@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Profile', function(fgConstraints, Datapath, Ports,
+  .factory('Profile', function(fgConstraints, Datapath, Ports, Tables,
                                Meters, Groups) {
 
 var TIPS = {};
@@ -49,54 +49,6 @@ if(match /*&& match instanceof Match*/) {
     ];
   }
 }
-
-TIPS.match = {
-  in_port: 'Match on ingress port',
-  eth_src: 'Match on Ethernet source address',
-  eth_dst: 'Match on Ethernet destination address',
-  eth_typelen: 'Match on Ethernet type/length field',
-  arp_opcode: 'Match on ARP message type',
-  arp_sha: 'Match on Source hardware address',
-  arp_spa: 'Match on Source protocol address',
-  arp_tha: 'Match on Target hardware address',
-  arp_tpa: 'Match on Target protocol address',
-  vlan_pcp: 'Match on VLAN priority code',
-  vlan_dei: 'Match on VLAN',
-  vlan_vid: 'Match on VLAN ID',
-  vlan_typelen: 'Match on VLAN Type/Len',
-  mpls_label: 'Match on MPLS label',
-  mpls_tc: 'Match on MPLS tc',
-  mpls_bos: 'Match on MPLS bos',
-  ipv4_dscp: 'Match on IPv4 Differentiated Services Code Type',
-  ipv4_ecn: 'Match on Explicit Congestion Notification',
-  ipv4_proto: 'Match on Protocol',
-  ipv4_src: 'Match on IPv4 source',
-  ipv4_dst: 'Match on IPv4 destination'
-
-};
-TESTS.match = {
-  in_port: fgConstraints.isUInt(0, 0xffffffff),
-  eth_src: fgConstraints.isUInt(0, 0xffffffffffff),
-  eth_dst: fgConstraints.isUInt(0, 0xffffffffffff),
-  eth_typelen: fgConstraints.isUInt(0, 0xffff),
-  arp_opcode: fgConstraints.isUInt(0, 0x1),
-  arp_sha: fgConstraints.isUInt(0, 0xffffffffffff),
-  arp_spa: fgConstraints.isUInt(0, 0xffffffff),
-  arp_tha: fgConstraints.isUInt(0, 0xffffffffffff),
-  arp_tpa: fgConstraints.isUInt(0, 0xffffffff),
-  vlan_pcp: fgConstraints.isUInt(0, 0x7),
-  vlan_dei: fgConstraints.isUInt(0, 0x3),
-  vlan_vid: fgConstraints.isUInt(0, 0x0fff),
-  vlan_typelen: fgConstraints.isUInt(0, 0xffff),
-  mpls_label: fgConstraints.isUInt(0, 0x0fffff),
-  mpls_tc: fgConstraints.isUInt(0, 0x7),
-  mpls_bos: fgConstraints.isUInt(0, 0x0fffff),
-  ipv4_dscp: fgConstraints.isUInt(0, 0x3f),
-  ipv4_ecn: fgConstraints.isUInt(0, 0x03),
-  ipv4_proto: fgConstraints.isUInt(0, 255),
-  ipv4_src: fgConstraints.isUInt(0, 0xffffffff),
-  ipv4_dst: fgConstraints.isUInt(0, 0xffffffff)
-};
 
 function mkActionField(name, value) {
   return {
@@ -247,96 +199,12 @@ function Instruction(ins) {
   }
 }
 
-TIPS.instruction = {
-  apply: 'Applies actions immediately',
-  clear: 'Clears the action set',
-  write: 'Appends actions to the action set',
-  metadata: 'Writes metadata register',
-  meter: 'Sends packet to designated meter',
-  goto_: 'Jumps to another flow table'
-};
-TESTS.instruction = {
-  metadata: fgConstraints.isUInt(0, 0xffffffffffffffff),
-  goto_: function(input) {
-    return /^([0-9]+)(\.\.([0-9]+))?$/.test(input);
-  }
-};
-
-var Miss = Instruction;
-
-function Table(table) {
-if(typeof table === 'number') {
-    this.table_id    = table;
-    this.name        = 'table' + this.table_id;
-    this.max_entries = 256;
-    this.table_stats = true;
-    this.flow_stats  = true;
-    this.match       = new Match();
-    this.instruction = new Instruction();
-    this.miss        = new Miss();
-  } else {
-    this.table_id    = table.table_id;
-    this.name        = table.name;
-    this.max_entries = table.max_entries;
-    this.table_stats = table.table_stats;
-    this.flow_stats  = table.flow_stats;
-    this.match       = new Match(table.match);
-    this.instruction = new Instruction(table.instruction);
-    this.miss        = new Miss(table.miss);
-  }
-}
-
-TIPS.table = {
-  table_id: 'Unique table identifier',
-  name: 'Descriptive name for flow table type',
-  max_entries: 'Maximum flows supported',
-  table_stats: 'Ability of table to record lookup statistics',
-  flow_stats: 'Ability of flow to record match statistics',
-  flow_caps: 'Match, Instruction, and Actions to support'
-};
-TESTS.table = {
-  name: function(n) { return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(n); },
-  max_entries: fgConstraints.isUInt(0,0xffffffff)
-};
-
-function Tables(tables) {
-if(tables /*&& tables instanceof Tables*/) {
-    this.n_tables = tables.n_tables;
-    this.tables = _.map(tables.tables, function(t) { return new Table(t); });
-  } else {
-    this.n_tables = 8;
-    this.tables = _.map(_.range(this.n_tables), function(id) {
-      return new Table(id);
-    });
-  }
-}
-
-Tables.prototype.rebuild = function() {
-  var i;
-  if(this.n_tables === this.tables.length) {
-    return;
-  } else if(this.n_tables < this.tables.length) {
-    this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
-  } else {
-    for(i=this.tables.length; i<this.n_tables; ++i) {
-      this.tables.push(new Table(i));
-    }
-  }
-};
-
-TIPS.tables = {
-  n_tables: 'Number of flow tables available'
-};
-TESTS.tables = {
-  n_tables: fgConstraints.isUInt(0,0xff)
-};
-
 function Profile(p) {
   if(typeof p === 'string') {
     this.name = p;
     this.datapath = new Datapath.Capabilities();
     this.ports    = new Ports.Capabilities();
-    this.tables   = new Tables();
+    this.tables   = new Tables.Capabilities();
     this.meters   = new Meters.Capabilities();
     this.groups   = new Groups.Capabilities();
   } else if(p) {
@@ -346,8 +214,8 @@ function Profile(p) {
     this.name     = p.name;
     this.datapath = new Datapath.Capabilities(p.datapath);
     this.ports    = new Ports.Capabilities(p.ports);
-    this.meters   = new Meters(p.meters);
     this.tables   = new Tables.Capabilities(p.tables);
+    this.meters   = new Meters.Capabilities(p.meters);
     this.groups   = new Groups.Capabilities(p.groups);
   } else {
     throw 'Bad construction: Profile';
@@ -364,6 +232,8 @@ TIPS.datapath  = Datapath.TIPS;
 TESTS.datapath = Datapath.TESTS;
 TIPS.ports     = Ports.TIPS;
 TESTS.ports    = Ports.TESTS;
+TIPS.tables    = Tables.TIPS;
+TESTS.tables   = Tables.TESTS;
 TIPS.meters    = Meters.TIPS;
 TESTS.meters   = Meters.TESTS;
 TIPS.groups    = Groups.TIPS;
