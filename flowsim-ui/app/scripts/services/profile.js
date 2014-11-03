@@ -270,6 +270,9 @@ function Instruction(ins) {
       };
     });
     this.metadata = ins.metadata;
+    this.goto_ = _.map(ins.goto_, function(i) {
+      return _.clone(i);
+    });
   } else {
     this.caps = {
       apply    : true,
@@ -341,6 +344,43 @@ function Instruction(ins) {
         mkActionField('Src write', true),
         mkActionField('Dst write', true)
       ]
+    }, {
+      protocol: 'ARP',
+      fields: []
+    }, {
+      protocol: 'MPLS',
+      fields: []
+    }, {
+      protocol: 'ARP',
+      fields: []
+    }, {
+      protocol: 'IPv4',
+      fields: [
+      ]
+    }, {
+      protocol: 'IPv6',
+      fields: [
+      ]
+    }, {
+      protocol: 'ICMPv4',
+      fields: [
+      ]
+    }, {
+      protocol: 'ICMPv6',
+      fields: [
+      ]
+    }, {
+      protocol: 'TCP',
+      fields: [
+      ]
+    }, {
+      protocol: 'SCTP',
+      fields: [
+      ]
+    }, {
+      protocol: 'TCP',
+      fields: [
+      ]
     }];
     this.metadata = '0xffffffffffffffff';
     this.goto_ = [];
@@ -356,7 +396,10 @@ TIPS.instruction = {
   goto_: 'Jumps to another flow table'
 };
 TESTS.instruction = {
-  metadata: fgConstraints.isUInt(0, 0xffffffffffffffff)
+  metadata: fgConstraints.isUInt(0, 0xffffffffffffffff),
+  goto_: function(input) {
+    return /^([0-9]+)(\.\.([0-9]+))?$/.test(input);
+  }
 };
 
 function Miss(miss) {

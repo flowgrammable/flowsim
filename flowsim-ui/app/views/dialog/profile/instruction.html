@@ -97,13 +97,28 @@
       <accordion>
         <accordion-group heading="Next Tables">
           <ul class="list-group">
-            <li class="list-group-item">
-              0..14
-              <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+            <li class="list-group-item" ng-repeat="rng in instruction.goto_">
+              {{rng.first}}
+              {{'..'+rng.second}}
+              <span ng-click="del($index)"
+                    class="glyphicon glyphicon-minus-sign pull-right"></span>
             </li>
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Cras justo odio</li>
-          <ul>
+          </ul>
+
+          <div class="input-group">
+            <input type="text" class="form-control" ng-model="range">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="add(range)">
+                Add
+              </button>
+            </span>
+          </div>
+          <div class="error" ng-show="errorMsg.length">
+            <h6>
+              <span>{{errorMsg}}</span>
+            </h6>
+          </div>
+
         </accordion-group>
       </accordion>
     </div>
