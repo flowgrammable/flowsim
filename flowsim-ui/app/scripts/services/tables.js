@@ -321,12 +321,18 @@ Table.TIPS = {
   max_entries: 'Maximum flows supported',
   table_stats: 'Ability of table to record lookup statistics',
   flow_stats: 'Ability of flow to record match statistics',
-  flow_caps: 'Match, Instruction, and Actions to support'
+  flow_caps: 'Match, Instruction, and Actions to support',
+  Match: Match.TIPS,
+  Instruction: Instruction.TIPS,
+  Miss: Instruction.TIPS
 };
 
 Table.TESTS = {
   name: function(n) { return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(n); },
-  max_entries: fgConstraints.isUInt(0,0xffffffff)
+  max_entries: fgConstraints.isUInt(0,0xffffffff),
+  Match: Match.TESTS,
+  Instruction: Instruction.TESTS,
+  Miss: Instruction.TESTS
 };
 
 Table.Configuration = function(tables) {
@@ -395,18 +401,12 @@ function Configuration(tables) {
 
 var TIPS = {
   n_tables: 'Number of flow tables available',
-  match: Match.TIPS,
-  instruction: Instruction.TIPS,
-  miss: Miss.TIPS,
-  table: Table.TIPS
+  Table: Table.TIPS
 };
 
 var TESTS = {
   n_tables: fgConstraints.isUInt(0,0xff),
-  match: Match.TESTS,
-  instruction: Instruction.TESTS,
-  miss: Miss.TESTS,
-  table: Table.TESTS
+  Table: Table.TESTS
 };
 
 return {
