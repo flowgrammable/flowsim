@@ -34,42 +34,6 @@ Port.TESTS = {
   name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v) }
 }
 
-Port.SPEEDS = [{
-  label: '10 Mbps',
-  value: '10_mbps'
-}, {
-  label: '100 Mbps',
-  value: '100_mbps'
-}, {
-  label: '1 Gbps',
-  value: '1_gbps'
-}, {
-  label: '10 Gbps',
-  value: '10_gbps'
-}, {
-  label: '40 Gbps',
-  value: '40_gbps'
-}, {
-  label: '100 Gbps',
-  value: '100_gbps'
-}, {
-  label: '1 Tbps',
-  value: '1_tbps'
-}];
-
-Port.MODES = [{
-  label: 'Half Duplex',
-  value: 'half_duplex'
-}, {
-  label: 'Full Duplex',
-  value: 'full_duplex'
-}];
-
-Port.MEDIUMS = [
-  'Copper',
-  'Fiber'
-];
-
 Port.Capabilities = function(port) {
   if(typeof port === 'number') {
     // default construction
@@ -119,6 +83,13 @@ function Capabilities(ports) {
     this.ports = _.map(ports.ports, function(port) {
       return new Port.Capabilities(port);
     });
+    this.speeds = _.map(ports.speeds, function(speed) {
+      return _.clone(speed);
+    });
+    this.modes = _.map(ports.speeds, function(mode) {
+      return _.clone(mode);
+    });
+    this.mediums = _.clone(ports.mediums);
     this.vports = _.clone(ports.vports);
   } else {
     // default constructor
@@ -139,6 +110,39 @@ function Capabilities(ports) {
       any:        true,
       none:       true
     };
+    this.speeds = [{
+      label: '10 Mbps',
+      value: '10_mbps'
+    }, {
+      label: '100 Mbps',
+      value: '100_mbps'
+    }, {
+      label: '1 Gbps',
+      value: '1_gbps'
+    }, {
+      label: '10 Gbps',
+      value: '10_gbps'
+    }, {
+      label: '40 Gbps',
+      value: '40_gbps'
+    }, {
+      label: '100 Gbps',
+      value: '100_gbps'
+    }, {
+      label: '1 Tbps',
+      value: '1_tbps'
+    }];
+    this.modes = [{
+      label: 'Half Duplex',
+      value: 'half_duplex'
+    }, {
+      label: 'Full Duplex',
+      value: 'full_duplex'
+    }];
+    this.mediums = [
+      'Copper',
+      'Fiber'
+    ];
   }
 }
 
