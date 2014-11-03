@@ -388,20 +388,11 @@ TESTS.groups   = Groups.TESTS;
     function openflow_1_0(p) {
       console.log('preselecting 1.0');
 
-      // Ports
-      p.ports.vports = {
-        port_stats: true,
-        stp:        true, // optional
-        in_port:    true,
-        table:      true,
-        normal:     true, // optional
-        flood:      true, // optional
-        all:        true,
-        controller: true,
-        local:      true,
-        any:        false,
-        none:       true
-      };
+      p.datapath.openflow_1_0();
+      p.ports.openflow_1_0();
+      //p.tables.openflow_1_0();
+      p.meters.openflow_1_0();
+      p.groups.openflow_1_0();
 
       // Tables
       var i;

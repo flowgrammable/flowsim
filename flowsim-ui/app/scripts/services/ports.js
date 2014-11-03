@@ -156,18 +156,91 @@ Capabilities.prototype.rebuild = function() {
 }
 
 Capabilities.prototype.openflow_1_0 = function() {
+  // Ports
+  this.vports = {
+    port_stats: true,
+    stp:        true, // optional
+    in_port:    true,
+    table:      true,
+    normal:     true, // optional
+    flood:      true, // optional
+    all:        true,
+    controller: true,
+    local:      true,
+    any:        false,
+    none:       true
+  };
+
+  // set number of ports?
+  // construct ports?
 };
 
 Capabilities.prototype.openflow_1_1 = function() {
-};   
+  // Ports
+  this.vports = {
+    port_stats: true,
+    stp:        false,
+    in_port:    true,
+    table:      true,
+    normal:     true, // optional
+    flood:      true, // optional
+    all:        true,
+    controller: true,
+    local:      true, // optional
+    any:        true,
+    none:       false
+  };
+};
 
 Capabilities.prototype.openflow_1_2 = function() {
+  // Ports
+  this.vports = {
+    port_stats: true,
+    stp:        false,
+    in_port:    true,
+    table:      true,
+    normal:     true, // optional
+    flood:      true, // optional
+    all:        true,
+    controller: true,
+    local:      true, // optional
+    any:        true,
+    none:       false
+  };
 };
 
 Capabilities.prototype.openflow_1_3 = function() {
+  // Ports
+  this.vports = {
+    port_stats: true,
+    stp:        false,
+    in_port:    true,
+    table:      true,
+    normal:     true, // optional
+    flood:      true, // optional
+    all:        true,
+    controller: true,
+    local:      true, // optional
+    any:        true,
+    none:       false
+  };
 };
 
 Capabilities.prototype.openflow_1_4 = function() {
+  // Ports
+  this.vports = {
+    port_stats: true,
+    stp:        false,
+    in_port:    true,
+    table:      true,
+    normal:     true, // optional
+    flood:      true, // optional
+    all:        true,
+    controller: true,
+    local:      true, // optional
+    any:        true,
+    none:       false
+  };
 };
 
 function Configuration(ports) {

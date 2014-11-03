@@ -41,18 +41,43 @@ function Capabilities(datapath) {
 }
 
 Capabilities.prototype.openflow_1_0 = function() {
+  this.ip_reassembly   = true;
+  this.mfr_description = 'Flowgrammable';
+  this.hw_description  = 'Generic OpenFlow 1.0 Switch';
+  this.sw_description  = 'Generic OpenFlow 1.0 Software';
+  this.dp_description  = 'Generic OpenFlow 1.0 Pipeline';
 };
 
 Capabilities.prototype.openflow_1_1 = function() {
+  this.ip_reassembly   = true;
+  this.mfr_description = 'Flowgrammable';
+  this.hw_description  = 'Generic OpenFlow 1.1 Switch';
+  this.sw_description  = 'Generic OpenFlow 1.1 Software';
+  this.dp_description  = 'Generic OpenFlow 1.1 Pipeline';
 };
 
 Capabilities.prototype.openflow_1_2 = function() {
+  this.ip_reassembly   = true;
+  this.mfr_description = 'Flowgrammable';
+  this.hw_description  = 'Generic OpenFlow 1.2 Switch';
+  this.sw_description  = 'Generic OpenFlow 1.2 Software';
+  this.dp_description  = 'Generic OpenFlow 1.2 Pipeline';
 };
 
 Capabilities.prototype.openflow_1_3 = function() {
+  this.ip_reassembly   = true;
+  this.mfr_description = 'Flowgrammable';
+  this.hw_description  = 'Generic OpenFlow 1.3 Switch';
+  this.sw_description  = 'Generic OpenFlow 1.3 Software';
+  this.dp_description  = 'Generic OpenFlow 1.3 Pipeline';
 };
 
 Capabilities.prototype.openflow_1_4 = function() {
+  this.ip_reassembly   = true;
+  this.mfr_description = 'Flowgrammable';
+  this.hw_description  = 'Generic OpenFlow 1.4 Switch';
+  this.sw_description  = 'Generic OpenFlow 1.4 Software';
+  this.dp_description  = 'Generic OpenFlow 1.4 Pipeline';
 };
 
 function Configuration(datapath) {
