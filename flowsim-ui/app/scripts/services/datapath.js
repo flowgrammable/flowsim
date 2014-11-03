@@ -13,21 +13,27 @@ angular.module('flowsimUiApp')
 function Capabilities(datapath) {
   if(datapath) {
     if(datapath instanceof Datapath) {
+      // Copy constructor
     } else {
+      // JSON constructor
       _.extend(this, datapath);
     }
   } else {
+    // default constructor
   }
 }
 
 function Configuration(datapath) {
   if(datapath) {
     if(datapath instanceof Capabilities) {
+      // copy constructor
     } else if(datapath instanceof Configuration) {
     } else {
+      // JSON constructor
       _.extend(this, datapath);
     }
   } else {
+    // default constructor
   }
 }
 
