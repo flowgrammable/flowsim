@@ -57,6 +57,10 @@ Port.Capabilities = function(port) {
   }
 }
 
+Port.Capabilities.prototype.openflow_1_0 = function(speeds, mediums, modes) {
+  // ensure speed/medium/mode are in param sets
+}
+
 Port.Configuration = function(port) {
   if(port) {
     if(port instanceof Port.Capabilities) {
