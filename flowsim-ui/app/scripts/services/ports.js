@@ -59,7 +59,7 @@ Port.Capabilities = function(port) {
 
 Port.Capabilities.prototype.openflow_1_0 = function(speeds, mediums, modes) {
   // ensure speed/medium/mode are in param sets
-}
+};
 
 Port.Configuration = function(port) {
   if(port) {
@@ -194,6 +194,9 @@ Capabilities.prototype.openflow_1_0 = function() {
     any:        false,
     none:       true
   };
+  _.each(this.ports, function(port) {
+    port.openflow_1_0(this.speeds, this.mediums, this.modes);
+  });
 
   // set number of ports?
   // construct ports?
