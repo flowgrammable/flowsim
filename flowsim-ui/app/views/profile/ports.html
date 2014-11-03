@@ -118,29 +118,31 @@
   <tr ng-repeat="port in profile.ports.ports">
     <td>{{$index}}</td>
     <td>
+      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.mac(port.mac)}">
       <input class="form-control" type="text" ng-model="port.mac"
-             tooltip="{{tips.port.mac}}"  
-             ng-class="{'has-error': !tests.port.mac(port.mac)}">
+             tooltip="{{tips.Ports.Port.mac}}">
+           </div>
     </td>
     <td>
+      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.name(port.name)}">
       <input class="form-control" type="text" ng-model="port.name"
-             tooltip="{{tips.port.name}}"
-             ng-class="{'has-error': !tests.port.name(port.name)}">
+             tooltip="{{tips.Ports.Port.name}}">
+      </div>
     </td>
     <td>
-      <select class="form-control" tooltip="{{tips.port.speed}}" i
+      <select class="form-control" tooltip="{{tips.Ports.Port.speed}}" i
               ng-model="port.speed" 
               ng-options="speed.value as speed.label for speed in speeds">
       </select>
     </td>
     <td>
-      <select class="form-control" tooltip="{{tips.port.mode}}" 
+      <select class="form-control" tooltip="{{tips.Ports.Port.mode}}" 
               ng-model="port.mode"
               ng-options="mode.value as mode.label for mode in modes">
       </select>
     </td>
     <td>
-      <select class="form-control" tooltip="{{tips.port.medium}}" 
+      <select class="form-control" tooltip="{{tips.Ports.Port.medium}}" 
               ng-model="port.medium"
               ng-options="medium as medium for medium in mediums">
       </select>

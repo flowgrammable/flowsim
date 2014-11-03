@@ -30,7 +30,7 @@ Port.TIPS = {
 };
 
 Port.TESTS = {
-  mac: ETHERNET.isMac,
+  mac: ETHERNET.isMAC,
   name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v) }
 }
 

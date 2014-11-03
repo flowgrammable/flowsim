@@ -36,16 +36,16 @@ Profile.prototype.clone = function() {
 var ProfileUI = Profile;
 ProfileUI.prototype.toBase = Profile.prototype.clone;
 
-TIPS.datapath  = Datapath.TIPS;
-TESTS.datapath = Datapath.TESTS;
-TIPS.ports     = Ports.TIPS;
-TESTS.ports    = Ports.TESTS;
-TIPS.tables    = Tables.TIPS;
-TESTS.tables   = Tables.TESTS;
-TIPS.meters    = Meters.TIPS;
-TESTS.meters   = Meters.TESTS;
-TIPS.groups    = Groups.TIPS;
-TESTS.groups   = Groups.TESTS;
+TIPS.Datapath  = Datapath.TIPS;
+TESTS.Datapath = Datapath.TESTS;
+TIPS.Ports     = Ports.TIPS;
+TESTS.Ports    = Ports.TESTS;
+TIPS.Tables    = Tables.TIPS;
+TESTS.Tables   = Tables.TESTS;
+TIPS.Meters    = Meters.TIPS;
+TESTS.Meters   = Meters.TESTS;
+TIPS.Groups    = Groups.TIPS;
+TESTS.Groups   = Groups.TESTS;
 
 /**
  * @ngdoc service

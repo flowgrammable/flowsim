@@ -18,6 +18,9 @@ angular.module('flowsimUiApp')
     var prev = false;               // <- what is the purpose of this variable
     $scope.tips = Profile.TIPS;
     $scope.tests = Profile.TESTS;
+
+    console.log($scope.tests);
+
     $scope.mediums = Profile.MEDIUMS;
     $scope.modes = Profile.MODES;
     $scope.speeds = Profile.SPEEDS;
