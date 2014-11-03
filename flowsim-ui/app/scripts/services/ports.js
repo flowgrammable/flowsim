@@ -208,7 +208,24 @@ Capabilities.prototype.openflow_1_0 = function() {
       '1_tbps': false
     };
   _.each(this.ports, function(port) {
-    port.openflow_1_0(this.speeds, this.mediums, this.modes);
+    var speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': false,
+      '100_gbps': false,
+      '1_tbps': false
+    };  // tmp fix...  figure out how to pass this in?
+    var mediums = {
+      'Copper': true,
+      'Fiber': true
+    };  // tmp fix...
+    var modes = {
+      'half_duplex': true,
+      'full_duplex': true
+    }; // tmp fix...
+    port.openflow_1_0(speeds, mediums, modes);
   });
 };
 
