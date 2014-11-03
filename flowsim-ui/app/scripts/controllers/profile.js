@@ -13,8 +13,9 @@ angular.module('flowsimUiApp')
 
     $scope.names = {};
     $scope.profile = null;
-    var loaded = false;
-    var prev = false;
+
+    var loaded = false;             // <- what is the purpose of this variable
+    var prev = false;               // <- what is the purpose of this variable
     $scope.tips = Profile.TIPS;
     $scope.tests = Profile.TESTS;
     $scope.mediums = Profile.MEDIUMS;
@@ -149,6 +150,17 @@ angular.module('flowsimUiApp')
     }
 
     $scope.$watch('profile', function(){
+      //
+      // Our only reason for beinig here is that something has changed
+      // it could be defined but null
+      // it could be defined and has changed
+      // Why not just if($scope.profile) { $scope.setDirty(); } ?
+      
+      if($scope.profile) {
+        $scope.setDirty();
+      }
+      
+      /*
       if(loaded && (!prev)){
         $scope.setDirty();
         $scope.profile.dirty = true;
@@ -157,6 +169,7 @@ angular.module('flowsimUiApp')
         loaded = true;
       }
       prev = $scope.profile.dirty;
+      */
     },true);
 
   });

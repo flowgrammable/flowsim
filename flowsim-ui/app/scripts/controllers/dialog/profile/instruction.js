@@ -25,7 +25,7 @@ angular.module('flowsimUiApp')
     
       $scope.errorMsg = '';
 
-      console.log($scope.nextTables);
+      console.log('nt: ' + $scope.nextTables);
 
       if(!$scope.tests.goto_($scope.nextTables)) {
         $scope.errorMsg = 'Invalid Range';

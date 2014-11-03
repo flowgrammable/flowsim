@@ -71,9 +71,11 @@ angular.module('flowsimUiApp')
       };
 
       $scope.$watch('stack', function() {
-        if($scope.loaded) {
+        if($scope.loaded) {   // <-- why not just use '$scope.stack' here?
           $scope.setDirty()();
-          if($scope.stack.slice(-1)[0].name === 'Payload'){
+          if($scope.stack.slice(-1)[0].name === 'Payload'){   // <-- what if the stack is empty
+            // this needs to be moved into a self contained function ... $scope.getPayloadBytes()
+            // then it will be obvious later what is happening
               val = parseInt($scope.stack.slice(-1)[0].attrs[0].value);
               if(isNaN(val)){
                 $scope.stack.slice(-1)[0].bytes = 0;
