@@ -343,19 +343,20 @@ function Instruction(ins) {
       ]
     }];
     this.metadata = '0xffffffffffffffff';
-
+    this.goto_ = [];
   }
 }
 
 TIPS.instruction = {
-  apply: '',
-  clear: '',
-  write: '',
-  metadata: '',
-  meter: '',
-  goto_: ''
+  apply: 'Applies actions immediately',
+  clear: 'Clears the action set',
+  write: 'Appends actions to the action set',
+  metadata: 'Writes metadata register',
+  meter: 'Sends packet to designated meter',
+  goto_: 'Jumps to another flow table'
 };
 TESTS.instruction = {
+  metadata: fgConstraints.isUInt(0, 0xffffffffffffffff)
 };
 
 function Miss(miss) {

@@ -46,7 +46,7 @@
   </div>
   
   <div class="col-md-3" ng-show="instruction.caps.apply">
-    <h4>Apply Actions</h4>
+    <h4 tooltip="{{tips.apply}}">Apply Actions</h4>
     <accordion>
       <accordion-group ng-repeat="proto in instruction.apply"
                        heading="{{proto.protocol}}">
@@ -63,7 +63,7 @@
   </div>
 
   <div class="col-md-3" ng-show="instruction.caps.write">
-    <h4>Write Actions</h4>
+    <h4 tooltip="{{tips.write}}">Write Actions</h4>
     <accordion>
       <accordion-group ng-repeat="proto in instruction.write"
                        heading="{{proto.protocol}}">
@@ -82,17 +82,18 @@
   <div class="col-md-3">
 
     <div ng-show="instruction.caps.metadata">
-      <h4>Metadata</h4>
-      <div class="input-group">
+      <h4 tooltips="{{tips.metadata}}">Metadata</h4>
+      <div class="input-group" ng-class="{'has-error':
+        !tests.metadata(instruction.metadata)}">
         <span class="input-group-addon">
           Bits
         </span>
-        <input type="text" class="form-control">
+        <input type="text" class="form-control" ng-model="instruction.metadata">
       </div>
     </div>
 
     <div ng-show="instruction.caps.goto_">
-      <h4>Goto</h4>
+      <h4 tooltips="{{tips.goto_}}">Goto</h4>
       <accordion>
         <accordion-group heading="Next Tables">
           <ul class="list-group">
