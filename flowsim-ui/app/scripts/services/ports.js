@@ -73,6 +73,42 @@ Port.Configuration = function(port) {
   }
 }
 
+Port.Speeds = [{
+  label: '10 Mbps',
+  value: '10_mbps'
+}, {
+  label: '100 Mbps',
+  value: '100_mbps'
+}, {
+  label: '1 Gbps',
+  value: '1_gbps'
+}, {
+  label: '10 Gbps',
+  value: '10_gbps'
+}, {
+  label: '40 Gbps',
+  value: '40_gbps'
+}, {
+  label: '100 Gbps',
+  value: '100_gbps'
+}, {
+  label: '1 Tbps',
+  value: '1_tbps'
+}];
+
+Port.Modes = [{
+  label: 'Half Duplex',
+  value: 'half_duplex'
+}, {
+  label: 'Full Duplex',
+  value: 'full_duplex'
+}];
+
+Port.Mediums = [
+  'Copper',
+  'Fiber'
+];
+
 function Capabilities(ports) {
   if(ports) {
     // copy constructor
@@ -110,39 +146,13 @@ function Capabilities(ports) {
       any:        true,
       none:       true
     };
-    this.speeds = [{
-      label: '10 Mbps',
-      value: '10_mbps'
-    }, {
-      label: '100 Mbps',
-      value: '100_mbps'
-    }, {
-      label: '1 Gbps',
-      value: '1_gbps'
-    }, {
-      label: '10 Gbps',
-      value: '10_gbps'
-    }, {
-      label: '40 Gbps',
-      value: '40_gbps'
-    }, {
-      label: '100 Gbps',
-      value: '100_gbps'
-    }, {
-      label: '1 Tbps',
-      value: '1_tbps'
-    }];
-    this.modes = [{
-      label: 'Half Duplex',
-      value: 'half_duplex'
-    }, {
-      label: 'Full Duplex',
-      value: 'full_duplex'
-    }];
-    this.mediums = [
-      'Copper',
-      'Fiber'
-    ];
+    this.speeds = _.map(Port.Speeds, function(speed) {
+      return _.clone(speed);
+    });
+    this.modes = _.map(Port.Modes, function(mode) {
+      return _.clone(mode);
+    });
+    this.mediums = _.clone(Port.Mediums);
   }
 }
 
