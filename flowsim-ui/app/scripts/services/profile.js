@@ -331,21 +331,6 @@ TESTS.tables = {
   n_tables: fgConstraints.isUInt(0,0xff)
 };
 
-/*
-function Groups(groups) {
-  if(groups && groups instanceof Groups) {
-  } else {
-  }
-}
-
-Groups.prototype.clone = function() {
-  return new Groups(this);
-}
-
-var GroupsUI              = Groups;
-GroupsUI.prototype.toBase = Groups.prototype.clone;
-*/
-
 function Profile(p) {
   if(typeof p === 'string') {
     this.name = p;
@@ -399,11 +384,14 @@ TESTS.ports = Ports.TESTS;
     function openflow_1_0(p) {
       // openflow preseelect 1.0 code goes here
       console.log('preselecting 1.0');
+      p.datapath.ip_reassembly = true;
+      p.ports.table = false
       return p
     }
     function openflow_1_1(p) {
       // openflow preseelect 1.1 code goes here
       console.log('preselecting 1.1');
+      p.ports.table = true;
       return p
     }
     function openflow_1_2(p) {
