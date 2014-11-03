@@ -58,19 +58,9 @@ Port.Capabilities = function(port) {
 }
 
 Port.Capabilities.prototype.openflow_1_0 = function(speeds, mediums, modes) {
-  this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': false,
-      '100_gbps': false,
-      '1_tbps': false
-    };
-
     // ensure speed/medium/mode are in param sets
-    if (this.speeds[this.speed] === false) {
-      this.speeds = '10_gbps';
+    if (speeds[this.speed] === false) {
+      speeds = '10_gbps';
     }
 };
 
@@ -207,12 +197,19 @@ Capabilities.prototype.openflow_1_0 = function() {
     any:        false,
     none:       true
   };
+
+  this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': false,
+      '100_gbps': false,
+      '1_tbps': false
+    };
   _.each(this.ports, function(port) {
     port.openflow_1_0(this.speeds, this.mediums, this.modes);
   });
-
-  // set number of ports?
-  // construct ports?
 };
 
 Capabilities.prototype.openflow_1_1 = function() {
@@ -230,6 +227,16 @@ Capabilities.prototype.openflow_1_1 = function() {
     any:        true,
     none:       false
   };
+
+  this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': true,
+      '100_gbps': true,
+      '1_tbps': true
+    };
 };
 
 Capabilities.prototype.openflow_1_2 = function() {
@@ -247,6 +254,16 @@ Capabilities.prototype.openflow_1_2 = function() {
     any:        true,
     none:       false
   };
+
+  this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': true,
+      '100_gbps': true,
+      '1_tbps': true
+    };
 };
 
 Capabilities.prototype.openflow_1_3 = function() {
@@ -264,6 +281,16 @@ Capabilities.prototype.openflow_1_3 = function() {
     any:        true,
     none:       false
   };
+
+  this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': true,
+      '100_gbps': true,
+      '1_tbps': true
+    };
 };
 
 Capabilities.prototype.openflow_1_4 = function() {
@@ -281,6 +308,16 @@ Capabilities.prototype.openflow_1_4 = function() {
     any:        true,
     none:       false
   };
+
+  this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': true,
+      '100_gbps': true,
+      '1_tbps': true
+    };
 };
 
 function Configuration(ports) {

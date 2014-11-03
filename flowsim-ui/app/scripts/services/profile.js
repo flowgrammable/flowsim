@@ -73,7 +73,7 @@ TESTS.Groups   = Groups.TESTS;
       p.groups.openflow_1_0();
 
       // Tables
-      var i;
+      /*var i;
       for (i = 0; i < p.tables.n_tables; i++) {
         // set relevant match fields:
         var table = p.tables.tables[i];
@@ -88,7 +88,7 @@ TESTS.Groups   = Groups.TESTS;
           }
           // ...
         }
-      }
+      }*/
 
       // Groups
 
