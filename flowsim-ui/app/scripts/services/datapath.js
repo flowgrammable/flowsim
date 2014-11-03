@@ -40,6 +40,21 @@ function Capabilities(datapath) {
   }
 }
 
+Capabilities.prototype.openflow_1_0 = function() {
+};
+
+Capabilities.prototype.openflow_1_1 = function() {
+};
+
+Capabilities.prototype.openflow_1_2 = function() {
+};
+
+Capabilities.prototype.openflow_1_3 = function() {
+};
+
+Capabilities.prototype.openflow_1_4 = function() {
+};
+
 function Configuration(datapath) {
   if(datapath) {
     if(datapath instanceof Capabilities) {
