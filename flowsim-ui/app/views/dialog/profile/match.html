@@ -18,12 +18,14 @@
         <td>{{m.protocol}}</td>
         <td><div tooltip="{{tips[m.key]}}">{{m.field}}</div></td>
         <td><input type="checkbox" ng-model="m.enabled"></td>
-        <td><input type="checkbox" ng-model="m.wildcardable"></td>
-        <td><input type="checkbox" ng-model="m.maskable"></td>
+        <td><input type="checkbox" ng-model="m.wildcardable" 
+                   ng-disabled="!m.enabled"></td>
+        <td><input type="checkbox" ng-model="m.maskable"
+                   ng-disabled="!m.enabled"></td>
         <td>
           <div ng-class="{'has-error': !tests[m.key](m.mask)}">
           <input class="form-control" type="text" ng-model="m.mask"
-                 style="width:150px" ng-disabled="!m.maskable">
+                 style="width:150px" ng-disabled="!m.maskable ||!m.enabled">
           </div>
         </td>
       </tr>
