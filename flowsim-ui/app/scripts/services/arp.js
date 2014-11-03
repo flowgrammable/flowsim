@@ -47,7 +47,7 @@ function ARP_UI(arp) {
           name: key,
           value: value,
           test: isMAC,
-          tipe: 'Source hardware address'
+          tip: 'Source hardware address'
         };
       case 'spa':
         return {

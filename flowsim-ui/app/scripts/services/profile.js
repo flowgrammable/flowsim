@@ -8,17 +8,17 @@ var TESTS = {};
 
 function Datapath(dp) {
   // Copy constructor
-  if(dp && dp instanceof Datapath) {
+if(dp /*&& dp instanceof Datapath*/) {
     this.datapath_id   = dp.datapath_id;
     this.ip_reassembly = dp.ip_reassembly;
     this.n_buffers     = dp.n_buffers;
 
-    this.mfc_desc   = dp.mfc_desc;
-    this.hw_desc    = dp.hw_desc;
-    this.sw_desc    = dp.sw_desc;
+    this.mfr_description   = dp.mfr_description;
+    this.hw_description    = dp.hw_description;
+    this.sw_description    = dp.sw_description;
     this.serial_num = dp.serial_num;
-    this.dp_desc    = dp.dp_desc;
-  } 
+    this.dp_description    = dp.dp_description;
+  }
   // Default constructor
   else {
     this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
@@ -45,25 +45,26 @@ TIPS.datapath = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',
   n_buffers: 'Number of packets that can be buffered for controller',
-  mfr_desc: '',
-  hw_desc: '',
+  mfr_description: '',
+  hw_description: '',
+  sw_description: '',
   serial_num: '',
-  dp_desc: ''
+  dp_description: ''
 };
 
 TESTS.datapath = {
   datapath_id: function() { return true; },
   n_buffers:   fgConstraints.isUInt(0, 0xffff),
-  mfr_desc:    function(v) { return !v || v.length <= 256 ; },
-  hw_desc:     function(v) { return !v || v.length <= 256; },
-  sw_desc:     function(v) { return !v || v.length <= 256; },
+  mfr_description:    function(v) { return !v || v.length <= 256 ; },
+  hw_description:     function(v) { return !v || v.length <= 256; },
+  sw_description:     function(v) { return !v || v.length <= 256; },
   serial_num:  function(v) { return !v || v.length <= 32; },
-  dp_desc:     function(v) { return !v || v.length <= 256; }
+  dp_description:     function(v) { return !v || v.length <= 256; }
 };
 
 function Port(p) {
   // Copy constructor
-  if(p && p instanceof Port) {
+if(p /*&& p instanceof Port*/) {
     this.port_id = p.port_id;
     this.mac     = p.mac;
     this.name    = p.name;
@@ -142,7 +143,7 @@ var MEDIUMS = [
 ];
 
 function Ports(ports) {
-  if(ports && ports instanceof Ports) {
+if(ports /*&& ports instanceof Ports*/) {
     this.n_ports = ports.n_ports;
     this.ports = _.map(ports.ports, function(port) {
       return new Port(port);
@@ -218,14 +219,32 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
 }
 
 function Match(match) {
-  if(match && match instanceof Match) {
+if(match /*&& match instanceof Match*/) {
     this.fields = _.map(match.fields, function(f) { return _.clone(f); });
   } else {
     this.fields = [
       createMatch('Ingress', 'Port', 'in_port', true, false, 0),
       createMatch('Ethernet', 'Src', 'eth_src', true, true, '0xffffffffffff'),
       createMatch('Ethernet', 'Dst', 'eth_dst', true, true, '0xffffffffffff'),
-      createMatch('Ethernet', 'Type/Len', 'eth_typelen', true, false, '0xffff')
+      createMatch('Ethernet', 'Type/Len', 'eth_typelen', true, false, '0xffff'),
+      createMatch('ARP', 'Opcode', 'arp_opcode', true, false, 0),
+      createMatch('ARP', 'SHA', 'arp_sha', true, false, '0xffffffffffff'),
+      createMatch('ARP', 'SPA', 'arp_spa', true, true, '0xffffffff'),
+      createMatch('ARP', 'THA', 'arp_tha', true, true, '0xffffffffffff'),
+      createMatch('ARP', 'TPA', 'arp_tpa', true, true, '0xffffffff'),
+      createMatch('VLAN', 'PCP', 'vlan_pcp', true, true, '0x7'),
+      createMatch('VLAN', 'DEI', 'vlan_dei', true, true, '0x3'),
+      createMatch('VLAN', 'VID', 'vlan_vid', true, true, '0x0fff'),
+      createMatch('VLAN', 'Type/Len', 'vlan_typelen', true, true, '0xffff'),
+      createMatch('MPLS', 'Label', 'mpls_label', true, true, '0x0fffff'),
+      createMatch('MPLS', 'Traffic Control', 'mpls_tc', true, true, '0x7'),
+      createMatch('MPLS', 'BOS', 'mpls_bos', true, true, '0x0fffff'),
+      createMatch('IPv4', 'DSCP', 'ipv4_dscp', true, true, '0x3f'),
+      createMatch('IPv4', 'ECN', 'ipv4_ecn', true, true, '0x03'),
+      createMatch('IPv4', 'Proto', 'ipv4_proto', true, true, '0xff'),
+      createMatch('IPv4', 'Src', 'ipv4_src', true, true, '0xffffffff'),
+      createMatch('IPv4', 'Dst', 'ipv4_dst', true, true, '0xffffffff')
+
     ];
   }
 }
@@ -234,13 +253,48 @@ TIPS.match = {
   in_port: 'Match on ingress port',
   eth_src: 'Match on Ethernet source address',
   eth_dst: 'Match on Ethernet destination address',
-  eth_typelen: 'Match on Ethernet type/length field'
+  eth_typelen: 'Match on Ethernet type/length field',
+  arp_opcode: 'Match on ARP message type',
+  arp_sha: 'Match on Source hardware address',
+  arp_spa: 'Match on Source protocol address',
+  arp_tha: 'Match on Target hardware address',
+  arp_tpa: 'Match on Target protocol address',
+  vlan_pcp: 'Match on VLAN priority code',
+  vlan_dei: 'Match on VLAN',
+  vlan_vid: 'Match on VLAN ID',
+  vlan_typelen: 'Match on VLAN Type/Len',
+  mpls_label: 'Match on MPLS label',
+  mpls_tc: 'Match on MPLS tc',
+  mpls_bos: 'Match on MPLS bos',
+  ipv4_dscp: 'Match on IPv4 Differentiated Services Code Type',
+  ipv4_ecn: 'Match on Explicit Congestion Notification',
+  ipv4_proto: 'Match on Protocol',
+  ipv4_src: 'Match on IPv4 source',
+  ipv4_dst: 'Match on IPv4 destination'
+
 };
 TESTS.match = {
   in_port: fgConstraints.isUInt(0, 0xffffffff),
   eth_src: fgConstraints.isUInt(0, 0xffffffffffff),
   eth_dst: fgConstraints.isUInt(0, 0xffffffffffff),
-  eth_typelen: fgConstraints.isUInt(0, 0xffff)
+  eth_typelen: fgConstraints.isUInt(0, 0xffff),
+  arp_opcode: fgConstraints.isUInt(0, 0x1),
+  arp_sha: fgConstraints.isUInt(0, 0xffffffffffff),
+  arp_spa: fgConstraints.isUInt(0, 0xffffffff),
+  arp_tha: fgConstraints.isUInt(0, 0xffffffffffff),
+  arp_tpa: fgConstraints.isUInt(0, 0xffffffff),
+  vlan_pcp: fgConstraints.isUInt(0, 0x7),
+  vlan_dei: fgConstraints.isUInt(0, 0x3),
+  vlan_vid: fgConstraints.isUInt(0, 0x0fff),
+  vlan_typelen: fgConstraints.isUInt(0, 0xffff),
+  mpls_label: fgConstraints.isUInt(0, 0x0fffff),
+  mpls_tc: fgConstraints.isUInt(0, 0x7),
+  mpls_bos: fgConstraints.isUInt(0, 0x0fffff),
+  ipv4_dscp: fgConstraints.isUInt(0, 0x3f),
+  ipv4_ecn: fgConstraints.isUInt(0, 0x03),
+  ipv4_proto: fgConstraints.isUInt(0, 255),
+  ipv4_src: fgConstraints.isUInt(0, 0xffffffff),
+  ipv4_dst: fgConstraints.isUInt(0, 0xffffffff)
 };
 
 function mkActionField(name, value) {
@@ -253,7 +307,7 @@ function mkActionField(name, value) {
 function Instruction(ins) {
   if(ins && ins instanceof Instruction) {
     this.caps = _.clone(ins.caps);
-    this.apply = _.map(ins.apply, function(i) { 
+    this.apply = _.map(ins.apply, function(i) {
       return {
         protocol: i.protocol,
         fields: _.map(i.fields, function(j) {
@@ -261,7 +315,7 @@ function Instruction(ins) {
         })
       };
     });
-    this.write = _.map(ins.write, function(i) { 
+    this.write = _.map(ins.write, function(i) {
       return {
         protocol: i.protocol,
         fields: _.map(i.fields, function(j) {
@@ -292,11 +346,16 @@ function Instruction(ins) {
       protocol: 'Ethernet',
       fields: [
         mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Dst write', true),
+        mkActionField('Typelen write', true)
       ]
     }, {
       protocol: 'ARP',
-      fields: []
+      fields: [
+        mkActionField('Opcode write', true),
+        mkActionField('SHA write', true),
+        mkActionField('SPA write', true)
+      ]
     }, {
       protocol: 'MPLS',
       fields: []
@@ -414,16 +473,7 @@ TESTS.miss = {
 };
 
 function Table(table) {
-  if(table && table instanceof Table) {
-    this.table_id    = table.table_id;
-    this.name        = table.name;
-    this.max_entries = table.max_entries;
-    this.table_stats = table.table_stats;
-    this.flow_stats  = table.flow_stats;
-    this.match       = new Match(table.match);
-    this.instruction = new Instruction(table.insturction);
-    this.miss        = new Miss(table.miss);
-  } else {
+if(typeof table === 'number') {
     this.table_id    = table;
     this.name        = 'table' + this.table_id;
     this.max_entries = 256;
@@ -432,6 +482,15 @@ function Table(table) {
     this.match       = new Match();
     this.instruction = new Instruction();
     this.miss        = new Miss();
+  } else {
+    this.table_id    = table.table_id;
+    this.name        = table.name;
+    this.max_entries = table.max_entries;
+    this.table_stats = table.table_stats;
+    this.flow_stats  = table.flow_stats;
+    this.match       = new Match(table.match);
+    this.instruction = new Instruction(table.instruction);
+    this.miss        = new Miss(table.miss);
   }
 }
 
@@ -449,13 +508,13 @@ TESTS.table = {
 };
 
 function Tables(tables) {
-  if(tables && tables instanceof Tables) {
+if(tables /*&& tables instanceof Tables*/) {
     this.n_tables = tables.n_tables;
     this.tables = _.map(tables.tables, function(t) { return new Table(t); });
   } else {
     this.n_tables = 8;
-    this.tables = _.map(_.range(this.n_tables), function(id) { 
-      return new Table(id); 
+    this.tables = _.map(_.range(this.n_tables), function(id) {
+      return new Table(id);
     });
   }
 }
@@ -494,20 +553,20 @@ var GroupsUI              = Groups;
 GroupsUI.prototype.toBase = Groups.prototype.clone;
 
 function Profile(p) {
-  if(p && p instanceof Profile) {
-    this.name     = p.name;
-    this.datapath = new Datapath(p.datapath);
-    this.ports    = new Ports(p.ports);
-    this.meters   = new Meters(p.meters);
-    this.tables   = new Tables(p.tables);
-    this.groups   = new Groups(p.groups);
-  } else if(p) {
+  if(typeof p === 'string') {
     this.name = p;
     this.datapath = new Datapath();
     this.ports    = new Ports();
     this.meters   = new Meters();
     this.tables   = new Tables();
     this.groups   = new Groups();
+  } else if(p) {
+    this.name     = p.name;
+    this.datapath = new Datapath(p.datapath);
+    this.ports    = new Ports(p.ports);
+    this.meters   = new Meters(p.meters);
+    this.tables   = new Tables(p.tables);
+    this.groups   = new Groups(p.groups);
   } else {
     throw 'Bad construction: Profile';
   }

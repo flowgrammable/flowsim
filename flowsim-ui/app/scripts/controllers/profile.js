@@ -13,7 +13,8 @@ angular.module('flowsimUiApp')
 
     $scope.names = {};
     $scope.profile = null;
-
+    var loaded = false;
+    var prev = false;
     $scope.tips = Profile.TIPS;
     $scope.tests = Profile.TESTS;
     $scope.mediums = Profile.MEDIUMS;
@@ -91,7 +92,7 @@ angular.module('flowsimUiApp')
     $scope.setDirty = function() {
       $rootScope.$broadcast('dirtyCache');
     };
-    
+
     $scope.setClean = function() {
       $rootScope.$broadcast('cleanCache');
     };
@@ -146,5 +147,16 @@ angular.module('flowsimUiApp')
          $scope.profile.tables.tables[idx].miss = miss;
       });
     }
+
+    $scope.$watch('profile', function(){
+      if(loaded && (!prev)){
+        $scope.setDirty();
+        $scope.profile.dirty = true;
+      }
+      if(!$scope.profile.dirty){
+        loaded = true;
+      }
+      prev = $scope.profile.dirty;
+    },true);
 
   });
