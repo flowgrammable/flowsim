@@ -106,9 +106,11 @@
           </ul>
 
           <div class="input-group">
-            <input type="text" class="form-control" ng-model="nextTables">
+            <input type="text" class="form-control" placeholder="0..255"
+                   ng-model="goto_.nextTables">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" ng-click="add()">
+              <button class="btn btn-default" type="button" 
+                      ng-click="add()">
                 Add
               </button>
             </span>
