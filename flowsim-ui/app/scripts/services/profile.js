@@ -253,6 +253,23 @@ function mkActionField(name, value) {
 function Instruction(ins) {
   if(ins && ins instanceof Instruction) {
     this.caps = _.clone(ins.caps);
+    this.apply = _.map(ins.apply, function(i) { 
+      return {
+        protocol: i.protocol,
+        fields: _.map(i.fields, function(j) {
+          return _.clone(j);
+        })
+      };
+    });
+    this.write = _.map(ins.write, function(i) { 
+      return {
+        protocol: i.protocol,
+        fields: _.map(i.fields, function(j) {
+          return _.clone(j);
+        })
+      };
+    });
+    this.metadata = ins.metadata;
   } else {
     this.caps = {
       apply    : true,
@@ -325,6 +342,8 @@ function Instruction(ins) {
         mkActionField('Dst write', true)
       ]
     }];
+    this.metadata = '0xffffffffffffffff';
+
   }
 }
 

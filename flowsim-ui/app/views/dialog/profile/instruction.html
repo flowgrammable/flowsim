@@ -83,40 +83,31 @@
 
     <div ng-show="instruction.caps.metadata">
       <h4>Metadata</h4>
-    </div>
-
-    <div ng-show="instruction.caps.meter">
-      <h4>Meter</h4>
+      <div class="input-group">
+        <span class="input-group-addon">
+          Bits
+        </span>
+        <input type="text" class="form-control">
+      </div>
     </div>
 
     <div ng-show="instruction.caps.goto_">
-    <h4>Goto</h4>
-    <div class="panel panel-default" ng-show="instruction.caps.goto_">
-      <!-- Default panel contents -->
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          Next Table
-        </h3>
-      </div>
-      <ul class="list-group">
-        <li class="list-group-item">
-          0..14
-          <span class="glyphicon glyphicon-minus-sign pull-right"></span>
-        </li>
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Cras justo odio</li>
-      <ul>
-      <br>
-      <div class="input-group">
-        <input type="text" class="form-control">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">
-            Add
-          </button>
-        </span>
-      </div>
+      <h4>Goto</h4>
+      <accordion>
+        <accordion-group heading="Next Tables">
+          <ul class="list-group">
+            <li class="list-group-item">
+              0..14
+              <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+            </li>
+            <li class="list-group-item">Cras justo odio</li>
+            <li class="list-group-item">Cras justo odio</li>
+          <ul>
+        </accordion-group>
+      </accordion>
     </div>
   </div>
+
 </div>
 
 </div>
