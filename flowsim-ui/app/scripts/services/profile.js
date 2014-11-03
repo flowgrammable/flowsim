@@ -449,6 +449,11 @@ TESTS.groups   = Groups.TESTS;
     function openflow_1_4(p) {
       // openflow preseelect 1.4 code goes here
       console.log('preselecting 1.4');
+      p.datapath.openflow_1_4();
+      p.ports.openflow_1_4();
+      p.tables.openflow_1_4();
+      p.meters.openflow_1_4();
+      p.groups.openflow_1_4();
       return p
     }
 
