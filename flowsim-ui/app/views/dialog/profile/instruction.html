@@ -9,143 +9,115 @@
   <div class="col-md-2">
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="instruction.apply">
+        <input type="checkbox" ng-model="instruction.caps.apply">
         Apply
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="instruction.clear">
+        <input type="checkbox" ng-model="instruction.caps.clear">
         Clear
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="instruction.write">
+        <input type="checkbox" ng-model="instruction.caps.write">
         Write
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="instruction.metadata">
+        <input type="checkbox" ng-model="instruction.caps.metadata">
         Metadata
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="instruction.meter">
+        <input type="checkbox" ng-model="instruction.caps.meter">
         Meter
       </label>
     </div>
     <div class="checkbox">
       <label>
-        <input type="checkbox" ng-model="instruction.goto_">
+        <input type="checkbox" ng-model="instruction.caps.goto_">
         Goto
       </label>
     </div>
   </div>
   
-  <div class="col-md-3">
+  <div class="col-md-3" ng-show="instruction.caps.apply">
     <h4>Apply Actions</h4>
-    <div class="panel panel-default" ng-show="instruction.apply">
-      <!-- Default panel contents -->
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          Ethernet
-        </h3>
-      </div>
-      <!-- Table -->
-      <div class="list-group">
-        <div class="list-group-item">
-          Src write
-          <span class="glyphicon glyphicon-ok pull-right"></span>
-        </div>
-        <div class="list-group-item">
-          Dst write
-          <span class="glyphicon glyphicon-remove pull-right"></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-3">
-    <h4>Write Actions</h4>
     <accordion>
-      <accordion-group heading="Ethernet">
-        <div class="list-group" style="width:100%;">
-          <a href="" class="list-group-item">
-            Src write
+      <accordion-group ng-repeat="proto in instruction.apply"
+                       heading="{{proto.protocol}}">
+        <div class="list-group">
+          <div ng-repeat="field in proto.fields" class="list-group-item">
+            {{field.name}}
             <div class="pull-right">
-              <input type="checkbox">
-            </div>
-          </a>
-          <div class="list-group-item">
-            Dst write
-            <div class="pull-right">
-              <input type="checkbox" class="pull-right">
+              <input type="checkbox" class="pull-right" ng-model="field.value">
             </div>
           </div>
         </div>
       </accordion-group>
-      <accordion-group heading="MPLS">
+    </accordion>
+  </div>
+
+  <div class="col-md-3" ng-show="instruction.caps.write">
+    <h4>Write Actions</h4>
+    <accordion>
+      <accordion-group ng-repeat="proto in instruction.write"
+                       heading="{{proto.protocol}}">
         <div class="list-group">
-          <a href="" class="list-group-item">
-            Label write
-            <span class="glyphicon glyphicon-pencil pull-right"></span>
-          </a>
-          <a href="" class="list-group-item">
-            Label push
-            <span class="glyphicon glyphicon-plus pull-right"></span>
-          </a>
-          <a href="" class="list-group-item">
-            Label pop
-            <span class="glyphicon glyphicon-minus pull-right"></span>
-          </a>
+          <div ng-repeat="field in proto.fields" class="list-group-item">
+            {{field.name}}
+            <div class="pull-right">
+              <input type="checkbox" class="pull-right" ng-model="field.value">
+            </div>
+          </div>
         </div>
-      </accordion-group>
-      <accordion-group heading="ARP">
       </accordion-group>
     </accordion>
   </div>
 
   <div class="col-md-3">
+
+    <div ng-show="instruction.caps.metadata">
+      <h4>Metadata</h4>
+    </div>
+
+    <div ng-show="instruction.caps.meter">
+      <h4>Meter</h4>
+    </div>
+
+    <div ng-show="instruction.caps.goto_">
     <h4>Goto</h4>
-    <div class="panel panel-default" ng-show="instruction.goto_">
+    <div class="panel panel-default" ng-show="instruction.caps.goto_">
       <!-- Default panel contents -->
       <div class="panel-heading">
         <h3 class="panel-title">
-          Goto
+          Next Table
         </h3>
       </div>
-      <!-- Table -->
+      <ul class="list-group">
+        <li class="list-group-item">
+          0..14
+          <span class="glyphicon glyphicon-minus-sign pull-right"></span>
+        </li>
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Cras justo odio</li>
+      <ul>
+      <br>
+      <div class="input-group">
+        <input type="text" class="form-control">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            Add
+          </button>
+        </span>
+      </div>
     </div>
   </div>
-
-  <!--
-  <accordion>
-      <div class="col-md-3">
-        <accordion-group heading="Apply">
-          <table class="table table-striped">
-            <tr><td>Output</td></tr>
-            <tr><td>Group</td></tr>
-            <tr><td>Ethernet.src=</td></tr>
-            <tr><td>Ethernet.dst=</td></tr>
-            <tr><td>Ethernet.typelen=</td></tr>
-          </table>
-        </accordion-group>
-      </div>
-      <div class="col-md-3">
-        <accordion-group heading="Write">
-          Write restrictions
-        </accordion-group>
-      </div>
-      <div class="col-md-3">
-        <accordion-group heading="Goto">
-          Table restrictions
-        </accordion-group>
-      </div>
-  </accordion>
-  -->
+</div>
 
 </div>
 

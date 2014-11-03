@@ -243,21 +243,88 @@ TESTS.match = {
   eth_typelen: fgConstraints.isUInt(0, 0xffff)
 };
 
+function mkActionField(name, value) {
+  return {
+    name: name,
+    value: value
+  };
+}
+
 function Instruction(ins) {
   if(ins && ins instanceof Instruction) {
-    this.apply = ins.apply;
-    this.clear = ins.clear;
-    this.write = ins.write;
-    this.metadata = ins.metadata;
-    this.meter = ins.meter;
-    this.goto_ = ins.goto_;
+    this.caps = _.clone(ins.caps);
   } else {
-    this.apply    = true;
-    this.clear    = true;
-    this.write    = true;
-    this.metadata = true;
-    this.meter    = true;
-    this.goto_    = true;
+    this.caps = {
+      apply    : true,
+      clear    : true,
+      write    : true,
+      metadata : true,
+      meter    : true,
+      goto_    : true
+    };
+    this.apply = [{
+      protocol: 'Internal',
+      fields: [
+        mkActionField('Output', true),
+        mkActionField('Group', true)
+      ]
+    }, {
+      protocol: 'Ethernet',
+      fields: [
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
+      ]
+    }, {
+      protocol: 'ARP',
+      fields: []
+    }, {
+      protocol: 'MPLS',
+      fields: []
+    }, {
+      protocol: 'ARP',
+      fields: []
+    }, {
+      protocol: 'IPv4',
+      fields: [
+      ]
+    }, {
+      protocol: 'IPv6',
+      fields: [
+      ]
+    }, {
+      protocol: 'ICMPv4',
+      fields: [
+      ]
+    }, {
+      protocol: 'ICMPv6',
+      fields: [
+      ]
+    }, {
+      protocol: 'TCP',
+      fields: [
+      ]
+    }, {
+      protocol: 'SCTP',
+      fields: [
+      ]
+    }, {
+      protocol: 'TCP',
+      fields: [
+      ]
+    }];
+    this.write = [{
+      protocol: 'Internal',
+      fields: [
+        mkActionField('Output', true),
+        mkActionField('Group', true)
+      ]
+    }, {
+      protocol: 'Ethernet',
+      fields: [
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
+      ]
+    }];
   }
 }
 
