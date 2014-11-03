@@ -10,14 +10,21 @@
 angular.module('flowsimUiApp')
   .factory('meters', function() {
 
-function Meters(meters) {
+function Capabilities(meters) {
+  if(meters && meters instanceof Meters) {
+  } else {
+  }
+}
+
+function Configuration(meters) {
   if(meters && meters instanceof Meters) {
   } else {
   }
 }
 
 return {
-  Meters: Meters
+  Capabilities: Capabilities,
+  Configuration: Configuration
 };
 
 });

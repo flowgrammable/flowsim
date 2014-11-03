@@ -10,14 +10,21 @@
 angular.module('flowsimUiApp')
   .factory('tables', function() {
 
-function Tables(tables) {
+function Capabilities(tables) {
+  if(tables && tables instanceof Tables) {
+  } else {
+  }
+}
+
+function Configuration(tables) {
   if(tables && tables instanceof Tables) {
   } else {
   }
 }
 
 return {
-  Tables: Tables
+  Capabilities: Capabilities,
+  Configuration: Configuration
 };
 
 });

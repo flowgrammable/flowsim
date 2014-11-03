@@ -10,14 +10,21 @@
 angular.module('flowsimUiApp')
   .factory('datapath', function() {
 
-function Datapath(dp) {
-  if(dp && dp instanceof Datapath) {
+function Capabilities(datapath) {
+  if(datapath && datapath instanceof Datapath) {
+  } else {
+  }
+}
+
+function Configuration(datapath) {
+  if(datapath && datapath instanceof Datapath) {
   } else {
   }
 }
 
 return {
-  Datapath: Datapath
+  Capabilities: Capabilities,
+  Configuration: Configuration
 };
 
 

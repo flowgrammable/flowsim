@@ -10,14 +10,21 @@
 angular.module('flowsimUiApp')
   .factory('groups', function() {
 
-function Groups(groups) {
+function Capabilities(groups) {
+  if(groups && groups instanceof Groups) {
+  } else {
+  }
+}
+
+function Configuration(groups) {
   if(groups && groups instanceof Groups) {
   } else {
   }
 }
 
 return {
-  Groups: Groups
+  Capabilities: Capabilities,
+  Configuration: Configuration
 };
 
 });
