@@ -1,70 +1,16 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Profile', function(ETHERNET, fgConstraints) {
+  .factory('Profile', function(fgConstraints, Datapath, Ports,
+                               Meters, Groups) {
 
 var TIPS = {};
 var TESTS = {};
 
-function Datapath(dp) {
-  // Copy constructor
-if(dp /*&& dp instanceof Datapath*/) {
-    this.datapath_id   = dp.datapath_id;
-    this.ip_reassembly = dp.ip_reassembly;
-    this.n_buffers     = dp.n_buffers;
-
-    this.mfr_description   = dp.mfr_description;
-    this.hw_description    = dp.hw_description;
-    this.sw_description    = dp.sw_description;
-    this.serial_num = dp.serial_num;
-    this.dp_description    = dp.dp_description;
-  }
-  // Default constructor
-  else {
-    this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
-    this.n_buffers     = 1024;
-    this.ip_reassembly = true;
-
-    // Descriptions
-    this.mfr_description = '';
-    this.hw_description  = '';
-    this.sw_description  = '';
-    this.serial_num      = '';
-    this.dp_description  = '';
-  }
-}
-
-Datapath.prototype.clone = function() {
-  return new Datapath(this);
-};
-
-var DatapathUI = Datapath;
-DatapathUI.prototype.toBase = Datapath.prototype.clone;
-
-TIPS.datapath = {
-  datapath_id: 'Unique id of the datapath',
-  ip_reassembly: 'Datapath can reassemble IP fragments',
-  n_buffers: 'Number of packets that can be buffered for controller',
-  mfr_description: '',
-  hw_description: '',
-  sw_description: '',
-  serial_num: '',
-  dp_description: ''
-};
-
-TESTS.datapath = {
-  datapath_id: function() { return true; },
-  n_buffers:   fgConstraints.isUInt(0, 0xffff),
-  mfr_description:    function(v) { return !v || v.length <= 256 ; },
-  hw_description:     function(v) { return !v || v.length <= 256; },
-  sw_description:     function(v) { return !v || v.length <= 256; },
-  serial_num:  function(v) { return !v || v.length <= 32; },
-  dp_description:     function(v) { return !v || v.length <= 256; }
-};
-
+/*
 function Port(p) {
   // Copy constructor
-if(p /*&& p instanceof Port*/) {
+if(p && p instanceof Port) {
     this.port_id = p.port_id;
     this.mac     = p.mac;
     this.name    = p.name;
@@ -103,7 +49,6 @@ TIPS.port = {
 
 TESTS.port = {
   mac: ETHERNET.isMac,
-  name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v) }
 };
 
 var SPEEDS = [{
@@ -143,7 +88,7 @@ var MEDIUMS = [
 ];
 
 function Ports(ports) {
-if(ports /*&& ports instanceof Ports*/) {
+if(ports && ports instanceof Ports) {
     this.n_ports = ports.n_ports;
     this.ports = _.map(ports.ports, function(port) {
       return new Port(port);
@@ -205,6 +150,7 @@ Meters.prototype.clone = function() {
 
 var MetersUI = Meters;
 MetersUI.prototype.toBase = Meters.prototype.clone;
+*/
 
 function createMatch(protocol, field, key, wildcard, maskable, mask) {
   return {
@@ -530,6 +476,7 @@ TESTS.tables = {
   n_tables: fgConstraints.isUInt(0,0xff)
 };
 
+/*
 function Groups(groups) {
   if(groups && groups instanceof Groups) {
   } else {
@@ -542,22 +489,26 @@ Groups.prototype.clone = function() {
 
 var GroupsUI              = Groups;
 GroupsUI.prototype.toBase = Groups.prototype.clone;
+*/
 
 function Profile(p) {
   if(typeof p === 'string') {
     this.name = p;
-    this.datapath = new Datapath();
-    this.ports    = new Ports();
-    this.meters   = new Meters();
+    this.datapath = new Datapath.Capabilities();
+    this.ports    = new Ports.Capabilities();
     this.tables   = new Tables();
-    this.groups   = new Groups();
+    this.meters   = new Meters.Capabilities();
+    this.groups   = new Groups.Capabilities();
   } else if(p) {
+    if(!p instanceof Profile) {
+      _.extend(this, p);
+    }
     this.name     = p.name;
-    this.datapath = new Datapath(p.datapath);
-    this.ports    = new Ports(p.ports);
+    this.datapath = new Datapath.Capabilities(p.datapath);
+    this.ports    = new Ports.Capabilities(p.ports);
     this.meters   = new Meters(p.meters);
-    this.tables   = new Tables(p.tables);
-    this.groups   = new Groups(p.groups);
+    this.tables   = new Tables.Capabilities(p.tables);
+    this.groups   = new Groups.Capabilities(p.groups);
   } else {
     throw 'Bad construction: Profile';
   }
@@ -568,6 +519,11 @@ Profile.prototype.clone = function() {
 
 var ProfileUI = Profile;
 ProfileUI.prototype.toBase = Profile.prototype.clone;
+
+TIPS.datapath = Datapath.TIPS;
+TESTS.datapath = Datapath.TESTS;
+TIPS.ports = Ports.TIPS;
+TESTS.ports = Ports.TESTS;
 
 /**
  * @ngdoc service
@@ -621,9 +577,9 @@ ProfileUI.prototype.toBase = Profile.prototype.clone;
       openflow_1_4: openflow_1_4,
       TIPS: TIPS,
       TESTS: TESTS,
-      MEDIUMS: MEDIUMS,
-      MODES: MODES,
-      SPEEDS: SPEEDS
+      MEDIUMS: Ports.MEDIUMS,
+      MODES: Ports.MODES,
+      SPEEDS: Ports.SPEEDS
     };
 
 });

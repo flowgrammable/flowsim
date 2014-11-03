@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('tables', function() {
+  .factory('Tables', function() {
 
 function Capabilities(tables) {
   if(tables) {

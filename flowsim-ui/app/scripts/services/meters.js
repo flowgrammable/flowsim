@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('meters', function() {
+  .factory('Meters', function() {
 
 function Capabilities(meters) {
   if(meters) {

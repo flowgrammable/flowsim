@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('groups', function() {
+  .factory('Groups', function() {
 
 function Capabilities(groups) {
   if(groups) {

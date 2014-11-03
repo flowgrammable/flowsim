@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('datapath', function() {
+  .factory('Datapath', function(fgConstraints) {
 
 function Capabilities(datapath) {
   if(datapath) {
