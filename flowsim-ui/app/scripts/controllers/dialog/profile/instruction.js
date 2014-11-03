@@ -16,19 +16,21 @@ angular.module('flowsimUiApp')
     $scope.tests = tests;
     $scope.instruction = instruction;
 
-    $scope.range = '';
     $scope.errorMsg = '';
+    $scope.nextTables = '';
 
-    $scope.add = function(range) {
+    $scope.add = function() {
       var extract = /^([0-9]+)(\.\.([0-9]+))?$/;
       var match, result;
     
       $scope.errorMsg = '';
 
-      if(!$scope.tests.goto_(range)) {
+      console.log($scope.nextTables);
+
+      if(!$scope.tests.goto_($scope.nextTables)) {
         $scope.errorMsg = 'Invalid Range';
       } else {
-        match = range.match(extract);
+        match = $scope.nextTables.match(extract);
         result = {};
         if(match[1] && fgConstraints.isUInt(0, 255)) {
           result.first = match[1];
@@ -39,7 +41,7 @@ angular.module('flowsimUiApp')
           if(fgConstraints.isUInt(0, 255)) {
             result.second = match[3];
             $scope.instruction.goto_.push(result);
-            $scope.range = '';
+            $scope.nextTables = '';
           }
           else {
             $scope.errorMsg = 'Invalid Range';
@@ -47,7 +49,7 @@ angular.module('flowsimUiApp')
         } else {
           result.second = result.first;
           $scope.instruction.goto_.push(result);
-          $scope.range = '';
+          $scope.nextTables = '';
         }
       }
     };
