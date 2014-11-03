@@ -17,7 +17,10 @@ function Capabilities(groups) {
 }
 
 function Configuration(groups) {
-  if(groups && groups instanceof Groups) {
+  if(groups) {
+    if(groups instanceof Capabilities) {
+    } else if(groups instanceof Configuration) {
+    }
   } else {
   }
 }

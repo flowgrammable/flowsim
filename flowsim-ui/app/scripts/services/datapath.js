@@ -18,7 +18,7 @@ function Capabilities(datapath) {
 
 function Configuration(datapath) {
   if(datapath) {
-    if(datapath instanceof Datapath) {
+    if(datapath instanceof Capabilities) {
     } else if(datapath instanceof Configuration) {
     }
   } else {

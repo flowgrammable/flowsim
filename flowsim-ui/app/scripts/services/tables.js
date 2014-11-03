@@ -17,7 +17,10 @@ function Capabilities(tables) {
 }
 
 function Configuration(tables) {
-  if(tables && tables instanceof Tables) {
+  if(tables) {
+    if(tables instanceof Capabilities) {
+    } else if(tables instanceof Configuration) {
+    }
   } else {
   }
 }

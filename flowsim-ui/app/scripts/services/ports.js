@@ -17,7 +17,10 @@ function Capabilities(ports) {
 }
 
 function Configuration(ports) {
-  if(ports && ports instanceof Ports) {
+  if(ports) {
+    if(ports instanceof Capabilities) {
+    } else if(ports instanceof Configuration) {
+    }
   } else {
   }
 }

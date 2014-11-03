@@ -17,7 +17,10 @@ function Capabilities(meters) {
 }
 
 function Configuration(meters) {
-  if(meters && meters instanceof Meters) {
+  if(meters) {
+    if(meters instanceof Capabilities) {
+    } else if(meters instanceof Configuration) {
+    }
   } else {
   }
 }
