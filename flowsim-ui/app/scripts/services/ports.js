@@ -58,7 +58,20 @@ Port.Capabilities = function(port) {
 }
 
 Port.Capabilities.prototype.openflow_1_0 = function(speeds, mediums, modes) {
-  // ensure speed/medium/mode are in param sets
+  this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': false,
+      '100_gbps': false,
+      '1_tbps': false
+    };
+
+    // ensure speed/medium/mode are in param sets
+    if (this.speeds[this.speed] === false) {
+      this.speeds = '10_gbps';
+    }
 };
 
 Port.Configuration = function(port) {
@@ -152,7 +165,7 @@ function Capabilities(ports) {
       '1_gbps': true,
       '10_gbps': true,
       '40_gbps': true,
-      '100_bgps': true,
+      '100_gbps': true,
       '1_tbps': true
     };
     this.mediums = {
