@@ -26,8 +26,9 @@ function Capabilities(datapath) {
 function Configuration(datapath) {
   if(datapath) {
     if(datapath instanceof Capabilities) {
-      // copy constructor
+      // capability constructor
     } else if(datapath instanceof Configuration) {
+      // copy constructor
     } else {
       // JSON constructor
       _.extend(this, datapath);

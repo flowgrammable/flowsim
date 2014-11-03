@@ -13,21 +13,28 @@ angular.module('flowsimUiApp')
 function Capabilities(meters) {
   if(meters) {
     if(meters instanceof Meters) {
+      // copy constructor
     } else {
+      // JSON constructor
       _.extend(this, meters);
     }
   } else {
+    // default constructor
   }
 }
 
 function Configuration(meters) {
   if(meters) {
     if(meters instanceof Capabilities) {
+      // capability constructor
     } else if(meters instanceof Configuration) {
+      // copy constructor
     } else {
+      // JSON constructor
       _.extend(this, meters);
     }
   } else {
+    // default constructor
   }
 }
 
