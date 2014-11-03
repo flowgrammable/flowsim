@@ -360,10 +360,14 @@ Profile.prototype.clone = function() {
 var ProfileUI = Profile;
 ProfileUI.prototype.toBase = Profile.prototype.clone;
 
-TIPS.datapath = Datapath.TIPS;
+TIPS.datapath  = Datapath.TIPS;
 TESTS.datapath = Datapath.TESTS;
-TIPS.ports = Ports.TIPS;
-TESTS.ports = Ports.TESTS;
+TIPS.ports     = Ports.TIPS;
+TESTS.ports    = Ports.TESTS;
+TIPS.meters    = Meters.TIPS;
+TESTS.meters   = Meters.TESTS;
+TIPS.groups    = Groups.TIPS;
+TESTS.groups   = Groups.TESTS;
 
 /**
  * @ngdoc service

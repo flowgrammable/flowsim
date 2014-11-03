@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Ports', function(ETHERNET) {
+  .factory('Ports', function(fgConstraints, ETHERNET) {
 
 var defaultPorts  = 24;
 var defaultMAC    = '00:00:00:00:00:01';
