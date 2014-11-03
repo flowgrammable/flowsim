@@ -585,14 +585,40 @@ ProfileUI.prototype.toBase = Profile.prototype.clone;
       return new ProfileUI(profile);
     }
 
-    function setVersion(profile, version) {
-      console.log('version: '+version);
+    function openflow_1_0(p) {
+      // openflow preseelect 1.0 code goes here
+      console.log('preselecting 1.0');
+      return p
+    }
+    function openflow_1_1(p) {
+      // openflow preseelect 1.1 code goes here
+      console.log('preselecting 1.1');
+      return p
+    }
+    function openflow_1_2(p) {
+      // openflow preseelect 1.2 code goes here
+      console.log('preselecting 1.2');
+      return p
+    }
+    function openflow_1_3(p) {
+      // openflow preseelect 1.3 code goes here
+      console.log('preselecting 1.3');
+      return p
+    }
+    function openflow_1_4(p) {
+      // openflow preseelect 1.4 code goes here
+      console.log('preselecting 1.4');
+      return p
     }
 
     return {
       create: create,
       createUI: createUI,
-      setVersion: setVersion,
+      openflow_1_0: openflow_1_0,
+      openflow_1_1: openflow_1_1,
+      openflow_1_2: openflow_1_2,
+      openflow_1_3: openflow_1_3,
+      openflow_1_4: openflow_1_4,
       TIPS: TIPS,
       TESTS: TESTS,
       MEDIUMS: MEDIUMS,

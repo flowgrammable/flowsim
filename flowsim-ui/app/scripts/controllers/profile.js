@@ -30,6 +30,28 @@ angular.module('flowsimUiApp')
       'OpenFlow 1.4'
     ];
 
+    $scope.preselectVersion = function(idx) {
+      switch(idx) {
+        case 0:
+          $scope.profile = Profile.openflow_1_0($scope.profile);
+          break;
+        case 1:
+          $scope.profile = Profile.openflow_1_1($scope.profile);
+          break;
+        case 2:
+          $scope.profile = Profile.openflow_1_2($scope.profile);
+          break;
+        case 3:
+          $scope.profile = Profile.openflow_1_3($scope.profile);
+          break;
+        case 4:
+          $scope.profile = Profile.openflow_1_4($scope.profile);
+          break;
+        default:
+          break;
+      }
+    }
+
     $scope.showProto = function(idx) {
       $scope.activeProto = idx;
     };
