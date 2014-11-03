@@ -16,7 +16,7 @@ if(dp /*&& dp instanceof Datapath*/) {
     this.mfr_description   = dp.mfr_description;
     this.hw_description    = dp.hw_description;
     this.sw_description    = dp.sw_description;
-    this.serial_num = dp.serial_num;
+    this.serial_num        = dp.serial_num;
     this.dp_description    = dp.dp_description;
   }
   // Default constructor
@@ -588,11 +588,14 @@ ProfileUI.prototype.toBase = Profile.prototype.clone;
     function openflow_1_0(p) {
       // openflow preseelect 1.0 code goes here
       console.log('preselecting 1.0');
+      p.datapath.ip_reassembly = true;
+      p.ports.table = false
       return p
     }
     function openflow_1_1(p) {
       // openflow preseelect 1.1 code goes here
       console.log('preselecting 1.1');
+      p.ports.table = true;
       return p
     }
     function openflow_1_2(p) {
