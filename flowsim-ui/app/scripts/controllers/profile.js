@@ -173,27 +173,11 @@ angular.module('flowsimUiApp')
       });
     }
 
-    $scope.$watch('profile', function(){
-      //
-      // Our only reason for beinig here is that something has changed
-      // it could be defined but null
-      // it could be defined and has changed
-      // Why not just if($scope.profile) { $scope.setDirty(); } ?
-      
-      if($scope.profile) {
-        $scope.setDirty();
-      }
-      
-      /*
-      if(loaded && (!prev)){
-        $scope.setDirty();
+    $scope.$watch('profile', function(newValue, oldValue){
+      if($scope.profile && !newValue.dirty && oldValue && !oldValue.dirty){
         $scope.profile.dirty = true;
+        $scope.setDirty();
       }
-      if(!$scope.profile.dirty){
-        loaded = true;
-      }
-      prev = $scope.profile.dirty;
-      */
     },true);
 
   });

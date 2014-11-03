@@ -386,10 +386,48 @@ TESTS.groups   = Groups.TESTS;
     }
 
     function openflow_1_0(p) {
-      // openflow preseelect 1.0 code goes here
       console.log('preselecting 1.0');
-      p.datapath.ip_reassembly = true;
-      p.ports.table = false
+
+      // Ports
+      p.ports.vports = {
+        port_stats: true,
+        stp:        true, // optional
+        in_port:    true,
+        table:      true,
+        normal:     true, // optional
+        flood:      true, // optional
+        all:        true,
+        controller: true,
+        local:      true,
+        any:        false,
+        none:       true
+      };
+
+      // Tables
+      var i;
+      for (i = 0; i < p.tables.n_tables; i++) {
+        // set relevant match fields:
+        var table = p.tables.tables[i];
+        var j;
+        for (j = 0; j < table.match.fields.length; j++) {
+          var f = table.match.fields[j];
+          if (f.key === 'in_port') {
+            f.enabled = true;
+            f.wildcardable = true;
+            f.maskable = false;
+            f.mask = 0;
+          }
+          // ...
+        }
+      }
+
+      // Groups
+
+      // Meters
+
+      //p.datapath.ip_reassembly = true;
+      //p.ports.table = false
+
       return p
     }
     function openflow_1_1(p) {
