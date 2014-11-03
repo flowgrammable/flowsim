@@ -70,19 +70,24 @@ angular.module('flowsimUiApp')
         $scope.popNode()();
       };
 
-      $scope.$watch('stack', function() {
-        if($scope.loaded) {   // <-- why not just use '$scope.stack' here?
-          $scope.setDirty()();
-          if($scope.stack.slice(-1)[0].name === 'Payload'){   // <-- what if the stack is empty
-            // this needs to be moved into a self contained function ... $scope.getPayloadBytes()
-            // then it will be obvious later what is happening
-              val = parseInt($scope.stack.slice(-1)[0].attrs[0].value);
-              if(isNaN(val)){
-                $scope.stack.slice(-1)[0].bytes = 0;
-              } else {
-                $scope.stack.slice(-1)[0].bytes = val;
-              }
+      $scope.calcPayloadBytes = function() {
+        if($scope.stack.slice(-1)[0].name === 'Payload'){
+          val = parseInt($scope.stack.slice(-1)[0].attrs[0].value);
+          if(isNaN(val)){
+            $scope.stack.slice(-1)[0].bytes = 0;
+          } else {
+            $scope.stack.slice(-1)[0].bytes = val;
           }
+        }
+      }
+
+      $scope.$watch('stack', function() {
+        // directive runs before controller,
+        // using $scope.loaded to determine if ctrl has run
+        // need to rework
+        if($scope.loaded){
+          $scope.calcPayloadBytes();
+          $scope.setDirty()();
         }
         if($scope.stack){
           $scope.loaded = true;
