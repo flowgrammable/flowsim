@@ -119,12 +119,8 @@ function Capabilities(ports) {
     this.ports = _.map(ports.ports, function(port) {
       return new Port.Capabilities(port);
     });
-    this.speeds = _.map(ports.speeds, function(speed) {
-      return _.clone(speed);
-    });
-    this.modes = _.map(ports.speeds, function(mode) {
-      return _.clone(mode);
-    });
+    this.speeds = _.clone(ports.speeds);
+    this.modes = _.clone(ports.modes);
     this.mediums = _.clone(ports.mediums);
     this.vports = _.clone(ports.vports);
   } else {
@@ -146,13 +142,23 @@ function Capabilities(ports) {
       any:        true,
       none:       true
     };
-    this.speeds = _.map(Port.Speeds, function(speed) {
-      return _.clone(speed);
-    });
-    this.modes = _.map(Port.Modes, function(mode) {
-      return _.clone(mode);
-    });
-    this.mediums = _.clone(Port.Mediums);
+    this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': true,
+      '100_bgps': true,
+      '1_tbps': true
+    };
+    this.mediums = {
+      'Copper': true,
+      'Fiber': true
+    };
+    this.modes = {
+      'half_duplex': true,
+      'full_duplex': true
+    };
   }
 }
 
