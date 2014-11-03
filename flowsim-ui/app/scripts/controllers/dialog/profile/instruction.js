@@ -9,9 +9,10 @@
  */
 angular.module('flowsimUiApp')
   .controller('DialogProfileInstructionCtrl', function ($scope, $modalInstance, 
-                                                        fgConstraints,
+                                                        fgConstraints, name,
                                                         tips, tests, 
                                                         instruction) {
+    $scope.name = name;
     $scope.tips = tips;
     $scope.tests = tests;
     $scope.instruction = instruction;

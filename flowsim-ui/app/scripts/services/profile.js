@@ -461,16 +461,7 @@ TESTS.instruction = {
   }
 };
 
-function Miss(miss) {
-  if(miss && miss instanceof Miss) {
-  } else {
-  }
-}
-
-TIPS.miss = {
-};
-TESTS.miss = {
-};
+var Miss = Instruction;
 
 function Table(table) {
 if(typeof table === 'number') {

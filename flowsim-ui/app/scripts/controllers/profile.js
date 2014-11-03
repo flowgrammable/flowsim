@@ -121,6 +121,7 @@ angular.module('flowsimUiApp')
         controller: 'DialogProfileInstructionCtrl',
         size: 'lg',
         resolve: {
+          name: function() { return 'Instruction'; },
           tips: function() { return $scope.tips.instruction; },
           tests: function() { return $scope.tests.instruction; },
           instruction: function () {
@@ -134,13 +135,14 @@ angular.module('flowsimUiApp')
 
     $scope.miss = function(idx) {
       $modal.open({
-        templateUrl: 'views/dialog/profile/miss.html',
-        controller: 'DialogProfileMissCtrl',
+        templateUrl: 'views/dialog/profile/instruction.html',
+        controller: 'DialogProfileInstructionCtrl',
         size: 'lg',
         resolve: {
-          tips: function() { return $scope.tips.miss; },
-          tests: function() { return $scope.tests.miss; },
-          miss: function() {
+          name: function() { return 'Miss'; },
+          tips: function() { return $scope.tips.instruction; },
+          tests: function() { return $scope.tests.instruction; },
+          instruction: function() {
             return $scope.profile.tables.tables[idx].miss;
           }
         }
