@@ -11,7 +11,11 @@ angular.module('flowsimUiApp')
   .factory('ports', function() {
 
 function Capabilities(ports) {
-  if(ports && ports instanceof Ports) {
+  if(ports) {
+    if(ports instanceof Ports) {
+    } else {
+      _.extend(this, ports);
+    }
   } else {
   }
 }
@@ -20,6 +24,8 @@ function Configuration(ports) {
   if(ports) {
     if(ports instanceof Capabilities) {
     } else if(ports instanceof Configuration) {
+    } else {
+      _.extend(this, ports);
     }
   } else {
   }

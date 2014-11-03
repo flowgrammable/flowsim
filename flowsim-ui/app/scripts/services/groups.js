@@ -11,7 +11,11 @@ angular.module('flowsimUiApp')
   .factory('groups', function() {
 
 function Capabilities(groups) {
-  if(groups && groups instanceof Groups) {
+  if(groups) {
+    if(groups instanceof Groups) {
+    } else {
+      _.extend(this, groups);
+    }
   } else {
   }
 }
@@ -20,6 +24,8 @@ function Configuration(groups) {
   if(groups) {
     if(groups instanceof Capabilities) {
     } else if(groups instanceof Configuration) {
+    } else {
+      _.extend(this, groups);
     }
   } else {
   }

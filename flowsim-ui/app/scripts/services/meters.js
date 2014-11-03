@@ -11,7 +11,11 @@ angular.module('flowsimUiApp')
   .factory('meters', function() {
 
 function Capabilities(meters) {
-  if(meters && meters instanceof Meters) {
+  if(meters) {
+    if(meters instanceof Meters) {
+    } else {
+      _.extend(this, meters);
+    }
   } else {
   }
 }
@@ -20,6 +24,8 @@ function Configuration(meters) {
   if(meters) {
     if(meters instanceof Capabilities) {
     } else if(meters instanceof Configuration) {
+    } else {
+      _.extend(this, meters);
     }
   } else {
   }
