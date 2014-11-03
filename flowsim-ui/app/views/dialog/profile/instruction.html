@@ -46,7 +46,7 @@
   </div>
   
   <div class="col-md-3">
-    <h4>Apply</h4>
+    <h4>Apply Actions</h4>
     <div class="panel panel-default" ng-show="instruction.apply">
       <!-- Default panel contents -->
       <div class="panel-heading">
@@ -69,18 +69,22 @@
   </div>
 
   <div class="col-md-3">
-    <h4>Write</h4>
+    <h4>Write Actions</h4>
     <accordion>
       <accordion-group heading="Ethernet">
         <div class="list-group" style="width:100%;">
           <a href="" class="list-group-item">
             Src write
-            <span class="glyphicon glyphicon-pencil pull-right"></span>
+            <div class="pull-right">
+              <input type="checkbox">
+            </div>
           </a>
-          <a href="" class="list-group-item">
+          <div class="list-group-item">
             Dst write
-            <span class="glyphicon glyphicon-pencil pull-right"></span>
-          </a>
+            <div class="pull-right">
+              <input type="checkbox" class="pull-right">
+            </div>
+          </div>
         </div>
       </accordion-group>
       <accordion-group heading="MPLS">
