@@ -65,8 +65,8 @@ Match.Capabilities = function(match) {
         '0xfffff'),
       createMatch('ICMPv6', 'Type', 'icmpv6_type', true, true, '0xff'),
       createMatch('ICMPv6', 'Code', 'icmpv6_code', true, true, '0xff'),
-      createMatch('ICMPv4', 'Type', 'icmpv6_type', true, true, '0xff'),
-      createMatch('ICMPv4', 'Code', 'icmpv6_code', true, true, '0xff'),
+      createMatch('ICMPv4', 'Type', 'icmpv4_type', true, true, '0xff'),
+      createMatch('ICMPv4', 'Code', 'icmpv4_code', true, true, '0xff'),
       createMatch('TCP', 'Src', 'tcp_src', true, true, '0xffff'),
       createMatch('TCP', 'Dst', 'tcp_dst', true, true, '0xffff'),
       createMatch('UDP', 'Src', 'udp_src', true, true, '0xffff'),
@@ -508,6 +508,45 @@ Capabilities.prototype.openflow_1_0 = function() {
 }
 
 Capabilities.prototype.openflow_1_1 = function() {
+  var i,j;
+  for (i = 0; i < this.n_tables; i++) {
+    var match = this.tables[i].match;
+    for (j = 0; j < match.fields.length; j++) {
+      var item = match.fields[j];
+      switch (item.key) {
+      case 'in_port':
+      case 'eth_typelen':
+      case 'vlan_pcp':
+      case 'vlan_vid':
+      case 'mpls_label':
+      case 'mpls_tc':
+      case 'ipv4_dscp':
+      case 'ipv4_proto':
+      case 'icmpv4_type':
+      case 'icmpv4_code':
+      case 'tcp_src':
+      case 'tcp_dst':
+      case 'udp_src':
+      case 'udp_dst':
+      case 'sctp_src':
+      case 'sctp_dst':
+        item.enabled = true;
+        item.wildcardable = true;
+        item.maskable = false;
+        break;
+      case 'eth_src':
+      case 'eth_dst':
+      case 'ipv4_src':
+      case 'ipv4_dst':
+        item.enabled = true;
+        item.wildcardable = true;
+        item.maskable = true;
+        break;
+      default:
+        item.enabled = false;
+      }
+    }
+  }
 }
 
 Capabilities.prototype.openflow_1_2 = function() {
