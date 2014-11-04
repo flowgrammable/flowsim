@@ -1,0 +1,71 @@
+
+<br>
+
+<div class="row">
+
+  <div class="col-md-2">
+    <fg-list on-add="addTrace" on-del="delTrace" on-set="setTrace"
+             on-init="getTraces">
+      Traces
+      <div class="error" ng-show="errorMsg.length">
+        {{errorMsg}}
+      </div>
+    </fg-list>
+  </div>
+
+  <div class="col-md-5" ng-show="trace">
+
+    <h4>Switch</h4>
+
+    <div class="input-group">
+      <select class="form-control" ng-model="switch_.name"
+              ng-changed="selectSwitch()">
+        <option ng-repeat="name in switch_.names">{{name}}</option>
+      </select>
+    </div>
+
+    <switch-view data="trace.switch_"></switch-view>
+
+  </div>
+
+  <div class="col-md-5" ng-show="switch_.name.length">
+
+    <h4>Configure the trace</h4>
+
+    <div class="input-group">
+      <select class="form-control" ng-model="packet.name">
+        <option ng-repeat="name in packet.names">{{name}}</option>
+        <option></option>
+      </select>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button"
+          ng-click="addPacket()">
+          Add
+        </button>
+      </span>
+    </div>
+
+  <table class="table table-striped">
+    <thead>
+      <th>#</th>
+      <th>Packet</th>
+      <th>In Port</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="packet in trace.packets">
+        <td>{{$index+1}}</td>
+        <td>{{packet.name}}</td>
+        <td>
+          <select>
+            <option>1</option>
+            <option>2</option>
+          </select>
+        </td>
+        <td><span class="glyphicon glyphicon-minus-sign"
+                  ng-click="delPacket($index)"></span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
