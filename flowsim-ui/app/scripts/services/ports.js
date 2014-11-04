@@ -45,15 +45,7 @@ Port.Capabilities = function(port) {
     this.medium  = defaultMedium;
   } else {
     // copy construction
-    if(!port instanceof Port.Capabilities) {
-      _.extend(this, port);
-    }
-    this.port_id = port.port_id;
-    this.mac     = port.mac;
-    this.name    = port.name;
-    this.speed   = port.speed;
-    this.mode    = port.mode;
-    this.medium  = port.medium;
+    _.extend(this, port);
   }
 }
 
@@ -128,18 +120,14 @@ Port.Mediums = [
 
 function Capabilities(ports) {
   if(ports) {
-    // copy constructor
-    if(!ports instanceof Ports) {
-      _.extend(this, ports);
-    }
-    this.n_ports = ports.n_ports;
+    _.extend(this, ports);
     this.ports = _.map(ports.ports, function(port) {
       return new Port.Capabilities(port);
     });
-    this.speeds = _.clone(ports.speeds);
-    this.modes = _.clone(ports.modes);
+    this.speeds  = _.clone(ports.speeds);
+    this.modes   = _.clone(ports.modes);
     this.mediums = _.clone(ports.mediums);
-    this.vports = _.clone(ports.vports);
+    this.vports  = _.clone(ports.vports);
   } else {
     // default constructor
     this.n_ports = defaultPorts;

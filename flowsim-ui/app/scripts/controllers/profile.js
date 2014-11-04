@@ -19,8 +19,6 @@ angular.module('flowsimUiApp')
     $scope.tips = Profile.TIPS;
     $scope.tests = Profile.TESTS;
 
-    console.log($scope.tests);
-
     $scope.mediums = Profile.MEDIUMS;
     $scope.modes = Profile.MODES;
     $scope.speeds = Profile.SPEEDS;
@@ -129,8 +127,8 @@ angular.module('flowsimUiApp')
         controller: 'DialogProfileMatchCtrl',
         size: 'lg',
         resolve: {
-          tips: function() { return $scope.tips.match; },
-          tests: function() { return $scope.tests.match; },
+          tips: function() { return $scope.tips.Tables.Table.Match; },
+          tests: function() { return $scope.tests.Tables.Table.Match; },
           match: function () {
             return $scope.profile.tables.tables[idx].match;
           }
@@ -147,8 +145,8 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: {
           name: function() { return 'Instruction'; },
-          tips: function() { return $scope.tips.instruction; },
-          tests: function() { return $scope.tests.instruction; },
+          tips: function() { return $scope.tips.Tables.Table.Instruction; },
+          tests: function() { return $scope.tests.Tables.Table.Instruction; },
           instruction: function () {
             return $scope.profile.tables.tables[idx].instruction;
           }
@@ -165,8 +163,8 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: {
           name: function() { return 'Miss'; },
-          tips: function() { return $scope.tips.instruction; },
-          tests: function() { return $scope.tests.instruction; },
+          tips: function() { return $scope.tips.Tables.Table.Miss; },
+          tests: function() { return $scope.tests.Tables.Table.Miss; },
           instruction: function() {
             return $scope.profile.tables.tables[idx].miss;
           }

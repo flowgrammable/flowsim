@@ -12,20 +12,7 @@ angular.module('flowsimUiApp')
 
 function Capabilities(datapath) {
   if(datapath) {
-    if(datapath instanceof Datapath) {
-      // Copy constructor
-      this.datapath_id     = datapath.datapath_id;
-      this.ip_reassembly   = datapath.ip_reassembly;
-      this.n_buffers       = datapath.n_buffers;
-      this.mfr_description = datapath.mfr_description;
-      this.hw_description  = datapath.hw_description;
-      this.sw_description  = datapath.sw_description;
-      this.serial_num      = datapath.serial_num;
-      this.dp_description  = datapath.dp_description;
-    } else {
-      // JSON constructor
-      _.extend(this, datapath);
-    }
+    _.extend(this, datapath);
   } else {
     // default constructor
     this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default

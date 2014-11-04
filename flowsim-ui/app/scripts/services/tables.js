@@ -32,11 +32,8 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
 
 Match.Capabilities = function(match) {
   if(match) {
-    if(match instanceof Match.Capabilities) {
-      this.fields = _.map(match.fields, function(f) { return _.clone(f); });
-    } else {
-      _.extend(this, match);
-    }
+    _.extend(this, match);
+    this.fields = _.map(match.fields, function(f) { return _.clone(f); });
   } else {
     this.fields = [
       createMatch('Ingress', 'Port', 'in_port', true, false, 0),
@@ -126,7 +123,7 @@ var Instruction = {};
 
 Instruction.Capabilities = function(ins) {
   if(ins) {
-    if(ins instanceof Instruction.Capabilities) {
+    _.extend(this, ins);
       this.caps = _.clone(ins.caps);
       this.apply = _.map(ins.apply, function(i) {
         return {
@@ -144,13 +141,9 @@ Instruction.Capabilities = function(ins) {
           })
         };
       });
-      this.metadata = ins.metadata;
       this.goto_ = _.map(ins.goto_, function(i) {
         return _.clone(i);
       });
-    } else {
-      _.extend(this, ins);
-    }
   } else {
     this.caps = {
       apply    : true,
@@ -285,33 +278,20 @@ var Miss = Instruction;
 var Table = {};
 
 Table.Capabilities = function(table) {
-  if(table) {
-    if(table instanceof Table.Capabilities) {
-      // copy constructor
-      this.table_id    = table.table_id;
-      this.name        = table.name;
-      this.max_entries = table.max_entries;
-      this.table_stats = table.table_stats;
-      this.flow_stats  = table.flow_stats;
-      this.match       = new Match.Capabilities(table.match);
-      this.instruction = new Instruction.Capabilities(table.instruction);
-      this.miss        = new Miss.Capabilities(table.miss);
-    } else if(typeof table === 'number') {
-      this.table_id    = table;
-      this.name        = 'table' + this.table_id;
-      this.max_entries = defaultMaxEntries;
-      this.table_stats = defaultTableStats;
-      this.flow_stats  = defaultFlowStats;
-      this.match       = new Match.Capabilities();
-      this.instruction = new Instruction.Capabilities();
-      this.miss        = new Miss.Capabilities();
-    } else {
-      // JSON constructor
-      _.extend(this, tables);
-      this.match       = new Match.Capabilities(table.match);
-      this.instruction = new Instruction.Capabilities(table.instruction);
-      this.miss        = new Miss.Capabilities(table.miss);
-    }
+  if(typeof table === 'number') {
+    this.table_id    = table;
+    this.name        = 'table' + this.table_id;
+    this.max_entries = defaultMaxEntries;
+    this.table_stats = defaultTableStats;
+    this.flow_stats  = defaultFlowStats;
+    this.match       = new Match.Capabilities();
+    this.instruction = new Instruction.Capabilities();
+    this.miss        = new Miss.Capabilities();
+  } else {
+    _.extend(this, table);
+    this.match       = new Match.Capabilities(table.match);
+    this.instruction = new Instruction.Capabilities(table.instruction);
+    this.miss        = new Miss.Capabilities(table.miss);
   }
 };
 
@@ -346,13 +326,9 @@ Table.Configuration = function(tables) {
 };
 
 function Capabilities(tables) {
+      
   if(tables) {
-    if(tables instanceof Capabilities) {
-      this.n_tables = tables.n_tables;
-      this.tables = _.map(tables.tables, function(t) { 
-        return new Table.Capabilities(t); 
-      });
-    } else if(typeof tables === 'number') {
+    if(typeof tables === 'number') {
       this.n_tables = tables;
       this.tables = _.map(_.range(this.n_tables), function(id) {
         return new Table.Capabilities(id);
@@ -365,9 +341,9 @@ function Capabilities(tables) {
     }
   } else {
     this.n_tables = defaultTables;
-      this.tables = _.map(_.range(this.n_tables), function(id) {
-        return new Table.Capabilities(id);
-      });
+    this.tables = _.map(_.range(this.n_tables), function(id) {
+      return new Table.Capabilities(id);
+    });
   }
 }
 
