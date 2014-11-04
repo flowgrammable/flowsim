@@ -489,6 +489,22 @@ Capabilities.prototype.rebuild = function() {
 }
 
 Capabilities.prototype.openflow_1_0 = function() {
+/*var i;
+-      for (i = 0; i < p.tables.n_tables; i++) {
+-        // set relevant match fields:
+-        var table = p.tables.tables[i];
+-        var j;
+-        for (j = 0; j < table.match.fields.length; j++) {
+-          var f = table.match.fields[j];
+-          if (f.key === 'in_port') {
+-            f.enabled = true;
+-            f.wildcardable = true;
+-            f.maskable = false;
+-            f.mask = 0;
+-          }
+-          // ...
+-        }
+-      }*/
 }
 
 Capabilities.prototype.openflow_1_1 = function() {
