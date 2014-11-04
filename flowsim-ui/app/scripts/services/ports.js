@@ -53,7 +53,7 @@ Port.Capabilities = function(port) {
 Port.Capabilities.prototype.openflow_1_0 = function(speeds, mediums, modes) {
     // ensure speed/medium/mode are in param sets
     if (speeds[this.speed] === false) {
-      speeds = '10_gbps';
+      this.speed = '10_gbps';
     }
 };
 

@@ -63,7 +63,7 @@ var TESTS = {
     }
 
     function openflow_1_0(p) {
-      // openflow preseelect 1.1 code goes here
+      // openflow preseelect 1.0 code goes here
       p.datapath.openflow_1_0();
       p.ports.openflow_1_0();
       p.tables.openflow_1_0();
