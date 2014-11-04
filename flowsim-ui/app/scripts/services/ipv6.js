@@ -23,13 +23,9 @@ function _IPV6() {
   this.name = NAME;
   this.bytes = 40;
   this.fields = {
-    dscp: 0,
-    ecn: 0,
-    proto: 0,
     src: '0:0:0:0:0:0:0:0',
     dst: '0:0:0:0:0:0:0:0',
-    flabel: '0:0:0:0:0:0:0:0',
-    exthdr: '0:0:0:0:0:0:0:0'
+    flabel: '0:0:0:0:0:0:0:0'
   };
 }
 
@@ -39,27 +35,6 @@ function _IPV6_UI(ipv6) {
   this.bytes = ipv6.bytes;
   this.attrs = _.map(ipv6.fields, function(value, key) {
     switch(key) {
-      case 'dscp':
-        return {
-          name: key,
-          value: value,
-          test: fgConstraints.isUInt(0, 0x3f),
-          tip: 'Differentiated Services Code Point'
-        };
-      case 'ecn':
-        return {
-          name: key,
-          value: value,
-          test: fgConstraints.isUInt(0, 0x03),
-          tip: 'Explicit Congestion Notification'
-        };
-      case 'proto':
-        return {
-          name: key,
-          value: value,
-          test: fgConstraints.isUInt(0, 255),
-          tip: 'Protocol'
-        };
       case 'src':
         return {
           name: key,
@@ -78,15 +53,8 @@ function _IPV6_UI(ipv6) {
         return {
           name: key,
           value: value,
-          test: isIPv6,
+          test: fgConstraints.isUInt(0,0xfffff),
           tip: 'Flow Label'
-        };
-      case 'dscp':
-        return {
-          name: key,
-          value: value,
-          test: isIPv6,
-          tip: 'Extension Header'
         };
       default:
         return {
