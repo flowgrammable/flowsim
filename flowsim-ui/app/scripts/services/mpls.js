@@ -50,6 +50,13 @@ function _MPLS_UI(mpls){
           test: fgConstraints.isUInt(0, 0x0fffff),
           tip: 'Bottom of Stack'
         };
+      case 'ttl':
+        return {
+          name: key,
+          value: value,
+          test: fgConstraints.isUInt(0,0xff),
+          tip: 'Time to live'
+        }
       default:
         return {
           name: key,
@@ -70,7 +77,7 @@ _MPLS_UI.prototype.toBase = function () {
 };
 
 _MPLS_UI.prototype.setPayload = function(name) {
-  
+
 };
 
 _MPLS_UI.prototype.clearPayload = function() {

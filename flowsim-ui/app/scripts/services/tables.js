@@ -195,7 +195,9 @@ Instruction.Capabilities = function(ins) {
       protocol: 'Internal',
       fields: [
         mkActionField('Output', true),
-        mkActionField('Group', true)
+        mkActionField('Drop', true),
+        mkActionField('Set Group', true),
+        mkActionField('Set Queue', true)
       ]
     }, {
       protocol: 'Ethernet',
@@ -218,7 +220,11 @@ Instruction.Capabilities = function(ins) {
       fields: [
         mkActionField('Label write', true),
         mkActionField('TC write', true),
-        mkActionField('bos write', true)
+        mkActionField('BOS write', true),
+        mkActionField('Set TTL', true),
+        mkActionField('Dec TTL', true),
+        mkActionField('Push Tag', true),
+        mkActionField('Pop Tag', true)
       ]
     }, {
       protocol: 'VLAN',
@@ -226,7 +232,8 @@ Instruction.Capabilities = function(ins) {
         mkActionField('PCP write', true),
         mkActionField('DEI write', true),
         mkActionField('VID write', true),
-        mkActionField('Typelen write', true)
+        mkActionField('Push tag', true),
+        mkActionField('Pop tag', true)
       ]
     }, {
       protocol: 'IPv4',
@@ -235,7 +242,9 @@ Instruction.Capabilities = function(ins) {
         mkActionField('ECN write', true),
         mkActionField('Proto write', true),
         mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Dst write', true),
+        mkActionField('Set TTL', true),
+        mkActionField('Dec TTL', true)
       ]
     }, {
       protocol: 'IPv6',
@@ -279,7 +288,9 @@ Instruction.Capabilities = function(ins) {
       protocol: 'Internal',
       fields: [
         mkActionField('Output', true),
-        mkActionField('Group', true)
+        mkActionField('Drop', true),
+        mkActionField('Set Group', true),
+        mkActionField('Set Queue', true)
       ]
     }, {
       protocol: 'Ethernet',
@@ -294,69 +305,76 @@ Instruction.Capabilities = function(ins) {
         mkActionField('Opcode write', true),
         mkActionField('SHA write', true),
         mkActionField('SPA write', true),
-        mkActionField('THA', true),
-        mkActionField('TPA', true)
+        mkActionField('THA write', true),
+        mkActionField('TPA write', true)
       ]
-    },{
+    }, {
       protocol: 'MPLS',
       fields: [
         mkActionField('Label write', true),
         mkActionField('TC write', true),
-        mkActionField('bos', true)
+        mkActionField('BOS write', true),
+        mkActionField('Set TTL', true),
+        mkActionField('Dec TTL', true),
+        mkActionField('Push Tag', true),
+        mkActionField('Pop Tag', true)
       ]
     }, {
       protocol: 'VLAN',
       fields: [
-        mkActionField('PCP', true),
-        mkActionField('DEI', true),
-        mkActionField('VID', true),
-        mkActionField('Typelen', true)
+        mkActionField('PCP write', true),
+        mkActionField('DEI write', true),
+        mkActionField('VID write', true),
+        mkActionField('Push tag', true),
+        mkActionField('Pop tag', true)
       ]
     }, {
       protocol: 'IPv4',
       fields: [
-        mkActionField('DSCP', true),
-        mkActionField('ECN', true),
-        mkActionField('Proto', true),
-        mkActionField('Src', true),
-        mkActionField('Dst', true)
+        mkActionField('DSCP write', true),
+        mkActionField('ECN write', true),
+        mkActionField('Proto write', true),
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true),
+        mkActionField('Set TTL', true),
+        mkActionField('Dec TTL', true)
       ]
     }, {
       protocol: 'IPv6',
       fields: [
-        mkActionField('Src', true),
-        mkActionField('Dst', true),
-        mkActionField('FLabel', true)
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true),
+        mkActionField('FLabel write', true)
       ]
     }, {
       protocol: 'ICMPv4',
       fields: [
-        mkActionField('Type', true),
-        mkActionField('Code', true)
+        mkActionField('Type write', true),
+        mkActionField('Code write', true)
       ]
     }, {
       protocol: 'ICMPv6',
       fields: [
-        mkActionField('Type', true),
-        mkActionField('Code', true)
+        mkActionField('Type write', true),
+        mkActionField('Code write', true)
       ]
     }, {
       protocol: 'TCP',
       fields: [
-        mkActionField('Src', true),
-        mkActionField('Dst', true)
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
       ]
     }, {
       protocol: 'UDP',
       fields: [
-        mkActionField('Src', true),
-        mkActionField('Dst', true)
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
       ]
     }, {
       protocol: 'SCTP',
       fields: [
-        mkActionField('Src', true),
-        mkActionField('Dst', true)
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
       ]
     }];
     this.metadata = '0xffffffffffffffff';

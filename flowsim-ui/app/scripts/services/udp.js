@@ -43,11 +43,11 @@ _UDP_UI.prototype.toBase = function() {
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
-}
+};
 
 _UDP_UI.prototype.setPayload = function() {
   return true;
-}
+};
 
 this.name = NAME;
 this.Payloads = Object.keys(Payloads);
