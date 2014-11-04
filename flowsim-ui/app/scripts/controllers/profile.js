@@ -20,8 +20,8 @@ angular.module('flowsimUiApp')
     $scope.tests = Profile.TESTS;
 
     $scope.mediums = Profile.MEDIUMS;
-    $scope.modes = Profile.MODES;
-    $scope.speeds = Profile.SPEEDS;
+    $scope.modes   = Profile.MODES;
+    $scope.speeds  = Profile.SPEEDS;
 
     $scope.versions = [
       'OpenFlow 1.0',

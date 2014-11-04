@@ -34,10 +34,10 @@
         </div>
         <hr>
         <label class="checkbox-inline">
-          <input type="checkbox" ng-model="profile.ports.mediums.copper">Copper
+          <input type="checkbox" ng-model="profile.ports.mediums.Copper">Copper
         </label>
         <label class="checkbox-inline">
-          <input type="checkbox" ng-model="profile.ports.mediums.copper">Fiber
+          <input type="checkbox" ng-model="profile.ports.mediums.Fiber">Fiber
         </label>
         <hr>
         <div class="checkbox">
@@ -188,19 +188,22 @@
     <td>
       <select class="form-control" tooltip="{{tips.Ports.Port.speed}}" i
               ng-model="port.speed" 
-              ng-options="speed.value as speed.label for speed in speeds">
+              ng-options="speed.value as speed.label for speed in speeds |
+              fgSelect: profile.ports.speeds">
       </select>
     </td>
     <td>
       <select class="form-control" tooltip="{{tips.Ports.Port.mode}}" 
               ng-model="port.mode"
-              ng-options="mode.value as mode.label for mode in modes">
+              ng-options="mode.value as mode.label for mode in modes |
+              fgSelect: profile.ports.modes">
       </select>
     </td>
     <td>
       <select class="form-control" tooltip="{{tips.Ports.Port.medium}}" 
               ng-model="port.medium"
-              ng-options="medium as medium for medium in mediums">
+              ng-options="medium as medium for medium in mediums | 
+              fgSelect: profile.ports.mediums">
       </select>
     </td>
 

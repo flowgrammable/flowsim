@@ -73,7 +73,7 @@ Port.Configuration = function(port) {
   }
 }
 
-Port.Speeds = [{
+Port.SPEEDS = [{
   label: '10 Mbps',
   value: '10_mbps'
 }, {
@@ -96,7 +96,7 @@ Port.Speeds = [{
   value: '1_tbps'
 }];
 
-Port.Modes = [{
+Port.MODES = [{
   label: 'Half Duplex',
   value: 'half_duplex'
 }, {
@@ -104,7 +104,7 @@ Port.Modes = [{
   value: 'full_duplex'
 }];
 
-Port.Mediums = [
+Port.MEDIUMS = [
   'Copper',
   'Fiber'
 ];
@@ -136,8 +136,8 @@ function Capabilities(ports) {
       '1_tbps': true
     };
     this.mediums = {
-      copper: true,
-      fiber: true
+      Copper: true,
+      Fiber: true
     };
     this.modes = {
       'half_duplex': true,
