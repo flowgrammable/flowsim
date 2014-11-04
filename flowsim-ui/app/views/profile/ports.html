@@ -1,25 +1,85 @@
 
 <br>
+<switch-view data="profile.ports"></switch-view>
 
 <div class="row">
-  <div class="col-md-6 text-center">
+  <div class="col-md-offset-3">
+<div class="form-group">
+  <div class="input-group">
+    <div class="input-group-addon">Port Count</div>
+      <input class="form-control" type="text" style="max-width:100px"
+             ng-model="profile.ports.n_ports">
+      <button class="btn btn-primary" ng-click="profile.ports.rebuild()">
+        Update
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+   
+<div class="row">
 
-    <div class="form-group">
-      <div class="input-group">
-        <div class="input-group-addon">Port Count</div>
-        <input class="form-control" type="text" style="max-width:100px"
-               ng-model="profile.ports.n_ports">
-    <button class="btn btn-primary" ng-click="profile.ports.rebuild()">
-      Update
-    </button>
+  <div class="col-md-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Capabilities</h3>
+      </div>
+      <div class="panel-body">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="profile.ports.port_stats">
+            Port Statistics
+          </label>
+        </div>
+        <hr>
+        <label class="checkbox-inline">
+          <input type="checkbox"> Copper
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox"> Fiber
+        </label>
+        <hr>
+        <div class="checkbox">
+          <label class="checkbox-inline">
+            <input type="checkbox"> Half Duplex
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox"> Full Duplex
+          </label>
+        </div>
+        <hr>
+        <div class="checkbox">
+          <label class="checkbox-inline">
+            <input type="checkbox">10 Mbps
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox"> 100 Mbps
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox"> 1 Gbps
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-inline">
+            <input type="checkbox"> 10 Gbps
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox"> 40 Gbps
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox"> 100 Gbps
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-inline">
+            <input type="checkbox"> 1 Tbps
+          </label>
+        </div>
       </div>
     </div>
-   
-    <switch-view data="profile.ports"></switch-view>
-
   </div>
-
-  <div class="col-md-6">
+  <div class="col-md-5">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Virtual Ports</h3>
