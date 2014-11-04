@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
 
 function Capabilities(groups) {
   if(groups) {
-    if(groups instanceof Groups) {
+    if(groups instanceof Capabilities) {
       // copy constructor
     } else {
       // JSON constructor

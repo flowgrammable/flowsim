@@ -8,8 +8,8 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchCtrl', function ($scope, fgCache, Switch, $rootScope, 
-                                      $modal) {
+  .controller('SwitchCtrl', function ($scope, fgCache, Profile, Switch, 
+                                      $rootScope, $modal) {
     $scope.names = {};
     $scope._switch = null;
 
@@ -39,14 +39,20 @@ angular.module('flowsimUiApp')
                 }
               }
             }).result.then(function(profileName) {
-              callback(null);
-              $scope._switch = fgCache.create('switch', name, Switch);
-              $scope.names[name] = true;
-              $scope.setDirty();
+              fgCache.get('profile', profileName, Profile, function(err, result) {
+                if(err) {
+                  console.log(err.details);
+                } else {
+                  console.log(result);
+                  $scope._switch = fgCache.create('switch', name, Switch, result);
+                  $scope.names[name] = true;
+                  $scope.setDirty();
+                  callback(null);
+                }
+              });
             });
           }
         });
-        return '';
       }
     };
 

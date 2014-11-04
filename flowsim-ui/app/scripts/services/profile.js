@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Profile', function(fgConstraints, Datapath, Ports, Tables,
-                               Meters, Groups) {
+  .factory('Profile', function(Datapath, Ports, Tables, Meters, Groups) {
 
 function Profile(p) {
   if(typeof p === 'string') {

@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
 
 function Capabilities(meters) {
   if(meters) {
-    if(meters instanceof Meters) {
+    if(meters instanceof Capabilities) {
       // copy constructor
     } else {
       // JSON constructor
