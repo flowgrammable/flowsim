@@ -25,9 +25,9 @@ function Capabilities(meters) {
 
 Capabilities.prototype.openflow_1_0 = function() {
 };
-       
+
 Capabilities.prototype.openflow_1_1 = function() {
-};   
+};
 
 Capabilities.prototype.openflow_1_2 = function() {
 };
