@@ -42,22 +42,34 @@ angular.module('flowsimUiApp')
 
     // allow for pushing packets to the list
     $scope.addPacket = function() {
+      if($scope.packet.name.length) {
       fgCache.get('packet', $scope.packet.name, Packet, function(err, result) {
         if(err) {
           console.log(err.details);
         } else {
           $scope.trace.push(result);
+          $scope.packet.name = '';
         }
-      })
+      });
+      }
     };
 
     $scope.delPacket = function(idx) {
       $scope.trace.del(idx);
     }
 
-    $scope.selectSwitch = function() {
-      $scope.trace.switchName = $scope.switch_.name;
-    }
+    $scope.$watch('switch_.name', function() {
+      if($scope.trace) {
+        fgCache.get('switch', $scope.switch_.name, Switch,
+                    function(err, switch_) {
+          if(err) {
+            console.log(err.details);
+          } else {
+            $scope.trace.switch_ = switch_;
+          }
+        });
+      }
+    });
      
     $scope.getTraces = function(callback) {
       fgCache.getNames('trace', callback);
@@ -97,14 +109,9 @@ angular.module('flowsimUiApp')
           console.log(err.details);
         } else {
           $scope.trace = result;
-          fgCache.get('switch', $scope.trace.switchName, Switch, 
-                      function(err, result) {
-            if(err) {
-              console.log(err.details);
-            } else {
-              $scope.switch_.name = result;
-            }
-          });
+          if($scope.trace.switch_) {
+            $scope.switch_.name = $scope.trace.switch_.name || '';
+          }
         }
       });
     }

@@ -13,13 +13,14 @@ angular.module('flowsimUiApp')
 function Trace(trace) {
   if(typeof trace === 'string') {
     this.name = trace;
-    this.switch_ = '';
+    this.switch_ = null;
     this.packets = [];
   } else {
     _.extend(this, trace);
     this.packets = _.map(trace.packets, function(pkt) {
       return {
         name: pkt.name,
+        packet: pkt.packet,
         in_port: pkt.in_port
       };
     });
