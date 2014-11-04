@@ -4,9 +4,6 @@ angular.module('flowsimUiApp')
   .factory('Profile', function(fgConstraints, Datapath, Ports, Tables,
                                Meters, Groups) {
 
-var TIPS = {};
-var TESTS = {};
-
 function Profile(p) {
   if(typeof p === 'string') {
     this.name = p;
@@ -15,37 +12,40 @@ function Profile(p) {
     this.tables   = new Tables.Capabilities();
     this.meters   = new Meters.Capabilities();
     this.groups   = new Groups.Capabilities();
-  } else if(p) {
-    if(!p instanceof Profile) {
-      _.extend(this, p);
-    }
-    this.name     = p.name;
+  } else {
+    _.extend(this, p);
     this.datapath = new Datapath.Capabilities(p.datapath);
     this.ports    = new Ports.Capabilities(p.ports);
     this.tables   = new Tables.Capabilities(p.tables);
     this.meters   = new Meters.Capabilities(p.meters);
     this.groups   = new Groups.Capabilities(p.groups);
-  } else {
-    throw 'Bad construction: Profile';
   }
 }
+
+/* ... this is super ugly .... */
 Profile.prototype.clone = function() {
   return new Profile(this);
 };
 
 var ProfileUI = Profile;
 ProfileUI.prototype.toBase = Profile.prototype.clone;
+/* ... .end of super ugly .... */
 
-TIPS.Datapath  = Datapath.TIPS;
-TESTS.Datapath = Datapath.TESTS;
-TIPS.Ports     = Ports.TIPS;
-TESTS.Ports    = Ports.TESTS;
-TIPS.Tables    = Tables.TIPS;
-TESTS.Tables   = Tables.TESTS;
-TIPS.Meters    = Meters.TIPS;
-TESTS.Meters   = Meters.TESTS;
-TIPS.Groups    = Groups.TIPS;
-TESTS.Groups   = Groups.TESTS;
+var TIPS = {
+  Datapath: Datapath.TIPS,
+  Ports:    Ports.TIPS,
+  Tables:   Tables.TIPS,
+  Meters:   Meters.TIPS,
+  Groups:   Groups.TIPS
+};
+
+var TESTS = {
+  Datapath: Datapath.TESTS,
+  Ports:    Ports.TESTS,
+  Tables:   Tables.TESTS,
+  Meters:   Meters.TESTS,
+  Groups:   Groups.TESTS
+};
 
 /**
  * @ngdoc service
@@ -64,78 +64,48 @@ TESTS.Groups   = Groups.TESTS;
     }
 
     function openflow_1_0(p) {
-      console.log('preselecting 1.0');
-
+      // openflow preseelect 1.1 code goes here
       p.datapath.openflow_1_0();
       p.ports.openflow_1_0();
-      //p.tables.openflow_1_0();
+      p.tables.openflow_1_0();
       p.meters.openflow_1_0();
       p.groups.openflow_1_0();
-
-      // Tables
-      /*var i;
-      for (i = 0; i < p.tables.n_tables; i++) {
-        // set relevant match fields:
-        var table = p.tables.tables[i];
-        var j;
-        for (j = 0; j < table.match.fields.length; j++) {
-          var f = table.match.fields[j];
-          if (f.key === 'in_port') {
-            f.enabled = true;
-            f.wildcardable = true;
-            f.maskable = false;
-            f.mask = 0;
-          }
-          // ...
-        }
-      }*/
-
-      // Groups
-
-      // Meters
-
-      //p.datapath.ip_reassembly = true;
-      //p.ports.table = false
 
       return p
     }
     function openflow_1_1(p) {
       // openflow preseelect 1.1 code goes here
-      console.log('preselecting 1.1');
       p.datapath.openflow_1_1();
       p.ports.openflow_1_1();
-      //p.tables.openflow_1_1();
+      p.tables.openflow_1_1();
       p.meters.openflow_1_1();
       p.groups.openflow_1_1();
-      p.ports.table = true;
+      //p.ports.table = true;     <--- this should be done inside of ports
       return p
     }
     function openflow_1_2(p) {
       // openflow preseelect 1.2 code goes here
-      console.log('preselecting 1.2');
       p.datapath.openflow_1_2();
       p.ports.openflow_1_2();
-      //p.tables.openflow_1_2();
+      p.tables.openflow_1_2();
       p.meters.openflow_1_2();
       p.groups.openflow_1_2();
       return p
     }
     function openflow_1_3(p) {
       // openflow preseelect 1.3 code goes here
-      console.log('preselecting 1.3');
       p.datapath.openflow_1_3();
       p.ports.openflow_1_3();
-      //p.tables.openflow_1_3();
+      p.tables.openflow_1_3();
       p.meters.openflow_1_3();
       p.groups.openflow_1_3();
       return p
     }
     function openflow_1_4(p) {
       // openflow preseelect 1.4 code goes here
-      console.log('preselecting 1.4');
       p.datapath.openflow_1_4();
       p.ports.openflow_1_4();
-      //p.tables.openflow_1_4();
+      p.tables.openflow_1_4();
       p.meters.openflow_1_4();
       p.groups.openflow_1_4();
       return p
