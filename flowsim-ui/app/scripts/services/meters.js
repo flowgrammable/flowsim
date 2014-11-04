@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
 
 function Capabilities(meters) {
   if(meters) {
-    if(meters instanceof Meters) {
+    if(meters instanceof Capabilities) {
       // copy constructor
     } else {
       // JSON constructor
@@ -25,9 +25,9 @@ function Capabilities(meters) {
 
 Capabilities.prototype.openflow_1_0 = function() {
 };
-       
+
 Capabilities.prototype.openflow_1_1 = function() {
-};   
+};
 
 Capabilities.prototype.openflow_1_2 = function() {
 };
