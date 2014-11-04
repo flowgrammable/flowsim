@@ -56,7 +56,23 @@ Match.Capabilities = function(match) {
       createMatch('IPv4', 'ECN', 'ipv4_ecn', true, true, '0x03'),
       createMatch('IPv4', 'Proto', 'ipv4_proto', true, true, '0xff'),
       createMatch('IPv4', 'Src', 'ipv4_src', true, true, '0xffffffff'),
-      createMatch('IPv4', 'Dst', 'ipv4_dst', true, true, '0xffffffff')
+      createMatch('IPv4', 'Dst', 'ipv4_dst', true, true, '0xffffffff'),
+      createMatch('IPv6', 'Src', 'ipv6_src', true, true,
+        '0xffffffffffffffffffffffffffffffff'),
+      createMatch('IPv6', 'Dst', 'ipv6_dst', true, true,
+        '0xffffffffffffffffffffffffffffffff'),
+      createMatch('IPv6', 'Flow Label', 'ipv6_flabel', true, true,
+        '0xfffff'),
+      createMatch('ICMPv6', 'Type', 'icmpv6_type', true, true, '0xff'),
+      createMatch('ICMPv6', 'Code', 'icmpv6_code', true, true, '0xff'),
+      createMatch('ICMPv4', 'Type', 'icmpv6_type', true, true, '0xff'),
+      createMatch('ICMPv4', 'Code', 'icmpv6_code', true, true, '0xff'),
+      createMatch('TCP', 'Src', 'tcp_src', true, true, '0xffff'),
+      createMatch('TCP', 'Dst', 'tcp_dst', true, true, '0xffff'),
+      createMatch('UDP', 'Src', 'udp_src', true, true, '0xffff'),
+      createMatch('UDP', 'Dst', 'udp_dst', true, true, '0xffff'),
+      createMatch('SCTP', 'Src', 'sctp_src', true, true, '0xffff'),
+      createMatch('SCTP', 'Dst', 'sctp_dst', true, true, '0xffff')
     ];
   }
 };
@@ -85,7 +101,15 @@ Match.TIPS = {
   ipv4_ecn: 'Match on Explicit Congestion Notification',
   ipv4_proto: 'Match on Protocol',
   ipv4_src: 'Match on IPv4 source',
-  ipv4_dst: 'Match on IPv4 destination'
+  ipv4_dst: 'Match on IPv4 destination',
+  ipv6_dst: 'Match on IPv6 destination',
+  ipv6_src: 'Match on IPv6 source',
+  tcp_src: 'Match on TCP source',
+  tcp_dst: 'Match on TCP destination',
+  udp_src: 'Match on UDP source',
+  udp_dst: 'Match on UDP destination',
+  sctp_src: 'Match on SCTP source',
+  sctp_dst: 'Match on SCTP destination'
 };
 
 Match.TESTS = {
@@ -109,7 +133,21 @@ Match.TESTS = {
   ipv4_ecn: fgConstraints.isUInt(0, 0x03),
   ipv4_proto: fgConstraints.isUInt(0, 255),
   ipv4_src: fgConstraints.isUInt(0, 0xffffffff),
-  ipv4_dst: fgConstraints.isUInt(0, 0xffffffff)
+  ipv4_dst: fgConstraints.isUInt(0, 0xffffffff),
+  icmpv4_type: fgConstraints.isUInt(0, 0xff),
+  icmpv4_code: fgConstraints.isUInt(0, 0xff),
+  icmpv6_type: fgConstraints.isUInt(0, 0xff),
+  icmpv6_code: fgConstraints.isUInt(0, 0xff),
+  ipv6_src: fgConstraints.isUInt(0,
+    0xffffffffffffffffffffffffffffffff),
+  ipv6_dst: fgConstraints.isUInt(0,
+    0xffffffffffffffffffffffffffffffff),
+  tcp_src: fgConstraints.isUInt(0, 0xffff),
+  tcp_dst: fgConstraints.isUInt(0, 0xffff),
+  udp_src: fgConstraints.isUInt(0, 0xffff),
+  udp_dst: fgConstraints.isUInt(0, 0xffff),
+  sctp_src: fgConstraints.isUInt(0, 0xffff),
+  sctp_dst: fgConstraints.isUInt(0, 0xffff)
 };
 
 function mkActionField(name, value) {
@@ -171,35 +209,71 @@ Instruction.Capabilities = function(ins) {
       fields: [
         mkActionField('Opcode write', true),
         mkActionField('SHA write', true),
-        mkActionField('SPA write', true)
+        mkActionField('SPA write', true),
+        mkActionField('THA write', true),
+        mkActionField('TPA write', true)
       ]
     }, {
       protocol: 'MPLS',
-      fields: []
+      fields: [
+        mkActionField('Label write', true),
+        mkActionField('TC write', true),
+        mkActionField('bos write', true)
+      ]
     }, {
-      protocol: 'ARP',
-      fields: []
+      protocol: 'VLAN',
+      fields: [
+        mkActionField('PCP write', true),
+        mkActionField('DEI write', true),
+        mkActionField('VID write', true),
+        mkActionField('Typelen write', true)
+      ]
     }, {
       protocol: 'IPv4',
-      fields: []
+      fields: [
+        mkActionField('DSCP write', true),
+        mkActionField('ECN write', true),
+        mkActionField('Proto write', true),
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
+      ]
     }, {
       protocol: 'IPv6',
-      fields: []
+      fields: [
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true),
+        mkActionField('FLabel write', true)
+      ]
     }, {
       protocol: 'ICMPv4',
-      fields: []
+      fields: [
+        mkActionField('Type write', true),
+        mkActionField('Code write', true)
+      ]
     }, {
       protocol: 'ICMPv6',
-      fields: []
+      fields: [
+        mkActionField('Type write', true),
+        mkActionField('Code write', true)
+      ]
     }, {
       protocol: 'TCP',
-      fields: []
+      fields: [
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
+      ]
+    }, {
+      protocol: 'UDP',
+      fields: [
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
+      ]
     }, {
       protocol: 'SCTP',
-      fields: []
-    }, {
-      protocol: 'TCP',
-      fields: []
+      fields: [
+        mkActionField('Src write', true),
+        mkActionField('Dst write', true)
+      ]
     }];
     this.write = [{
       protocol: 'Internal',
@@ -219,35 +293,71 @@ Instruction.Capabilities = function(ins) {
       fields: [
         mkActionField('Opcode write', true),
         mkActionField('SHA write', true),
-        mkActionField('SPA write', true)
+        mkActionField('SPA write', true),
+        mkActionField('THA', true),
+        mkActionField('TPA', true)
+      ]
+    },{
+      protocol: 'MPLS',
+      fields: [
+        mkActionField('Label write', true),
+        mkActionField('TC write', true),
+        mkActionField('bos', true)
       ]
     }, {
-      protocol: 'MPLS',
-      fields: []
-    }, {
-      protocol: 'ARP',
-      fields: []
+      protocol: 'VLAN',
+      fields: [
+        mkActionField('PCP', true),
+        mkActionField('DEI', true),
+        mkActionField('VID', true),
+        mkActionField('Typelen', true)
+      ]
     }, {
       protocol: 'IPv4',
-      fields: []
+      fields: [
+        mkActionField('DSCP', true),
+        mkActionField('ECN', true),
+        mkActionField('Proto', true),
+        mkActionField('Src', true),
+        mkActionField('Dst', true)
+      ]
     }, {
       protocol: 'IPv6',
-      fields: []
+      fields: [
+        mkActionField('Src', true),
+        mkActionField('Dst', true),
+        mkActionField('FLabel', true)
+      ]
     }, {
       protocol: 'ICMPv4',
-      fields: []
+      fields: [
+        mkActionField('Type', true),
+        mkActionField('Code', true)
+      ]
     }, {
       protocol: 'ICMPv6',
-      fields: []
+      fields: [
+        mkActionField('Type', true),
+        mkActionField('Code', true)
+      ]
     }, {
       protocol: 'TCP',
-      fields: []
+      fields: [
+        mkActionField('Src', true),
+        mkActionField('Dst', true)
+      ]
+    }, {
+      protocol: 'UDP',
+      fields: [
+        mkActionField('Src', true),
+        mkActionField('Dst', true)
+      ]
     }, {
       protocol: 'SCTP',
-      fields: []
-    }, {
-      protocol: 'TCP',
-      fields: []
+      fields: [
+        mkActionField('Src', true),
+        mkActionField('Dst', true)
+      ]
     }];
     this.metadata = '0xffffffffffffffff';
     this.goto_ = [];
@@ -326,7 +436,7 @@ Table.Configuration = function(tables) {
 };
 
 function Capabilities(tables) {
-      
+
   if(tables) {
     if(typeof tables === 'number') {
       this.n_tables = tables;
@@ -335,8 +445,8 @@ function Capabilities(tables) {
       });
     } else {
       _.extend(this, tables);
-      this.tables = _.map(tables.tables, function(t) { 
-        return new Table.Capabilities(t); 
+      this.tables = _.map(tables.tables, function(t) {
+        return new Table.Capabilities(t);
       });
     }
   } else {
