@@ -34,12 +34,12 @@ Switch.prototype.clone = function() {
 var SwitchUI = Switch;
 SwitchUI.prototype.toBase = Switch.prototype.clone;
 
-function create(name) {
-    return new Switch(name);
+function create(name, initialValue) {
+    return new Switch(name, initialValue);
 }
 
-function createUI(swi) {
-  return new SwitchUI(swi);
+function createUI(swi, initialValue) {
+  return new SwitchUI(swi, initialValue);
 }
 
 return {

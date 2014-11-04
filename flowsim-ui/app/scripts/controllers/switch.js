@@ -43,7 +43,6 @@ angular.module('flowsimUiApp')
                 if(err) {
                   console.log(err.details);
                 } else {
-                  console.log(result);
                   $scope._switch = fgCache.create('switch', name, Switch, result);
                   $scope.names[name] = true;
                   $scope.setDirty();

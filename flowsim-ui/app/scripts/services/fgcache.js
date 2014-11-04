@@ -46,7 +46,6 @@ angular.module('flowsimUiApp')
 
       if(Object.keys(update[type]).length) {
         result = Object.keys(post[type]);
-        console.log('what is this: '+result.concat(Object.keys(update[type])));
         callback(null, result.concat(Object.keys(update[type])));
       } else {
         Subscriber.httpGet('/api/'+type, {}, function(err, result) {
@@ -63,7 +62,6 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in post)) { post[type] = {}; }
 
-      console.log('fg: '+initialValue);
       post[type][name] = service.createUI(name, initialValue);
       post[type][name].dirty = true;
       return post[type][name];
