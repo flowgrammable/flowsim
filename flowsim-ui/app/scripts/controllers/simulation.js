@@ -163,12 +163,6 @@ angular.module('flowsimUiApp')
       $scope.active = false;
     };
 
-    $scope.pause = function() {
-      if(!$scope.active) {
-        return;
-      }
-    };
-
     $scope.step = function() {
       var idx;
       if(!$scope.active) {
