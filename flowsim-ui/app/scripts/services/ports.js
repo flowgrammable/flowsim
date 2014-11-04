@@ -115,9 +115,9 @@ function Capabilities(ports) {
     this.ports = _.map(ports.ports, function(port) {
       return new Port.Capabilities(port);
     });
-    this.speeds  = _.clone(ports.speeds);
-    this.modes   = _.clone(ports.modes);
+    this.speeds = _.clone(ports.speeds);
     this.mediums = _.clone(ports.mediums);
+    this.modes = _.clone(ports.modes);
     this.vports  = _.clone(ports.vports);
   } else {
     // default constructor
@@ -125,6 +125,24 @@ function Capabilities(ports) {
     this.ports = _.map(_.range(this.n_ports), function(id) {
       return new Port.Capabilities(id);
     });
+    this.port_stats = true;
+    this.speeds = {
+      '10_mbps': true,
+      '100_mbps': true,
+      '1_gbps': true,
+      '10_gbps': true,
+      '40_gbps': true,
+      '100_gbps': true,
+      '1_tbps': true
+    };
+    this.mediums = {
+      copper: true,
+      fiber: true
+    };
+    this.modes = {
+      'half_duplex': true,
+      'full_duplex': true
+    };
     this.vports = {
       port_stats: true,
       stp:        false,
@@ -137,23 +155,6 @@ function Capabilities(ports) {
       local:      true,
       any:        true,
       none:       true
-    };
-    this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': true,
-      '100_gbps': true,
-      '1_tbps': true
-    };
-    this.mediums = {
-      'Copper': true,
-      'Fiber': true
-    };
-    this.modes = {
-      'half_duplex': true,
-      'full_duplex': true
     };
   }
 }
