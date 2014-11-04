@@ -23,6 +23,7 @@
 
 <tabset>
   <tab heading="Setup" disabled=true active="!active">
+    <ng-include src="'views/simulation/setup.html'"></ng-include>
   </tab>
   <tab ng-repeat="stage in stages" heading="{{stage.name}}" disabled=true
        active="stage.active">
