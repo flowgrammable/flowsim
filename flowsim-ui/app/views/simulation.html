@@ -1,6 +1,32 @@
 
-<div class="row">
-
-
+<!-- Primary simulator controls -->
+<div style="text-align:center">
+  <div class="btn-group">
+    <button type="button" class="btn btn-default" ng-click="stop()"
+            ng-disabled="!active">
+      <span class="glyphicon glyphicon-stop"></span>
+    </button>
+    <button type="button" class="btn btn-default" ng-click="play()"
+            ng-disabled="active">
+      <span class="glyphicon glyphicon-play"></span>
+    </button>
+    <button type="button" class="btn btn-default" ng-click="pause()"
+            ng-disabled="!active">
+      <span class="glyphicon glyphicon-pause"></span>
+    </button>
+    <button type="button" class="btn btn-default" ng-click="step()"
+            ng-disabled="!active">
+      <span class="glyphicon glyphicon-step-forward"></span>
+    </button>
+  </div>
 </div>
+
+<tabset>
+  <tab heading="Setup" disabled=true active="!active">
+  </tab>
+  <tab ng-repeat="stage in stages" heading="{{stage.name}}" disabled=true
+       active="stage.active">
+    <ng-include src="'views/simulation/'+stage.label+'.html'"></ng-include>
+  </tab>
+</tabset>
 
