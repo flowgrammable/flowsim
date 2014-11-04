@@ -1,0 +1,20 @@
+
+
+.PortText {
+  font-size: 10px;
+  fill       : white;
+}
+.Switch {
+  background-color: lightgrey;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.PortColorA {
+  fill: #C0224E;
+}
+
+.PortColorB {
+  fill: #42A0BA;
+}
+

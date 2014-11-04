@@ -43,6 +43,7 @@ Port.Capabilities = function(port) {
     this.speed   = defaultSpeed;
     this.mode    = defaultMode;
     this.medium  = defaultMedium;
+    this.up      = true;
   } else {
     // copy construction
     _.extend(this, port);
