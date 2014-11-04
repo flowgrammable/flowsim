@@ -1,5 +1,5 @@
 
-<br>
+<h3>Switch</h3>
 <switch-view data="profile.ports"></switch-view>
 
 <div class="row">
@@ -34,46 +34,48 @@
         </div>
         <hr>
         <label class="checkbox-inline">
-          <input type="checkbox"> Copper
+          <input type="checkbox" ng-model="profile.ports.mediums.copper">Copper
         </label>
         <label class="checkbox-inline">
-          <input type="checkbox"> Fiber
+          <input type="checkbox" ng-model="profile.ports.mediums.copper">Fiber
         </label>
         <hr>
         <div class="checkbox">
           <label class="checkbox-inline">
-            <input type="checkbox"> Half Duplex
+            <input type="checkbox" ng-model="profile.ports.modes.half_duplex">
+            Half Duplex
           </label>
           <label class="checkbox-inline">
-            <input type="checkbox"> Full Duplex
+            <input type="checkbox" ng-model="profile.ports.modes.full_duplex">
+            Full Duplex
           </label>
         </div>
         <hr>
         <div class="checkbox">
           <label class="checkbox-inline">
-            <input type="checkbox">10 Mbps
+            <input type="checkbox" ng-model="profile.ports.speeds['10_mbps']">10 Mbps
           </label>
           <label class="checkbox-inline">
-            <input type="checkbox"> 100 Mbps
+            <input type="checkbox" ng-model="profile.ports.speeds['100_mbps']">100 Mbps
           </label>
           <label class="checkbox-inline">
-            <input type="checkbox"> 1 Gbps
-          </label>
-        </div>
-        <div class="checkbox">
-          <label class="checkbox-inline">
-            <input type="checkbox"> 10 Gbps
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox"> 40 Gbps
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox"> 100 Gbps
+            <input type="checkbox" ng-model="profile.ports.speeds['1_gbps']">1 Gbps
           </label>
         </div>
         <div class="checkbox">
           <label class="checkbox-inline">
-            <input type="checkbox"> 1 Tbps
+            <input type="checkbox" ng-model="profile.ports.speeds['10_gbps']">10 Gbps
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="profile.ports.speeds['40_gbps']">40 Gbps
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="profile.ports.speeds['100_gbps']">100 Gbps
+          </label>
+        </div>
+        <div class="checkbox">
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="profile.ports.speeds['1_tbps']">1 Tbps
           </label>
         </div>
       </div>
