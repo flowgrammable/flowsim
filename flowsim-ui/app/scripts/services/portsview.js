@@ -7,6 +7,8 @@ angular.module('flowsimUiApp')
       var pos, row, rowCount, slot;
       var result;
 
+      if(_.isUndefined(sw)) return [];
+
       rowCount = Math.floor(sw.length / rowWidth) + (sw.length%rowWidth ? 1:0);
       rowCount = rowCount % 2 != 0 ? rowCount + 1 : rowCount;
       result = _.map(_.range(rowCount), function() { return []; });
