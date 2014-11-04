@@ -10,6 +10,15 @@
 angular.module('flowsimUiApp')
   .factory('Datapath', function(fgConstraints) {
 
+var defaultFragHandling = 'normal';
+var defaultMissSendLen  = 100;
+
+var fragOptions = [
+  'normal',
+  'drop',
+  'reassemble'
+];
+
 function Capabilities(datapath) {
   if(datapath) {
     _.extend(this, datapath);
@@ -70,16 +79,22 @@ Capabilities.prototype.openflow_1_4 = function() {
 function Configuration(datapath) {
   if(datapath) {
     if(datapath instanceof Capabilities) {
-      // capability constructor
-      this.capabilities = datapath;
-    } else if(datapath instanceof Configuration) {
-      // copy constructor
+      this.datapath_id = datapath.datapath_id;
+      this.n_buffers   = datapath.n_buffers;
+      // 
+      if(datapath.ip_reassembly) {
+        this.fragHandling = defaultFragHandling;
+      }
+      this.miss_send_len = defaultMissSendLen;
+      // Copy for statistics reasons
+      this.mfr_description = datapath.mfr_description;
+      this.hw_description  = datapath.hw_description;
+      this.sw_description  = datapath.sw_description;
+      this.serial_num      = datapath.serial_num;
+      this.dp_description  = datapath.dp_description;
     } else {
-      // JSON constructor
       _.extend(this, datapath);
     }
-  } else {
-    // default constructor
   }
 }
 

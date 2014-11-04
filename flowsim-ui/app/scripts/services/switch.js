@@ -13,18 +13,18 @@ angular.module('flowsimUiApp')
 function Switch(s, switchCapabilities) {
   if(typeof s === 'string') {
     this.name = s;
-    this.datapath = new Datapath.Capabilities(switchCapabilities.datapath);
-    this.ports    = new Ports.Capabilities(switchCapabilities.ports);
-    this.tables   = new Tables.Capabilities(switchCapabilities.tables);
-    this.meters   = new Meters.Capabilities(switchCapabilities.meters);
-    this.groups   = new Groups.Capabilities(switchCapabilities.groups);
+    this.datapath = new Datapath.Configuration(switchCapabilities.datapath);
+    this.ports    = new Ports.Configuration(switchCapabilities.ports);
+    this.tables   = new Tables.Configuration(switchCapabilities.tables);
+    this.meters   = new Meters.Configuration(switchCapabilities.meters);
+    this.groups   = new Groups.Configuration(switchCapabilities.groups);
   } else {
     _.extend(this, s);
-    this.datapath = new Datapath.Capabilities(s.datapath);
-    this.ports    = new Ports.Capabilities(s.ports);
-    this.tables   = new Tables.Capabilities(s.tables);
-    this.meters   = new Meters.Capabilities(s.meters);
-    this.groups   = new Groups.Capabilities(s.groups);
+    this.datapath = new Datapath.Configuration(s.datapath);
+    this.ports    = new Ports.Configuration(s.ports);
+    this.tables   = new Tables.Configuration(s.tables);
+    this.meters   = new Meters.Configuration(s.meters);
+    this.groups   = new Groups.Configuration(s.groups);
   }
 }
 Switch.prototype.clone = function() {

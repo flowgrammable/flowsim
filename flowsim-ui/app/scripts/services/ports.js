@@ -57,21 +57,11 @@ Port.Capabilities.prototype.openflow_1_0 = function(speeds, mediums, modes) {
     }
 };
 
-Port.Configuration = function(port) {
-  if(port) {
-    if(port instanceof Port.Capabilities) {
-      // Capability constructor
-      this.capabilities = port;
-    } else if(port instanceof Port.Configuration) {
-      // Copy constructor
-    } else {
-      // JSON constructor
-      _.extend(this, port);
-    }
-  } else {
-    // default constructor
+Port.Configuration = function(port, portCaps) {
+  _.extend(this, port);
+  if(port instanceof Port.Capabilities) {
   }
-}
+};
 
 Port.SPEEDS = [{
   label: '10 Mbps',
@@ -156,6 +146,20 @@ function Capabilities(ports) {
       any:        true,
       none:       true
     };
+  }
+}
+
+function Configuration(ports) {
+  if(ports instanceof Capabilities) {
+    this.n_ports = ports.n_ports;
+    this.ports = _.map(ports.ports, function(port) { 
+      return new Port.Configuration(port, ports);
+    });
+  } else {
+    _.extend(this, ports);
+    this.ports = _.map(ports.ports, function(port) {
+      return new Port.Configuration(port);
+    });
   }
 }
 
@@ -326,21 +330,6 @@ Capabilities.prototype.openflow_1_4 = function() {
       '1_tbps': true
     };
 };
-
-function Configuration(ports) {
-  if(ports) {
-    if(ports instanceof Capabilities) {
-      // capability constructor
-    } else if(ports instanceof Configuration) {
-      // copy constructor
-    } else {
-      // JSON constructor
-      _.extend(this, ports);
-    }
-  } else {
-    // default constructor
-  }
-}
 
 var TIPS = {
   Port: Port.TIPS,
