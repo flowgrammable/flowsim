@@ -156,19 +156,19 @@ describe('Service: ETHERNET', function () {
 
     var exact = new ETHERNET.Ethernet.MAC.Match(u, b);
 
-    /*
-    console.log(exact.match(u));
-    console.log(exact.match(b));
-    console.log(exact.match(m));
+    //console.log(exact.match(u));
+    //console.log(exact.match(b));
+    //console.log(exact.match(m));
 
     expect(every.match(u)).toBe(true);
     expect(every.match(b)).toBe(true);
     expect(every.match(m)).toBe(true);
 
-
     expect(multi.match(u)).toBe(false);
     expect(multi.match(b)).toBe(true);
     expect(multi.match(m)).toBe(true);
+
+    /*
 
     expect(exact.match(u)).toBe(true);
     expect(exact.match(b)).toBe(false);
