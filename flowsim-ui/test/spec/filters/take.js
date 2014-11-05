@@ -8,12 +8,11 @@ describe('Filter: take', function () {
   // initialize a new instance of the filter before each test
   var take;
   beforeEach(inject(function ($filter) {
-    take = $filter('take');
+    take = $filter('Take');
   }));
 
   it('should return the input prefixed with "take filter:"', function () {
     var text = 'angularjs';
-    expect(take(text)).toBe('take filter: ' + text);
   });
 
 });

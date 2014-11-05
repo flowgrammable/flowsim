@@ -7,8 +7,8 @@ describe('Service: profile', function () {
 
   // instantiate service
   var profile;
-  beforeEach(inject(function (_profile_) {
-    profile = _profile_;
+  beforeEach(inject(function (_Profile_) {
+    profile = _Profile_;
   }));
 
   it('should do something', function () {

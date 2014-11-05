@@ -6,13 +6,13 @@ describe('Service: trace', function () {
   beforeEach(module('flowsimUiApp'));
 
   // instantiate service
-  var trace;
-  beforeEach(inject(function (_trace_) {
-    trace = _trace_;
+  var Trace;
+  beforeEach(inject(function (_Trace_) {
+    Trace = _Trace_;
   }));
 
   it('should do something', function () {
-    expect(!!trace).toBe(true);
+    expect(!!Trace).toBe(true);
   });
 
 });

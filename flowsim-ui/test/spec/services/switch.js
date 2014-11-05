@@ -6,13 +6,13 @@ describe('Service: switch', function () {
   beforeEach(module('flowsimUiApp'));
 
   // instantiate service
-  var switch;
-  beforeEach(inject(function (_switch_) {
-    switch = _switch_;
+  var Switch_;
+  beforeEach(inject(function (_Switch_) {
+    Switch_ = _Switch_;
   }));
 
   it('should do something', function () {
-    expect(!!switch).toBe(true);
+    expect(!!Switch_).toBe(true);
   });
 
 });

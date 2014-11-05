@@ -12,6 +12,7 @@ describe('Service: ETHERNET', function () {
   }));
 
   it('should do something', function () {
+    console.log('name: '+ETHERNET.name);
     expect(!!ETHERNET).toBe(true);
   });
 

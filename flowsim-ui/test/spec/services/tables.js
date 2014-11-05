@@ -6,13 +6,13 @@ describe('Service: tables', function () {
   beforeEach(module('flowsimUiApp'));
 
   // instantiate service
-  var tables;
-  beforeEach(inject(function (_tables_) {
-    tables = _tables_;
+  var Tables;
+  beforeEach(inject(function (_Tables_) {
+    Tables = _Tables_;
   }));
 
   it('should do something', function () {
-    expect(!!tables).toBe(true);
+    expect(!!Tables).toBe(true);
   });
 
 });

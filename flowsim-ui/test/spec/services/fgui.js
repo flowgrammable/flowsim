@@ -7,8 +7,8 @@ describe('Service: fgUi', function () {
 
   // instantiate service
   var fgUi;
-  beforeEach(inject(function (_fgUi_) {
-    fgUi = _fgUi_;
+  beforeEach(inject(function (_fgUI_) {
+    fgUi = _fgUI_;
   }));
 
   it('should do something', function () {

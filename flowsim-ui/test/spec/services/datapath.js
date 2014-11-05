@@ -7,8 +7,8 @@ describe('Service: datapath', function () {
 
   // instantiate service
   var datapath;
-  beforeEach(inject(function (_datapath_) {
-    datapath = _datapath_;
+  beforeEach(inject(function (_Datapath_) {
+    datapath = _Datapath_;
   }));
 
   it('should do something', function () {

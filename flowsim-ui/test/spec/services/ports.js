@@ -7,8 +7,8 @@ describe('Service: ports', function () {
 
   // instantiate service
   var ports;
-  beforeEach(inject(function (_ports_) {
-    ports = _ports_;
+  beforeEach(inject(function (_Ports_) {
+    ports = _Ports_;
   }));
 
   it('should do something', function () {
