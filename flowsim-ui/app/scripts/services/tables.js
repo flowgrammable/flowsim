@@ -444,12 +444,21 @@ Table.TESTS = {
   Miss: Instruction.TESTS
 };
 
-Table.Configuration = function(tables) {
-  if(tables) {
-    if(tables instanceof Capabilities) {
-      // capability constructor
-    } else if(tables instanceof Configuration) {
-      // JSON constructor
+Table.Stats = function() {
+};
+
+Table.Configuration = function(table) {
+  if(table instanceof Table.Capabilities) {
+    this.table_id    = table.table_id;
+    this.name        = table.name;
+    this.max_entries = table.max_entries;
+    if(table.table_stats) {
+      this.stats = new Table.Stats();
+    }
+  } else {
+    _.extend(this, table);
+    if(table.stats) {
+      this.stats = new Table.Stats(table.stats;
     }
   }
 };
@@ -745,18 +754,10 @@ Capabilities.prototype.openflow_1_4 = function() {
 }
 
 function Configuration(tables) {
-  if(tables) {
-    if(tables instanceof Capabilities) {
-      // capability constructor
-    } else if(tables instanceof Configuration) {
-      // copy constructor
-    } else {
-      // JSON constructor
-      _.extend(this, tables);
-    }
-  } else {
-    // default constructor
-  }
+  _.extend(this, tables);
+  this.tables = _.map(this.tables, function(table) { 
+    return new Table.Configuration(table); 
+  });
 }
 
 var TIPS = {
