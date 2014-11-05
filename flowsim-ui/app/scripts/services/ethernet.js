@@ -35,16 +35,12 @@ function Ethernet(eth, src, dst, typelen) {
   }
 }
 
+Ethernet.Name = NAME;
+
 Ethernet.TIPS = {
   src: 'Ethernet source address',
   dst: 'Ethernet destination address',
   typelen: 'Ethernet payload type or length'
-};
-
-Ethernet.TESTS = {
-  src: Ethernet.MAC.is,
-  dst: Ethernet.MAC.is,
-  typelen: Utils.UInt.is(16)
 };
 
 Ethernet.MAC = function(mac) {
@@ -115,6 +111,12 @@ Ethernet.MAC.Match.prototype.match = function(addr) {
 
 Ethernet.MAC.Match.prototype.toString = function() {
   return this.addr.toString() + '/' + this.mask.toString();
+};
+
+Ethernet.TESTS = {
+  src: Ethernet.MAC.is,
+  dst: Ethernet.MAC.is,
+  typelen: Utils.UInt.is(16)
 };
 
 function Ethernet_UI(eth) {
