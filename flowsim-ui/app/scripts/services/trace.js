@@ -31,7 +31,7 @@ Trace.prototype.push = function(pkt) {
   this.packets.push({
     name: pkt.name,
     packet: pkt,
-    in_port: null
+    in_port: 0
   });
 };
 
