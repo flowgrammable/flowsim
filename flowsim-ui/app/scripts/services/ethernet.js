@@ -200,7 +200,7 @@ return {
   name:        NAME,
   Ethernet:    Ethernet,
   Ethernet_UI: Ethernet_UI,
-  create:      function()            { return new Ethernet(); },
+  create:      function(eth)         { return new Ethernet(eth); },
   createUI:    function(eth)         { return new Ethernet_UI(eth); },
   Payloads:    Object.keys(Payloads)
 };
