@@ -6,6 +6,9 @@ angular.module('flowsimUiApp')
 
 function padZeros(input, len) {
   len -= input.length;
+  if(len < 1) {
+    return input;
+  }
   return _.map(_.range(len), function() { return '0'; }).join() + input;
 }
 
@@ -35,40 +38,31 @@ function maxFromBytes(val) {
   return Math.ceil(maxFromBits(8*val));
 }
 
-/*
-function parseUInt(floor, ceil) {
-  return function(value) {
-    var tmp;
-    if(typeof value === 'number' && inRange(floor, ceil)(value)) {
-      return parseInt;
-    } else if(typeof value === 'string' && HexPattern.test(value)) {
-      tmp = parseInt(value);
-      if(inRange(floor, ceil)(tmp)) {
-        return tmp;
-      } 
-    } 
-    return null;
-  };
-} 
-*/
-
 function UInt(value, bits, min, max) {
   if(typeof value === 'number' && value === parseInt(value)) {
     this.value = value;
+    this.bits = bits ? bits : howManyBits(value);
+    this.bytes = Math.ceil(this.bits / 8);
+    this.min = min ? min : 0;
+    this.max = max ? max : this.bytes;
   } else if(typeof value === 'string' && HexPattern.test(value)) {
     this.value = parseInt(value);
+    this.bits = bits ? bits : howManyBits(value);
+    this.bytes = Math.ceil(this.bits / 8);
+    this.min = min ? min : 0;
+    this.max = max ? max : this.bytes;
   } else if(value instanceof UInt) {
-    this.value = value;
+    this.value = value.value;
+    this.bits  = value.bits;
+    this.bytes = value.bytes;
+    this.min   = value.min;
+    this.max   = value.max;
   } else {
     throw 'UInt(' + value + ')';
   }
-  this.bits = bits ? bits : howManyBits(value);
-  this.bytes = Math.ceil(this.bits / 8);
   if(howManyBits(this.value) > this.bits) {
     throw 'UInt(' + this.value + ') : bits > ' + this.bits;
   }
-  this.min = min ? min : 0;
-  this.max = max ? max : this.bytes;
   if(min) {
     if(min > this.value) {
       throw 'UInt(' + this.value + ') | >= ' + min;
@@ -94,8 +88,7 @@ UInt.Match.prototype.toString = function() {
 
 UInt.prototype.toString = function(val) {
   if(val === 16) {
-    return '0x' + padZeros(this.value.toString(16), this.bytes) + 
-           this.value.toString(16);
+    return '0x' + padZeros(this.value.toString(16), 2*this.bytes);
   }
   return this.value.toString();
 };

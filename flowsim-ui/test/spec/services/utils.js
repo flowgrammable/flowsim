@@ -67,4 +67,11 @@ describe('Service: Utils', function () {
     }).toThrow();
   });
 
+  it('UInt(0x800).toString()', function() {
+
+    var v = new Utils.UInt('0x800', 16);
+    expect(v.toString(16)).toBe('0x0800');
+
+  });
+
 });
