@@ -1,1 +1,69 @@
-<p>This is the switch/tables view.</p>
+
+<br>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="form-group"
+      ng-class="{'has-error':!tests.Tables.n_tables(profile.tables.n_tables)}">
+      <div class="input-group">
+        <div class="input-group-addon" tooltip="{{tips.Tables.n_tables}}">
+          Table Count
+        </div>
+        <input class="form-control" type="text" style="max-width:100px"
+               ng-model="profile.tables.n_tables">
+               <button class="btn btn-primary" ng-click="profile.tables.rebuild()">
+            Update
+          </button>
+        </div>
+      </div>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <th>Identifier</th>
+    <th>Name</th>
+    <th>Max Entries</th>
+    <th>Table Stats</th>
+    <th>Flow Stats</th>
+    <th>Flow Capabilities</th>
+  </thead>
+  <tbody>
+  <tr ng-repeat="table in profile.tables.tables">
+    <td>{{table.table_id}}</td>
+    <td>
+      <div class="form-group" tooltip="{{tips.Tables.Table.name}}"
+           ng-class="{'has-error': !tests.Tables.Table.name(table.name)}">
+        <input class="form-control" type="text" ng-model="table.name" 
+               style="width:100px">
+      </div>
+    </td>
+    <td>
+      <div class="form-group" tooltip="{{tips.Tables.Table.max_entries}}"
+           ng-class="{'has-error': !tests.Tables.Table.max_entries(table.max_entries)}">
+        <input class="form-control" type="text" ng-model="table.max_entries"
+               style="width:60px">
+      </div>
+    </td>
+    <td>
+      <input type="checkbox" ng-model="table.table_stats">
+    </td>
+    <td>
+      <input type="checkbox" ng-model="table.flow_stats">
+    </td>
+    <td>
+      <div class="btn-group btn-group-xs">
+        <button type="button" class="btn btn-default" ng-click="match($index)">
+          Match
+        </button>
+        <button type="button" class="btn btn-default" ng-click="instruction($index)">
+          Instruction
+        </button>
+        <button type="button" class="btn btn-default" ng-click="miss($index)">
+          Miss
+        </button>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

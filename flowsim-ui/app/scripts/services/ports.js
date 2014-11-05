@@ -240,14 +240,24 @@ Capabilities.prototype.openflow_1_1 = function() {
   };
 
   this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': true,
-      '100_gbps': true,
-      '1_tbps': true
-    };
+    '10_mbps': true,
+    '100_mbps': true,
+    '1_gbps': true,
+    '10_gbps': true,
+    '40_gbps': true,
+    '100_gbps': true,
+    '1_tbps': true
+  };
+
+  this.modes = {
+    'half_duplex': true,
+    'full_duplex': true
+  };
+
+  this.medium = {
+    Fiber: true,
+    Copper: true
+  };
 };
 
 Capabilities.prototype.openflow_1_2 = function() {

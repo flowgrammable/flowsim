@@ -65,8 +65,8 @@ Match.Capabilities = function(match) {
         '0xfffff'),
       createMatch('ICMPv6', 'Type', 'icmpv6_type', true, true, '0xff'),
       createMatch('ICMPv6', 'Code', 'icmpv6_code', true, true, '0xff'),
-      createMatch('ICMPv4', 'Type', 'icmpv6_type', true, true, '0xff'),
-      createMatch('ICMPv4', 'Code', 'icmpv6_code', true, true, '0xff'),
+      createMatch('ICMPv4', 'Type', 'icmpv4_type', true, true, '0xff'),
+      createMatch('ICMPv4', 'Code', 'icmpv4_code', true, true, '0xff'),
       createMatch('TCP', 'Src', 'tcp_src', true, true, '0xffff'),
       createMatch('TCP', 'Dst', 'tcp_dst', true, true, '0xffff'),
       createMatch('UDP', 'Src', 'udp_src', true, true, '0xffff'),
@@ -150,10 +150,11 @@ Match.TESTS = {
   sctp_dst: fgConstraints.isUInt(0, 0xffff)
 };
 
-function mkActionField(name, value) {
+function mkActionField(name, value, key) {
   return {
     name: name,
-    value: value
+    value: value,
+    key: key
   };
 }
 
@@ -194,187 +195,187 @@ Instruction.Capabilities = function(ins) {
     this.apply = [{
       protocol: 'Internal',
       fields: [
-        mkActionField('Output', true),
-        mkActionField('Drop', true),
-        mkActionField('Set Group', true),
-        mkActionField('Set Queue', true)
+        mkActionField('Output', true, 'forward'),
+        mkActionField('Drop', true, 'drop'),
+        mkActionField('Set Group', true, 'set_group'),
+        mkActionField('Set Queue', true, 'set_queue')
       ]
     }, {
       protocol: 'Ethernet',
         fields: [
-          mkActionField('Src write', true),
-          mkActionField('Dst write', true),
-          mkActionField('Typelen write', true)
+          mkActionField('Src write', true, 'set_eth_src'),
+          mkActionField('Dst write', true, 'set_eth_dst'),
+          mkActionField('Typelen write', true, 'set_eth_type')
         ]
     }, {
     protocol: 'ARP',
       fields: [
-        mkActionField('Opcode write', true),
-        mkActionField('SHA write', true),
-        mkActionField('SPA write', true),
-        mkActionField('THA write', true),
-        mkActionField('TPA write', true)
+        mkActionField('Opcode write', true, 'set_arp_op'),
+        mkActionField('SHA write', true, 'set_arp_sha'),
+        mkActionField('SPA write', true, 'set_arp_spa'),
+        mkActionField('THA write', true, 'set_arp_tha'),
+        mkActionField('TPA write', true, 'set_arp_tpa')
       ]
     }, {
       protocol: 'MPLS',
       fields: [
-        mkActionField('Label write', true),
-        mkActionField('TC write', true),
-        mkActionField('BOS write', true),
-        mkActionField('Set TTL', true),
-        mkActionField('Dec TTL', true),
-        mkActionField('Push Tag', true),
-        mkActionField('Pop Tag', true)
+        mkActionField('Label write', true, 'set_mpls_label'),
+        mkActionField('TC write', true, 'set_mpls_tc'),
+        mkActionField('BOS write', true, 'set_mpls_bos'),
+        mkActionField('Set TTL', true, 'set_mpls_ttl'),
+        mkActionField('Dec TTL', true, 'dec_mpls_ttl'),
+        mkActionField('Push Tag', true, 'push_mpls'),
+        mkActionField('Pop Tag', true, 'pop_mpls')
       ]
     }, {
       protocol: 'VLAN',
       fields: [
-        mkActionField('PCP write', true),
-        mkActionField('DEI write', true),
-        mkActionField('VID write', true),
-        mkActionField('Push tag', true),
-        mkActionField('Pop tag', true)
+        mkActionField('PCP write', true, 'set_vlan_pcp'),
+        mkActionField('DEI write', true, 'set_vlan_dei'),
+        mkActionField('VID write', true, 'set_vlan_vid'),
+        mkActionField('Push tag', true, 'push_vlan'),
+        mkActionField('Pop tag', true, 'pop_vlan')
       ]
     }, {
       protocol: 'IPv4',
       fields: [
-        mkActionField('DSCP write', true),
-        mkActionField('ECN write', true),
-        mkActionField('Proto write', true),
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true),
-        mkActionField('Set TTL', true),
-        mkActionField('Dec TTL', true)
+        mkActionField('DSCP write', true, 'set_ip_dscp'),
+        mkActionField('ECN write', true, 'set_ip_ecn'),
+        mkActionField('Proto write', true, 'set_ip_proto'),
+        mkActionField('Src write', true, 'set_ipv4_src'),
+        mkActionField('Dst write', true, 'set_ipv4_dst'),
+        mkActionField('Set TTL', true, 'set_nw_ttl'),
+        mkActionField('Dec TTL', true, 'dec_nw_ttl')
       ]
     }, {
       protocol: 'IPv6',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true),
-        mkActionField('FLabel write', true)
+        mkActionField('Src write', true, 'set_ipv6_src'),
+        mkActionField('Dst write', true, 'set_ipv6_dst'),
+        mkActionField('FLabel write', true, 'set_ipv6_flabel')
       ]
     }, {
       protocol: 'ICMPv4',
       fields: [
-        mkActionField('Type write', true),
-        mkActionField('Code write', true)
+        mkActionField('Type write', true, 'set_icmpv4_type'),
+        mkActionField('Code write', true, 'set_icmpv4_code')
       ]
     }, {
       protocol: 'ICMPv6',
       fields: [
-        mkActionField('Type write', true),
-        mkActionField('Code write', true)
+        mkActionField('Type write', true, 'set_icmpv6_type'),
+        mkActionField('Code write', true, 'set_icmpv6_code')
       ]
     }, {
       protocol: 'TCP',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Src write', true, 'set_tcp_src'),
+        mkActionField('Dst write', true, 'set_tcp_dst')
       ]
     }, {
       protocol: 'UDP',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Src write', true, 'set_udp_src'),
+        mkActionField('Dst write', true, 'set_udp_dst')
       ]
     }, {
       protocol: 'SCTP',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Src write', true, 'set_sctp_src'),
+        mkActionField('Dst write', true, 'set_sctp_dst')
       ]
     }];
     this.write = [{
       protocol: 'Internal',
       fields: [
-        mkActionField('Output', true),
-        mkActionField('Drop', true),
-        mkActionField('Set Group', true),
-        mkActionField('Set Queue', true)
+        mkActionField('Output', true, 'forward'),
+        mkActionField('Drop', true, 'drop'),
+        mkActionField('Set Group', true, 'set_group'),
+        mkActionField('Set Queue', true, 'set_queue')
       ]
     }, {
       protocol: 'Ethernet',
         fields: [
-          mkActionField('Src write', true),
-          mkActionField('Dst write', true),
-          mkActionField('Typelen write', true)
+          mkActionField('Src write', true, 'set_eth_src'),
+          mkActionField('Dst write', true, 'set_eth_dst'),
+          mkActionField('Typelen write', true, 'set_eth_type')
         ]
     }, {
     protocol: 'ARP',
       fields: [
-        mkActionField('Opcode write', true),
-        mkActionField('SHA write', true),
-        mkActionField('SPA write', true),
-        mkActionField('THA write', true),
-        mkActionField('TPA write', true)
+        mkActionField('Opcode write', true, 'set_arp_op'),
+        mkActionField('SHA write', true, 'set_arp_sha'),
+        mkActionField('SPA write', true, 'set_arp_spa'),
+        mkActionField('THA write', true, 'set_arp_tha'),
+        mkActionField('TPA write', true, 'set_arp_tpa')
       ]
     }, {
       protocol: 'MPLS',
       fields: [
-        mkActionField('Label write', true),
-        mkActionField('TC write', true),
-        mkActionField('BOS write', true),
-        mkActionField('Set TTL', true),
-        mkActionField('Dec TTL', true),
-        mkActionField('Push Tag', true),
-        mkActionField('Pop Tag', true)
+        mkActionField('Label write', true, 'set_mpls_label'),
+        mkActionField('TC write', true, 'set_mpls_tc'),
+        mkActionField('BOS write', true, 'set_mpls_bos'),
+        mkActionField('Set TTL', true, 'set_mpls_ttl'),
+        mkActionField('Dec TTL', true, 'dec_mpls_ttl'),
+        mkActionField('Push Tag', true, 'push_mpls'),
+        mkActionField('Pop Tag', true, 'pop_mpls')
       ]
     }, {
       protocol: 'VLAN',
       fields: [
-        mkActionField('PCP write', true),
-        mkActionField('DEI write', true),
-        mkActionField('VID write', true),
-        mkActionField('Push tag', true),
-        mkActionField('Pop tag', true)
+        mkActionField('PCP write', true, 'set_vlan_pcp'),
+        mkActionField('DEI write', true, 'set_vlan_dei'),
+        mkActionField('VID write', true, 'set_vlan_vid'),
+        mkActionField('Push tag', true, 'push_vlan'),
+        mkActionField('Pop tag', true, 'pop_vlan')
       ]
     }, {
       protocol: 'IPv4',
       fields: [
-        mkActionField('DSCP write', true),
-        mkActionField('ECN write', true),
-        mkActionField('Proto write', true),
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true),
-        mkActionField('Set TTL', true),
-        mkActionField('Dec TTL', true)
+        mkActionField('DSCP write', true, 'set_ip_dscp'),
+        mkActionField('ECN write', true, 'set_ip_ecn'),
+        mkActionField('Proto write', true, 'set_ip_proto'),
+        mkActionField('Src write', true, 'set_ipv4_src'),
+        mkActionField('Dst write', true, 'set_ipv4_dst'),
+        mkActionField('Set TTL', true, 'set_nw_ttl'),
+        mkActionField('Dec TTL', true, 'dec_nw_ttl')
       ]
     }, {
       protocol: 'IPv6',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true),
-        mkActionField('FLabel write', true)
+        mkActionField('Src write', true, 'set_ipv6_src'),
+        mkActionField('Dst write', true, 'set_ipv6_dst'),
+        mkActionField('FLabel write', true, 'set_ipv6_flabel')
       ]
     }, {
       protocol: 'ICMPv4',
       fields: [
-        mkActionField('Type write', true),
-        mkActionField('Code write', true)
+        mkActionField('Type write', true, 'set_icmpv4_type'),
+        mkActionField('Code write', true, 'set_icmpv4_code')
       ]
     }, {
       protocol: 'ICMPv6',
       fields: [
-        mkActionField('Type write', true),
-        mkActionField('Code write', true)
+        mkActionField('Type write', true, 'set_icmpv6_type'),
+        mkActionField('Code write', true, 'set_icmpv6_code')
       ]
     }, {
       protocol: 'TCP',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Src write', true, 'set_tcp_src'),
+        mkActionField('Dst write', true, 'set_tcp_dst')
       ]
     }, {
       protocol: 'UDP',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Src write', true, 'set_udp_src'),
+        mkActionField('Dst write', true, 'set_udp_dst')
       ]
     }, {
       protocol: 'SCTP',
       fields: [
-        mkActionField('Src write', true),
-        mkActionField('Dst write', true)
+        mkActionField('Src write', true, 'set_sctp_src'),
+        mkActionField('Dst write', true, 'set_sctp_dst')
       ]
     }];
     this.metadata = '0xffffffffffffffff';
@@ -517,6 +518,230 @@ Capabilities.prototype.openflow_1_0 = function() {
 }
 
 Capabilities.prototype.openflow_1_1 = function() {
+  var i,j,k;
+  for (i = 0; i < this.n_tables; i++) {
+    var match = this.tables[i].match;
+    var inst = this.tables[i].instruction;
+    var miss = this.tables[i].miss;
+    for (j = 0; j < match.fields.length; j++) {
+      var item = match.fields[j];
+      switch (item.key) {
+      case 'in_port':
+      case 'eth_typelen':
+      case 'vlan_pcp':
+      case 'vlan_vid':
+      case 'mpls_label':
+      case 'mpls_tc':
+      case 'ipv4_dscp':
+      case 'ipv4_proto':
+      case 'icmpv4_type':
+      case 'icmpv4_code':
+      case 'tcp_src':
+      case 'tcp_dst':
+      case 'udp_src':
+      case 'udp_dst':
+      case 'sctp_src':
+      case 'sctp_dst':
+        item.enabled = true;
+        item.wildcardable = true;
+        item.maskable = false;
+        break;
+      case 'eth_src':
+      case 'eth_dst':
+      case 'ipv4_src':
+      case 'ipv4_dst':
+        item.enabled = true;
+        item.wildcardable = true;
+        item.maskable = true;
+        break;
+      default:
+        item.enabled = false;
+      }
+    }
+
+    inst.caps = {
+      apply    : true,
+      clear    : true,
+      write    : true,
+      metadata : true,
+      meter    : false,
+      goto_    : true
+    };
+
+    for (j = 0; j < inst.apply.length; j++) {
+      for (k = 0; k < inst.apply[j].fields.length; k++) {
+        var act = inst.apply[j].fields[k];
+        switch (act.key) {
+        case 'drop':
+        case 'forward':
+        case 'copy_ttl_out':
+        case 'copy_ttl_in':
+        case 'set_mpls_ttl':
+        case 'dec_mpls_ttl':
+        case 'pop_vlan':
+        case 'push_vlan':
+        case 'push_mpls':
+        case 'pop_mpls':
+        case 'set_queue':
+        case 'set_group':
+        case 'set_nw_ttl':
+        case 'dec_nw_ttl':
+        case 'set_eth_src':
+        case 'set_eth_dst':
+        case 'set_vlan_vid':
+        case 'set_vlan_pcp':
+        case 'set_ip_ecn':
+        case 'set_ipv4_src':
+        case 'set_ipv4_dst':
+        case 'set_nw_tos':
+        case 'set_udp_src':
+        case 'set_udp_dst':
+        case 'set_tcp_src':
+        case 'set_tcp_dst':
+        case 'set_sctp_src':
+        case 'set_sctp_dst':
+        case 'set_mpls_label':
+        case 'set_mpls_tc':
+          act.value = true;
+          break;
+        default:
+          act.value = false;
+        }
+      }
+
+      for (k = 0; k < inst.write[j].fields.length; k++) {
+        var act = inst.write[j].fields[k];
+        switch (act.key) {
+        case 'drop':
+        case 'forward':
+        case 'copy_ttl_out':
+        case 'copy_ttl_in':
+        case 'set_mpls_ttl':
+        case 'dec_mpls_ttl':
+        case 'pop_vlan':
+        case 'push_vlan':
+        case 'push_mpls':
+        case 'pop_mpls':
+        case 'set_queue':
+        case 'set_group':
+        case 'set_nw_ttl':
+        case 'dec_nw_ttl':
+        case 'set_eth_src':
+        case 'set_eth_dst':
+        case 'set_vlan_vid':
+        case 'set_vlan_pcp':
+        case 'set_ip_ecn':
+        case 'set_ipv4_src':
+        case 'set_ipv4_dst':
+        case 'set_nw_tos':
+        case 'set_udp_src':
+        case 'set_udp_dst':
+        case 'set_tcp_src':
+        case 'set_tcp_dst':
+        case 'set_sctp_src':
+        case 'set_sctp_dst':
+        case 'set_mpls_label':
+        case 'set_mpls_tc':
+          act.value = true;
+          break;
+        default:
+          act.value = false;
+        }
+      }
+    }
+
+    miss.caps = {
+      apply    : true,
+      clear    : true,
+      write    : true,
+      metadata : true,
+      meter    : false,
+      goto_    : true
+    };
+
+    for (j = 0; j < miss.apply.length; j++) {
+      for (k = 0; k < miss.apply[j].fields.length; k++) {
+        var act = miss.apply[j].fields[k];
+        switch (act.key) {
+        case 'drop':
+        case 'forward':
+        case 'copy_ttl_out':
+        case 'copy_ttl_in':
+        case 'set_mpls_ttl':
+        case 'dec_mpls_ttl':
+        case 'pop_vlan':
+        case 'push_vlan':
+        case 'push_mpls':
+        case 'pop_mpls':
+        case 'set_queue':
+        case 'set_group':
+        case 'set_nw_ttl':
+        case 'dec_nw_ttl':
+        case 'set_eth_src':
+        case 'set_eth_dst':
+        case 'set_vlan_vid':
+        case 'set_vlan_pcp':
+        case 'set_ip_ecn':
+        case 'set_ipv4_src':
+        case 'set_ipv4_dst':
+        case 'set_nw_tos':
+        case 'set_udp_src':
+        case 'set_udp_dst':
+        case 'set_tcp_src':
+        case 'set_tcp_dst':
+        case 'set_sctp_src':
+        case 'set_sctp_dst':
+        case 'set_mpls_label':
+        case 'set_mpls_tc':
+          act.value = true;
+          break;
+        default:
+          act.value = false;
+        }
+      }
+
+      for (k = 0; k < miss.write[j].fields.length; k++) {
+        var act = miss.write[j].fields[k];
+        switch (act.key) {
+        case 'drop':
+        case 'forward':
+        case 'copy_ttl_out':
+        case 'copy_ttl_in':
+        case 'set_mpls_ttl':
+        case 'dec_mpls_ttl':
+        case 'pop_vlan':
+        case 'push_vlan':
+        case 'push_mpls':
+        case 'pop_mpls':
+        case 'set_queue':
+        case 'set_group':
+        case 'set_nw_ttl':
+        case 'dec_nw_ttl':
+        case 'set_eth_src':
+        case 'set_eth_dst':
+        case 'set_vlan_vid':
+        case 'set_vlan_pcp':
+        case 'set_ip_ecn':
+        case 'set_ipv4_src':
+        case 'set_ipv4_dst':
+        case 'set_nw_tos':
+        case 'set_udp_src':
+        case 'set_udp_dst':
+        case 'set_tcp_src':
+        case 'set_tcp_dst':
+        case 'set_sctp_src':
+        case 'set_sctp_dst':
+        case 'set_mpls_label':
+        case 'set_mpls_tc':
+          act.value = true;
+          break;
+        default:
+          act.value = false;
+        }
+      }
+    }
+
+  }
 }
 
 Capabilities.prototype.openflow_1_2 = function() {
