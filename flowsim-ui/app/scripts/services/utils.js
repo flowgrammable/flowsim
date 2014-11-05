@@ -6,7 +6,7 @@ angular.module('flowsimUiApp')
 
 function padZeros(input, len) {
   len -= input.length;
-  return _.map(_.range(len), function(i) { return '0'; }).join() + input;
+  return _.map(_.range(len), function() { return '0'; }).join() + input;
 }
 
 var HexPattern = /^(0x)?[0-9a-fA-F]+$/;
@@ -18,12 +18,12 @@ function inRange(min, max) {
 }
 
 function howManyBits(val) {
-  if(val === 0) return 1;
+  if(val === 0) { return 1; }
   return Math.floor((Math.log(val) / Math.LN2) + 1);
 }
 
 function howManyBytes(val) {
-  if(val === 0) return 1;
+  if(val === 0) { return 1; }
   return Math.ceil(howManyBits(val) / 8);
 }
 
@@ -35,6 +35,7 @@ function maxFromBytes(val) {
   return Math.ceil(maxFromBits(8*val));
 }
 
+/*
 function parseUInt(floor, ceil) {
   return function(value) {
     var tmp;
@@ -49,9 +50,10 @@ function parseUInt(floor, ceil) {
     return null;
   };
 } 
+*/
 
 function UInt(value, bits, min, max) {
-  if(typeof value === 'number') {
+  if(typeof value === 'number' && value === parseInt(value)) {
     this.value = value;
   } else if(typeof value === 'string' && HexPattern.test(value)) {
     this.value = parseInt(value);
@@ -61,9 +63,9 @@ function UInt(value, bits, min, max) {
     throw 'UInt(' + value + ')';
   }
   this.bits = bits ? bits : howManyBits(value);
-  this.bytes = Match.ceil(this.bits / 8);
+  this.bytes = Math.ceil(this.bits / 8);
   this.min = min ? min : 0;
-  this.max = max ? max : this.bytes
+  this.max = max ? max : this.bytes;
   if(min) {
     if(min > this.value) {
       throw 'UInt(' + this.value + ') | >= ' + min;
@@ -80,7 +82,7 @@ UInt.Match = function(value, mask) {
 };
 
 UInt.Match.prototype.match = function(value) {
-  return (this.mask & value) == this.value;
+  return (this.mask & value) === this.value;
 };
   
 UInt.Match.prototype.toString = function() {
@@ -93,7 +95,21 @@ UInt.prototype.toString = function(val) {
            this.value.toString(16);
   }
   return this.value.toString();
-}
+};
+
+UInt.is = function(bits) {
+  return function(val) {
+    var tmp;
+    if(typeof val === 'number') {
+      return val === parseInt(val) && (0 <= val && val <= maxFromBits(bits));
+    } else if(typeof val === 'string' && HexPattern.test(val)) {
+      tmp = parseInt(val);
+      return 0 <= val && val <= maxFromBits(bits);
+    } else {
+      return false;
+    }
+  };
+};
 
 return {
   padZeros: padZeros,
@@ -102,7 +118,7 @@ return {
   howManyBytes: howManyBytes,
   maxFromBits: maxFromBits,
   maxFromBytes: maxFromBytes,
-  UInt: UInt
+  UInt: UInt,
 };
 
 });
