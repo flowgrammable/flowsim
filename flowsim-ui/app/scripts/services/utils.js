@@ -64,6 +64,9 @@ function UInt(value, bits, min, max) {
   }
   this.bits = bits ? bits : howManyBits(value);
   this.bytes = Math.ceil(this.bits / 8);
+  if(howManyBits(this.value) > this.bits) {
+    throw 'UInt(' + this.value + ') : bits > ' + this.bits;
+  }
   this.min = min ? min : 0;
   this.max = max ? max : this.bytes;
   if(min) {

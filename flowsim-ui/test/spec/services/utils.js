@@ -42,7 +42,7 @@ describe('Service: Utils', function () {
     });
   });
 
-  if('UInt construction, UInt.Match.match', function() {
+  it('UInt construction, UInt.Match.match', function() {
 
     var type_ip = new Utils.UInt(0x0800);
     var type_arp = new Utils.UInt(0x0806);
@@ -53,6 +53,18 @@ describe('Service: Utils', function () {
     var def    = new Utils.UInt.Match(0, 0);
     var prefix = new Utils.UInt.Match(0xa010102, 0xffffff00);
 
+  });
+
+  it('UInt(0x1ffff, 16) should fail', function() {
+    expect(function() {
+      new Utils.UInt(0x1ffff, 16)
+    }).toThrow();
+  });
+  
+  it('UInt("0x1ffff", 16) should fail', function() {
+    expect(function() {
+      new Utils.UInt('0x1ffff', 16)
+    }).toThrow();
   });
 
 });
