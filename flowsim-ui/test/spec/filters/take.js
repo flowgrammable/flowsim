@@ -8,7 +8,7 @@ describe('Filter: take', function () {
   // initialize a new instance of the filter before each test
   var take;
   beforeEach(inject(function ($filter) {
-    take = $filter('Take');
+    take = $filter('takeObject');
   }));
 
   it('should return the input prefixed with "take filter:"', function () {
