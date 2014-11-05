@@ -513,6 +513,7 @@ Capabilities.prototype.openflow_1_1 = function() {
   for (i = 0; i < this.n_tables; i++) {
     var match = this.tables[i].match;
     var inst = this.tables[i].instruction;
+    var miss = this.tables[i].miss;
     for (j = 0; j < match.fields.length; j++) {
       var item = match.fields[j];
       switch (item.key) {
@@ -639,6 +640,98 @@ Capabilities.prototype.openflow_1_1 = function() {
         }
       }
     }
+
+    miss.caps = {
+      apply    : true,
+      clear    : true,
+      write    : true,
+      metadata : true,
+      meter    : false,
+      goto_    : true
+    };
+
+    for (j = 0; j < miss.apply.length; j++) {
+      for (k = 0; k < miss.apply[j].fields.length; k++) {
+        var act = miss.apply[j].fields[k];
+        switch (act.key) {
+        case 'drop':
+        case 'forward':
+        case 'copy_ttl_out':
+        case 'copy_ttl_in':
+        case 'set_mpls_ttl':
+        case 'dec_mpls_ttl':
+        case 'pop_vlan':
+        case 'push_vlan':
+        case 'push_mpls':
+        case 'pop_mpls':
+        case 'set_queue':
+        case 'set_group':
+        case 'set_nw_ttl':
+        case 'dec_nw_ttl':
+        case 'set_eth_src':
+        case 'set_eth_dst':
+        case 'set_vlan_vid':
+        case 'set_vlan_pcp':
+        case 'set_ip_ecn':
+        case 'set_ipv4_src':
+        case 'set_ipv4_dst':
+        case 'set_nw_tos':
+        case 'set_udp_src':
+        case 'set_udp_dst':
+        case 'set_tcp_src':
+        case 'set_tcp_dst':
+        case 'set_sctp_src':
+        case 'set_sctp_dst':
+        case 'set_mpls_label':
+        case 'set_mpls_tc':
+          act.value = true;
+          break;
+        default:
+          act.value = false;
+        }
+      }
+
+      for (k = 0; k < miss.write[j].fields.length; k++) {
+        var act = miss.write[j].fields[k];
+        switch (act.key) {
+        case 'drop':
+        case 'forward':
+        case 'copy_ttl_out':
+        case 'copy_ttl_in':
+        case 'set_mpls_ttl':
+        case 'dec_mpls_ttl':
+        case 'pop_vlan':
+        case 'push_vlan':
+        case 'push_mpls':
+        case 'pop_mpls':
+        case 'set_queue':
+        case 'set_group':
+        case 'set_nw_ttl':
+        case 'dec_nw_ttl':
+        case 'set_eth_src':
+        case 'set_eth_dst':
+        case 'set_vlan_vid':
+        case 'set_vlan_pcp':
+        case 'set_ip_ecn':
+        case 'set_ipv4_src':
+        case 'set_ipv4_dst':
+        case 'set_nw_tos':
+        case 'set_udp_src':
+        case 'set_udp_dst':
+        case 'set_tcp_src':
+        case 'set_tcp_dst':
+        case 'set_sctp_src':
+        case 'set_sctp_dst':
+        case 'set_mpls_label':
+        case 'set_mpls_tc':
+          act.value = true;
+          break;
+        default:
+          act.value = false;
+        }
+      }
+    }
+
   }
 }
 
