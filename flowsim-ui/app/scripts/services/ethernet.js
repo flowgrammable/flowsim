@@ -19,43 +19,43 @@ var Payloads = {
 function Ethernet(eth, src, dst, typelen) {
   if(eth instanceof Ethernet) {
     this.name    = eth.name;
-    this.src     = new Ethernet.MAC(eth.src);
-    this.dst     = new Ethernet.MAC(eth.dst);
-    this.typelen = new Utils.UInt(eth.typelen);
+    this._src     = new Ethernet.MAC(eth._src);
+    this._dst     = new Ethernet.MAC(eth._dst);
+    this._typelen = new Utils.UInt(eth._typelen);
   } else if(eth instanceof Ethernet_UI) {
     this.name    = eth.name;
-    this.src     = new Ethernet.MAC(eth.attrs[0].value);
-    this.dst     = new Ethernet.MAC(eth.attrs[1].value);
-    this.typelen = new Utils.UInt(eth.attrs[2].value, 16);
+    this._src     = new Ethernet.MAC(eth.attrs[0].value);
+    this._dst     = new Ethernet.MAC(eth.attrs[1].value);
+    this._typelen = new Utils.UInt(eth.attrs[2].value, 16);
   } else if(typeof eth === 'string') {
     this.name    = eth;
-    this.src     = new Ethernet.MAC(src);
-    this.dst     = new Ethernet.MAC(dst);
-    this.typelen = new Utils.UInt(typelen, 16);
+    this._src     = new Ethernet.MAC(src);
+    this._dst     = new Ethernet.MAC(dst);
+    this._typelen = new Utils.UInt(typelen, 16);
   }
 }
 
 Ethernet.prototype.src = function(src) {
   if(src) {
-    this.src = new Ethernet.MAC(src);
+    this._src = new Ethernet.MAC(src);
   } else {
-    return this.src;
+    return this._src;
   }
 };
 
-Ethernet.prototype.src = function(dst) {
+Ethernet.prototype.dst = function(dst) {
   if(dst) {
-    this.dst = new Ethernet.MAC(dst);
+    this._dst = new Ethernet.MAC(dst);
   } else {
-    return this.dst;
+    return this._dst;
   }
 };
 
-Ethernet.prototype.src = function(typelen) {
+Ethernet.prototype.typelen = function(typelen) {
   if(typelen) {
-    this.typelen = new Utils.UInt(typelen, 16);
+    this._typelen = new Utils.UInt(typelen, 16);
   } else {
-    return this.typelen;
+    return this._typelen;
   }
 };
 
@@ -81,8 +81,7 @@ Ethernet.MAC = function(mac) {
       return parseInt('0x'+tmp[2*i+1]);
     });
   } else if(mac instanceof Ethernet.MAC) {
-    console.log('instance: '+mac.toString());
-    this.value = _.clone(mac);
+    this.value = _.clone(mac.value);
   } else if(mac === undefined) {
     this.value = [0, 0, 0, 0, 0, 0];
   } else {
@@ -129,17 +128,7 @@ Ethernet.MAC.Match = function(addr, mask) {
 
 Ethernet.MAC.Match.prototype.match = function(addr) {
   var i;
-  console.log(this.addr.toString());
-  console.log(this.mask.toString());
-  console.log(addr.toString());
   for(i=0; i<6; ++i) {
-    console.log('i='+i);
-    console.log('typeof(this.addr.value[i]: '+ typeof(this.addr.value[i]));
-    console.log('%s !== %s & %s = %s', 
-      this.addr.value[i].toString(16), 
-      this.mask.value[i].toString(16), 
-      addr.value[i].toString(16), 
-      (this.addr.value[i] !== (this.mask.value[i] & addr.value[i])).toString(16));
     if(this.addr.value[i] !== (this.mask.value[i] & addr.value[i])) {
       return false;
     } 

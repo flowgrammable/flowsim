@@ -138,6 +138,35 @@ describe('Service: ETHERNET', function () {
     expect(bfm.equal(ufs)).toBe(false);
     expect(ufm.equal(bfs)).toBe(false);
   });
+
+  it('MAC Match Multi', function() {
+    expect(!!ETHERNET).toBe(true);
+
+    var match1 = new ETHERNET.Ethernet.MAC.Match(
+      '00:00:00:00:00:00',
+      new ETHERNET.Ethernet.MAC(
+        '00:00:00:00:00:00'
+        )
+      );
+
+    var match2 = new ETHERNET.Ethernet.MAC.Match(
+      new ETHERNET.Ethernet.MAC('00:00:00:00:00:00'),
+      '00:00:00:00:00:00'
+      );
+
+    var match3 = new ETHERNET.Ethernet.MAC.Match(
+      '00:00:00:00:00:00', '00:00:00:00:00:00');
+
+    var match4 = new ETHERNET.Ethernet.MAC.Match(
+      new ETHERNET.Ethernet.MAC('00:00:00:00:00:00'),
+      new ETHERNET.Ethernet.MAC('00:00:00:00:00:00')
+    );
+
+    expect(match1.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
+    expect(match2.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
+    expect(match3.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
+    expect(match4.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
+  });
     
   it('MAC Match Pass', function() {
     expect(!!ETHERNET).toBe(true);
@@ -153,12 +182,7 @@ describe('Service: ETHERNET', function () {
       '01:00:00:00:00:00', '01:00:00:00:00:00'
       );
 
-
     var exact = new ETHERNET.Ethernet.MAC.Match(u, b);
-
-    //console.log(exact.match(u));
-    //console.log(exact.match(b));
-    //console.log(exact.match(m));
 
     expect(every.match(u)).toBe(true);
     expect(every.match(b)).toBe(true);
@@ -168,22 +192,30 @@ describe('Service: ETHERNET', function () {
     expect(multi.match(b)).toBe(true);
     expect(multi.match(m)).toBe(true);
 
-    /*
-
     expect(exact.match(u)).toBe(true);
     expect(exact.match(b)).toBe(false);
     expect(exact.match(m)).toBe(false);
 
-    */
-
-  });
-
-  it('Ethernet Match Fail', function() {
-    expect(!!ETHERNET).toBe(true);
   });
 
   it('Ethernet Set Field Pass', function() {
     expect(!!ETHERNET).toBe(true);
+
+    var dhcp_disco = new ETHERNET.Ethernet(
+      'dhcp_disco',
+      '00:00:00:00:00:00',
+      'ff:ff:ff:ff:ff:ff',
+      '0x0806'
+      );
+
+    dhcp_disco.dst('00:11:22:33:44:55');
+    expect(dhcp_disco.dst().toString()).toBe('00:11:22:33:44:55');
+    
+    dhcp_disco.src('10:11:22:33:44:55');
+    expect(dhcp_disco.src().toString()).toBe('10:11:22:33:44:55');
+    
+    dhcp_disco.typelen('0x800');
+    expect(dhcp_disco.typelen().toString(16)).toBe('0x0800');
   });
 
   it('Ethernet Set Field Fail', function() {
