@@ -1,5 +1,58 @@
 
-<div class="row text-center">
-  <img src="images/switch.png" alt="Responsive image">
-</div>
+<h3>Switch</h3>
+<switch-view data="switch_.ports"></switch-view>
+<br>
+
+<h3>Port Properties</h3>
+<hr>
+
+<table class="table table-striped">
+  <thead>
+    <th>Id</td>
+    <th>Address</th>
+    <th>Name</th>
+    <th>Speed</th>
+    <th>Mode</th>
+    <th>Medium</th>
+  </thead>
+  <tbody>
+  <tr ng-repeat="port in profile.ports.ports">
+    <td>{{$index}}</td>
+    <td>
+      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.mac(port.mac)}">
+      <input class="form-control" type="text" ng-model="port.mac"
+             tooltip="{{tips.Ports.Port.mac}}">
+           </div>
+    </td>
+    <td>
+      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.name(port.name)}">
+      <input class="form-control" type="text" ng-model="port.name"
+             tooltip="{{tips.Ports.Port.name}}">
+      </div>
+    </td>
+    <td>
+      <select class="form-control" tooltip="{{tips.Ports.Port.speed}}" i
+              ng-model="port.speed" 
+              ng-options="speed.value as speed.label for speed in speeds |
+              fgSelect: profile.ports.speeds">
+      </select>
+    </td>
+    <td>
+      <select class="form-control" tooltip="{{tips.Ports.Port.mode}}" 
+              ng-model="port.mode"
+              ng-options="mode.value as mode.label for mode in modes |
+              fgSelect: profile.ports.modes">
+      </select>
+    </td>
+    <td>
+      <select class="form-control" tooltip="{{tips.Ports.Port.medium}}" 
+              ng-model="port.medium"
+              ng-options="medium as medium for medium in mediums | 
+              fgSelect: profile.ports.mediums">
+      </select>
+    </td>
+
+  </tr>
+  </tbody>
+</table>
 

@@ -1,1 +1,105 @@
-<p>This is the switch/datapath view.</p>
+
+<br>
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-1">
+
+    <div class="form-group">
+      <div class="input-group"
+           ng-class="{'has-error':
+                      !tests.Datapath.datapath_id(profile.datapath.datapath_id)}">
+        <div class="input-group-addon" style="width:110px"
+              tooltip="{{tips.Datapath.datapath_id}}">
+          Datapath ID
+        </div>
+        <input class="form-control" type="text" style="width:200px"
+               ng-model="profile.datapath.datapath_id">
+      </div>
+    </div>
+    <div class="checkbox">
+      <label tooltip="{{tips.Datapath.ip_reassembly}}">
+        <input type="checkbox" ng-model="profile.datapath.ip_reassembly">
+          IP Reassembly
+      </label>
+    </div>
+    <div class="form-group"
+          ng-class="{'has-error':
+                     !tests.Datapath.n_buffers(profile.datapath.n_buffers)}">
+      <div class="input-group">
+        <div class="input-group-addon" style="width:110px"
+             tooltip="{{tips.Datapath.n_buffers}}">
+          Buffer Count
+        </div>
+        <input class="form-control" type="text" style="width:200px"
+               ng-model="profile.datapath.n_buffers">
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+
+    <div class="form-group">
+      <div class="input-group"
+            ng-class="{'has-error':
+            !tests.Datapath.mfr_description(profile.datapath.mfr_description)}">
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.Datapath.mfr_description}}">
+          Manufacturer description
+        </div>
+        <textarea class="form-control" rows="3" style="width:300px"
+                  ng-model="profile.datapath.mfr_description"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group"
+           ng-class="{'has-error':
+            !tests.Datapath.hw_description(profile.datapath.hw_description)}">
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.Datapath.hw_description}}">
+          Hardware description
+        </div>
+        <textarea class="form-control" rows="3" style="width:300px"
+                  ng-model="profile.datapath.hw_description"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group"
+            ng-class="{'has-error':
+            !tests.Datapath.sw_description(profile.datapath.sw_description)}">
+        <div class="input-group-addon" style="width:200px"
+          tooltip="{{tips.Datapath.sw_description}}">
+          Software description</div>
+        <textarea class="form-control" rows="3" style="width:300px"
+                  ng-model="profile.datapath.sw_description"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group"
+            ng-class="{'has-error':
+            !tests.Datapath.serial_num(profile.datapath.serial_num)}">
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.Datapath.serial_num}}">
+          Serial Number</div>
+        <input class="form-control" type="text" style="width:300px"
+               ng-model="profile.datapath.serial_num">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="input-group"
+            ng-class="{'has-error':
+            !tests.Datapath.dp_description(profile.datapath.dp_description)}">
+        <div class="input-group-addon" style="width:200px"
+             tooltip="{{tips.Datapath.dp_description}}">
+          Dataplane description
+        </div>
+        <textarea class="form-control" rows="3" style="width:300px"
+                  ng-model="profile.datapath.dp_description"></textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
