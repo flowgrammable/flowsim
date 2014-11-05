@@ -458,7 +458,7 @@ Table.Configuration = function(table) {
   } else {
     _.extend(this, table);
     if(table.stats) {
-      this.stats = new Table.Stats(table.stats;
+      this.stats = new Table.Stats(table.stats);
     }
   }
 };
