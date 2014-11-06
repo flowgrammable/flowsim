@@ -9,10 +9,11 @@
  */
 angular.module('flowsimUiApp')
   .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace, 
-                                          Switch, Packet) {
+                                          Switch, Packet, Dataplane) {
 
     $scope.names = {};
     $scope.trace = null;
+    $scope.simulation = null;
 
     // grab the available switches
     $scope.switch_ = {
@@ -154,6 +155,9 @@ angular.module('flowsimUiApp')
       }
       $scope.active = true;
       $scope.stages[0].active = true;
+      $scope.simulation = new Dataplane.Dataplane($scope.trace, 
+        function(next, cur) {
+        });
     };
 
     $scope.stop = function() {
@@ -161,6 +165,7 @@ angular.module('flowsimUiApp')
         return;
       }
       $scope.active = false;
+      $scope.simulation = null;
     };
 
     $scope.step = function() {
@@ -175,6 +180,7 @@ angular.module('flowsimUiApp')
           return;
         }
       }
+      $scope.simluation.step();
     };
 
   });

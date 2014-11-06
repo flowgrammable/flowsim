@@ -58,11 +58,12 @@ Context.prototype.table = function(table) {
   }
 };
  
-function Dataplane(trace) {
+function Dataplane(trace, transCallback) {
   this.trace = trace;
   this.evId  = 0;
   this.ev    = trace.events[this.evId];
   this.stage = 'arrival';
+  this.transCallback = transCallback;
 
   this.ctx       = null;
   this.prevTbl   = -1;
@@ -154,36 +155,49 @@ Dataplane.prototype.step = function() {
       // need to implement packet buffer mechanism
       this.arrival(this.ev.packet, this.ev.in_port);
       this.stage = 'extraction';
+      this.transCallback(null, 0);
       break;
     case 'extraction':
       this.extraction();
       this.stage = 'choice';
+      this.transCallback(0, 1);
       break;
     case 'choice':
       this.table = this.tables[this.ctx.tableId];
+      if(stage === 'extraction') {
+        this.transCallback(1, 2);
+      } else {
+        this.transCallback(4, 2);
+      }
       this.stage = 'selection';
       break;
     case 'selection':
       this.flow = this.selection(this.table, this.ctx.key);
-      this.stage = 'instruction';
+      this.transCallback(2, 3);
+      this.tansition('instruction');
       break;
     case 'instruction':
       this.prevTbl = this.ctx.table;
       this.instruction(this.flow); 
+      this.transCallback(3, 4);
       if(this.hasImEgress()) {
         this.stage = 'egress';
       } else if(this.loop(this.ctx)) {
         this.stage = 'choice';
       } else {
-        this.stage = 'action';
+        this.stage ='action';
       }
       break;
     case 'action':
       this.action();
+      this.transCallback(4, null);
       this.ctx = null;
       this.stage = 'egress';
       break;
     case 'egress':
+      if(this.hasImEgress()) {
+        this.transCallback(4, 4);
+      }
       this.egress();
       if(!this.hasImEgress() && this.loop(this.ctx)) {
         this.stage = 'choice';
@@ -200,6 +214,7 @@ Dataplane.prototype.step = function() {
 };
 
 return {
+  Dataplane: Dataplane
 };
   
 });
