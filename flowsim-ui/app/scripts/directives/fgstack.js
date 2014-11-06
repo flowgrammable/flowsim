@@ -71,7 +71,7 @@ angular.module('flowsimUiApp')
       };
 
       $scope.calcPayloadBytes = function() {
-        if($scope.stack.slice(-1)[0].name === 'Payload'){
+        if($scope.stack && $scope.stack.slice(-1)[0].name === 'Payload'){
           val = parseInt($scope.stack.slice(-1)[0].attrs[0].value);
           if(isNaN(val)){
             $scope.stack.slice(-1)[0].bytes = 0;

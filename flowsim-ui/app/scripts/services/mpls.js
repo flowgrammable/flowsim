@@ -7,7 +7,6 @@ var NAME = 'MPLS';
 
 var Payloads = {
  'MPLS': 0x8847,
- 'ARP':  0x0806,
  'IPv4': 0x0800,
  'IPv6': 0x86dd,
  'Payload': 0

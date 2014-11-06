@@ -48,9 +48,7 @@ function mkActionField(name, value, key) {
 function Capabilities(groups) {
   if(groups) {
     _.extend(this, groups);
-    this.groups = _.map(groups.groups, function(port) {
-      return new Group.Capabilities(group);
-    });
+    this.actions = _.map(groups.actions, function(f) { return _.clone(f); });
   } else {
     // default constructor
     this.max_groups = defaultGroups;
@@ -62,11 +60,7 @@ function Capabilities(groups) {
     this.select_liveness = true;
     this.chaining = true;
     this.chaining_checks = true;
-    this.ref_count = true;
-    this.packet_count = true;
-    this.byte_count = true;
-    this.duration_sec = true;
-    this.duration_nsec = true;
+    this.stats = true;
     this.actions = [{
       protocol: 'Internal',
       fields: [

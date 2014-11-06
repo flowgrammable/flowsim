@@ -173,9 +173,13 @@ angular.module('flowsimUiApp')
     }
 
     $scope.$watch('profile', function(newValue, oldValue){
-      if($scope.profile && !newValue.dirty && oldValue && !oldValue.dirty){
-        $scope.profile.dirty = true;
-        $scope.setDirty();
+
+      if($scope.profile){ // watch for change if profile is loaded
+        if($scope.profile.dirty){
+          $scope.setDirty();
+        } else if(oldValue && !oldValue.dirty) { // if old value was clean, then set dirty
+          $scope.profile.dirty = true;
+        }
       }
     },true);
 

@@ -77,7 +77,6 @@ angular.module('flowsimUiApp')
       if(post[type][name]) {
         delete post[type][name];
       } else if(update[type][name]) {
-        //dirty = true;
         _delete[type][name] = update[type][name];
         delete update[type][name];
       }
@@ -109,17 +108,19 @@ angular.module('flowsimUiApp')
     }
 
     function save() {
-      //dirty = false;
       _.each(post, function(_post, type) {
         _.each(_post, function(value, key) {
+          // Set dirty to false before save
+          post[type][key].dirty = false;
           var obj = post[type][key].toBase();
             Subscriber.httpPost('/api/'+type+'/'+key, obj,
                                 function(err) {
               if(err) {
+                // in case save fails
+                post[type][key].dirty = true;
                 console.log(err.details);
               } else {
                 update[type][key] = post[type][key];
-                update[type][key].dirty = false;
                 delete post[type][key];
               }
             });
@@ -129,13 +130,14 @@ angular.module('flowsimUiApp')
         _.each(_update, function(value, key) {
           var obj;
           if(update[type][key].dirty) {
+            //set dirty to false before save
+            update[type][key].dirty = false;
             obj = update[type][key].toBase();
             Subscriber.httpUpdate('/api/'+type+'/'+key, obj,
                                   function(err) {
               if(err) {
-                console.log(err.details);
-              } else {
-                update[type][key].dirty = false;
+                // in case save fails
+                update[type][key].dirty = true;
               }
             });
           }

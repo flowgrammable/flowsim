@@ -89,13 +89,15 @@
         </div>
         <div class="checkbox-inline">
           <label tooltip="{{tips.Groups.chaining}}">
-            <input type="checkbox" ng-model="profile.groups.chaining">
+            <input type="checkbox" ng-model="profile.groups.chaining"
+              ng-disabled="!profile.groups.fastfailover">
             Chaining
           </label>
         </div>
         <div class="checkbox-inline">
           <label tooltip="{{tips.Groups.chaining_checks}}">
-            <input type="checkbox" ng-model="profile.groups.chaining_checks">
+            <input type="checkbox" ng-model="profile.groups.chaining_checks"
+               ng-disabled="!profile.groups.fastfailover">
             Chaining Checks
           </label>
         </div>
