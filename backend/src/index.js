@@ -16,6 +16,7 @@ var sub = require('./subscriber');
 var pac = require('./packet');
 var pro = require('./profile');
 var swi = require('./switch');
+var tra = require('./trace');
 var log = require('./logger');
 
 // Process the command line
@@ -67,6 +68,12 @@ var mods = [
     logger: logger
   }),
   new swi.Switch({
+    configuration: config,
+    database: db,
+    server: restServer,
+    logger: logger
+  }),
+  new tra.Trace({
     configuration: config,
     database: db,
     server: restServer,

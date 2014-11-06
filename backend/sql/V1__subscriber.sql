@@ -50,11 +50,21 @@ CREATE TABLE profile
 );
 
 -- create the primary switch table
-CREATE TABLE switch 
+CREATE TABLE switch
 (
   id SERIAL PRIMARY KEY,                        -- internal id uses for sub
   subscriber_id INTEGER references subscriber(id) NOT NULL, -- ref to sub
   name VARCHAR(60) NOT NULL,                                -- switch name
-  _switch JSON NOT NULL,                                    -- switch 
+  _switch JSON NOT NULL,                                    -- switch
+  unique(subscriber_id, name)                              -- name unique to sub
+);
+
+-- create the primary trace table
+CREATE TABLE trace
+(
+  id SERIAL PRIMARY KEY,                        -- internal id uses for sub
+  subscriber_id INTEGER references subscriber(id) NOT NULL, -- ref to sub
+  name VARCHAR(60) NOT NULL,                                -- trace name
+  trace JSON NOT NULL,                                    -- trace
   unique(subscriber_id, name)                              -- name unique to sub
 );
