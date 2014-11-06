@@ -17,6 +17,7 @@ var Payloads = {
 };
 
 function Ethernet(eth, src, dst, typelen) {
+  this.bytes = 14;
   if(eth instanceof Ethernet) {
     this.name    = eth.name;
     this._src     = new Ethernet.MAC(eth._src);
@@ -147,41 +148,25 @@ Ethernet.TESTS = {
 };
 
 function Ethernet_UI(eth) {
-  eth = eth === undefined ? new Ethernet() : eth;
+  eth = eth === undefined ? new Ethernet(NAME) : eth;
   this.name = NAME;
   this.bytes = eth.bytes;
-  this.attrs = _.map(eth.fields, function(value, key) {
-    switch(key) {
-      case 'src':
-        return {
-          name: key,
-          value: value,
-          test: Ethernet.MAC.is,
-          tip: 'Ethernet source MAC address'
-        };
-      case 'dst':
-        return {
-          name: key,
-          value: value,
-          test: Ethernet.MAC.is,
-          tip: 'Ethernet destination MAC address'
-        };
-      case 'typelen':
-        return {
-          name: key,
-          value: value.toString(16),
-          test: fgConstraints.isUInt(0, 0xffff),
-          tip: 'Ethernet type/length of payload'
-        };
-      default:
-        return {
-          name: key,
-          value: value,
-          test: function() { return true; },
-          tip: 'Unknown'
-        };
-    }
-  });
+  this.attrs = [{
+    name: 'Src',
+    value: eth.src().toString(),
+    test: Ethernet.MAC.is,
+    tip: Ethernet.TIPS.src
+  }, {
+    name: 'Dst',
+    value: eth.dst().toString(),
+    test: Ethernet.MAC.is,
+    tip: Ethernet.TIPS.dst
+  }, {
+    name: 'Type/Length',
+    value: eth.typelen().toString(),
+    test: Utils.UInt.is(16),
+    tip: Ethernet.TIPS.typelen
+  }];
 }
 
 Ethernet_UI.prototype.toBase = function() {

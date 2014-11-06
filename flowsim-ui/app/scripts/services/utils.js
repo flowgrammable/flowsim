@@ -57,6 +57,12 @@ function UInt(value, bits, min, max) {
     this.bytes = value.bytes;
     this.min   = value.min;
     this.max   = value.max;
+  } else if(value === undefined && bits) {
+    this.value = 0;
+    this.bits = bits;
+    this.bytes = Math.ceil(this.bits / 8);
+    this.min = min ? min : 0;
+    this.max = max ? max : this.bytes;
   } else {
     throw 'UInt(' + value + ')';
   }
