@@ -167,6 +167,10 @@ describe('Service: ETHERNET', function () {
     expect(match3.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
     expect(match4.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
   });
+
+  it('Ethernet Save', function() {
+    var dhcp_disco = new ETHERNET.Ethernet('dhcp_disco');
+  });
     
   it('MAC Match Pass', function() {
     expect(!!ETHERNET).toBe(true);
