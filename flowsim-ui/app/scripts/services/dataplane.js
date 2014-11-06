@@ -8,45 +8,27 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4, 
-                                 ICMPV6, SCTP, TCP, UDP, Action, Instruction) {
-
-function Key(key) {
-  if(key) {
-    _.extend(this, key);
-    this.vlan = _.map(key.vlan, function(vlan) { return new VLAN(vlan); });
-    this.mpls = _.map(key.vlan, function(vlan) { return new MPLS(vlan); });
-  } else {
-    this.in_port = null;
-    this.vlan = [];
-    this.mpls = [];
-  }
-}
+  .factory('Dataplane', function(Extraction, Instruction, Action) {
 
 function Context(ctx) { 
   if(ctx) {
     _.extend(this, ctx);
-    this.packet    = new Packet(ctx.packet);
-    this.key       = new Key(ctx.key);
+    this.packet    = ctx.packet.clone();
+    this.key       = ctx.key.clone();
     this.actionSet = new Action.Set(ctx.actionSet);
   } else {
-  this.stage     = 'arrival';
-  this.packet    = null;           // packet data
-  this.buffer_id = null;
+    this.stage     = 'arrival';
+    this.packet    = null;           // packet data
+    this.buffer_id = null;
 
-  // All contents of a key are just a reference to actual packet
-  this.key = {      // extracted key
-    in_port: null,  // in_port always present
-    vlan: [],       // vlan is a stack
-    mpls: [],       // mpls is a stack
-  };
-
-  this.actionSet = Action.Set;  // action set carried
-  this._metadata = null;        // metadata carried
-  this._table    = 0;           // goto table - default is table 0
+    // All contents of a key are just a reference to actual packet
+    this.key       = new Extraction.Key();
+    this.actionSet = new Action.Set();  // action set carried
+    this._metadata = null;        // metadata carried
+    this._table    = 0;           // goto table - default is table 0
   }
 }
-
+/*
 // Clear the action set
 Context.prototype.clear = function() {
   this.actionSet = [];
@@ -56,6 +38,7 @@ Context.prototype.clear = function() {
 Context.prototype.write = function(actions) {
   this.actionSet.concat(actions);
 };
+*/
 
 // set or get the metadata
 Context.prototype.metadata = function(metadata) {
@@ -75,129 +58,14 @@ Context.prototype.table = function(table) {
   }
 };
  
-function extract_ethernet(eth, key) {
-  key.eth_src  = eth.src;
-  key.eth_dst  = eth.dst;
-  key.eth_type = eth.typelen;
-}
-
-function extract_vlan(vlan, key) {
-  key.vlan.push({
-    id: vlan.id,
-    pcp: vlan.pcp
-  });
-}
-
-function extract_arp(arp, key) {
-  key.arp_op  = arp.opcode;
-  key.arp_sha = arp.sdrHwAddr;
-  key.arp_spa = arp.sdrProtoAddr;
-  key.arp_tha = arp.tgtHwAddr;
-  key.arp_tpa = arp.tgtProtoAddr;
-}
-
-function extract_mpls(mpls, key) {
-  key.mpls.push({
-    label : mpls.label,
-    tc    : mpls.tc,
-    bos   : mpls.bos
-  });
-}
-
-function extract_ipv4(ipv4, key) {
-  key.ip_dscp  = ipv4.dscp;
-  key.ip_ecn   = ipv4.ecn;
-  key.ip_proto = ipv4.proto;
-  key.ip_src   = ipv4.src;
-  key.ip_dst   = ipv4.dst;
-}
-
-function extract_ipv6(ipv6, key) {
-  key.ip_dscp    = ipv6.dscp;
-  key.ip_ecn     = ipv6.ecn;
-  key.ip_proto   = ipv6.proto;
-  key.ip_src     = ipv6.src;
-  key.ip_dst     = ipv6.dst;
-  key.flow_label = ipv6.flowLabel;
-  key.ext_hdr    = ipv6.extHdr;
-}
-
-function extract_icmpv4(icmpv4, key) {
-  key.icmpv4.type = icmpv4.type;
-  key.icmpv4.code = icmpv4.code;
-}
-
-function extract_icmpv6(icmpv6, key) {
-  key.icmpv6.type      = icmpv6.type;
-  key.icmpv6.code      = icmpv6.code;
-  key.icmpv6.nd_tgt    = icmpv6.ndTgtAddr;
-  key.icmpv6.nd_ll_src = icmpv6.ndLLSrc;
-  key.icmpv6.nd_ll_tgt = icmpv6.ndLLTgt;
-}
-
-function extract_sctp(sctp, key) {
-  key.sctp_src = sctp.src;
-  key.sctp_dst = sctp.dst;
-}
-
-function extract_tcp(tcp, key) {
-  key.tcp_src = tcp.src;
-  key.tcp_dst = tcp.dst;
-}
-
-function extract_udp(udp, key) {
-  key.udp_src = udp.src;
-  key.udp_dst = udp.dst;
-}
-
-function extraction(ctx) {
-  _.each(ctx.packet.protocols, function(protocol) {
-    switch(protocol.name) {
-      case ETHERNET.NAME:
-        extract_ethernet(protocol, ctx.key);
-        break;
-      case VLAN.NAME:
-        extract_vlan(protocol, ctx.key);
-        break;
-      case ARP.NAME:
-        extract_arp(protocol, ctx.key);
-        break;
-      case MPLS.NAME:
-        extract_mpls(protocol, ctx.key);
-        break;
-      case IPV4.NAME:
-        extract_ipv4(protocol, ctx.key);
-        break;
-      case IPV6.NAME:
-        extract_ipv6(protocol, ctx.key);
-        break;
-      case ICMPV4.NAME:
-        extract_icmpv4(protocol, ctx.key);
-        break;
-      case ICMPV6.NAME:
-        extract_icmpv6(protocol, ctx.key);
-        break;
-      case SCTP.NAME:
-        extract_sctp(protocol, ctx.key);
-        break;
-      case TCP.NAME:
-        extract_tcp(protocol, ctx.key);
-        break;
-      case UDP.NAME:
-        extract_udp(protocol, ctx.key);
-        break;
-    }
-  });
-}
-
 function Dataplane(trace) {
   this.trace = trace;
   this.evId  = 0;
-  this.ev    = trace.events[this.pktId];
+  this.ev    = trace.events[this.evId];
   this.stage = 'arrival';
 
-  this.ctxs = [];      // There can be more than 1 ctx (pkt copy)
-  this.ctx  = null;
+  this.ctx     = null;
+  this._egress = [];
 
   this.tables = trace.switch_.tables;
   this.table  = null;
@@ -211,7 +79,7 @@ Dataplane.prototype.arrival = function(pkt, in_port) {
 };
 
 Dataplane.prototype.extraction = function() {
-  extraction(this.ctx);
+  Extraction.extract(this.ctx);
 };
 
 Dataplane.prototype.choice = function() {
@@ -222,66 +90,68 @@ Dataplane.prototype.selection = function(table, key) {
   return 'Im a flow';
 };
 
-Dataplane.prototype.execution = function(flow) {
-  var ctxs = [];
-  _.each(flow.instructions, function(ins) {
-    ctxs.concat(ctxs.ins.execute(this.ctx));
-  });
-  return [this.ctx];
+Dataplane.prototype.instruction = function(flow) {
+  flow.instructions.execute(this, this.ctx);
 };
 
-Dataplane.prototype.egress = function() {
+Dataplane.prototype.action = function() {
+  this.ctx.actionSet.execute(this, this.ctx);
+};
+
+Dataplane.prototype.egress = function(port_id, group_id, ctx) {
+  this._egress.push({
+    port_id: port_id,
+    group_id: group_id,
+    ctx: ctx
+  });
 };
 
 Dataplane.prototype.step = function() {
   var oldId;
 
+  // As long as there are packets to process
   if(this.evId >= this.ev.length) {
     return;
   }
+  
+  // Initialize the context if null
   if(this.ctx === null) {
     this.ctx = new Context();
-    this.ctxs = [this.ctx];
   }
 
   switch(this.ctx.stage) {
     case 'arrival':
       // need to implement packet buffer mechanism
       this.arrival(this.ev.packet, this.ev.in_port);
-      this.ctx.stage = 'extraction';
+      this.stage = 'extraction';
       break;
     case 'extraction':
       this.extraction();
-      this.ctx.stage = 'choice';
+      this.stage = 'choice';
       break;
     case 'choice':
       this.table = this.tables[this.ctx.tableId];
-      this.ctx.stage = 'selection';
+      this.stage = 'selection';
       break;
     case 'selection':
-      this.selection(this.table, this.ctx.key);
-      this.ctx.stage = 'execution';
+      this.flow = this.selection(this.table, this.ctx.key);
+      this.stage = 'instruction';
       break;
-    case 'execution':
+    case 'instruction':
       oldId = this.ctx.table;
-      this.ctxs = this.execution(this.flow); 
-      this.ins = null;
+      this.instruction(this.flow); 
       if(oldId === this.ctx.table) {
-        this.ctx.stage = 'egress';
+        this.stage = 'action';
       } else {
-        this.ctx.stage = 'choice';
+        this.stage = 'choice';
       }
+      break;
+    case 'action':
+      this.action();
+      this.ctx = null;
+      this.stage = 'egress';
       break;
     case 'egress':
-      this.egress();
-      this.ctxs.splice(0, 1);
-      if(this.ctxs.length) {
-        this.ctx = this.ctxs[0];
-        this.ctx.stage = 'choice';
-      } else {
-        this.ctx = null;
-        this.evId++;
-      }
       break;
     default:
       throw 'Bad stage: ' + this.stage;
