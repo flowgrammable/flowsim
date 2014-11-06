@@ -88,6 +88,15 @@ describe('Service: ETHERNET', function () {
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       '0x0');
+    new ETHERNET.Ethernet(
+      'test');
+    new ETHERNET.Ethernet(
+      'test',
+      '00:00:00:00:00:00',
+      '12:34:56:78:90:ab');
+    new ETHERNET.Ethernet(
+      'test',
+      '00:00:00:00:00:00');
   });
 
   it('Ethernet Construction Fail', function() {
@@ -168,10 +177,6 @@ describe('Service: ETHERNET', function () {
     expect(match4.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
   });
 
-  it('Ethernet Save', function() {
-    var dhcp_disco = new ETHERNET.Ethernet('dhcp_disco');
-  });
-    
   it('MAC Match Pass', function() {
     expect(!!ETHERNET).toBe(true);
     

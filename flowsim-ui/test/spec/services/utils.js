@@ -53,6 +53,9 @@ describe('Service: Utils', function () {
     var def    = new Utils.UInt.Match(0, 0);
     var prefix = new Utils.UInt.Match(0xa010102, 0xffffff00);
 
+    new Utils.UInt(undefined, 16);
+    new Utils.UInt(null, 16);
+
   });
 
   it('UInt(0x1ffff, 16) should fail', function() {
