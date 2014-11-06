@@ -184,6 +184,95 @@ function extraction(ctx) {
   });
 }
 
+function ActionSet() {
+  this.actions = {};
+}
+
+ActionSet.prototype.add = function(action) {
+  this.actions[action.name] = action.value;
+};
+
+ActionSet.prototype.execute = function(ctx) {
+};
+
+function ActionList(actions) {
+  this.actions = actions;
+}
+
+ActionList.prototype.execute = function(ctx) {
+  var tmp;
+  _.each(this.actions, function(action) {
+    tmp = action.execute(ctx);
+    if(tmp) {
+      // clone the packet
+    }
+  });
+};
+
+function Output() {}
+Output.prototype.execute = function(ctx) {};
+
+function Group() {}
+Group.prototype.execute = function(ctx) {};
+
+function Queue() {}
+Queue.prototype.execute = function(ctx) {};
+
+function Apply(actions) {
+  this.actionList = actions;
+}
+
+Apply.prototype.execute = function(ctx) {
+  var ctxs = [];
+  _.each(this.actionList, function(action) {
+    ctxs.push(action.execute(ctx))
+  });
+  return ctxs;
+};
+
+function Clear() {}
+
+Clear.prototype.execute = function(ctx) {
+  ctx.actionSet = [];
+  return [ctx];
+};
+
+function Write(actions) {
+  this.actionList = actions;
+}
+
+Write.prototype.execute = function(ctx) {
+  ctx.actionSet.concat(this.actionList);
+  return [ctx];
+};
+
+function Metadata(metadata) {
+  this.metadata = metadata;
+}
+
+Metadata.prototype.execute = function(ctx) {
+  ctx.metadata(this.metadata);
+  return [ctx];
+};
+
+function Meter(meter_id) {
+  this.meter_id = meter_id;
+}
+
+Meter.prototype.execute = function(ctx) {
+  ctx.meter(this.meter_id);
+  return [ctx];
+};
+
+function Goto(table_id) {
+  this.table_id = table_id;
+}
+
+Goto.prototype.execute = function(ctx) {
+  ctx.table(this.table_id);
+  return [ctx];
+};
+
 function Dataplane(trace) {
   this.trace = trace;
   this.evId  = 0;
@@ -217,6 +306,10 @@ Dataplane.prototype.selection = function(table, key) {
 };
 
 Dataplane.prototype.execution = function(flow) {
+  var ctxs = [];
+  _.each(flow.instructions, function(ins) {
+    ctxs.concat(ctxs.ins.execute(ctx);
+  }):
   return [this.ctx];
 };
 
