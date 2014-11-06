@@ -16,7 +16,7 @@ function Output(port_id) {
 }
 
 Output.prototype.execute = function(dp, ctx) {
-  dp.egress(this.port_id, null, ctx);
+  dp.output(this.port_id, null, ctx);
 };
 
 Output.prototype.clone = function() {
@@ -28,7 +28,7 @@ function Group(group_id) {
 }
 
 Group.prototype.execute = function(dp, ctx) {
-  dp.egress(null, this.group_id, ctx);
+  dp.output(null, this.group_id, ctx);
 };
 
 Group.prototype.clone = function() {

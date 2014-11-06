@@ -64,8 +64,10 @@ function Dataplane(trace) {
   this.ev    = trace.events[this.evId];
   this.stage = 'arrival';
 
-  this.ctx     = null;
-  this._egress = [];
+  this.ctx       = null;
+  this.prevTbl   = -1;
+  this._imEgress = [];
+  this._evEgress = [];
 
   this.tables = trace.switch_.tables;
   this.table  = null;
@@ -83,7 +85,7 @@ Dataplane.prototype.extraction = function() {
 };
 
 Dataplane.prototype.choice = function() {
-  this.table = this.tables[this.ctx.tableid];
+  this.table = this.tables[this.ctx._table];
 };
 
 Dataplane.prototype.selection = function(table, key) {
@@ -98,17 +100,45 @@ Dataplane.prototype.action = function() {
   this.ctx.actionSet.execute(this, this.ctx);
 };
 
-Dataplane.prototype.egress = function(port_id, group_id, ctx) {
-  this._egress.push({
-    port_id: port_id,
-    group_id: group_id,
-    ctx: ctx
-  });
+Dataplane.prototype.egress = function() {
+  if(this._imEgress.length > 0) {
+    this._imEgress.splice(0, 1);
+  } else if(this._evEgress.length > 0) {
+    this._evEgress.splice(0, 1);
+  }
+};
+
+Dataplane.prototype.output = function(port_id, group_id, ctx) {
+  if(this.stage === 'instruction') {
+    this._imEgress.push({
+      port_id: port_id,
+      group_id: group_id,
+      ctx: ctx
+    });
+  } else if(this.stage === 'action') {
+    this._evEgress.push({
+      port_id: port_id,
+      group_id: group_id,
+      ctx: ctx
+    });
+  } else {
+    throw 'Bad output state: '+ this.state;
+  }
+};
+
+Dataplane.prototype.loop = function(ctx) {
+  return this.prevTbl !== ctx._table;
+};
+
+Dataplane.prototype.hasImEgress = function() {
+  return this._imEgress.length > 0;
+};
+
+Dataplane.prototype.hasEvEgress = function() {
+  return this._evEgress.length > 0;
 };
 
 Dataplane.prototype.step = function() {
-  var oldId;
-
   // As long as there are packets to process
   if(this.evId >= this.ev.length) {
     return;
@@ -138,12 +168,14 @@ Dataplane.prototype.step = function() {
       this.stage = 'instruction';
       break;
     case 'instruction':
-      oldId = this.ctx.table;
+      this.prevTbl = this.ctx.table;
       this.instruction(this.flow); 
-      if(oldId === this.ctx.table) {
-        this.stage = 'action';
-      } else {
+      if(this.hasImEgress()) {
+        this.stage = 'egress';
+      } else if(this.loop(this.ctx)) {
         this.stage = 'choice';
+      } else {
+        this.stage = 'action';
       }
       break;
     case 'action':
@@ -152,9 +184,18 @@ Dataplane.prototype.step = function() {
       this.stage = 'egress';
       break;
     case 'egress':
+      this.egress();
+      if(!this.hasImEgress() && this.loop(this.ctx)) {
+        this.stage = 'choice';
+      }
       break;
     default:
       throw 'Bad stage: ' + this.stage;
+  }
+
+  // Advance to the next packet in the trace if nothing more 
+  if(this._egress.length === 0 && this.ctx === null) {
+    this.evId += 1;
   }
 };
 
