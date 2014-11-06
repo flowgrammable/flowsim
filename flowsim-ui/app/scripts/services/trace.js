@@ -14,10 +14,10 @@ function Trace(trace) {
   if(typeof trace === 'string') {
     this.name = trace;
     this.switch_ = null;
-    this.packets = [];
+    this.events = [];
   } else {
     _.extend(this, trace);
-    this.packets = _.map(trace.packets, function(pkt) {
+    this.events = _.map(trace.events, function(pkt) {
       return {
         name: pkt.name,
         packet: pkt.packet,
@@ -28,7 +28,7 @@ function Trace(trace) {
 }
 
 Trace.prototype.push = function(pkt) {
-  this.packets.push({
+  this.events.push({
     name: pkt.name,
     packet: pkt,
     in_port: 0
@@ -36,7 +36,7 @@ Trace.prototype.push = function(pkt) {
 };
 
 Trace.prototype.del = function(idx) {
-  this.packets.splice(idx, 1);
+  this.events.splice(idx, 1);
 }
 
 Trace.prototype.clone = function() {

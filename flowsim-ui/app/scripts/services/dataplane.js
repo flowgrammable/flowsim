@@ -18,16 +18,16 @@ function Context(packet, buffer_id, in_port) {
   this.buffer_id = buffer_id;   // stored id info
 
   // All contents of a key are just a reference to actual packet
-  this.key = {                  // extracted key
-    in_port: in_port,           // in_port always present
-    vlan: [],                   // vlan is a stack
-    mpls: [],                   // mpls is a stack
+  this.key = {             // extracted key
+    in_port: in_port,      // in_port always present
+    vlan: [],              // vlan is a stack
+    mpls: [],              // mpls is a stack
   };
 
-  this.actionSet = [];          // action set carried
-  this._metadata = null;         // metadata carried
-  this._meter = null;         // meter to apply
-  this._table = null;         // goto table
+  this.actionSet = [];     // action set carried
+  this._metadata = null;   // metadata carried
+  this._meter = null;      // meter to apply
+  this._table = 0;         // goto table - default is table 0
 }
 
 // Clear the action set
@@ -68,7 +68,9 @@ Context.prototype.table = function(table) {
 };
  
 function arrival(packet, in_port) {
-  return new Context(packet, in_port);
+  // need to implement a packet buffer mechanism
+  var buffer_id = 1;
+  return new Context(packet, buffer_id, in_port);
 }
 
 function extract_ethernet(eth, key) {
@@ -186,27 +188,67 @@ function extraction(ctx) {
   });
 }
 
-function Choice() {
+function Dataplane(trace) {
+  this.trace = trace;
+  this.evId  = 0;
+  this.ev    = trace.events[this.pktId];
+  this.stage = 'arrival';
+
+  this.ctxs  = [];      // There can be more than 1 ctx (pkt copy)
+  this.ctx = null;
+  this.ins   = [];
 }
 
-Choice.prototype.step = function() {
+Dataplane.prototype.step = function() {
+  var oldId;
 
+  if(this.evId >= this.ev.length) {
+    return;
+  }
+
+  switch(this.stage) {
+    case 'arrival':
+      // need to implement packet buffer mechanism
+      this.ctx = arrival(this.ev.packet, this.ev.in_port);
+      this.ctxs.push(arrival());
+      this.stage = 'extraction';
+      break;
+    case 'extraction':
+      extraction(this.ctx);
+      this.stage = 'choice';
+      break;
+    case 'choice':
+      this.table = this.tables[this.ctx.tableId];
+      this.stage = 'selection';
+      break;
+    case 'selection':
+      this.ins = selection(this.table, this.ctx.key);
+      this.stage = 'execution';
+      break;
+    case 'execution':
+      oldId = this.ctx.table;
+      this.ctxs = execution(this.ctx, this.ins); 
+      if(oldId === this.ctx.table) {
+        this.stage = 'egress';
+      } else {
+        this.stage = 'choice';
+      }
+      break;
+    case 'egress':
+      this.ctxs.splice(0, 1);
+      if(this.ctxs.length) {
+        this.ctx = this.ctxs[0];
+        this.stage = 'choice';
+      } else {
+        this.stage = 'arrival';
+        this.evId++;
+      }
+      break;
+    default:
+      throw 'Bad stage: ' + this.stage;
+      break;
+  }
 };
-
-function Selection() {
-}
-
-Selection.prototype.step = function() {
-
-};
-
-function Execution() {
-}
-
-Execution.prototype.step = function() {
-
-};
-   
 
 return {
 };
