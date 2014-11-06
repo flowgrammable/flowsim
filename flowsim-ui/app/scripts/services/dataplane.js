@@ -8,7 +8,8 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function dataplane() {
+  .factory('Dataplane', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4, 
+                                 ICMPV6, SCTP, TCP, UDP) {
     // AngularJS will instantiate a singleton by calling "new" on this function
    
 // This is the primary datastructure that follows the packet through the
@@ -19,10 +20,10 @@ function Context() { //packet, buffer_id, in_port) {
   this.buffer_id = null;
 
   // All contents of a key are just a reference to actual packet
-  this.key = {             // extracted key
-    in_port: in_port,      // in_port always present
-    vlan: [],              // vlan is a stack
-    mpls: [],              // mpls is a stack
+  this.key = {      // extracted key
+    in_port: null,  // in_port always present
+    vlan: [],       // vlan is a stack
+    mpls: [],       // mpls is a stack
   };
 
   this.actionSet = [];     // action set carried
@@ -68,13 +69,6 @@ Context.prototype.table = function(table) {
   }
 };
  
-function arrival(ctx, packet, in_port) {
-  // need to implement a packet buffer mechanism
-  ctx.packet = packet;
-  ctx.buffer_id = 1;
-  ctx.key.in_port = in_port;
-}
-
 function extract_ethernet(eth, key) {
   key.eth_src  = eth.src;
   key.eth_dst  = eth.dst;
@@ -154,7 +148,7 @@ function extraction(ctx) {
   _.each(ctx.packet.protocols, function(protocol) {
     switch(protocol.name) {
       case ETHERNET.NAME:
-        extract_arp(protocol, ctx.key);
+        extract_ethernet(protocol, ctx.key);
         break;
       case VLAN.NAME:
         extract_vlan(protocol, ctx.key);
@@ -190,17 +184,6 @@ function extraction(ctx) {
   });
 }
 
-function selection(table, key) {
-  return 'Im a flow';
-}
-
-function execution(ctx, flow) {
-  return [ctx];
-}
-
-function egress(ctx) {
-}
-
 function Dataplane(trace) {
   this.trace = trace;
   this.evId  = 0;
@@ -209,8 +192,36 @@ function Dataplane(trace) {
 
   this.ctxs = [];      // There can be more than 1 ctx (pkt copy)
   this.ctx  = null;
-  this.flow = null;
+
+  this.tables = null;
+  this.table  = null;
+  this.flow   = null;
 }
+
+Dataplane.prototype.arrival = function(pkt, in_port) {
+  this.ctx.packet      = pkt;
+  this.ctx.buffer_id   = 1;
+  this.ctx.key.in_port = in_port;
+};
+
+Dataplane.prototype.extraction = function() {
+  extraction(this.ctx);
+};
+
+Dataplane.prototype.choice = function() {
+  this.table = this.tables[this.ctx.tableid];
+};
+
+Dataplane.prototype.selection = function(table, key) {
+  return 'Im a flow';
+};
+
+Dataplane.prototype.execution = function(flow) {
+  return [this.ctx];
+};
+
+Dataplane.prototype.egress = function() {
+};
 
 Dataplane.prototype.step = function() {
   var oldId;
@@ -226,11 +237,11 @@ Dataplane.prototype.step = function() {
   switch(this.ctx.stage) {
     case 'arrival':
       // need to implement packet buffer mechanism
-      arrival(this.ctx, this.ev.packet, this.ev.in_port);
+      this.arrival(this.ev.packet, this.ev.in_port);
       this.ctx.stage = 'extraction';
       break;
     case 'extraction':
-      extraction(this.ctx);
+      this.extraction();
       this.ctx.stage = 'choice';
       break;
     case 'choice':
@@ -238,12 +249,12 @@ Dataplane.prototype.step = function() {
       this.ctx.stage = 'selection';
       break;
     case 'selection':
-      this.flow = selection(this.table, this.ctx.key);
+      this.selection(this.table, this.ctx.key);
       this.ctx.stage = 'execution';
       break;
     case 'execution':
       oldId = this.ctx.table;
-      this.ctxs = execution(this.ctx, this.flow); 
+      this.ctxs = this.execution(this.flow); 
       this.ins = null;
       if(oldId === this.ctx.table) {
         this.ctx.stage = 'egress';
@@ -252,7 +263,7 @@ Dataplane.prototype.step = function() {
       }
       break;
     case 'egress':
-      egress(this.ctx);
+      this.egress();
       this.ctxs.splice(0, 1);
       if(this.ctxs.length) {
         this.ctx = this.ctxs[0];
@@ -264,7 +275,6 @@ Dataplane.prototype.step = function() {
       break;
     default:
       throw 'Bad stage: ' + this.stage;
-      break;
   }
 };
 
