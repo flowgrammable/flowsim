@@ -9,12 +9,27 @@
  */
 angular.module('flowsimUiApp')
   .factory('Dataplane', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4, 
-                                 ICMPV6, SCTP, TCP, UDP) {
-    // AngularJS will instantiate a singleton by calling "new" on this function
-   
-// This is the primary datastructure that follows the packet through the
-// pipeline
-function Context() { //packet, buffer_id, in_port) {
+                                 ICMPV6, SCTP, TCP, UDP, Action, Instruction) {
+
+function Key(key) {
+  if(key) {
+    _.extend(this, key);
+    this.vlan = _.map(key.vlan, function(vlan) { return new VLAN(vlan); });
+    this.mpls = _.map(key.vlan, function(vlan) { return new MPLS(vlan); });
+  } else {
+    this.in_port = null;
+    this.vlan = [];
+    this.mpls = [];
+  }
+}
+
+function Context(ctx) { 
+  if(ctx) {
+    _.extend(this, ctx);
+    this.packet    = new Packet(ctx.packet);
+    this.key       = new Key(ctx.key);
+    this.actionSet = new Action.Set(ctx.actionSet);
+  } else {
   this.stage     = 'arrival';
   this.packet    = null;           // packet data
   this.buffer_id = null;
@@ -26,10 +41,10 @@ function Context() { //packet, buffer_id, in_port) {
     mpls: [],       // mpls is a stack
   };
 
-  this.actionSet = [];     // action set carried
-  this._metadata = null;   // metadata carried
-  this._meter = null;      // meter to apply
-  this._table = 0;         // goto table - default is table 0
+  this.actionSet = Action.Set;  // action set carried
+  this._metadata = null;        // metadata carried
+  this._table    = 0;           // goto table - default is table 0
+  }
 }
 
 // Clear the action set
@@ -48,15 +63,6 @@ Context.prototype.metadata = function(metadata) {
     this._metadata = metadata;
   } else {
     return this._metadata;
-  }
-};
-
-// set or get the meter id
-Context.prototype.meter = function(meter) {
-  if(meter !== undefined && meter !== null) {
-    this._meter = meter;
-  } else {
-    return this._meter;
   }
 };
 
@@ -184,95 +190,6 @@ function extraction(ctx) {
   });
 }
 
-function ActionSet() {
-  this.actions = {};
-}
-
-ActionSet.prototype.add = function(action) {
-  this.actions[action.name] = action.value;
-};
-
-ActionSet.prototype.execute = function(ctx) {
-};
-
-function ActionList(actions) {
-  this.actions = actions;
-}
-
-ActionList.prototype.execute = function(ctx) {
-  var tmp;
-  _.each(this.actions, function(action) {
-    tmp = action.execute(ctx);
-    if(tmp) {
-      // clone the packet
-    }
-  });
-};
-
-function Output() {}
-Output.prototype.execute = function(ctx) {};
-
-function Group() {}
-Group.prototype.execute = function(ctx) {};
-
-function Queue() {}
-Queue.prototype.execute = function(ctx) {};
-
-function Apply(actions) {
-  this.actionList = actions;
-}
-
-Apply.prototype.execute = function(ctx) {
-  var ctxs = [];
-  _.each(this.actionList, function(action) {
-    ctxs.push(action.execute(ctx))
-  });
-  return ctxs;
-};
-
-function Clear() {}
-
-Clear.prototype.execute = function(ctx) {
-  ctx.actionSet = [];
-  return [ctx];
-};
-
-function Write(actions) {
-  this.actionList = actions;
-}
-
-Write.prototype.execute = function(ctx) {
-  ctx.actionSet.concat(this.actionList);
-  return [ctx];
-};
-
-function Metadata(metadata) {
-  this.metadata = metadata;
-}
-
-Metadata.prototype.execute = function(ctx) {
-  ctx.metadata(this.metadata);
-  return [ctx];
-};
-
-function Meter(meter_id) {
-  this.meter_id = meter_id;
-}
-
-Meter.prototype.execute = function(ctx) {
-  ctx.meter(this.meter_id);
-  return [ctx];
-};
-
-function Goto(table_id) {
-  this.table_id = table_id;
-}
-
-Goto.prototype.execute = function(ctx) {
-  ctx.table(this.table_id);
-  return [ctx];
-};
-
 function Dataplane(trace) {
   this.trace = trace;
   this.evId  = 0;
@@ -308,8 +225,8 @@ Dataplane.prototype.selection = function(table, key) {
 Dataplane.prototype.execution = function(flow) {
   var ctxs = [];
   _.each(flow.instructions, function(ins) {
-    ctxs.concat(ctxs.ins.execute(ctx);
-  }):
+    ctxs.concat(ctxs.ins.execute(this.ctx));
+  });
   return [this.ctx];
 };
 
