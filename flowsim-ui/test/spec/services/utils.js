@@ -74,4 +74,10 @@ describe('Service: Utils', function () {
 
   });
 
+  it('UInt("0xx0000", 16)', function() {
+    expect(function() {
+      new Utils.UInt('0xx0000', 16);
+    }).toThrow();
+  });
+
 });

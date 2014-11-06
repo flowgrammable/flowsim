@@ -18,21 +18,28 @@ var Payloads = {
 
 function Ethernet(eth, src, dst, typelen) {
   this.bytes = 14;
+  this.name = 'Ethernet';
   if(eth instanceof Ethernet) {
-    this.name    = eth.name;
     this._src     = new Ethernet.MAC(eth._src);
     this._dst     = new Ethernet.MAC(eth._dst);
     this._typelen = new Utils.UInt(eth._typelen);
   } else if(eth instanceof Ethernet_UI) {
-    this.name    = eth.name;
     this._src     = new Ethernet.MAC(eth.attrs[0].value);
     this._dst     = new Ethernet.MAC(eth.attrs[1].value);
     this._typelen = new Utils.UInt(eth.attrs[2].value, 16);
   } else if(typeof eth === 'string') {
-    this.name    = eth;
     this._src     = new Ethernet.MAC(src);
     this._dst     = new Ethernet.MAC(dst);
     this._typelen = new Utils.UInt(typelen, 16);
+  } else if(eth) {
+    _.extend(this, eth);
+    this._src     = new Ethernet.MAC(eth._src);
+    this._dst     = new Ethernet.MAC(eth._dst);
+    this._typelen = new Utils.UInt(eth._typelen, 16);
+  } else {
+    this._src     = new Ethernet.MAC();
+    this._dst     = new Ethernet.MAC();
+    this._typelen = new Utils.UInt(null, 16);
   }
 }
 
@@ -86,7 +93,8 @@ Ethernet.MAC = function(mac) {
   } else if(mac === undefined) {
     this.value = [0, 0, 0, 0, 0, 0];
   } else {
-    throw 'Bad MAC Address: ' + mac;
+    _.extend(this, mac);
+    this.value = _.clone(mac.value);
   } 
 };
 
@@ -123,8 +131,17 @@ Ethernet.MAC.isMulticast = function(addr) {
 };
 
 Ethernet.MAC.Match = function(addr, mask) {
-  this.addr = new Ethernet.MAC(addr);
-  this.mask = new Ethernet.MAC(mask);
+  if(addr instanceof Ethernet.MAC.Match) {
+    this.addr = new Ethernet.MAC(addr.addr);
+    this.mask = new Ethernet.MAC(addr.mask);
+  } else if(addr && mask === undefined) {
+    _.extend(this, addr);
+    this.addr = new Ethernet.MAC(addr.addr);
+    this.mask = new Ethernet.MAC(addr.mask);
+  } else {
+    this.addr = new Ethernet.MAC(addr);
+    this.mask = new Ethernet.MAC(mask);
+  }
 };
 
 Ethernet.MAC.Match.prototype.match = function(addr) {

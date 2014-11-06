@@ -92,7 +92,7 @@ describe('Service: ETHERNET', function () {
 
   it('Ethernet Construction Fail', function() {
     expect(!!ETHERNET).toBe(true);
-    
+  
     expect(function() {
       new ETHERNET.Ethernet(
       'test',

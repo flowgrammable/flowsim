@@ -14,11 +14,13 @@ function padZeros(input, len) {
 
 var HexPattern = /^(0x)?[0-9a-fA-F]+$/;
 
+/*
 function inRange(min, max) {
   return function(value) { 
     return min <= value && value <= max;
   };
 }
+*/
 
 function howManyBits(val) {
   if(val === 0) { return 1; }
@@ -39,18 +41,26 @@ function maxFromBytes(val) {
 }
 
 function UInt(value, bits, min, max) {
-  if(typeof value === 'number' && value === parseInt(value)) {
+  if(typeof value === 'number') {
+    if(value === parseInt(value)) {
     this.value = value;
     this.bits = bits ? bits : howManyBits(value);
     this.bytes = Math.ceil(this.bits / 8);
     this.min = min ? min : 0;
     this.max = max ? max : this.bytes;
-  } else if(typeof value === 'string' && HexPattern.test(value)) {
+    } else {
+      throw 'UInt('+ this.value +')';
+    }
+  } else if(typeof value === 'string') {
+    if(HexPattern.test(value)) {
     this.value = parseInt(value);
     this.bits = bits ? bits : howManyBits(value);
     this.bytes = Math.ceil(this.bits / 8);
     this.min = min ? min : 0;
     this.max = max ? max : this.bytes;
+    } else {
+      throw 'UInt('+ this.value +')';
+    }
   } else if(value instanceof UInt) {
     this.value = value.value;
     this.bits  = value.bits;
@@ -63,7 +73,11 @@ function UInt(value, bits, min, max) {
     this.bytes = Math.ceil(this.bits / 8);
     this.min = min ? min : 0;
     this.max = max ? max : this.bytes;
+  } else if(value) {
+    // this is just for json ... i wish we could do better
+    _.extend(this, value);
   } else {
+    // this seems like dead code ...
     throw 'UInt(' + value + ')';
   }
   if(howManyBits(this.value) > this.bits) {
