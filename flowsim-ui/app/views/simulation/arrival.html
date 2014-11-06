@@ -1,2 +1,24 @@
 
-<img src="images/design/arrival.png">
+<div class="row">
+  <div class="col-md-4">
+    <table class="table table-striped">
+      <thead>
+        <th>#</th>
+        <th>Packet</th>
+        <th>In Port</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="packet in trace.packets">
+          <td>{{$index+1}}</td>
+          <td>{{packet.name}}</td>
+          <td>{{packet.in_port}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-8">
+    <div style="text-align:center">
+      <img src="images/design/arrival.png">
+    </div>
+  </div>
+</div>
