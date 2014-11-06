@@ -11,14 +11,47 @@ angular.module('flowsimUiApp')
   .factory('Dataplane', function dataplane() {
     // AngularJS will instantiate a singleton by calling "new" on this function
    
+// This is the primary datastructure that follows the packet through the
+// pipeline
+function Context(packet, buffer_id, in_port) {
+  this.packet = null;           // packet data
+  this.buffer_id = buffer_id;   // stored id info
 
-function Context(packet, in_port) {
-  this.packet = null;
-  this.key = {
+  this.key = {                // extracted key
     in_port: in_port
   };
-  this.actionSet = [];
+
+  this.actionSet = [];      // action set carried
+  this.metadata = null;     // metadata carried
+  this.meter_id = null;     // meter to apply
+  this.table_id = null;     // goto table
 }
+
+// Clear the action set
+Context.prototype.clear = function() {
+  this.actionSet = [];
+};
+
+// Write (append) actions to the action set
+Context.prototype.write = function(actions) {
+  this.actionSet.concat(actions);
+};
+
+// set or get the metadata
+Context.prototype.metadata = function(metadata) {
+  if(metadata !== undefined && metadata !== null) {
+  } else {
+
+  }
+};
+
+// set or get the meter id
+Context.prototype.meter = function(meter) {
+};
+
+// set or get the next table id
+Context.prototype.table = function(table) {
+};
  
 function arrival(packet, in_port) {
   return new Context(packet, in_port);
