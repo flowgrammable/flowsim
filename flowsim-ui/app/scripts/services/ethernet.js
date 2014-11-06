@@ -84,7 +84,7 @@ Ethernet.MAC = function(mac) {
     tmp = mac.match(Pattern);
     if(!tmp || tmp.length < 12) {
       throw 'Bad MAC Address: ' + mac;
-    } 
+    }
     this.value = _.map(_.range(6), function(i) {
       return parseInt('0x'+tmp[2*i+1]);
     });
@@ -95,7 +95,7 @@ Ethernet.MAC = function(mac) {
   } else {
     _.extend(this, mac);
     this.value = _.clone(mac.value);
-  } 
+  }
 };
 
 Ethernet.MAC.prototype.equal = function(mac) {
@@ -109,7 +109,7 @@ Ethernet.MAC.prototype.equal = function(mac) {
 };
 
 Ethernet.MAC.prototype.toString = function() {
-  return _.map(this.value, function(oct) { 
+  return _.map(this.value, function(oct) {
     return Utils.padZeros(oct.toString(16), 2);
   }).join(':');
 };
@@ -149,8 +149,8 @@ Ethernet.MAC.Match.prototype.match = function(addr) {
   for(i=0; i<6; ++i) {
     if(this.addr.value[i] !== (this.mask.value[i] & addr.value[i])) {
       return false;
-    } 
-  } 
+    }
+  }
   return true;
 };
 

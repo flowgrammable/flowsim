@@ -1,1 +1,70 @@
-<p>This is the profile/meters view.</p>
+<br>
+
+<div class="row">
+  <div class="col-md-10">
+    <form class="form-inline">
+      <div class="form-group"
+        ng-class="{'has-error':!tests.Meters.max_meters(profile.meters.max_meters)}">
+          <div class="input-group">
+            <div class="input-group-addon" tooltip="{{tips.Meters.max_meters}}">
+              Max Meters:
+            </div>
+            <input class="form-control" type="text" style="max-width:100px"
+              ng-model="profile.meters.max_meters">
+          </div>
+      </div>
+      <div class="checkbox-inline">
+        <label tooltip="{{tips.Meters.stats}}">
+          <input type="checkbox" ng-model="profile.meters.stats">
+          Meter Stats
+        </label>
+      </div>
+    </form>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-10">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Band Properties</h3>
+      </div>
+      <div class="panel-body">
+        <div class="checkbox-inline">
+          <label tooltip="{{tips.Meters.dropband}}">
+            <input type="checkbox" ng-model="profile.meters.dropband">
+            Drop
+          </label>
+        </div>
+        <div class="checkbox-inline">
+          <label tooltip="{{tips.Meters.dscp_band}}">
+            <input type="checkbox" ng-model="profile.meters.dscpband">
+            DSCP
+          </label>
+        </div>
+        <form class="form-inline">
+          <div class="form-group"
+            ng-class="{'has-error':!tests.Meters.max_bands(profile.meters.max_bands)}">
+              <div class="input-group">
+                <div class="input-group-addon" tooltip="{{tips.Meters.max_bands}}">
+                  Max Bands:
+                </div>
+                <input class="form-control" type="text" style="max-width:100px"
+                  ng-model="profile.meters.max_bands">
+              </div>
+          </div>
+          <div class="form-group"
+            ng-class="{'has-error':!tests.Meters.max_color(profile.meters.max_color)}">
+              <div class="input-group">
+                <div class="input-group-addon" tooltip="{{tips.Meters.max_color}}">
+                  Max Color:
+                </div>
+                <input class="form-control" type="text" style="max-width:100px"
+                  ng-model="profile.meters.max_color">
+              </div>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
