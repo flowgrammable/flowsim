@@ -165,7 +165,7 @@ Ethernet.TESTS = {
 };
 
 function Ethernet_UI(eth) {
-  eth = eth === undefined ? new Ethernet(NAME) : eth;
+  eth = eth === undefined ? new Ethernet(NAME) : new Ethernet(eth);
   this.name = NAME;
   this.bytes = eth.bytes;
   this.attrs = [{
