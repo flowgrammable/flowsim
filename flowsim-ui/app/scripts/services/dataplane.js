@@ -193,7 +193,7 @@ function Dataplane(trace) {
   this.ctxs = [];      // There can be more than 1 ctx (pkt copy)
   this.ctx  = null;
 
-  this.tables = null;
+  this.tables = trace.switch_.tables;
   this.table  = null;
   this.flow   = null;
 }
