@@ -67,7 +67,7 @@ function UInt(value, bits, min, max) {
     this.bytes = value.bytes;
     this.min   = value.min;
     this.max   = value.max;
-  } else if(value === undefined && bits) {
+  } else if(value === null && bits) {
     this.value = 0;
     this.bits = bits;
     this.bytes = Math.ceil(this.bits / 8);
