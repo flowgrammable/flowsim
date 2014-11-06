@@ -8,26 +8,28 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function dataplane() {
+  .factory('Dataplane', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4, 
+                                 ICMPV6, SCTP, TCP, UDP) {
     // AngularJS will instantiate a singleton by calling "new" on this function
    
 // This is the primary datastructure that follows the packet through the
 // pipeline
-function Context(packet, buffer_id, in_port) {
-  this.packet = null;           // packet data
-  this.buffer_id = buffer_id;   // stored id info
+function Context() { //packet, buffer_id, in_port) {
+  this.stage     = 'arrival';
+  this.packet    = null;           // packet data
+  this.buffer_id = null;
 
   // All contents of a key are just a reference to actual packet
-  this.key = {                  // extracted key
-    in_port: in_port,           // in_port always present
-    vlan: [],                   // vlan is a stack
-    mpls: [],                   // mpls is a stack
+  this.key = {      // extracted key
+    in_port: null,  // in_port always present
+    vlan: [],       // vlan is a stack
+    mpls: [],       // mpls is a stack
   };
 
-  this.actionSet = [];          // action set carried
-  this._metadata = null;         // metadata carried
-  this._meter = null;         // meter to apply
-  this._table = null;         // goto table
+  this.actionSet = [];     // action set carried
+  this._metadata = null;   // metadata carried
+  this._meter = null;      // meter to apply
+  this._table = 0;         // goto table - default is table 0
 }
 
 // Clear the action set
@@ -67,10 +69,6 @@ Context.prototype.table = function(table) {
   }
 };
  
-function arrival(packet, in_port) {
-  return new Context(packet, in_port);
-}
-
 function extract_ethernet(eth, key) {
   key.eth_src  = eth.src;
   key.eth_dst  = eth.dst;
@@ -150,7 +148,7 @@ function extraction(ctx) {
   _.each(ctx.packet.protocols, function(protocol) {
     switch(protocol.name) {
       case ETHERNET.NAME:
-        extract_arp(protocol, ctx.key);
+        extract_ethernet(protocol, ctx.key);
         break;
       case VLAN.NAME:
         extract_vlan(protocol, ctx.key);
@@ -186,27 +184,99 @@ function extraction(ctx) {
   });
 }
 
-function Choice() {
+function Dataplane(trace) {
+  this.trace = trace;
+  this.evId  = 0;
+  this.ev    = trace.events[this.pktId];
+  this.stage = 'arrival';
+
+  this.ctxs = [];      // There can be more than 1 ctx (pkt copy)
+  this.ctx  = null;
+
+  this.tables = trace.switch_.tables;
+  this.table  = null;
+  this.flow   = null;
 }
 
-Choice.prototype.step = function() {
-
+Dataplane.prototype.arrival = function(pkt, in_port) {
+  this.ctx.packet      = pkt;
+  this.ctx.buffer_id   = 1;
+  this.ctx.key.in_port = in_port;
 };
 
-function Selection() {
-}
-
-Selection.prototype.step = function() {
-
+Dataplane.prototype.extraction = function() {
+  extraction(this.ctx);
 };
 
-function Execution() {
-}
-
-Execution.prototype.step = function() {
-
+Dataplane.prototype.choice = function() {
+  this.table = this.tables[this.ctx.tableid];
 };
-   
+
+Dataplane.prototype.selection = function(table, key) {
+  return 'Im a flow';
+};
+
+Dataplane.prototype.execution = function(flow) {
+  return [this.ctx];
+};
+
+Dataplane.prototype.egress = function() {
+};
+
+Dataplane.prototype.step = function() {
+  var oldId;
+
+  if(this.evId >= this.ev.length) {
+    return;
+  }
+  if(this.ctx === null) {
+    this.ctx = new Context();
+    this.ctxs = [this.ctx];
+  }
+
+  switch(this.ctx.stage) {
+    case 'arrival':
+      // need to implement packet buffer mechanism
+      this.arrival(this.ev.packet, this.ev.in_port);
+      this.ctx.stage = 'extraction';
+      break;
+    case 'extraction':
+      this.extraction();
+      this.ctx.stage = 'choice';
+      break;
+    case 'choice':
+      this.table = this.tables[this.ctx.tableId];
+      this.ctx.stage = 'selection';
+      break;
+    case 'selection':
+      this.selection(this.table, this.ctx.key);
+      this.ctx.stage = 'execution';
+      break;
+    case 'execution':
+      oldId = this.ctx.table;
+      this.ctxs = this.execution(this.flow); 
+      this.ins = null;
+      if(oldId === this.ctx.table) {
+        this.ctx.stage = 'egress';
+      } else {
+        this.ctx.stage = 'choice';
+      }
+      break;
+    case 'egress':
+      this.egress();
+      this.ctxs.splice(0, 1);
+      if(this.ctxs.length) {
+        this.ctx = this.ctxs[0];
+        this.ctx.stage = 'choice';
+      } else {
+        this.ctx = null;
+        this.evId++;
+      }
+      break;
+    default:
+      throw 'Bad stage: ' + this.stage;
+  }
+};
 
 return {
 };
