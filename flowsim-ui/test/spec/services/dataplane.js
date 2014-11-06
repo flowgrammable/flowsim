@@ -7,8 +7,8 @@ describe('Service: dataplane', function () {
 
   // instantiate service
   var dataplane;
-  beforeEach(inject(function (_dataplane_) {
-    dataplane = _dataplane_;
+  beforeEach(inject(function (_Dataplane_) {
+    dataplane = _Dataplane_;
   }));
 
   it('should do something', function () {

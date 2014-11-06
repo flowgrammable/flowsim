@@ -11,8 +11,6 @@ angular.module('flowsimUiApp')
   .factory('Dataplane', function dataplane() {
     // AngularJS will instantiate a singleton by calling "new" on this function
  
-
-
 function Arrival() {
 
 }
@@ -49,6 +47,9 @@ function Execution() {
 Execution.prototype.step = function() {
 
 };
-    
+   
+
+return {
+};
   
 });
