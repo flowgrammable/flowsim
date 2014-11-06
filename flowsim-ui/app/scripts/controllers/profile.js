@@ -14,8 +14,6 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.profile = null;
 
-    var loaded = false;             // <- what is the purpose of this variable
-    var prev = false;               // <- what is the purpose of this variable
     $scope.tips = Profile.TIPS;
     $scope.tests = Profile.TESTS;
 
