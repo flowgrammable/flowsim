@@ -13,9 +13,10 @@ angular.module('flowsimUiApp')
    
 // This is the primary datastructure that follows the packet through the
 // pipeline
-function Context(packet, buffer_id, in_port) {
-  this.packet = null;           // packet data
-  this.buffer_id = buffer_id;   // stored id info
+function Context() { //packet, buffer_id, in_port) {
+  this.stage     = 'arrival';
+  this.packet    = null;           // packet data
+  this.buffer_id = null;
 
   // All contents of a key are just a reference to actual packet
   this.key = {             // extracted key
@@ -67,10 +68,11 @@ Context.prototype.table = function(table) {
   }
 };
  
-function arrival(packet, in_port) {
+function arrival(ctx, packet, in_port) {
   // need to implement a packet buffer mechanism
-  var buffer_id = 1;
-  return new Context(packet, buffer_id, in_port);
+  ctx.packet = packet;
+  ctx.buffer_id = 1;
+  ctx.key.in_port = in_port;
 }
 
 function extract_ethernet(eth, key) {
@@ -188,15 +190,26 @@ function extraction(ctx) {
   });
 }
 
+function selection(table, key) {
+  return 'Im a flow';
+}
+
+function execution(ctx, flow) {
+  return [ctx];
+}
+
+function egress(ctx) {
+}
+
 function Dataplane(trace) {
   this.trace = trace;
   this.evId  = 0;
   this.ev    = trace.events[this.pktId];
   this.stage = 'arrival';
 
-  this.ctxs  = [];      // There can be more than 1 ctx (pkt copy)
-  this.ctx = null;
-  this.ins   = [];
+  this.ctxs = [];      // There can be more than 1 ctx (pkt copy)
+  this.ctx  = null;
+  this.flow = null;
 }
 
 Dataplane.prototype.step = function() {
@@ -205,42 +218,47 @@ Dataplane.prototype.step = function() {
   if(this.evId >= this.ev.length) {
     return;
   }
+  if(this.ctx === null) {
+    this.ctx = new Context();
+    this.ctxs = [this.ctx];
+  }
 
-  switch(this.stage) {
+  switch(this.ctx.stage) {
     case 'arrival':
       // need to implement packet buffer mechanism
-      this.ctx = arrival(this.ev.packet, this.ev.in_port);
-      this.ctxs.push(arrival());
-      this.stage = 'extraction';
+      arrival(this.ctx, this.ev.packet, this.ev.in_port);
+      this.ctx.stage = 'extraction';
       break;
     case 'extraction':
       extraction(this.ctx);
-      this.stage = 'choice';
+      this.ctx.stage = 'choice';
       break;
     case 'choice':
       this.table = this.tables[this.ctx.tableId];
-      this.stage = 'selection';
+      this.ctx.stage = 'selection';
       break;
     case 'selection':
-      this.ins = selection(this.table, this.ctx.key);
-      this.stage = 'execution';
+      this.flow = selection(this.table, this.ctx.key);
+      this.ctx.stage = 'execution';
       break;
     case 'execution':
       oldId = this.ctx.table;
-      this.ctxs = execution(this.ctx, this.ins); 
+      this.ctxs = execution(this.ctx, this.flow); 
+      this.ins = null;
       if(oldId === this.ctx.table) {
-        this.stage = 'egress';
+        this.ctx.stage = 'egress';
       } else {
-        this.stage = 'choice';
+        this.ctx.stage = 'choice';
       }
       break;
     case 'egress':
+      egress(this.ctx);
       this.ctxs.splice(0, 1);
       if(this.ctxs.length) {
         this.ctx = this.ctxs[0];
-        this.stage = 'choice';
+        this.ctx.stage = 'choice';
       } else {
-        this.stage = 'arrival';
+        this.ctx = null;
         this.evId++;
       }
       break;
