@@ -19,7 +19,7 @@ var fragOptions = [
   'reassemble'
 ];
 
-function Capabilities(datapath) {
+function Profile(datapath) {
   if(datapath) {
     _.extend(this, datapath);
   } else {
@@ -36,7 +36,7 @@ function Capabilities(datapath) {
   }
 }
 
-Capabilities.prototype.openflow_1_0 = function() {
+Profile.prototype.openflow_1_0 = function() {
   this.ip_reassembly   = true;
   this.mfr_description = 'Flowgrammable';
   this.hw_description  = 'Generic OpenFlow 1.0 Switch';
@@ -44,7 +44,7 @@ Capabilities.prototype.openflow_1_0 = function() {
   this.dp_description  = 'Generic OpenFlow 1.0 Pipeline';
 };
 
-Capabilities.prototype.openflow_1_1 = function() {
+Profile.prototype.openflow_1_1 = function() {
   this.ip_reassembly   = true;
   this.mfr_description = 'Flowgrammable';
   this.hw_description  = 'Generic OpenFlow 1.1 Switch';
@@ -52,7 +52,7 @@ Capabilities.prototype.openflow_1_1 = function() {
   this.dp_description  = 'Generic OpenFlow 1.1 Pipeline';
 };
 
-Capabilities.prototype.openflow_1_2 = function() {
+Profile.prototype.openflow_1_2 = function() {
   this.ip_reassembly   = true;
   this.mfr_description = 'Flowgrammable';
   this.hw_description  = 'Generic OpenFlow 1.2 Switch';
@@ -60,7 +60,7 @@ Capabilities.prototype.openflow_1_2 = function() {
   this.dp_description  = 'Generic OpenFlow 1.2 Pipeline';
 };
 
-Capabilities.prototype.openflow_1_3 = function() {
+Profile.prototype.openflow_1_3 = function() {
   this.ip_reassembly   = true;
   this.mfr_description = 'Flowgrammable';
   this.hw_description  = 'Generic OpenFlow 1.3 Switch';
@@ -68,7 +68,7 @@ Capabilities.prototype.openflow_1_3 = function() {
   this.dp_description  = 'Generic OpenFlow 1.3 Pipeline';
 };
 
-Capabilities.prototype.openflow_1_4 = function() {
+Profile.prototype.openflow_1_4 = function() {
   this.ip_reassembly   = true;
   this.mfr_description = 'Flowgrammable';
   this.hw_description  = 'Generic OpenFlow 1.4 Switch';
@@ -77,12 +77,13 @@ Capabilities.prototype.openflow_1_4 = function() {
 };
 
 function Datapath(datapath, profile) {
-  if(datapath instanceof Datapath || typeof datapath === 'object') {
+  if(datapath instanceof Datapath ||
+    (typeof datapath === 'object' && datapath !== null)) {
     _.extend(this, datapath);
     this.capabilities = _.clone(datapath.capabilities);
   } else {
       this.capabilities = {
-        ip_reassembly: profile.ip_reassebmly
+        ip_reassembly : profile.ip_reassembly
       };
 
       this.datapath_id   = profile.datapath_id;
@@ -121,7 +122,7 @@ var TESTS = {
 };
 
 return {
-  Capabilities: Capabilities,
+  Capabilities: Profile,
   Configuration: Datapath,
   TIPS: TIPS,
   TESTS: TESTS
