@@ -15,7 +15,7 @@ function Key(key) {
   if(key) {
     _.extend(this, key);
     this.vlan = _.map(key.vlan, function(vlan) { return vlan.clone(); });
-    this.mpls = _.map(key.mpls, function(mpls) { return new mpls.clone(); });
+    this.mpls = _.map(key.mpls, function(mpls) { return mpls.clone(); });
   } else {
     this.in_port = null;
     this.vlan = [];
@@ -24,9 +24,9 @@ function Key(key) {
 }
 
 function extract_ethernet(eth, key) {
-  key.eth_src  = eth.src;
-  key.eth_dst  = eth.dst;
-  key.eth_type = eth.typelen;
+  key.eth_src  = eth.src();
+  key.eth_dst  = eth.dst();
+  key.eth_type = eth.typelen();
 }
 
 function extract_vlan(vlan, key) {

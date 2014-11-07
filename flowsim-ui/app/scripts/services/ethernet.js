@@ -18,7 +18,7 @@ var Payloads = {
 
 function Ethernet(eth, src, dst, typelen) {
   this.bytes = 14;
-  this.name = 'Ethernet';
+  this.name = NAME;
   if(eth instanceof Ethernet) {
     this._src     = new Ethernet.MAC(eth._src);
     this._dst     = new Ethernet.MAC(eth._dst);
