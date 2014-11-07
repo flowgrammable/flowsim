@@ -12,14 +12,21 @@ angular.module('flowsimUiApp')
 
 function Switch(s, switchCapabilities) {
   if(typeof s === 'string') {
+    // create new switch, copy capabilities
+    this.capabilities = {};
+    _.extend(this.capabilities, switchCapabilities);
     this.name = s;
     this.datapath = new Datapath.Configuration(switchCapabilities.datapath);
     this.ports    = new Ports.Configuration(switchCapabilities.ports);
     this.tables   = new Tables.Configuration(switchCapabilities.tables);
     this.meters   = new Meters.Configuration(switchCapabilities.meters);
     this.groups   = new Groups.Configuration(switchCapabilities.groups);
-  } else {
+  } else if(s instanceof Switch){
+    // json construction
     _.extend(this, s);
+  } else {
+    // swi already constructed
+    this.capabilities = s.capabilities;
     this.datapath = new Datapath.Configuration(s.datapath);
     this.ports    = new Ports.Configuration(s.ports);
     this.tables   = new Tables.Configuration(s.tables);
