@@ -85,7 +85,11 @@ function Datapath(datapath, profile) {
       this.miss_send_len = defaultMissSendLen;
 
       // optional bit necessary for UI display
-      this.ip_reassebly = profile.ip_reassembly;
+      this.ip_reassembly = profile.ip_reassembly;
+      // or this
+      this.capabilities = {
+        ip_reassembly: profile.ip_reassebmly
+      };
       this.fragHandling = defaultFragHandling;
 
       this.mfr_description = profile.mfr_description;
