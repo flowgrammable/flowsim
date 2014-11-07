@@ -79,17 +79,16 @@ Capabilities.prototype.openflow_1_4 = function() {
 function Datapath(datapath, profile) {
   if(datapath instanceof Datapath || typeof datapath === 'object') {
     _.extend(this, datapath);
+    this.capabilities = _.clone(datapath.capabilities);
   } else {
+      this.capabilities = {
+        ip_reassembly: profile.ip_reassebmly
+      };
+
       this.datapath_id   = profile.datapath_id;
       this.n_buffers     = profile.n_buffers;
       this.miss_send_len = defaultMissSendLen;
 
-      // optional bit necessary for UI display
-      this.ip_reassembly = profile.ip_reassembly;
-      // or this
-      this.capabilities = {
-        ip_reassembly: profile.ip_reassebmly
-      };
       this.fragHandling = defaultFragHandling;
 
       this.mfr_description = profile.mfr_description;
