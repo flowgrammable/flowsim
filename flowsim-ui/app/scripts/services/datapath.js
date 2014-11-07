@@ -78,29 +78,22 @@ Capabilities.prototype.openflow_1_4 = function() {
 
 function Datapath(datapath, profile) {
   if(datapath instanceof Datapath || typeof datapath === 'object') {
+    _.extend(this, datapath);
   } else {
-  }
-  /*
-  if(datapath) {
-    if(datapath instanceof Capabilities) {
-      this.datapath_id = datapath.datapath_id;
-      this.n_buffers   = datapath.n_buffers;
-      // 
-      if(datapath.ip_reassembly) {
-        this.fragHandling = defaultFragHandling;
-      }
+      this.datapath_id   = profile.datapath_id;
+      this.n_buffers     = profile.n_buffers;
       this.miss_send_len = defaultMissSendLen;
-      // Copy for statistics reasons
-      this.mfr_description = datapath.mfr_description;
-      this.hw_description  = datapath.hw_description;
-      this.sw_description  = datapath.sw_description;
-      this.serial_num      = datapath.serial_num;
-      this.dp_description  = datapath.dp_description;
-    } else {
-      _.extend(this, datapath);
-    }
+
+      // optional bit necessary for UI display
+      this.ip_reassebly = profile.ip_reassembly;
+      this.fragHandling = defaultFragHandling;
+
+      this.mfr_description = profile.mfr_description;
+      this.hw_description  = profile.hw_description;
+      this.sw_description  = profile.sw_description;
+      this.serial_num      = profile.serial_num;
+      this.dp_description  = profile.dp_description;
   }
-  */
 }
 
 var TIPS = {
@@ -126,7 +119,7 @@ var TESTS = {
 
 return {
   Capabilities: Capabilities,
-  Configuration: Configuration,
+  Configuration: Datapath,
   TIPS: TIPS,
   TESTS: TESTS
 };
