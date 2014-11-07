@@ -3,19 +3,19 @@
 angular.module('flowsimUiApp')
   .factory('Profile', function(Datapath, Ports, Tables, Meters, Groups) {
 
-function Profile(p) {
-  if(typeof p === 'string') {
-    this.name = p;
+function Profile(p, name, profile) {
+  if(p instanceof Profile || typeof p ==='object') {
+    //_.extend(this, p)
     this.datapath = new Datapath.Capabilities();
     this.ports    = new Ports.Capabilities();
-    this.tables   = new Tables.Capabilities();
+    this.tables   = new Tables.Capabilities(p.tables);
     this.meters   = new Meters.Capabilities();
     this.groups   = new Groups.Capabilities();
   } else {
-    _.extend(this, p);
+    this.name     = name;
     this.datapath = new Datapath.Capabilities(p.datapath);
     this.ports    = new Ports.Capabilities(p.ports);
-    this.tables   = new Tables.Capabilities(p.tables);
+    this.tables   = new Tables.Capabilities();
     this.meters   = new Meters.Capabilities(p.meters);
     this.groups   = new Groups.Capabilities(p.groups);
   }
