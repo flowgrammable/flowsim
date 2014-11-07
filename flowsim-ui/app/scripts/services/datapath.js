@@ -76,7 +76,11 @@ Capabilities.prototype.openflow_1_4 = function() {
   this.dp_description  = 'Generic OpenFlow 1.4 Pipeline';
 };
 
-function Configuration(datapath) {
+function Datapath(datapath, profile) {
+  if(datapath instanceof Datapath || typeof datapath === 'object') {
+  } else {
+  }
+  /*
   if(datapath) {
     if(datapath instanceof Capabilities) {
       this.datapath_id = datapath.datapath_id;
@@ -96,6 +100,7 @@ function Configuration(datapath) {
       _.extend(this, datapath);
     }
   }
+  */
 }
 
 var TIPS = {
