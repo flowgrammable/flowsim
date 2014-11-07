@@ -148,6 +148,35 @@ angular.module('flowsimUiApp')
       label: 'execution',
       active: false
     }];
+    $scope.transitions = [{
+      from: null,
+      to: 0,
+      forward: true
+    }, {
+      from: 0,
+      to: 1,
+      forward: true
+    },{
+      from: 1,
+      to: 2,
+      forward: true
+    },{
+      from: 2,
+      to: 3,
+      forward: true
+    },{
+      from: 3,
+      to: 4,
+      forward: true
+    },{
+      from: 4,
+      to: null,
+      forward: true
+    },{
+      from: 4,
+      to: 2,
+      forward: false
+    }];
     
     $scope.play = function() {
       if($scope.active) {
