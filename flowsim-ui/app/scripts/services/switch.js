@@ -10,30 +10,26 @@
 angular.module('flowsimUiApp')
   .factory('Switch', function(Datapath, Ports, Tables, Meters, Groups){
 
-function Switch(s, switchCapabilities) {
-  if(typeof s === 'string') {
-    // create new switch, copy capabilities
-    this.capabilities = {};
-    _.extend(this.capabilities, switchCapabilities);
-    this.name = s;
-    this.datapath = new Datapath.Configuration(switchCapabilities.datapath);
-    this.ports    = new Ports.Configuration(switchCapabilities.ports);
-    this.tables   = new Tables.Configuration(switchCapabilities.tables);
-    this.meters   = new Meters.Configuration(switchCapabilities.meters);
-    this.groups   = new Groups.Configuration(switchCapabilities.groups);
-  } else if(s instanceof Switch){
-    // json construction
+function Switch(sw, name, switchCapabilities) {
+  if(sw instanceof Switch || typeof sw === 'object') {
     _.extend(this, s);
+    //this.capabilities = ss.capabilities;
+    this.datapath     = new Datapath.Configuration(sw.datapath);
+    this.ports        = new Ports.Configuration(sw.ports);
+    this.tables       = new Tables.Configuration(sw.tables);
+    this.meters       = new Meters.Configuration(sw.meters);
+    this.groups       = new Groups.Configuration(sw.groups);
   } else {
-    // swi already constructed
-    this.capabilities = s.capabilities;
-    this.datapath = new Datapath.Configuration(s.datapath);
-    this.ports    = new Ports.Configuration(s.ports);
-    this.tables   = new Tables.Configuration(s.tables);
-    this.meters   = new Meters.Configuration(s.meters);
-    this.groups   = new Groups.Configuration(s.groups);
+    this.name         = name;
+    //this.capabilities = {};
+    this.datapath     = new Datapath.Configuration(switchCapabilities.datapath);
+    this.ports        = new Ports.Configuration(switchCapabilities.ports);
+    this.tables       = new Tables.Configuration(switchCapabilities.tables);
+    this.meters       = new Meters.Configuration(switchCapabilities.meters);
+    this.groups       = new Groups.Configuration(switchCapabilities.groups);
   }
 }
+
 Switch.prototype.clone = function() {
   return new Switch(this);
 };
