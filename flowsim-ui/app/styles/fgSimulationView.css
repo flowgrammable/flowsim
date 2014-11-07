@@ -1,0 +1,38 @@
+.sim-container
+{
+	display: block;
+	margin : auto;
+}
+
+.sim-stage-prim
+{
+    fill: #42a0ba;
+}
+.sim-packet
+{
+    fill: lightgrey;
+}
+
+.sim-stage-sec
+{
+    fill: #c0224e;
+}
+
+.sim-stage-text
+{
+	font-size  : 14px;
+	font-weight: bold ;
+	font-style : italic;
+	fill       : white;
+}
+line.link {
+    stroke-width: 2px;
+    stroke: #999;
+    stroke-opacity: 0.6;
+fill: "none";
+}
+
+marker#arrow {
+    stroke: #999;
+    fill: #999;
+}
