@@ -22,7 +22,8 @@ function mkActionField(name, value, key) {
 var Instruction = {};
 
 Instruction.Profile = function(ins, instruction){
-  if(ins instanceof Instruction.Profile || (typeof ins === 'object' && ins !== null)){
+  if(ins instanceof Instruction.Profile ||
+        (typeof ins === 'object' && ins !== null)){
     _.extend(this, ins);
     this.caps = _.clone(ins.caps);
     this.apply = _.map(ins.apply, function(i) {

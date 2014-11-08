@@ -50,32 +50,31 @@ Table.Profile.TESTS = {
   Miss: Instruction.Profile.TESTS
 };
 
-function Priority(priority) {
-  if(priority && typeof priority === 'number') {
-    this.priority = priority;
-    this.flows = [];
-  }
-  else if(priority) {
-    _.extend(this, priority);
-    _.map(priority.flows, function(flow) { return flow.clone(); });
-  } else {
-    this.flows = [];
-  }
+Table.Priority = function(priority){
+  if(priority instanceof Table.Priority ||
+    (typeof priority === 'object' && priority !== null)){
+      _.extend(this, priority);
+      this.flows = _.map(priority.flows, function(flow){
+        return new Flow(flow);
+      });
+    } else {
+      this.flows = [];
+    }
 }
 
-Priority.prototype.clone = function() {
-  return new Priority(this);
+Table.Priority.prototype.clone = function() {
+  return new Table.Priority(this);
 };
 
-Priority.prototype.add = function(flow) {
+Table.Priority.prototype.add = function(flow) {
   this.flows.push(flow);
 };
 
-Priority.prototype.del = function(idx) {
+Table.Priority.prototype.del = function(idx) {
   this.flows.splice(idx, 1);
 };
 
-Priority.prototype.select = function(key) {
+Table.Priority.prototype.select = function(key) {
   var i=0;
   for(i=0; i<this.flows.length; ++i) {
     if(this.flows[i].match.match(key)) {
@@ -89,10 +88,11 @@ function Table(table, profile) {
   if(table instanceof Table || (typeof table === 'object' && table !== null)) {
     _.extend(this, table);
     this.capabilities.match = new Match.Profile(table.capabilities.match);
-    this.capabilities.instruction = new Instruction.Profile(table.capabilities.instruction);
+    this.capabilities.instruction =
+        new Instruction.Profile(table.capabilities.instruction);
     this.capabilities.miss = new Instruction.Profile(table.capabilities.miss);
     this.priorities = _.map(table.priorities, function(priority) {
-      return priority.clone();
+      return new Table.Priority(priority);
     });
     this.miss = table.miss.clone();
   } else {
@@ -115,7 +115,7 @@ Table.prototype.add = function(priority, flow) {
     return _priority.priority <= priority;
   });
   if(this.priorities[pos].priority !== priority) {
-    this.priorities.splice(pos, 0, new Priority(priority));
+    this.priorities.splice(pos, 0, new Table.Priority(priority));
   }
   this.priorities[pos].add(flow);
 };

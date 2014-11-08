@@ -8,7 +8,8 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Tables', function(fgConstraints, ETHERNET, Instruction, Match, Table) {
+  .factory('Tables', function(fgConstraints, ETHERNET, Instruction,
+        Match, Table) {
 
 /* Default Construction Constants */
 var defaultTables     = 8;
@@ -29,7 +30,8 @@ function Tables(tbls, profile) {
 
 
 Tables.Profile = function(prof, tables){
-  if(prof instanceof Tables.Profile || (typeof prof ==='object' && prof !== null)){
+  if(prof instanceof Tables.Profile ||
+      (typeof prof ==='object' && prof !== null)){
     _.extend(this, prof);
     this.tables = _.map(prof.tables, function(table) {
       return new Table.Profile(table);
