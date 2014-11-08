@@ -445,10 +445,10 @@ Tables.Table.TESTS = {
   Miss: Tables.Table.Instruction.TESTS
 };
 
-Tables.Profile = function(tbls, tables){
-  if(tbls instanceof Tables.Profile || (typeof tbls ==='object' && tbls !== null)){
-    _.extend(this, tbls);
-    this.tables = _.map(tbls.tables, function(table) {
+function Profile(prof, tables){
+  if(prof instanceof Profile || (typeof prof ==='object' && prof !== null)){
+    _.extend(this, prof);
+    this.tables = _.map(prof.tables, function(table) {
       return new Tables.Table(table);
     });
   } else {
@@ -459,7 +459,7 @@ Tables.Profile = function(tbls, tables){
   }
 }
 
-Tables.Profile.prototype.rebuild = function() {
+Profile.prototype.rebuild = function() {
   var i;
   if(this.n_tables === this.tables.length) {
     return;
@@ -749,7 +749,7 @@ var TablesUI = Tables;
 TablesUI.prototype.toBase = Tables.prototype.clone;
 
 return {
-  Capabilities: Tables.Profile,
+  Capabilities: Profile,
   Configuration: Tables,
   TIPS: TIPS,
   TESTS: TESTS
