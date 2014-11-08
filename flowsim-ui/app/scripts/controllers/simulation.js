@@ -177,13 +177,18 @@ angular.module('flowsimUiApp')
       to: 2,
       forward: false
     }];
-    
+    //for simulationView $watch
+    $scope.makeTransition = {
+        to:-1,
+        clonePacket : false
+        };
     $scope.play = function() {
       if($scope.active) {
         return;
       }
       $scope.active = true;
       $scope.stages[0].active = true;
+      $scope.makeTransition.to =0;
       $scope.simulation = new Dataplane.Dataplane($scope.trace, 
         function(next, cur) {
         });
@@ -196,12 +201,15 @@ angular.module('flowsimUiApp')
       $scope.active = false;
       $scope.simulation = null;
     };
-
+    $scope.moves =  [ {to: 1},{to: 2}, {to: 3}, {to: 4}, {to: 2}, {to: 3}, {to: 4}, {to: 4, clonePacket:true}, {to: 5}];
+    $scope.currStep =0;
     $scope.step = function() {
       var idx;
       if(!$scope.active) {
         return;
       }
+        $scope.makeTransition = $scope.moves[$scope.currStep];
+        $scope.currStep++;
       for(idx=0; idx<$scope.stages.length; ++idx) {
         if($scope.stages[idx].active) {
           $scope.stages[idx].active = false;

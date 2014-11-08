@@ -15,12 +15,13 @@ angular.module('flowsimUiApp')
             scope: {
                 stages: '=',
                 transitions: '=',
+                makeTransition: '=',
                 label: '@'
             },
             link: function postLink(scope, element, attrs) {
                 //directive attributes with defaults
                 var width        = parseInt(attrs.width) || 630,
-                    height       = parseInt(attrs.height) || 90,
+                    height       = parseInt(attrs.height) || 100,
                     stageWidth   = parseInt(attrs.stageWidth) || 90,
                     stageHeight  = parseInt(attrs.stageHeight) || 30,
                     stagePadding = parseInt(attrs.stagePadding) || 30,
@@ -46,33 +47,56 @@ angular.module('flowsimUiApp')
                 .attr("orient", "auto")
                 .append("svg:path")
                 .attr("d", "M 0 -4 L 10 0 L 0 4 z");
-
-                scope.$watch('stages', function ( newData, oldData) {
-                    var fromIdx = -1;
-                    var i;
-                    for (i = 0; i < oldData.length; ++i) {
-                       if(oldData[i].active) fromIdx=i;
-                    }
-                    var toIdx =-1;
-                    i=0;
-                    for (i = 0; i < oldData.length; ++i) {
-                       if(newData[i].active) toIdx=i;
-                    }
-                    scope.transition(fromIdx, toIdx);
+                var currentStage = -1;
+                scope.$watch('makeTransition', function ( newData) {
+                    scope.transition(newData.to, newData.clonePacket);
                 }, true);
+                /**
+                 *
+                 * @param to - int - index to make transition to
+                 * @param clone -boolean - Copy packet and transition one forward
+                 */
+                scope.transition = function(to, clone){
+                    console.log('Transition:'+ clone +' ' + to);
+                    if(clone){
+                         svg.select('#packets')
+                            .append('rect')
+                            .attr('class', 'sim-packet')
 
-                scope.transition = function(from, to){
-                    if(to>-1){
-                      svg.selectAll('.sim-packet')
-                        .transition()
-                        .style('display', 'block')
+                            .attr('height', stageHeight + 10)
+                            .attr('width', stageWidth + 10)
+                            .attr('x', to * (stageWidth + stagePadding) + margin - 5)
+                            .attr('y', margin / 2 - 5)
+                            .attr('ry', 10)
+                            .transition()
+                        
                         .duration(1500)
-                        .attr('x', to * (stageWidth + stagePadding) + margin - 5);
+                        .attr('x', 5 * (stageWidth + stagePadding) + margin - 5);
+                    }else
+                    if(to>-1){
+                        if(to > currentStage){//forward transition
+                          svg.selectAll('.sim-packet')
+                            .transition()
+                            .style('display', 'block')
+                            .duration(1500)
+                            .attr('x', to * (stageWidth + stagePadding) + margin - 5);
+                        }else{//bacward transition
+                            svg.selectAll('.sim-packet')
+                            .transition()
+                            .duration(1500)
+                            .style('display', 'block')
+                            .attr('y', height - margin - 15)
+                            .transition()
+                            .attr('x', to * (stageWidth + stagePadding) + margin - 5)
+                            .transition()
+                            .attr('y',  margin / 2 - 5);
+                        }
                     }else{
                         svg.selectAll('.sim-packet')
                         .style('display', 'none')
                         .attr('x', to * (stageWidth + stagePadding) + margin - 5);
                     }
+                    currentStage = to;
                     
                 };
                 /**
@@ -85,7 +109,9 @@ angular.module('flowsimUiApp')
 
                     if (_.isUndefined(stages) || !stages || stages.length === 0) return; //don't render if there is no data
                //Place holder for Active
-                var packet= svg
+                svg.append("g").attr("id", "packets");
+                svg.append("g").attr("id", "stages");
+                var packet= svg.select('#packets')
                     .append('rect')
                     .attr('class', 'sim-packet')
                     // .style('display', 'none')
@@ -95,11 +121,11 @@ angular.module('flowsimUiApp')
                     .attr('y', margin / 2 - 5)
                     .attr('ry', 10);
 
-                    var stages = svg.selectAll('g')
+                    var stages = svg.select('#stages').selectAll('g')
                         .data(stages)
                         .enter()
                         .append('g')
-
+                        .attr("id", "stages")
                         .attr('height', stageHeight)
                         .attr('width', stageWidth)
                         
@@ -140,7 +166,7 @@ angular.module('flowsimUiApp')
                                     var x1 =  (d.from +1)* (stageWidth + stagePadding) -stageWidth /2;
                                     var x2 =  d.to * ( stageWidth + stagePadding) +stagePadding + stageWidth /2;
                                     var y1 = margin/2 + stageHeight;
-                                    var y2 = height - margin/2 ;
+                                    var y2 = height - margin/2 -10;
                                     return [x1,y1 , x1, y2, x2,y2, x2, y1 ];
                                 }
 
