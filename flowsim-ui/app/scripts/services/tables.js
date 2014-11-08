@@ -15,8 +15,10 @@ var defaultTables     = 8;
 var defaultMaxEntries = 1024;
 var defaultTableStats = true;
 var defaultFlowStats  = true;
+var defaultMissController = false;
+var defaultMissContinue = false;
+var defaultMissDrop = false;
 
-var Match = {};
 
 function createMatch(protocol, field, key, wildcard, maskable, mask) {
   return {
@@ -33,12 +35,32 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
 function Tables(tbls, profile) {
   if(tbls instanceof Tables || (typeof tbls === 'object' && tbls !== null)){
     _.extend(this, tbls);
-    this.capabilities = _.clone(tbls.capabilities);
   } else {
-
-
+    this.tables = _.map(profile.tables, function(table){
+      return new Tables.Table(null, table);
+    });
   }
-};
+}
+
+
+
+Tables.Table = function(table, profileTable){
+  if(table instanceof Tables.Table ||
+    (typeof table ==='object' && table !== null)){
+      _.extend(this, table);
+      this.capabilities = _.clone(table.capabilities);
+    } else {
+      this.capabilities = {
+        match : profileTable.match,
+        instruction : profileTable.instruction,
+        miss : profileTable.miss
+      };
+      this.flows = [];
+      this.miss_controller = defaultMissController;
+      this.miss_continue = defaultMissContinue;
+      this.miss_drop = defaultMissDrop;
+    }
+}
 
 function mkActionField(name, value, key) {
   return {
@@ -49,24 +71,26 @@ function mkActionField(name, value, key) {
 }
 
 
-Tables.Table = function(tbl, id){
-  if(tbl instanceof Tables.Table || (typeof tbl === 'object' && tbl !== null)){
+Profile.Table = function(tbl, id){
+  if(tbl instanceof Profile.Table || (typeof tbl === 'object' && tbl !== null)){
     _.extend(this, tbl);
-    this.match = new Tables.Table.Match(tbl.match);
+    this.match = new Profile.Table.Match(tbl.match);
+    this.instruction = new Profile.Table.Instruction(tbl.instruction);
+    this.miss = new Profile.Table.Miss(tbl.miss);
   } else {
     this.table_id = tbl;
     this.name = 'table' + this.table_id;
     this.max_entries = defaultMaxEntries;
     this.table_stats = defaultTableStats;
     this.flow_stats = defaultFlowStats;
-    this.match = new Tables.Table.Match();
-    this.instruction = new Tables.Table.Instruction();
-    this.miss = new Tables.Table.Miss;
+    this.match = new Profile.Table.Match();
+    this.instruction = new Profile.Table.Instruction();
+    this.miss = new Profile.Table.Miss;
   }
 }
 
-Tables.Table.Match = function(mat, match){
-  if(mat instanceof Tables.Table.Match || (typeof mat === 'object' && mat !==null)){
+Profile.Table.Match = function(mat, match){
+  if(mat instanceof Profile.Table.Match || (typeof mat === 'object' && mat !==null)){
     _.extend(this, mat);
     this.fields = _.map(mat.fields, function(f) { return _.clone(f); });
   } else {
@@ -112,7 +136,7 @@ Tables.Table.Match = function(mat, match){
   }
 }
 
-Tables.Table.Match.TIPS = {
+Profile.Table.Match.TIPS = {
   in_port: 'Match on ingress port',
   eth_src: 'Match on Ethernet source address',
   eth_dst: 'Match on Ethernet destination address',
@@ -144,7 +168,7 @@ Tables.Table.Match.TIPS = {
   sctp_dst: 'Match on SCTP destination'
 };
 
-Tables.Table.Match.TESTS = {
+Profile.Table.Match.TESTS = {
   in_port: fgConstraints.isUInt(0, 0xffffffff),
   eth_src: fgConstraints.isUInt(0, 0xffffffffffff),
   eth_dst: fgConstraints.isUInt(0, 0xffffffffffff),
@@ -182,8 +206,8 @@ Tables.Table.Match.TESTS = {
   sctp_dst: fgConstraints.isUInt(0, 0xffff)
 };
 
-Tables.Table.Instruction = function(ins, instruction){
-  if(ins instanceof Tables.Table.Instruction ||
+Profile.Table.Instruction = function(ins, instruction){
+  if(ins instanceof Profile.Table.Instruction ||
     (typeof ins === 'object' && ins !== null)){
     _.extend(this, ins);
     this.caps = _.clone(ins.caps);
@@ -405,10 +429,10 @@ Tables.Table.Instruction = function(ins, instruction){
     this.goto_ = [];
   }
 }
-Tables.Table.Miss = Tables.Table.Instruction;
+Profile.Table.Miss = Profile.Table.Instruction;
 //Tables.Table.Miss = Tables.Table.Instruction;
 
-Tables.Table.Instruction.TIPS = {
+Profile.Table.Instruction.TIPS = {
   apply: 'Applies actions immediately',
   clear: 'Clears the action set',
   write: 'Appends actions to the action set',
@@ -417,44 +441,43 @@ Tables.Table.Instruction.TIPS = {
   goto_: 'Jumps to another flow table'
 };
 
-Tables.Table.Instruction.TESTS = {
+Profile.Table.Instruction.TESTS = {
   metadata: fgConstraints.isUInt(0, 0xffffffffffffffff),
   goto_: function(input) {
     return /^([0-9]+)(\.\.([0-9]+))?$/.test(input);
   }
 };
 
-
-Tables.Table.TIPS = {
+Profile.Table.TIPS = {
   table_id: 'Unique table identifier',
   name: 'Descriptive name for flow table type',
   max_entries: 'Maximum flows supported',
   table_stats: 'Ability of table to record lookup statistics',
   flow_stats: 'Ability of flow to record match statistics',
   flow_caps: 'Match, Instruction, and Actions to support',
-  Match: Tables.Table.Match.TIPS,
-  Instruction: Tables.Table.Instruction.TIPS,
-  Miss: Tables.Table.Instruction.TIPS
+  Match: Profile.Table.Match.TIPS,
+  Instruction: Profile.Table.Instruction.TIPS,
+  Miss: Profile.Table.Instruction.TIPS
 };
 
-Tables.Table.TESTS = {
+Profile.Table.TESTS = {
   name: function(n) { return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(n); },
   max_entries: fgConstraints.isUInt(0,0xffffffff),
-  Match: Tables.Table.Match.TESTS,
-  Instruction: Tables.Table.Instruction.TESTS,
-  Miss: Tables.Table.Instruction.TESTS
+  Match: Profile.Table.Match.TESTS,
+  Instruction: Profile.Table.Instruction.TESTS,
+  Miss: Profile.Table.Instruction.TESTS
 };
 
 function Profile(prof, tables){
   if(prof instanceof Profile || (typeof prof ==='object' && prof !== null)){
     _.extend(this, prof);
     this.tables = _.map(prof.tables, function(table) {
-      return new Tables.Table(table);
+      return new Profile.Table(table);
     });
   } else {
     this.n_tables = defaultTables;
     this.tables = _.map(_.range(this.n_tables), function(id) {
-      return new Tables.Table(id);
+      return new Profile.Table(id);
     });
   }
 }
@@ -467,7 +490,7 @@ Profile.prototype.rebuild = function() {
     this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
   } else {
     for(i=this.tables.length; i<this.n_tables; ++i) {
-      this.tables.push(new Table(i));
+      this.tables.push(new Profile.Table(i));
     }
   }
 };
@@ -733,12 +756,12 @@ Capabilities.prototype.openflow_1_4 = function() {
 
 var TIPS = {
   n_tables: 'Number of flow tables available',
-  Table: Tables.Table.TIPS
+  Table: Profile.Table.TIPS
 };
 
 var TESTS = {
   n_tables: fgConstraints.isUInt(0,0xff),
-  Table: Tables.Table.TESTS
+  Table: Profile.Table.TESTS
 };
 
 Tables.prototype.clone = function() {

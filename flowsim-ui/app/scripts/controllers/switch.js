@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchCtrl', function ($scope, fgCache, Profile, Switch, 
+  .controller('SwitchCtrl', function ($scope, fgCache, Profile, Switch,
                                       $rootScope, $modal) {
     $scope.names = {};
     $scope._switch = null;
@@ -84,7 +84,7 @@ angular.module('flowsimUiApp')
     $scope.setDirty = function() {
       $rootScope.$broadcast('dirtyCache');
     };
-          
+
     $scope.setClean = function() {
       $rootScope.$broadcast('cleanCache');
     };
