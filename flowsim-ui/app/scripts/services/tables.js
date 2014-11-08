@@ -11,13 +11,13 @@ angular.module('flowsimUiApp')
   .factory('Tables', function(fgConstraints, ETHERNET) {
 
 /* Default Construction Constants */
-var defaultTables     = 8;
-var defaultMaxEntries = 1024;
-var defaultTableStats = true;
-var defaultFlowStats  = true;
+var defaultTables         = 8;
+var defaultMaxEntries     = 1024;
+var defaultTableStats     = true;
+var defaultFlowStats      = true;
 var defaultMissController = false;
-var defaultMissContinue = false;
-var defaultMissDrop = false;
+var defaultMissContinue   = false;
+var defaultMissDrop       = false;
 
 
 function createMatch(protocol, field, key, wildcard, maskable, mask) {

@@ -41,6 +41,9 @@ Match.prototype.match = function(key) {
   return true;
 };
 
+Match.Profile = function() {
+};
+
 Match.Ethernet = {};
 
 Match.Ethernet.Src = function(addr, mask) {
