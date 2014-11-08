@@ -55,7 +55,7 @@
 		<key>NSPaperSize</key>
 		<array>
 			<string>size</string>
-			<string>{612, 792}</string>
+			<string>{611.99999904632568, 792}</string>
 		</array>
 		<key>NSPrintReverseOrientation</key>
 		<array>
@@ -85,7 +85,7 @@
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>FontInfo</key>
@@ -19030,7 +19030,7 @@
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -20643,7 +20643,7 @@
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -21970,7 +21970,7 @@ type: VLAN (0x8100)}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -23079,7 +23079,7 @@ tunnel_id: 12435}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -24643,7 +24643,7 @@ type: VLAN (0x0800)}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -26334,7 +26334,7 @@ type: VLAN (0x0800)}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -28786,7 +28786,7 @@ type: VLAN (0x0800)}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -32025,7 +32025,7 @@ type: VLAN (0x8100)}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {733, 576}}</string>
+				<string>{{0, 0}, {733, 575.99999904632568}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -34046,11 +34046,11 @@ type: VLAN (0x8100)}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>0</integer>
+		<integer>8</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>Frame</key>
-		<string>{{116, 34}, {1065, 824}}</string>
+		<string>{{615, 325}, {1065, 824}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
