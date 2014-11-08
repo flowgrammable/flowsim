@@ -69,9 +69,10 @@ angular.module('flowsimUiApp')
                             .attr('y', margin / 2 - 5)
                             .attr('ry', 10)
                             .transition()
-                        
-                        .duration(1500)
-                        .attr('x', 5 * (stageWidth + stagePadding) + margin - 5);
+                            .duration(1500)
+                            .attr('x', 5 * (stageWidth + stagePadding) + margin + 5)
+                            ;
+                        ;
                     }else
                     if(to>-1){
                         if(to > currentStage){//forward transition
@@ -79,11 +80,11 @@ angular.module('flowsimUiApp')
                             .transition()
                             .style('display', 'block')
                             .duration(1500)
-                            .attr('x', to * (stageWidth + stagePadding) + margin - 5);
+                            .attr('x', to * (stageWidth + stagePadding) + margin + ((to===5)?5:-5));
                         }else{//bacward transition
                             svg.selectAll('.sim-packet')
                             .transition()
-                            .duration(1500)
+                            .duration(500)
                             .style('display', 'block')
                             .attr('y', height - margin - 15)
                             .transition()
