@@ -25,7 +25,8 @@ angular.module('flowsimUiApp')
                     stageWidth   = parseInt(attrs.stageWidth) || 90,
                     stageHeight  = parseInt(attrs.stageHeight) || 30,
                     stagePadding = parseInt(attrs.stagePadding) || 30,
-                    margin       = parseInt(attrs.margin) || 30;
+                    margin       = parseInt(attrs.margin) || 30,
+                    animationDuration = parseInt(attrs.animationDuration) || 1500;
 
                 var svg = d3.select(element[0])
                     .append('svg')
@@ -69,7 +70,7 @@ angular.module('flowsimUiApp')
                             .attr('y', margin / 2 - 5)
                             .attr('ry', 10)
                             .transition()
-                            .duration(1500)
+                            .duration(animationDuration)
                             .attr('x', 5 * (stageWidth + stagePadding) + margin + 5)
                             ;
                         ;
@@ -79,12 +80,12 @@ angular.module('flowsimUiApp')
                           svg.selectAll('.sim-packet')
                             .transition()
                             .style('display', 'block')
-                            .duration(1500)
+                            .duration(animationDuration)
                             .attr('x', to * (stageWidth + stagePadding) + margin + ((to===5)?5:-5));
                         }else{//bacward transition
                             svg.selectAll('.sim-packet')
                             .transition()
-                            .duration(500)
+                            .duration(animationDuration / 3)
                             .style('display', 'block')
                             .attr('y', height - margin - 15)
                             .transition()
