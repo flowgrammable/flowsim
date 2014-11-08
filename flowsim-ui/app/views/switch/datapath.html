@@ -6,14 +6,13 @@
 
     <div class="form-group">
       <div class="input-group"
-           ng-class="{'has-error':
-                      !tests.Datapath.datapath_id(profile.datapath.datapath_id)}">
+           ng-disabled="true">
         <div class="input-group-addon" style="width:110px"
               tooltip="{{tips.Datapath.datapath_id}}">
           Datapath ID
         </div>
         <input class="form-control" type="text" style="width:200px"
-               ng-model="profile.datapath.datapath_id">
+               ng-model="_switch.datapath.datapath_id" ng-disabled="true">
       </div>
     </div>
     <div class="checkbox">
@@ -22,16 +21,14 @@
           IP Reassembly
       </label>
     </div>
-    <div class="form-group"
-          ng-class="{'has-error':
-                     !tests.Datapath.n_buffers(profile.datapath.n_buffers)}">
+    <div class="form-group">
       <div class="input-group">
         <div class="input-group-addon" style="width:110px"
              tooltip="{{tips.Datapath.n_buffers}}">
           Buffer Count
         </div>
         <input class="form-control" type="text" style="width:200px"
-               ng-model="profile.datapath.n_buffers">
+               ng-model="_switch.datapath.n_buffers" ng-disabled="true">
       </div>
     </div>
   </div>
@@ -43,61 +40,56 @@
   <div class="col-md-10 col-md-offset-1">
 
     <div class="form-group">
-      <div class="input-group"
-            ng-class="{'has-error':
-            !tests.Datapath.mfr_description(profile.datapath.mfr_description)}">
+      <div class="input-group">
         <div class="input-group-addon" style="width:200px"
              tooltip="{{tips.Datapath.mfr_description}}">
           Manufacturer description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="profile.datapath.mfr_description"></textarea>
+                  ng-model="_switch.datapath.mfr_description"
+                  ng-disabled="true"></textarea>
       </div>
     </div>
     <div class="form-group">
-      <div class="input-group"
-           ng-class="{'has-error':
-            !tests.Datapath.hw_description(profile.datapath.hw_description)}">
+      <div class="input-group">
         <div class="input-group-addon" style="width:200px"
              tooltip="{{tips.Datapath.hw_description}}">
           Hardware description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="profile.datapath.hw_description"></textarea>
+                  ng-model="_switch.datapath.hw_description"
+                  ng-disabled="true"></textarea>
       </div>
     </div>
     <div class="form-group">
-      <div class="input-group"
-            ng-class="{'has-error':
-            !tests.Datapath.sw_description(profile.datapath.sw_description)}">
+      <div class="input-group">
         <div class="input-group-addon" style="width:200px"
           tooltip="{{tips.Datapath.sw_description}}">
           Software description</div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="profile.datapath.sw_description"></textarea>
+                  ng-model="_switch.datapath.sw_description"
+                  ng-disabled="true"></textarea>
       </div>
     </div>
     <div class="form-group">
-      <div class="input-group"
-            ng-class="{'has-error':
-            !tests.Datapath.serial_num(profile.datapath.serial_num)}">
+      <div class="input-group">
         <div class="input-group-addon" style="width:200px"
              tooltip="{{tips.Datapath.serial_num}}">
           Serial Number</div>
         <input class="form-control" type="text" style="width:300px"
-               ng-model="profile.datapath.serial_num">
+               ng-model="_switch.datapath.serial_num"
+               ng-disabled="true">
       </div>
     </div>
     <div class="form-group">
-      <div class="input-group"
-            ng-class="{'has-error':
-            !tests.Datapath.dp_description(profile.datapath.dp_description)}">
+      <div class="input-group">
         <div class="input-group-addon" style="width:200px"
              tooltip="{{tips.Datapath.dp_description}}">
           Dataplane description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="profile.datapath.dp_description"></textarea>
+                  ng-model="_switch.datapath.dp_description"
+                  ng-disabled="true"></textarea>
       </div>
     </div>
 
