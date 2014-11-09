@@ -20,9 +20,21 @@ describe('Service: uint', function () {
     var dst  = new UInt.UInt(null, [255, 255, 255, 255, 255, 255], 6);
     var type = new UInt.UInt(null, 0x0800, 2);
 
+    var x1 = UInt.and(src, dst);
+    var x2 = UInt.or(src, dst);
+    var x3 = UInt.neg(src);
+    var x4 = UInt.neg(dst);
+
+    console.log(x1.toString(16));
+    console.log(x2.toString(16));
+    console.log(x3.toString(16));
+    console.log(x4.toString(16));
+
     expect(function() {
       UInt.equal(src, type);
     }).toThrow();
+
+
   });
 
 });

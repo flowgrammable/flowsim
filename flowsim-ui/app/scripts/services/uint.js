@@ -59,22 +59,25 @@ UInt.prototype.toString = function(base) {
 };
 
 function equal(lhs, rhs) {
+  if(lhs.bytes !== rhs.bytes) {
+    throw 'equal('+lhs.bytes+', '+rhs.bytes+')';
+  }
   return lhs.bytes === rhs.bytes && _.isEqual(lhs, rhs);
 }
 
 function neg(val) {
   if(val.bytes < 5) {
-    return new UInt(null, ~val.value, 4);
+    return new UInt(null, ~val.value >>> 0, 4);
   } else {
     return new UInt(null, _(val.bytes).times(function(i) {
-      return ~val.value[i];
+      return 0xff & (~val.value[i] >>> 0);
     }), val.bytes);
   }
 }
 
 function and(lhs, rhs) {
   if(lhs.bytes !== rhs.bytes) {
-    throw 'mask('+lhs.bytes+', '+rhs.bytes+')';
+    throw 'and('+lhs.bytes+', '+rhs.bytes+')';
   }
   if(lhs.bytes < 5) {
     return new UInt(null, lhs.value & rhs.value, 4);
@@ -87,7 +90,7 @@ function and(lhs, rhs) {
 
 function or(lhs, rhs) {
   if(lhs.bytes !== rhs.bytes) {
-    throw 'mask('+lhs.bytes+', '+rhs.bytes+')';
+    throw 'or('+lhs.bytes+', '+rhs.bytes+')';
   }
   if(lhs.bytes < 5) {
     return new UInt(null, lhs.value | rhs.value, 4);
@@ -100,7 +103,7 @@ function or(lhs, rhs) {
 
 function xor(lhs, rhs) {
   if(lhs.bytes !== rhs.bytes) {
-    throw 'mask('+lhs.bytes+', '+rhs.bytes+')';
+    throw 'xor('+lhs.bytes+', '+rhs.bytes+')';
   }
   if(lhs.bytes < 5) {
     return new UInt(null, lhs.value ^ rhs.value, 4);
