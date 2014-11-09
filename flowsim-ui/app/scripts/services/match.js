@@ -10,12 +10,15 @@
 angular.module('flowsimUiApp')
   .factory('Match', function(fgConstraints, ETHERNET, UInt) {
 
-function Match(match, matches) {
-  if(match instanceof Match || match) {
-    _.extend(this, match);
-    this.matches = _.map(match.matches, function(m) { return m.clone(); });
+function Match(match, label, matchObject) {
+  if(_.isObject(match)) {
+    this.label  = match.label;
+    this._match = matchObject.clone();
+  } else if(label && matchObject) {
+    this.label  = label;
+    this._match = matchObject;
   } else {
-    this.matches = matches ? matches : [];
+    throw 'Match('+match+', '+label+', '+matchObject+')';
   }
 }
 
@@ -23,11 +26,25 @@ Match.prototype.clone = function() {
   return new Match(this);
 };
 
-Match.prototype.push = function(match) {
+function Set(set) {
+  if(_.isObject(set)) {
+    this.matches = _.map(set.matches, function(match) { 
+      return new Match(match);
+    });
+  } else {
+    this.matches = [];
+  }
+}
+
+Set.prototype.clone = function() {
+  return new Set(this);
+}
+
+Set.prototype.push = function(match) {
   this.matches.push(match);
 };
 
-Match.prototype.pop = function() {
+Set.prototype.pop = function() {
   if(this.matches.length) {
     this.matches.splice(this.matches.length-1, 1);
   }
@@ -35,7 +52,7 @@ Match.prototype.pop = function() {
 
 Match.prototype.match = function(key) {
   return _.every(this.matches, function(match) {
-    return match.match(key);
+    return _(key).has(match.label) && match._match.match(key[match.label]);
   });
 };
 
@@ -212,6 +229,7 @@ Match.Ethernet.Type.prototype.match = function(key) {
 
 return {
   Match: Match,
+  Set: Set,
   Ethernet: Match.Ethernet,
   Profile: Match.Profile
 };

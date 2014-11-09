@@ -34,7 +34,7 @@ function maxFromBytes(val) {
 function is(bits) {
   return function(val) {
     var tmp;
-    if(_.isFinite(val) && (value % 1 === 0)) {
+    if(_.isFinite(val) && (val % 1 === 0)) {
       return 0 <= val && val <= maxFromBits(bits);
     } else if(_.isString(val) && Pattern.test(val)) {
       tmp = parseInt(val);

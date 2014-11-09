@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('ETHERNET', function ETHERNET(fgConstraints, fgUI, UInt) {
+  .factory('ETHERNET', function ETHERNET(UInt) {
 
 var NAME  = 'Ethernet';
 var BYTES = 14;
@@ -59,6 +59,10 @@ Ethernet.prototype.type = function(type) {
   }
 };
 
+Ethernet.prototype.clone = function() {
+  return new Ethernet(this);
+};
+
 var TIPS = {
   src: 'Ethernet source address',
   dst: 'Ethernet destination address',
@@ -86,6 +90,10 @@ function MAC(mac, input) {
     this._mac = new UInt.UInt(null, null, 6);
   }
 }
+
+MAC.prototype.clone = function() {
+  return new MAC(this);
+};
 
 function mkMAC(mac) {
   if(_.isObject(mac)) {
@@ -143,6 +151,18 @@ MAC.Match.prototype.toString = function() {
   return this.addr.toString() + '/' + this.mask.toString();
 };
 
+function mkMACMatch(value, mask) {
+  return new MAC.Match(null, value, mask);
+}
+
+function mkType(input) {
+  return new UInt.UInt(null, input, 2);
+}
+
+function mkTypeMatch(value, mask) {
+  return new UInt.Match(null, mkType(value), mkType(mask));
+}
+
 var TESTS = {
   src:     MAC.is,
   dst:     MAC.is,
@@ -150,7 +170,8 @@ var TESTS = {
 };
 
 function Ethernet_UI(eth) {
-  eth = eth === undefined ? new Ethernet(NAME) : new Ethernet(eth);
+  eth = eth ? eth : new Ethernet();
+  //eth = eth === undefined ? new Ethernet() : new Ethernet(eth);
   this.name = NAME;
   this.bytes = eth.bytes;
   this.attrs = [{
@@ -165,14 +186,15 @@ function Ethernet_UI(eth) {
     tip: TIPS.dst
   }, {
     name: 'Type/Length',
-    value: eth.typelen().toString(),
+    value: eth.type().toString(),
     test: UInt.is(16),
     tip: TIPS.typelen
   }];
 }
 
 Ethernet_UI.prototype.toBase = function() {
-  return new Ethernet(this);
+  return new Ethernet(null, this.attrs[0].value, this.attrs[1].value, 
+                      this.attrs[2].value);
 };
 
 Ethernet_UI.prototype.setPayload = function(name) {
@@ -192,6 +214,9 @@ return {
   Payloads:    Object.keys(Payloads),
   MAC:         MAC,
   mkMAC:       mkMAC,
+  mkMACMatch:  mkMACMatch,
+  mkType:      mkType,
+  mkTypeMatch: mkTypeMatch,
   TESTS:       TESTS,
   TIPS:        TIPS
 };
