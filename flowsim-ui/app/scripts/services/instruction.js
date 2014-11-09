@@ -335,10 +335,19 @@ Goto.prototype.execute = function(dp, ctx) {
   ctx.table_id = this.table_id;
 };
 
-function Set() {
-  this._apply = Action.List();
-  this._write = Action.Set();
+function Set(set) {
+  if(set) {
+    this._apply = new Action.List(set._apply);
+    this._write = new Action.List(set._write);
+  } else {
+    this._apply = Action.List();
+    this._write = Action.Set();
+  }
 }
+
+Set.prototype.clone = function() {
+  return new Set(this);
+};
 
 Set.prototype.apply = function(apply) {
   if(apply) {

@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(Extraction, Instruction, Action) {
+  .factory('Dataplane', function(Extraction, Instruction, Action, Context) {
 
 function Context(ctx) { 
   if(ctx) {

@@ -8,14 +8,14 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Match', function(fgConstraints, ETHERNET, Utils) {
+  .factory('Match', function(fgConstraints, ETHERNET, Utils) {
 
-function Match(match) {
+function Match(match, matches) {
   if(match instanceof Match || match) {
     _.extend(this, match);
-    _.each(match.matches, function(m) { return m.clone(); });
+    this.matches = _.map(match.matches, function(m) { return m.clone(); });
   } else {
-    this.matches = [];
+    this.matches = matches ? matches : [];
   }
 }
 
@@ -23,22 +23,20 @@ Match.prototype.clone = function() {
   return new Match(this);
 };
 
-Match.prototype.add = function(match) {
+Match.prototype.push = function(match) {
   this.matches.push(match);
 };
 
-Match.prototype.del = function(idx) {
-  this.matches.splice(idx, 1);
+Match.prototype.pop = function() {
+  if(this.matches.length) {
+    this.matches.splice(this.matches.length-1, 1);
+  }
 };
 
 Match.prototype.match = function(key) {
-  var i;
-  for(i=0; i<this.matches.length; i++) {
-    if(!this.matches[i].match(key)) {
-      return false;
-    }
-  }
-  return true;
+  return _.every(this.matches, function(match) {
+    return match.match(key);
+  });
 };
 
 function createMatch(protocol, field, key, wildcard, maskable, mask) {
@@ -53,10 +51,11 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
   };
 }
 
-Match.Profile = function(mat, match){
-  if(mat instanceof Match.Profile || (typeof mat === 'object' && mat !==null)){
-    _.extend(this, mat);
-    this.fields = _.map(mat.fields, function(f) { return _.clone(f); });
+Match.Profile = function(match){
+  if(match instanceof Match.Profile || 
+     (typeof match === 'object' && match !==null)){
+    _.extend(this, match);
+    this.fields = _.map(match.fields, function(f) { return _.clone(f); });
   } else {
     this.fields = [
     createMatch('Ingress', 'Port', 'in_port', true, false, 0),
@@ -98,7 +97,7 @@ Match.Profile = function(mat, match){
     createMatch('SCTP', 'Dst', 'sctp_dst', true, true, '0xffff')
     ];
   }
-}
+};
 
 Match.Profile.TIPS ={
   in_port: 'Match on ingress port',
@@ -168,28 +167,43 @@ Match.Profile.TESTS = {
   udp_dst: fgConstraints.isUInt(0, 0xffff),
   sctp_src: fgConstraints.isUInt(0, 0xffff),
   sctp_dst: fgConstraints.isUInt(0, 0xffff)
-}
+};
 
 Match.Ethernet = {};
 
-Match.Ethernet.Src = function(addr, mask) {
-  this.match = new ETHERNET.MAC.Match(addr, mask);
+Match.Ethernet.Src = function(m, addr, mask) {
+  if(m instanceof Match.Ethernet.Src || (typeof m === 'object' && m !== null)) {
+    _.extend(this, m);
+    this.match = new ETHERNET.MAC.Match(m.match);
+  } else {
+    this.match = new ETHERNET.MAC.Match(null, addr, mask);
+  }
 };
 
 Match.Ethernet.Src.prototype.match = function(key) {
   return key.eth_src ? this.match.match(key.eth_src) : false;
 };
 
-Match.Ethernet.Dst = function(addr, mask) {
-  this.match = new ETHERNET.MAC.Match(addr, mask);
+Match.Ethernet.Dst = function(m, addr, mask) {
+  if(m instanceof Match.Ethernet.Dst || (typeof m === 'object' && m !== null)) {
+    _.extend(this, m);
+    this.match = new ETHERNET.MAC.Match(m.match);
+  } else {
+    this.match = new ETHERNET.MAC.Match(addr, mask);
+  }
 };
 
 Match.Ethernet.Dst.prototype.match = function(key) {
   return key.eth_dst ? this.match.match(key.eth_dst) : false;
 };
 
-Match.Ethernet.Type = function(value, mask) {
-  this.match = new Utils.UInt.Match(value, mask);
+Match.Ethernet.Type = function(m, value, mask) {
+  if(m instanceof Match.Ethernet.Type || (typeof m === 'object' && m !== null)) {
+    _.extend(this, m);
+    this.match = new Utils.UInt.Match(m.match);
+  } else {
+    this.match = new Utils.UInt.Match(value, mask);
+  }
 };
 
 Match.Ethernet.Type.prototype.match = function(key) {
@@ -198,6 +212,7 @@ Match.Ethernet.Type.prototype.match = function(key) {
 
 return {
   Match: Match,
+  Ethernet: Match.Ethernet,
   Profile: Match.Profile
 };
 

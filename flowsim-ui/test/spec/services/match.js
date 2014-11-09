@@ -6,13 +6,27 @@ describe('Service: match', function () {
   beforeEach(module('flowsimUiApp'));
 
   // instantiate service
-  var match;
+  var Match;
   beforeEach(inject(function (_Match_) {
-    match = _Match_;
+    Match = _Match_;
   }));
 
   it('should do something', function () {
-    expect(!!match).toBe(true);
+    expect(!!Match).toBe(true);
+
+    var m = new Match.Match(
+      new Match.Ethernet.Src(
+        '00:00:00:00:00:00',
+        '00:00:00:00:00:00'
+      ),
+      new Match.Ethernet.Dst(
+        'ff:ff:ff:ff:ff:ff',
+        'ff:ff:ff:ff:ff:ff'
+      ),
+      new Match.Ethernet.Type('0', '0')
+    );
+
+
   });
 
 });
