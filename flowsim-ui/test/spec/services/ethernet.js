@@ -235,6 +235,10 @@ describe('Service: ETHERNET', function () {
       'ff:ff:ff:ff:ff:ff',
       '0x0806'
       );
+    
+    var dhcp2 = JSON.stringify(dhcp_disco);
+    console.log(dhcp2);
+    var dhcp2_ = new ETHERNET.Ethernet(JSON.parse(dhcp2));
 
     dhcp_disco.dst('00:11:22:33:44:55');
     expect(dhcp_disco.dst().toString()).toBe('00:11:22:33:44:55');
@@ -244,6 +248,16 @@ describe('Service: ETHERNET', function () {
 
     dhcp_disco.type('0x800');
     expect(dhcp_disco.type().toString(16)).toBe('0x0800');
+
+    dhcp2_.dst('00:11:22:33:44:55');
+    expect(dhcp2_.dst().toString()).toBe('00:11:22:33:44:55');
+
+    dhcp2_.src('10:11:22:33:44:55');
+    expect(dhcp2_.src().toString()).toBe('10:11:22:33:44:55');
+
+    dhcp2_.type('0x800');
+    expect(dhcp2_.type().toString(16)).toBe('0x0800');
+
   });
 
   it('Ethernet Set Field Fail', function() {
