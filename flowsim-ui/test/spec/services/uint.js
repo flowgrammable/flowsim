@@ -160,12 +160,22 @@ describe('Service: uint', function () {
     expect(wildcard1_mac1.match(mac1)).toBe(true);
     expect(wildcard2_mac1.match(mac1)).toBe(true);
     expect(wildcard3_mac1.match(mac1)).toBe(true);
-
     expect(exact1_mac1.match(mac2)).toBe(false);
     expect(exact2_mac1.match(mac2)).toBe(false);
     expect(wildcard1_mac1.match(mac2)).toBe(true);
     expect(wildcard2_mac1.match(mac2)).toBe(true);
     expect(wildcard3_mac1.match(mac2)).toBe(true);
+
+    expect(exact1_mac2.match(mac1)).toBe(false);
+    expect(exact2_mac2.match(mac1)).toBe(false);
+    expect(wildcard1_mac2.match(mac1)).toBe(true);
+    expect(wildcard2_mac2.match(mac1)).toBe(true);
+    expect(wildcard3_mac2.match(mac1)).toBe(true);
+    expect(exact1_mac2.match(mac2)).toBe(true);
+    expect(exact2_mac2.match(mac2)).toBe(true);
+    expect(wildcard1_mac2.match(mac2)).toBe(true);
+    expect(wildcard2_mac2.match(mac2)).toBe(true);
+    expect(wildcard3_mac2.match(mac2)).toBe(true);
   });
 
   it('UInt Match', function() {
