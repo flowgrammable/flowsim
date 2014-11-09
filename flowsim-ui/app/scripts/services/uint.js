@@ -182,6 +182,14 @@ function Match(match, value, mask) {
   }
 }
 
+Match.prototype.clone = function() {
+  return new Match(this);
+};
+
+Match.prototype.toString = function(base) {
+  return this.value.toString(base) + '/' + this.mask.toString(base);
+};
+
 Match.mkWildcard = function(uint) {
   var bytes;
   if(uint instanceof UInt) {

@@ -144,14 +144,14 @@ describe('Service: uint', function () {
     var exact2_mac2 = new UInt.Match.mkExact(mac2);
 
     var wildcard1_mac1 = new UInt.Match(null,
-        new UInt.UInt(broadcast),
-        new UInt.UInt(broadcast));
+        new UInt.UInt(null, null, 6),
+        new UInt.UInt(null, null, 6));
     var wildcard2_mac1 = new UInt.Match.mkWildcard(mac1);
     var wildcard3_mac1 = new UInt.Match.mkWildcard(6);
 
     var wildcard1_mac2 = new UInt.Match(null,
-        new UInt.UInt(broadcast),
-        new UInt.UInt(broadcast));
+        new UInt.UInt(null, null, 6),
+        new UInt.UInt(null, null, 6));
     var wildcard2_mac2 = new UInt.Match.mkWildcard(mac2);
     var wildcard3_mac2 = new UInt.Match.mkWildcard(6);
 
