@@ -31,19 +31,18 @@ function maxFromBytes(val) {
   return Math.ceil(maxFromBits(8*val));
 }
 
-function is(bits){
-  return function(val){
+function is(bits) {
+  return function(val) {
     var tmp;
-    if(typeof val === 'number'){
-      return val === parseInt(val) && (0 <= val && val <= maxFromBits(bits));
+    if(_.isFinite(val) && (value % 1 === 0)) {
+      return 0 <= val && val <= maxFromBits(bits);
     } else if(_.isString(val) && Pattern.test(val)) {
       tmp = parseInt(val);
       return 0 <= val && val <= maxFromBits(bits);
-    } else {
-      return false;
     }
-  }
-};
+    return false;
+  };
+}
 
 function UInt(uint, value, bytes) {
   if(_.isObject(uint)) {
