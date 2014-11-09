@@ -95,19 +95,21 @@ describe('Service: uint', function () {
     var outval = new UInt.UInt(null, 0x0b0101f0, 4);
   });
 
-  it('UInt Match - Ethernet Type'), function() {
+  it('UInt Match - Ethernet Type', function() {
     var type1 = new UInt.UInt(null, 0x0800, 2);
     var type2 = new UInt.UInt(null, 0x0806, 2);
 
     var exact1 = new UInt.Match(null,
         new UInt.UInt(null, 0x0800, 2),
         new UInt.UInt(null, 0xffff, 2));
-    var exact2 = new UInt.mkExact(type);
+
+    var exact2 = new UInt.Match.mkExact(type1);
 
     var wildcard1 = new UInt.Match(null,
         new UInt.UInt(null, 0x0000, 2),
         new UInt.UInt(null, 0x0000, 2));
-    var wildcard2 = new UInt.Match.mkWildcard(type);
+
+    var wildcard2 = new UInt.Match.mkWildcard(type1);
     var wildcard3 = new UInt.Match.mkWildcard(2);
 
     expect(exact1.match(type1)).toBe(true);
@@ -121,7 +123,50 @@ describe('Service: uint', function () {
     expect(wildcard1.match(type2)).toBe(true);
     expect(wildcard2.match(type2)).toBe(true);
     expect(wildcard3.match(type2)).toBe(true);
-  }
+
+  });
+
+  it('UInt Match - Ethernet MAC', function() {
+    var empty     = new UInt.UInt(null, null, 6);
+    var broadcast = (new UInt.UInt(null, null, 6)).neg();
+
+    var mac1 = new UInt.UInt(null, [0, 1, 2, 3, 4, 5], 6);
+    var mac2 = new UInt.UInt(null, [0, 1, 2, 3, 4, 6], 6);
+
+    var exact1_mac1 = new UInt.Match(null,
+        new UInt.UInt(null, [0, 1, 2, 3, 4, 5], 6),
+        new UInt.UInt(null, [0xff, 0xff, 0xff, 0xff, 0xff, 0xff], 6));
+    var exact2_mac1 = new UInt.Match.mkExact(mac1);
+    
+    var exact1_mac2 = new UInt.Match(null,
+        new UInt.UInt(null, [0, 1, 2, 3, 4, 6], 6),
+        new UInt.UInt(null, [0xff, 0xff, 0xff, 0xff, 0xff, 0xff], 6));
+    var exact2_mac2 = new UInt.Match.mkExact(mac2);
+
+    var wildcard1_mac1 = new UInt.Match(null,
+        new UInt.UInt(broadcast),
+        new UInt.UInt(broadcast));
+    var wildcard2_mac1 = new UInt.Match.mkWildcard(mac1);
+    var wildcard3_mac1 = new UInt.Match.mkWildcard(6);
+
+    var wildcard1_mac2 = new UInt.Match(null,
+        new UInt.UInt(broadcast),
+        new UInt.UInt(broadcast));
+    var wildcard2_mac2 = new UInt.Match.mkWildcard(mac2);
+    var wildcard3_mac2 = new UInt.Match.mkWildcard(6);
+
+    expect(exact1_mac1.match(mac1)).toBe(true);
+    expect(exact2_mac1.match(mac1)).toBe(true);
+    expect(wildcard1_mac1.match(mac1)).toBe(true);
+    expect(wildcard2_mac1.match(mac1)).toBe(true);
+    expect(wildcard3_mac1.match(mac1)).toBe(true);
+
+    expect(exact1_mac1.match(mac2)).toBe(false);
+    expect(exact2_mac1.match(mac2)).toBe(false);
+    expect(wildcard1_mac1.match(mac2)).toBe(true);
+    expect(wildcard2_mac1.match(mac2)).toBe(true);
+    expect(wildcard3_mac1.match(mac2)).toBe(true);
+  });
 
   it('UInt Match', function() {
     var left = new UInt.UInt(null, 0xffffffff);

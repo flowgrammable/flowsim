@@ -33,6 +33,12 @@ function maxFromBytes(val) {
 
 function UInt(uint, value, bytes) {
   if(_.isObject(uint)) {
+    if(uint.bytes > 4) {
+      this.value = _.clone(uint.value);
+    } else {
+      this.value = uint.value;
+    }
+    this.bytes = uint.bytes;
     _.extend(this, uint);
   } else if(_.isString(value) && Pattern.test(value) && bytes) {
     if(bytes < 5) {
@@ -61,11 +67,16 @@ function UInt(uint, value, bytes) {
   }
   // If converted value is wider than limit throw exception
   if(this.bytes < 5 && howManyBytes(this.value) > this.bytes) {
+    console.log('goign to throw');
     throw 'UInt('+uint+', '+value+', '+bytes+')';
   } else if(this.bytes > 4 && this.value.length > this.bytes) {
     throw 'UInt('+uint+', '+value+', '+bytes+')';
   }
 }
+
+UInt.prototype.clone = function() {
+  return new UInt(this);
+};
 
 UInt.prototype.and = function(rhs) {
   if(this.bytes !== rhs.bytes) {
