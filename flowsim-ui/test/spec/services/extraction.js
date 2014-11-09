@@ -10,30 +10,41 @@ describe('Service: extraction', function () {
   beforeEach(inject(function (_Extraction_) {
     extraction = _Extraction_;
   }));
+
   var ETHERNET;
   beforeEach(inject(function (_ETHERNET_) {
     ETHERNET = _ETHERNET_;
+  }));
+  
+  var Context;
+  beforeEach(inject(function (_Context_) {
+    Context = _Context_;
   }));
 
   it('extraction Ethernet Pass', function () {
     expect(!!extraction).toBe(true);
     expect(!!ETHERNET).toBe(true);
+    expect(!!Context).toBe(true);
 
     // create protocols to match on
-    var eth1 = new ETHERNET.Ethernet(
-      'eth1',
+    
+    var eth = ETHERNET.mkEthernet( 
       'de:ad:be:ef:00:01',
       '12:34:56:78:90:ab',
       '0x8100');
 
     // create key to extract into
-    var key1 = new extraction.Key(null);
+    var key = new Context.Key(null, 0);
 
-    // extract ethernet
-    extraction.extract_ethernet(eth1, key1);
-    expect(key1.eth_src.toString()).toBe('de:ad:be:ef:00:01');
-    expect(key1.eth_dst.toString()).toBe('12:34:56:78:90:ab');
-    expect(key1.eth_type.value).toBe(0x8100);
+    expect(key.eth_src).toBe(undefined);
+    expect(key.eth_dst).toBe(undefined);
+    expect(key.eth_type).toBe(undefined);
+
+    extraction.extract_ethernet(eth, key);
+    
+    expect(key.eth_src).toBe(eth.src());
+    expect(key.eth_dst).toBe(eth.dst());
+    expect(key.eth_type).toBe(eth.type());
   });
 
 });

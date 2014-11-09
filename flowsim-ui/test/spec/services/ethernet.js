@@ -237,7 +237,6 @@ describe('Service: ETHERNET', function () {
       );
     
     var dhcp2 = JSON.stringify(dhcp_disco);
-    console.log(dhcp2);
     var dhcp2_ = new ETHERNET.Ethernet(JSON.parse(dhcp2));
 
     dhcp_disco.dst('00:11:22:33:44:55');

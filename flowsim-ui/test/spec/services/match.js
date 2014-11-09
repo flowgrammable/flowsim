@@ -66,9 +66,13 @@ describe('Service: match', function () {
     key.eth_type = new ETHERNET.mkType(0x0800);
 
     expect(match.match(key)).toBe(true);
+    
+    key.eth_src = new ETHERNET.mkMAC('00:00:00:00:00:01');
+    expect(match.match(key)).toBe(true);
 
     key.eth_type = new ETHERNET.mkType('0x0806');
     expect(match.match(key)).toBe(false);
+    
   });
 
 });

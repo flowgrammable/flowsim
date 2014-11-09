@@ -31,6 +31,10 @@ function Ethernet(eth, src, dst, type) {
   this.name = NAME;
 }
 
+function mkEthernet(src, dst, type) {
+  return new Ethernet(null, src, dst, type);
+}
+
 Ethernet.prototype.src = function(src) {
   if(src) {
     this._src = mkMAC(src);
@@ -170,7 +174,7 @@ var TESTS = {
 };
 
 function Ethernet_UI(eth) {
-  eth = eth ? eth : new Ethernet();
+  eth = eth ? new Ethernet(eth) : new Ethernet();
   //eth = eth === undefined ? new Ethernet() : new Ethernet(eth);
   this.name = NAME;
   this.bytes = eth.bytes;
@@ -186,7 +190,7 @@ function Ethernet_UI(eth) {
     tip: TIPS.dst
   }, {
     name: 'Type/Length',
-    value: eth.type().toString(),
+    value: eth.type().toString(16),
     test: UInt.is(16),
     tip: TIPS.typelen
   }];
@@ -217,6 +221,7 @@ return {
   mkMACMatch:  mkMACMatch,
   mkType:      mkType,
   mkTypeMatch: mkTypeMatch,
+  mkEthernet:   mkEthernet,
   TESTS:       TESTS,
   TIPS:        TIPS
 };

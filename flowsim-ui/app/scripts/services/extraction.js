@@ -11,22 +11,10 @@ angular.module('flowsimUiApp')
   .factory('Extraction', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                                   ICMPV6, SCTP, TCP, UDP) {
 
-function Key(key) {
-  if(key) {
-    _.extend(this, key);
-    this.vlan = _.map(key.vlan, function(vlan) { return vlan.clone(); });
-    this.mpls = _.map(key.mpls, function(mpls) { return mpls.clone(); });
-  } else {
-    this.in_port = null;
-    this.vlan = [];
-    this.mpls = [];
-  }
-}
-
 function extract_ethernet(eth, key) {
   key.eth_src  = eth.src();
   key.eth_dst  = eth.dst();
-  key.eth_type = eth.typelen();
+  key.eth_type = eth.type();
 }
 
 function extract_vlan(vlan, key) {
@@ -139,7 +127,6 @@ function extract(packet, key) {
 }
 
 return {
-  Key: Key,
   extract_ethernet: extract_ethernet,
   process: extract
 };
