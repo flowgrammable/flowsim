@@ -66,7 +66,7 @@ function UInt(uint, value, bytes) {
   } else if(_.isFinite(value) && (value % 1 === 0)) {
     this.value = value;
     this.bytes = bytes ? bytes : 4;
-  } else if(_.isNull(value) && bytes && bytes > 0) {
+  } else if((_.isUndefined(value) || _.isNull(value)) && bytes && bytes > 0) {
     if(bytes < 5) {
       this.value = 0;
       this.bytes = bytes;
@@ -243,13 +243,7 @@ Match.mkExact = function(uint) {
 
 Match.prototype.match = function(val) {
   if(this.value.bytes !== val.bytes) {
-    console.log(this.value);
-    console.log(this.mask);
-    console.log(val);
-    console.log(this.value.bytes);
-    console.log(this.mask.bytes);
-    console.log(val.bytes);
-    throw 'Match.match';
+    throw 'Match.match('+this.value.bytes+', '+val.bytes+')';
   } else if(this.value.bytes < 5) {
     return (val.value & this.mask.value) === this.value.value;
   } else {

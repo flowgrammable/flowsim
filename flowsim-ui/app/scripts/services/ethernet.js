@@ -33,7 +33,7 @@ function Ethernet(eth, src, dst, type) {
 
 Ethernet.prototype.src = function(src) {
   if(src) {
-    this._src = new MAC(src);
+    this._src = mkMAC(src);
   } else {
     return this._src;
   }
@@ -41,7 +41,7 @@ Ethernet.prototype.src = function(src) {
 
 Ethernet.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = new MAC(dst);
+    this._dst = mkMAC(dst);
   } else {
     return this._dst;
   }
@@ -127,7 +127,7 @@ MAC.Match = function(match, addr, mask) {
   if(_.isObject(match)) {
     this._match = new UInt.Match(match._match);
   } else {
-    this._match = new UInt.Match(null, mkMAC(addr), mkMAC(mask));
+    this._match = new UInt.Match(null, mkMAC(addr)._mac, mkMAC(mask)._mac);
   }
 };
 
