@@ -8,10 +8,10 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Group', function group(Action, Utils) {
+  .factory('Group', function group(Action) {
 
 function Bucket(bucket, weight, watch_port, watch_group, actions) {
-  if(bucket instanceof Bucket || 
+  if(bucket instanceof Bucket ||
      (typeof bucket === 'object' && bucket !== null)) {
     _.extend(this, bucket);
     this.actions = actions.clone();
@@ -76,4 +76,3 @@ return {
 };
 
 });
-

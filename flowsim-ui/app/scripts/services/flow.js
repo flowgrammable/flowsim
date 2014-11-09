@@ -10,15 +10,13 @@
 angular.module('flowsimUiApp')
   .factory('Flow', function(Match, Instruction) {
 
-function Flow(flow) {
-  if(flow) {
+function Flow(flow){
+  if(flow instanceof Flow || (typeof flow === 'object' && flow !== null)){
     _.extend(this, flow);
-    // all the other flow stuff can go here
     this.match = new Match.Match(flow.match);
-    this.ins   = new Instruction.Set(flow.ins);
+    this.ins = new Instruction.Set(flow.ins);
   } else {
     this.match = new Match.Match();
-    // all the other flow stuff can go here
     this.ins   = new Instruction.Set();
   }
 }
@@ -38,5 +36,5 @@ Flow.prototype.select = function(key) {
 return {
   Flow: Flow
 };
-  
+
 });

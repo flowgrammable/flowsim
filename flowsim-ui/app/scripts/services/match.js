@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Match', function(fgConstraints, ETHERNET, Utils) {
+  .factory('Match', function(fgConstraints, ETHERNET, UInt) {
 
 function Match(match, matches) {
   if(match instanceof Match || match) {
@@ -52,7 +52,7 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
 }
 
 Match.Profile = function(match){
-  if(match instanceof Match.Profile || 
+  if(match instanceof Match.Profile ||
      (typeof match === 'object' && match !==null)){
     _.extend(this, match);
     this.fields = _.map(match.fields, function(f) { return _.clone(f); });
@@ -200,9 +200,9 @@ Match.Ethernet.Dst.prototype.match = function(key) {
 Match.Ethernet.Type = function(m, value, mask) {
   if(m instanceof Match.Ethernet.Type || (typeof m === 'object' && m !== null)) {
     _.extend(this, m);
-    this.match = new Utils.UInt.Match(m.match);
+    this.match = new UInt.Match(m.match);
   } else {
-    this.match = new Utils.UInt.Match(value, mask);
+    this.match = new UInt.Match(value, mask);
   }
 };
 
