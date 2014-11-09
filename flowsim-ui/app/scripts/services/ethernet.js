@@ -105,7 +105,7 @@ MAC.equal = function(lhs, rhs) {
 
 MAC.prototype.toString = function() {
   return _(this._mac.value).map(function(oct) {
-    return UInt.padZeros(oct.toString(16, 2));
+    return UInt.padZeros(oct.toString(16), 2);
   }).join(':');
 };
 
@@ -125,9 +125,9 @@ MAC.isMulticast = function(addr) {
 
 MAC.Match = function(match, addr, mask) {
   if(_.isObject(match)) {
-    this.match = new UInt.Match(match.match);
+    this._match = new UInt.Match(match._match);
   } else {
-    this.match = new UInt.Match(null, addr, mask);
+    this._match = new UInt.Match(null, mkMAC(addr), mkMAC(mask));
   }
 };
 
@@ -136,7 +136,7 @@ MAC.Match.prototype.clone = function() {
 };
 
 MAC.Match.prototype.match = function(addr) {
-  return this.match.match(addr._mac);
+  return this._match.match(addr._mac);
 };
 
 MAC.Match.prototype.toString = function() {

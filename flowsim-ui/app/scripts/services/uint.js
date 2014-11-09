@@ -243,6 +243,12 @@ Match.mkExact = function(uint) {
 
 Match.prototype.match = function(val) {
   if(this.value.bytes !== val.bytes) {
+    console.log(this.value);
+    console.log(this.mask);
+    console.log(val);
+    console.log(this.value.bytes);
+    console.log(this.mask.bytes);
+    console.log(val.bytes);
     throw 'Match.match';
   } else if(this.value.bytes < 5) {
     return (val.value & this.mask.value) === this.value.value;
