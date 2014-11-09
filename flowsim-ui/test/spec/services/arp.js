@@ -52,22 +52,23 @@ describe('Service: ARP', function () {
 
   it('MAC Construction Pass', function() {
     expect(!!ARP).toBe(true);
-    new ARP.ARP.MAC('00:00:00:00:00:00');
-    new ARP.ARP.MAC('11:22:33:44:55:66');
+    new ARP.ARP.MAC(null, '00:00:00:00:00:00');
+    new ARP.ARP.MAC(null, '11:22:33:44:55:66');
   });
 
   it('MAC Construction Fail', function() {
     expect(!!ARP).toBe(true);
-    expect(function(){
-      new ARP.ARP.MAC('');
-    }).toThrow();
 
     expect(function(){
-      new ARP.ARP.MAC('00:gg:00:00:00:00');
+      new ARP.ARP.MAC(null, '00:gg:00:00:00:00');
     }).toThrow();
 
     expect(function() {
-      new ARP.ARP.MAC('00:00:00:00:00:00:00');
+      new ARP.ARP.MAC(null, '00:00:00:00:00:00:00');
+    }).toThrow();
+
+    expect(function() {
+      new ARP.ARP.MAC(null, '');
     }).toThrow();
   });
 

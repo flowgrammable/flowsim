@@ -4,43 +4,93 @@ angular.module('flowsimUiApp')
   .factory('ARP', function ARP(fgConstraints, fgUI, ETHERNET, IPV4, UInt) {
 
 var NAME = 'ARP';
+var BYTES = 28;
 
-var macPattern = /^([a-fA-F0-9]{1,2}(-|:)){5}[a-fA-F0-9]{1,2}$/;
-var ipv4Pattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
-
-function isMAC(addr) {
-  return macPattern.test(addr);
-}
-
-function isIPv4(ipv4) {
-  return ipv4Pattern.test(ipv4) &&
-         _.every(ipv4.split('.'), fgConstraints.isUInt(0, 255));
-}
+var Payloads = {
+  'Payload': 0x0000
+};
 
 function ARP(arp, opcode, sha, spa, tha, tpa){
-  this.bytes = 28;
-  this.name = NAME;
-  if(arp instanceof ARP || _.isObject(arp)){
+  if(_.isObject(arp)){
     _.extend(this, arp);
-    this._opcode  = new UInt.UInt(arp._opcode, 2);
+    this._opcode  = new UInt.UInt(arp._opcode);
     this._sha     = new ARP.MAC(arp._sha);
     this._spa     = new ARP.IP(arp._spa);
     this._tha     = new ARP.MAC(arp._tha);
     this._tpa     = new ARP.IP(arp._tpa);
   } else {
-    this._opcode  = new UInt.UInt(opcode, 2);
-    this._sha     = new ARP.MAC(sha);
+    this._opcode  = new UInt.UInt(null, opcode, 2);
+    this._sha     = new ETHERNET.mkMAC(sha);
     this._spa     = new ARP.IP(spa);
-    this._tha     = new ARP.MAC(tha);
+    this._tha     = new ETHERNET.mkMAC(tha);
     this._tpa     = new ARP.IP(tpa);
   }
+  this.bytes = BYTES;
+  this.name = NAME;
 }
 
 ARP.Opcode = UInt.UInt;
 ARP.Opcode.Match = UInt.Match;
 ARP.MAC = ETHERNET.MAC;
 ARP.MAC.Match = ETHERNET.MAC.Match;
-ARP.IP = IPV4;
+ARP.IP = IPV4.IP;
+ARP.IP.Match = IPV4.IP.Match;
+
+ARP.prototype.opcode = function(opcode) {
+  if(opcode) {
+    this._opcode = new UInt.UInt(opcode);
+  } else {
+    return this._opcode;
+  }
+};
+
+ARP.prototype.sha = function(sha) {
+  if(src) {
+    this._sha = new ARP.MAC(sha);
+  } else {
+    return this._sha;
+  }
+};
+
+ARP.prototype.spa = function(spa) {
+  if(src) {
+    this._spa = new ARP.IP(spa);
+  } else {
+    return this._spa;
+  }
+};
+
+ARP.prototype.tha = function(tha) {
+  if(tha) {
+    this._tha = new ARP.MAC(tha)
+  } else {
+    return this._tha;
+  }
+};
+
+ARP.prototype.tpa = function(tpa) {
+  if(tpa) {
+    this._tpa = new ARP.IP(tpa);
+  } else {
+    return this._tpa;
+  }
+};
+
+var TIPS = {
+  opcode: 'ARP Message Type',
+  sha: 'Source Hardware Address',
+  spa: 'Source Protocol Aaddress',
+  tha: 'Target Hardware Address',
+  tpa: 'Target Protocol Address'
+};
+
+var TESTS = {
+  opcode: UInt.is(2),
+  sha: ETHERNET.MAC.is,
+  spa: IPV4.IP.is,
+  tha: ETHERNET.MAC.is,
+  tpa: IPV4.IP.is
+};
 
 var opPattern = /^[1-2]$/;
 
@@ -130,17 +180,17 @@ ARP_UI.prototype.setPayload = function() {
 };
 
 
-var Payloads = {
-  'Payload': 0x0000
-};
+
 
 return {
-  name:     NAME,
-  ARP:      ARP,
-  ARP_UI:   ARP_UI,
-  create:   function(arp)   { return new ARP(arp); },
-  createUI: function(arp)   { return new ARP_UI(arp); },
-  Payloads: Object.keys(Payloads)
+  name:       NAME,
+  ARP:        ARP,
+  ARP_UI:     ARP_UI,
+  create:     function(arp)   { return new ARP(arp); },
+  createUI:   function(arp)   { return new ARP_UI(arp); },
+  Payloads:   Object.keys(Payloads),
+  TESTS:      TESTS,
+  TIPS:       TIPS
 };
 
 });
