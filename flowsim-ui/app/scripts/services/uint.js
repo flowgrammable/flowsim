@@ -39,7 +39,6 @@ function UInt(uint, value, bytes) {
       this.value = uint.value;
     }
     this.bytes = uint.bytes;
-    _.extend(this, uint);
   } else if(_.isString(value) && Pattern.test(value) && bytes) {
     if(bytes < 5) {
       this.value = parseInt(value);
@@ -67,7 +66,6 @@ function UInt(uint, value, bytes) {
   }
   // If converted value is wider than limit throw exception
   if(this.bytes < 5 && howManyBytes(this.value) > this.bytes) {
-    console.log('goign to throw');
     throw 'UInt('+uint+', '+value+', '+bytes+')';
   } else if(this.bytes > 4 && this.value.length > this.bytes) {
     throw 'UInt('+uint+', '+value+', '+bytes+')';
@@ -121,11 +119,13 @@ UInt.prototype.xor = function(rhs) {
 };
 
 UInt.prototype.neg = function() {
+  var mask;
   if(this.bytes < 5) {
-    this.value = (~this.value) >>> 0;
+    mask = 0xffffffff >>> (32 - (8*this.bytes));
+    this.value = mask & (~this.value) >>> 0;
   } else {
     this.value = _(this.value).map(function(v) {
-      return (~v) >>> 0;
+      return 0xff & (~v) >>> 0;
     });
   }
   return this;
