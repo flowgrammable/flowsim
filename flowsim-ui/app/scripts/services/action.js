@@ -47,18 +47,28 @@ Queue.prototype.clone = function() {
   return new Queue(this.queue_id);
 };
 
-function SetField(protocol, field, value) {
-  this.protocol = protocol;
-  this.field    = field;
-  this.value    = value;
+function SetField(sf, proto, field, value) {
+  if(_.isObject(sf)) {
+    _.extend(this, sf);
+    this.value = sf.value.clone();
+  } else {
+    this.protocol = proto;
+    this.field    = field;
+    this.value    = value;
+  }
 }
 
+SetField.prototype.clone = function() {
+  return new SetField(this);
+};
+
 SetField.prototype.execute = function(dp, ctx) {
-  var i, protocols;
-  protocols = ctx.packet.protoccols;
+  var i, protocols, protocol;
+  protocols = ctx.packet.protocols;
   for(i=0; i<protocols.length; ++i) {
-    if(protocols[i].name === this.protocol && protocols[i][this.field]) {
-      protocols[i][this.field](this.value);
+    protocol = protocols[i];
+    if(protocols[i].name === this.protocol && _(protocol).has(this.field)) {
+      protocols[i][this.field] = this.value;
       return;
     }
   }
@@ -70,15 +80,15 @@ SetField.prototype.clone = function() {
 
 function Set() {
   this.actions = {
-    pop       : {},
-    setFields : {}
+    pop       : [],
+    setField  : []
   };
 }
 
 Set.prototype.clear = function() {
   this.actions = {
-    pop: {},
-    setFields : {}
+    pop: [],
+    setField: []
   };
 };
 
@@ -89,9 +99,9 @@ Set.prototype.concat = function(rhs) {
       _.each(val, function(_key, _val) {
         self.actions.pop[_key] = _val.clone();
       });
-    } else if(key === 'setFields') {
+    } else if(key === 'setField') {
       _.each(val, function(_key, _val) {
-        self.actions.setFields[_key] = _val.clone();
+        self.actions.setField[_key] = _val.clone();
       });
     } else {
       self.actions[key] = val.clone();
@@ -147,11 +157,11 @@ Set.prototype.dec_ttl = function(action) {
   }
 };
 
-Set.prototype.setFields = function(action) {
+Set.prototype.setField = function(action) {
   if(action) {
-    this.actions.setFields.push(action);
+    this.actions.setField.push(action);
   } else {
-    return this.actions.setFields;
+    return this.actions.setField;
   }
 };
 

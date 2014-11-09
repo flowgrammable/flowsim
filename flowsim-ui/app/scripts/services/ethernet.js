@@ -67,6 +67,12 @@ Ethernet.prototype.clone = function() {
   return new Ethernet(this);
 };
 
+Ethernet.prototype.toString = function() {
+  return 'src: '+this._src.toString()+'\n'+
+         'dst: '+this._dst.toString()+'\n'+
+         'type: '+this._type.toString(16);
+};
+
 var TIPS = {
   src: 'Ethernet source address',
   dst: 'Ethernet destination address',
@@ -175,7 +181,6 @@ var TESTS = {
 
 function Ethernet_UI(eth) {
   eth = eth ? new Ethernet(eth) : new Ethernet();
-  //eth = eth === undefined ? new Ethernet() : new Ethernet(eth);
   this.name = NAME;
   this.bytes = eth.bytes;
   this.attrs = [{
@@ -211,6 +216,9 @@ Ethernet_UI.prototype.clearPayload = function() {
 
 return {
   name:        NAME,
+  src:         '_src',
+  dst:         '_dst',
+  type:        '_type',
   Ethernet:    Ethernet,
   Ethernet_UI: Ethernet_UI,
   create:      function(eth)         { return new Ethernet(eth); },
@@ -221,7 +229,7 @@ return {
   mkMACMatch:  mkMACMatch,
   mkType:      mkType,
   mkTypeMatch: mkTypeMatch,
-  mkEthernet:   mkEthernet,
+  mkEthernet:  mkEthernet,
   TESTS:       TESTS,
   TIPS:        TIPS
 };
