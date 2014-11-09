@@ -21,10 +21,23 @@ describe('Service: match', function () {
     ETHERNET = _ETHERNET_;
   }));
 
+  var Context;
+  beforeEach(inject(function(_Context_) {
+    Context = _Context_;
+  }));
+
+  it('Default Match', function() {
+    var key = new Context.Key(null, 0);
+    var match = new Match.Set();
+    expect(match.match(key)).toBe(true);
+  });
+
   it('IPv4 Match', function () {
     expect(!!Match).toBe(true);
 
     var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
 
     match.push(
       new Match.Match(null,
@@ -45,6 +58,17 @@ describe('Service: match', function () {
       new Match.Match(null,
         'eth_type',
         ETHERNET.mkTypeMatch('0x0800', '0xffff')));
+
+    expect(match.match(key)).toBe(false);
+
+    key.eth_src = new ETHERNET.mkMAC('00:00:00:00:00:00');
+    key.eth_dst = new ETHERNET.mkMAC('ff:ff:ff:ff:ff:ff');
+    key.eth_type = new ETHERNET.mkType(0x0800);
+
+    expect(match.match(key)).toBe(true);
+
+    key.eth_type = new ETHERNET.mkType('0x0806');
+    expect(match.match(key)).toBe(false);
   });
 
 });

@@ -10,13 +10,12 @@
 angular.module('flowsimUiApp')
   .factory('Context', function(Action) {
 
-function Key(key, in_port, in_phy_port, tunnen_id) {
-  if(key instanceof Key || (typeof key === 'object' && key !== null)) {
+function Key(key, in_port, in_phy_port, tunnel_id) {
+  if(_.isObject(key)) {
     _.extend(this, key);
-
     this.vlan = _.map(key.vlan, function(tag) { return tag.clone(); });
     this.mpls = _.map(key.mpls, function(tag) { return tag.clone(); });
-  } else if(in_port) {
+  } else if(_.isFinite(in_port)) {
     // Initialize input information
     this.in_port     = in_port;
     this.in_phy_port = in_phy_port;
@@ -105,6 +104,11 @@ Context.prototype.writeActions = function(actions) {
 
 Context.prototype.hasGoto = function() {
   return this._nxtTable !== this._lstTable;
+};
+
+return {
+  Key: Key,
+  Context: Context
 };
 
 });

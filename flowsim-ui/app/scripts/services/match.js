@@ -38,7 +38,7 @@ function Set(set) {
 
 Set.prototype.clone = function() {
   return new Set(this);
-}
+};
 
 Set.prototype.push = function(match) {
   this.matches.push(match);
@@ -50,7 +50,11 @@ Set.prototype.pop = function() {
   }
 };
 
-Match.prototype.match = function(key) {
+Set.prototype.match = function(key) {
+  // empty match set matches everything .. is default match
+  if(this.matches.length === 0) {
+    return true;
+  }
   return _.every(this.matches, function(match) {
     return _(key).has(match.label) && match._match.match(key[match.label]);
   });
@@ -186,51 +190,9 @@ Match.Profile.TESTS = {
   sctp_dst: fgConstraints.isUInt(0, 0xffff)
 };
 
-Match.Ethernet = {};
-
-Match.Ethernet.Src = function(m, addr, mask) {
-  if(m instanceof Match.Ethernet.Src || (typeof m === 'object' && m !== null)) {
-    _.extend(this, m);
-    this.match = new ETHERNET.MAC.Match(m.match);
-  } else {
-    this.match = new ETHERNET.MAC.Match(null, addr, mask);
-  }
-};
-
-Match.Ethernet.Src.prototype.match = function(key) {
-  return key.eth_src ? this.match.match(key.eth_src) : false;
-};
-
-Match.Ethernet.Dst = function(m, addr, mask) {
-  if(m instanceof Match.Ethernet.Dst || (typeof m === 'object' && m !== null)) {
-    _.extend(this, m);
-    this.match = new ETHERNET.MAC.Match(m.match);
-  } else {
-    this.match = new ETHERNET.MAC.Match(addr, mask);
-  }
-};
-
-Match.Ethernet.Dst.prototype.match = function(key) {
-  return key.eth_dst ? this.match.match(key.eth_dst) : false;
-};
-
-Match.Ethernet.Type = function(m, value, mask) {
-  if(m instanceof Match.Ethernet.Type || (typeof m === 'object' && m !== null)) {
-    _.extend(this, m);
-    this.match = new UInt.Match(m.match);
-  } else {
-    this.match = new UInt.Match(value, mask);
-  }
-};
-
-Match.Ethernet.Type.prototype.match = function(key) {
-  return key.eth_type ? this.match.match(key.eth_type) : false;
-};
-
 return {
   Match: Match,
   Set: Set,
-  Ethernet: Match.Ethernet,
   Profile: Match.Profile
 };
 
