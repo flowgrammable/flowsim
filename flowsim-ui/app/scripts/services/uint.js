@@ -131,6 +131,21 @@ UInt.prototype.neg = function() {
   return this;
 };
 
+UInt.prototype.mask = function(src, mask) {
+  if(this.bytes !== src.bytes || this.bytes !== mask.bytes) {
+    throw '.mask('+this.bytes+', '+src.bytes+', '+mask.bytes+')';
+  }
+  if(this.bytes < 5) {
+    this.value = ((this.value & ~mask.value) | (src.value & mask.value)) >>> 0;
+  } else {
+    this.value = _.map(_.zip(this.value, src.value, mask.value), 
+                       function(triple) {
+      return ((triple[0] & ~triple[2]) | (triple[1] & triple[2])) >>> 0;
+    });
+  }
+  return this;
+};
+
 UInt.prototype.toString = function(base, sep) {
   var prefix = base === 16 ? '0x' : '';
   var sep    = sep ? sep : '';
@@ -168,6 +183,11 @@ function or(lhs, rhs) {
 function xor(lhs, rhs) {
   var result = new UInt(lhs);
   return result.xor(rhs);
+}
+
+function mask(tgt, src, mask) {
+  var result = new UInt(tgt);
+  return result.mask(src, mask);
 }
 
 function Match(match, value, mask) {
@@ -233,6 +253,7 @@ return {
   or: or,
   xor: xor,
   neg: neg,
+  mask: mask,
   equal: equal,
   Match: Match
 };
