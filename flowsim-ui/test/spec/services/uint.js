@@ -199,11 +199,18 @@ describe('Service: uint', function () {
   });
 
   it('UInt Mask', function() {
-    var left = new UInt.UInt(null, 0xffffffff);
-    var mask = new UInt.UInt(null, 0x0000ff00);
-    var right = new UInt.UInt(null, 0x11223344);
+    var metadata = new UInt.UInt(null, [1, 2, 3, 4, 5, 6, 7, 8], 8);
+    var mask1 = new UInt.UInt(null, [0, 0xff, 0, 0xff, 0, 0xff, 0, 0xff], 8);
+    var mask2 = new UInt.UInt(null, [0xff, 0, 0xff, 0, 0xff, 0, 0xff, 0], 8);
+    var value = new UInt.UInt(null, [8, 7, 6, 5, 4, 3, 2, 1], 8);
+    
+    expect(metadata.toString(16)).toBe('0x0102030405060708');
 
-    var r = UInt.or(UInt.and(mask, right), UInt.and(UInt.neg(mask), left));
+    var result = UInt.mask(metadata, value, mask1);
+    expect(result.toString(16)).toBe('0x0107030505030701');
+
+    metadata.mask(value, mask2);
+    expect(metadata.toString(16)).toBe('0x0802060404060208');
   });
 
 });
