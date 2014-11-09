@@ -48,6 +48,59 @@ function UInt(uint, value, bytes) {
   }
 }
 
+UInt.prototype.and = function(rhs) {
+  if(this.bytes !== rhs.bytes) {
+    throw '.and('+this.bytes+', '+rhs.bytes+')';
+  }
+  if(this.bytes < 5) {
+    this.value = (this.value & rhs.value) >>> 0;
+  } else {
+    this.value = _.map(_.zip([this.value, rhs.value]), function(pair) {
+      return (pair[0] & pair[1]) >>> 0;
+    });
+  }
+  return this;
+};
+
+UInt.prototype.or = function(rhs) {
+  if(this.bytes !== rhs.bytes) {
+    throw '.or('+this.bytes+', '+rhs.bytes+')';
+  }
+  if(this.bytes < 5) {
+    this.value = (this.value | rhs.value) >>> 0;
+  } else {
+    this.value = _.map(_.zip([this.value, rhs.value]), function(pair) {
+      return (pair[0] | pair[1]) >>> 0;
+    });
+  }
+  return this;
+};
+
+UInt.prototype.xor = function(rhs) {
+  if(this.bytes !== rhs.bytes) {
+    throw '.xor('+this.bytes+', '+rhs.bytes+')';
+  }
+  if(this.bytes < 5) {
+    this.value = (this.value ^ rhs.value) >>> 0;
+  } else {
+    this.value = _.map(_.zip([this.value, rhs.value]), function(pair) {
+      return (pair[0] ^ pair[1]) >>> 0;
+    });
+  }
+  return this;
+};
+
+UInt.prototype.neg = function() {
+  if(this.bytes < 5) {
+    this.value = (~this.value) >>> 0;
+  } else {
+    this.value = _(this.value).map(function(v) {
+      return (~v) >>> 0;
+    });
+  }
+  return this;
+};
+
 UInt.prototype.toString = function(base) {
   if(this.bytes < 5) {
     return this.value.toString(base);
@@ -66,52 +119,23 @@ function equal(lhs, rhs) {
 }
 
 function neg(val) {
-  if(val.bytes < 5) {
-    return new UInt(null, ~val.value >>> 0, 4);
-  } else {
-    return new UInt(null, _(val.bytes).times(function(i) {
-      return 0xff & (~val.value[i] >>> 0);
-    }), val.bytes);
-  }
+  var result = new UInt(val);
+  return result.neg();
 }
 
 function and(lhs, rhs) {
-  if(lhs.bytes !== rhs.bytes) {
-    throw 'and('+lhs.bytes+', '+rhs.bytes+')';
-  }
-  if(lhs.bytes < 5) {
-    return new UInt(null, lhs.value & rhs.value, 4);
-  } else {
-    return new UInt(null, _(lhs.bytes).times(function(i) {
-      return lhs.value[i] & rhs.value[i];
-    }), lhs.bytes);
-  }
+  var result = new UInt(lhs);
+  return result.and(rhs);
 }
 
 function or(lhs, rhs) {
-  if(lhs.bytes !== rhs.bytes) {
-    throw 'or('+lhs.bytes+', '+rhs.bytes+')';
-  }
-  if(lhs.bytes < 5) {
-    return new UInt(null, lhs.value | rhs.value, 4);
-  } else {
-    return new UInt(null, _(lhs.bytes).times(function(i) {
-      return lhs.value[i] | rhs.value[i];
-    }), lhs.bytes);
-  }
+  var result = new UInt(lhs);
+  return result.or(rhs);
 }
 
 function xor(lhs, rhs) {
-  if(lhs.bytes !== rhs.bytes) {
-    throw 'xor('+lhs.bytes+', '+rhs.bytes+')';
-  }
-  if(lhs.bytes < 5) {
-    return new UInt(null, lhs.value ^ rhs.value, 4);
-  } else {
-    return new UInt(null, _(lhs.bytes).times(function(i) {
-      return lhs.value[i] ^ rhs.value[i];
-    }), lhs.bytes);
-  }
+  var result = new UInt(lhs);
+  return result.xor(rhs);
 }
 
 function Match(match, value, mask) {
@@ -133,8 +157,8 @@ Match.prototype.match = function(val) {
     return (val.value & this.mask.value) === this.value.value;
   } else {
     return _.reduce(_.zip(val.value, this.mask.value, this.value.value),
-      function(triple) {
-        return (triple[0] & triple[1]) === triple[2]; 
+      function(pass, triple) {
+        return !pass ? false : ((triple[0] & triple[1]) >>> 0) === triple[2]; 
       }, true);
   }
 };

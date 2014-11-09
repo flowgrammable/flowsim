@@ -15,26 +15,32 @@ describe('Service: uint', function () {
     expect(!!UInt).toBe(true);
   });
 
-  it('', function() {
-    var src  = new UInt.UInt(null, null, 6);
-    var dst  = new UInt.UInt(null, [255, 255, 255, 255, 255, 255], 6);
-    var type = new UInt.UInt(null, 0x0800, 2);
-
-    var x1 = UInt.and(src, dst);
-    var x2 = UInt.or(src, dst);
-    var x3 = UInt.neg(src);
-    var x4 = UInt.neg(dst);
-
-    console.log(x1.toString(16));
-    console.log(x2.toString(16));
-    console.log(x3.toString(16));
-    console.log(x4.toString(16));
-
+  it('UInt', function() {
     expect(function() {
-      UInt.equal(src, type);
+      new UInt.UInt(null, 'q');
     }).toThrow();
+    expect(function() {
+      new UInt.UInt(null, '0xx00');
+    }).toThrow();
+    expect(function() {
+      new UInt.UInt(null, 1.2);
+    }).toThrow();
+    expect(function() {
+      new UInt.UInt(null, null, 0);
+    }).toThrow();
+  });
 
+  it('', function() {
+    var left = new UInt.UInt(null, 0xffffffff);
+    var mask = new UInt.UInt(null, 0x0000ff00);
+    var right = new UInt.UInt(null, 0x11223344);
 
+    console.log(UInt.and(mask, right).toString(16));
+    console.log(UInt.neg(mask).toString(16));
+    console.log(UInt.and(UInt.neg(mask), left).toString(16));
+
+    var r = UInt.or(UInt.and(mask, right), UInt.and(UInt.neg(mask), left));
+    console.log(r.toString(16));
   });
 
 });
