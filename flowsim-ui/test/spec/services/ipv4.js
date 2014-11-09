@@ -43,18 +43,18 @@ describe('Service: IPV4', function () {
   it('IPv4.IP Construction Success', function(){
     expect(!!IPV4).toBe(true);
 
-    new IPV4.IPv4.IP();
-    new IPV4.IPv4.IP('127.1.1.1');
-    new IPV4.IPv4.IP(new IPV4.IPv4.IP());
+    new IPV4.IP();
+    new IPV4.IP('127.1.1.1');
+    new IPV4.IP(new IPV4.IP());
   });
 
   it('IPv4.IP Match success', function() {
-    var ipAddr = new IPV4.IPv4.IP('127.0.0.1');
-    var ipMask = new IPV4.IPv4.IP('127.0.0.1');
-    var ip2 = new IPV4.IPv4.IP('127.0.0.1');
+    var ipAddr = new IPV4.IP('127.0.0.1');
+    var ipMask = new IPV4.IP('127.0.0.1');
+    var ip2 = new IPV4.IP('127.0.0.1');
 
 
-    var ipMatch = new IPV4.IPv4.IP.Match(null, ipAddr, ipMask);
+    var ipMatch = new IPV4.IP.Match(null, ipAddr, ipMask);
     console.log('ipMatch', ipMatch);
 
     expect(ipMatch.match(ip2)).toBe(true);

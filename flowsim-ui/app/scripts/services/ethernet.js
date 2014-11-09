@@ -20,25 +20,6 @@ var Payloads = {
 var Pattern = /^([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})$/;
 
 
-function MAC(mac) {
-  var tmp;
-  if(typeof mac === 'string') {
-    tmp = mac.match(Pattern);
-    if(!tmp || tmp.length < 12) {
-      throw 'Bad MAC Address: ' + mac;
-    }
-    this.value = _.map(_.range(6), function(i) {
-      return parseInt('0x'+tmp[2*i+1]);
-    });
-  } else if(mac instanceof MAC) {
-    this.value = _.clone(mac.value);
-  } else if(mac === undefined) {
-    this.value = [0, 0, 0, 0, 0, 0];
-  } else {
-    _.extend(this, mac);
-    this.value = _.clone(mac.value);
-  }
-};
 
 function Ethernet(eth, src, dst, type) {
   if(eth instanceof Ethernet || (typeof eth === 'object' && eth !== null)) {
@@ -86,7 +67,25 @@ Ethernet.TIPS = {
   typelen: 'Ethernet payload type or length'
 };
 
-
+function MAC(mac) {
+  var tmp;
+  if(typeof mac === 'string') {
+    tmp = mac.match(Pattern);
+    if(!tmp || tmp.length < 12) {
+      throw 'Bad MAC Address: ' + mac;
+    }
+    this.value = _.map(_.range(6), function(i) {
+      return parseInt('0x'+tmp[2*i+1]);
+    });
+  } else if(mac instanceof MAC) {
+    this.value = _.clone(mac.value);
+  } else if(mac === undefined) {
+    this.value = [0, 0, 0, 0, 0, 0];
+  } else {
+    _.extend(this, mac);
+    this.value = _.clone(mac.value);
+  }
+};
 
 MAC.prototype.equal = function(mac) {
   var i;

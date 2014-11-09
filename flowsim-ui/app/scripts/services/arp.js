@@ -37,7 +37,7 @@ function ARP(arp, opcode, sha, spa, tha, tpa){
 }
 
 ARP.Opcode = UInt.UInt;
-ARP.Opcode.Match = UInt.UInt.Match;
+ARP.Opcode.Match = UInt.Match;
 ARP.MAC = ETHERNET.MAC;
 ARP.MAC.Match = ETHERNET.MAC.Match;
 ARP.IP = IPV4;

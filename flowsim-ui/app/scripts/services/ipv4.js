@@ -46,30 +46,33 @@ function IPv4(ipv4, dscp, ecn, proto, src, dst) {
     this._src     = new IPv4.IP(ipv4.src);
     this._dst     = new IPv4.IP(ipv4.dst);
   } else {
-    this._dscp    = new UInt.UInt(null, 6);
-    this._ecn     = new UInt.UInt(null, 2);
-    this._proto   = new UInt.UInt(null, 8);
-    this._src     = new IPv4.IP();
-    this._dst     = new IPv4.IP();
+    this._dscp    = new UInt.UInt(dscp, 6);
+    this._ecn     = new UInt.UInt(ecn, 2);
+    this._proto   = new UInt.UInt(proto, 8);
+    this._src     = new IPv4.IP(src);
+    this._dst     = new IPv4.IP(dst);
   }
 }
 
-IPv4.IP = function(ipv4){
+function dot2num(dot){
+    var d = dot.split('.');
+    return ((((((+d[0])*256)+(+d[1]))*256)+(+d[2]))*256)+(+d[3]);
+}
+
+function IP(ipv4){
   var tmp;
   if(typeof ipv4 === 'string'){
     tmp = ipv4.match(ipv4Pattern);
     if(!tmp || !_.every(ipv4.split('.'), fgConstraints.isUInt(0, 255))){
-      throw 'Bad IPv4 Address: ' + ipv4;
+        throw 'Bad IPv4 Address: ' + ipv4;
     }
-    this.value = _.map(ipv4.split('.'), function(i){
-      return parseInt(i);
-    });
+    this.value = dot2num(ipv4);
     this.bytes = 4;
-  } else if(ipv4 instanceof IPv4.IP) {
-    this.value = _.clone(ipv4.value);
+  } else if(ipv4 instanceof IP) {
+    this.value = _.clone;
     this.bytes = 4;
   } else if(ipv4 === undefined){
-    this.value = [0,0,0,0];
+    this.value = 0;
     this.bytes = 4;
   } else {
     _.extend(this, ipv4);
@@ -78,7 +81,7 @@ IPv4.IP = function(ipv4){
   }
 }
 
-IPv4.IP.Match = UInt.Match;
+IP.Match = UInt.Match;
 /*IPv4.IP.Match = function(addr, mask){
   if(addr instanceof IPv4.IP.Match){
     this.addr = new IPv4.IP(addr.addr);
@@ -165,7 +168,8 @@ return {
   IPv4_UI:  IPv4_UI,
   create:   function(ipv4)    { return new IPv4(ipv4); },
   createUI: function(ipv4)    { return new IPv4_UI(ipv4); },
-  Payloads: Object.keys(Payloads)
+  Payloads: Object.keys(Payloads),
+  IP: IP
 };
 
 });
