@@ -33,20 +33,21 @@ describe('Service: ARP', function () {
 
   it('Opcode Construction Pass', function() {
     expect(!!ARP).toBe(true);
-    new ARP.ARP.Opcode('1');
-    new ARP.ARP.Opcode('2');
-    new ARP.ARP.Opcode(1);
-    new ARP.ARP.Opcode(2);
+    new ARP.ARP.Opcode(null,'1');
+    new ARP.ARP.Opcode(null,'2');
+    new ARP.ARP.Opcode(null,1);
+    new ARP.ARP.Opcode(null, 2);
   });
 
   it('Opcode Match', function() {
     expect(!!ARP).toBe(true);
-    var match1 = new ARP.ARP.Opcode.Match(1);
-    var match2 = new ARP.ARP.Opcode.Match('1');
+    var opcode1= new ARP.ARP.Opcode(null, 1);
+    var opcode2 = new ARP.ARP.Opcode(null, '1');
 
-    expect(match1.match(new ARP.ARP.Opcode(1))).toBe(true);
-    expect(match2.match(new ARP.ARP.Opcode(1))).toBe(true);
-    expect(match1.match(new ARP.ARP.Opcode(2))).toBe(false);
+    var match1 = new ARP.ARP.Opcode.Match(null, opcode1, opcode2);
+
+    expect(match1.match(new ARP.ARP.Opcode(null, 1))).toBe(true);
+
   });
 
   it('MAC Construction Pass', function() {
