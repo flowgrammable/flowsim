@@ -65,7 +65,6 @@ function Capabilities(groups) {
       protocol: 'Internal',
       fields: [
         mkActionField('Output', true, 'forward'),
-        mkActionField('Drop', true, 'drop'),
         mkActionField('Set Group', true, 'set_group'),
         mkActionField('Set Queue', true, 'set_queue')
       ]

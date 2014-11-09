@@ -30,7 +30,7 @@ Port.TIPS = {
 };
 
 Port.TESTS = {
-  mac: ETHERNET.Ethernet.MAC.is,
+  mac: ETHERNET.MAC.is,
   name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v) }
 }
 
@@ -152,7 +152,7 @@ function Capabilities(ports) {
 function Configuration(ports) {
   if(ports instanceof Capabilities) {
     this.n_ports = ports.n_ports;
-    this.ports = _.map(ports.ports, function(port) { 
+    this.ports = _.map(ports.ports, function(port) {
       return new Port.Configuration(port, ports);
     });
   } else {

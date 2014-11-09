@@ -8,8 +8,8 @@ var Pattern = /^(0x)?[0-9a-fA-F]+$/;
 function padZeros(input, len) {
   len -= input.length;
   if(len < 1) { return input; }
-  return _(len).times(function() { 
-    return '0'; 
+  return _(len).times(function() {
+    return '0';
   }).join('') + input;
 }
 
@@ -22,7 +22,7 @@ function howManyBytes(val) {
   if(val === 0) { return 1; }
   return Math.ceil(howManyBits(val) / 8);
 }
-      
+
 function maxFromBits(val) {
   return Math.ceil(Math.pow(2, val) - 1);
 }
@@ -30,6 +30,20 @@ function maxFromBits(val) {
 function maxFromBytes(val) {
   return Math.ceil(maxFromBits(8*val));
 }
+
+function is(bits){
+  return function(val){
+    var tmp;
+    if(typeof val === 'number'){
+      return val === parseInt(val) && (0 <= val && val <= maxFromBits(bits));
+    } else if(_.isString(val) && Pattern.test(val)) {
+      tmp = parseInt(val);
+      return 0 <= val && val <= maxFromBits(bits);
+    } else {
+      return false;
+    }
+  }
+};
 
 function UInt(uint, value, bytes) {
   if(_.isObject(uint)) {
@@ -137,7 +151,7 @@ UInt.prototype.toString = function(base, sep) {
   if(this.bytes < 5) {
     return prefix + padZeros(this.value.toString(base), 2*this.bytes);
   } else {
-    return prefix + _(this.value).map(function(v) { 
+    return prefix + _(this.value).map(function(v) {
       return padZeros(v.toString(base), 2);
     }).join(sep);
   }
@@ -196,7 +210,7 @@ Match.mkWildcard = function(uint) {
 
 Match.mkExact = function(uint) {
   return new Match(null,
-    uint, 
+    uint,
     (new UInt(null, null, uint.bytes)).neg());
 };
 
@@ -208,7 +222,7 @@ Match.prototype.match = function(val) {
   } else {
     return _.reduce(_.zip(val.value, this.mask.value, this.value.value),
       function(pass, triple) {
-        return !pass ? false : ((triple[0] & triple[1]) >>> 0) === triple[2]; 
+        return !pass ? false : ((triple[0] & triple[1]) >>> 0) === triple[2];
       }, true);
   }
 };
@@ -220,6 +234,7 @@ return {
   howManyBytes: howManyBytes,
   maxFromBits: maxFromBits,
   maxFromBytes: maxFromBytes,
+  is: is,
   UInt: UInt,
   and: and,
   or: or,

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('ETHERNET', function ETHERNET(fgConstraints, fgUI, Utils) {
+  .factory('ETHERNET', function ETHERNET(fgConstraints, fgUI, UInt) {
 
 var NAME = 'Ethernet';
 
@@ -16,51 +16,6 @@ var Payloads = {
   'Payload' : 0x0000
 };
 
-function Ethernet(eth, src, dst, type) {
-  if(eth instanceof Ethernet || (typeof eth === 'object' && eth !== null)) {
-    this._src = new MAC(eth._src);
-    this._dst = new MAC(eth._dst);
-    this._type = new Utils.UInt(eth._type, 16);
-  } else {
-    this._src = new MAC(src);
-    this._dst = new MAC(dst);
-    this._type = new Utils.UInt(type, 16);
-  }
-  this.bytes = 14;
-  this.name = NAME;
-}
-
-Ethernet.prototype.src = function(src) {
-  if(src) {
-    this._src = new MAC(src);
-  } else {
-    return this._src;
-  }
-};
-
-Ethernet.prototype.dst = function(dst) {
-  if(dst) {
-    this._dst = new MAC(dst);
-  } else {
-    return this._dst;
-  }
-};
-
-Ethernet.prototype.typelen = function(typelen) {
-  if(typelen) {
-    this._typelen = new Utils.UInt(typelen, 16);
-  } else {
-    return this._typelen;
-  }
-};
-
-Ethernet.Name = NAME;
-
-Ethernet.TIPS = {
-  src: 'Ethernet source address',
-  dst: 'Ethernet destination address',
-  typelen: 'Ethernet payload type or length'
-};
 
 var Pattern = /^([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})$/;
 
@@ -85,6 +40,54 @@ function MAC(mac) {
   }
 };
 
+function Ethernet(eth, src, dst, type) {
+  if(eth instanceof Ethernet || (typeof eth === 'object' && eth !== null)) {
+    this._src = new MAC(eth._src);
+    this._dst = new MAC(eth._dst);
+    this._type = new UInt.UInt(eth._type, 16);
+  } else {
+    this._src = new MAC(src);
+    this._dst = new MAC(dst);
+    this._type = new UInt.UInt(type, 16);
+  }
+  this.bytes = 14;
+  this.name = NAME;
+}
+
+Ethernet.prototype.src = function(src) {
+  if(src) {
+    this._src = new MAC(src);
+  } else {
+    return this._src;
+  }
+};
+
+Ethernet.prototype.dst = function(dst) {
+  if(dst) {
+    this._dst = new MAC(dst);
+  } else {
+    return this._dst;
+  }
+};
+
+Ethernet.prototype.typelen = function(typelen) {
+  if(typelen) {
+    this._typelen = new UInt.UInt(typelen, 16);
+  } else {
+    return this._typelen;
+  }
+};
+
+Ethernet.Name = NAME;
+
+Ethernet.TIPS = {
+  src: 'Ethernet source address',
+  dst: 'Ethernet destination address',
+  typelen: 'Ethernet payload type or length'
+};
+
+
+
 MAC.prototype.equal = function(mac) {
   var i;
   for(i=0; i<6; ++i) {
@@ -97,7 +100,7 @@ MAC.prototype.equal = function(mac) {
 
 MAC.prototype.toString = function() {
   return _.map(this.value, function(oct) {
-    return Utils.padZeros(oct.toString(16), 2);
+    return UInt.padZeros(oct.toString(16), 2);
   }).join(':');
 };
 
@@ -145,10 +148,10 @@ MAC.Match.prototype.toString = function() {
   return this.addr.toString() + '/' + this.mask.toString();
 };
 
-TESTS = {
+var TESTS = {
   src:     MAC.is,
   dst:     MAC.is,
-  typelen: Utils.UInt.is(16)
+  typelen: UInt.is(16)
 };
 
 function Ethernet_UI(eth) {
@@ -168,7 +171,7 @@ function Ethernet_UI(eth) {
   }, {
     name: 'Type/Length',
     value: eth.typelen().toString(),
-    test: Utils.UInt.is(16),
+    test: UInt.is(16),
     tip: TIPS.typelen
   }];
 }
@@ -192,7 +195,7 @@ return {
   create:      function(eth)         { return new Ethernet(eth); },
   createUI:    function(eth)         { return new Ethernet_UI(eth); },
   Payloads:    Object.keys(Payloads),
-  MAC:         Ethernet.MAC
+  MAC:         MAC
 };
 
 });
