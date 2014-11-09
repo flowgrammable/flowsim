@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(Context, Utils) {
+  .factory('Dataplane', function(Context, UInt) {
 
 
 var State = {
@@ -19,7 +19,7 @@ function Dataplane(switch_, trace) {
     this.ctx   = null;
     this.state = ARRIVAL;
 
-    this.bufferIdAllocator = new Utils.Allocator();
+    this.bufferIdAllocator = null;//new Utils.Allocator();
 
     // state machine references
     this.table         = null;
