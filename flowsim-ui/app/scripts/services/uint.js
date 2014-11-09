@@ -97,7 +97,7 @@ UInt.prototype.and = function(rhs) {
   if(this.bytes < 5) {
     this.value = (this.value & rhs.value) >>> 0;
   } else {
-    this.value = _.map(_.zip([this.value, rhs.value]), function(pair) {
+    this.value = _.map(_.zip(this.value, rhs.value), function(pair) {
       return (pair[0] & pair[1]) >>> 0;
     });
   }
@@ -111,7 +111,7 @@ UInt.prototype.or = function(rhs) {
   if(this.bytes < 5) {
     this.value = (this.value | rhs.value) >>> 0;
   } else {
-    this.value = _.map(_.zip([this.value, rhs.value]), function(pair) {
+    this.value = _.map(_.zip(this.value, rhs.value), function(pair) {
       return (pair[0] | pair[1]) >>> 0;
     });
   }
@@ -125,7 +125,7 @@ UInt.prototype.xor = function(rhs) {
   if(this.bytes < 5) {
     this.value = (this.value ^ rhs.value) >>> 0;
   } else {
-    this.value = _.map(_.zip([this.value, rhs.value]), function(pair) {
+    this.value = _.map(_.zip(this.value, rhs.value), function(pair) {
       return (pair[0] ^ pair[1]) >>> 0;
     });
   }
@@ -162,7 +162,7 @@ UInt.prototype.mask = function(src, mask) {
 
 UInt.prototype.toString = function(base, sep) {
   var prefix = base === 16 ? '0x' : '';
-  var sep    = sep ? sep : '';
+  sep = sep ? sep : '';
   if(this.bytes < 5) {
     return prefix + padZeros(this.value.toString(base), 2*this.bytes);
   } else {
@@ -199,9 +199,9 @@ function xor(lhs, rhs) {
   return result.xor(rhs);
 }
 
-function mask(tgt, src, mask) {
+function mask(tgt, src, msk) {
   var result = new UInt(tgt);
-  return result.mask(src, mask);
+  return result.mask(src, msk);
 }
 
 function Match(match, value, mask) {
