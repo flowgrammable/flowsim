@@ -14,14 +14,6 @@ function padZeros(input, len) {
 
 var HexPattern = /^(0x)?[0-9a-fA-F]+$/;
 
-/*
-function inRange(min, max) {
-  return function(value) { 
-    return min <= value && value <= max;
-  };
-}
-*/
-
 function howManyBits(val) {
   if(val === 0) { return 1; }
   return Math.floor((Math.log(val) / Math.LN2) + 1);
