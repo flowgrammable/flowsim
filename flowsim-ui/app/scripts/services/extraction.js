@@ -140,6 +140,7 @@ function extract(packet, key) {
 
 return {
   Key: Key,
+  extract_ethernet: extract_ethernet,
   process: extract
 };
   
