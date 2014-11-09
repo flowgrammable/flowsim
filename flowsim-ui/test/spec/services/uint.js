@@ -144,14 +144,14 @@ describe('Service: uint', function () {
     var exact2_mac2 = new UInt.Match.mkExact(mac2);
 
     var wildcard1_mac1 = new UInt.Match(null,
-        new UInt.UInt(broadcast),
-        new UInt.UInt(broadcast));
+        new UInt.UInt(null, null, 6),
+        new UInt.UInt(null, null, 6));
     var wildcard2_mac1 = new UInt.Match.mkWildcard(mac1);
     var wildcard3_mac1 = new UInt.Match.mkWildcard(6);
 
     var wildcard1_mac2 = new UInt.Match(null,
-        new UInt.UInt(broadcast),
-        new UInt.UInt(broadcast));
+        new UInt.UInt(null, null, 6),
+        new UInt.UInt(null, null, 6));
     var wildcard2_mac2 = new UInt.Match.mkWildcard(mac2);
     var wildcard3_mac2 = new UInt.Match.mkWildcard(6);
 
@@ -160,15 +160,45 @@ describe('Service: uint', function () {
     expect(wildcard1_mac1.match(mac1)).toBe(true);
     expect(wildcard2_mac1.match(mac1)).toBe(true);
     expect(wildcard3_mac1.match(mac1)).toBe(true);
-
     expect(exact1_mac1.match(mac2)).toBe(false);
     expect(exact2_mac1.match(mac2)).toBe(false);
     expect(wildcard1_mac1.match(mac2)).toBe(true);
     expect(wildcard2_mac1.match(mac2)).toBe(true);
     expect(wildcard3_mac1.match(mac2)).toBe(true);
+
+    expect(exact1_mac2.match(mac1)).toBe(false);
+    expect(exact2_mac2.match(mac1)).toBe(false);
+    expect(wildcard1_mac2.match(mac1)).toBe(true);
+    expect(wildcard2_mac2.match(mac1)).toBe(true);
+    expect(wildcard3_mac2.match(mac1)).toBe(true);
+    expect(exact1_mac2.match(mac2)).toBe(true);
+    expect(exact2_mac2.match(mac2)).toBe(true);
+    expect(wildcard1_mac2.match(mac2)).toBe(true);
+    expect(wildcard2_mac2.match(mac2)).toBe(true);
+    expect(wildcard3_mac2.match(mac2)).toBe(true);
   });
 
-  it('UInt Match', function() {
+  it('UInt Prefix', function() {
+    var route1 = new UInt.Match(null,
+      new UInt.UInt(null, 0x0a000000, 4),
+      new UInt.UInt(null, 0xff000000, 4));
+    var route2 = new UInt.Match(null,
+      new UInt.UInt(null, 0x0a0b0000, 4),
+      new UInt.UInt(null, 0xffff0000, 4));
+    var dst1 = new UInt.UInt(null, 0x0a0a0101, 4);
+    var dst2 = new UInt.UInt(null, 0x0a0b0101, 4);
+    var dst3 = new UInt.UInt(null, 0x0b0b0101, 4);
+
+    expect(route1.match(dst1)).toBe(true);
+    expect(route1.match(dst2)).toBe(true);
+    expect(route1.match(dst3)).toBe(false);
+    
+    expect(route2.match(dst1)).toBe(false);
+    expect(route2.match(dst2)).toBe(true);
+    expect(route2.match(dst3)).toBe(false);
+  });
+
+  it('UInt Mask', function() {
     var left = new UInt.UInt(null, 0xffffffff);
     var mask = new UInt.UInt(null, 0x0000ff00);
     var right = new UInt.UInt(null, 0x11223344);
