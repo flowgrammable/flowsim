@@ -60,8 +60,6 @@ describe('Service: ETHERNET', function () {
     ETHERNET.mkMAC('01-23:45-67:89:EF');
   });
 
-  /*
-
   it('MAC Helper Functions', function () {
     expect(!!ETHERNET).toBe(true);
 
@@ -78,9 +76,11 @@ describe('Service: ETHERNET', function () {
     // the built in values get undefined for some reason
     //expect(broadcast.equal(MAC.Braodcast)).toBe(true);
     //expect(multicast.equal(MAC.Braodcast)).toBe(false);
-    expect(broadcast.equal(multicast)).toBe(false);
+    expect(ETHERNET.MAC.equal(multicast, broadcast)).toBe(false);
 
   });
+
+  /*
 
   it('MAC toString Pass', function() {
     expect(!!ETHERNET).toBe(true);

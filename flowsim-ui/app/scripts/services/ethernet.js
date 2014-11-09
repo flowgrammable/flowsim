@@ -95,8 +95,12 @@ function mkMAC(mac) {
   }
 }
 
-MAC.prototype.equal = function(mac) {
-  return this._mac.equal(mac._mac);
+function mkBroadcast() {
+  return mkMAC('ff:ff:ff:ff:ff:ff');
+}
+
+MAC.equal = function(lhs, rhs) {
+  return UInt.equal(lhs._mac, rhs._mac);
 };
 
 MAC.prototype.toString = function() {
@@ -104,8 +108,6 @@ MAC.prototype.toString = function() {
     return UInt.padZeros(oct.toString(16, 2));
   }).join(':');
 };
-// FIXME
-MAC.Broadcast = new MAC('ff:ff:ff:ff:ff:ff');
 
 MAC.Pattern = Pattern;
 
@@ -114,7 +116,7 @@ MAC.is = function(addr) {
 };
 
 MAC.isBroadcast = function(addr) {
-  return MAC.Broadcast.equal(addr);
+  return MAC.equal(mkBroadcast(), addr);
 };
 
 MAC.isMulticast = function(addr) {
