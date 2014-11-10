@@ -35,7 +35,7 @@ var v1 = {
   }],
   ins: [{
     name: 'Meter',
-    value: 1234
+    value1: 1234
   }, {
     name: 'Apply'
     set: [{
@@ -50,5 +50,9 @@ var v1 = {
       name: 'Output',
       value1: 1
     }]
+  }, {
+    name: 'Metadata',
+    value1: '00:11:22:44:55:66:77,',
+    value2: '00:ff:ff:00:00:ff:ff'
   }]
 };
