@@ -71,6 +71,48 @@ Queue.prototype.step = function(dp, ctx) {
   ctx.queue_id = this.queue_id;
 };
 
+function Push(psh, tag) {
+  if(_.isObject(psh)) {
+    this.tag = psh.tag.clone();
+  } else {
+    this.tag = tag;
+  }
+}
+
+Push.prototype.clone = function() {
+  return new Push(this);
+};
+
+Push.prototype.toString = function() {
+  return this.tag.toString();
+};
+
+VLAN.prototype.insertHere = function(protocol) {
+  if(protocol.name !=== ETHERNET.name) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+VLAN.prototype.setDefaults = function(protocol) {
+  if(protocol.name === <self>.name) {
+    // ith tag default rules
+  } else {
+    // 1st tag default rules
+  }
+};
+
+Push.prototype.step = function(dp, ctx) {
+  var idx = _(ctx.packet.protocols).find(this.tag.insertHere);
+  if(idx) {
+    this.tag.setDefaults(ctx.packet.protocols[idx]);
+    ctx.packet.protocols.splice(idx, 1, this.tag);
+  } else {
+    throw 'Push failed';
+  }
+};
+
 function SetField(sf, proto, field, value) {
   if(_.isObject(sf)) {
     _.extend(this, sf);
