@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Match', function(fgConstraints, ETHERNET, UInt) {
+  .factory('Match', function(fgConstraints) {
 
 function Match(match, label, matchObject) {
   if(_.isObject(match)) {
