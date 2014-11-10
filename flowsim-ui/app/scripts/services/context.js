@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Context', function(Action, UInt) {
+  .factory('Context', function(Action, Instruction, UInt) {
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
@@ -45,12 +45,16 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
 
     this.key = ctx.key.clone();
 
-    this.actionSet = ctx.actionSet.clone();
+    this.actionSet      = new Action.Set(ctx.actionSet);
+    this.instructionSet = new Instruction.Set(ctx.instructionSet);
   } else if(packet && buffer_id && in_port) {
     // store a reference to the packet and buffer id
     this.packet = packet;
     this.buffer = buffer_id;
     this.meter  = -1;
+    this.group  = -1;
+    this.output = -1;
+    this.queue  = -1;
 
     // initialize the first table target
     this._nxtTable = 0;
@@ -60,7 +64,8 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
     this.key = new Key(in_port, in_phy_port, tunnel_id);
 
     // initialize an empty packet set
-    this.actionSet = new Action.Set();
+    this.actionSet      = new Action.Set();
+    this.instructionSet = new Instruction.Set();
   } else {
     throw 'Bad Context('+packet+', '+buffer_id+', '+in_port+')';
   }
@@ -108,6 +113,17 @@ Context.prototype.writeActions = function(actions) {
 
 Context.prototype.hasGoto = function() {
   return this._nxtTable !== this._lstTable;
+};
+
+Context.prototype.toView = function() {
+  return {
+    table: this.nxtTable,
+    meter: this.meter,
+    buffer: this.buffer,
+    packet: Packet.createUI(this.packet),   // FIXME: normalize
+    actionSet: this.actionSet.toView(),
+    instructionSet: this.instructionSet.toView() 
+  };
 };
 
 return {
