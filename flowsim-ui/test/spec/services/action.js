@@ -36,6 +36,11 @@ describe('Service: action', function () {
     VLAN = _VLAN_;
   }));
 
+  var MPLS;
+  beforeEach(inject(function(_MPLS_) {
+    MPLS = _MPLS_;
+  }));
+
   it('test', function () {
     expect(!!Action).toBe(true);
 
@@ -299,6 +304,55 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dei().toString(16)).toBe('0x02');
     expect(pkt.protocols[1].vid().toString(16)).toBe('0x0444');
     expect(pkt.protocols[1].typelen().toString(16)).toBe('0x0000');
+
+  });
+
+  it('MPLS SetField', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('MPLSpack');
+    pkt.push(MPLS.mkMPLS());
+
+    set.setField(new Action.SetField(
+      null,
+      MPLS.name, MPLS.label,
+      MPLS.mkLabel('0x012345')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x012345');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
+
+    set.setField(new Action.SetField(
+      null,
+      MPLS.name, MPLS.tc,
+      MPLS.mkTc('0x02')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x012345');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x02');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
+
+    set.setField(new Action.SetField(
+      null,
+      MPLS.name, MPLS.bos,
+      MPLS.mkBos('0x1')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x012345');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x02');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x01');
 
   });
 
