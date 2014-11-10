@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('VLAN', function VLAN(fgConstraints, fgUI, UInt) {
+  .factory('VLAN', function(fgConstraints, fgUI, UInt) {
 
 var NAME = 'VLAN';
 var BYTES = 4;
@@ -15,7 +15,7 @@ var Payloads = {
  'Payload': 0
 };
 
-function Vlan(vlan, pcp, dei, vid, typelen){
+function VLAN(vlan, pcp, dei, vid, typelen){
   if(_.isObject(vlan)){
     _.extend(this, vlan);
     this._pcp     = new UInt.UInt(vlan._pcp);
@@ -23,20 +23,20 @@ function Vlan(vlan, pcp, dei, vid, typelen){
     this._vid     = new UInt.UInt(vlan._vid);
     this._typelen = new UInt.UInt(vlan._typelen);
   } else {
-    this._pcp     = new UInt.UInt(pcp);
-    this._dei     = new UInt.UInt(dei);
-    this._vid     = new UInt.UInt(vid);
-    this._typelen = new UInt.UInt(typelen);
+    this._pcp     = mkPcp(pcp);
+    this._dei     = mkDei(dei);
+    this._vid     = mkVid(vid);
+    this._typelen = mkTypelen(typelen);
   }
   this.bytes = BYTES;
   this.name = NAME;
 }
 
 function mkVLAN(pcp, dei, vid, typelen){
-  return new Vlan(null, pcp, dei, vid, typelen);
+  return new VLAN(null, pcp, dei, vid, typelen);
 }
 
-Vlan.prototype.pcp = function(pcp){
+VLAN.prototype.pcp = function(pcp){
   if(pcp) {
     if(pcp instanceof UInt.UInt){
       this._pcp = new UInt.UInt(pcp);
@@ -57,7 +57,7 @@ function mkPcpMatch(value, mask) {
 }
 
 
-Vlan.prototype.dei = function(dei){
+VLAN.prototype.dei = function(dei){
   if(dei) {
     if(dei instanceof UInt.UInt){
       this._dei = new UInt.UInt(dei);
@@ -77,7 +77,7 @@ function mkDeiMatch(value, mask) {
   return new UInt.Match(null, mkDei(value), mkDei(mask));
 }
 
-Vlan.prototype.vid = function(vid){
+VLAN.prototype.vid = function(vid){
   if(vid) {
     if(vid instanceof UInt.UInt){
       this._vid = new UInt.UInt(vid);
@@ -97,7 +97,7 @@ function mkVidMatch(value, mask) {
   return new UInt.Match(null, mkVid(value), mkVid(mask));
 }
 
-Vlan.prototype.typelen = function(typelen){
+VLAN.prototype.typelen = function(typelen){
   if(typelen) {
     if(typelen instanceof UInt.UInt){
       this._typelen = new UInt.UInt(typelen);
@@ -174,7 +174,7 @@ VLAN_UI.prototype.clearPayload = function() {
 
 return {
   name:           NAME,
-  VLAN:           Vlan,
+  VLAN:           VLAN,
   pcp:            '_pcp',
   dei:            '_dei',
   vid:            '_vid',
@@ -186,9 +186,10 @@ return {
   mkDeiMatch:     mkDeiMatch,
   mkVid:          mkVid,
   mkVidMatch:     mkVidMatch,
+  mkTypelen:      mkTypelen,
   mkTypelenMatch: mkTypelenMatch,
   VLAN_UI:        VLAN_UI,
-  create:         function(vlan) { return new Vlan(vlan); },
+  create:         function(vlan) { return new VLAN(vlan); },
   createUI:       function(vlan) { return new VLAN_UI(vlan); },
   Payloads:       Object.keys(Payloads),
   TESTS:          TESTS,

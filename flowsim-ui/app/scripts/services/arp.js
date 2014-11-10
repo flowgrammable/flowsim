@@ -119,8 +119,6 @@ var TESTS = {
   tpa: IPV4.IP.is
 };
 
-var opPattern = /^[1-2]$/;
-
 function ARP_UI(arp) {
   arp = arp ? new ARP(arp) : new ARP();
   this.name = NAME;

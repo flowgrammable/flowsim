@@ -14,14 +14,6 @@ var Payloads = {
   'Payload' : 0
 };
 
-var Pattern = /^(([0-9]{1,3})\.){3}([0-9]{1,3})$/;
-
-
-function isIPv4(ipv4) {
-  return ipv4Pattern.test(ipv4) &&
-    _.every(ipv4.split('.'), fgConstraints.isUInt(0, 255));
-}
-
 function IPv4(ipv4, dscp, ecn, proto, src, dst) {
   if(_.isObject(ipv4)) {
     this._dscp = new UInt.UInt(ipv4._dscp);

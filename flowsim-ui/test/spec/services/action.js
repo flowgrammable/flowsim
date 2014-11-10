@@ -30,6 +30,12 @@ describe('Service: action', function () {
   beforeEach(inject(function (_IPV4_) {
     IPV4 = _IPV4_;
   }));
+
+  var VLAN;
+  beforeEach(inject(function (_VLAN_) {
+    VLAN = _VLAN_;
+  }));
+
   it('test', function () {
     expect(!!Action).toBe(true);
 
@@ -243,4 +249,57 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].src().toString()).toBe('192.168.1.1');
     expect(pkt.protocols[1].dst().toString()).toBe('1.1.1.1');
   });
+
+  it('VLAN SetField', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('vlanpack');
+    pkt.push(VLAN.mkVLAN());
+
+    set.setField(new Action.SetField(
+      null,
+      VLAN.name, VLAN.pcp,
+      VLAN.mkPcp('0x01')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].pcp().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].dei().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].vid().toString(16)).toBe('0x0000');
+    expect(pkt.protocols[1].typelen().toString(16)).toBe('0x0000');
+
+    set.setField(new Action.SetField(
+      null,
+      VLAN.name, VLAN.dei,
+      VLAN.mkDei('0x02')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].pcp().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].dei().toString(16)).toBe('0x02');
+    expect(pkt.protocols[1].vid().toString(16)).toBe('0x0000');
+    expect(pkt.protocols[1].typelen().toString(16)).toBe('0x0000');
+
+    set.setField(new Action.SetField(
+      null,
+      VLAN.name, VLAN.vid,
+      VLAN.mkVid('0x444')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].pcp().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].dei().toString(16)).toBe('0x02');
+    expect(pkt.protocols[1].vid().toString(16)).toBe('0x0444');
+    expect(pkt.protocols[1].typelen().toString(16)).toBe('0x0000');
+
+  });
+
 });
