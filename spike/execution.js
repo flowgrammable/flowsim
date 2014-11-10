@@ -28,8 +28,27 @@ var v1 = {
   buffer: 0x00112301,
   meter: -1,
   packet: _packet1,
-  actionSet: [
-  ],
-  instructionSet: [
-  ]
+  actionSet: [{
+    name: 'eth'
+    value1: 'src='
+    value2: '00:00:00:00:00:00'
+  }],
+  ins: [{
+    name: 'Meter',
+    value: 1234
+  }, {
+    name: 'Apply'
+    set: [{
+      name: 'eth',
+      value1: 'src=',
+      value2: '01:00:00:00:00:00'
+    }, {
+      name: 'icmpv6',
+      value1: 'type=',
+      value2: '2'
+    }, {
+      name: 'Output',
+      value1: 1
+    }]
+  }]
 };
