@@ -90,9 +90,26 @@ SetField.prototype.clone = function() {
   return new SetField(this.protocol, this.field, this.value);
 };
 
-function Set() {
-  this.actions = {};
+function Set(set) {
+  if(_.isObject(set)) {
+    _.each(set.actions, function(key, val) {
+      if(key === 'setField') {
+      } else if(key === 'pop_mpls') {
+      } else if(key === 'pop_pbb') {
+      } else if(key === 'pop_vlan') {
+      } else if(key === 'pop_mpls') {
+      } else if(key === 'pop_pbb') {
+      } else if(key === 'pop_vlan') {
+      }
+    }, this);
+  } else {
+    this.actions = {};
+  }
 }
+
+Set.prototype.clone = function() {
+  return new Set(this);
+};
 
 Set.prototype.clear = function() {
   this.actions = {};
