@@ -96,6 +96,9 @@ var _packet0 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -253,6 +256,9 @@ var _packet1 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -405,6 +411,9 @@ var _packet2 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -553,6 +562,9 @@ var _packet3 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -697,6 +709,9 @@ var _packet4 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -835,6 +850,9 @@ var _packet5 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -973,6 +991,9 @@ var _packet6 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -1095,6 +1116,9 @@ var _packet7 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
@@ -1214,6 +1238,9 @@ var _packet8 = {
       value: 5060,
       bytes: 2
     }
+  }, {
+    name: 'Payload',
+    bytes: 1000
   }]
 };
 
