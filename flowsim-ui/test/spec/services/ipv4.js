@@ -40,24 +40,46 @@ describe('Service: IPV4', function () {
 
   });
 
-  it('IPv4.IP Construction Success', function(){
+  it('IPv4.IP Construction Pass', function(){
     expect(!!IPV4).toBe(true);
+
+    IPV4.mkIP();
 
     new IPV4.IP();
     new IPV4.IP('127.1.1.1');
     new IPV4.IP(new IPV4.IP());
   });
 
-  it('IPv4.IP Match success', function() {
-    var ipAddr = new IPV4.IP('127.0.0.1');
-    var ipMask = new IPV4.IP('127.0.0.1');
-    var ip2 = new IPV4.IP('127.0.0.1');
+  it('IPv4.IP Match Pass', function() {
+    var ip1 = IPV4.mkIP('10.0.0.0');
+    var ip2 = IPV4.mkIP('255.255.255.255');
+    var ip3 = IPV4.mkIP('10.0.0.1');
 
+    var ipMatch = new IPV4.IP.Match(null, ip1, ip2);
+    var ipMatch2 = new IPV4.IP.Match(null, '0.0.0.0', '0.0.0.0');
+    var ipMatch3 = new IPV4.IP.Match(null, '1.0.0.0', '1.0.0.0');
 
-    var ipMatch = new IPV4.IP.Match(null, ipAddr, ipMask);
-    console.log('ipMatch', ipMatch);
+    expect(ipMatch.match(ip1)).toBe(true);
+    expect(ipMatch.match(ip3)).toBe(false);
 
-    expect(ipMatch.match(ip2)).toBe(true);
+    expect(ipMatch2.match(ip1)).toBe(true);
+    expect(ipMatch2.match(ip2)).toBe(true);
+
+    expect(ipMatch3.match(ip1)).toBe(false);
+    expect(ipMatch3.match(ip2)).toBe(true);
+
   });
+
+  it('IPv4 Construction Pass', function() {
+    IPV4.mkIPv4();
+    IPV4.mkIPv4('0x1', '0x1', '0x06', '128.0.0.1','127.0.0.1');
+  });
+
+  it('IPv4 Construction Fail', function() {
+    expect(function(){
+      IPV4.mkIPv4('0x222');
+    }).toThrow();
+  });
+
 
 });
