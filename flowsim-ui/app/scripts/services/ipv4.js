@@ -170,17 +170,8 @@ IP.equal = function(lhs, rhs) {
 };
 
 IP.prototype.toString = function() {
-  /*
-    var part1 = this._ip.value & 255;
-    var part2 = ((this._ip.value >> 8) & 255);
-    var part3 = ((this._ip.value >> 16) & 255);
-    var part4 = ((this._ip.value >> 24) & 255);
-    */
-
     return [(this._ip.value >> 24) & 255, (this._ip.value >> 16) & 255,
             (this._ip.value >> 8) & 255, this._ip.value & 255].join('.');
-
-    //return part4 + '.' + part3 + '.' + part2 + '.' + part1;
 };
 
 IP.Pattern = ipv4Pattern;

@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('VLAN', function(fgConstraints, fgUI) {
+  .factory('VLAN', function VLAN(fgConstraints, fgUI, UInt) {
 
 var NAME = 'VLAN';
+var BYTES = 4;
 
 var Payloads = {
  'VLAN': 0x8100,
@@ -14,47 +15,153 @@ var Payloads = {
  'Payload': 0
 };
 
-function VLAN() {
+function Vlan(vlan, pcp, dei, vid, typelen){
+  if(_.isObject(vlan)){
+    _.extend(this, vlan);
+    this._pcp     = new UInt.UInt(vlan._pcp);
+    this._dei     = new UInt.UInt(vlan._dei);
+    this._vid     = new UInt.UInt(vlan._vid);
+    this._typelen = new UInt.UInt(vlan._typelen);
+  } else {
+    this._pcp     = new UInt.UInt(pcp);
+    this._dei     = new UInt.UInt(dei);
+    this._vid     = new UInt.UInt(vid);
+    this._typelen = new UInt.UInt(typelen);
+  }
+  this.bytes = BYTES;
   this.name = NAME;
-  this.bytes = 4;
-  this.fields = {
-    pcp: 0,
-    dei: 0,
-    vlan_id: 0,
-    typelen: 0
-  };
 }
 
-function VLAN_UI(vlan) {
-  vlan = vlan === undefined ? new VLAN() : vlan;
-  this.name = NAME;
-  this.bytes = 4;
-  this.attrs = _.map(vlan.fields, function(value, key) {
-    switch(key) {
-      case 'pcp':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,7),
-                            'VLAN Priority Code Point');
-      case 'dei':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,3),
-                            '');
-      case 'vlan_id':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0x0fff),
-                            'VLAN Tag Identifier');
-      case 'typelen':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0xffff),
-                            'Ethernet type or length of payload');
-      default:
-        return mkLabelInput(key, value, function(){ return true; }, 'Unknown');
+function mkVLAN(pcp, dei, vid, typelen){
+  return new Vlan(null, pcp, dei, vid, typelen);
+}
+
+Vlan.prototype.pcp = function(pcp){
+  if(pcp) {
+    if(pcp instanceof UInt.UInt){
+      this._pcp = new UInt.UInt(pcp);
+    } else {
+      this._pcp = new UInt.UInt(null, pcp, 1);
     }
-  });
+  } else {
+    return this._pcp;
+  }
+};
+
+function mkPcp(input){
+  return new UInt.UInt(null, input, 1);
+}
+
+function mkPcpMatch(value, mask) {
+  return new UInt.Match(null, mkPcp(value), mkPcp(mask));
+}
+
+
+Vlan.prototype.dei = function(dei){
+  if(dei) {
+    if(dei instanceof UInt.UInt){
+      this._dei = new UInt.UInt(dei);
+    } else {
+      this._dei = new UInt.UInt(null, dei, 1);
+    }
+  } else {
+    return this._dei;
+  }
+};
+
+function mkDei(input){
+  return new UInt.UInt(null, input, 1);
+}
+
+function mkDeiMatch(value, mask) {
+  return new UInt.Match(null, mkDei(value), mkDei(mask));
+}
+
+Vlan.prototype.vid = function(vid){
+  if(vid) {
+    if(vid instanceof UInt.UInt){
+      this._vid = new UInt.UInt(vid);
+    } else {
+      this._vid = new UInt.UInt(null, vid, 2);
+    }
+  } else {
+    return this._vid;
+  }
+};
+
+function mkVid(input){
+  return new UInt.UInt(null, input, 2);
+}
+
+function mkVidMatch(value, mask) {
+  return new UInt.Match(null, mkVid(value), mkVid(mask));
+}
+
+Vlan.prototype.typelen = function(typelen){
+  if(typelen) {
+    if(typelen instanceof UInt.UInt){
+      this._typelen = new UInt.UInt(typelen);
+    } else {
+      this._typelen = new UInt.UInt(null, typelen, 2);
+    }
+  } else {
+    return this._typelen;
+  }
+};
+
+function mkTypelen(input){
+  return new UInt.UInt(null, input, 2);
+}
+
+function mkTypelenMatch(value, mask) {
+  return new UInt.Match(null, mkTypelen(value), mkTypelen(mask));
+}
+
+var TIPS = {
+  pcp: 'VLAN Priority Code Point',
+  dei: '',
+  vid: 'VLAN Tag Identifier',
+  typelen: 'Ethernet type or length of payload'
+};
+
+var TESTS = {
+  pcp: UInt.is(3),
+  dei: UInt.is(1),
+  vid: UInt.is(12),
+  typelen: UInt.is(16)
+};
+
+
+function VLAN_UI(vlan) {
+  vlan = vlan ? new VLAN(vlan) : new VLAN();
+  this.name = NAME;
+  this.bytes = vlan.bytes;
+  this.attrs = [{
+    name: 'PCP',
+    value: vlan.pcp().toString(16),
+    test: TESTS.pcp,
+    tip: TIPS.pcp
+  },{
+    name: 'DEI',
+    value: vlan.dei().toString(16),
+    test: TESTS.dei,
+    tip: TIPS.dei
+  },{
+    name: 'VID',
+    value: vlan.vid().toString(16),
+    test: TESTS.vid,
+    tip: TIPS.vid
+  },{
+    name: 'Typelen',
+    value: vlan.typelen().toString(16),
+    test: TESTS.typelen,
+    tip: TIPS.typelen
+  }];
 }
 
 VLAN_UI.prototype.toBase = function() {
-  var result = new VLAN();
-  result.name = this.name;
-  result.bytes = this.bytes;
-  result.fields = fgUI.stripLabelInputs(this.attrs);
-  return result;
+  return new VLAN(null, this.attrs[0].value, this.attrs[1].value,
+      this.attrs[2].value, this.attrs[3].value);
 };
 
 VLAN_UI.prototype.setPayload = function(name) {
@@ -65,21 +172,27 @@ VLAN_UI.prototype.clearPayload = function() {
   this.attrs[3].value = '0x0000';
 };
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.VLAN
- * @description
- * # VLAN
- * Service in the flowsimUiApp.
- */
-this.name = NAME;
-this.Payloads = Object.keys(Payloads);
-this.create = function() {
-  return new VLAN();
-};
-
-this.createUI = function(vlan){
-  return new VLAN_UI(vlan);
+return {
+  name:           NAME,
+  VLAN:           Vlan,
+  pcp:            '_pcp',
+  dei:            '_dei',
+  vid:            '_vid',
+  typelen:        '_typelen',
+  mkVLAN:         mkVLAN,
+  mkPcp:          mkPcp,
+  mkPcpMatch:     mkPcpMatch,
+  mkDei:          mkDei,
+  mkDeiMatch:     mkDeiMatch,
+  mkVid:          mkVid,
+  mkVidMatch:     mkVidMatch,
+  mkTypelenMatch: mkTypelenMatch,
+  VLAN_UI:        VLAN_UI,
+  create:         function(vlan) { return new Vlan(vlan); },
+  createUI:       function(vlan) { return new VLAN_UI(vlan); },
+  Payloads:       Object.keys(Payloads),
+  TESTS:          TESTS,
+  TIPS:           TIPS
 };
 
 });
