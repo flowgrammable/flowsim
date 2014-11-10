@@ -1,5 +1,5 @@
 
-var _packet1 = {
+var _packet0 = {
   name: 'packet 1',
   protocols: [{
     name: 'Ethernet',
@@ -99,15 +99,22 @@ var _packet1 = {
   }]
 };
 
-var v1 = {
+var v0 = {
   table: 0,
   buffer: 0x00112301,
   meter: -1,
   packet: _packet1,
   actionSet: [{
-    name: 'eth'
-    value1: 'src='
+    name: 'eth',
+    value1: 'src=',
     value2: '00:00:00:00:00:00'
+  },{
+    name: 'eth',
+    value1: 'dst=',
+    value2: '00:00:00:00:00:00'
+  },{
+    name: 'queue',
+    value1: 5
   }],
   ins: [{
     name: 'Meter',
