@@ -315,7 +315,7 @@ var _packet2 = {
     bytes: 14,
     _src: {
       _mac: {
-        value: [0,0,0,0,0,0],
+        value: [1,0,0,0,0,0],
         bytes: 6
       }
     },
@@ -432,10 +432,6 @@ var v2 = {
   ins: [{
     name: 'Apply'
     set: [{
-      name: 'eth',
-      value1: 'src=',
-      value2: '01:00:00:00:00:00'
-    }, {
       name: 'icmpv6',
       value1: 'type=',
       value2: '2'
