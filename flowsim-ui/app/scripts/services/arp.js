@@ -79,6 +79,7 @@ ARP.prototype.spa = function(spa) {
 };
 
 ARP.mkSpa = IPV4.mkIP;
+ARP.mkSpaMatch = IPV4.mkIPMatch;
 
 ARP.prototype.tha = function(tha) {
   if(tha) {
@@ -100,6 +101,7 @@ ARP.prototype.tpa = function(tpa) {
 };
 
 ARP.mkTpa = IPV4.mkIP;
+ARP.mkTpaMatch = IPV4.mkIPMatch;
 
 var TIPS = {
   opcode: 'ARP Message Type',
@@ -169,13 +171,22 @@ ARP.prototype.clone = function() {
 return {
   name:           NAME,
   ARP:            ARP,
+  opcode:         '_opcode',
+  sha:            '_sha',
+  spa:            '_spa',
+  tha:            '_tha',
+  tpa:            '_tpa',
   mkARP:          mkARP,
   mkOpcode:       mkOpcode,
   mkOpcodeMatch:  mkOpcodeMatch,
   mkSha:          ARP.mkSha,
   mkShaMatch:     ARP.mkShaMatch,
+  mkSpa:          ARP.mkSpa,
+  mkSpaMatch:     ARP.mkSpaMatch,
   mkTha:          ARP.mkTha,
   mkThaMatch:     ARP.mkThaMatch,
+  mkTpa:          ARP.mkTpa,
+  mkTpaMatch:     ARP.mkTpaMatch,
   ARP_UI:         ARP_UI,
   create:         function(arp)   { return new ARP(arp); },
   createUI:       function(arp)   { return new ARP_UI(arp); },
