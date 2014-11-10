@@ -104,6 +104,7 @@ SetField.prototype.step = function(dp, ctx) {
 
 function Set(set) {
   if(_.isObject(set)) {
+    //FIXME: implement
     _.each(set.actions, function(key, val) {
       if(key === 'setField') {
       } else if(key === 'pop_mpls') {
@@ -127,21 +128,12 @@ Set.prototype.clear = function() {
   this.actions = {};
 };
 
+Set.prototype.get = function() {
+  //FIXME: needs implementation
+};
+
 Set.prototype.concat = function(rhs) {
-  var self = this;
-  _.each(rhs.actions, function(key, val) {
-    if(key === 'pop') {
-      _.each(val, function(_key, _val) {
-        self.actions.pop[_key] = _val.clone();
-      });
-    } else if(key === 'setField') {
-      _.each(val, function(_key, _val) {
-        self.actions.setField[_key] = _val.clone();
-      });
-    } else {
-      self.actions[key] = val.clone();
-    }
-  });
+  //FIXME: needs implementation
 };
 
 Set.prototype.copy_ttl_in = function(action) {
@@ -287,61 +279,61 @@ Set.prototype.step = function(dp, ctx) {
   if(this.actions.copy_ttl_in) {
     this.actions.copy_ttl_in.step(dp, ctx);
     delete this.actions.copy_ttl_in;
-    return;
+    return true;
   }
 
   if(this.stepArray(dp, ctx, 'pop_mpls')) {
-    return;
+    return true;
   } else if(this.stepArray(dp, ctx, 'pop_pbb')) {
-    return;
+    return true;
   } else if(this.stepArray(dp, ctx, 'pop_vlan')) {
-    return;
+    return true;
   } else if(this.stepArray(dp, ctx, 'push_mpls')) {
-    return;
+    return true;
   } else if(this.stepArray(dp, ctx, 'push_pbb')) {
-    return;
+    return true;
   } else if(this.stepArray(dp, ctx, 'push_vlan')) {
-    return;
+    return true;
   }
 
   if(this.actions.copy_ttl_out) {
     this.actions.copy_ttl_out.step(dp, ctx);
     delete this.actions.copy_ttl_out;
-    return;
+    return true;
   }
 
   if(this.actions.dec_ttl) {
     this.actions.dec_ttl.step(dp, ctx);
     delete this.actions.dec_ttl;
-    return;
+    return true;
   }
 
   if(_(this.actions).has('setField')) {
     if(_(this.actions.setField).keys().length > 0) {
       if(this.stepSetField(dp, ctx, ETHERNET.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, VLAN.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, ARP.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, MPLS.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, IPV4.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, IPV6.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, ICMPV4.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, ICMPV6.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, TCP.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, UDP.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, SCTP.name)) {
-        return;
+        return true;
       } else if(this.stepSetField(dp, ctx, ETHERNET.name)) {
-        return;
+        return true;
       } else {
         throw 'Bad setField keys: '+this.actions.setField.keys();
       }
@@ -351,20 +343,21 @@ Set.prototype.step = function(dp, ctx) {
   if(this.actions.queue) {
     this.actions.queue.step(dp, ctx);
     delete this.actions.queue;
-    return;
+    return true;
   }
  
   // Execute group if present or output if present
   if(this.actions.group) {
     this.actions.group.step(dp, ctx);
     delete this.actions.group;
-    return;
+    return true;
   }
   if(this.actions.output) {
     this.actions.output.step(dp, ctx);
     delete this.actions.output;
-    return;
+    return true;
   }
+  return false;
 };
 
 Set.prototype.execute = function(dp, ctx) {

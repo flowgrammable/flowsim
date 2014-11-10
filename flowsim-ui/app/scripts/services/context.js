@@ -8,18 +8,20 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Context', function(Action) {
+  .factory('Context', function(Action, UInt) {
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
     _.extend(this, key);
-    this.vlan = _.map(key.vlan, function(tag) { return tag.clone(); });
-    this.mpls = _.map(key.mpls, function(tag) { return tag.clone(); });
+    this.metadata = key.metadata.clone();
+    this.vlan     = _.map(key.vlan, function(tag) { return tag.clone(); });
+    this.mpls     = _.map(key.mpls, function(tag) { return tag.clone(); });
   } else if(_.isFinite(in_port)) {
     // Initialize input information
     this.in_port     = in_port;
     this.in_phy_port = in_phy_port;
     this.tunnel_id   = tunnel_id;
+    this.metadata    = new UInt.UInt(null, null, 8);
 
     // Initialize array for stacks
     this.vlan = [];
@@ -34,19 +36,21 @@ Key.prototype.clone = function() {
 };
 
 function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
-  if(ctx instanceof Context || (typeof ctx === 'object' && ctx !== null)) {
+  if(_.isObject(ctx)) {
+    _.extend(this, ctx);
     this.packet = ctx.packet.clone();
-    this.buffer = ctx.buffer;
 
     this._nxtTable = ctx._nxtTable;
     this._lstTable = ctx._lstTable;
 
     this.key = ctx.key.clone();
+
     this.actionSet = ctx.actionSet.clone();
   } else if(packet && buffer_id && in_port) {
     // store a reference to the packet and buffer id
     this.packet = packet;
     this.buffer = buffer_id;
+    this.meter  = -1;
 
     // initialize the first table target
     this._nxtTable = 0;

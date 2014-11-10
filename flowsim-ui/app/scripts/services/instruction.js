@@ -21,12 +21,11 @@ function mkActionField(name, value, key) {
 
 var Instruction = {};
 
-Instruction.Profile = function(ins, instruction){
-  if(ins instanceof Instruction.Profile ||
-        (typeof ins === 'object' && ins !== null)){
-    _.extend(this, ins);
-    this.caps = _.clone(ins.caps);
-    this.apply = _.map(ins.apply, function(i) {
+function Profile(profile){
+  if(_.isObject(profile)) {
+    _.extend(this, profile);
+    this.caps = _.clone(profile.caps);
+    this.apply = _.map(profile.apply, function(i) {
       return {
         protocol: i.protocol,
         fields: _.map(i.fields, function(j) {
@@ -34,7 +33,7 @@ Instruction.Profile = function(ins, instruction){
         })
       };
     });
-    this.write = _.map(ins.write, function(i){
+    this.write = _.map(profile.write, function(i){
       return {
         protocol: i.protocol,
         fields: _.map(i.fields, function(j) {
@@ -42,7 +41,7 @@ Instruction.Profile = function(ins, instruction){
         })
       };
     });
-    this.goto_ = _.map(ins.goto_, function(i) {
+    this.goto_ = _.map(profile.goto_, function(i) {
       return _.clone(i);
     });
   } else {
@@ -245,7 +244,7 @@ Instruction.Profile = function(ins, instruction){
   }
 }
 
-Instruction.Profile.TIPS = {
+Profile.TIPS = {
   apply: 'Applies actions immediately',
   clear: 'Clears the action set',
   write: 'Appends actions to the action set',
@@ -254,91 +253,141 @@ Instruction.Profile.TIPS = {
   goto_: 'Jumps to another flow table'
 };
 
-Instruction.Profile.TESTS = {
+Profile.TESTS = {
   metadata: fgConstraints.isUInt(0, 0xffffffffffffffff),
   goto_: function(input) {
     return /^([0-9]+)(\.\.([0-9]+))?$/.test(input);
   }
+};
+
+Profile.Miss = Profile;
+
+function Apply(apply, actions) {
+  if(_.isObject(apply)) {
+    this.actions = apply.actions.clone();
+  } else {
+    this.actions = actions;
+  }
 }
 
-Instruction.Profile.Miss = Instruction.Profile;
+Apply.prototype.clone = function() {
+  return new Apply(this);
+};
 
-function Apply(actions) {
-  this.actions = actions;
-}
+Apply.prototype.step = function(dp, ctx) {
+  if(this.actions.empty()) {
+    return;
+  }
+  return this.actions.step(dp, ctx);
+};
+
+Apply.prototype.empty = function() {
+  return this.actions.empty();
+};
 
 Apply.prototype.execute = function(dp, ctx) {
-  _.each(this.actions, function(action) {
-    action.execute(dp, ctx);
-  });
+  while(!this.actions.empty()) {
+    this.actions.step(dp, ctx);
+  }
 };
 
 function Clear() {}
 
-Clear.prototype.execute = function(dp, ctx) {
+Clear.prototype.clone = function() { return new Clear(); };
+
+Clear.prototype.step = function(dp, ctx) {
   ctx.actionSet.clear();
 };
 
-function Write(actions) {
-  this.actions = actions;
+Clear.prototype.execute = Clear.prototype.step;
+
+function Write(write, actions) {
+  if(_.isObject(write)) {
+    this.actions = write.actions.clone();
+  } else {
+    this.actions = actions;
+  }
 }
+
+Write.prototype.clone = function() {
+  return new Write(this);
+};
+
+Write.prototype.step = function(dp, ctx) {
+  if(this.actions.empty()) {
+    return;
+  }
+  ctx.actionSet.push(this.actions.get());
+};
 
 Write.prototype.execute = function(dp, ctx) {
   ctx.actionSet.concat(this.actions);
 };
 
-function Metadata(metadata) {
-  this._metadata = metadata;
-}
-
-Metadata.prototype.value = function(metadata) {
-  if(metadata) {
-    this._metadata = new Metadata(metadata);
+function Metadata(meta, data, mask) {
+  if(_.isObject(meta)) {
+    this._data = meta._data.clone();
+    this._mask = meta._mask.clone();
   } else {
-    return this._metadata;
+    this._data = data.clone();
+    this._mask = mask.clone();
   }
-};
-
-Metadata.prototype.execute = function(dp, ctx) {
-  ctx.metadata(this._metadata);
-};
-
-function Meter(meter_id) {
-  this.meter_id = meter_id;
 }
 
-Meter.prototype.value = function(meter_id) {
-  if(meter_id) {
+Metadata.prototype.clone = function() {
+  return new Metadata(this);
+};
+
+Metadata.prototype.step = function(dp, ctx) {
+  ctx.key.metadata.mask(this.data, this.mask);
+};
+
+Metadata.prototype.execute = Metadata.prototype.step;
+
+function Meter(meter, meter_id) {
+  if(_.isObject(meter)) {
+    this.meter = new Meter(meter);
+  } else {
     this.meter_id = meter_id;
-  } else {
-    return this.meter_id;
   }
-};
-
-Meter.prototype.execute = function(dp, ctx) {
-  // meter the flow
-};
-
-function Goto(table_id) {
-  this.table_id = table_id;
 }
 
-Goto.prototype.value = function(table_id) {
-  if(table_id) {
-    this.table_id = table_id;
-  } else {
-    return this.table_id;
-  }
+Meter.prototype.clone = function() {
+  return new Meter(this);
 };
 
-Goto.prototype.execute = function(dp, ctx) {
-  ctx.table_id = this.table_id;
+Meter.prototype.step = function(dp, ctx) {
+  ctx.meter = this.meter;
 };
+
+Meter.prototype.execute = Meter.prototype.step;
+
+function Goto(jump, table) {
+  if(_.isObject(jump)) {
+    this.table = jump.table;
+  } else {
+    this.table = table;
+  }
+}
+
+Goto.prototype.clone = function() {
+  return new Goto(this);
+};
+
+Goto.prototype.step = function(dp, ctx) {
+  ctx.table(this.table);
+};
+
+Goto.prototype.execute = Goto.prototype.step;
 
 function Set(set) {
   if(set) {
-    this._apply = new Action.List(set._apply);
-    this._write = new Action.List(set._write);
+    this._meter    = set._meter ? new Meter(set._meter) : null;
+    this._apply    = new Apply(set._apply);
+    this._clear    = set._clear ? new Clear(set._clear) : null;
+    this._write    = new Write(set._write);
+    this._metadata = set._metadata ? new Metadata(set._metadata) : null;
+    this._goto     = set._goto ? new Goto(set._goto) : null;
   } else {
     this._apply = Action.List();
     this._write = Action.Set();
@@ -351,59 +400,65 @@ Set.prototype.clone = function() {
 
 Set.prototype.apply = function(apply) {
   if(apply) {
-    this._apply = new Apply(apply);
-  } else {
-    return this._apply;
+    this._apply = new Apply(null, apply);
   }
 };
 
 Set.prototype.write = function(write) {
   if(write) {
-    this._write = new Write(write);
-  } else {
-    return this._write;
+    this._write = new Write(null, write);
   }
 };
 
 Set.prototype.metadata = function(metadata) {
   if(metadata) {
-    this._metadata = new Metadata(metadata);
-  } else {
-    return this._metadata;
+    this._metadata = new Metadata(null, metadata);
   }
 };
 
 Set.prototype.meter = function(meter) {
   if(meter) {
-    this._meter = new Meter(meter);
-  } else {
-    return this._meter;
-  }
+    this._meter = new Meter(null, meter);
+  } 
 };
 
 Set.prototype.jump = function(jump) {
   if(jump) {
-    this._jump = new Goto(jump);
-  } else {
-    return this._jump;
+    this._goto = new Goto(null, jump);
   }
 };
 
+Set.prototype.step = function(dp, ctx) {
+  if(this._meter && this._meter.step(dp, ctx)) {
+    delete this._meter;
+    return true;
+  }
+  if(!this._apply.empty() && this._apply.step(dp, ctx)) {
+    return true;
+  }
+  if(this._clear) {
+    this._clear.step(dp, ctx);
+    delete this._clear;
+    return true;
+  }
+  if(!this._write.empty() && this._write.step(dp, ctx)) {
+    return true;
+  }
+  if(this._metadata) {
+    this._metadata.step(dp, ctx);
+    delete this._metadata;
+    return true;
+  }
+  if(this._goto) {
+    this._goto.step(dp, ctx);
+    delete this._goto;
+    return true;
+  }
+  return false;
+};
+
 Set.prototype.execute = function(dp, ctx) {
-  if(this.meter) {
-    this.meter.execute(dp, ctx);
-  }
-  this.apply.execute(dp, ctx);
-  if(this.ins.clear) {
-    ctx.actionSet.clear();
-  }
-  this.write.execute(dp, ctx);
-  if(this.metadata) {
-    this.metadata.execute(dp, ctx);
-  }
-  if(this.jump) {
-    this.jump.execute(dp, ctx);
-  }
+  while(this.step(dp, ctx)) {}
 };
 
 return {
@@ -414,7 +469,7 @@ return {
   Goto: Goto,
   Set: Set,
   Instruction: Instruction,
-  Profile: Instruction.Profile
+  Profile: Profile
 };
 
 });
