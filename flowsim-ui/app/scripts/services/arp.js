@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('ARP', function ARP(fgConstraints, fgUI, ETHERNET, IPV4, UInt) {
+  .factory('ARP', function(fgConstraints, fgUI, ETHERNET, IPV4, UInt) {
 
 var NAME = 'ARP';
 var BYTES = 28;
@@ -41,7 +41,7 @@ function mkARP(opcode, sha, spa, tha, tpa) {
 
 ARP.prototype.opcode = function(opcode) {
   if(opcode) {
-    if(opcode instanceof UIint.UIint){
+    if(opcode instanceof UInt.UInt){
       this._opcode = new UInt.UInt(opcode);
     } else {
       this._opcode = new UInt.UInt(null, opcode, 2);
@@ -83,7 +83,7 @@ ARP.mkSpaMatch = IPV4.mkIPMatch;
 
 ARP.prototype.tha = function(tha) {
   if(tha) {
-    this._tha = new ARP.MAC(tha)
+    this._tha = new ARP.MAC(tha);
   } else {
     return this._tha;
   }

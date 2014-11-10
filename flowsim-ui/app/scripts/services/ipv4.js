@@ -14,7 +14,7 @@ var Payloads = {
   'Payload' : 0
 };
 
-//var ipv4Pattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}$/;
+var Pattern = /^(([0-9]{1,3})\.){3}([0-9]{1,3})$/;
 
 
 function isIPv4(ipv4) {
@@ -37,7 +37,7 @@ function IPv4(ipv4, dscp, ecn, proto, src, dst) {
     this._dst   = mkIP(dst);
   }
   this.name = NAME;
-  this.bytes = 20;
+  this.bytes = BYTES;
 }
 
 function mkIPv4(dscp, ecn, proto, src, dst){
@@ -46,7 +46,7 @@ function mkIPv4(dscp, ecn, proto, src, dst){
 
 IPv4.prototype.dscp = function(dscp) {
   if(dscp) {
-    if(type instanceof UInt.UInt) {
+    if(dscp instanceof UInt.UInt) {
       this._dscp = new UInt.UInt(dscp);
     } else {
       this._dscp = new UInt.UInt(null, dscp, 1);
@@ -62,7 +62,7 @@ function mkDscp(dscp){
 
 IPv4.prototype.ecn = function(ecn) {
   if(ecn) {
-    if(type instanceof UInt.UInt) {
+    if(ecn instanceof UInt.UInt) {
       this._ecn = new UInt.UInt(ecn);
     } else {
       this._ecn = new UInt.UInt(null, ecn, 1);
@@ -78,7 +78,7 @@ function mkEcn(ecn){
 
 IPv4.prototype.proto = function(proto) {
   if(proto) {
-    if(type instanceof UInt.UInt) {
+    if(proto instanceof UInt.UInt) {
       this._proto = new UInt.UInt(proto);
     } else {
       this._proto = new UInt.UInt(null, proto, 1);
@@ -143,7 +143,7 @@ function IP(ip, input){
   } else if(_.isString(input)){
     tmp = input.match(ipv4Pattern);
     if(!tmp || !_.every(input.split('.'), fgConstraints.isUInt(0, 255))){
-        throw 'Bad IPv4 Address: ' + ipv4;
+        throw 'Bad IPv4 Address: ' + ip+', '+input;
     }
     this._ip = new UInt.UInt(null, dot2num(input), 4);
   } else if(_.isNumber(input)){
@@ -170,12 +170,18 @@ IP.equal = function(lhs, rhs) {
 };
 
 IP.prototype.toString = function() {
+  /*
     var part1 = this._ip.value & 255;
     var part2 = ((this._ip.value >> 8) & 255);
     var part3 = ((this._ip.value >> 16) & 255);
     var part4 = ((this._ip.value >> 24) & 255);
+    */
 
-    return part4 + "." + part3 + "." + part2 + "." + part1;
+    return [this._ip.value & 255, (this._ip.value >> 8) & 255,
+            (this._ip.value >> 16) & 255, 
+            (this._ip.value >> 24) & 255].join('.');
+
+    //return part4 + '.' + part3 + '.' + part2 + '.' + part1;
 };
 
 IP.Pattern = ipv4Pattern;
@@ -202,7 +208,7 @@ IP.Match.prototype.clone = function() {
 
 function mkIPMatch(value, mask){
   return new IP.Match(null, value, mask);
-};
+}
 
 var TESTS = {
   dscp: UInt.is(6),
