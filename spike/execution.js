@@ -103,7 +103,7 @@ var v0 = {
   table: 0,
   buffer: 0x000000,
   queue: 0,
-  meter: -1,
+  meter: 0,
   packet: _packet0,
   actionSet: [{
     name: 'eth',
@@ -722,12 +722,6 @@ var v4 = {
     value1: 2
   }],
   ins: [{
-    name: 'Apply'
-    set: [{
-      name: 'Output',
-      value1: 1
-    }]
-  },{
     name: 'Clear'
   },{
     name: 'Write',
