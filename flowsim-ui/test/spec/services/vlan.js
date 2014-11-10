@@ -53,11 +53,15 @@ describe('Service: VLAN', function () {
   it('VLAN pcp match pass', function() {
     var a = VLAN.mkPcp('0x01');
     var b = VLAN.mkPcp('0xff');
-    var c = VLAN.mkPcp('0x91');
+    var c = VLAN.mkPcp('0x90');
 
     var every = VLAN.mkPcpMatch('0x00', '0x00');
     var multi = VLAN.mkPcpMatch('0x01', '0x01');
     var exact = VLAN.mkPcpMatch('0x01', '0xff');
+
+    expect(exact.match(a)).toBe(true);
+    expect(exact.match(b)).toBe(false);
+    expect(exact.match(c)).toBe(false);
 
     expect(every.match(a)).toBe(true);
     expect(every.match(b)).toBe(true);
@@ -65,17 +69,15 @@ describe('Service: VLAN', function () {
 
     expect(multi.match(a)).toBe(true);
     expect(multi.match(b)).toBe(true);
-    expect(multi.match(c)).toBe(true);
+    expect(multi.match(c)).toBe(false);
 
-    expect(exact.match(a)).toBe(true);
-    expect(exact.match(b)).toBe(false);
-    expect(exact.match(c)).toBe(false);
+
   });
 
   it('VLAN vid match pass', function() {
     var a = VLAN.mkVid('0x0100');
     var b = VLAN.mkVid('0xffff');
-    var c = VLAN.mkVid('0x9111');
+    var c = VLAN.mkVid('0x9011');
 
     var every = VLAN.mkVidMatch('0x0000', '0x0000');
     var multi = VLAN.mkVidMatch('0x0100', '0x0100');
@@ -87,11 +89,43 @@ describe('Service: VLAN', function () {
 
     expect(multi.match(a)).toBe(true);
     expect(multi.match(b)).toBe(true);
-    expect(multi.match(c)).toBe(true);
+    expect(multi.match(c)).toBe(false);
 
     expect(exact.match(a)).toBe(true);
     expect(exact.match(b)).toBe(false);
     expect(exact.match(c)).toBe(false);
   });
 
+  it('Vlan Set Field Pass', function() {
+    var vlan_disco = VLAN.mkVLAN('0x01','0x02', '0x1111', '0x0800');
+
+    var vlan2 = JSON.stringify(vlan_disco);
+    var vlan2_disco = new VLAN.VLAN(JSON.parse(vlan2));
+
+    vlan_disco.pcp('0x01');
+    expect(vlan_disco.pcp().toString(16)).toBe('0x01');
+
+    vlan_disco.dei('0x02');
+    expect(vlan_disco.dei().toString(16)).toBe('0x02');
+
+    vlan_disco.vid('0x7777');
+    expect(vlan_disco.vid().toString(16)).toBe('0x7777');
+
+    vlan_disco.typelen('0x0800');
+    expect(vlan_disco.typelen().toString(16)).toBe('0x0800');
+
+    vlan2_disco.pcp('0x01');
+    expect(vlan2_disco.pcp().toString(16)).toBe('0x01');
+
+    vlan2_disco.dei('0x02');
+    expect(vlan2_disco.dei().toString(16)).toBe('0x02');
+
+    vlan2_disco.vid('0x7777');
+    expect(vlan2_disco.vid().toString(16)).toBe('0x7777');
+
+    vlan2_disco.typelen('0x0800');
+    expect(vlan2_disco.typelen().toString(16)).toBe('0x0800');
+
+
+  });
 });
