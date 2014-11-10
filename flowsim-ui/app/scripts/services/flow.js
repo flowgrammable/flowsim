@@ -10,11 +10,11 @@
 angular.module('flowsimUiApp')
   .factory('Flow', function(Match, Instruction) {
 
-function Flow(flow){
-  if(flow instanceof Flow || (typeof flow === 'object' && flow !== null)){
+function Flow(flow) {
+  if(_.isObject(flow)) {
     _.extend(this, flow);
     this.match = new Match.Match(flow.match);
-    this.ins = new Instruction.Set(flow.ins);
+    this.ins   = new Instruction.Set(flow.ins);
   } else {
     this.match = new Match.Match();
     this.ins   = new Instruction.Set();
@@ -27,9 +27,9 @@ Flow.prototype.clone = function() {
 
 Flow.prototype.select = function(key) {
   if(this.match.match(key)) {
-    return this.ins;
+    return true;
   } else {
-    return null;
+    return false;
   }
 };
 
