@@ -4,23 +4,99 @@ var _packet1 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    attrs: [{
-      name: 'Src',
-      value: '00:00:00:00:00:00',
-      tip: 'Ethernet source',
-      test: function() { return true; }
-    }, {
-      name: 'Dst',
-      value: 'ff:ff:ff:ff:ff:ff',
-      tip: 'Ethernet detination',
-      test: function() { return true; }
-    }, {
-      name: 'Src',
-      value: '00:00:00:00:00:00',
-      tip: '',
-      test: function() { return true; }
-    }]
-  }];
+    _src: {
+      _mac: {
+        value: [0,0,0,0,0,0],
+        bytes: 6
+      }
+    },
+    _dst: {
+      _mac: {
+        value: [0,0,0,0,0,0],
+        bytes: 6
+      }
+    },
+    _type: {
+      value: 33024,
+      bytes: 2
+    }
+  }, {
+    name: 'VLAN',
+    bytes: 4,
+    _pcp: {
+      value: 0,
+      bytes: 1
+    },
+    _dei: {
+      value: 0,
+      bytes: 1
+    },
+    _vid: {
+      value: 10000,
+      bytes: 2
+    },
+    _typelen: {
+      value: 33024,
+      bytes: 2
+    }
+  }, {
+    name: 'VLAN',
+    bytes: 4,
+    _pcp: {
+      value: 0,
+      bytes: 1
+    },
+    _dei: {
+      value: 0,
+      bytes: 1
+    },
+    _vid: {
+      value: 100,
+      bytes: 2
+    },
+    _typelen: {
+      value: 2048,
+      bytes: 2
+    }
+  }, {
+    name: 'IPv4',
+    bytes: 20,
+    _dscp: {
+      value: 0,
+      bytes: 1
+    },
+    _ecn: {
+      value: 0,
+      bytes: 1
+    },
+    _proto: {
+      value: 6,
+      bytes: 1
+    },
+    _src: {
+      _ip: {
+        value: 167772161,
+        bytes: 4
+      }
+    },
+    _dst: {
+      _ip: {
+        value: 184615169,
+        bytes: 4
+      }
+    }
+  }, {
+    name: 'TCP',
+    bytes: 20,
+    _src: {
+      value: 1000,
+      bytes: 2
+    },
+    _dst: {
+      value: 5060,
+      bytes: 2
+    }
+  }]
 };
 
 var v1 = {
