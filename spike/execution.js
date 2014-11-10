@@ -4,101 +4,98 @@ var _packet0 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 10000,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x03e8',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
-    bytes: 1000
+    bytes: 1000,
   }]
 };
 
@@ -158,108 +155,103 @@ var v0 = {
   }]
 };
 
-
-
 var _packet1 = {
   name: 'packet 1',
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 10000,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x03e8',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
-    bytes: 1000
+    bytes: 1000,
   }]
 };
 
@@ -321,101 +313,98 @@ var _packet2 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 10000,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x03e8',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
-    bytes: 1000
+    bytes: 1000,
   }]
 };
 
@@ -473,101 +462,98 @@ var _packet3 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 2,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0002',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
-    bytes: 1000
+    bytes: 1000,
   }]
 };
 
@@ -621,98 +607,95 @@ var _packet4 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 2,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0002',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
     bytes: 1000
@@ -763,98 +746,95 @@ var _packet5 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 2,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0002',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
     bytes: 1000
@@ -905,98 +885,95 @@ var _packet6 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 2,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0002',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
     bytes: 1000
@@ -1031,98 +1008,95 @@ var _packet7 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 2,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0002',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
     bytes: 1000
@@ -1154,98 +1128,95 @@ var _packet8 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 2,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0002',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
     bytes: 1000
@@ -1277,98 +1248,95 @@ var _packet9 = {
   protocols: [{
     name: 'Ethernet',
     bytes: 14,
-    _src: {
-      _mac: {
-        value: [1,0,0,0,0,0],
-        bytes: 6
-      }
-    },
-    _dst: {
-      _mac: {
-        value: [0,17,34,51,68,85],
-        bytes: 6
-      }
-    },
-    _type: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '00:00:00:00:00:00',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 2,
-      bytes: 2
-    },
-    _typelen: {
-      value: 33024,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0002',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'VLAN',
     bytes: 4,
-    _pcp: {
-      value: 0,
-      bytes: 1
-    },
-    _dei: {
-      value: 0,
-      bytes: 1
-    },
-    _vid: {
-      value: 100,
-      bytes: 2
-    },
-    _typelen: {
-      value: 2048,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
   }, {
     name: 'IPv4',
     bytes: 20,
-    _dscp: {
-      value: 0,
-      bytes: 1
-    },
-    _ecn: {
-      value: 0,
-      bytes: 1
-    },
-    _proto: {
-      value: 6,
-      bytes: 1
-    },
-    _src: {
-      _ip: {
-        value: 167772161,
-        bytes: 4
-      }
-    },
-    _dst: {
-      _ip: {
-        value: 184615169,
-        bytes: 4
-      }
-    }
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
   }, {
     name: 'TCP',
     bytes: 20,
-    _src: {
-      value: 1000,
-      bytes: 2
-    },
-    _dst: {
-      value: 5060,
-      bytes: 2
-    }
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
   }, {
     name: 'Payload',
     bytes: 1000
