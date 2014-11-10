@@ -56,6 +56,10 @@ IPv4.prototype.dscp = function(dscp) {
   }
 };
 
+function mkDscp(dscp){
+  return new UInt.UInt(null, dscp, 1);
+}
+
 IPv4.prototype.ecn = function(ecn) {
   if(ecn) {
     if(type instanceof UInt.UInt) {
@@ -67,6 +71,10 @@ IPv4.prototype.ecn = function(ecn) {
     return this._ecn;
   }
 };
+
+function mkEcn(ecn){
+  return new UInt.UInt(null, ecn, 1);
+}
 
 IPv4.prototype.proto = function(proto) {
   if(proto) {
@@ -80,6 +88,11 @@ IPv4.prototype.proto = function(proto) {
   }
 };
 
+
+function mkProto(proto){
+  return new UInt.UInt(null, proto, 1);
+}
+
 IPv4.prototype.src = function(src) {
   if(src) {
     this._src = mkIP(src);
@@ -88,6 +101,10 @@ IPv4.prototype.src = function(src) {
   }
 };
 
+function mkSrc(src){
+  return new IP(null, src);
+}
+
 IPv4.prototype.dst = function(dst) {
   if(dst) {
     this._dst = mkIP(dst);
@@ -95,6 +112,10 @@ IPv4.prototype.dst = function(dst) {
     return this._dst;
   }
 };
+
+function mkDst(dst){
+  return new IP(null, dst);
+}
 
 IPv4.prototype.clone = function() {
   return new IPv4(this);
@@ -244,18 +265,28 @@ IPv4_UI.prototype.clearPayload = function() {
 
 
 return {
-  name:     NAME,
-  IPv4:     IPv4,
-  IPv4_UI:  IPv4_UI,
-  create:   function(ipv4)    { return new IPv4(ipv4); },
-  createUI: function(ipv4)    { return new IPv4_UI(ipv4); },
-  Payloads: Object.keys(Payloads),
-  IP: IP,
-  mkIP: mkIP,
-  mkIPMatch: mkIPMatch,
-  mkIPv4: mkIPv4,
-  TESTS: TESTS,
-  TIPS: TIPS
+  name:       NAME,
+  IPv4:       IPv4,
+  dscp:       '_dscp',
+  ecn:        '_ecn',
+  proto:      '_proto',
+  src:        '_src',
+  dst:        '_dst',
+  IPv4_UI:    IPv4_UI,
+  create:     function(ipv4)    { return new IPv4(ipv4); },
+  createUI:   function(ipv4)    { return new IPv4_UI(ipv4); },
+  Payloads:   Object.keys(Payloads),
+  IP:         IP,
+  mkIP:       mkIP,
+  mkIPMatch:  mkIPMatch,
+  mkIPv4:     mkIPv4,
+  mkDscp:     mkDscp,
+  mkEcn:      mkEcn,
+  mkProto:    mkProto,
+  mkSrc:      mkSrc,
+  mkDst:      mkDst,
+  TESTS:      TESTS,
+  TIPS:       TIPS
 };
 
 });
