@@ -151,7 +151,7 @@ UInt.prototype.mask = function(src, mask) {
   if(this.bytes < 5) {
     this.value = ((this.value & ~mask.value) | (src.value & mask.value)) >>> 0;
   } else {
-    this.value = _.map(_.zip(this.value, src.value, mask.value), 
+    this.value = _.map(_.zip(this.value, src.value, mask.value),
                        function(triple) {
       return ((triple[0] & ~triple[2]) | (triple[1] & triple[2])) >>> 0;
     });
