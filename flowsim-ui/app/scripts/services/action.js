@@ -9,42 +9,66 @@
  */
 angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4, 
-                                 ICMPV6, SCTP, TCP, UDP) {
+                              ICMPV6, SCTP, TCP, UDP) {
 
-function Output(port_id) {
-  this.port_id = port_id;
+function Output(output, port_id) {
+  if(_.isObject(output)) {
+    _.extend(this, output);
+  } else {
+    this.port_id = port_id;
+  }
 }
 
-Output.prototype.execute = function(dp, ctx) {
+Output.prototype.clone = function() {
+  return new Output(this);
+};
+
+Output.prototype.toString = function() {
+  return 'output('+this.port_id+')';
+};
+
+Output.prototype.step = function(dp, ctx) {
   dp.output(this.port_id, null, ctx);
 };
 
-Output.prototype.clone = function() {
-  return new Output(this.port_id);
-};
-
-function Group(group_id) {
-  this.group_id = group_id;
+function Group(group, group_id) {
+  if(_.isObject(group)) {
+    _.extend(this, group);
+  } else {
+    this.group_id = group_id;
+  }
 }
 
-Group.prototype.execute = function(dp, ctx) {
+Group.prototype.clone = function() {
+  return new Group(this);
+};
+
+Group.prototype.toString = function() {
+  return 'group('+this.group_id+')';
+};
+
+Group.prototype.step = function(dp, ctx) {
   dp.output(null, this.group_id, ctx);
 };
 
-Group.prototype.clone = function() {
-  return new Group(this.group_id);
-};
-
-function Queue(queue_id) {
-  this.queue_id = queue_id;
+function Queue(queue, queue_id) {
+  if(_.isObject(queue)) {
+    _.extend(this, queue);
+  } else {
+    this.queue_id = queue_id;
+  }
 }
 
-Queue.prototype.execute = function(dp, ctx) {
-  ctx.queue_id = this.queue_id;
+Queue.prototype.clone = function() {
+  return new Queue(this);
 };
 
-Queue.prototype.clone = function() {
-  return new Queue(this.queue_id);
+Queue.prototype.toString = function() {
+  return 'queue('+this.queue_id+')';
+};
+
+Queue.prototype.step = function(dp, ctx) {
+  ctx.queue_id = this.queue_id;
 };
 
 function SetField(sf, proto, field, value) {
@@ -62,6 +86,10 @@ SetField.prototype.clone = function() {
   return new SetField(this);
 };
 
+SetField.prototype.toString = function() {
+  return this.protocol+'('+this.field+'='+this.value.toString()+')';
+};
+
 SetField.prototype.step = function(dp, ctx) {
   var protocol = _.find(ctx.packet.protocols, function(protocol) {
     return protocol.name === this.protocol && _(protocol).has(this.field);
@@ -72,22 +100,6 @@ SetField.prototype.step = function(dp, ctx) {
     console.log('SetField(%s, %s, %s) Miss', this.protocol, this.field, 
                 this.value.toString());
   }
-};
-
-SetField.prototype.execute = function(dp, ctx) {
-  var i, protocols, protocol;
-  protocols = ctx.packet.protocols;
-  for(i=0; i<protocols.length; ++i) {
-    protocol = protocols[i];
-    if(protocols[i].name === this.protocol && _(protocol).has(this.field)) {
-      protocols[i][this.field] = this.value;
-      return;
-    }
-  }
-};
-
-SetField.prototype.clone = function() {
-  return new SetField(this.protocol, this.field, this.value);
 };
 
 function Set(set) {
@@ -361,18 +373,40 @@ Set.prototype.execute = function(dp, ctx) {
   }
 };
 
-function List() {
-  this.actions = [];
+function List(list) {
+  if(_.isObject(list)) {
+    this.actions = _.map(list.actions, function(action) { 
+      return action.clone(); 
+    });
+  } else {
+    this.actions = [];
+  }
 }
 
-List.prototype.add = function(action) {
+List.prototype.clone = function() {
+  return new List(this);
+};
+
+List.prototype.push = function(action) {
   this.actions.push(action);
 };
 
+List.prototype.empty = function() {
+  return this.actions.length === 0;
+};
+
+List.prototype.step = function(dp, ctx) {
+  if(this.actions.length === 0) {
+    return;
+  }
+  this.actions[0].step(dp, ctx);
+  this.actions.splice(0, 1);
+};
+
 List.prototype.execute = function(dp, ctx) {
-  _.each(this.actions, function(action) {
-    action.execute(dp, ctx);
-  });
+  while(!this.empty()) {
+    this.step(dp, ctx);
+  }
 };
 
 return {
