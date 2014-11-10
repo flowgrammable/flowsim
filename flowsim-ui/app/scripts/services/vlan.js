@@ -112,10 +112,20 @@ VLAN.prototype.typelen = function(typelen){
 function mkTypelen(input){
   return new UInt.UInt(null, input, 2);
 }
-
 function mkTypelenMatch(value, mask) {
   return new UInt.Match(null, mkTypelen(value), mkTypelen(mask));
 }
+
+VLAN.prototype.clone = function() {
+  return new VLAN(this);
+};
+
+VLAN.prototype.toString = function() {
+  return 'pcp: '+this._pcp.toString(16)+'\n'+
+         'dei: '+this._dei.toString(16)+'\n'+
+         'vid: '+this._vid.toString(16)+'\n'+
+         'typelen: '+this._typelen.toString(16);
+};
 
 var TIPS = {
   pcp: 'VLAN Priority Code Point',

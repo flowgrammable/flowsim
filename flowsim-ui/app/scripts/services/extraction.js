@@ -19,8 +19,8 @@ function extract_ethernet(eth, key) {
 
 function extract_vlan(vlan, key) {
   key.vlan.push({
-    id: vlan.id,
-    pcp: vlan.pcp
+    vid: vlan.vid(),
+    pcp: vlan.pcp()
   });
 }
 
@@ -128,7 +128,8 @@ function extract(packet, key) {
 
 return {
   extract_ethernet: extract_ethernet,
+  extract_vlan: extract_vlan,
   process: extract
 };
-  
+
 });
