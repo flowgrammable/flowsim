@@ -8,26 +8,52 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Tables', function(fgConstraints, ETHERNET, Instruction,
-        Match, Table) {
+  .factory('Tables', function(Regex, fgConstraints) {
 
 /* Default Construction Constants */
 var defTables = 8;
 
-function Tables(tbls, profile) {
-  if(_.isObject(tbls)) {
-    _.extend(this, tbls);
-    this.tables = _.map(tbls.tables, function(table){
+function Table(table, tableProfile) {
+  if(_.isObject(table)) {
+  } else {
+  }
+}
+
+Table.prototype.clone = function() {
+  return new Table(this);
+};
+
+function TableProfile(tableProfile) {
+  if(_.isObject(tableProfile)) {
+  } else {
+  }
+}
+
+TableProfile.prototype.clone = function() {
+  return new TableProfile(this);
+};
+
+function Tables(tables, profile) {
+  if(_.isObject(tables)) {
+    _.extend(this, tables);
+    this.tables = _(tables.tables).map(function(table){
       return new Table.Table(table);
     });
   } else {
+    this.tables = _(profile.n_tables).times(function(id) {
+      return new Table.Table(null, id, profile);
+    });
     this.tables = _.map(profile.tables, function(table){
       return new Table.Table(null, table);
     });
   }
 }
 
-function Profile(profile, tables){
+Tables.prototype.clone = function() {
+  return new Tables(this);
+};
+
+function Profile(profile){
   if(_.isObject(profile)) {
     _.extend(this, profile);
     this.tables = _.map(profile.tables, function(table) {
@@ -35,22 +61,14 @@ function Profile(profile, tables){
     });
   } else {
     this.n_tables = defTables;
-    this.tables = _(this.n_tables).times(function(i) {
+    this.tables = _(this.n_tables).times(function(id) {
       return new Table.Profile(null, id);
     });
   }
 }
 
-TIPS = {
-  table_id: 'Unique table identifier',
-  name: 'Descriptive name for flow table type',
-  max_entries: 'Maximum flows supported',
-  table_stats: 'Ability of table to record lookup statistics',
-  flow_stats: 'Ability of flow to record match statistics',
-  flow_caps: 'Match, Instruction, and Actions to support',
-  Match: Match.Profile.TIPS,
-  Instruction: Instruction.Profile.TIPS,
-  Miss: Instruction.Profile.TIPS
+Profile.prototype.clone = function() {
+  return new Profile(this);
 };
 
 Profile.prototype.rebuild = function() {
@@ -59,11 +77,26 @@ Profile.prototype.rebuild = function() {
   } else if(this.n_tables < this.tables.length) {
     this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
   } else {
-    _(this.n_tables-this.tables.length).times(function(i) {
+    _(this.n_tables-this.tables.length).times(function(id) {
       this.tables.push(new Table.Profile(null, id));
     });
   }
 };
+
+TIPS = {
+  table_id: 'Unique table identifier',
+  name: 'Descriptive name for flow table type',
+  max_entries: 'Maximum flows supported',
+  table_stats: 'Ability of table to record lookup statistics',
+  flow_stats: 'Ability of flow to record match statistics',
+  flow_caps: 'Match, Instruction, and Actions to support'
+    /*
+  Match: Match.Profile.TIPS,
+  Instruction: Instruction.Profile.TIPS,
+  Miss: Instruction.Profile.TIPS
+  */
+};
+
 /*
 Capabilities.prototype.openflow_1_0 = function() {
 /*var i;
@@ -337,13 +370,6 @@ var TESTS = {
   n_tables: fgConstraints.isUInt(0,0xff),
   Table: Table.Profile.TESTS
 };
-
-Tables.prototype.clone = function() {
-  return new Tables(this);
-};
-
-var TablesUI = Tables;
-TablesUI.prototype.toBase = Tables.prototype.clone;
 
 return {
   Capabilities: Profile,

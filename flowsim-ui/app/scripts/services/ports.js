@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Ports', function(UInt, ETHERNET) {
+  .factory('Ports', function(UInt, ETHERNET, Regex) {
 
 var defPortCount   = 24;
 var defNamePrefix  = 'eth';
@@ -299,7 +299,7 @@ var TIPS = {
 
 var TESTS = {
   mac: ETHERNET.MAC.is,
-  name: function(v) { return /^[a-zA-Z_][a-zA-Z_0-9]*$/.test(v); }
+  name: function(v) { return Regex.Identifier.test(v); }
 };
 
 var RANGES = {
