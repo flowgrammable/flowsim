@@ -118,6 +118,7 @@ Push.prototype.step = function(dp, ctx) {
       this.tag.setDefaults(ctx.packet.protocols, i);
       ctx.packet.protocols.splice(i, 0, this.tag);
       ctx.packet.protocols[i-1].setPayload(ctx.packet.protocols[i].name);
+      ctx.packet.protocols[i].setPayload(ctx.packet.protocols[i+1].name);
       return;
     }
   }
