@@ -1,25 +1,38 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('IPV6', function(fgConstraints, fgUI){
+  .factory('IPV6', function(fgConstraints, fgUI){
 
 var NAME = 'IPv6';
-
-
-var fullyQualifiedPattern = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
 
 // Javascript regex patterns that support prefix/infix/postfix :: notation
 // prefix/postfix are complete
 // infix is not complete, regex have no counting ability, so you must ensure
 // that not too many octets are on either side of the :: notation
+
+var qualifiedPattern = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+
 var prefixPattern = /^::[0-9a-fA-F](:[0-9a-fA-F]{1,4}){0,6}$/;
 var infixPattern = /^(([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4})?::([0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){0,6})?$/;
-var postfixPattern = /([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4}::$/;
-
-var ipv6Pattern = /^[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}$/;
+var postfixPattern = /^([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4}::$/;
 
 function isIPv6(addr) {
-  return ipv6Pattern.test(addr);
+  var fixes, prefix, postfix;
+  if(qualifiedPattern.test(addr) || prefixPattern.test(addr) || 
+     postfixPattern.test(addr)) {
+    return true; 
+  } else if(infixPattern.test(addr)) {
+    fixes = addr.split('::');
+    prefix = _(fixes[0].split(':')).filter(function(s) {
+      return s.length > 0;
+    });
+    postfix = _(fixes[1].split(':')).filter(function(s) {
+      return s.length > 0;
+    });
+    return prefix.length + postfix.length < 8;
+  } else {
+    return false;
+  }
 }
 
 var Payloads = {
@@ -30,7 +43,7 @@ var Payloads = {
   'Payload' : 0
 };
 
-function IPV6() {
+function IPv6() {
   this.name = NAME;
   this.bytes = 40;
   this.fields = {
@@ -40,8 +53,8 @@ function IPV6() {
   };
 }
 
-function IPV6_UI(ipv6) {
-  ipv6 = ipv6 === undefined ? new IPV6() : ipv6;
+function IPv6_UI(ipv6) {
+  ipv6 = ipv6 === undefined ? new IPv6() : ipv6;
   this.name = NAME;
   this.bytes = ipv6.bytes;
   this.attrs = _.map(ipv6.fields, function(value, key) {
@@ -78,31 +91,28 @@ function IPV6_UI(ipv6) {
   });
 }
 
-IPV6_UI.prototype.toBase = function() {
-  var result = new IPV6();
+IPv6_UI.prototype.toBase = function() {
+  var result = new IPv6();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
 };
 
-IPV6_UI.prototype.setPayload = function(name) {
+IPv6_UI.prototype.setPayload = function(name) {
   this.attrs[2].value = Payloads[name] || 0;
 };
 
-IPV6_UI.prototype.clearPayload = function(name) {
+IPv6_UI.prototype.clearPayload = function() {
   this.attrs[2].value = 0;
 };
 
-this.name = NAME;
-this.create = function() {
-  return new IPV6();
+return {
+  name: NAME,
+  IPv6: IPv6,
+  create: function() { return new IPv6(); },
+  createUI: function(v6) { return new IPv6_UI(v6); },
+  Payloads: _(Payloads).keys()
 };
-
-this.createUI = function(ipv6) {
-  return new IPV6_UI(ipv6);
-};
-
-this.Payloads = Object.keys(Payloads);
 
 });
