@@ -90,7 +90,7 @@ Push.prototype.toString = function() {
 Push.prototype.step = function(dp, ctx) {
   for(var i = 0; i < ctx.packet.protocols.length; i++){
     if(this.tag.insertHere(ctx.packet.protocols[i])){
-      this.tag.setDefaults(ctx.packet.protocols[i-1]);
+      this.tag.setDefaults(ctx.packet.protocols, i);
       ctx.packet.protocols.splice(i, 0, this.tag);
       console.log('pkt proto after splice', ctx.packet.protocols);
       return;

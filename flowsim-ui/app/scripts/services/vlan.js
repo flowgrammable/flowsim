@@ -125,18 +125,18 @@ VLAN.prototype.insertHere = function(protocol) {
   }
 };
 
-VLAN.prototype.setDefaults = function(protocol) {
-  console.log('proto in vlan:', protocol);
-  //console.log('prototype:', protocol._type.toString(16));
-  if(protocol.name === this.name) {
-    this._vid = mkVid(protocol.vid());
-    this._pcp = mkPcp(protocol.pcp());
+VLAN.prototype.setDefaults = function(protocols, index) {
+  console.log('proto in vlan:', protocols[index]);
+  if(protocols[index].name === this.name) {
+    this._vid = protocols[index].vid();
+    this._pcp = protocols[index].pcp();
+    this._dei = mkDei();
+    this._type = mkType('0x8100');
   } else {
     this._vid = mkVid();
     this._pcp = mkPcp();
     this._dei = mkDei();
-    this._type = protocol._type;
-    protocol._type = mkType('0x8100');
+    this._type = mkType(protocols[index-1].type().toString(16));
   }
 };
 
