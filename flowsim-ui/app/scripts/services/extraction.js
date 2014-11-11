@@ -27,11 +27,11 @@ function extract_vlan(vlan, key) {
 }
 
 function extract_arp(arp, key) {
-  key.arp_op  = arp.opcode;
-  key.arp_sha = arp.sdrHwAddr;
-  key.arp_spa = arp.sdrProtoAddr;
-  key.arp_tha = arp.tgtHwAddr;
-  key.arp_tpa = arp.tgtProtoAddr;
+  key.arp_opcode  = arp.opcode();
+  key.arp_sha     = arp.sha();
+  key.arp_spa     = arp.spa();
+  key.arp_tha     = arp.tha();
+  key.arp_tpa     = arp.tpa();
 }
 
 function extract_mpls(mpls, key) {
@@ -131,6 +131,7 @@ function extract(packet, key) {
 return {
   extract_ethernet: extract_ethernet,
   extract_vlan: extract_vlan,
+  extract_arp: extract_arp,
   process: extract
 };
 
