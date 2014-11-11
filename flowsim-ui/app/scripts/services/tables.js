@@ -12,17 +12,17 @@ angular.module('flowsimUiApp')
         Match, Table) {
 
 /* Default Construction Constants */
-var defaultTables     = 8;
+var defaultTables = 8;
 
 function Tables(tbls, profile) {
-  if(tbls instanceof Tables || (typeof tbls === 'object' && tbls !== null)){
+  if(_.isObject(tbls)) {
     _.extend(this, tbls);
     this.tables = _.map(tbls.tables, function(table){
-      return new Tables.Table(table);
+      return new Table.Table(table);
     });
   } else {
     this.tables = _.map(profile.tables, function(table){
-      return new Tables.Table(null, table);
+      return new Table.Table(null, table);
     });
   }
 }
