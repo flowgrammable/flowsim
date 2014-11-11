@@ -45,19 +45,19 @@ function Capabilities(meters) {
   }
 }
 
-Capabilities.prototype.openflow_1_0 = function() {
+Capabilities.prototype.ofp_1_0 = function() {
 };
 
-Capabilities.prototype.openflow_1_1 = function() {
+Capabilities.prototype.ofp_1_1 = function() {
 };
 
-Capabilities.prototype.openflow_1_2 = function() {
+Capabilities.prototype.ofp_1_2 = function() {
 };
 
-Capabilities.prototype.openflow_1_3 = function() {
+Capabilities.prototype.ofp_1_3 = function() {
 };
 
-Capabilities.prototype.openflow_1_4 = function() {
+Capabilities.prototype.ofp_1_4 = function() {
 };
 
 function Configuration(meters) {

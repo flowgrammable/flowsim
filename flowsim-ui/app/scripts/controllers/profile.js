@@ -28,25 +28,17 @@ angular.module('flowsimUiApp')
       'OpenFlow 1.4'
     ];
 
-    $scope.preselectVersion = function(idx) {
-      switch(idx) {
-        case 0:
-          $scope.profile = Profile.openflow_1_0($scope.profile);
-          break;
-        case 1:
-          $scope.profile = Profile.openflow_1_1($scope.profile);
-          break;
-        case 2:
-          $scope.profile = Profile.openflow_1_2($scope.profile);
-          break;
-        case 3:
-          $scope.profile = Profile.openflow_1_3($scope.profile);
-          break;
-        case 4:
-          $scope.profile = Profile.openflow_1_4($scope.profile);
-          break;
-        default:
-          break;
+    $scope.ceilOpenFlow = function(idx) {
+      if(idx === 0) {
+        $scope.profile.ofp_1_0();
+      } else if(idx ===1) {
+        $scope.profile.ofp_1_1();
+      } else if(idx ===2) {
+        $scope.profile.ofp_1_2();
+      } else if(idx ===3) {
+        $scope.profile.ofp_1_3();
+      } else if(idx ===4) {
+        $scope.profile.ofp_1_4();
       }
     };
 

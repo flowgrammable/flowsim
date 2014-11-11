@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('TCP', function(fgUI, fgConstraints){
+  .factory('TCP', function(fgUI, fgConstraints){
 
 var NAME = 'TCP';
 
@@ -9,7 +9,7 @@ var Payloads = {
  'Payload': 0
 };
 
-function _TCP(){
+function TCP(){
   this.name = NAME;
   this.bytes = 20;
   this.fields = {
@@ -18,7 +18,7 @@ function _TCP(){
   };
 }
 
-function _TCP_UI(tcp){
+function TCP_UI(tcp){
   tcp = tcp === undefined ? new _TCP() : tcp;
   this.name = NAME;
   this.bytes = 20;
@@ -37,7 +37,7 @@ function _TCP_UI(tcp){
   });
 }
 
-_TCP_UI.prototype.toBase = function() {
+TCP_UI.prototype.toBase = function() {
   var result = new _TCP();
   result.name = this.name;
   result.bytes = this.bytes;
@@ -45,18 +45,12 @@ _TCP_UI.prototype.toBase = function() {
   return result;
 }
 
-_TCP_UI.prototype.setPayload = function() {
+TCP_UI.prototype.setPayload = function() {
   return true;
 }
 
-this.name = NAME;
-this.Payloads = Object.keys(Payloads);
-this.create = function() {
-    return new _TCP();
-};
-
-this.createUI = function(tcp){
-  return new _TCP_UI(tcp);
+return {
+  name: NAME,
 };
 
 });
