@@ -11,16 +11,16 @@ angular.module('flowsimUiApp')
   .factory('Switch', function(Datapath, Ports, Tables, Meters, Groups){
 
 function Switch(sw, profile) {
-  if(sw instanceof Switch || (typeof sw === 'object' && sw !== null)) {
+  if(_.isObject(sw)) {
     _.extend(this, sw);
-    this.datapath = new Datapath.Configuration(sw.datapath);
+    this.datapath = new Datapath.Datapath(sw.datapath);
     this.ports    = new Ports.Ports(sw.ports);
     this.tables   = new Tables.Configuration(sw.tables);
     //this.meters   = new Meters.Configuration(sw.meters);
     //this.groups   = new Groups.Configuration(sw.groups);
   } else {
     this.name     = sw;
-    this.datapath = new Datapath.Configuration(null, profile.datapath);
+    this.datapath = new Datapath.Datapath(null, profile.datapath);
     this.ports    = new Ports.Ports(null, profile.ports);
     this.tables   = new Tables.Configuration(null, profile.tables);
     //this.meters   = new Meters.Configuration(null, profile.meters);
