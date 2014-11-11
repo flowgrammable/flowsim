@@ -126,7 +126,6 @@ VLAN.prototype.insertHere = function(protocol) {
 };
 
 VLAN.prototype.setDefaults = function(protocols, index) {
-  console.log('proto in vlan:', protocols[index]);
   if(protocols[index].name === this.name) {
     this._vid = protocols[index].vid();
     this._pcp = protocols[index].pcp();
@@ -138,6 +137,17 @@ VLAN.prototype.setDefaults = function(protocols, index) {
     this._dei = mkDei();
     this._type = mkType(protocols[index-1].type().toString(16));
   }
+};
+
+VLAN.prototype.popHere = function(protocol){
+  if(protocol.name === NAME){
+    return true;
+  }
+  return false;
+};
+
+VLAN.prototype.setPayload = function(name){
+  this._type = new UInt.UInt(null, Payloads[name], 2);
 };
 
 VLAN.prototype.clone = function() {

@@ -332,7 +332,7 @@ describe('Service: action', function () {
     expect(pkt.protocols.length).toBe(3);
 
     // Eth.type is 0x8100 (vlan)
-    //expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
     // default values for new tag
     expect(pkt.protocols[1].pcp().toString(16)).toBe('0x00');
     expect(pkt.protocols[1].dei().toString(16)).toBe('0x00');
@@ -354,15 +354,32 @@ describe('Service: action', function () {
     });
 
     expect(pkt.protocols.length).toBe(4);
-    //expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
     expect(pkt.protocols[1].type().toString(16)).toBe('0x8100');
     expect(pkt.protocols[1].vid().toString(16)).toBe('0x7777');
     expect(pkt.protocols[1].pcp().toString(16)).toBe('0x02');
     expect(pkt.protocols[2].type().toString(16)).toBe('0x0800');
     expect(pkt.protocols[2].vid().toString(16)).toBe('0x7777');
-    expect(pkt.protocols[2].pcp().toString(16)).toBe('0x02'); 
+    expect(pkt.protocols[2].pcp().toString(16)).toBe('0x02');
 
+    set.pop_vlan(new Action.Pop(null, new VLAN.VLAN() ));
 
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols.length).toBe(3);
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
+    expect(pkt.protocols[1].type().toString(16)).toBe('0x0800');
+
+    set.pop_vlan(new Action.Pop(null, new VLAN.VLAN() ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols.length).toBe(2);
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x0800');
 
   });
 

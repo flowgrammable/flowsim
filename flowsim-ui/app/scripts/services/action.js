@@ -71,6 +71,31 @@ Queue.prototype.step = function(dp, ctx) {
   ctx.queue_id = this.queue_id;
 };
 
+function Pop(pop, tag){
+  if(_.isObject(pop)) {
+    this.tag = pop.tag.clone();
+  } else {
+    this.tag = tag;
+  }
+}
+
+Pop.prototype.clone = function() {
+  return new Pop(this);
+};
+
+Pop.prototype.toString = function() {
+  return this.pop.toString();
+};
+
+Pop.prototype.step = function(dp, ctx) {
+  for(var i = 0; i < ctx.packet.protocols.length; i++){
+    if(this.tag.popHere(ctx.packet.protocols[i])){
+      ctx.packet.protocols.splice(i, 1);
+      ctx.packet.protocols[i-1].setPayload(ctx.packet.protocols[i].name);
+    }
+  }
+};
+
 function Push(psh, tag) {
   if(_.isObject(psh)) {
     this.tag = psh.tag.clone();
@@ -92,7 +117,7 @@ Push.prototype.step = function(dp, ctx) {
     if(this.tag.insertHere(ctx.packet.protocols[i])){
       this.tag.setDefaults(ctx.packet.protocols, i);
       ctx.packet.protocols.splice(i, 0, this.tag);
-      console.log('pkt proto after splice', ctx.packet.protocols);
+      ctx.packet.protocols[i-1].setPayload(ctx.packet.protocols[i].name);
       return;
     }
   }
@@ -438,7 +463,8 @@ return {
   SetField: SetField,
   Set: Set,
   List: List,
-  Push: Push
+  Push: Push,
+  Pop: Pop
 };
 
 });

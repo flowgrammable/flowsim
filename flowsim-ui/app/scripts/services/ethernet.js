@@ -63,6 +63,10 @@ Ethernet.prototype.type = function(type) {
   }
 };
 
+Ethernet.prototype.setPayload = function(name){
+  this._type = new UInt.UInt(null, Payloads[name], 2);
+};
+
 Ethernet.prototype.clone = function() {
   return new Ethernet(this);
 };
@@ -202,7 +206,7 @@ function Ethernet_UI(eth) {
 }
 
 Ethernet_UI.prototype.toBase = function() {
-  return new Ethernet(null, this.attrs[0].value, this.attrs[1].value, 
+  return new Ethernet(null, this.attrs[0].value, this.attrs[1].value,
                       this.attrs[2].value);
 };
 
