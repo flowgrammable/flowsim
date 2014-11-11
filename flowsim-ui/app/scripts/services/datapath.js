@@ -36,10 +36,9 @@ function Profile(datapath, dp_id) {
       this.datapath_id = dp_id;
     } else {
       this.datapath_id = (_(8).times(function() { 
-        return UInt.padZeros(_.random(0, 255)).toString(16));
+        return UInt.padZeros(_.random(0, 255)).toString(16);
       })).join(':');
-      this.datapath_id = UInt.padZeros(_.random(Math.pow(2,32)).toString(16),16)
-        + UInt.padZeros(_.random(Math.pow(2,32)).toString(16), 16);
+      this.datapath_id = UInt.padZeros(_.random(Math.pow(2,32)).toString(16),16) + UInt.padZeros(_.random(Math.pow(2,32)).toString(16), 16);
     }
     this.n_buffers     = defBufferCount;
     this.ip_reassembly = defIPReassembly;
@@ -55,7 +54,7 @@ function Profile(datapath, dp_id) {
 
 Profile.prototype.clone = function() {
   return new Profile(this);
-}
+};
 
 Profile.prototype.getMACPrefix = function() {
   return this.datapath_id.slice(0, 11); 
