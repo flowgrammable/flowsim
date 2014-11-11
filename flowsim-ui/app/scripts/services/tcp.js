@@ -59,6 +59,9 @@ TCP_UI.prototype.setPayload = function() {
 
 return {
   name: NAME,
+  TCP: TCP,
+  TCP_UI: TCP_UI,
+  mkTCP: mkTCP
 };
 
 });
