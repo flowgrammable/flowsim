@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Ports', function(UInt) {
+  .factory('Ports', function(UInt, ETHERNET) {
 
 var defPortCount   = 24;
 var defNamePrefix  = 'eth';
@@ -235,6 +235,21 @@ Profile.prototype.clone = function() {
   return new Profile(this);
 };
 
+Profile.prototype.rebuild = function() {
+  var base;
+  if(this.n_ports === this.ports.length) {
+    return;
+  } else if(this.n_ports < this.ports.length) {
+    this.ports.splice(this.n_ports, this.ports.length-this.n_ports);
+  } else {
+    base = this.ports.length;
+    _(this.n_ports-this.ports.length).times(function(i) {
+      var idx = base + i;
+      this.ports.push(new PortProfile(null, idx, mkMAC(this.macPrefix, idx)));
+    }, this);
+  }
+};
+
 function mkMAC(prefix, id) {
   // don't use the bridge id ..  maybe this is unnecessary stp hold over
   var idx = UInt.padZeros(id.toString(16), 4);
@@ -273,10 +288,25 @@ Profile.prototype.ofp_1_4 = function() {
   });
 };
 
+var TIPS = {
+  mac: '',
+  name: '',
+  speed: '',
+  mode: '',
+  medium: ''
+};
+
+var TESTS = {
+  mac: ETHERNET.MAC.is,
+  name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v); }
+};
+
 return {
   Port: Port,
   Ports: Ports,
-  Profile: Profile
+  Profile: Profile,
+  TIPS: TIPS,
+  TESTS: TESTS
 };
 
 });
