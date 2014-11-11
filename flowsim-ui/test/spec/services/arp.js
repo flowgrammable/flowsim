@@ -11,6 +11,11 @@ describe('Service: ARP', function () {
     ARP = _ARP_;
   }));
 
+  var ETHERNET;
+  beforeEach(inject(function (_ETHERNET_) {
+    ETHERNET = _ETHERNET_;
+  }));
+
   it('ARP Construction Fail', function() {
       expect(!!ARP).toBe(true);
 
@@ -103,6 +108,36 @@ describe('Service: ARP', function () {
 
   });
 
+  it('ARP fields match', function() {
+    expect(!!ARP).toBe(true);
+
+    var u = new ETHERNET.MAC(null, '00:11:22:33:44:55');
+    var b = new ETHERNET.MAC(null, 'ff:ff:ff:ff:ff:ff');
+    var m = new ETHERNET.MAC(null, '91:ab:ba:ef:cd:45');
+
+    var every = new ARP.mkShaMatch(
+      '00:00:00:00:00:00', '00:00:00:00:00:00'
+      );
+    var multi = new ARP.mkShaMatch(
+      '01:00:00:00:00:00', '01:00:00:00:00:00'
+      );
+
+    var exact = new ARP.mkShaMatch(u, b);
+
+    expect(every.match(u)).toBe(true);
+    expect(every.match(b)).toBe(true);
+    expect(every.match(m)).toBe(true);
+
+    expect(multi.match(u)).toBe(false);
+    expect(multi.match(b)).toBe(true);
+    expect(multi.match(m)).toBe(true);
+
+    expect(exact.match(u)).toBe(true);
+    expect(exact.match(b)).toBe(false);
+    expect(exact.match(m)).toBe(false);
+
+  })
+
   it('MAC Construction Pass', function() {
     expect(!!ARP).toBe(true);
     new ARP.ARP.MAC(null, '00:00:00:00:00:00');
@@ -174,32 +209,6 @@ describe('Service: ARP', function () {
 
   });
 
-  it('SHA match Pass', function() {
-      var u = ARP.mkSha('00:11:22:33:44:55');
-      var b = ARP.mkSha('ff:ff:ff:ff:ff:ff');
-      var m = ARP.mkSha('91:ab:ba:ef:cd:45');
-
-      var every = ARP.mkShaMatch(
-        '00:00:00:00:00:00', '00:00:00:00:00:00'
-        );
-      var multi = ARP.mkShaMatch(
-        '01:00:00:00:00:00', '01:00:00:00:00:00'
-        );
-
-      var exact = ARP.mkShaMatch( u, b);
-
-      expect(every.match(u)).toBe(true);
-      expect(every.match(b)).toBe(true);
-      expect(every.match(m)).toBe(true);
-
-      expect(multi.match(u)).toBe(false);
-      expect(multi.match(b)).toBe(true);
-      expect(multi.match(m)).toBe(true);
-
-      expect(exact.match(u)).toBe(true);
-      expect(exact.match(b)).toBe(false);
-      expect(exact.match(m)).toBe(false);
-  });
 
   it('THA match Pass', function() {
       var u = ARP.mkTha('00:11:22:33:44:55');
@@ -226,6 +235,52 @@ describe('Service: ARP', function () {
       expect(exact.match(u)).toBe(true);
       expect(exact.match(b)).toBe(false);
       expect(exact.match(m)).toBe(false);
+  });
+
+  it('Spa match Pass', function() {
+    var u = ARP.mkSpa('70.168.1.1');
+    var b = ARP.mkSpa('255.255.255.255');
+    var m = ARP.mkSpa('157.168.1.1');
+
+    var every = ARP.mkSpaMatch('0.0.0.0', '0.0.0.0');
+    var multi = ARP.mkSpaMatch('1.0.0.0', '1.0.0.0');
+    var exact = ARP.mkSpaMatch(u,b);
+
+    expect(every.match(u)).toBe(true);
+    expect(every.match(b)).toBe(true);
+    expect(every.match(m)).toBe(true);
+
+    expect(multi.match(u)).toBe(false);
+    expect(multi.match(b)).toBe(true);
+    expect(multi.match(m)).toBe(true);
+
+    expect(exact.match(u)).toBe(true);
+    expect(exact.match(b)).toBe(false);
+    expect(exact.match(m)).toBe(false);
+
+  });
+
+  it('TPA match Pass', function() {
+    var u = ARP.mkTpa('70.168.1.1');
+    var b = ARP.mkTpa('255.255.255.255');
+    var m = ARP.mkTpa('157.168.1.1');
+
+    var every = ARP.mkTpaMatch('0.0.0.0', '0.0.0.0');
+    var multi = ARP.mkTpaMatch('1.0.0.0', '1.0.0.0');
+    var exact = ARP.mkTpaMatch(u,b);
+
+    expect(every.match(u)).toBe(true);
+    expect(every.match(b)).toBe(true);
+    expect(every.match(m)).toBe(true);
+
+    expect(multi.match(u)).toBe(false);
+    expect(multi.match(b)).toBe(true);
+    expect(multi.match(m)).toBe(true);
+
+    expect(exact.match(u)).toBe(true);
+    expect(exact.match(b)).toBe(false);
+    expect(exact.match(m)).toBe(false);
+
   });
 
 
