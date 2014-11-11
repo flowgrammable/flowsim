@@ -27,23 +27,24 @@ function Tables(tbls, profile) {
   }
 }
 
+function TableProfile() {
+}
 
-Tables.Profile = function(prof, tables){
-  if(prof instanceof Tables.Profile ||
-      (typeof prof ==='object' && prof !== null)){
+function Profile(prof, tables){
+  if(_.isObject(prof)) {
     _.extend(this, prof);
     this.tables = _.map(prof.tables, function(table) {
-      return new Table.Profile(table);
+      return new TableProfile(table);
     });
   } else {
     this.n_tables = defaultTables;
     this.tables = _.map(_.range(this.n_tables), function(id) {
-      return new Table.Profile(id);
+      return new TableProfile(null, id);
     });
   }
 }
 
-Tables.Profile.TIPS = {
+Profile.TIPS = {
   table_id: 'Unique table identifier',
   name: 'Descriptive name for flow table type',
   max_entries: 'Maximum flows supported',
@@ -55,7 +56,7 @@ Tables.Profile.TIPS = {
   Miss: Instruction.Profile.TIPS
 };
 
-Tables.Profile.prototype.rebuild = function() {
+Profile.prototype.rebuild = function() {
   var i;
   if(this.n_tables === this.tables.length) {
     return;
@@ -63,7 +64,7 @@ Tables.Profile.prototype.rebuild = function() {
     this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
   } else {
     for(i=this.tables.length; i<this.n_tables; ++i) {
-      this.tables.push(new Table.Profile(i));
+      this.tables.push(new Profile(i));
     }
   }
 };
@@ -324,7 +325,11 @@ Capabilities.prototype.openflow_1_4 = function() {
 }
 */
 
-
+Profile.prototype.ofp_1_0 = function() {};
+Profile.prototype.ofp_1_1 = function() {};
+Profile.prototype.ofp_1_2 = function() {};
+Profile.prototype.ofp_1_3 = function() {};
+Profile.prototype.ofp_1_4 = function() {};
 
 
 var TIPS = {
@@ -345,7 +350,7 @@ var TablesUI = Tables;
 TablesUI.prototype.toBase = Tables.prototype.clone;
 
 return {
-  Capabilities: Tables.Profile,
+  Capabilities: Profile,
   Configuration: Tables,
   TIPS: TIPS,
   TESTS: TESTS
