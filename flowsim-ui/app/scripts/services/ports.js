@@ -223,7 +223,7 @@ function Profile(profile, macPrefix) {
     this.n_ports = defPortCount;
     this.macPrefix    = macPrefix;
     this.ports = _(this.n_ports).times(function(id) {
-      return new PortProfile(null, id, mkMAC(this, macPrefix, id));
+      return new PortProfile(null, id, mkMAC(macPrefix, id));
     });
     this.port_stats   = defPortStats;
     this.port_blocked = defPortBlocked;
@@ -237,8 +237,8 @@ Profile.prototype.clone = function() {
 
 function mkMAC(prefix, id) {
   // don't use the bridge id ..  maybe this is unnecessary stp hold over
-  var idx = UInt.padZeros((1+id).toString(16), 4);
-  return prefix + ':' + idx.slice(0,1) + ':' + idx.slice(2, 3);
+  var idx = UInt.padZeros(id.toString(16), 4);
+  return prefix + ':' + idx.slice(0,2) + ':' + idx.slice(2, 4);
 }
 
 Profile.prototype.ofp_1_0 = function() {
