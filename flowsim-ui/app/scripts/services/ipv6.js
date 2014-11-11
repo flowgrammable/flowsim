@@ -5,6 +5,17 @@ angular.module('flowsimUiApp')
 
 var NAME = 'IPv6';
 
+var Pattern = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+[0-9a-fA-F]{1,4}
+
+// Javascript regex patterns that support prefix/infix/postfix :: notation
+// prefix/postfix are complete
+// infix is not complete, regex have no counting ability, so you must ensure
+// that not too many octets are on either side of the :: notation
+var prefixPattern = /^::[0-9a-fA-F](:[0-9a-fA-F]{1,4}){0,6}$/;
+var infixPattern = /^(([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4})?::([0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){0,6})?$/;
+var postfixPattern = /([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4}::$/;
+
 var ipv6Pattern = /^[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}:[0-9a-fA-F]{1,4}$/;
 
 function isIPv6(addr) {
