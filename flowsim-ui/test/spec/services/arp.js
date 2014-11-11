@@ -11,9 +11,34 @@ describe('Service: ARP', function () {
     ARP = _ARP_;
   }));
 
-  it('Opcode Construction Fail', function() {
+  it('ARP Construction Fail', function() {
       expect(!!ARP).toBe(true);
 
+      expect(function(){
+        new ARP.mkARP('0x000','gg:gg:gg:gg:gg:gg', '1.1.1.1',
+          'aa:bb:cc:dd:ee:ff');
+      }).toThrow();
+
+      expect(function(){
+        ARP.mkARP('0x000','00;bb;cc;dd','1.1.1.1','00:00:00:00:00:00',
+          '10.10.10.10');
+      }).toThrow();
+
+      expect(function(){
+        ARP.mkARP('0x000','aa:bb:cc:dd:ee:ff','1.1','00:00:00:00:00:00',
+          '10.10.10.10');
+      }).toThrow();
+
+  });
+
+  it('ARP Construction Pass', function() {
+    expect(!!ARP).toBe(true);
+
+    new ARP.mkARP('0x0001', 'aa:bb:cc:dd:ee:ff', '1.1.1.1',
+        '00:00:00:00:00:00');
+
+    new ARP.ARP(null, '0x0001', 'aa:bb:cc:dd:ee:ff', '1.1.1.1',
+        '00:00:00:00:00:00');
   });
 
   it('Opcode Construction Pass', function() {

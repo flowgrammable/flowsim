@@ -12,7 +12,6 @@ var Payloads = {
 
 function ARP(arp, opcode, sha, spa, tha, tpa){
   if(_.isObject(arp)){
-    _.extend(this, arp);
     this._opcode  = new UInt.UInt(arp._opcode);
     this._sha     = new ETHERNET.MAC(arp._sha);
     this._spa     = new IPV4.IP(arp._spa);
@@ -20,10 +19,10 @@ function ARP(arp, opcode, sha, spa, tha, tpa){
     this._tpa     = new IPV4.IP(arp._tpa);
   } else {
     this._opcode  = mkOpcode(opcode);
-    this._sha     = new ETHERNET.mkMAC(sha);
-    this._spa     = new IPV4.IP(spa);
-    this._tha     = new ETHERNET.mkMAC(tha);
-    this._tpa     = new IPV4.IP(tpa);
+    this._sha     = ETHERNET.mkMAC(sha);
+    this._spa     = IPV4.mkIP(spa);
+    this._tha     = ETHERNET.mkMAC(tha);
+    this._tpa     = IPV4.mkIP(tpa);
   }
   this.bytes = BYTES;
   this.name = NAME;
@@ -38,6 +37,10 @@ ARP.MAC.Match = ETHERNET.MAC.Match;
 function mkARP(opcode, sha, spa, tha, tpa) {
   return new ARP(null, opcode, sha, spa, tha, tpa);
 }
+
+ARP.prototype.clone = function() {
+  return new ARP(this);
+};
 
 ARP.prototype.opcode = function(opcode) {
   if(opcode) {
@@ -61,7 +64,7 @@ function mkOpcodeMatch(value, mask) {
 
 ARP.prototype.sha = function(sha) {
   if(sha) {
-    this._sha = new ARP.MAC(sha);
+    this._sha = new ETHERNET.MAC(sha);
   } else {
     return this._sha;
   }
@@ -72,7 +75,7 @@ ARP.mkShaMatch = ETHERNET.mkMACMatch;
 
 ARP.prototype.spa = function(spa) {
   if(spa) {
-    this._spa = new ARP.IP(spa);
+    this._spa = new IPV4.IP(spa);
   } else {
     return this._spa;
   }
@@ -83,7 +86,7 @@ ARP.mkSpaMatch = IPV4.mkIPMatch;
 
 ARP.prototype.tha = function(tha) {
   if(tha) {
-    this._tha = new ARP.MAC(tha);
+    this._tha = new ETHERNET.MAC(tha);
   } else {
     return this._tha;
   }
@@ -94,7 +97,7 @@ ARP.mkThaMatch = ETHERNET.mkMACMatch;
 
 ARP.prototype.tpa = function(tpa) {
   if(tpa) {
-    this._tpa = new ARP.IP(tpa);
+    this._tpa = new IPV4.IP(tpa);
   } else {
     return this._tpa;
   }
@@ -102,6 +105,14 @@ ARP.prototype.tpa = function(tpa) {
 
 ARP.mkTpa = IPV4.mkIP;
 ARP.mkTpaMatch = IPV4.mkIPMatch;
+
+ARP.prototype.toString = function() {
+  return 'opcode: '+this._opcode.toString(16)+'\n'+
+         'sha: '+this._sha.toString()+'\n'+
+         'spa: '+this._spa.toString()+'\n'+
+         'tha: '+this._tha.toString()+'\n'+
+         'spa: '+this._tpa.toString();
+};
 
 var TIPS = {
   opcode: 'ARP Message Type',
