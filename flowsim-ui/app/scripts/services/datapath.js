@@ -43,7 +43,7 @@ function Profile(datapath, dp_id) {
       this.datapath_id = dp_id;
     } else {
       this.datapath_id = (_(8).times(function() { 
-        return UInt.padZeros(_.random(0, 255)).toString(16);
+        return UInt.padZeros(_.random(0, 255).toString(16), 2);
       })).join(':');
     }
     this.n_buffers     = defBufferCount;
