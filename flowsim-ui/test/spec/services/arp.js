@@ -41,6 +41,44 @@ describe('Service: ARP', function () {
         '00:00:00:00:00:00');
   });
 
+  it('ARP equivalency Pass', function() {
+    var arp_disco = new ARP.ARP(null, '0x0023',
+      '00:11:22:33:44:55',
+      '192.168.1.1',
+      '55:44:33:22:11:00',
+      '10.10.10.10');
+    var arp2 = JSON.stringify(arp_disco);
+    var arp2_ = new ARP.ARP(JSON.parse(arp2));
+
+    arp_disco.opcode('0x0011');
+    expect(arp_disco.opcode().toString(16)).toBe('0x0011');
+
+    arp_disco.sha('11:22:33:44:55:66');
+    expect(arp_disco.sha().toString(16)).toBe('11:22:33:44:55:66');
+
+    arp_disco.spa('100.100.100.100');
+    expect(arp_disco.spa().toString(16)).toBe('100.100.100.100');
+
+    arp_disco.tha('66:55:44:33:22:11');
+    expect(arp_disco.tha().toString(16)).toBe('66:55:44:33:22:11');
+
+    arp_disco.tpa('100.100.100.101');
+    expect(arp_disco.tpa().toString(16)).toBe('100.100.100.101');
+
+    arp2_.sha('11:22:33:44:55:66');
+    expect(arp2_.sha().toString(16)).toBe('11:22:33:44:55:66');
+
+    arp2_.spa('100.100.100.100');
+    expect(arp2_.spa().toString(16)).toBe('100.100.100.100');
+
+    arp2_.tha('66:55:44:33:22:11');
+    expect(arp2_.tha().toString(16)).toBe('66:55:44:33:22:11');
+
+    arp2_.tpa('100.100.100.101');
+    expect(arp2_.tpa().toString(16)).toBe('100.100.100.101');
+
+  });
+
   it('Opcode Construction Pass', function() {
     expect(!!ARP).toBe(true);
     new ARP.ARP.Opcode(null,'1');

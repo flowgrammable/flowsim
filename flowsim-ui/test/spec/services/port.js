@@ -31,15 +31,4 @@ describe('Service: port', function () {
     expect(inportMatch.match(p2)).toBe(false);
   });
 
-  it('Phyport match pass', function(){
-    var port  = Port.mkPort('0x00000001','0xabcdeff1');
-    var phyportMatch = Port.mkPhyportMatch(port.phy());
-
-    var p  = Port.mkPort('0x00000001', '0xabcdeff1');
-    var p2 = Port.mkPort('0x00000008', '0xddeeffaa');
-    console.log('p: ', p._phy);
-    //expect(phyportMatch.match(p)).toBe(true);
-    //expect(phyportMatch.match(p2)).toBe(false);
-  });
-
 });
