@@ -20,7 +20,9 @@ function extract_ethernet(eth, key) {
 function extract_vlan(vlan, key) {
   key.vlan.push({
     vid: vlan.vid(),
-    pcp: vlan.pcp()
+    pcp: vlan.pcp(),
+    dei: vlan.dei(),
+    type: vlan.type()
   });
 }
 

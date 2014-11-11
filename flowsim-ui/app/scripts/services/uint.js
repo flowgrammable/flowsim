@@ -269,7 +269,8 @@ return {
   neg: neg,
   mask: mask,
   equal: equal,
-  Match: Match
+  Match: Match,
+  mkExact: Match.mkExact
 };
 
 });

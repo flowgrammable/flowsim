@@ -324,6 +324,10 @@ Write.prototype.execute = function(dp, ctx) {
   ctx.actionSet.concat(this.actions);
 };
 
+Write.prototype.empty = function(){
+  return this.actions.empty();
+};
+
 function Metadata(meta, data, mask) {
   if(_.isObject(meta)) {
     this._data = meta._data.clone();
@@ -389,8 +393,8 @@ function Set(set) {
     this._metadata = set._metadata ? new Metadata(set._metadata) : null;
     this._goto     = set._goto ? new Goto(set._goto) : null;
   } else {
-    this._apply = Action.List();
-    this._write = Action.Set();
+    this._apply = new Action.List();
+    this._write = new Action.Set();
   }
 }
 
@@ -419,7 +423,7 @@ Set.prototype.metadata = function(metadata) {
 Set.prototype.meter = function(meter) {
   if(meter) {
     this._meter = new Meter(null, meter);
-  } 
+  }
 };
 
 Set.prototype.jump = function(jump) {
