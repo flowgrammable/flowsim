@@ -86,6 +86,14 @@ var TESTS = {
   Groups:   Groups.TESTS
 };
 
+var RANGES = {
+  Datapath: Datapath.RANGES,
+  Ports:    Ports.RANGES,
+  Tables:   Tables.RANGES,
+  Meters:   Meters.RANGES,
+  Groups:   Groups.RANGES
+};
+
 /**
  * @ngdoc service
  * @name flowsimUiApp.profile
@@ -107,9 +115,7 @@ return {
   createUI: createUI,
   TIPS: TIPS,
   TESTS: TESTS,
-  MEDIUMS: Ports.MEDIUMS,
-  MODES: Ports.MODES,
-  SPEEDS: Ports.SPEEDS
+  RANGES: RANGES
 };
 
 });

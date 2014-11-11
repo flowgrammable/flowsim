@@ -14,12 +14,11 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.profile = null;
 
-    $scope.tips = Profile.TIPS;
-    $scope.tests = Profile.TESTS;
-
-    $scope.mediums = Profile.MEDIUMS;
-    $scope.modes   = Profile.MODES;
-    $scope.speeds  = Profile.SPEEDS;
+    $scope.metadata = {
+      tips:  Profile.TIPS,
+      tests: Profile.TESTS,
+      ranges: Profile.RANGES
+    };
 
     $scope.versions = [
       'OpenFlow 1.0',
@@ -49,7 +48,7 @@ angular.module('flowsimUiApp')
         default:
           break;
       }
-    }
+    };
 
     $scope.showProto = function(idx) {
       $scope.activeProto = idx;
@@ -75,7 +74,7 @@ angular.module('flowsimUiApp')
       }
     };
 
-    $scope.delProfile = function(name) {
+    $scope.delProfile = function(name, callback) {
       fgCache.destroy('profile', name);
       if(fgCache.isDirty()) {
         $scope.setDirty();
@@ -170,7 +169,7 @@ angular.module('flowsimUiApp')
       }).result.then(function(miss) {
          $scope.profile.tables.tables[idx].miss = miss;
       });
-    }
+    };
 
     $scope.$watch('profile', function(newValue, oldValue){
 

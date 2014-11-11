@@ -1,6 +1,6 @@
 
 <h3>Switch</h3>
-<switch-view data="profile.ports"></switch-view>
+  <switch-view data="profile.ports"></switch-view>
 <br>
 
 <div class="row">
@@ -33,50 +33,10 @@
             Port Statistics
           </label>
         </div>
-        <hr>
-        <label class="checkbox-inline">
-          <input type="checkbox" ng-model="profile.ports.mediums.Copper">Copper
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" ng-model="profile.ports.mediums.Fiber">Fiber
-        </label>
-        <hr>
         <div class="checkbox">
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.modes.half_duplex">
-            Half Duplex
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.modes.full_duplex">
-            Full Duplex
-          </label>
-        </div>
-        <hr>
-        <div class="checkbox">
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.speeds['10_mbps']">10 Mbps
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.speeds['100_mbps']">100 Mbps
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.speeds['1_gbps']">1 Gbps
-          </label>
-        </div>
-        <div class="checkbox">
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.speeds['10_gbps']">10 Gbps
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.speeds['40_gbps']">40 Gbps
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.speeds['100_gbps']">100 Gbps
-          </label>
-        </div>
-        <div class="checkbox">
-          <label class="checkbox-inline">
-            <input type="checkbox" ng-model="profile.ports.speeds['1_tbps']">1 Tbps
+          <label>
+            <input type="checkbox" ng-model="profile.ports.port_blocked">
+            Port Blocked
           </label>
         </div>
       </div>
@@ -90,12 +50,6 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-md-5">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.stp">
-                STP
-              </label>
-            </div>
             <div class="checkbox">
               <label>
                 <input type="checkbox" ng-model="profile.ports.vports.in_port">
@@ -112,12 +66,6 @@
               <label>
                 <input type="checkbox" ng-model="profile.ports.vports.normal">
                 Normal
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.none">
-                None
               </label>
             </div>
           </div>
@@ -146,12 +94,6 @@
                 Local
               </label>
             </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.any">
-                Any
-              </label>
-            </div>
           </div>
         </div>
       </div>
@@ -165,46 +107,38 @@
 <table class="table table-striped">
   <thead>
     <th>Id</td>
-    <th>Address</th>
+    <th>MAC Address</th>
     <th>Name</th>
     <th>Speed</th>
-    <th>Mode</th>
     <th>Medium</th>
   </thead>
   <tbody>
   <tr ng-repeat="port in profile.ports.ports">
     <td>{{$index}}</td>
     <td>
-      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.mac(port.mac)}">
+      <div class="input-group" ng-class="{'has-error': !metadata.tests.Ports.mac(port.mac)}">
       <input class="form-control" type="text" ng-model="port.mac"
-             tooltip="{{tips.Ports.Port.mac}}">
+             tooltip="{{metadata.tips.Ports.mac}}">
            </div>
     </td>
     <td>
-      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.name(port.name)}">
+      <div class="input-group" ng-class="{'has-error': !metadata.tests.Ports.name(port.name)}">
       <input class="form-control" type="text" ng-model="port.name"
-             tooltip="{{tips.Ports.Port.name}}">
+             tooltip="{{metadata.tips.Ports.name}}">
       </div>
     </td>
     <td>
       <select class="form-control" tooltip="{{tips.Ports.Port.speed}}" i
-              ng-model="port.speed" 
-              ng-options="speed.value as speed.label for speed in speeds |
-              fgSelect: profile.ports.speeds">
-      </select>
-    </td>
-    <td>
-      <select class="form-control" tooltip="{{tips.Ports.Port.mode}}" 
-              ng-model="port.mode"
-              ng-options="mode.value as mode.label for mode in modes |
-              fgSelect: profile.ports.modes">
+              ng-model="port.ethernet.speed" 
+              ng-options="value as value for (key, value) 
+              in metadata.ranges.Ports.speeds">
       </select>
     </td>
     <td>
       <select class="form-control" tooltip="{{tips.Ports.Port.medium}}" 
-              ng-model="port.medium"
-              ng-options="medium as medium for medium in mediums | 
-              fgSelect: profile.ports.mediums">
+              ng-model="port.ethernet.medium"
+              ng-options="value as value for (key, value) in
+              metadata.ranges.Ports.mediums">
       </select>
     </td>
 

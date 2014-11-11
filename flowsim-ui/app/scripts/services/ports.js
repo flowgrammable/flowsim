@@ -170,6 +170,7 @@ function PortProfile(portProfile, id, mac) {
     this.id = id;
     this.mac = mac;
     this.name = defNamePrefix+id;
+    this.up = true;
     this.ethernet = {
       speed: defSpeed,
       speeds: _.clone(_speeds),
@@ -289,16 +290,23 @@ Profile.prototype.ofp_1_4 = function() {
 };
 
 var TIPS = {
-  mac: '',
-  name: '',
-  speed: '',
-  mode: '',
-  medium: ''
+  mac: 'a',
+  name: 'b',
+  speed: 'c',
+  mode: 'd',
+  medium: 'e'
 };
 
 var TESTS = {
   mac: ETHERNET.MAC.is,
-  name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v); }
+  name: function(v) { return /^[a-zA-Z_][a-zA-Z_0-9]*$/.test(v); }
+};
+
+var RANGES = {
+  speeds: _speeds,
+  modes: _modes,
+  procedures: _procedures,
+  mediums: _mediums
 };
 
 return {
@@ -306,7 +314,8 @@ return {
   Ports: Ports,
   Profile: Profile,
   TIPS: TIPS,
-  TESTS: TESTS
+  TESTS: TESTS,
+  RANGES: RANGES
 };
 
 });

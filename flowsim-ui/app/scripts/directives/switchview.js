@@ -101,7 +101,7 @@ angular.module('flowsimUiApp').
                             });
 //Copper shape
                         portsG.filter(function (d) {
-                            return d.medium === 'Copper';
+                            return d.ethernet.medium === 'Copper';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.85)
@@ -110,7 +110,7 @@ angular.module('flowsimUiApp').
                             .attr('y', portHeight * 0.15);
 
                         portsG.filter(function (d) {
-                            return d.medium === 'Copper';
+                            return d.ethernet.medium === 'Copper';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.15)
@@ -119,7 +119,7 @@ angular.module('flowsimUiApp').
 
 //Fiber Shape
                         portsG.filter(function (d) {
-                            return d.medium === 'Fiber';
+                            return d.ethernet.medium === 'Fiber';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.8)
@@ -128,7 +128,7 @@ angular.module('flowsimUiApp').
                             .attr('y', portHeight * 0.15);
 
                         portsG.filter(function (d) {
-                            return d.medium === 'Fiber';
+                            return d.ethernet.medium === 'Fiber';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.8)
@@ -138,7 +138,7 @@ angular.module('flowsimUiApp').
                             .attr('x', portWidth / 2 + 2);
 
                         portsG.filter(function (d) {
-                            return d.medium === 'Fiber';
+                            return d.ethernet.medium === 'Fiber';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.6)
@@ -154,7 +154,7 @@ angular.module('flowsimUiApp').
                             .attr('class', 'PortText')
                             .attr('text-anchor', 'middle')
                             .text(function (d) {
-                                return d.port_id;
+                                return d.id;
                             });
                     };
 
