@@ -13,6 +13,7 @@ angular.module('flowsimUiApp')
 var defaultPorts  = 24;
 var defaultMAC    = '00:00:00:00:00:01';
 var defaultName   = 'eth';
+
 var defaultSpeed  = '1_gbps';
 var defaultMedium = 'Fiber';
 var defaultMode   = 'full_duplex';

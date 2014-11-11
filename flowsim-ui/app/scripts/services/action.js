@@ -167,6 +167,7 @@ function Set(set) {
       } else if(key === 'pop_mpls') {
       } else if(key === 'pop_pbb') {
       } else if(key === 'pop_vlan') {
+      } else {
       }
     }, this);
   } else {
