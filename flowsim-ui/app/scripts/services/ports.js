@@ -64,6 +64,16 @@ var _procedures = {
 };
 var defProcedures = {};
 
+var defVirtualPorts = {
+  in_port:    true,  // mandatory in 1.0+
+  table:      true,  // mandatory in 1.0+
+  controller: true,  // mandatory in 1.0+
+  all:        true,  // mandatory in 1.0+
+  local:      true,  // mandatory in 1.0, optional in 1.1+
+  normal:     true,  // optional in 1.0-1.4
+  flood:      true,  // optional in 1.0-1.4
+};
+
 function Port(port, portProfile) {
   if(_.isObject(port)) {
     this.capabilities = new PortProfile(port.capabilities);
@@ -208,6 +218,7 @@ function Profile(profile, macPrefix) {
     this.ports = _(profile.ports).map(function(port) {
       return new PortProfile(port);
     });
+    this.vports = _.clone(profile.vports);
   } else {
     this.n_ports = defPortCount;
     this.macPrefix    = macPrefix;
@@ -216,6 +227,7 @@ function Profile(profile, macPrefix) {
     });
     this.port_stats   = defPortStats;
     this.port_blocked = defPortBlocked;
+    this.vports = defVirtualPorts;
   }
 }
 
