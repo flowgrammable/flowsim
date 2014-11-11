@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4, 
+  .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                               ICMPV6, SCTP, TCP, UDP) {
 
 function Output(output, port_id) {
@@ -87,30 +87,17 @@ Push.prototype.toString = function() {
   return this.tag.toString();
 };
 
-VLAN.prototype.insertHere = function(protocol) {
-  if(protocol.name !=== ETHERNET.name) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-VLAN.prototype.setDefaults = function(protocol) {
-  if(protocol.name === <self>.name) {
-    // ith tag default rules
-  } else {
-    // 1st tag default rules
-  }
-};
-
 Push.prototype.step = function(dp, ctx) {
-  var idx = _(ctx.packet.protocols).find(this.tag.insertHere);
-  if(idx) {
-    this.tag.setDefaults(ctx.packet.protocols[idx]);
-    ctx.packet.protocols.splice(idx, 1, this.tag);
-  } else {
-    throw 'Push failed';
+  for(var i = 0; i < ctx.packet.protocols.length; i++){
+    if(this.tag.insertHere(ctx.packet.protocols[i])){
+      this.tag.setDefaults(ctx.packet.protocols[i-1]);
+      ctx.packet.protocols.splice(i, 0, this.tag);
+      console.log('pkt proto after splice', ctx.packet.protocols);
+      return;
+    }
   }
+  throw 'Push failed';
+
 };
 
 function SetField(sf, proto, field, value) {
@@ -139,7 +126,7 @@ SetField.prototype.step = function(dp, ctx) {
   if(protocol) {
     protocol[this.field] = this.value;
   } else {
-    console.log('SetField(%s, %s, %s) Miss', this.protocol, this.field, 
+    console.log('SetField(%s, %s, %s) Miss', this.protocol, this.field,
                 this.value.toString());
   }
 };
@@ -147,7 +134,7 @@ SetField.prototype.step = function(dp, ctx) {
 function Set(set) {
   if(_.isObject(set)) {
     //FIXME: implement
-    _.each(set.actions, function(key, val) {
+    _.each(set.actions, function(key) {
       if(key === 'setField') {
       } else if(key === 'pop_mpls') {
       } else if(key === 'pop_pbb') {
@@ -174,7 +161,7 @@ Set.prototype.get = function() {
   //FIXME: needs implementation
 };
 
-Set.prototype.concat = function(rhs) {
+Set.prototype.concat = function() {
   //FIXME: needs implementation
 };
 
@@ -235,7 +222,7 @@ Set.prototype.push_vlan = function(action) {
     if(!_(this.actions).has('push_vlan')) {
       this.actions.push_vlan = [];
     }
-    this.actions.push_vlan = action;
+    this.actions.push_vlan.push(action);
   }
 };
 
@@ -317,7 +304,7 @@ Set.prototype.empty = function() {
 
 // Execute the action set in a precise ordering
 Set.prototype.step = function(dp, ctx) {
- 
+
   if(this.actions.copy_ttl_in) {
     this.actions.copy_ttl_in.step(dp, ctx);
     delete this.actions.copy_ttl_in;
@@ -387,7 +374,7 @@ Set.prototype.step = function(dp, ctx) {
     delete this.actions.queue;
     return true;
   }
- 
+
   // Execute group if present or output if present
   if(this.actions.group) {
     this.actions.group.step(dp, ctx);
@@ -410,8 +397,8 @@ Set.prototype.execute = function(dp, ctx) {
 
 function List(list) {
   if(_.isObject(list)) {
-    this.actions = _.map(list.actions, function(action) { 
-      return action.clone(); 
+    this.actions = _.map(list.actions, function(action) {
+      return action.clone();
     });
   } else {
     this.actions = [];
@@ -450,7 +437,8 @@ return {
   Queue: Queue,
   SetField: SetField,
   Set: Set,
-  List: List
+  List: List,
+  Push: Push
 };
-  
+
 });

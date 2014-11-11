@@ -275,7 +275,7 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].pcp().toString(16)).toBe('0x01');
     expect(pkt.protocols[1].dei().toString(16)).toBe('0x00');
     expect(pkt.protocols[1].vid().toString(16)).toBe('0x0000');
-    expect(pkt.protocols[1].typelen().toString(16)).toBe('0x0000');
+    expect(pkt.protocols[1].type().toString(16)).toBe('0x0000');
 
     set.setField(new Action.SetField(
       null,
@@ -289,7 +289,7 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].pcp().toString(16)).toBe('0x01');
     expect(pkt.protocols[1].dei().toString(16)).toBe('0x02');
     expect(pkt.protocols[1].vid().toString(16)).toBe('0x0000');
-    expect(pkt.protocols[1].typelen().toString(16)).toBe('0x0000');
+    expect(pkt.protocols[1].type().toString(16)).toBe('0x0000');
 
     set.setField(new Action.SetField(
       null,
@@ -303,7 +303,49 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].pcp().toString(16)).toBe('0x01');
     expect(pkt.protocols[1].dei().toString(16)).toBe('0x02');
     expect(pkt.protocols[1].vid().toString(16)).toBe('0x0444');
-    expect(pkt.protocols[1].typelen().toString(16)).toBe('0x0000');
+    expect(pkt.protocols[1].type().toString(16)).toBe('0x0000');
+
+  });
+
+  it('VLAN pushVLAN', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('vlanpack');
+    pkt.protocols[0]._type = Ethernet.mkType('0x0800');
+    pkt.push(IPV4.mkIPv4());
+    var vl  = VLAN.mkVLAN();
+    set.push_vlan(new Action.Push(
+      null, new VLAN.VLAN()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    // push_vlan[] should be cleared
+    // set.actions.push_vlan should not exist
+    expect(set.actions.push_vlan).toBe(undefined);
+
+    // vlan inserted
+    expect(pkt.protocols.length).toBe(3);
+
+    // Eth.type is 0x8100 (vlan)
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
+    // default values for new tag
+    expect(pkt.protocols[1].pcp().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].dei().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].vid().toString(16)).toBe('0x0000');
+    // Vlan.type should be ipv4 0x0800
+    expect(pkt.protocols[1].type().toString(16)).toBe('0x0800');
+
+    pkt.protocols[1]._vid = VLAN.mkVid('0x7777');
+    pkt.protocols[1]._pcp = VLAN.mkPcp('0x02');
+    expect(pkt.protocols[1].vid().toString(16)).toBe('0x7777');
+    expect(pkt.protocols[1].pcp().toString(16)).toBe('0x02');
+
+
 
   });
 

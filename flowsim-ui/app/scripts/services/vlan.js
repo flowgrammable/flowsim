@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('VLAN', function(fgConstraints, fgUI, UInt) {
+  .factory('VLAN', function(fgConstraints, fgUI, UInt, ETHERNET) {
 
 var NAME = 'VLAN';
 var BYTES = 4;
@@ -15,25 +15,25 @@ var Payloads = {
  'Payload': 0
 };
 
-function VLAN(vlan, pcp, dei, vid, typelen){
+function VLAN(vlan, pcp, dei, vid, type){
   if(_.isObject(vlan)){
     _.extend(this, vlan);
     this._pcp     = new UInt.UInt(vlan._pcp);
     this._dei     = new UInt.UInt(vlan._dei);
     this._vid     = new UInt.UInt(vlan._vid);
-    this._typelen = new UInt.UInt(vlan._typelen);
+    this._type = new UInt.UInt(vlan._type);
   } else {
     this._pcp     = mkPcp(pcp);
     this._dei     = mkDei(dei);
     this._vid     = mkVid(vid);
-    this._typelen = mkTypelen(typelen);
+    this._type = mkType(type);
   }
   this.bytes = BYTES;
   this.name = NAME;
 }
 
-function mkVLAN(pcp, dei, vid, typelen){
-  return new VLAN(null, pcp, dei, vid, typelen);
+function mkVLAN(pcp, dei, vid, type){
+  return new VLAN(null, pcp, dei, vid, type);
 }
 
 VLAN.prototype.pcp = function(pcp){
@@ -97,24 +97,48 @@ function mkVidMatch(value, mask) {
   return new UInt.Match(null, mkVid(value), mkVid(mask));
 }
 
-VLAN.prototype.typelen = function(typelen){
-  if(typelen) {
-    if(typelen instanceof UInt.UInt){
-      this._typelen = new UInt.UInt(typelen);
+VLAN.prototype.type = function(type){
+  if(type) {
+    if(type instanceof UInt.UInt){
+      this._type = new UInt.UInt(type);
     } else {
-      this._typelen = new UInt.UInt(null, typelen, 2);
+      this._type = new UInt.UInt(null, type, 2);
     }
   } else {
-    return this._typelen;
+    return this._type;
   }
 };
 
-function mkTypelen(input){
+function mkType(input){
   return new UInt.UInt(null, input, 2);
 }
-function mkTypelenMatch(value, mask) {
-  return new UInt.Match(null, mkTypelen(value), mkTypelen(mask));
+
+function mkTypeMatch(value, mask) {
+  return new UInt.Match(null, mkType(value), mkType(mask));
 }
+
+VLAN.prototype.insertHere = function(protocol) {
+  if(protocol.name !== ETHERNET.name) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+VLAN.prototype.setDefaults = function(protocol) {
+  console.log('proto in vlan:', protocol);
+  //console.log('prototype:', protocol._type.toString(16));
+  if(protocol.name === this.name) {
+    this._vid = mkVid(protocol.vid());
+    this._pcp = mkPcp(protocol.pcp());
+  } else {
+    this._vid = mkVid();
+    this._pcp = mkPcp();
+    this._dei = mkDei();
+    this._type = protocol._type;
+    protocol._type = mkType('0x8100');
+  }
+};
 
 VLAN.prototype.clone = function() {
   return new VLAN(this);
@@ -124,21 +148,21 @@ VLAN.prototype.toString = function() {
   return 'pcp: '+this._pcp.toString(16)+'\n'+
          'dei: '+this._dei.toString(16)+'\n'+
          'vid: '+this._vid.toString(16)+'\n'+
-         'typelen: '+this._typelen.toString(16);
+         'type: '+this._type.toString(16);
 };
 
 var TIPS = {
   pcp: 'VLAN Priority Code Point',
   dei: '',
   vid: 'VLAN Tag Identifier',
-  typelen: 'Ethernet type or length of payload'
+  type: 'Ethernet type or length of payload'
 };
 
 var TESTS = {
   pcp: UInt.is(3),
   dei: UInt.is(1),
   vid: UInt.is(12),
-  typelen: UInt.is(16)
+  type: UInt.is(16)
 };
 
 
@@ -163,9 +187,9 @@ function VLAN_UI(vlan) {
     tip: TIPS.vid
   },{
     name: 'Typelen',
-    value: vlan.typelen().toString(16),
-    test: TESTS.typelen,
-    tip: TIPS.typelen
+    value: vlan.type().toString(16),
+    test: TESTS.type,
+    tip: TIPS.type
   }];
 }
 
@@ -188,7 +212,7 @@ return {
   pcp:            '_pcp',
   dei:            '_dei',
   vid:            '_vid',
-  typelen:        '_typelen',
+  type:           '_type',
   mkVLAN:         mkVLAN,
   mkPcp:          mkPcp,
   mkPcpMatch:     mkPcpMatch,
@@ -196,8 +220,8 @@ return {
   mkDeiMatch:     mkDeiMatch,
   mkVid:          mkVid,
   mkVidMatch:     mkVidMatch,
-  mkTypelen:      mkTypelen,
-  mkTypelenMatch: mkTypelenMatch,
+  mkType:         mkType,
+  mkTypeMatch: mkTypeMatch,
   VLAN_UI:        VLAN_UI,
   create:         function(vlan) { return new VLAN(vlan); },
   createUI:       function(vlan) { return new VLAN_UI(vlan); },

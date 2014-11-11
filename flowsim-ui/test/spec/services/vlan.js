@@ -35,8 +35,8 @@ describe('Service: VLAN', function () {
 
   it('Typelen construction Pass', function() {
     expect(!!VLAN).toBe(true);
-    var typelen = VLAN.mkTypelen();
-    expect(typelen.toString(16)).toBe('0x0000');
+    var type = VLAN.mkType();
+    expect(type.toString(16)).toBe('0x0000');
   });
 
   it('VLAN construction PASS', function() {
@@ -111,8 +111,8 @@ describe('Service: VLAN', function () {
     vlan_disco.vid('0x7777');
     expect(vlan_disco.vid().toString(16)).toBe('0x7777');
 
-    vlan_disco.typelen('0x0800');
-    expect(vlan_disco.typelen().toString(16)).toBe('0x0800');
+    vlan_disco.type('0x0800');
+    expect(vlan_disco.type().toString(16)).toBe('0x0800');
 
     vlan2_disco.pcp('0x01');
     expect(vlan2_disco.pcp().toString(16)).toBe('0x01');
@@ -123,8 +123,8 @@ describe('Service: VLAN', function () {
     vlan2_disco.vid('0x7777');
     expect(vlan2_disco.vid().toString(16)).toBe('0x7777');
 
-    vlan2_disco.typelen('0x0800');
-    expect(vlan2_disco.typelen().toString(16)).toBe('0x0800');
+    vlan2_disco.type('0x0800');
+    expect(vlan2_disco.type().toString(16)).toBe('0x0800');
 
 
   });
