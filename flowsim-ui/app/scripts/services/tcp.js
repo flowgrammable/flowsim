@@ -15,8 +15,8 @@ function TCP(tcp, src, dst){
     this._src = new UInt.UInt(tcp._src);
     this._dst = new UInt.UInt(tcp._dst);
   } else {
-    this._src = new UInt.UInt(null, src);
-    this._dst = new UInt.UInt(null, dst);
+    this._src = new UInt.UInt(null, src, 2);
+    this._dst = new UInt.UInt(null, dst, 2);
   }
   this.name = NAME;
   this.bytes = BYTES;
