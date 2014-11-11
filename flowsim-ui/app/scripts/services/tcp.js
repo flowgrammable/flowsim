@@ -4,18 +4,26 @@ angular.module('flowsimUiApp')
   .factory('TCP', function(fgUI, fgConstraints){
 
 var NAME = 'TCP';
+var BYTES = 20;
 
 var Payloads = {
  'Payload': 0
 };
 
-function TCP(){
+function TCP(tcp, src, dst){
+  if(_.isObject(tcp)) {
+    this._src = new UInt.UInt(tcp._src);
+    this._dst = new UInt.UInt(tcp._dst);
+  } else {
+    this._src = new UInt.UInt(null, src);
+    this._dst = new UInt.UInt(null, dst);
+  }
   this.name = NAME;
-  this.bytes = 20;
-  this.fields = {
-    src: 0,
-    dst: 0
-  };
+  this.bytes = BYTES;
+}
+
+function mkTCP(src, dst) {
+  return new TCP(null, src, dst);
 }
 
 function TCP_UI(tcp){

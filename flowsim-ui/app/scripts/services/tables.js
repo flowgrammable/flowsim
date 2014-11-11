@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
         Match, Table) {
 
 /* Default Construction Constants */
-var defaultTables = 8;
+var defTables = 8;
 
 function Tables(tbls, profile) {
   if(_.isObject(tbls)) {
@@ -27,24 +27,21 @@ function Tables(tbls, profile) {
   }
 }
 
-function TableProfile() {
-}
-
-function Profile(prof, tables){
-  if(_.isObject(prof)) {
-    _.extend(this, prof);
-    this.tables = _.map(prof.tables, function(table) {
-      return new TableProfile(table);
+function Profile(profile, tables){
+  if(_.isObject(profile)) {
+    _.extend(this, profile);
+    this.tables = _.map(profile.tables, function(table) {
+      return new Table.Profile(table);
     });
   } else {
-    this.n_tables = defaultTables;
-    this.tables = _.map(_.range(this.n_tables), function(id) {
-      return new TableProfile(null, id);
+    this.n_tables = defTables;
+    this.tables = _(this.n_tables).times(function(i) {
+      return new Table.Profile(null, id);
     });
   }
 }
 
-Profile.TIPS = {
+TIPS = {
   table_id: 'Unique table identifier',
   name: 'Descriptive name for flow table type',
   max_entries: 'Maximum flows supported',
@@ -57,15 +54,14 @@ Profile.TIPS = {
 };
 
 Profile.prototype.rebuild = function() {
-  var i;
   if(this.n_tables === this.tables.length) {
     return;
   } else if(this.n_tables < this.tables.length) {
     this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
   } else {
-    for(i=this.tables.length; i<this.n_tables; ++i) {
-      this.tables.push(new Profile(i));
-    }
+    _(this.n_tables-this.tables.length).times(function(i) {
+      this.tables.push(new Table.Profile(null, id));
+    });
   }
 };
 /*
