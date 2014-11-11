@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('TCP', function(fgUI, fgConstraints){
+  .factory('TCP', function(fgUI, fgConstraints, UInt){
 
 var NAME = 'TCP';
 var BYTES = 20;
