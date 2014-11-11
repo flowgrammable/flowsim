@@ -6,6 +6,9 @@ angular.module('flowsimUiApp')
 var NAME = 'MPLS';
 var BYTES = 4;
 
+// MPLS Label is just 20 bits, so just match on 5 hex values
+var Pattern = /^[0-9a-fA-F]{1,5}$/;
+
 var Payloads = {
  'MPLS': 0x8847,
  'IPv4': 0x0800,
