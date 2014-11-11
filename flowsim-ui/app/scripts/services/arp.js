@@ -64,7 +64,7 @@ function mkOpcodeMatch(value, mask) {
 
 ARP.prototype.sha = function(sha) {
   if(sha) {
-    this._sha = new ETHERNET.MAC(sha);
+    this._sha = new ETHERNET.mkMAC(sha);
   } else {
     return this._sha;
   }
@@ -75,7 +75,7 @@ ARP.mkShaMatch = ETHERNET.mkMACMatch;
 
 ARP.prototype.spa = function(spa) {
   if(spa) {
-    this._spa = new IPV4.IP(spa);
+    this._spa = new IPV4.mkIP(spa);
   } else {
     return this._spa;
   }
@@ -86,7 +86,7 @@ ARP.mkSpaMatch = IPV4.mkIPMatch;
 
 ARP.prototype.tha = function(tha) {
   if(tha) {
-    this._tha = new ETHERNET.MAC(tha);
+    this._tha = new ETHERNET.mkMAC(tha);
   } else {
     return this._tha;
   }
@@ -97,7 +97,7 @@ ARP.mkThaMatch = ETHERNET.mkMACMatch;
 
 ARP.prototype.tpa = function(tpa) {
   if(tpa) {
-    this._tpa = new IPV4.IP(tpa);
+    this._tpa = new IPV4.mkIP(tpa);
   } else {
     return this._tpa;
   }
