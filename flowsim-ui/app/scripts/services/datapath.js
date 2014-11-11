@@ -8,7 +8,16 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Datapath', function(fgConstraints) {
+  .factory('Datapath', function(fgConstraints, UInt) {
+
+var defBufferCount  = 1024;
+var defIPReassembly = true;
+
+var defMfrDesc   = 'Flowgrammable';
+var defHwDesc    = 'Flowsim, OpenFlow Dataplane Simulator';
+var defSwDesc    = 'Flowsim, OpenFlow Dataplane Simulator';
+var defSerialNum = '0.1';
+var defDpDesc    = 'Flowsim, OpenFlow Dataplane Simulator';
 
 var defaultFragHandling = 'normal';
 var defaultMissSendLen  = 100;
@@ -19,66 +28,47 @@ var fragOptions = [
   'reassemble'
 ];
 
-function Profile(datapath) {
-  if(datapath) {
+function Profile(datapath, dp_id) {
+  if(_.isObject(datapath)) {
     _.extend(this, datapath);
   } else {
-    // default constructor
-    this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
-    this.n_buffers     = 1024;
-    this.ip_reassembly = true;
+    if(dp_id) {
+      this.datapath_id = dp_id;
+    } else {
+      this.datapath_id = (_(8).times(function() { 
+        return UInt.padZeros(_.random(0, 255)).toString(16));
+      })).join(':');
+      this.datapath_id = UInt.padZeros(_.random(Math.pow(2,32)).toString(16),16)
+        + UInt.padZeros(_.random(Math.pow(2,32)).toString(16), 16);
+    }
+    this.n_buffers     = defBufferCount;
+    this.ip_reassembly = defIPReassembly;
+
     // Descriptions
-    this.mfr_description = '';
-    this.hw_description  = '';
-    this.sw_description  = '';
-    this.serial_num      = '';
-    this.dp_description  = '';
+    this.mfr_description = defMfrDesc;
+    this.hw_description  = defHwDesc;
+    this.sw_description  = defSwDesc;
+    this.serial_num      = defSerialNum;
+    this.dp_description  = defDpDesc;
   }
 }
 
-Profile.prototype.openflow_1_0 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.0 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.0 Software';
-  this.dp_description  = 'Generic OpenFlow 1.0 Pipeline';
+Profile.prototype.clone = function() {
+  return new Profile(this);
+}
+
+Profile.prototype.getMACPrefix = function() {
+  return this.datapath_id.slice(0, 11); 
 };
 
-Profile.prototype.openflow_1_1 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.1 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.1 Software';
-  this.dp_description  = 'Generic OpenFlow 1.1 Pipeline';
-};
-
-Profile.prototype.openflow_1_2 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.2 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.2 Software';
-  this.dp_description  = 'Generic OpenFlow 1.2 Pipeline';
-};
-
-Profile.prototype.openflow_1_3 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.3 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.3 Software';
-  this.dp_description  = 'Generic OpenFlow 1.3 Pipeline';
-};
-
-Profile.prototype.openflow_1_4 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.4 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.4 Software';
-  this.dp_description  = 'Generic OpenFlow 1.4 Pipeline';
-};
+Profile.prototype.ofp_1_0 = function() {};
+Profile.prototype.ofp_1_1 = function() {};
+Profile.prototype.ofp_1_2 = function() {};
+Profile.prototype.ofp_1_3 = function() {};
+Profile.prototype.ofp_1_4 = function() {};
 
 function Datapath(datapath, profile) {
-  if(datapath instanceof Datapath ||
-    (typeof datapath === 'object' && datapath !== null)) {
+  if(_.isObject(datapath)) {
     _.extend(this, datapath);
     this.capabilities = _.clone(datapath.capabilities);
   } else {

@@ -210,12 +210,12 @@ function Profile(profile, macPrefix) {
     });
   } else {
     this.n_ports = defPortCount;
+    this.macPrefix    = macPrefix;
     this.ports = _(this.n_ports).times(function(id) {
       return new PortProfile(null, id, this.mkMAC(id));
     });
     this.port_stats   = defPortStats;
     this.port_blocked = defPortBlocked;
-    this.macPrefix    = macPrefix;
   }
 }
 
@@ -225,7 +225,7 @@ Profile.prototype.clone = function() {
 
 Profile.prototype.mkMAC = function(id) {
   // don't use the bridge id ..  maybe this is unnecessary stp hold over
-  var idx = UInt.padZeros((1+id).toString(16));
+  var idx = UInt.padZeros((1+id).toString(16), 4);
   return this.macPrefix + ':' + idx.slice(0,1) + ':' + idx.slice(2, 3);
 };
 
@@ -264,7 +264,7 @@ Profile.prototype.ofp_1_4 = function() {
 return {
   Port: Port,
   Ports: Ports,
-  Profile: Profile
+  Capabilities: Profile
 };
 
 });
