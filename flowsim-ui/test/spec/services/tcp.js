@@ -16,7 +16,6 @@ describe('Service: TCP', function () {
 
     new TCP.TCP();
     new TCP.TCP_UI();
-    // FIXME - this is wrong, first param is always self
     new TCP.TCP_UI(new TCP());
   });
 
