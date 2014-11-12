@@ -17,7 +17,7 @@ describe('Service: ETHERNET', function () {
     expect(function() {
       new ETHERNET.MAC(null, '');
     }).toThrow();
-    
+
     expect(function() {
       ETHERNET.mkMAC('');
     }).toThrow();
@@ -25,7 +25,7 @@ describe('Service: ETHERNET', function () {
     expect(function() {
       new ETHERNET.MAC(null, '00:00:00:00:00:00:00');
     }).toThrow();
-    
+
     expect(function() {
       ETHERNET.mkMAC('00:00:00:00:00:00:00');
     }).toThrow();
@@ -33,7 +33,7 @@ describe('Service: ETHERNET', function () {
     expect(function() {
       new ETHERNET.MAC(null, '00:00:00:00:0000');
     }).toThrow();
-    
+
     expect(function() {
       ETHERNET.mkMAC('00:00:00:00:0000');
     }).toThrow();
@@ -41,7 +41,7 @@ describe('Service: ETHERNET', function () {
     expect(function() {
       new ETHERNET.MAC(null, '00:00:g0:00:00:00');
     }).toThrow();
-    
+
     expect(function() {
       ETHERNET.mkMAC('00:00:g0:00:00:00');
     }).toThrow();
@@ -54,7 +54,7 @@ describe('Service: ETHERNET', function () {
     new ETHERNET.MAC(null, '00:00:00:00:00:00');
     new ETHERNET.MAC(null, 'ab:cd:ef:AB:CD:EF');
     new ETHERNET.MAC(null, '01-23:45-67:89:EF');
-    
+
     ETHERNET.mkMAC('00:00:00:00:00:00');
     ETHERNET.mkMAC('ab:cd:ef:AB:CD:EF');
     ETHERNET.mkMAC('01-23:45-67:89:EF');
@@ -93,30 +93,48 @@ describe('Service: ETHERNET', function () {
   it('Ethernet Construction Pass', function() {
     expect(!!ETHERNET).toBe(true);
 
-    new ETHERNET.Ethernet(
+    var eth1 = new ETHERNET.Ethernet(
        null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       '0');
-    new ETHERNET.Ethernet(
+    var eth2 = new ETHERNET.Ethernet(
       null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       0);
-    new ETHERNET.Ethernet(
+    var eth3 = new ETHERNET.Ethernet(
       null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       '0x0');
-    new ETHERNET.Ethernet(
+    var eth4 = new ETHERNET.Ethernet(
       null);
-    new ETHERNET.Ethernet(
+    var eth5 = new ETHERNET.Ethernet(
       null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab');
-    new ETHERNET.Ethernet(
+    var eth6 = new ETHERNET.Ethernet(
       null,
       '00:00:00:00:00:00');
+
+    var eth7 = ETHERNET.Ethernet(eth1);
+    var eth8 = ETHERNET.mkEthernet(
+      '00:00:00:00:00:00',
+      '12:34:56:78:90:ab',
+      0);
+
+    var eth9 = ETHERNET.Ethernet.clone(eth1);
+
+    var testStr = eth1.toString();
+    expect(eth1.toString()).toBe(testStr);
+    expect(eth2.toString()).toBe(testStr);
+    expect(eth3.toString()).toBe(testStr);
+    expect(eth4.toString()).toBe(testStr);
+    expect(eth5.toString()).toBe(testStr);
+    expect(eth6.toString()).toBe(testStr);
+    expect(eth7.toString()).toBe(testStr);
+    expect(eth8.toString()).toBe(testStr);
   });
 
   it('Ethernet Construction Fail', function() {
@@ -235,7 +253,7 @@ describe('Service: ETHERNET', function () {
       'ff:ff:ff:ff:ff:ff',
       '0x0806'
       );
-    
+
     var dhcp2 = JSON.stringify(dhcp_disco);
     var dhcp2_ = new ETHERNET.Ethernet(JSON.parse(dhcp2));
 
@@ -261,6 +279,18 @@ describe('Service: ETHERNET', function () {
 
   it('Ethernet Set Field Fail', function() {
     expect(!!ETHERNET).toBe(true);
+  });
+
+  it('Ethernet toString Pass', function() {
+    expect(!!ETHERNET).toBe(true);
+
+    var dhcp_disco = new ETHERNET.Ethernet(
+      null,
+      '00:00:00:00:00:00',
+      'ff:ff:ff:ff:ff:ff',
+      '0x0806'
+      );
+    dhcp_disco.toString();
   });
 
 });
