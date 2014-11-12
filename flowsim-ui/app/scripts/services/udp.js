@@ -31,7 +31,11 @@ UDP.prototype.clone = function() {
 };
 
 function mkPort(port){
-  return new UInt.UInt(null, port, 2);
+  if(port instanceof UInt.UInt) {
+    return new UInt.UInt(port);
+  } else {
+    return new UInt.UInt(null, port, 2);
+  }
 }
 
 UDP.prototype.src = function(src) {
