@@ -26,36 +26,34 @@
 
   </div>
   <div class="col-md-6">
-
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Fragmentation Handling</h3>
       </div>
-      
       <div class="panel-body">
         <div class="radio">
           <label>
-            <input type="radio" name="fragBehavior" 
-                   ng-model="device.datapath.fragBehavior"
-                   ng-true-value="'Normal'"
+            <input type="radio" name="fragHandling"
+                   ng-model="device.datapath.fragHandling"
+                   ng-value="'Normal'"
                    ng-disabled="!device.datapath.capabilities.ip_reassembly">
             Normal
           </label>
         </div>
         <div class="radio">
           <label>
-            <input type="radio" name="fragBehavior"
-                   ng-model="device.datapath.fragBehavior"
-                   ng-true-value="'Drop'"
+            <input type="radio" name="fragHandling"
+                   ng-model="device.datapath.fragHandling"
+                   ng-value="'Drop'"
                    ng-disabled="!device.datapath.capabilities.ip_reassembly">
             Drop
           </label>
         </div>
         <div class="radio">
           <label>
-            <input type="radio" name="fragBehavior"
-                   ng-model="device.datapath.fragBehavior"
-                   ng-true-value="'Reassemble'"
+            <input type="radio" name="fragHandling"
+                   ng-model="device.datapath.fragHandling"
+                   ng-value="'Reassemble'"
                    ng-disabled="!device.datapath.capabilities.ip_reassembly">
             Reassemble
           </label>

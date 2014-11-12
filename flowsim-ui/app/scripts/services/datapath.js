@@ -24,8 +24,8 @@ var defDpDesc    = 'Flowsim, OpenFlow Dataplane Simulator';
 
 var defMissSendLen  = 100;
 
-var _normal = 'Normal';
-var _drop = 'Drop';
+var _normal     = 'Normal';
+var _drop       = 'Drop';
 var _reassemble = 'Reassemble';
 
 var defFrag = _normal;
