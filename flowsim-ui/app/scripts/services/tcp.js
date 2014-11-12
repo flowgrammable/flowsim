@@ -26,6 +26,41 @@ function mkTCP(src, dst) {
   return new TCP(null, src, dst);
 }
 
+TCP.prototype.src = function(src) {
+  if (src) {
+    this._src = new UInt.UInt(src);
+  } else {
+    return this._src;
+  }
+};
+
+TCP.prototype.dst = function(dst) {
+  if (dst) {
+    this._dst = new UInt.UInt(dst);
+  } else {
+    return this._dst;
+  }
+};
+
+TCP.prototype.setPayload = function() {
+  return true;
+};
+
+TCP.prototype.clone = function() {
+  return new TCP(this);
+};
+
+TCP.prototype.toString = function() {
+  return 'src: '+this._src.toString()+'\n'+
+         'dst: '+this._dst.toString();
+};
+
+var TIPS = {
+  src: 'TCP source port',
+  dst: 'TCP destination port'
+};
+
+////////////////
 function TCP_UI(tcp){
   tcp = tcp === undefined ? new _TCP() : tcp;
   this.name = NAME;

@@ -15,9 +15,7 @@ describe('Service: TCP', function () {
     expect(!!TCP).toBe(true);
 
     new TCP.TCP();
-    new TCP.TCP_UI();
-    new TCP.TCP_UI(new TCP());
-  }
+  });
 
   it('stringify Pass', function () {
     expect(!!TCP).toBe(true);
@@ -30,5 +28,5 @@ describe('Service: TCP', function () {
     
     expect(tcp3.field.src).toBe(22);
     expect(tcp3.field.dst).toBe(2222);
-  }
+  });
 });
