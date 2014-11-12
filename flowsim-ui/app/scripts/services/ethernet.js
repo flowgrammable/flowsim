@@ -227,7 +227,7 @@ return {
   Ethernet_UI: Ethernet_UI,
   create:      function(eth)         { return new Ethernet(eth); },
   createUI:    function(eth)         { return new Ethernet_UI(eth); },
-  Payloads:    Object.keys(Payloads),
+  Payloads:    _(Payloads).keys(),
   MAC:         MAC,
   mkMAC:       mkMAC,
   mkMACMatch:  mkMACMatch,

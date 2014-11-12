@@ -78,13 +78,13 @@ function mkDstMatch(value, mask) {
 
 var TESTS = {
   src: UInt.is(16),
-  dst: Uint.is(16)
+  dst: UInt.is(16)
 };
 
 function TCP_UI(tcp){
-  tcp = tcp === undefined ? new TCP() : tcp;
+  tcp = tcp ? new TCP(tcp) : new TCP();
   this.name = NAME;
-  this.bytes = 20;
+  this.bytes = BYTES;
   this.attrs = [{
     name: 'Src',
     value: tcp.src().toString(),
@@ -99,21 +99,11 @@ function TCP_UI(tcp){
 }
 
 TCP_UI.prototype.toBase = function() {
-  var result = new TCP();
-  //result.name = this.name;
-  //result.bytes = this.bytes;
-  //result.fields = fgUI.stripLabelInputs(this.attrs);
-  //return result;
-  return new MAC(null, this.attrs[0].value, this.attrs[1].value);
+  return new TCP(null, this.attrs[0].value, this.attrs[1].value);
 };
 
-TCP_UI.prototype.setPayload = function() {
-  return true;
-};
-
-TCP_UI.prototype.clearPayload = function() {
-  return true;
-};
+TCP_UI.prototype.setPayload = function() {};
+TCP_UI.prototype.clearPayload = function() {};
 
 return {
   name: NAME,
@@ -122,7 +112,8 @@ return {
   TCP: TCP,
   TCP_UI: TCP_UI,
   create: function(tcp) {return new TCP(tcp); },
-  createUI: function(tcp) {return new TCP(tcp): },
+  createUI: function(tcp) {return new TCP_UI(tcp); },
+  Payloads: [],
   mkSrc: mkSrc,
   mkDst: mkDst,
   mkTCP: mkTCP,
