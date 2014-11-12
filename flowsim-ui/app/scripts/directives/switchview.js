@@ -58,7 +58,9 @@ angular.module('flowsimUiApp').
                     scope.render = function (data) {
                         svg.selectAll('*').remove();//cleanup
 
-                        if (_.isUndefined(data) || !data || data.length === 0) return; //don't render if there is no data
+                        if (_.isUndefined(data) || !data || data.length === 0) {
+                          return; //don't render if there is no data
+                        }
 
                         data = portsView(data.ports, 24);//parse ports and convert to matrix [row][port]
 

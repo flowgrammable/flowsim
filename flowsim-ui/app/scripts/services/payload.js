@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('PAYLOAD', function(fgUI, fgConstraints){
+  .factory('PAYLOAD', function(fgUI, fgConstraints){
 
 var NAME = 'Payload';
 
-function _Payload() {
+function Payload() {
   this.name = NAME;
   this.fields = {
     bytes: 0
@@ -13,9 +13,8 @@ function _Payload() {
   this.bytes = this.fields.bytes;
 }
 
-function _Payload_UI(payload){
-  payload = payload === undefined ? new _Payload() : payload;
-  var x = this;
+function Payload_UI(payload){
+  payload = payload === undefined ? new Payload() : payload;
   this.name = NAME;
   this.attrs = [{
       name: 'bytes',
@@ -25,23 +24,18 @@ function _Payload_UI(payload){
   this.bytes = this.attrs[0].value;
 }
 
-_Payload_UI.prototype.toBase = function() {
-  var result = new _Payload();
+Payload_UI.prototype.toBase = function() {
+  var result = new Payload();
   result.name = this.name;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   result.bytes = parseInt(this.attrs[0].value);
   return result;
-}
-
-
-this.name = NAME;
-
-this.create = function() {
-  return new _Payload();
 };
 
-this.createUI = function(payload){
-  return new _Payload_UI(payload);
+return {
+  name: NAME,
+  create: function() { return new Payload(); },
+  createUI: function(payload) { return new Payload_UI(payload); }
 };
 
 });

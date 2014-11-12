@@ -42,7 +42,7 @@ angular.module('flowsimUiApp')
 
     function deauthorize() {
       xAccessToken = '';
-    };
+    }
 
     function get(path, data, callback){
       $http.get(path,{
@@ -58,15 +58,15 @@ angular.module('flowsimUiApp')
         });
     }
 
-    function post(path, data, callback){
+    function post(path, data, callback) {
       request(this, 'post', path, data, callback);
     }
 
-    function update(path, data, callback){
+    function update(path, data, callback) {
       request(this, 'put', path, data, callback);
     }
 
-    function _delete(path, data, callback){
+    function _delete(path, data, callback) {
       $http.delete(path, {
         headers: { 'x-access-token': xAccessToken }
           }).success(function(data) {

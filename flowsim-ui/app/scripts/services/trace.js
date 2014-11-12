@@ -37,7 +37,7 @@ Trace.prototype.push = function(pkt) {
 
 Trace.prototype.del = function(idx) {
   this.events.splice(idx, 1);
-}
+};
 
 Trace.prototype.clone = function() {
   return new Trace(this);

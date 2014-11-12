@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Context', function(Action, Instruction, UInt) {
+  .factory('Context', function(Action, Instruction, UInt, Packet) {
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
