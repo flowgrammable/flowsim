@@ -24,7 +24,7 @@ function TCP(tcp, src, dst){
 
 TCP.prototype.src = function(src) {
   if(src) {
-    this._src = new mkSrc(src);
+    this._src = mkSrc(src);
   } else {
     return this._src;
   }
@@ -32,7 +32,7 @@ TCP.prototype.src = function(src) {
 
 TCP.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = new mkDst(dst);
+    this._dst = mkDst(dst);
   } else {
     return this._dst;
   }
@@ -42,9 +42,7 @@ function mkTCP(src, dst) {
   return new TCP(null, src, dst);
 }
 
-TCP.prototype.setPayload = function() {
-  return true;
-};
+TCP.prototype.setPayload = function() {};
 
 TCP.prototype.clone = function() {
   return new TCP(this);
