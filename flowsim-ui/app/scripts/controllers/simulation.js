@@ -57,7 +57,7 @@ angular.module('flowsimUiApp')
 
     $scope.delPacket = function(idx) {
       $scope.trace.del(idx);
-    }
+    };
 
     $scope.$watch('switch_.name', function() {
       if($scope.trace) {

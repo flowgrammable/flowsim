@@ -10,54 +10,6 @@
 angular.module('flowsimUiApp')
   .factory('Dataplane', function(Extraction, Instruction, Action, Context) {
 
-function Context(ctx) { 
-  if(ctx) {
-    _.extend(this, ctx);
-    this.packet    = ctx.packet.clone();
-    this.key       = ctx.key.clone();
-    this.actionSet = new Action.Set(ctx.actionSet);
-  } else {
-    this.stage     = 'arrival';
-    this.packet    = null;           // packet data
-    this.buffer_id = null;
-
-    // All contents of a key are just a reference to actual packet
-    this.key       = new Extraction.Key();
-    this.actionSet = new Action.Set();  // action set carried
-    this._metadata = null;        // metadata carried
-    this._table    = 0;           // goto table - default is table 0
-  }
-}
-/*
-// Clear the action set
-Context.prototype.clear = function() {
-  this.actionSet = [];
-};
-
-// Write (append) actions to the action set
-Context.prototype.write = function(actions) {
-  this.actionSet.concat(actions);
-};
-*/
-
-// set or get the metadata
-Context.prototype.metadata = function(metadata) {
-  if(metadata !== undefined && metadata !== null) {
-    this._metadata = metadata;
-  } else {
-    return this._metadata;
-  }
-};
-
-// set or get the next table id
-Context.prototype.table = function(table) {
-  if(table !== undefined && table !== null) {
-    this._table = table;
-  } else {
-    return this._table;
-  }
-};
- 
 function Dataplane(trace, transCallback) {
   this.trace = trace;
   this.evId  = 0;
@@ -164,7 +116,7 @@ Dataplane.prototype.step = function() {
       break;
     case 'choice':
       this.table = this.tables[this.ctx.tableId];
-      if(stage === 'extraction') {
+      if(this.stage === 'extraction') {
         this.transCallback(1, 2);
       } else {
         this.transCallback(4, 2);

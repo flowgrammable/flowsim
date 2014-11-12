@@ -29,7 +29,7 @@ Meters.TESTS = {
   max_meters: fgConstraints.isUInt(0, 0xffffffff),
   max_bands: fgConstraints.isUInt(0, 0xff),
   max_color: fgConstraints.isUInt(0, 0xff)
-}
+};
 
 function Capabilities(meters) {
   if(meters) {

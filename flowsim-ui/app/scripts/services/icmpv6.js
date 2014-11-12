@@ -15,8 +15,8 @@ function ICMPv6() {
   };
 }
 
-function ICMPV6_UI(icmpv6){
-  icmpv6 = icmpv6 === undefined ? new ICMPV6() : icmpv6;
+function ICMPv6_UI(icmpv6){
+  icmpv6 = icmpv6 === undefined ? new ICMPv6() : icmpv6;
   this.name = NAME;
   this.bytes = 4;
   this.attrs = [{
@@ -32,22 +32,22 @@ function ICMPV6_UI(icmpv6){
   }];
 }
 
-ICMPV6_UI.prototype.toBase = function() {
-  var result = new ICMPV6();
+ICMPv6_UI.prototype.toBase = function() {
+  var result = new ICMPv6();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
 };
 
-ICMPV6_UI.prototype.setPayload = function() {
+ICMPv6_UI.prototype.setPayload = function() {
   return true;
 };
 
 return {
   name: NAME,
   create: function() { return new ICMPv6(); },
-  createUI: function(icmpv6) { return new ICMPV6_UI(icmpv6); }
+  createUI: function(icmpv6) { return new ICMPv6_UI(icmpv6); }
 };
 
 });

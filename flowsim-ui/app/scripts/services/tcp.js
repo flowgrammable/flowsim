@@ -15,8 +15,8 @@ function TCP(tcp, src, dst){
     this._src = new UInt.UInt(tcp._src);
     this._dst = new UInt.UInt(tcp._dst);
   } else {
-    this._src = new UInt.UInt(null, src, 2);
-    this._dst = new UInt.UInt(null, dst, 2);
+    this._src = mkSrc(src);
+    this._dst = mkDst(dst);
   }
   this.name = NAME;
   this.bytes = BYTES;
@@ -24,7 +24,7 @@ function TCP(tcp, src, dst){
 
 TCP.prototype.src = function(src) {
   if(src) {
-    this._src = new UInt.UInt(src);
+    this._src = new mkSrc(src);
   } else {
     return this._src;
   }
@@ -32,35 +32,15 @@ TCP.prototype.src = function(src) {
 
 TCP.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = new UInt.UInt(dst);
+    this._dst = new mkDst(dst);
   } else {
     return this._dst;
   }
-};
-
-TCP.prototype.toString = function() {
-  return '';
 };
 
 function mkTCP(src, dst) {
   return new TCP(null, src, dst);
 }
-
-TCP.prototype.src = function(src) {
-  if (src) {
-    this._src = new UInt.UInt(src);
-  } else {
-    return this._src;
-  }
-};
-
-TCP.prototype.dst = function(dst) {
-  if (dst) {
-    this._dst = new UInt.UInt(dst);
-  } else {
-    return this._dst;
-  }
-};
 
 TCP.prototype.setPayload = function() {
   return true;
@@ -80,7 +60,27 @@ var TIPS = {
   dst: 'TCP destination port'
 };
 
-////////////////
+function mkSrc(input) {
+  return new UInt.UInt(null, input, 2);
+}
+
+function mkSrcMatch(value, mask) {
+  return new UInt.Match(null, mkSrc(value), mkSrc(mask));
+}
+
+function mkDst(input) {
+  return new UInt.UInt(null, input, 2);
+}
+
+function mkDstMatch(value, mask) {
+  return new UInt.Match(null, mkDst(value), mkDst(mask));
+}
+
+var TESTS = {
+  src: UInt.is(16),
+  dst: Uint.is(16)
+};
+
 function TCP_UI(tcp){
   tcp = tcp === undefined ? new TCP() : tcp;
   this.name = NAME;
@@ -100,21 +100,34 @@ function TCP_UI(tcp){
 
 TCP_UI.prototype.toBase = function() {
   var result = new TCP();
-  result.name = this.name;
-  result.bytes = this.bytes;
-  result.fields = fgUI.stripLabelInputs(this.attrs);
-  return result;
+  //result.name = this.name;
+  //result.bytes = this.bytes;
+  //result.fields = fgUI.stripLabelInputs(this.attrs);
+  //return result;
+  return new MAC(null, this.attrs[0].value, this.attrs[1].value);
 };
 
 TCP_UI.prototype.setPayload = function() {
   return true;
 };
 
+TCP_UI.prototype.clearPayload = function() {
+  return true;
+};
+
 return {
   name: NAME,
+  src: '_src',
+  dst: '_dst',
   TCP: TCP,
   TCP_UI: TCP_UI,
-  mkTCP: mkTCP
+  create: function(tcp) {return new TCP(tcp); },
+  createUI: function(tcp) {return new TCP(tcp): },
+  mkSrc: mkSrc,
+  mkDst: mkDst,
+  mkTCP: mkTCP,
+  TESTS: TESTS,
+  TIPS: TIPS
 };
 
 });
