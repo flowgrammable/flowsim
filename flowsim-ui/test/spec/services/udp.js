@@ -53,5 +53,44 @@ describe('Service: UDP', function () {
     expect(function(){UDP.mkUDP('66422', 234)}).toThrow();
   });
 
+  it('Set Field Pass', function () {
+    expect(!!UDP).toBe(true);
+
+    var src = UDP.mkPort(12345);
+    var dst = UDP.mkPort('54689');
+    var udp1 = UDP.mkUDP(src, dst);
+
+
+    expect(udp1.src().toString()).toBe('12345');
+    expect(udp1.dst().toString()).toBe('54689');
+    udp1.src(5000);
+    expect(udp1.src().toString()).toBe('5000');
+    expect(udp1.dst().toString()).toBe('54689');
+    udp1.dst('0xFFFF');
+    expect(udp1.src().toString()).toBe('5000');
+    expect(udp1.dst().toString()).toBe('65535');
+  });
+
+  it('Set Field Fail', function () {
+    expect(!!UDP).toBe(true);
+
+    var src = UDP.mkPort(12345);
+    var dst = UDP.mkPort('54689');
+    var udp1 = UDP.mkUDP(src, dst);
+
+
+    expect(udp1.src().toString()).toBe('12345');
+    expect(udp1.dst().toString()).toBe('54689');
+    expect(function(){udp1.src(70000)}).toThrow();
+    expect(udp1.src().toString()).toBe('12345');
+    expect(udp1.dst().toString()).toBe('54689');
+    expect(function(){udp1.dst('0x10000')}).toThrow();
+    expect(udp1.src().toString()).toBe('12345');
+    expect(udp1.dst().toString()).toBe('54689');
+    expect(function(){udp1.dst(-1)}).toThrow();
+    expect(udp1.src().toString()).toBe('12345');
+    expect(udp1.dst().toString(16)).toBe('54689');
+  });
+
 
 });

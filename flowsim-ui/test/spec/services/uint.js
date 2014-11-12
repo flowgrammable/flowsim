@@ -60,6 +60,18 @@ describe('Service: uint', function () {
     }).toThrow();
   });
 
+  it('UInt(null, -1, 2) should fail', function() {
+    expect(function() {
+      new UInt.UInt(null, -1, 2)
+    }).toThrow();
+  });
+
+  it('UInt(null, "-65536", 2) should fail', function() {
+    expect(function() {
+      new UInt.UInt(null, '-65536', 2)
+    }).toThrow();
+  });
+
   it('UInt(null, 0x800, 2).toString()', function() {
     var v = new UInt.UInt(null, '0x800', 2);
     expect(v.toString(16)).toBe('0x0800');
