@@ -10,37 +10,45 @@
 angular.module('flowsimUiApp')
   .factory('Trace', function trace() {
 
-function Trace(trace) {
-  if(typeof trace === 'string') {
-    this.name = trace;
-    this.switch_ = null;
-    this.events = [];
+function Event(ev, packet, in_port, in_phy_port, tunnel) {
+  if(_.isObject(ev)) {
+    _.extend(this, ev);
   } else {
-    _.extend(this, trace);
-    this.events = _.map(trace.events, function(pkt) {
-      return {
-        name: pkt.name,
-        packet: pkt.packet,
-        in_port: pkt.in_port
-      };
-    });
+    this.packet  = packet;
+    this.in_port = in_port ? in_port : 0;
+
+    this.in_phy_port = in_phy_port ? in_phy_port : null;
+    this.tunnel      = tunnel ? tunnel : null;
   }
 }
 
-Trace.prototype.push = function(pkt) {
-  this.events.push({
-    name: pkt.name,
-    packet: pkt,
-    in_port: 0
-  });
+Event.prototype.clone = function() {
+  return new Event(this);
+};
+
+function Trace(trace) {
+  if(_.isObject(trace)) {
+    _.extend(this, trace);
+    this.events = _(trace.events).map(function(ev) {
+      return new Event(ev);
+    });
+  } else {
+    this.name = trace;
+    this.device = null;
+    this.events = [];
+  }
+}
+
+Trace.prototype.clone = function() {
+  return new Trace(this);
+};
+
+Trace.prototype.push = function(packet, in_port, in_phy_port, tunnel) {
+  this.events.push(new Event(null, packet, in_port, in_phy_port, tunnel));
 };
 
 Trace.prototype.del = function(idx) {
   this.events.splice(idx, 1);
-};
-
-Trace.prototype.clone = function() {
-  return new Trace(this);
 };
 
 var TraceUI              = Trace;
@@ -55,7 +63,8 @@ function createUI(trace) {
 
 return {
   create: create,
-  createUI: createUI
+  createUI: createUI,
+  Event: Event
 };
 
 });

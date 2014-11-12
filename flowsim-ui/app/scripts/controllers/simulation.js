@@ -9,14 +9,14 @@
  */
 angular.module('flowsimUiApp')
   .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace, 
-                                          Switch, Packet, Dataplane) {
+                                          Switch, Packet, Dataplane, Regex) {
 
     $scope.names = {};
     $scope.trace = null;
     $scope.simulation = null;
 
     // grab the available switches
-    $scope.switch_ = {
+    $scope.device = {
       name: '',
       names: []
     };
@@ -24,7 +24,7 @@ angular.module('flowsimUiApp')
       if(err) {
         console.log(err.details);
       } else {
-        $scope.switch_.names = result;
+        $scope.device.names = result;
       }
     });
 
@@ -59,14 +59,14 @@ angular.module('flowsimUiApp')
       $scope.trace.del(idx);
     };
 
-    $scope.$watch('switch_.name', function() {
+    $scope.$watch('device.name', function() {
       if($scope.trace) {
-        fgCache.get('switch', $scope.switch_.name, Switch,
-                    function(err, switch_) {
+        fgCache.get('switch', $scope.device.name, Switch,
+                    function(err, device) {
           if(err) {
             console.log(err.details);
           } else {
-            $scope.trace.switch_ = switch_;
+            $scope.trace.device = device;
           }
         });
       }
@@ -77,12 +77,10 @@ angular.module('flowsimUiApp')
     };
 
     $scope.addTrace = function(name, callback) {
-      if(name in $scope.names) {
+      if(!Regex.Identifier.test(name)) {
+        callback('Bad name');
+      } else if(name in $scope.names) {
         callback('Name exists');
-      } else if(name.length === 0) {
-        callback('Invalid name');
-      } else if(!/^[a-zA-Z_][a-zA-Z_0-9]*$/.test(name)) {
-        callback('Invalid name');
       } else {
         $scope.trace = fgCache.create('trace', name, Trace);
         $scope.names[name] = true;
@@ -110,8 +108,8 @@ angular.module('flowsimUiApp')
           console.log(err.details);
         } else {
           $scope.trace = result;
-          if($scope.trace.switch_) {
-            $scope.switch_.name = $scope.trace.switch_.name || '';
+          if($scope.trace.device) {
+            $scope.device.name = $scope.trace.device.name || '';
           }
         }
       });
