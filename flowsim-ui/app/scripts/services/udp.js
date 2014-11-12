@@ -1,62 +1,55 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('UDP', function(fgUI, fgConstraints){
+  .factory('UDP', function(fgUI, fgConstraints){
 
 var NAME = 'UDP';
+var BYTES = 8;
 
 var Payloads = {
  'Payload': 0
 };
 
-function _UDP(){
+function UDP(){
   this.name = NAME;
-  this.bytes = 20;
-  this.fields = {
-    src: 0,
-    dst: 0
-  };
+  this.bytes = BYTES;
 }
 
-function _UDP_UI(udp){
-  udp = udp === undefined ? new _UDP() : udp;
+function UDP_UI(udp){
+  udp = udp === undefined ? new UDP() : udp;
   this.name = NAME;
-  this.bytes = 8;
-  this.attrs = _.map(udp.fields, function(value, key){
-    switch(key) {
-      case 'src':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Source port');
-      case 'dst':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Destination Port');
-      default:
-        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
-
-    }
-  });
+  this.bytes = BYTES;
+  this.attrs = [{
+    name: 'Src',
+    value: udp.src().toString(),
+    tip: 'Source port',
+    test: fgConstraints.isUInt(0,0xffff)
+  }, {
+    name: 'Dst',
+    value: udp.dst().toString(),
+    tip: 'Destination port',
+    test: fgConstraints.isUInt(0,0xffff)
+  }];
 }
 
-_UDP_UI.prototype.toBase = function() {
-  var result = new _UDP();
+UDP_UI.prototype.toBase = function() {
+  var result = new UDP();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
 };
 
-_UDP_UI.prototype.setPayload = function() {
+UDP_UI.prototype.setPayload = function() {
+  //FIXME
   return true;
 };
 
-this.name = NAME;
-this.Payloads = Object.keys(Payloads);
-this.create = function() {
-    return new _UDP();
-};
-
-this.createUI = function(UDP){
-  return new _UDP_UI(UDP);
+return {
+  name: NAME,
+  Payloads: _.keys(Payloads),
+  create: function() { return new UDP(); },
+  createUI: function(UDP) { return new UDP_UI(UDP); }
 };
 
 });

@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('regex', function() {
+  .factory('Regex', function() {
 
 return {
   Identifier: /^[a-zA-Z_][a-zA-Z_0-9]*$/

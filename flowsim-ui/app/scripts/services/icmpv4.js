@@ -1,58 +1,53 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('ICMPV4', function(fgUI, fgConstraints){
+  .factory('ICMPV4', function(fgUI, fgConstraints){
 
 var NAME = 'ICMPv4';
+var BYTES = 4; //FIXME this isnt correct
 
-function _ICMPV4() {
+function ICMPV4() {
   this.name = NAME;
-  this.bytes = 4;
+  this.bytes = BYTES;
   this.fields = {
     type: 0,
     code: 0
   };
 }
 
-function _ICMPV4_UI(icmpv4){
-  icmpv4 = icmpv4 === undefined ? new _ICMPV4() : icmpv4;
+function ICMPV4_UI(icmpv4){
+  icmpv4 = icmpv4 === undefined ? new ICMPV4() : icmpv4;
   this.name = NAME;
   this.bytes = 4;
-  this.attrs = _.map(icmpv4.fields, function(value, key){
-    switch(key){
-      case 'type':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xff),
-                                        'ICMP message type');
-      case 'code':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0, 0xff),
-                                        'ICMP message code');
-      default:
-        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
-    }
-  });
+  this.attrs = [{
+    name: 'Type',
+    value: icmpv4.type().toString(),
+    tip: 'ICMP message type',
+    test: fgConstraints.isUInt(0, 0xff)
+  }, {
+    name: 'Code',
+    value: icmpv4.code().toString(),
+    tip: 'ICMP message code',
+    test: fgConstraints.isUInt(0, 0xff)
+  }];
 }
 
-_ICMPV4_UI.prototype.toBase = function() {
-  var result = new _ICMPV4();
+ICMPV4_UI.prototype.toBase = function() {
+  var result = new ICMPV4();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
 };
 
-_ICMPV4_UI.prototype.setPayload = function() {
+ICMPV4_UI.prototype.setPayload = function() {
   return true;
 };
 
-this.name = NAME;
-
-this.create = function() {
-  return new _ICMPV4();
+return {
+  name: NAME,
+  create: function() { return new ICMPV4(); },
+  createUI: function(icmpv4) { return new ICMPV4_UI(icmpv4); }
 };
-
-this.createUI = function(icmpv4){
-  return new _ICMPV4_UI(icmpv4);
-};
-
 
 });

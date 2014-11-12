@@ -22,40 +22,58 @@ function TCP(tcp, src, dst){
   this.bytes = BYTES;
 }
 
+TCP.prototype.src = function(src) {
+  if(src) {
+    this._src = new UInt.UInt(src);
+  } else {
+    return this._src;
+  }
+};
+
+TCP.prototype.dst = function(dst) {
+  if(dst) {
+    this._dst = new UInt.UInt(dst);
+  } else {
+    return this._dst;
+  }
+};
+
+TCP.prototype.toString = function() {
+  return '';
+};
+
 function mkTCP(src, dst) {
   return new TCP(null, src, dst);
 }
 
 function TCP_UI(tcp){
-  tcp = tcp === undefined ? new _TCP() : tcp;
+  tcp = tcp === undefined ? new TCP() : tcp;
   this.name = NAME;
   this.bytes = 20;
-  this.attrs = _.map(tcp.fields, function(value, key){
-    switch(key) {
-      case 'src':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Source port');
-      case 'dst':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Destination Port');
-      default:
-        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
-
-    }
-  });
+  this.attrs = [{
+    name: 'Src',
+    value: tcp.src().toString(),
+    test: fgConstraints.isUInt(0,0xffff),
+    tip: 'Source port'
+  }, {
+    name: 'Dst',
+    value: tcp.dst().toString(),
+    test: fgConstraints.isUInt(0,0xffff),
+    tip: 'Destination port'
+  }];
 }
 
 TCP_UI.prototype.toBase = function() {
-  var result = new _TCP();
+  var result = new TCP();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
-}
+};
 
 TCP_UI.prototype.setPayload = function() {
   return true;
-}
+};
 
 return {
   name: NAME,

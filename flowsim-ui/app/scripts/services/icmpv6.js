@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('ICMPV6', function(fgUI, fgConstraints){
+  .factory('ICMPV6', function(fgUI, fgConstraints){
 
 var NAME = 'ICMPv6';
+var BYTES = 4; //FIXME this isn't correct
 
-function _ICMPV6() {
+function ICMPv6() {
   this.name = NAME;
   this.bytes = 4;
   this.fields = {
@@ -14,44 +15,39 @@ function _ICMPV6() {
   };
 }
 
-function _ICMPV6_UI(icmpv6){
-  icmpv6 = icmpv6 === undefined ? new _ICMPV6() : icmpv6;
+function ICMPV6_UI(icmpv6){
+  icmpv6 = icmpv6 === undefined ? new ICMPV6() : icmpv6;
   this.name = NAME;
   this.bytes = 4;
-  this.attrs = _.map(icmpv6.fields, function(value, key){
-    switch(key){
-      case 'type':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xff),
-                                        'ICMP message type');
-      case 'code':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xff),
-                                        'ICMP message code');
-      default:
-        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
-    }
-  });
+  this.attrs = [{
+    name: 'Type',
+    value: icmpv6.type().toString(),
+    tip: 'ICMP message type',
+    test: fgConstraints.isUInt(0,0xff)
+  }, {
+    name: 'Code',
+    value: icmpv6.code().toString(),
+    tip: 'ICMP message code',
+    test: fgConstraints.isUInt(0,0xff)
+  }];
 }
 
-_ICMPV6_UI.prototype.toBase = function() {
-  var result = new _ICMPV6();
+ICMPV6_UI.prototype.toBase = function() {
+  var result = new ICMPV6();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
-}
-
-_ICMPV6_UI.prototype.setPayload = function() {
-  return true;
-}
-
-this.name = NAME;
-
-this.create = function() {
-      return new _ICMPv6();
 };
 
-this.createUI = function(icmpv6){
-  return new _ICMPV6_UI(icmpv6);
-}
+ICMPV6_UI.prototype.setPayload = function() {
+  return true;
+};
+
+return {
+  name: NAME,
+  create: function() { return new ICMPv6(); },
+  createUI: function(icmpv6) { return new ICMPV6_UI(icmpv6); }
+};
 
 });
