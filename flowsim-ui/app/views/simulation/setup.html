@@ -21,9 +21,9 @@
       <div class="col-md-4">
         <h4>Switch</h4>
         <div class="input-group">
-          <select class="form-control" ng-model="device.name"
+          <select class="form-control" ng-model="resources.device"
                   ng-changed="selectSwitch()">
-            <option ng-repeat="name in device.names">{{name}}</option>
+            <option ng-repeat="name in resources.devices">{{name}}</option>
           </select>
         </div>
       </div>
@@ -31,9 +31,8 @@
       <div class="col-md-8" ng-show="trace.device">
         <h4>Configure the trace</h4>
         <div class="input-group">
-          <select class="form-control" ng-model="packet.name">
-            <option ng-repeat="name in packet.names">{{name}}</option>
-            <option></option>
+          <select class="form-control" ng-model="resources.packet">
+            <option ng-repeat="name in resources.packets">{{name}}</option>
           </select>
           <span class="input-group-btn">
             <button class="btn btn-default" type="button" ng-click="addPacket()">

@@ -12,68 +12,64 @@ angular.module('flowsimUiApp')
                                           Switch, Packet, Dataplane, Regex) {
 
     $scope.names = {};
-    $scope.trace = null;
+
     $scope.simulation = null;
 
-    // grab the available switches
-    $scope.device = {
-      name: '',
-      names: []
+    $scope.resources = {
+      packet: '',
+      device: '',
+      packets: [],
+      devices: []
     };
+
+    $scope.trace = null;
+
     fgCache.getNames('switch', function(err, result) {
       if(err) {
         console.log(err.details);
       } else {
-        $scope.device.names = result;
+        $scope.resources.devices = result;
       }
     });
 
-    // grabe the available packets
-    $scope.packet = {
-      name: '',
-      names: []
-    };
     fgCache.getNames('packet', function(err, result) {
       if(err) {
         console.log(err.details);
       } else {
-        $scope.packet.names = result;
+        $scope.resources.packets = result;
       }
+    });
+  
+    $scope.getTraces = function(callback) {
+      fgCache.getNames('trace', callback);
+    };
+    
+    $scope.$watch('resources.device', function() {
+      fgCache.get('switch', $scope.resources.device, Switch,
+                  function(err, device) {
+        if(err) {
+          console.log(err.details);
+        } else {
+          $scope.trace.device = device;
+        }
+      });
     });
 
     // allow for pushing packets to the list
     $scope.addPacket = function() {
-      if($scope.packet.name.length) {
-      fgCache.get('packet', $scope.packet.name, Packet, function(err, result) {
+      fgCache.get('packet', $scope.resources.packet, Packet, 
+                  function(err, result) {
         if(err) {
           console.log(err.details);
         } else {
           $scope.trace.push(result);
-          $scope.packet.name = '';
+          $scope.resources.packet = '';
         }
       });
-      }
     };
 
     $scope.delPacket = function(idx) {
       $scope.trace.del(idx);
-    };
-
-    $scope.$watch('device.name', function() {
-      if($scope.trace) {
-        fgCache.get('switch', $scope.device.name, Switch,
-                    function(err, device) {
-          if(err) {
-            console.log(err.details);
-          } else {
-            $scope.trace.device = device;
-          }
-        });
-      }
-    });
-     
-    $scope.getTraces = function(callback) {
-      fgCache.getNames('trace', callback);
     };
 
     $scope.addTrace = function(name, callback) {
@@ -109,7 +105,7 @@ angular.module('flowsimUiApp')
         } else {
           $scope.trace = result;
           if($scope.trace.device) {
-            $scope.device.name = $scope.trace.device.name || '';
+            $scope.device.name = $scope.trace.device.name;
           }
         }
       });
