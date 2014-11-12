@@ -71,14 +71,14 @@ function Tables(tables, profile) {
   if(_.isObject(tables)) {
     _.extend(this, tables);
     this.tables = _(tables.tables).map(function(table){
-      return new Table.Table(table);
+      return new Table(table);
     });
   } else {
     this.tables = _(profile.n_tables).times(function(id) {
-      return new Table.Table(null, id, profile);
+      return new Table(null, id, profile);
     });
     this.tables = _.map(profile.tables, function(table){
-      return new Table.Table(null, table);
+      return new Table(null, table);
     });
   }
 }
@@ -97,12 +97,12 @@ function Profile(profile){
   if(_.isObject(profile)) {
     _.extend(this, profile);
     this.tables = _.map(profile.tables, function(table) {
-      return new Table.Profile(table);
+      return new TableProfile(table);
     });
   } else {
     this.n_tables = defTables;
     this.tables = _(this.n_tables).times(function(id) {
-      return new Table.Profile(null, id);
+      return new TableProfile(null, id);
     });
   }
 }
@@ -118,7 +118,7 @@ Profile.prototype.rebuild = function() {
     this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
   } else {
     _(this.n_tables-this.tables.length).times(function(id) {
-      this.tables.push(new Table.Profile(null, id));
+      this.tables.push(new TableProfile(null, id));
     });
   }
 };
