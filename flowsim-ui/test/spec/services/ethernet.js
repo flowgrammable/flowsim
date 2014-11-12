@@ -124,7 +124,7 @@ describe('Service: ETHERNET', function () {
       '12:34:56:78:90:ab',
       0);
 
-    var eth9 = ETHERNET.Ethernet.clone(eth1);
+    var eth9 = eth1.clone();
 
     var testStr = eth1.toString();
     expect(eth1.toString()).toBe(testStr);
@@ -135,6 +135,7 @@ describe('Service: ETHERNET', function () {
     expect(eth6.toString()).toBe(testStr);
     expect(eth7.toString()).toBe(testStr);
     expect(eth8.toString()).toBe(testStr);
+    expect(eth9.toString()).toBe(testStr);
   });
 
   it('Ethernet Construction Fail', function() {
