@@ -12,7 +12,7 @@ var Payloads = {
   'ARP':  0x0806,
   'IPv4': 0x0800,
   'IPv6': 0x86dd,
-  'Payload' : 0x0000
+  'Payload': 0x0000
 };
 
 var Pattern = /^([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})$/;
@@ -63,7 +63,7 @@ Ethernet.prototype.type = function(type) {
   }
 };
 
-Ethernet.prototype.setPayload = function(name){
+Ethernet.prototype.setPayload = function(name) {
   this._type = new UInt.UInt(null, Payloads[name], 2);
 };
 
