@@ -6,9 +6,7 @@ angular.module('flowsimUiApp')
 var NAME = 'TCP';
 var BYTES = 20;
 
-var Payloads = {
- 'Payload': 0
-};
+var Payloads = {};
 
 function TCP(tcp, src, dst){
   if(_.isObject(tcp)) {
@@ -24,7 +22,7 @@ function TCP(tcp, src, dst){
 
 TCP.prototype.src = function(src) {
   if(src) {
-    this._src = new mkSrc(src);
+    this._src = mkSrc(src);
   } else {
     return this._src;
   }
@@ -32,7 +30,7 @@ TCP.prototype.src = function(src) {
 
 TCP.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = new mkDst(dst);
+    this._dst = mkDst(dst);
   } else {
     return this._dst;
   }
@@ -113,7 +111,7 @@ return {
   TCP_UI: TCP_UI,
   create: function(tcp) {return new TCP(tcp); },
   createUI: function(tcp) {return new TCP_UI(tcp); },
-  Payloads: [],
+  Payloads: _(Payloads).keys(),
   mkSrc: mkSrc,
   mkDst: mkDst,
   mkTCP: mkTCP,
