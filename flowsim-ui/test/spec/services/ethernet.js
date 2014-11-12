@@ -258,6 +258,8 @@ describe('Service: ETHERNET', function () {
     var dhcp2 = JSON.stringify(dhcp_disco);
     var dhcp2_ = new ETHERNET.Ethernet(JSON.parse(dhcp2));
 
+    expect(dhcp2_.toString()).toBe(dhcp_disco.toString());
+
     dhcp_disco.dst('00:11:22:33:44:55');
     expect(dhcp_disco.dst().toString()).toBe('00:11:22:33:44:55');
 
@@ -267,6 +269,9 @@ describe('Service: ETHERNET', function () {
     dhcp_disco.type('0x800');
     expect(dhcp_disco.type().toString(16)).toBe('0x0800');
 
+    dhcp_disco.type(1021);
+    expect(dhcp_disco.type().toString(16)).toBe('0x03fd');
+
     dhcp2_.dst('00:11:22:33:44:55');
     expect(dhcp2_.dst().toString()).toBe('00:11:22:33:44:55');
 
@@ -275,11 +280,21 @@ describe('Service: ETHERNET', function () {
 
     dhcp2_.type('0x800');
     expect(dhcp2_.type().toString(16)).toBe('0x0800');
-
   });
 
   it('Ethernet Set Field Fail', function() {
     expect(!!ETHERNET).toBe(true);
+
+    var dhcp_disco = new ETHERNET.Ethernet(
+      null,
+      '00:00:00:00:00:00',
+      'ff:ff:ff:ff:ff:ff',
+      '0x0806'
+      );
+
+    expect(function(){dhcp_disco.src('10::22:33:44:55')}).toThrow();
+    expect(function(){dhcp_disco.dst('01234')}).toThrow();
+    expect(function(){dhcp_disco.type('0xx800')}).toThrow();
   });
 
   it('Ethernet toString Pass', function() {

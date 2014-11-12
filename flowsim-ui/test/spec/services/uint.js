@@ -17,12 +17,12 @@ describe('Service: uint', function () {
 
   it('howMany_, maxFrom_', function () {
     var tmp;
-     
+
     expect(UInt.howManyBits(0)).toBe(1);
     expect(UInt.howManyBits(0x0)).toBe(1);
     expect(UInt.howManyBytes(0)).toBe(1);
     expect(UInt.howManyBytes(0x0)).toBe(1);
-    
+
     expect(UInt.howManyBits(0)).toBe(1);
 
     tmp = 1;
@@ -31,17 +31,17 @@ describe('Service: uint', function () {
       tmp <<= 1;
     });
     expect(UInt.howManyBytes(0)).toBe(1);
-    
+
     tmp = 1;
     _.each(_.range(31), function(i) {
       expect(UInt.howManyBytes(tmp)).toBe(Math.ceil((i+1)/8));
       tmp <<= 1;
     });
-    
+
     _.each(_.range(31), function(i) {
       expect(UInt.maxFromBits(i+1)).toBe(Math.pow(2, i+1)-1);
     });
-    
+
     _.each(_.range(4), function(i) {
       expect(UInt.maxFromBytes(i+1)).toBe(Math.pow(2, (8*(i+1)))-1);
     });
@@ -63,6 +63,11 @@ describe('Service: uint', function () {
   it('UInt(null, 0x800, 2).toString()', function() {
     var v = new UInt.UInt(null, '0x800', 2);
     expect(v.toString(16)).toBe('0x0800');
+  });
+
+  it('UInt(null, 12345, 2).toString()', function() {
+    var v = new UInt.UInt(null, 12345, 2);
+    expect(v.toString(16)).toBe('0x3039');
   });
 
   it('UInt(null, "0xx0000", 2)', function() {
@@ -90,7 +95,7 @@ describe('Service: uint', function () {
     var type_ip  = new UInt.UInt(null, 0x0800, 2);
     var type_arp = new UInt.UInt(null, 0x0806, 2);
     var type     = new UInt.UInt(null, null, 2);
-    
+
     var inval  = new UInt.UInt(null, 0x0a0101f0, 4);
     var outval = new UInt.UInt(null, 0x0b0101f0, 4);
   });
@@ -137,7 +142,7 @@ describe('Service: uint', function () {
         new UInt.UInt(null, [0, 1, 2, 3, 4, 5], 6),
         new UInt.UInt(null, [0xff, 0xff, 0xff, 0xff, 0xff, 0xff], 6));
     var exact2_mac1 = new UInt.Match.mkExact(mac1);
-    
+
     var exact1_mac2 = new UInt.Match(null,
         new UInt.UInt(null, [0, 1, 2, 3, 4, 6], 6),
         new UInt.UInt(null, [0xff, 0xff, 0xff, 0xff, 0xff, 0xff], 6));
@@ -192,7 +197,7 @@ describe('Service: uint', function () {
     expect(route1.match(dst1)).toBe(true);
     expect(route1.match(dst2)).toBe(true);
     expect(route1.match(dst3)).toBe(false);
-    
+
     expect(route2.match(dst1)).toBe(false);
     expect(route2.match(dst2)).toBe(true);
     expect(route2.match(dst3)).toBe(false);
@@ -203,7 +208,7 @@ describe('Service: uint', function () {
     var mask1 = new UInt.UInt(null, [0, 0xff, 0, 0xff, 0, 0xff, 0, 0xff], 8);
     var mask2 = new UInt.UInt(null, [0xff, 0, 0xff, 0, 0xff, 0, 0xff, 0], 8);
     var value = new UInt.UInt(null, [8, 7, 6, 5, 4, 3, 2, 1], 8);
-    
+
     expect(metadata.toString(16)).toBe('0x0102030405060708');
 
     var result = UInt.mask(metadata, value, mask1);
