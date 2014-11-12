@@ -79,7 +79,7 @@
           Manufacturer description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="device.datapath.mfr_description"
+                  ng-model="device.datapath.capabilities.mfr_description"
                   ng-disabled="true"></textarea>
       </div>
     </div>
@@ -90,7 +90,7 @@
           Hardware description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="device.datapath.hw_description"
+                  ng-model="device.datapath.capabilities.hw_description"
                   ng-disabled="true"></textarea>
       </div>
     </div>
@@ -100,7 +100,7 @@
           tooltip="{{tips.Datapath.sw_description}}">
           Software description</div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="device.datapath.sw_description"
+                  ng-model="device.datapath.capabilities.sw_description"
                   ng-disabled="true"></textarea>
       </div>
     </div>
@@ -110,7 +110,7 @@
              tooltip="{{tips.Datapath.serial_num}}">
           Serial Number</div>
         <input class="form-control" type="text" style="width:300px"
-               ng-model="device.datapath.serial_num"
+               ng-model="device.datapath.capabilities.serial_num"
                ng-disabled="true">
       </div>
     </div>
@@ -121,7 +121,7 @@
           Dataplane description
         </div>
         <textarea class="form-control" rows="3" style="width:300px"
-                  ng-model="device.datapath.dp_description"
+                  ng-model="device.datapath.capabilities.dp_description"
                   ng-disabled="true"></textarea>
       </div>
     </div>

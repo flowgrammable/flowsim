@@ -89,6 +89,7 @@ var TIPS = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',
   n_buffers: 'Number of packets that can be buffered for controller',
+  miss_send_len: 'Prefix of packet in bytes to send to controller',
   mfr_description: '',
   hw_description: '',
   sw_description: '',
@@ -99,6 +100,7 @@ var TIPS = {
 var TESTS = {
   datapath_id:     function() { return true; },
   n_buffers:       fgConstraints.isUInt(0, 0xffff),
+  miss_send_len:   fgConstraints.isUInt(0, 0xffff),
   mfr_description: function(v) { return !v || v.length <= descLen; },
   hw_description:  function(v) { return !v || v.length <= descLen; },
   sw_description:  function(v) { return !v || v.length <= descLen; },

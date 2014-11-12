@@ -43,9 +43,36 @@ function createUI(swi, initialValue) {
   return new SwitchUI(swi, initialValue);
 }
 
+var TIPS = {
+  Datapath: Datapath.TIPS,
+  Ports: Ports.TIPS,
+  Tables: Tables.TIPS,
+  Groups: Groups.TIPS,
+  Meters: Meters.TIPS
+};
+
+var TESTS = {
+  Datapath: Datapath.TESTS,
+  Ports: Ports.TESTS,
+  Tables: Tables.TESTS,
+  Groups: Groups.TESTS,
+  Meters: Meters.TESTS
+};
+
+var RANGES = {
+  Datapath: Datapath.RANGES,
+  Ports: Ports.RANGES,
+  Tables: Tables.RANGES,
+  Groups: Groups.RANGES,
+  Meters: Meters.RANGES
+};
+
 return {
     create: create,
-    createUI: createUI
+    createUI: createUI,
+    TIPS: TIPS,
+    TESTS: TESTS,
+    RANGES: RANGES
 };
 
 });
