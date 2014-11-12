@@ -11,7 +11,19 @@ angular.module('flowsimUiApp')
   .controller('SwitchCtrl', function ($scope, fgCache, Profile, Switch,
                                       $rootScope, $modal) {
     $scope.names = {};
-    $scope._switch = null;
+    $scope.device = null;
+
+    $scope.metadata = {
+      tips: Switch.TIPS,
+      tests: Switch.TESTS,
+      ranges: Switch.RANGES
+    };
+
+    $scope.togglePort = function(id) {
+      var port = $scope.device.ports.ports[id];
+      port.config.port_down = !port.config.port_down;
+      port.state.link_down = port.config.port_down;
+    }
 
     $scope.getSwitches = function(callback) {
       fgCache.getNames('switch', callback);
@@ -43,7 +55,7 @@ angular.module('flowsimUiApp')
                 if(err) {
                   console.log(err.details);
                 } else {
-                  $scope._switch = fgCache.create('switch', name, Switch, result);
+                  $scope.device = fgCache.create('switch', name, Switch, result);
                   $scope.names[name] = true;
                   $scope.setDirty();
                   callback(null);
@@ -67,15 +79,15 @@ angular.module('flowsimUiApp')
 
     $scope.setSwitch = function(name) {
       if(name === undefined) {
-        $scope._switch = null;
+        $scope.device = null;
         $scope.$broadcast('setSwitch', null);
       } else {
         fgCache.get('switch', name, Switch, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {
-            $scope._switch = result;
-            $scope.$broadcast('setSwitch', $scope._switch);
+            $scope.device = result;
+            //$scope.$broadcast('setSwitch', $scope.device);
           }
         });
       }

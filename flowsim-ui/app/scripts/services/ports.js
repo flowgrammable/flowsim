@@ -84,9 +84,10 @@ function Port(port, portProfile) {
     // Don't let user changes affect the instantiated switch
     this.capabilities = new PortProfile(portProfile);
 
-    this.port_id = portProfile.id;
-    this.mac     = portProfile.mac;
-    this.name    = portProfile.name;
+    this.id   = portProfile.id;
+    this.mac  = portProfile.mac;
+    this.name = portProfile.name;
+    this.up   = true;
 
     this.config = {
       port_down: defPortDown,
@@ -99,6 +100,10 @@ function Port(port, portProfile) {
       link_down: defLinkDown,
       blocked:   defPortBlocked,
       live:      defLive
+    };
+
+    this.ethernet = {
+      medium: this.capabilities.ethernet.medium
     };
 
     // Set the ethernet property portion of the port
@@ -170,7 +175,9 @@ function PortProfile(portProfile, id, mac) {
     this.id = id;
     this.mac = mac;
     this.name = defNamePrefix+id;
-    this.up = true;
+    this.state = {
+      link_down: false
+    };
     this.ethernet = {
       speed: defSpeed,
       speeds: _.clone(_speeds),

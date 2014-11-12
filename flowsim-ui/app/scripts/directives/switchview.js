@@ -94,7 +94,7 @@ angular.module('flowsimUiApp').
                                 return (scope.isColorA(this.parentNode.attributes.index.value, i) ? 'PortColorA' : 'PortColorB');
                             })
                             .style('opacity', function (d) {
-                                return d.up ? 1 : 0.3;
+                                return d.state.link_down ? 0.3 : 1;
                             })
                             .attr('transform', function (d, i) {
                                 var x = i * (portWidth + portPadding) + margin;

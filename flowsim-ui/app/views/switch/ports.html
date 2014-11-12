@@ -1,6 +1,6 @@
 
 <h3>Switch</h3>
-<switch-view data="switch_.ports"></switch-view>
+  <switch-view data="device.ports"></switch-view>
 <br>
 
 <h3>Port Properties</h3>
@@ -11,45 +11,43 @@
     <th>Id</td>
     <th>Address</th>
     <th>Name</th>
+    <th>Config</th>
     <th>Speed</th>
-    <th>Mode</th>
     <th>Medium</th>
   </thead>
   <tbody>
-  <tr ng-repeat="port in profile.ports.ports">
-    <td>{{$index}}</td>
+  <tr ng-repeat="port in device.ports.ports">
+    <td>{{port.id}}</td>
+    <td>{{port.mac}}</td>
+    <td>{{port.name}}</td>
     <td>
-      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.mac(port.mac)}">
-      <input class="form-control" type="text" ng-model="port.mac"
-             tooltip="{{tips.Ports.Port.mac}}">
-           </div>
+      <button type="button" class="btn btn-default btn-xs"
+              ng-class="{'active': !port.config.port_down}"
+              ng-click="togglePort(port.id)"
+              style="outline:none">
+        Down
+      </button>
+      <button type="button" class="btn btn-default btn-xs"
+              ng-class="{'active': !port.config.no_recv}"
+              ng-click="port.config.no_recv = !port.config.no_recv">
+        Recv
+      </button>
+      <button type="button" class="btn btn-default btn-xs"
+               ng-class="{'active': !port.config.no_fwd}"
+              ng-click="port.config.no_fwd = !port.config.no_fwd">
+        Fwd
+      </button>
+      <button type="button" class="btn btn-default btn-xs"
+              ng-class="{'active': !port.config.no_pkt_in}"
+              ng-click="port.config.no_pkt_in = !port.config.no_pkt_in">
+        PktIn
+      </button>
     </td>
     <td>
-      <div class="input-group" ng-class="{'has-error': !tests.Ports.Port.name(port.name)}">
-      <input class="form-control" type="text" ng-model="port.name"
-             tooltip="{{tips.Ports.Port.name}}">
-      </div>
+      {{port.curr.speed}}
     </td>
     <td>
-      <select class="form-control" tooltip="{{tips.Ports.Port.speed}}" i
-              ng-model="port.speed" 
-              ng-options="speed.value as speed.label for speed in speeds |
-              fgSelect: profile.ports.speeds">
-      </select>
-    </td>
-    <td>
-      <select class="form-control" tooltip="{{tips.Ports.Port.mode}}" 
-              ng-model="port.mode"
-              ng-options="mode.value as mode.label for mode in modes |
-              fgSelect: profile.ports.modes">
-      </select>
-    </td>
-    <td>
-      <select class="form-control" tooltip="{{tips.Ports.Port.medium}}" 
-              ng-model="port.medium"
-              ng-options="medium as medium for medium in mediums | 
-              fgSelect: profile.ports.mediums">
-      </select>
+      {{port.curr.medium}}
     </td>
 
   </tr>
