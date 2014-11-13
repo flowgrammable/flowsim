@@ -255,4 +255,20 @@ describe('Service: uint', function () {
     expect(metadata.toString(16)).toBe('0x0802060404060208');
   });
 
+  it('UInt toString', function() {
+    var uint32 = new UInt.UInt(null, 101, 4);
+    var uint24 = new UInt.UInt(null, 101, 3);
+    var uint16 = new UInt.UInt(null, 101, 2);
+    var uint8 = new UInt.UInt(null, 3, 1);
+
+    expect(uint32.toString()).toBe('101');
+    expect(uint32.toString(16)).toBe('0x00000065');
+    expect(uint24.toString()).toBe('101');
+    expect(uint24.toString(16)).toBe('0x000065');
+    expect(uint16.toString()).toBe('101');
+    expect(uint16.toString(16)).toBe('0x0065');
+    expect(uint8.toString()).toBe('3');
+    expect(uint8.toString(16)).toBe('0x03');
+  });
+
 });
