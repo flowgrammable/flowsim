@@ -36,6 +36,11 @@ describe('Service: match', function () {
     UDP = _UDP_;
   }));
 
+  var TCP;
+  beforeEach(inject(function (_TCP_) {
+    TCP = _TCP_;
+  }));
+
   var Context;
   beforeEach(inject(function(_Context_) {
     Context = _Context_;
@@ -239,4 +244,40 @@ describe('Service: match', function () {
 
   });
 
+  it('TCP Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!TCP).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'tcp_src',
+        TCP.mkPortMatch(
+          '22',
+          '0xffff')));
+
+    match.push(
+      new Match.Match(null,
+        'tcp_dst',
+        TCP.mkPortMatch(
+          '2222',
+          '0xffff')));
+
+    expect(match.match(key)).toBe(false);
+
+    key.tcp_src = TCP.mkPort('22');
+    key.tcp_dst = TCP.mkPort('2222');
+
+    expect(match.match(key)).toBe(true);
+
+    key.tcp_src = TCP.mkPort('65535');
+    expect(match.match(key)).toBe(false);
+
+    key.tcp_src = TCP.mkPort('22');
+    key.tcp_dst = TCP.mkPort('65535');
+    expect(match.match(key)).toBe(false);
+  });
 });

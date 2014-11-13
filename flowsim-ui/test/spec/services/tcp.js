@@ -77,21 +77,10 @@ describe('Service: TCP', function () {
   it('Equivalency Tests', function () {
     expect(!!TCP).toBe(true);
     
-    var tcp1 = JSON.stringify(TCP.mkTCP('22', '2222'));
-    var tcp2 = new TCP.TCP(JSON.parse(tcp1));
+    var tcp1 = TCP.mkTCP('22', '2222');
+    var tcp2 = new TCP.TCP(JSON.parse(JSON.stringify(tcp1)));
 
-    expect(tcp2.src).toBe('22');
-    expect(tcp2.dst).toBe('2222');
+    expect(tcp2.toString()).toBe(tcp1.toString());
   });
 
-/*  it('stringify Pass', function () {
-    expect(!!TCP).toBe(true);
-
-    var tcp1 = new TCP.TCP();
-    var tcp2 = JSON.stringify(tcp1);
-    var tcp3 = new TCP.TCP(JSON.parse(tcp2));
-    
-    expect(tcp3.field.src).toBe(22);
-    expect(tcp3.field.dst).toBe(2222);
-  });*/
 });

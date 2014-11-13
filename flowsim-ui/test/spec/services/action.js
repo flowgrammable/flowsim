@@ -46,6 +46,11 @@ describe('Service: action', function () {
     UDP = _UDP_;
   }));
 
+  var TCP;
+  beforeEach(inject(function (_TCP_) {
+    TCP = _TCP_;
+  }));
+
   it('Ethernet test', function () {
     expect(!!Action).toBe(true);
 
@@ -588,4 +593,39 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString(16)).toBe('0xbeef');
   });
 
+  it('TCP test', function () {
+    expect(!!Action).toBe(true);
+    expect(!!TCP).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(TCP.mkTCP());
+
+    expect(pkt.protocols[1].src().toString()).toBe('0');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      TCP.name, TCP.src,
+      TCP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      TCP.name, TCP.dst,
+      TCP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('65535');
+  });
 });

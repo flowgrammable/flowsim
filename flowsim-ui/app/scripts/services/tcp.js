@@ -10,11 +10,11 @@ var Payloads = {};
 
 function TCP(tcp, src, dst){
   if(_.isObject(tcp)) {
-    this._src = mkPort(tcp._src);
-    this._dst = mkPort(tcp._dst);
+    this._src = new UInt.UInt(tcp._src);
+    this._dst = new UInt.UInt(tcp._dst);
   } else {
-    this._src = mkPort(src);
-    this._dst = mkPort(dst);
+    this._src = new UInt.UInt(null, src, 2);
+    this._dst = new UInt.UInt(null, dst, 2);
   }
   this.name = NAME;
   this.bytes = BYTES;
