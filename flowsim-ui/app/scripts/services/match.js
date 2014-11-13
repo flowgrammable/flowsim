@@ -55,7 +55,6 @@ Set.prototype.match = function(key) {
   if(this.matches.length === 0) {
     return true;
   }
-  console.log('matches in set:', this.matches);
   return _.every(this.matches, function(match) {
     return _(key).has(match.label) && match._match.match(key[match.label]);
   });

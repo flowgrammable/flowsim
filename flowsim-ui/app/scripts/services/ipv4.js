@@ -273,6 +273,7 @@ return {
   mkProto:    mkProto,
   mkSrc:      mkSrc,
   mkDst:      mkDst,
+  dot2num:    dot2num,
   TESTS:      TESTS,
   TIPS:       TIPS
 };

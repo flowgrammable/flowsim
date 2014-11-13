@@ -138,21 +138,21 @@ describe('Service: match', function () {
           '00:aa:bb:cc:dd:ee',
           'ff:ff:ff:ff:ff:ff')));
 
-    match.push(
+  /*  match.push(
       new Match.Match(null,
         'arp_spa',
         new ARP.mkSpaMatch(
           '192.168.1.2',
-          '255.255.255.255')));
-/*
-    match.push(
+          '255.255.255.255')));*/
+
+  /*  match.push(
       new Match.Match(null,
         'arp_tha',
         new ARP.mkThaMatch(
           '11:aa:bb:cc:dd:ee',
           'ff:ff:ff:ff:ff:ff')));
 
-    match.push(
+/*    match.push(
       new Match.Match(null,
         'arp_tpa',
         new ARP.mkTpaMatch(
@@ -163,9 +163,9 @@ describe('Service: match', function () {
 
     key.arp_opcode = ARP.mkOpcode('0x0023');
     key.arp_sha    = ARP.mkSha('00:aa:bb:cc:dd:ee');
-    key.arp_spa    = ARP.mkSpa('192.168.1.2');
-    /*key.arp_tha    = new ARP.mkTha('11:aa:bb:cc:dd:ee');
-    key.arp_tpa    = new ARP.mkTpa('192.168.1.100');*/
+  //  key.arp_spa    = ARP.mkSpa('192.168.1.2');
+  //  key.arp_tha    = new ARP.mkTha('11:aa:bb:cc:dd:ee');
+    //key.arp_tpa    = new ARP.mkTpa('192.168.1.100');*/
 
     expect(match.match(key)).toBe(true);
   });
