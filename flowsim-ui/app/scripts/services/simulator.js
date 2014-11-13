@@ -33,8 +33,8 @@ Simulation.prototype.step = function() {
 Simulation.prototype.play = function(trace) {
   this.dataplane = new Dataplane.Dataplane(trace.device);
   _(trace.events).each(function(ev) {
-    this.dataplane.input(ev.toBase());
-  });
+    this.dataplane.input(ev.clone());
+  }, this);
   this.active = true;
   this.stage = 0;
 };

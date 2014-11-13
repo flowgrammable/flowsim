@@ -102,6 +102,7 @@ function Datapath(datapath, profile) {
   if(_.isObject(datapath)) {
     _.extend(this, datapath);
     this.capabilities = new Profile(datapath.capabilities);
+    this.bufAllocator = new Allocator(datapath.bufAllocator);
   } else {
     // Copy the profile
     this.capabilities = new Profile(profile);
@@ -112,6 +113,31 @@ function Datapath(datapath, profile) {
   }
 }
 
+Datapath.prototype.ingress = function(packet) {
+  var storeOrDrop;
+  if(packet.fragment) {
+    switch(this.fragHandling) {
+      case _normal:
+        storeOrDrop = false;
+        break;
+      case _drop:
+        storeOrDrop = true;
+        break;
+      case _reassemble:
+        // FIXME implement fragmentation reassembly behavior
+        storeOrDrop = true;
+        break;
+      default:
+        throw 'Bad fragmentation behavior'+this.fragHandling;
+    }
+  } else {
+    storeOrDrop = false;
+  }
+  // Pipeline just wants to know if it can proceed
+  // with this packet
+  return !storeOrDrop;
+};
+    
 var TIPS = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',

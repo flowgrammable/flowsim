@@ -155,11 +155,11 @@ function Port(port, portProfile) {
 }
 
 Port.prototype.ingress = function(packet) {
-  var drop = this.config.no_recv ? true : false;
+  var keep = this.config.no_recv ? false : true;
 
   // FIXME: stats goes here
 
-  return drop;
+  return keep;
 };
 
 Port.prototype.egress = function(packet) {

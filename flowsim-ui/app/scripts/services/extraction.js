@@ -88,41 +88,41 @@ function extract_udp(udp, key) {
   key.udp_dst = udp.dst();
 }
 
-function extract(packet, key) {
-  _.each(packet.protocols, function(protocol) {
+function extract(ctx) {
+  _.each(ctx.packet.protocols, function(protocol) {
     switch(protocol.name) {
       case ETHERNET.NAME:
-        extract_ethernet(protocol, key);
+        extract_ethernet(protocol, ctx.key);
         break;
       case VLAN.NAME:
-        extract_vlan(protocol, key);
+        extract_vlan(protocol, ctx.key);
         break;
       case ARP.NAME:
-        extract_arp(protocol, key);
+        extract_arp(protocol, ctx.key);
         break;
       case MPLS.NAME:
-        extract_mpls(protocol, key);
+        extract_mpls(protocol, ctx.key);
         break;
       case IPV4.NAME:
-        extract_ipv4(protocol, key);
+        extract_ipv4(protocol, ctx.key);
         break;
       case IPV6.NAME:
-        extract_ipv6(protocol, key);
+        extract_ipv6(protocol, ctx.key);
         break;
       case ICMPV4.NAME:
-        extract_icmpv4(protocol, key);
+        extract_icmpv4(protocol, ctx.key);
         break;
       case ICMPV6.NAME:
-        extract_icmpv6(protocol, key);
+        extract_icmpv6(protocol, ctx.key);
         break;
       case SCTP.NAME:
-        extract_sctp(protocol, key);
+        extract_sctp(protocol, ctx.key);
         break;
       case TCP.NAME:
-        extract_tcp(protocol, key);
+        extract_tcp(protocol, ctx.key);
         break;
       case UDP.NAME:
-        extract_udp(protocol, key);
+        extract_udp(protocol, ctx.key);
         break;
     }
   });

@@ -16,7 +16,7 @@ var State = {
 };
 
 function Dataplane(device) {
-  if(device && events) {
+  if(device) {
     this.inputQ = [];
 
     this.datapath = device.datapath;
@@ -37,15 +37,17 @@ Dataplane.prototype.input = function(ev) {
 };
 
 Dataplane.prototype.arrival = function(packet, in_port) {
-  // Only process packets if the port allows it
-  if(this.ports.ingress(packet, in_port)) {
+  // Every packet is not injected into the pipeline
+  // A port can have: link down, admin down, or in no_recv state
+  // The dataplane could be: dropping fragments, or reassembling fragments
+  if(this.ports.ingress(packet, in_port) && this.datapath.ingress(packet)) {
     var bufId = new this.datapath.bufAllocator.request();
     this.ctx  = new Context.Context(packet, bufId, in_port);
   }
 };
 
 Dataplane.prototype.extraction = function() {
-  Extraction.extract(this.packet, this.ctx.key);
+  Extraction.extract(this.ctx);
 };
 
 Dataplane.prototype.choice = function() {
@@ -63,10 +65,11 @@ Dataplane.prototype.selection = function() {
 };
 
 Dataplane.prototype.execution = function() {
-  this.instructions.execute(this, this.ctx);
+  this.ctx.instructionSet.step(this, this.ctx);
 };
 
 Dataplane.prototype.egress = function() {
+  this.ctx.actionSet.step(this, this.ctx);
 };
 
 Dataplane.prototype.transition = function(state) {
@@ -94,8 +97,10 @@ Dataplane.prototype.step = function() {
       break;
     case State.EXECUTION:
       this.execution();
-      if(this.instructions) {
+      if(this.ctx.instructionSet.empty()) {
+      } else {
         this.transition(State.EXECUTION);
+      }
       } else if(this.ctx.hasGoto()) {
         this.transition(State.CHOICE);
       } else {

@@ -84,6 +84,10 @@ Context.prototype.table = function(table) {
   }
 };
 
+Context.prototype.setInstructions = function(ins) {
+  this.instructionSet = ins;
+};
+
 Context.prototype.meter = function(meter) {
   if(meter) {
     this._meter = meter;

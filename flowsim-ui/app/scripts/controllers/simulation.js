@@ -66,7 +66,7 @@ angular.module('flowsimUiApp')
       if(err) {
         console.log(err.details);
       } else {
-        $scope.trace.push(result);
+        $scope.trace.push(result.toBase());
         $scope.resources.packetName = '';
       }
     });
