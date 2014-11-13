@@ -16,6 +16,7 @@ function Switch(sw, profile) {
     this.datapath = new Datapath.Datapath(sw.datapath);
     this.ports    = new Ports.Ports(sw.ports);
     this.tables   = new Tables.Tables(sw.tables);
+    this.groups   = new Groups.Groups(sw.groups);
     //this.meters   = new Meters.Configuration(sw.meters);
     //this.groups   = new Groups.Configuration(sw.groups);
   } else {
@@ -23,8 +24,8 @@ function Switch(sw, profile) {
     this.datapath = new Datapath.Datapath(null, profile.datapath);
     this.ports    = new Ports.Ports(null, profile.ports);
     this.tables   = new Tables.Tables(null, profile.tables);
+    this.groups   = new Groups.Groups(null, profile.groups);
     //this.meters   = new Meters.Configuration(null, profile.meters);
-    //this.groups   = new Groups.Configuration(null, profile.groups);
   }
 }
 

@@ -10,11 +10,9 @@
 angular.module('flowsimUiApp')
   .factory('Groups', function(fgConstraints) {
 
-var defaultGroups = 10;
+var defGroups = 10;
 
-var Groups = {};
-
-Groups.TIPS = {
+var TIPS = {
   // All
   max_groups: 'Maximum number of groups for each type',
   // Group types
@@ -32,10 +30,11 @@ Groups.TIPS = {
   supportedActions: 'Actions supported by groups'
 };
 
-Groups.TESTS = {
+var TESTS = {
   max_groups: fgConstraints.isUInt(0, 0xffffffff),
 };
 
+/*
 function mkActionField(name, value, key) {
   return {
     name: name,
@@ -43,7 +42,6 @@ function mkActionField(name, value, key) {
     key: key
   };
 }
-
 
 function Capabilities(groups) {
   if(groups) {
@@ -156,44 +154,67 @@ function Capabilities(groups) {
 
   }
 }
+*/
 
-Capabilities.prototype.ofp_1_0 = function() {
-};
-
-Capabilities.prototype.ofp_1_1 = function() {
-};
-
-Capabilities.prototype.ofp_1_2 = function() {
-};
-
-Capabilities.prototype.ofp_1_3 = function() {
-};
-
-Capabilities.prototype.ofp_1_4 = function() {
-};
-
-function Configuration(groups) {
-  if(groups) {
-    if(groups instanceof Capabilities) {
-      // capabiliy constructor
-      this.max_groups = groups.max_groups;
-    } else if(groups instanceof Configuration) {
-      // copy consturctor
-    } else {
-      // JSON constructor
-      _.extend(this, groups);
-    }
+function Group(group, groupProfile) {
+  if(_.isObject(group)) {
   } else {
-    // default constructor
   }
 }
 
+Group.prototype.clone = function() {
+  return new Group(this);
+};
+
+function GroupProfile(profile) {
+  if(_.isObject(profile)) {
+  } else {
+  }
+}
+
+GroupProfile.prototype.clone = function() {
+  return new GroupProfile(this);
+};
+
+GroupProfile.prototype.ofp_1_0 = function() {};
+GroupProfile.prototype.ofp_1_1 = function() {};
+GroupProfile.prototype.ofp_1_2 = function() {};
+GroupProfile.prototype.ofp_1_3 = function() {};
+GroupProfile.prototype.ofp_1_4 = function() {};
+
+function Groups(groups) {
+  if(_.isObject(groups)) {
+  } else {
+  }
+}
+
+Groups.prototype.clone = function() {
+  return new Groups(this);
+};
+
+function Profile(profile) {
+  if(_.isObject(profile)) {
+  } else {
+  }
+}
+
+Profile.prototype.clone = function() {
+  return new Profile(this);
+};
+
+Profile.prototype.ofp_1_0 = function() {};
+Profile.prototype.ofp_1_1 = function() {};
+Profile.prototype.ofp_1_2 = function() {};
+Profile.prototype.ofp_1_3 = function() {};
+Profile.prototype.ofp_1_4 = function() {};
+
+var RANGES = {
+};
 
 return {
-  Capabilities: Capabilities,
-  Configuration: Configuration,
-  TIPS: Groups.TIPS,
-  TESTS: Groups.TESTS
+  TIPS: TIPS,
+  TESTS: TESTS,
+  RANGES: RANGES
 };
 
 });
