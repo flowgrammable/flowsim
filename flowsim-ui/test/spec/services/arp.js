@@ -181,6 +181,32 @@ describe('Service: ARP', function () {
 
   });
 
+  it('SHA match Pass', function() {
+      var u = ARP.mkSha('00:11:22:33:44:55');
+      var b = ARP.mkSha('ff:ff:ff:ff:ff:ff');
+      var m = ARP.mkSha('91:ab:ba:ef:cd:45');
+
+      var every = ARP.mkShaMatch(
+        '00:00:00:00:00:00', '00:00:00:00:00:00'
+        );
+      var multi = ARP.mkShaMatch(
+        '01:00:00:00:00:00', '01:00:00:00:00:00'
+        );
+
+      var exact = ARP.mkShaMatch( u, b);
+
+      expect(every.match(u)).toBe(true);
+      expect(every.match(b)).toBe(true);
+      expect(every.match(m)).toBe(true);
+
+      expect(multi.match(u)).toBe(false);
+      expect(multi.match(b)).toBe(true);
+      expect(multi.match(m)).toBe(true);
+
+      expect(exact.match(u)).toBe(true);
+      expect(exact.match(b)).toBe(false);
+      expect(exact.match(m)).toBe(false);
+  });
 
   it('THA match Pass', function() {
       var u = ARP.mkTha('00:11:22:33:44:55');

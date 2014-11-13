@@ -174,6 +174,22 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].tha().toString()).toBe('22:22:22:22:22:22');
     expect(pkt.protocols[1].tpa().toString()).toBe('127.0.0.1');
 
+    set.setField(new Action.SetField(
+      null,
+      ARP.name, ARP.spa,
+      ARP.mkSpa('192.192.192.192')
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].opcode().toString(16)).toBe('0x0001');
+    expect(pkt.protocols[1].sha().toString()).toBe('ff:ff:ff:ff:ff:ff');
+    expect(pkt.protocols[1].spa().toString()).toBe('192.192.192.192');
+    expect(pkt.protocols[1].tha().toString()).toBe('22:22:22:22:22:22');
+    expect(pkt.protocols[1].tpa().toString()).toBe('127.0.0.1');
+
  });
 
   it('IPv4 SetField', function(){
