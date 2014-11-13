@@ -40,9 +40,7 @@ function mkTCP(src, dst) {
   return new TCP(null, src, dst);
 }
 
-TCP.prototype.setPayload = function() {
-  return true;
-};
+TCP.prototype.setPayload = function() {};
 
 TCP.prototype.clone = function() {
   return new TCP(this);
