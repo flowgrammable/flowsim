@@ -72,14 +72,12 @@ Profile.prototype.ofp_1_2 = function() {};
 Profile.prototype.ofp_1_3 = function() {};
 Profile.prototype.ofp_1_4 = function() {};
 
-function Buffer(allocator, limit) {
-  if(_.isObject(allocator)) {
-    _.extend(this, allocator);
-    this.alloc = _.clone(allocator.alloc);
-    console.log('copy cons');
+function Buffer(buffer, limit) {
+  if(_.isObject(buffer)) {
+    _.extend(this, buffer);
+    this.alloc = _.clone(buffer.alloc);
   } else {
     this.alloc = {};
-    console.log('limit: '+limit);
     this.limit = limit;
   }
 }
@@ -89,10 +87,10 @@ Buffer.prototype.clone = function() {
 };
 
 Buffer.prototype.request = function() {
-  var i;
+  var id;
   console.log('llimit: '+this.limit);
-  for(i=0; i<this.limit; ++i) {
-    if(!_(this.alloc).has(i.toString())) {
+  for(id=0; id<this.limit; ++id) {
+    if(!_(this.alloc).has(id.toString())) {
       this.alloc[id.toString()] = true;
       return id;
     }
@@ -112,10 +110,6 @@ function Datapath(datapath, profile) {
   } else {
     // Copy the profile
     this.capabilities = new Profile(profile);
-    console.log('t: '+_.keys(profile));
-    console.log('m: '+_.keys(this.capabilities));
-    console.log('bt: '+profile.n_buffers);
-    console.log('bm: '+this.capabilities.n_buffers);
     // Default the basic operations
     this.miss_send_len = defMissSendLen;
     this.fragHandling  = defFrag;
