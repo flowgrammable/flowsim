@@ -55,8 +55,8 @@ Dataplane.prototype.arrival = function(packet, in_port, in_phy_port, tunnel) {
   // A port can have: link down, admin down, or in no_recv state
   // The dataplane could be: dropping fragments, or reassembling fragments
   if(this.ports.ingress(packet, in_port) && this.datapath.ingress(packet)) {
-    var bufId = new this.datapath.bufAllocator.request();
-    this.ctx  = new Context.Context(packet, bufId, in_port, in_phy_port, 
+    var bufId = this.datapath.bufAllocator.request();
+    this.ctx  = new Context.Context(null, packet, bufId, in_port, in_phy_port, 
                                     tunnel);
   } else {
     throw 'Dataplane arrival failure: '+packet+', '+in_port+', '+in_phy_port+', '+tunnel+')';
@@ -68,7 +68,7 @@ Dataplane.prototype.extraction = function() {
 };
 
 Dataplane.prototype.choice = function() {
-  this.table = this.switch_.tables.get(this.ctx.table());
+  this.table = this.tables.get(this.ctx.table());
   if(!_.isObject(this.table)) {
     throw 'Failed to load table: ' + this.ctx.table();
   }

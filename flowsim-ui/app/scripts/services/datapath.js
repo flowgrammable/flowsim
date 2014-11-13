@@ -88,7 +88,6 @@ Buffer.prototype.clone = function() {
 
 Buffer.prototype.request = function() {
   var id;
-  console.log('llimit: '+this.limit);
   for(id=0; id<this.limit; ++id) {
     if(!_(this.alloc).has(id.toString())) {
       this.alloc[id.toString()] = true;
