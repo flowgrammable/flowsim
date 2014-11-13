@@ -68,7 +68,7 @@ $scope.instrucionList = [{
   set: [],
   list: []
 }];
-                                          Switch, Packet, Dataplane, Regex) {
+                                         
 
     $scope.names = {};
     $scope.trace = null;
@@ -235,7 +235,7 @@ $scope.instrucionList = [{
       forward: false
     }];
     //for simulationView $watch
-    $scope.makeTransition =  null;
+    $scope.makeTransition =  {to:-1};
     $scope.play = function() {
       if($scope.active) {
         return;
