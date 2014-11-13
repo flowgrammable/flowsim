@@ -132,6 +132,7 @@ return {
   extract_ethernet: extract_ethernet,
   extract_vlan: extract_vlan,
   extract_arp: extract_arp,
+  extract_udp: extract_udp,
   process: extract
 };
 
