@@ -112,6 +112,19 @@ describe('Service: uint', function () {
     var outval = new UInt.UInt(null, 0x0b0101f0, 4);
   });
 
+  it('UInt Copy Construction', function() {
+    var uint16 = new UInt.UInt(null, 0x0800, 2);
+    var uint24 = new UInt.UInt(null, 0x800, 3);
+    var uint32 = new UInt.UInt(null, 0xFEED0806, 4);
+
+    var copy16 = new UInt.UInt(uint16);
+    expect(copy16.toString(16)).toBe('0x0800');
+    var copy24 = new UInt.UInt(uint24);
+    expect(copy24.toString(16)).toBe('0x000800');
+    var copy32 = new UInt.UInt(uint32);
+    expect(copy32.toString(16)).toBe('0xfeed0806');
+  });
+
   it('UInt Match - Ethernet Type', function() {
     var type1 = new UInt.UInt(null, 0x0800, 2);
     var type2 = new UInt.UInt(null, 0x0806, 2);

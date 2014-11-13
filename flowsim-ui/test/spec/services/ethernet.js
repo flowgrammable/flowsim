@@ -141,9 +141,7 @@ describe('Service: ETHERNET', function () {
     expect(eth1.toString()).toBe(testStr);
     expect(eth2.toString()).toBe(testStr);
     expect(eth3.toString()).toBe(testStr);
-    //expect(eth4.toString()).toBe(testStr);
     expect(eth5.toString()).toBe(testStr);
-    //expect(eth6.toString()).toBe(testStr);
     expect(eth7.toString()).toBe(testStr);
     expect(eth8.toString()).toBe(testStr);
     expect(eth9.toString()).toBe(testStr);

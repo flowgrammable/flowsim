@@ -6,9 +6,7 @@ angular.module('flowsimUiApp')
 var NAME = 'UDP';
 var BYTES = 8;
 
-var Payloads = {
- 'Payload': 0
-};
+var Payloads = {};
 
 function UDP(udp, src, dst){
   if(_.isObject(udp)) {
