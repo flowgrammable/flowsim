@@ -36,6 +36,10 @@ function mkPort(port){
   }
 }
 
+function mkPortMatch(value, mask) {
+  return new UInt.Match(null, mkPort(value), mkPort(mask));
+}
+
 UDP.prototype.src = function(src) {
   if(src) {
     this._src = mkPort(src);
@@ -103,9 +107,8 @@ return {
   Payloads: _.keys(Payloads),
   UDP: UDP,
   mkPort: mkPort,
+  mkPortMatch: mkPortMatch,
   mkUDP: mkUDP,
-  src: '_src',
-  dst: '_dst',
   create: function() { return new UDP(); },
   createUI: function(UDP) { return new UDP_UI(UDP); },
   TESTS:       TESTS,
