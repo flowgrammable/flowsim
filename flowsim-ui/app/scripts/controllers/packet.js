@@ -74,7 +74,7 @@ angular.module('flowsimUiApp')
       if($scope.packet !== null) {
         $scope.packet.dirty = true;
         $scope.packet.bytes = 0;
-        _.each($scope.packet.protocols, function(value, key){
+        _.each($scope.packet.protocols, function(value){
           $scope.packet.bytes += value.bytes;
         });
       }

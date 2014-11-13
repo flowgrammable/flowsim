@@ -16,14 +16,15 @@ angular.module('flowsimUiApp')
   $scope.simulation = null;
 
   $scope.resources = {
-    packet: '',
-    device: '',
+    packetName: '',     // input selector for adding a packet
+    deviceName: '',     // input selector for setting a switch
     packets: [],
     devices: []
   };
 
   $scope.trace = null;
 
+  // get a list of all the existing switch names
   fgCache.getNames('switch', function(err, result) {
     if(err) {
       console.log(err.details);
@@ -32,6 +33,7 @@ angular.module('flowsimUiApp')
     }
   });
 
+  // get a list of all the existing packet names
   fgCache.getNames('packet', function(err, result) {
     if(err) {
       console.log(err.details);
@@ -39,39 +41,43 @@ angular.module('flowsimUiApp')
       $scope.resources.packets = result;
     }
   });
-  
+ 
+  // attach a method to - get all the existing trace names
   $scope.getTraces = function(callback) {
     fgCache.getNames('trace', callback);
   };
-    
-  $scope.$watch('resources.device', function() {
-    fgCache.get('switch', $scope.resources.device, Switch,
+  
+  // update the switch device on selector change
+  $scope.$watch('resources.deviceName', function() {
+    fgCache.get('switch', $scope.resources.deviceName, Switch,
                 function(err, device) {
       if(err) {
         console.log(err.details);
       } else {
-       $scope.trace.device = device;
+        $scope.trace.device = device;
       }
     });
   });
 
-  // allow for pushing packets to the list
+  // add the selected packet to the trace
   $scope.addPacket = function() {
-    fgCache.get('packet', $scope.resources.packet, Packet, 
+    fgCache.get('packet', $scope.resources.packetName, Packet, 
                 function(err, result) {
       if(err) {
         console.log(err.details);
       } else {
         $scope.trace.push(result);
-        $scope.resources.packet = '';
+        $scope.resources.packetName = '';
       }
     });
   };
 
+  // delete the indicated packet from the trace
   $scope.delPacket = function(idx) {
     $scope.trace.del(idx);
   };
 
+  // create a new trace
   $scope.addTrace = function(name, callback) {
     if(!Regex.Identifier.test(name)) {
       callback('Bad name');
@@ -85,6 +91,7 @@ angular.module('flowsimUiApp')
     }
   };
 
+  // delete a trace
   $scope.delTrace = function(name) {
     fgCache.destroy('trace', name);
     if(fgCache.isDirty()) {
@@ -95,6 +102,7 @@ angular.module('flowsimUiApp')
     delete $scope.names[name];
   };
 
+  // set focus on a new trace
   $scope.setTrace = function(name) {
     if(name === undefined) {
       $scope.trace = null;
@@ -105,20 +113,20 @@ angular.module('flowsimUiApp')
         } else {
           $scope.trace = result;
           if($scope.trace.device) {
-            $scope.device.name = $scope.trace.device.name;
+            $scope.resources.deviceName = $scope.trace.device.name;
           }
         }
       });
     }
   };
 
-   $scope.setDirty = function() {
-     $rootScope.$broadcast('dirtyCache');
-   };
+  $scope.setDirty = function() {
+    $rootScope.$broadcast('dirtyCache');
+  };
 
-   $scope.setClean = function() {
-     $rootScope.$broadcast('cleanCache');
-   };
+  $scope.setClean = function() {
+    $rootScope.$broadcast('cleanCache');
+  };
 
   $scope.simulation = new Simulation.Simulation();
 
