@@ -35,6 +35,11 @@ Key.prototype.clone = function() {
   return new Key(this);
 };
 
+Key.prototype.toView = function() {
+  return {
+  };
+};
+
 function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(ctx)) {
     _.extend(this, ctx);
@@ -73,6 +78,19 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
 
 Context.prototype.clone = function() {
   return new Context(this);
+};
+
+Context.prototype.toView = function() {
+  return {
+    buffer: this.buffer,
+    packet: this.packet.clone(),
+    key: this.key.toView(),
+    meter: this.meter,
+    table: this.table(),
+    actionSet: this.actionSet.toView(),
+    instructionSet: this.instructionSet.toView(),
+  };
+
 };
 
 Context.prototype.table = function(table) {

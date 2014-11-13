@@ -129,14 +129,22 @@ angular.module('flowsimUiApp')
   };
 
   $scope.simulation = new Simulation.Simulation();
+  $scope.view = null;
 
   $scope.stages = Simulation.Stages;
   $scope.transitions = Simulation.Transitions;
+
+  function hideDetails(state) {
+    return (state === 5 || state === 6) ? 4 : state;
+  }
   
   $scope.makeTransition =  {to:-1};
   $scope.play = function() {
     $scope.simulation.play($scope.trace);
-    $scope.makeTransition = { to: $scope.simulation.stage };
+    $scope.makeTransition = { 
+      to: hideDetails($scope.simulation.stage) 
+    };
+    $scope.view = $scope.simulation.toView();
   };
 
   $scope.stop = function() {
@@ -145,7 +153,10 @@ angular.module('flowsimUiApp')
 
   $scope.step = function() {
     $scope.simulation.step();
-    $scope.makeTransition = { to: $scope.simulation.stage };
+    $scope.makeTransition = { 
+      to: hideDetails($scope.simulation.stage) 
+    };
+    $scope.view = $scope.simulation.toView();
   };
 
 });

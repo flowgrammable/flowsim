@@ -180,6 +180,11 @@ Set.prototype.clone = function() {
   return new Set(this);
 };
 
+Set.prototype.toView = function() {
+  return {
+  };
+};
+
 Set.prototype.clear = function() {
   this.actions = {};
 };
@@ -434,6 +439,11 @@ function List(list) {
 
 List.prototype.clone = function() {
   return new List(this);
+};
+
+List.prototype.toView = function() {
+  return {
+  };
 };
 
 List.prototype.push = function(action) {

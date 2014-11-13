@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Simulation', function(Dataplane, Packet) {
+  .factory('Simulation', function(Dataplane) {
 
 function Simulation() {
   this.stage = 0;
@@ -23,6 +23,10 @@ Simulation.prototype.step = function() {
   if(this.dataplane.idle()) {
     this.stop();
   }
+};
+
+Simulation.prototype.toView = function() {
+  return this.dataplane.toView();
 };
 
 Simulation.prototype.play = function(trace) {
@@ -87,16 +91,12 @@ var Transitions = [{
   forward: true
 }, {
   from: 4,
-  to: 5,
-  forward: true
-}, {
-  from: 5,
-  to: null,
-  forward: true
-}, {
-  from: 4,
   to: 2,
   forward: false
+}, {
+  from: 4,
+  to: null,
+  forward: true
 }];
 
 return {

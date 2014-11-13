@@ -402,6 +402,11 @@ Set.prototype.clone = function() {
   return new Set(this);
 };
 
+Set.prototype.toView = function() {
+  return {
+  };
+};
+
 Set.prototype.apply = function(apply) {
   if(apply) {
     this._apply = new Apply(null, apply);

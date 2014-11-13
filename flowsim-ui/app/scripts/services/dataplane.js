@@ -43,6 +43,10 @@ function Dataplane(device) {
   }
 }
 
+Dataplane.prototype.toView = function() {
+  return this.ctx.toView();
+};
+
 Dataplane.prototype.input = function(ev) {
   this.inputQ.push(ev);
 };
