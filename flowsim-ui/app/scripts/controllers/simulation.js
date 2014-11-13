@@ -68,7 +68,6 @@ $scope.instrucionList = [{
   set: [],
   list: []
 }];
-                                          Switch, Packet, Dataplane, Regex) {
 
     $scope.names = {};
 
