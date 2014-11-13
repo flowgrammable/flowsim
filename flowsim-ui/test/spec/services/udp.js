@@ -124,7 +124,6 @@ describe('Service: UDP', function () {
     expect(!!UDP).toBe(true);
 
     var udp1 = UDP.mkUDP(65535, '123');
-
     var udp1_json = JSON.stringify(udp1);
     var udp1_ = new UDP.UDP(JSON.parse(udp1_json));
 
