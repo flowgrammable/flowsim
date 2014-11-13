@@ -99,12 +99,8 @@ describe('Service: UDP', function () {
     var zero = UDP.mkPort(0);
     var ssh = UDP.mkPort(22);
 
-    var every = new UDP.mkPortMatch(
-      '0', '0'
-      );
-    var multi = new UDP.mkPortMatch(
-      '0', '0xff00'
-      );
+    var every = new UDP.mkPortMatch(2, '0');
+    var multi = new UDP.mkPortMatch(14, '0xff00');
     var exact = new UDP.mkPortMatch(src, 0xffff);
 
     expect(every.match(src)).toBe(true);
