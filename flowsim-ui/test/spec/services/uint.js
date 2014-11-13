@@ -164,8 +164,8 @@ describe('Service: uint', function () {
         new UInt.UInt(null, 0x1, 2),
         new UInt.UInt(null, 0x0, 2));
 
-   // expect(wildcard1.match(type1)).toBe(true);
-   // expect(wildcard1.match(type2)).toBe(true);
+    expect(wildcard1.match(type1)).toBe(true);
+    expect(wildcard1.match(type2)).toBe(true);
   });
 
   it('UInt Match - Ethernet MAC', function() {
@@ -239,13 +239,15 @@ describe('Service: uint', function () {
     expect(route2.match(dst2)).toBe(true);
     expect(route2.match(dst3)).toBe(false);
 
+  });
+
+  it('UInt Exact', function(){
     var route3 = new UInt.Match(null,
       new UInt.UInt(null, 0xfedcbaaa, 4),
       new UInt.UInt(null, 0xffffffff, 4));
     var dst4 = new UInt.UInt(null, 0xfedcbaaa, 4);
 
     expect(route3.match(dst4)).toBe(true);
-
   });
 
   it('UInt Mask', function() {
