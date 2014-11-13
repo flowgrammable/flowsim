@@ -59,14 +59,14 @@ function mkPort(port) {
   }
 }
 
+function mkPortMatch(value, mask) {
+  return new UInt.Match(null, mkPort(value), mkPort(mask));
+}
+
 var TIPS = {
   src: 'TCP source port',
   dst: 'TCP destination port'
 };
-
-function mkPortMatch(value, mask) {
-  return new UInt.Match(null, mkPort(value), mkPort(mask));
-}
 
 var TESTS = {
   src: UInt.is(16),
@@ -107,6 +107,7 @@ return {
   createUI: function(tcp) {return new TCP_UI(tcp); },
   Payloads: _(Payloads).keys(),
   mkPort: mkPort,
+  mkPortMatch: mkPortMatch,
   mkTCP: mkTCP,
   TESTS: TESTS,
   TIPS: TIPS
