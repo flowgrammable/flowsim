@@ -78,6 +78,14 @@ function Packet(name) {
   this.bytes = this.protocols[0].bytes;
 }
 
+Packet.prototype.clone = function() {
+  var tmp = new Packet(this.name);
+  tmp.bytes = this.bytes;
+  tmp.protocols = _(this.protocols).map(function(protocol) {
+    return protocol.clone();
+  });
+};
+
 Packet.prototype.push = function(protocol) {
   this.protocols.push(protocol);
   this.bytes += protocol.bytes;

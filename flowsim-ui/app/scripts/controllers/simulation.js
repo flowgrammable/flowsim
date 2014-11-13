@@ -132,15 +132,6 @@ angular.module('flowsimUiApp')
 
   $scope.play = function() {
     $scope.simulation.play($scope.trace);
-    /*
-    $scope.trace.get(function(err) {
-      if(err) {
-        console.log(err.details);
-      } else {
-        $scope.simulation.play($scope.trace);
-      }
-    });
-    */
   };
 
   $scope.stop = function() {
