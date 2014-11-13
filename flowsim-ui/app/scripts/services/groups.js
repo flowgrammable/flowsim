@@ -212,6 +212,8 @@ var RANGES = {
 };
 
 return {
+  Groups: Groups,
+  Profile: Profile,
   TIPS: TIPS,
   TESTS: TESTS,
   RANGES: RANGES

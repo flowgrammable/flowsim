@@ -70,7 +70,22 @@ Dataplane.prototype.execution = function() {
   this.ctx.instructionSet.step(this, this.ctx);
 };
 
-Dataplane.prototype.group = function() {
+Dataplane.prototype.output = function(pkt, id) {
+  this.ports.egress(pkt, id); 
+};
+
+Dataplane.prototype.group = function(pkt, id) {
+  this.groupQ.push({
+    id: id,
+    packet: pkt
+  });
+};
+
+Dataplane.prototype.groups = function() {
+  var g_ctx = this.groupQ.splice(0, 1);
+  if(g_ctx) {
+    // FIXME group processing goes here 
+  }
 };
 
 Dataplane.prototype.egress = function() {
@@ -119,7 +134,7 @@ Dataplane.prototype.step = function() {
       }
       break;
     case State.GROUP:
-      this.group();
+      this.groups();
       if(this.groupQ.length > 0) {
         this.transition(State.GROUP);
       } else if(this.instructionSet.empty()) {

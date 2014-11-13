@@ -18,7 +18,6 @@ function Switch(sw, profile) {
     this.tables   = new Tables.Tables(sw.tables);
     this.groups   = new Groups.Groups(sw.groups);
     //this.meters   = new Meters.Configuration(sw.meters);
-    //this.groups   = new Groups.Configuration(sw.groups);
   } else {
     this.name     = sw;
     this.datapath = new Datapath.Datapath(null, profile.datapath);
@@ -69,11 +68,11 @@ var RANGES = {
 };
 
 return {
-    create: create,
-    createUI: createUI,
-    TIPS: TIPS,
-    TESTS: TESTS,
-    RANGES: RANGES
+  create: create,
+  createUI: createUI,
+  TIPS: TIPS,
+  TESTS: TESTS,
+  RANGES: RANGES
 };
 
 });
