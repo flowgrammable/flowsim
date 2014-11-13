@@ -96,6 +96,7 @@ Dataplane.prototype.group = function(pkt, id) {
 
 Dataplane.prototype.groups = function() {
   var g_ctx = this.groupQ.splice(0, 1);
+  this.groupQ.splice(0, 1);
   if(g_ctx) {
     // FIXME group processing goes here 
   }
