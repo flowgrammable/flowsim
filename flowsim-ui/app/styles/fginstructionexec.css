@@ -51,7 +51,7 @@ height : 190px;
 width : 50%;
 }
 .sim-exec-connection{
-	transition: all linear 0.5s;
+	transition: all linear 1s;
 margin: 0 auto;
 /* position: relative; */
 /* left: 6px; */

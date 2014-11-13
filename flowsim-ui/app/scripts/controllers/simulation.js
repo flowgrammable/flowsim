@@ -256,7 +256,7 @@ $scope.instrucionList = [{
       $scope.active = false;
       $scope.simulation = null;
     };
-    $scope.moves =  [ {to: 1},{to: 2}, {to: 3}, {to: 4},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true}, {to: 2}, {to: 3}, {to: 4}, {to: 4, clonePacket:true}, {to: 5}];
+    $scope.moves =  [ {to: 1},{to: 2}, {to: 3}, {to: 4},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true}, {to: 2}, {to: 3}, {to: 4}, {to: 4, clonePacket:true}, {to: 5}];
     $scope.currStep =0;
     $scope.step = function() {
       var idx;
@@ -268,7 +268,9 @@ $scope.instrucionList = [{
         //simulate execution
       if($scope.makeTransition.to === 4 &&  $scope.makeTransition.clonePacket){
         if($scope.instrucionList[0].name === "Apply" && _.size($scope.applyActionList) > 0){
-          $scope.ctx.actionSet.push($scope.applyActionList.shift());
+          $scope.applyActionList.shift();
+        }else if ($scope.instrucionList[0].name === "Write" && _.size($scope.writeActionSet) > 0){
+          $scope.ctx.actionSet.push($scope.writeActionSet.shift());
         }else{
           $scope.instrucionList.shift();
         }
