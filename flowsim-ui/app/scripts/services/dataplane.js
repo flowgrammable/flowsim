@@ -11,6 +11,7 @@ var State = {
   CHOICE:     'CHOICE',
   SELECTION:  'SELECTION',
   EXECUTION:  'EXECUTION',
+  GROUP:      'GROUP',
   EGRESS:     'EGRESS',
   FINAL:      'FINAL'
 };
@@ -18,11 +19,12 @@ var State = {
 function Dataplane(device) {
   if(device) {
     this.inputQ = [];
+    this.groupQ = [];
 
     this.datapath = device.datapath;
     this.ports    = device.ports;
     this.tables   = device.tables;
-    //this.groups   = device.groups;
+    this.groups   = device.groups;
     //this.meters   = device.meters;
 
     this.ctx    = null;
@@ -68,8 +70,15 @@ Dataplane.prototype.execution = function() {
   this.ctx.instructionSet.step(this, this.ctx);
 };
 
+Dataplane.prototype.group = function() {
+};
+
 Dataplane.prototype.egress = function() {
   this.ctx.actionSet.step(this, this.ctx);
+};
+
+Dataplane.prototype.interupt = function() {
+  this.immEgress.push(this.ctx.clone());
 };
 
 Dataplane.prototype.transition = function(state) {
@@ -97,20 +106,36 @@ Dataplane.prototype.step = function() {
       break;
     case State.EXECUTION:
       this.execution();
-      if(this.ctx.instructionSet.empty()) {
-      } else if(this.ctx.hasGoto()) {
-        this.transition(State.CHOICE);
+      if(this.groupQ.length > 0) {
+        this.transition(State.GROUPS);
+      } else if(this.instructionSet.empty()) {
+        if(this.ctx.hasGoto()) {
+          this.transition(State.CHOICE);
+        } else {
+          this.transition(State.EGRESS);
+        }
       } else {
+        this.transition(State.EXECUTION);
+      }
+      break;
+    case State.GROUP:
+      this.group();
+      if(this.groupQ.length > 0) {
+        this.transition(State.GROUP);
+      } else if(this.instructionSet.empty()) {
         this.transition(State.EGRESS);
+      } else {
+        this.transition(State.EXECUTION);
       }
       break;
     case State.EGRESS:
       this.egress();
-      if(!this.ctx.done()) {
-        this.transition(State.EGRESS);
-      } else {
-        this.cleanup();
+      if(this.groupQ.length > 0) {
+        this.transition(State.GROUPS);
+      } else if(this.ctx.actionSet.empty()) {
         this.transition(State.FINAL);
+      } else {
+        this.transition(State.EGRESS);
       }
       break;
     case State.FINAL:
