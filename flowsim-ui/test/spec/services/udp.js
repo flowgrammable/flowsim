@@ -35,9 +35,9 @@ describe('Service: UDP', function () {
     var src = UDP.mkPort(12345);
     var dst = UDP.mkPort('54689');
     var udp1 = UDP.mkUDP(src, dst);
-    var udp2 = UDP.UDP(udp1);
-    var udp3 = UDP.UDP(null, src, dst);
-    var udp3 = UDP.UDP(null, 12345, '54689');
+    var udp2 = new UDP.UDP(udp1);
+    var udp3 = new UDP.UDP(null, src, dst);
+    var udp3 = new UDP.UDP(null, 12345, '54689');
     var udp4 = udp1.clone();
 
     var testStr = udp1.toString();
@@ -78,7 +78,6 @@ describe('Service: UDP', function () {
     var dst = UDP.mkPort('54689');
     var udp1 = UDP.mkUDP(src, dst);
 
-
     expect(udp1.src().toString()).toBe('12345');
     expect(udp1.dst().toString()).toBe('54689');
     expect(function(){udp1.src(70000)}).toThrow();
@@ -89,8 +88,47 @@ describe('Service: UDP', function () {
     expect(udp1.dst().toString()).toBe('54689');
     expect(function(){udp1.dst(-1)}).toThrow();
     expect(udp1.src().toString()).toBe('12345');
-    expect(udp1.dst().toString(16)).toBe('54689');
+    expect(udp1.dst().toString(16)).toBe('0xd5a1');
   });
 
+  it('Port Match Pass', function() {
+    expect(!!UDP).toBe(true);
+
+    var src = UDP.mkPort(12345);
+    var dst = UDP.mkPort('54689');
+    var zero = UDP.mkPort(0);
+    var ssh = UDP.mkPort(22);
+
+    var every = new UDP.mkPortMatch(2, '0');
+    var multi = new UDP.mkPortMatch(14, '0xff00');
+    var exact = new UDP.mkPortMatch(src, 0xffff);
+
+    expect(every.match(src)).toBe(true);
+    expect(every.match(dst)).toBe(true);
+    expect(every.match(zero)).toBe(true);
+    expect(every.match(ssh)).toBe(true);
+
+    expect(multi.match(src)).toBe(false);
+    expect(multi.match(dst)).toBe(false);
+    expect(multi.match(zero)).toBe(true);
+    expect(multi.match(ssh)).toBe(true);
+
+    expect(exact.match(src)).toBe(true);
+    expect(exact.match(dst)).toBe(false);
+    expect(exact.match(zero)).toBe(false);
+    expect(exact.match(ssh)).toBe(false);
+  });
+
+
+  it ('JSON stringify', function() {
+    expect(!!UDP).toBe(true);
+
+    var udp1 = UDP.mkUDP(65535, '123');
+
+    var udp1_json = JSON.stringify(udp1);
+    var udp1_ = new UDP.UDP(JSON.parse(udp1_json));
+
+    expect(udp1_.toString()).toBe(udp1.toString());
+  });
 
 });

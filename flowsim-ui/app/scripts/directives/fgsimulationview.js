@@ -51,7 +51,7 @@ angular.module('flowsimUiApp')
                 var currentStage = -1;
                 scope.$watch('makeTransition', function ( newData) {
                     scope.transition(newData.to, newData.clonePacket);
-                }, true);
+                }, false);
                 /**
                  *
                  * @param to - int - index to make transition to

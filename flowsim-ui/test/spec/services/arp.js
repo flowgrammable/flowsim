@@ -108,35 +108,7 @@ describe('Service: ARP', function () {
 
   });
 
-  it('ARP fields match', function() {
-    expect(!!ARP).toBe(true);
 
-    var u = new ETHERNET.MAC(null, '00:11:22:33:44:55');
-    var b = new ETHERNET.MAC(null, 'ff:ff:ff:ff:ff:ff');
-    var m = new ETHERNET.MAC(null, '91:ab:ba:ef:cd:45');
-
-    var every = new ARP.mkShaMatch(
-      '00:00:00:00:00:00', '00:00:00:00:00:00'
-      );
-    var multi = new ARP.mkShaMatch(
-      '01:00:00:00:00:00', '01:00:00:00:00:00'
-      );
-
-    var exact = new ARP.mkShaMatch(u, b);
-
-    expect(every.match(u)).toBe(true);
-    expect(every.match(b)).toBe(true);
-    expect(every.match(m)).toBe(true);
-
-    expect(multi.match(u)).toBe(false);
-    expect(multi.match(b)).toBe(true);
-    expect(multi.match(m)).toBe(true);
-
-    expect(exact.match(u)).toBe(true);
-    expect(exact.match(b)).toBe(false);
-    expect(exact.match(m)).toBe(false);
-
-  })
 
   it('MAC Construction Pass', function() {
     expect(!!ARP).toBe(true);

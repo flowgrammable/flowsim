@@ -6,9 +6,7 @@ angular.module('flowsimUiApp')
 var NAME = 'UDP';
 var BYTES = 8;
 
-var Payloads = {
- 'Payload': 0
-};
+var Payloads = {};
 
 function UDP(udp, src, dst){
   if(_.isObject(udp)) {
@@ -36,6 +34,10 @@ function mkPort(port){
   } else {
     return new UInt.UInt(null, port, 2);
   }
+}
+
+function mkPortMatch(value, mask) {
+  return new UInt.Match(null, mkPort(value), mkPort(mask));
 }
 
 UDP.prototype.src = function(src) {
@@ -104,10 +106,11 @@ return {
   name: NAME,
   Payloads: _.keys(Payloads),
   UDP: UDP,
-  mkPort: mkPort,
-  mkUDP: mkUDP,
   src: '_src',
   dst: '_dst',
+  mkPort: mkPort,
+  mkPortMatch: mkPortMatch,
+  mkUDP: mkUDP,
   create: function() { return new UDP(); },
   createUI: function(UDP) { return new UDP_UI(UDP); },
   TESTS:       TESTS,

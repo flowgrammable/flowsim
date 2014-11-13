@@ -1,4 +1,69 @@
+<div class="blended_grid">
+	<div class="leftColumn">
+		<div class="instructions">
+ 		 Instructions
+		</div>
+		<div class="actionGroup">
+		<div class="actionlist" >
+			<div style="height:10px"></div>
+			<div ng-show="applyActionList.length > 0">Action List&nbsp;&nbsp;</div>
+			<div ng-show="applyActionList.length > 0" class="example-animate-container">
+   			   <div class="animate-repeat" ng-class="(applyActionList.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in applyActionList">
+     		   {{action.name}}
+     			</div>
+      		</div>
+      	</div>
+		<div class="actionset" ng-show="writeActionSet.length > 0">
+			<div style="height:10px"></div>
+			<div ng-show="writeActionSet.length > 0">Action Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<div ng-show="writeActionSet.length > 0" class="example-animate-container">
+   			   <div class="animate-repeat" ng-class="(writeActionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in writeActionSet">
+     		   		{{action.name}}
+     			</div>
+      		</div>
+      	</div>
+      	<div  ng-style="{'height':  80  + (6 - instrucionList.length )* 25  , 'border-width' : instrucionList.length > 4 && applyActionList.length > 0 ? '0 0 2 2':'0'}" class="sim-exec-connection" >
+      		<div ng-style="{'height':  30  + (6 - instrucionList.length )* 25,'width':'35%','border-width' : instrucionList.length > 2 && writeActionSet.length > 0 ? '0 0 2 2':'0'}" class="sim-exec-connection" ng-show="writeActionSet.length > 0"></div>
+      	</div>
+      	</div>
+      	<div class="instructionset" >
+			<div style="height:128px"></div>
+			<div>Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<div class="example-animate-container">
+   			   <div class="animate-repeat" ng-class="(instrucionList.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="instruction in instrucionList">
+     		   {{instruction.name}}
+     			</div>
+      		</div>
+		</div>
+      	</div>
+		
+	
+	<div class="topBanner">
+		<div class="righttable">
+			<table class="tblright">
+				<tr>
+					<td class="color-prim">table : {{ctx.tableId}}</td>
+					<td class="color-sec">buffer : {{ctx.bufferId}}</td>
+				</tr>
+				<tr>
+					<td class="color-sec">queue : {{ctx.packet}}</td>
+					<td class="color-prim">meter : {{ctx.meter}}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="rightContent">
+		<div>Action Set</div>
+		<div class="right-animate-container">
+			<div class="right-animate-repeat" ng-class="(ctx.actionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in ctx.actionSet">
+				{{action.name}}
+			</div>
+		</div>
+	</div>
+	<div class="bottomBanner">
+		<fg-packet-view packet="packet" width="100%"></fg-packet-view>
+	</div>
+</div>
 
-    <div style="text-align:center">
-      <img src="images/design/execution.png">
-    </div>
+		
+		
