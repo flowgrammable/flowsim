@@ -36,8 +36,8 @@ Key.prototype.clone = function() {
 };
 
 Key.prototype.toView = function() {
-  return {
-  };
+  // FIXME
+  return [];
 };
 
 function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
@@ -82,11 +82,11 @@ Context.prototype.clone = function() {
 
 Context.prototype.toView = function() {
   return {
-    buffer: this.buffer,
-    packet: this.packet.clone(),
-    key: this.key.toView(),
+    bufferId: this.buffer,
+    packet: new Packet.PacketUI(this.packet),
     meter: this.meter,
-    table: this.table(),
+    tableId: this.table(),
+    key: this.key.toView(),
     actionSet: this.actionSet.toView(),
     instructionSet: this.instructionSet.toView(),
   };
