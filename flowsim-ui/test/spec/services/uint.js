@@ -164,8 +164,8 @@ describe('Service: uint', function () {
         new UInt.UInt(null, 0x1, 2),
         new UInt.UInt(null, 0x0, 2));
 
-   // expect(wildcard1.match(type1)).toBe(true);
-   // expect(wildcard1.match(type2)).toBe(true);
+    expect(wildcard1.match(type1)).toBe(true);
+    expect(wildcard1.match(type2)).toBe(true);
   });
 
   it('UInt Match - Ethernet MAC', function() {
