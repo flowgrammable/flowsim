@@ -10,11 +10,11 @@ var Payloads = {};
 
 function UDP(udp, src, dst){
   if(_.isObject(udp)) {
-    this._src = mkPort(udp._src);
-    this._dst = mkPort(udp._dst);
+    this._src = new UInt.UInt(udp._src);
+    this._dst = new UInt.UInt(udp._dst);
   } else {
-    this._src = mkPort(src);
-    this._dst = mkPort(dst);
+    this._src = new UInt.UInt(null, src, 2);
+    this._dst = new UInt.UInt(null, dst, 2);
   }
   this.name = NAME;
   this.bytes = BYTES;
@@ -42,7 +42,11 @@ function mkPortMatch(value, mask) {
 
 UDP.prototype.src = function(src) {
   if(src) {
-    this._src = mkPort(src);
+    if(src instanceof UInt.UInt) {
+      this._src = new UInt.UInt(src);
+    } else {
+      this._src = new UInt.UInt(null, src, 2);
+    }
   } else {
     return this._src;
   }
@@ -50,7 +54,11 @@ UDP.prototype.src = function(src) {
 
 UDP.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = mkPort(dst);
+    if(src instanceof UInt.UInt) {
+      this._dst = new UInt.UInt(dst);
+    } else {
+      this._dst = new UInt.UInt(null, dst, 2);
+    }
   } else {
     return this._dst;
   }
@@ -91,6 +99,9 @@ function UDP_UI(udp){
 
 UDP_UI.prototype.toBase = function() {
   var result = new UDP();
+  //FIXME This is BAD!!!!! you are bypassing the constructor that established an
+  //invariant ... so now we can't depend on the invariant ....
+  //use the constructor, much like the force ... it will help you!!!
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);

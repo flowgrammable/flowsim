@@ -276,6 +276,109 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('1.1.1.1');
   });
 
+  it('IPv4 SetTTL', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('ipv4pack');
+    var ttl = new IPV4.mkTtl('0x01');
+    pkt.push(IPV4.mkIPv4());
+
+    var act = new Action.SetTTL(null, IPV4.name, ttl);
+
+    expect(act.protocol).toBe('IPv4');
+    expect(act.value.toString(16)).toBe('0x01');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.setTTL(new Action.SetTTL(
+      null,
+      IPV4.name,
+      IPV4.mkTtl('0x01')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].dscp().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ecn().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].proto().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].src().toString()).toBe('0.0.0.0');
+    expect(pkt.protocols[1].dst().toString()).toBe('0.0.0.0');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.setTTL(new Action.SetTTL(
+      null,
+      IPV4.name,
+      IPV4.mkTtl('0x02')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].dscp().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ecn().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].proto().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x02');
+    expect(pkt.protocols[1].src().toString()).toBe('0.0.0.0');
+    expect(pkt.protocols[1].dst().toString()).toBe('0.0.0.0');
+
+  });
+
+  it('IPv4 DecTTL', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('ipv4pack');
+    var ttl = new IPV4.mkTtl('0x01');
+    pkt.push(IPV4.mkIPv4(
+      '0x00', '0x00', '0x00', '0x02', '0.0.0.0', '0.0.0.0'
+    ));
+
+    var act = new Action.DecTTL(null, IPV4.name);
+
+    expect(act.protocol).toBe('IPv4');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.decTTL(new Action.DecTTL(
+      null,
+      IPV4.name));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x01');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.decTTL(new Action.DecTTL(
+      null,
+      IPV4.name));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x00');
+
+    set.decTTL(new Action.DecTTL(
+      null,
+      IPV4.name));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x00');
+
+  });
+
   it('VLAN SetField', function(){
 
     expect(!!Action).toBe(true);

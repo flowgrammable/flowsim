@@ -43,11 +43,12 @@ function extract_mpls(mpls, key) {
 }
 
 function extract_ipv4(ipv4, key) {
-  key.ip_dscp  = ipv4.dscp;
-  key.ip_ecn   = ipv4.ecn;
-  key.ip_proto = ipv4.proto;
-  key.ip_src   = ipv4.src;
-  key.ip_dst   = ipv4.dst;
+  key.ip_dscp  = ipv4.dscp();
+  key.ip_ecn   = ipv4.ecn();
+  key.ip_proto = ipv4.proto();
+  key.ip_ttl   = ipv4.ttl();
+  key.ip_src   = ipv4.src();
+  key.ip_dst   = ipv4.dst();
 }
 
 function extract_ipv6(ipv6, key) {
@@ -133,6 +134,7 @@ return {
   extract_vlan: extract_vlan,
   extract_arp: extract_arp,
   extract_udp: extract_udp,
+  extract_ipv4: extract_ipv4,
   process: extract
 };
 
