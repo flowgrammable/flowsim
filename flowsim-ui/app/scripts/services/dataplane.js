@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(Context, UInt) {
+  .factory('Dataplane', function(Context, UInt, Extraction) {
 
 
 var State = {
@@ -28,7 +28,7 @@ function Dataplane(device) {
     this.ctx    = null;
     this.state  = State.INIT;
   } else {
-    throw 'Bad Dataplane('+device+', '+events+')';
+    throw 'Bad Dataplane('+device+')';
   }
 }
 
@@ -52,7 +52,7 @@ Dataplane.prototype.extraction = function() {
 
 Dataplane.prototype.choice = function() {
   this.table = this.switch_.tables.get(this.ctx.table());
-  if(!_isObject(this.table)) {
+  if(!_.isObject(this.table)) {
     throw 'Failed to load table: ' + this.ctx.table();
   }
 };
@@ -98,9 +98,6 @@ Dataplane.prototype.step = function() {
     case State.EXECUTION:
       this.execution();
       if(this.ctx.instructionSet.empty()) {
-      } else {
-        this.transition(State.EXECUTION);
-      }
       } else if(this.ctx.hasGoto()) {
         this.transition(State.CHOICE);
       } else {
