@@ -14,111 +14,161 @@ describe('Service: ETHERNET', function () {
   it('MAC Construction Fail', function () {
     expect(!!ETHERNET).toBe(true);
 
-    expect(function() { 
-      new ETHERNET.Ethernet.MAC(''); 
+    expect(function() {
+      new ETHERNET.MAC(null, '');
     }).toThrow();
-    
-    expect(function() { 
-      new ETHERNET.Ethernet.MAC('00:00:00:00:00:00:00'); 
+
+    expect(function() {
+      ETHERNET.mkMAC('');
     }).toThrow();
-    
-    expect(function() { 
-      new ETHERNET.Ethernet.MAC('00:00:00:00:0000'); 
+
+    expect(function() {
+      new ETHERNET.MAC(null, '00:00:00:00:00:00:00');
     }).toThrow();
-    
-    expect(function() { 
-      new ETHERNET.Ethernet.MAC('00:00:g0:00:00:00'); 
+
+    expect(function() {
+      ETHERNET.mkMAC('00:00:00:00:00:00:00');
+    }).toThrow();
+
+    expect(function() {
+      new ETHERNET.MAC(null, '00:00:00:00:0000');
+    }).toThrow();
+
+    expect(function() {
+      ETHERNET.mkMAC('00:00:00:00:0000');
+    }).toThrow();
+
+    expect(function() {
+      new ETHERNET.MAC(null, '00:00:g0:00:00:00');
+    }).toThrow();
+
+    expect(function() {
+      ETHERNET.mkMAC('00:00:g0:00:00:00');
     }).toThrow();
 
   });
-  
+
   it('MAC Construction Pass', function () {
     expect(!!ETHERNET).toBe(true);
 
-    new ETHERNET.Ethernet.MAC('00:00:00:00:00:00');
-    new ETHERNET.Ethernet.MAC('ab:cd:ef:AB:CD:EF');
-    new ETHERNET.Ethernet.MAC('01-23:45-67:89:EF');
+    new ETHERNET.MAC(null, '00:00:00:00:00:00');
+    new ETHERNET.MAC(null, 'ab:cd:ef:AB:CD:EF');
+    new ETHERNET.MAC(null, '01-23:45-67:89:EF');
+
+    ETHERNET.mkMAC('00:00:00:00:00:00');
+    ETHERNET.mkMAC('ab:cd:ef:AB:CD:EF');
+    ETHERNET.mkMAC('01-23:45-67:89:EF');
   });
-  
+
   it('MAC Helper Functions', function () {
     expect(!!ETHERNET).toBe(true);
 
-    var broadcast = new ETHERNET.Ethernet.MAC('ff:ff:ff:ff:ff:ff');
-    var multicast = new ETHERNET.Ethernet.MAC('f1:00-11:22:33:44');
+    var broadcast = new ETHERNET.MAC(null, 'ff:ff:ff:ff:ff:ff');
+    var multicast = new ETHERNET.MAC(null, 'f1:00-11:22:33:44');
 
     // test is braodcast/multicast helper function
-    expect(ETHERNET.Ethernet.MAC.isBroadcast(broadcast)).toBe(true);
-    expect(ETHERNET.Ethernet.MAC.isBroadcast(multicast)).toBe(false);
-    expect(ETHERNET.Ethernet.MAC.isMulticast(broadcast)).toBe(true);
-    expect(ETHERNET.Ethernet.MAC.isMulticast(multicast)).toBe(true);
+    expect(ETHERNET.MAC.isBroadcast(broadcast)).toBe(true);
+    expect(ETHERNET.MAC.isBroadcast(multicast)).toBe(false);
+    expect(ETHERNET.MAC.isMulticast(broadcast)).toBe(true);
+    expect(ETHERNET.MAC.isMulticast(multicast)).toBe(true);
 
     // test mac level equivelence
     // the built in values get undefined for some reason
-    //expect(broadcast.equal(ETHERNET.Ethernet.MAC.Braodcast)).toBe(true);
-    //expect(multicast.equal(ETHERNET.Ethernet.MAC.Braodcast)).toBe(false);
-    expect(broadcast.equal(multicast)).toBe(false);
+    //expect(broadcast.equal(MAC.Braodcast)).toBe(true);
+    //expect(multicast.equal(MAC.Braodcast)).toBe(false);
+    expect(ETHERNET.MAC.equal(multicast, broadcast)).toBe(false);
 
   });
-  
+
   it('MAC toString Pass', function() {
     expect(!!ETHERNET).toBe(true);
 
-    var m1 = new ETHERNET.Ethernet.MAC('0:0:0:0:0:0');
-    var m2 = new ETHERNET.Ethernet.MAC('1:22:3:44:5:66');
+    var m1 = new ETHERNET.MAC(null, '0:0:0:0:0:0');
+    var m2 = new ETHERNET.MAC(null, '1:22:3:44:5:66');
 
     expect(m1.toString()).toBe('00:00:00:00:00:00');
     expect(m2.toString()).toBe('01:22:03:44:05:66');
   });
 
-  it('Ethernet Construction Pass', function() {
-    expect(!!ETHERNET).toBe(true);
-
-    new ETHERNET.Ethernet(
-      'test',
+  it('', function() {
+    var eth1 = new ETHERNET.Ethernet(
+       null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       '0');
-    new ETHERNET.Ethernet(
-      'test',
+    var eth2 = new ETHERNET.Ethernet(eth1);
+
+    expect(eth1.toString()).toBe(eth2.toString());
+  });
+
+  it('Ethernet Construction Pass', function() {
+    expect(!!ETHERNET).toBe(true);
+
+    var eth1 = new ETHERNET.Ethernet(
+       null,
+      '00:00:00:00:00:00',
+      '12:34:56:78:90:ab',
+      '0');
+    var eth2 = new ETHERNET.Ethernet(
+      null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       0);
-    new ETHERNET.Ethernet(
-      'test',
+    var eth3 = new ETHERNET.Ethernet(
+      null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       '0x0');
-    new ETHERNET.Ethernet(
-      'test');
-    new ETHERNET.Ethernet(
-      'test',
+    var eth4 = new ETHERNET.Ethernet(
+      null);
+    var eth5 = new ETHERNET.Ethernet(
+      null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab');
-    new ETHERNET.Ethernet(
-      'test',
+    var eth6 = new ETHERNET.Ethernet(
+      null,
       '00:00:00:00:00:00');
+
+    var eth7 = new ETHERNET.Ethernet(eth1);
+    var eth8 = ETHERNET.mkEthernet(
+      '00:00:00:00:00:00',
+      '12:34:56:78:90:ab',
+      0);
+
+    var eth9 = eth1.clone();
+
+    var testStr = eth1.toString();
+    expect(eth1.toString()).toBe(testStr);
+    expect(eth2.toString()).toBe(testStr);
+    expect(eth3.toString()).toBe(testStr);
+    //expect(eth4.toString()).toBe(testStr);
+    expect(eth5.toString()).toBe(testStr);
+    //expect(eth6.toString()).toBe(testStr);
+    expect(eth7.toString()).toBe(testStr);
+    expect(eth8.toString()).toBe(testStr);
+    expect(eth9.toString()).toBe(testStr);
   });
 
   it('Ethernet Construction Fail', function() {
     expect(!!ETHERNET).toBe(true);
-  
+
     expect(function() {
       new ETHERNET.Ethernet(
-      'test',
+      null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       '0xx0000')
     }).toThrow();
     expect(function() {
       new ETHERNET.Ethernet(
-      'test',
+      null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       0x1ffff)
     }).toThrow();
     expect(function() {
       new ETHERNET.Ethernet(
-      'test',
+      null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
       '0x1ffff')
@@ -131,67 +181,66 @@ describe('Service: ETHERNET', function () {
     var us = '00:11:22:33:44:55';
     var bs = 'ff:ff:ff:ff:ff:ff';
 
-    var ufs = new ETHERNET.Ethernet.MAC(us);
-    var bfs = new ETHERNET.Ethernet.MAC(bs);
-    var ufm = new ETHERNET.Ethernet.MAC(us);
-    var bfm = new ETHERNET.Ethernet.MAC(bs);
+    var ufs = new ETHERNET.MAC(null, us);
+    var bfs = new ETHERNET.MAC(null, bs);
+    var ufm = new ETHERNET.MAC(null, us);
+    var bfm = new ETHERNET.MAC(null, bs);
 
-    expect(ufs.equal(ufm)).toBe(true);
-    expect(bfs.equal(bfm)).toBe(true);
-    
-    expect(ufm.equal(ufs)).toBe(true);
-    expect(bfm.equal(bfs)).toBe(true);
-    
-    expect(ufm.equal(bfs)).toBe(false);
-    expect(bfm.equal(ufs)).toBe(false);
-    expect(bfm.equal(ufs)).toBe(false);
-    expect(ufm.equal(bfs)).toBe(false);
+    expect(ETHERNET.MAC.equal(ufs, ufm)).toBe(true);
+    expect(ETHERNET.MAC.equal(bfs, bfm)).toBe(true);
   });
 
   it('MAC Match Multi', function() {
     expect(!!ETHERNET).toBe(true);
 
-    var match1 = new ETHERNET.Ethernet.MAC.Match(
+    var match1 = new ETHERNET.MAC.Match(
+      null,
       '00:00:00:00:00:00',
-      new ETHERNET.Ethernet.MAC(
+      new ETHERNET.MAC(
+        null,
         '00:00:00:00:00:00'
         )
       );
 
-    var match2 = new ETHERNET.Ethernet.MAC.Match(
-      new ETHERNET.Ethernet.MAC('00:00:00:00:00:00'),
+    var match2 = new ETHERNET.MAC.Match(
+      null,
+      new ETHERNET.MAC(null, '00:00:00:00:00:00'),
       '00:00:00:00:00:00'
       );
 
-    var match3 = new ETHERNET.Ethernet.MAC.Match(
+    var match3 = new ETHERNET.MAC.Match(
+      null,
       '00:00:00:00:00:00', '00:00:00:00:00:00');
 
-    var match4 = new ETHERNET.Ethernet.MAC.Match(
-      new ETHERNET.Ethernet.MAC('00:00:00:00:00:00'),
-      new ETHERNET.Ethernet.MAC('00:00:00:00:00:00')
+    var match4 = new ETHERNET.MAC.Match(
+      null,
+      new ETHERNET.MAC(null, '00:00:00:00:00:00'),
+      new ETHERNET.MAC(null, '00:00:00:00:00:00')
     );
 
-    expect(match1.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
-    expect(match2.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
-    expect(match3.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
-    expect(match4.match(new ETHERNET.Ethernet.MAC('01:02:03:04:05:06'))).toBe(true);
+    expect(match1.match(ETHERNET.mkMAC('01:02:03:04:05:06'))).toBe(true);
+    expect(match2.match(new ETHERNET.MAC(null, '01:02:03:04:05:06'))).toBe(true);
+    expect(match3.match(new ETHERNET.MAC(null, '01:02:03:04:05:06'))).toBe(true);
+    expect(match4.match(new ETHERNET.MAC(null, '01:02:03:04:05:06'))).toBe(true);
   });
 
   it('MAC Match Pass', function() {
     expect(!!ETHERNET).toBe(true);
-    
-    var u = new ETHERNET.Ethernet.MAC('00:11:22:33:44:55');
-    var b = new ETHERNET.Ethernet.MAC('ff:ff:ff:ff:ff:ff');
-    var m = new ETHERNET.Ethernet.MAC('91:ab:ba:ef:cd:45');
-    
-    var every = new ETHERNET.Ethernet.MAC.Match(
+
+    var u = new ETHERNET.MAC(null, '00:11:22:33:44:55');
+    var b = new ETHERNET.MAC(null, 'ff:ff:ff:ff:ff:ff');
+    var m = new ETHERNET.MAC(null, '91:ab:ba:ef:cd:45');
+
+    var every = new ETHERNET.MAC.Match(
+      null,
       '00:00:00:00:00:00', '00:00:00:00:00:00'
       );
-    var multi = new ETHERNET.Ethernet.MAC.Match(
+    var multi = new ETHERNET.MAC.Match(
+      null,
       '01:00:00:00:00:00', '01:00:00:00:00:00'
       );
 
-    var exact = new ETHERNET.Ethernet.MAC.Match(u, b);
+    var exact = new ETHERNET.MAC.Match(null, u, b);
 
     expect(every.match(u)).toBe(true);
     expect(every.match(b)).toBe(true);
@@ -211,24 +260,64 @@ describe('Service: ETHERNET', function () {
     expect(!!ETHERNET).toBe(true);
 
     var dhcp_disco = new ETHERNET.Ethernet(
-      'dhcp_disco',
+      null,
       '00:00:00:00:00:00',
       'ff:ff:ff:ff:ff:ff',
       '0x0806'
       );
 
+    var dhcp2 = JSON.stringify(dhcp_disco);
+    var dhcp2_ = new ETHERNET.Ethernet(JSON.parse(dhcp2));
+
+    expect(dhcp2_.toString()).toBe(dhcp_disco.toString());
+
     dhcp_disco.dst('00:11:22:33:44:55');
     expect(dhcp_disco.dst().toString()).toBe('00:11:22:33:44:55');
-    
+
     dhcp_disco.src('10:11:22:33:44:55');
     expect(dhcp_disco.src().toString()).toBe('10:11:22:33:44:55');
-    
-    dhcp_disco.typelen('0x800');
-    expect(dhcp_disco.typelen().toString(16)).toBe('0x0800');
+
+    dhcp_disco.type('0x800');
+    expect(dhcp_disco.type().toString(16)).toBe('0x0800');
+
+    dhcp_disco.type(1021);
+    expect(dhcp_disco.type().toString(16)).toBe('0x03fd');
+
+    dhcp2_.dst('00:11:22:33:44:55');
+    expect(dhcp2_.dst().toString()).toBe('00:11:22:33:44:55');
+
+    dhcp2_.src('10:11:22:33:44:55');
+    expect(dhcp2_.src().toString()).toBe('10:11:22:33:44:55');
+
+    dhcp2_.type('0x800');
+    expect(dhcp2_.type().toString(16)).toBe('0x0800');
   });
 
   it('Ethernet Set Field Fail', function() {
     expect(!!ETHERNET).toBe(true);
+
+    var dhcp_disco = new ETHERNET.Ethernet(
+      null,
+      '00:00:00:00:00:00',
+      'ff:ff:ff:ff:ff:ff',
+      '0x0806'
+      );
+
+    expect(function(){dhcp_disco.src('10::22:33:44:55')}).toThrow();
+    expect(function(){dhcp_disco.dst('01234')}).toThrow();
+    expect(function(){dhcp_disco.type('0xx800')}).toThrow();
+  });
+
+  it('Ethernet toString Pass', function() {
+    expect(!!ETHERNET).toBe(true);
+
+    var dhcp_disco = new ETHERNET.Ethernet(
+      null,
+      '00:00:00:00:00:00',
+      'ff:ff:ff:ff:ff:ff',
+      '0x0806'
+      );
+    dhcp_disco.toString();
   });
 
 });

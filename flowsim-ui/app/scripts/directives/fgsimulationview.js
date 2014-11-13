@@ -73,7 +73,6 @@ angular.module('flowsimUiApp')
                             .duration(animationDuration)
                             .attr('x', 5 * (stageWidth + stagePadding) + margin + 5)
                             ;
-                        ;
                     }else
                     if(to>-1){
                         if(to > currentStage){//forward transition
@@ -109,7 +108,9 @@ angular.module('flowsimUiApp')
 
                     svg.selectAll('g').remove();//cleanup
 
-                    if (_.isUndefined(stages) || !stages || stages.length === 0) return; //don't render if there is no data
+                    if (_.isUndefined(stages) || !stages || stages.length === 0) {
+                      return; //don't render if there is no data
+                    }
                //Place holder for Active
                 svg.append("g").attr("id", "packets");
                 svg.append("g").attr("id", "stages");

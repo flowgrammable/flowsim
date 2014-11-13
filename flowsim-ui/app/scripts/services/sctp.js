@@ -1,62 +1,55 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('SCTP', function(fgUI, fgConstraints){
+  .factory('SCTP', function(fgUI, fgConstraints){
 
 var NAME = 'SCTP';
+var BYTES = 20;
 
 var Payloads = {
  'Payload': 0
 };
 
-function _SCTP(){
+function SCTP(){
   this.name = NAME;
-  this.bytes = 20;
-  this.fields = {
-    src: 0,
-    dst: 0
-  };
+  this.bytes = BYTES;
 }
 
-function _SCTP_UI(sctp){
-  sctp = sctp === undefined ? new _SCTP() : sctp;
+function SCTP_UI(sctp){
+  sctp = sctp === undefined ? new SCTP() : sctp;
   this.name = NAME;
   this.bytes = 20;
-  this.attrs = _.map(sctp.fields, function(value, key){
-    switch(key) {
-      case 'src':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Source port');
-      case 'dst':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Destination Port');
-      default:
-        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
-
-    }
-  });
+  this.attrs = [{
+    name: 'Src',
+    value: sctp.src().toString(),
+    tip: 'Source port',
+    test:  fgConstraints.isUInt(0,0xffff)
+  }, {
+    name: 'Dst',
+    value: sctp.dst().toString(),
+    tip: 'Desination port',
+    test:  fgConstraints.isUInt(0,0xffff)
+  }];
 }
 
-_SCTP_UI.prototype.toBase = function() {
-  var result = new _SCTP();
+SCTP_UI.prototype.toBase = function() {
+  var result = new SCTP();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
-}
-
-_SCTP_UI.prototype.setPayload = function() {
-  return true;
-}
-
-this.name = NAME;
-this.Payloads = Object.keys(Payloads);
-this.create = function() {
-    return new _SCTP();
 };
 
-this.createUI = function(sctp){
-  return new _SCTP_UI(sctp);
+SCTP_UI.prototype.setPayload = function() {
+  //FIXME
+  return true;
+};
+
+return {
+  name: NAME,
+  Payloads: _.keys(Payloads),
+  create: function() { return new SCTP(); },
+  createUI: function(sctp){ return new SCTP_UI(sctp); }
 };
 
 });

@@ -58,7 +58,9 @@ angular.module('flowsimUiApp').
                     scope.render = function (data) {
                         svg.selectAll('*').remove();//cleanup
 
-                        if (_.isUndefined(data) || !data || data.length === 0) return; //don't render if there is no data
+                        if (_.isUndefined(data) || !data || data.length === 0) {
+                          return; //don't render if there is no data
+                        }
 
                         data = portsView(data.ports, 24);//parse ports and convert to matrix [row][port]
 
@@ -92,7 +94,7 @@ angular.module('flowsimUiApp').
                                 return (scope.isColorA(this.parentNode.attributes.index.value, i) ? 'PortColorA' : 'PortColorB');
                             })
                             .style('opacity', function (d) {
-                                return d.up ? 1 : 0.3;
+                                return d.state.link_down ? 0.3 : 1;
                             })
                             .attr('transform', function (d, i) {
                                 var x = i * (portWidth + portPadding) + margin;
@@ -101,7 +103,7 @@ angular.module('flowsimUiApp').
                             });
 //Copper shape
                         portsG.filter(function (d) {
-                            return d.medium === 'Copper';
+                            return d.ethernet.medium === 'Copper';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.85)
@@ -110,7 +112,7 @@ angular.module('flowsimUiApp').
                             .attr('y', portHeight * 0.15);
 
                         portsG.filter(function (d) {
-                            return d.medium === 'Copper';
+                            return d.ethernet.medium === 'Copper';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.15)
@@ -119,7 +121,7 @@ angular.module('flowsimUiApp').
 
 //Fiber Shape
                         portsG.filter(function (d) {
-                            return d.medium === 'Fiber';
+                            return d.ethernet.medium === 'Fiber';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.8)
@@ -128,7 +130,7 @@ angular.module('flowsimUiApp').
                             .attr('y', portHeight * 0.15);
 
                         portsG.filter(function (d) {
-                            return d.medium === 'Fiber';
+                            return d.ethernet.medium === 'Fiber';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.8)
@@ -138,7 +140,7 @@ angular.module('flowsimUiApp').
                             .attr('x', portWidth / 2 + 2);
 
                         portsG.filter(function (d) {
-                            return d.medium === 'Fiber';
+                            return d.ethernet.medium === 'Fiber';
                         })
                             .append('rect')
                             .attr('height', portHeight * 0.6)
@@ -154,7 +156,7 @@ angular.module('flowsimUiApp').
                             .attr('class', 'PortText')
                             .attr('text-anchor', 'middle')
                             .text(function (d) {
-                                return d.port_id;
+                                return d.id;
                             });
                     };
 

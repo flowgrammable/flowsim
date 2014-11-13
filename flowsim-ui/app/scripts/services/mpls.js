@@ -1,9 +1,13 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('MPLS', function MPLS(fgConstraints, fgUI){
+  .factory('MPLS', function(fgConstraints, UInt){
 
 var NAME = 'MPLS';
+var BYTES = 4;
+
+// MPLS Label is just 20 bits, so just match on 5 hex values
+var Pattern = /^[0-9a-fA-F]{1,5}$/;
 
 var Payloads = {
  'MPLS': 0x8847,
@@ -12,87 +16,183 @@ var Payloads = {
  'Payload': 0
 };
 
-function _MPLS() {
+function MPLS(mpls, label, tc, bos, ttl){
+  if(_.isObject(mpls)){
+    _.extend(this, mpls);
+    this._label  = new UInt.UInt(mpls._label);
+    this._tc     = new UInt.UInt(mpls._tc);
+    this._bos    = new UInt.UInt(mpls._bos);
+    this._ttl    = new UInt.UInt(mpls._ttl);
+  } else {
+    this._label  = mkLabel(label);
+    this._tc     = mkTc(tc);
+    this._bos    = mkBos(bos);
+    this._ttl    = mkTtl(ttl);
+  }
+  this.bytes = BYTES;
   this.name = NAME;
-  this.bytes = 4;
-  this.fields = {
-    label: 0,
-    tc: 0,
-    bos: 0
-  };
 }
 
-function _MPLS_UI(mpls){
-  mpls = mpls === undefined ? new _MPLS() : mpls;
+function mkMPLS(label, tc, bos, ttl){
+  return new MPLS(null, label, tc, bos, ttl);
+}
+
+MPLS.prototype.label = function(label){
+  if(label){
+    if(label instanceof UInt.UInt){
+      this._label = new UInt.UInt(label);
+    } else {
+      this._label = new UInt.UInt(null, label, 3);
+    }
+  } else {
+    return this._label;
+  }
+};
+
+function mkLabel(input){
+  return new UInt.UInt(null, input, 3);
+}
+
+function mkLabelMatch(value, mask){
+  return new UInt.Match(null, mkLabel(value), mkLabel(mask));
+}
+
+MPLS.prototype.tc = function(tc){
+  if(tc){
+    if(tc instanceof UInt.UInt){
+      this._tc = new UInt.UInt(tc);
+    } else {
+      this._tc = new UInt.UInt(null, tc, 1);
+    }
+  } else {
+    return this._tc;
+  }
+};
+
+function mkTc(input){
+  return new UInt.UInt(null, input, 1);
+}
+
+function mkTcMatch(value, mask){
+  return new UInt.Match(null, mkTc(value), mkTc(mask));
+}
+
+MPLS.prototype.bos = function(bos){
+  if(bos){
+    if(bos instanceof UInt.UInt){
+      this._bos = new UInt.UInt(bos);
+    } else {
+      this._bos = new UInt.UInt(null, bos, 1);
+    }
+  } else {
+    return this._bos;
+  }
+};
+
+function mkBos(input){
+  return new UInt.UInt(null, input, 1);
+}
+
+function mkBosMatch(value, mask){
+  return new UInt.Match(null, mkBos(value), mkBos(mask));
+}
+
+MPLS.prototype.ttl = function(ttl){
+  if(ttl){
+    if(ttl instanceof UInt.UInt){
+      this._ttl = new UInt.UInt(ttl);
+    } else {
+      this._ttl = new UInt.UInt(null, ttl, 1);
+    }
+  } else {
+    return this._ttl;
+  }
+};
+
+function mkTtl(input){
+  return new UInt.UInt(null, input, 1);
+}
+
+function mkTtlMatch(value, mask){
+  return new UInt.Match(null, mkTtl(value), mkTtl(mask));
+}
+
+var TIPS = {
+  label: 'MPLS label',
+  tc: 'Traffic Class',
+  bos: 'Bottom of Stack',
+  ttl: 'Time to live'
+};
+
+var TESTS = {
+  label: UInt.is(20),
+  tc: UInt.is(3),
+  bos: UInt.is(1),
+  ttl: UInt.is(8)
+};
+
+function MPLS_UI(mpls){
+  mpls = mpls ? new MPLS(mpls) : new MPLS();
   this.name = NAME;
   this.bytes = mpls.bytes;
-  this.attrs = _.map(mpls.fields, function(value, key){
-    switch(key) {
-      case 'label':
-        return {
-          name: key,
-          value: value,
-          test: fgConstraints.isUInt(0, 0x0fffff),
-          tip: 'MPLS Label'
-        };
-      case 'tc':
-        return {
-          name: key,
-          value: value,
-          test: fgConstraints.isUInt(0, 7),
-          tip: 'Traffic Control'
-        };
-      case 'bos':
-        return {
-          name: key,
-          value: value,
-          test: fgConstraints.isUInt(0, 0x0fffff),
-          tip: 'Bottom of Stack'
-        };
-      case 'ttl':
-        return {
-          name: key,
-          value: value,
-          test: fgConstraints.isUInt(0,0xff),
-          tip: 'Time to live'
-        }
-      default:
-        return {
-          name: key,
-          value: value,
-          test: function() { return true; },
-          tip: 'Unknown'
-        };
-    }
-  });
+  this.attrs = [{
+    name: 'Label',
+    value: mpls.label().toString(16),
+    test: TESTS.label,
+    tip: TIPS.label
+  },{
+    name: 'Traffic Class',
+    value: mpls.tc().toString(16),
+    test: TESTS.tc,
+    tip: TIPS.tc
+  },{
+    name: 'Bottom of Stack',
+    value: mpls.bos().toString(16),
+    test: TESTS.bos,
+    tip: TIPS.bos
+  }, {
+    name: 'TTL',
+    value: mpls.ttl().toString(16),
+    test: TESTS.ttl,
+    tip: TIPS.ttl
+  }];
 }
 
-_MPLS_UI.prototype.toBase = function () {
-  var result = new _MPLS();
-  result.name = this.name;
-  result.bytes = this.bytes;
-  result.fields = fgUI.stripLabelInputs(this.attrs);
-  return result;
+MPLS_UI.prototype.toBase = function () {
+  return new MPLS(null, this.attrs[0].value, this.attrs[1].value,
+      this.attrs[2].value, this.attrs[3].value);
 };
 
-_MPLS_UI.prototype.setPayload = function(name) {
+MPLS_UI.prototype.setPayload = function() {
 
 };
 
-_MPLS_UI.prototype.clearPayload = function() {
+MPLS_UI.prototype.clearPayload = function() {
 
 };
 
-this.name = NAME;
-
-this.create = function () {
-  return new _MPLS();
+return {
+  name: NAME,
+  MPLS: MPLS,
+  label: '_label',
+  tc: '_tc',
+  bos: '_bos',
+  ttl: '_ttl',
+  mkMPLS: mkMPLS,
+  mkLabel: mkLabel,
+  mkLabelMatch: mkLabelMatch,
+  mkTc: mkTc,
+  mkTcMatch: mkTcMatch,
+  mkBos: mkBos,
+  mkBosMatch: mkBosMatch,
+  mkTtl: mkTtl,
+  mkTtlMatch: mkTtlMatch,
+  MPLS_UI:   MPLS_UI,
+  create: function(mpls) { return new MPLS(mpls); },
+  createUI: function(mpls) {return new MPLS_UI(mpls); },
+  Payloads: Object.keys(Payloads),
+  TESTS: TESTS,
+  TIPS: TIPS
 };
-
-this.createUI = function(mpls) {
-  return new _MPLS_UI(mpls);
-};
-
-this.Payloads = Object.keys(Payloads);
 
 });

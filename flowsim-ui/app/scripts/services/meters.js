@@ -29,7 +29,7 @@ Meters.TESTS = {
   max_meters: fgConstraints.isUInt(0, 0xffffffff),
   max_bands: fgConstraints.isUInt(0, 0xff),
   max_color: fgConstraints.isUInt(0, 0xff)
-}
+};
 
 function Capabilities(meters) {
   if(meters) {
@@ -45,19 +45,19 @@ function Capabilities(meters) {
   }
 }
 
-Capabilities.prototype.openflow_1_0 = function() {
+Capabilities.prototype.ofp_1_0 = function() {
 };
 
-Capabilities.prototype.openflow_1_1 = function() {
+Capabilities.prototype.ofp_1_1 = function() {
 };
 
-Capabilities.prototype.openflow_1_2 = function() {
+Capabilities.prototype.ofp_1_2 = function() {
 };
 
-Capabilities.prototype.openflow_1_3 = function() {
+Capabilities.prototype.ofp_1_3 = function() {
 };
 
-Capabilities.prototype.openflow_1_4 = function() {
+Capabilities.prototype.ofp_1_4 = function() {
 };
 
 function Configuration(meters) {

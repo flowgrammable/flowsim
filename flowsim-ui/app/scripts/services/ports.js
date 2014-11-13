@@ -1,362 +1,328 @@
 'use strict';
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.ports
- * @description
- * # ports
- * Service in the flowsimUiApp.
- */
 angular.module('flowsimUiApp')
-  .factory('Ports', function(fgConstraints, ETHERNET) {
+  .factory('Ports', function(UInt, ETHERNET, Regex) {
 
-var defaultPorts  = 24;
-var defaultMAC    = '00:00:00:00:00:01';
-var defaultName   = 'eth';
-var defaultSpeed  = '1_gbps';
-var defaultMedium = 'Fiber';
-var defaultMode   = 'full_duplex';
-var defaultSpeed  = '10_gbps';
+var defPortCount   = 24;
+var defNamePrefix  = 'eth';
+var defPortStats   = true;
+var defPortBlocked = true;
 
-var Port = {};
+var defCurrMaxSpeed = true;
 
-Port.TIPS = {
-  port_id: 'Ethernet port identifier',
-  mac:     'MAC address used by port in spanning tree',
-  name:    'display name of the port',
-  speed:   'physical layer speed of port',
-  mode:    'physical layer transmission mode',
-  medium:  'physical layer medium of port'
+// Port Config defaults
+var defPortDown = false;
+var defNoRecv   = false;
+var defNoFwd    = false;
+var defNoPktIn    = false;
+
+// Port State defaults
+var defLinkDown = false;
+var defLive     = false;
+
+// Basic constants
+
+var _half_duplex = 'Half Duplex';
+var _full_duplex = 'Full Duplex';
+
+var defMode = _full_duplex;
+var _modes = [_half_duplex, _full_duplex];
+
+var _copper = 'Copper';
+var _fiber  = 'Fiber';
+
+var defMedium = _copper;
+var _mediums = [_copper, _fiber];
+
+var _10Mbps  = '10 Mbps';
+var _100Mbps = '100 Mbs';
+var _1Gbps   = '1 Gbps';
+var _10Gbps  = '10 Gbps';
+var _40Gbps  = '40 Gbps';
+var _100Gbps = '100 Gbps';
+var _1Tbps = '1 Tbps';
+
+var defSpeed = _10Gbps;
+var _speeds = {
+  _10Mbps: _10Mbps, 
+  _100Mbps: _100Mbps, 
+  _1Gbps: _1Gbps, 
+  _10Gbps: _10Gbps, 
+  _40Gbps: _40Gbps, 
+  _100Gbps: _100Gbps,
+  _1Tbps: _1Tbps
 };
 
-Port.TESTS = {
-  mac: ETHERNET.Ethernet.MAC.is,
-  name: function(v) { return /[a-zA-Z_][a-zA-Z_0-9]*/.test(v) }
-}
+var _pause     = 'Pause';
+var _autoNeg   = 'Auto Neg';
+var _pauseAsym = 'Pause Asym';
 
-Port.Capabilities = function(port) {
-  if(typeof port === 'number') {
-    // default construction
-    this.port_id = port;
-    this.mac     = defaultMAC;
-    this.name    = defaultName + this.port_id;
-    this.speed   = defaultSpeed;
-    this.mode    = defaultMode;
-    this.medium  = defaultMedium;
-    this.up      = true;
-  } else {
-    // copy construction
+var _procedures = {
+  pause: _pause,
+  autoNeg: _autoNeg,
+  _pauseAsym: _pauseAsym
+};
+var defProcedures = {};
+
+var defVirtualPorts = {
+  in_port:    true,  // mandatory in 1.0+
+  table:      true,  // mandatory in 1.0+
+  controller: true,  // mandatory in 1.0+
+  all:        true,  // mandatory in 1.0+
+  local:      true,  // mandatory in 1.0, optional in 1.1+
+  normal:     true,  // optional in 1.0-1.4
+  flood:      true,  // optional in 1.0-1.4
+};
+
+function Port(port, portProfile) {
+  if(_.isObject(port)) {
+    this.capabilities = new PortProfile(port.capabilities);
     _.extend(this, port);
+    this.config = _.clone(port.config);
+    this.state  = _.clone(port.state);
+  } else {
+    // Don't let user changes affect the instantiated switch
+    this.capabilities = new PortProfile(portProfile);
+
+    this.id   = portProfile.id;
+    this.mac  = portProfile.mac;
+    this.name = portProfile.name;
+    this.up   = true;
+
+    this.config = {
+      port_down: defPortDown,
+      no_recv:   defNoRecv,
+      no_fwd:    defNoFwd,
+      no_pkt_in: defNoPktIn
+    };
+
+    this.state  = {
+      link_down: defLinkDown,
+      blocked:   defPortBlocked,
+      live:      defLive
+    };
+
+    this.ethernet = {
+      medium: this.capabilities.ethernet.medium
+    };
+
+    // Set the ethernet property portion of the port
+    this.supported = {
+      speeds: this.capabilities.ethernet.speeds,
+      modes: _modes,
+      medium: this.capabilities.ethernet.medium,
+      procedures: _procedures,
+    };
+
+    this.advertised = {
+      speeds: _.clone(this.supported.speeds),
+      modes: _.clone(this.supported.modes),
+      medium: this.supported.medium,
+      procedures: _.clone(this.supported.procedures)
+    };
+
+    this.curr = {
+      speed: this.capabilities.ethernet.speed,
+      mode: defMode,
+      medium: this.supported.medium,
+      procedures: defProcedures
+    };
+
+    this.peer = {
+      speeds: [],
+      modes: [],
+      medium: this.supported.medium,
+      procedures: []
+    };
+
+    this.curr_speed = this.capabilities.ethernet.speed;
+    this.max_speed  = this.capabilities.ethernet.speed;
+
+    this.optical  = {
+      // should put some things here
+    };
   }
 }
 
-Port.Capabilities.prototype.openflow_1_0 = function(speeds, mediums, modes) {
-    // ensure speed/medium/mode are in param sets
-    if (speeds[this.speed] === false) {
-      this.speed = '10_gbps';
-    }
+Port.prototype.clone = function() {
+  return new Port(this);
 };
 
-Port.Configuration = function(port, portCaps) {
-  _.extend(this, port);
-  if(port instanceof Port.Capabilities) {
+function Ports(ports, profile) {
+  if(_.isObject(ports)) {
+    this.capabilities = new Profile(ports.capabilities);
+    this.ports = _(ports.ports).map(function(port) {
+      return new Port(port);
+    });
+  } else {
+    this.capabilities = new Profile(profile);
+    this.ports = _(this.capabilities.ports).map(function(portProfile) {
+      return new Port(null, portProfile);
+    });
   }
+}
+
+Ports.prototype.clone = function() {
+  return new Ports(this);
 };
 
-Port.SPEEDS = [{
-  label: '10 Mbps',
-  value: '10_mbps'
-}, {
-  label: '100 Mbps',
-  value: '100_mbps'
-}, {
-  label: '1 Gbps',
-  value: '1_gbps'
-}, {
-  label: '10 Gbps',
-  value: '10_gbps'
-}, {
-  label: '40 Gbps',
-  value: '40_gbps'
-}, {
-  label: '100 Gbps',
-  value: '100_gbps'
-}, {
-  label: '1 Tbps',
-  value: '1_tbps'
-}];
-
-Port.MODES = [{
-  label: 'Half Duplex',
-  value: 'half_duplex'
-}, {
-  label: 'Full Duplex',
-  value: 'full_duplex'
-}];
-
-Port.MEDIUMS = [
-  'Copper',
-  'Fiber'
-];
-
-function Capabilities(ports) {
-  if(ports) {
-    _.extend(this, ports);
-    this.ports = _.map(ports.ports, function(port) {
-      return new Port.Capabilities(port);
-    });
-    this.speeds = _.clone(ports.speeds);
-    this.mediums = _.clone(ports.mediums);
-    this.modes = _.clone(ports.modes);
-    this.vports  = _.clone(ports.vports);
+function PortProfile(portProfile, id, mac) {
+  if(_.isObject(portProfile)) {
+    _.extend(this, portProfile);
+    this.ethernet = _.clone(portProfile.ethernet);
+    this.optical  = _.clone(portProfile.optical);
   } else {
-    // default constructor
-    this.n_ports = defaultPorts;
-    this.ports = _.map(_.range(this.n_ports), function(id) {
-      return new Port.Capabilities(id);
-    });
-    this.port_stats = true;
-    this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': true,
-      '100_gbps': true,
-      '1_tbps': true
+    this.id = id;
+    this.mac = mac;
+    this.name = defNamePrefix+id;
+    this.state = {
+      link_down: false
     };
-    this.mediums = {
-      Copper: true,
-      Fiber: true
+    this.ethernet = {
+      speed: defSpeed,
+      speeds: _.clone(_speeds),
+      medium: defMedium,
+      procedures: defProcedures,
+      curr_max_speed: defCurrMaxSpeed
     };
-    this.modes = {
-      'half_duplex': true,
-      'full_duplex': true
-    };
-    this.vports = {
-      port_stats: true,
-      stp:        false,
-      in_port:    true,
-      table:      true,
-      normal:     true,
-      flood:      true,
-      all:        true,
-      controller: true,
-      local:      true,
-      any:        true,
-      none:       true
+    this.optical = {
     };
   }
 }
 
-function Configuration(ports) {
-  if(ports instanceof Capabilities) {
-    this.n_ports = ports.n_ports;
-    this.ports = _.map(ports.ports, function(port) { 
-      return new Port.Configuration(port, ports);
+PortProfile.prototype.ofp_1_0 = function() {
+  delete this.ethernet.speeds._40Gbps;
+  delete this.ethernet.speeds._100Gbps;
+  delete this.ethernet.speeds._1Tbps;
+  if(this.ethernet.speed === _40Gbps ||
+      this.ethernet.speed === _100Gbps ||
+      this.ethernet.sppeed === _1Tbps) {
+    this.ethernet.speed = _10Gbps;
+  }
+  this.ethernet.curr_max_speed = false;
+};
+
+// Nothing to clear or reduce
+PortProfile.prototype.ofp_1_1 = function() {
+  this.ethernet.speeds = _.clone(_speeds);
+};
+PortProfile.prototype.ofp_1_2 = function() {
+  this.ethernet.speeds = _.clone(_speeds);
+};
+PortProfile.prototype.ofp_1_3 = function() {
+  this.ethernet.speeds = _.clone(_speeds);
+};
+PortProfile.prototype.ofp_1_4 = function() {
+  this.ethernet.speeds = _.clone(_speeds);
+};
+
+PortProfile.prototype.clone = function() {
+  return new PortProfile(this);
+};
+
+function Profile(profile, macPrefix) {
+  if(_.isObject(profile)) {
+    _.extend(this, profile);
+    this.ports = _(profile.ports).map(function(port) {
+      return new PortProfile(port);
     });
+    this.vports = _.clone(profile.vports);
   } else {
-    _.extend(this, ports);
-    this.ports = _.map(ports.ports, function(port) {
-      return new Port.Configuration(port);
+    this.n_ports = defPortCount;
+    this.macPrefix    = macPrefix;
+    this.ports = _(this.n_ports).times(function(id) {
+      return new PortProfile(null, id, mkMAC(macPrefix, id));
     });
+    this.port_stats   = defPortStats;
+    this.port_blocked = defPortBlocked;
+    this.vports = defVirtualPorts;
   }
 }
 
-Capabilities.prototype.rebuild = function() {
-  var i;
+Profile.prototype.clone = function() {
+  return new Profile(this);
+};
+
+Profile.prototype.rebuild = function() {
+  var base;
   if(this.n_ports === this.ports.length) {
     return;
   } else if(this.n_ports < this.ports.length) {
     this.ports.splice(this.n_ports, this.ports.length-this.n_ports);
   } else {
-    for(i=this.ports.length; i<this.n_ports; ++i) {
-      this.ports.push(new Port.Capabilities(i));
-    }
+    base = this.ports.length;
+    _(this.n_ports-this.ports.length).times(function(i) {
+      var idx = base + i;
+      this.ports.push(new PortProfile(null, idx, mkMAC(this.macPrefix, idx)));
+    }, this);
   }
+};
+
+function mkMAC(prefix, id) {
+  // don't use the bridge id ..  maybe this is unnecessary stp hold over
+  var idx = UInt.padZeros(id.toString(16), 4);
+  return prefix + ':' + idx.slice(0,2) + ':' + idx.slice(2, 4);
 }
 
-Capabilities.prototype.openflow_1_0 = function() {
-  // Ports
-  this.vports = {
-    port_stats: true,
-    stp:        true, // optional
-    in_port:    true,
-    table:      true,
-    normal:     true, // optional
-    flood:      true, // optional
-    all:        true,
-    controller: true,
-    local:      true,
-    any:        false,
-    none:       true
-  };
-
-  this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': false,
-      '100_gbps': false,
-      '1_tbps': false
-    };
-  _.each(this.ports, function(port) {
-    var speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': false,
-      '100_gbps': false,
-      '1_tbps': false
-    };  // tmp fix...  figure out how to pass this in?
-    var mediums = {
-      'Copper': true,
-      'Fiber': true
-    };  // tmp fix...
-    var modes = {
-      'half_duplex': true,
-      'full_duplex': true
-    }; // tmp fix...
-    port.openflow_1_0(speeds, mediums, modes);
+Profile.prototype.ofp_1_0 = function() {
+  this.port_blocked = false;
+  _(this.ports).each(function(port) {
+    port.ofp_1_0();
   });
 };
 
-Capabilities.prototype.openflow_1_1 = function() {
-  // Ports
-  this.vports = {
-    port_stats: true,
-    stp:        false,
-    in_port:    true,
-    table:      true,
-    normal:     true, // optional
-    flood:      true, // optional
-    all:        true,
-    controller: true,
-    local:      true, // optional
-    any:        true,
-    none:       false
-  };
-
-  this.speeds = {
-    '10_mbps': true,
-    '100_mbps': true,
-    '1_gbps': true,
-    '10_gbps': true,
-    '40_gbps': true,
-    '100_gbps': true,
-    '1_tbps': true
-  };
-
-  this.modes = {
-    'half_duplex': true,
-    'full_duplex': true
-  };
-
-  this.medium = {
-    Fiber: true,
-    Copper: true
-  };
+Profile.prototype.ofp_1_1 = function() {
+  this.port_blocked = false;
+  _(this.ports).each(function(port) {
+    port.ofp_1_1();
+  });
 };
 
-Capabilities.prototype.openflow_1_2 = function() {
-  // Ports
-  this.vports = {
-    port_stats: true,
-    stp:        false,
-    in_port:    true,
-    table:      true,
-    normal:     true, // optional
-    flood:      true, // optional
-    all:        true,
-    controller: true,
-    local:      true, // optional
-    any:        true,
-    none:       false
-  };
-
-  this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': true,
-      '100_gbps': true,
-      '1_tbps': true
-    };
+Profile.prototype.ofp_1_2 = function() {
+  _(this.ports).each(function(port) {
+    port.ofp_1_2();
+  });
 };
 
-Capabilities.prototype.openflow_1_3 = function() {
-  // Ports
-  this.vports = {
-    port_stats: true,
-    stp:        false,
-    in_port:    true,
-    table:      true,
-    normal:     true, // optional
-    flood:      true, // optional
-    all:        true,
-    controller: true,
-    local:      true, // optional
-    any:        true,
-    none:       false
-  };
-
-  this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': true,
-      '100_gbps': true,
-      '1_tbps': true
-    };
+Profile.prototype.ofp_1_3 = function() {
+  _(this.ports).each(function(port) {
+    port.ofp_1_0();
+  });
 };
 
-Capabilities.prototype.openflow_1_4 = function() {
-  // Ports
-  this.vports = {
-    port_stats: true,
-    stp:        false,
-    in_port:    true,
-    table:      true,
-    normal:     true, // optional
-    flood:      true, // optional
-    all:        true,
-    controller: true,
-    local:      true, // optional
-    any:        true,
-    none:       false
-  };
-
-  this.speeds = {
-      '10_mbps': true,
-      '100_mbps': true,
-      '1_gbps': true,
-      '10_gbps': true,
-      '40_gbps': true,
-      '100_gbps': true,
-      '1_tbps': true
-    };
+Profile.prototype.ofp_1_4 = function() {
+  _(this.ports).each(function(port) {
+    port.ofp_1_0();
+  });
 };
 
 var TIPS = {
-  Port: Port.TIPS,
+  mac: 'a',
+  name: 'b',
+  speed: 'c',
+  mode: 'd',
+  medium: 'e'
 };
 
 var TESTS = {
-  Port: Port.TESTS,
+  mac: ETHERNET.MAC.is,
+  name: function(v) { return Regex.Identifier.test(v); }
+};
+
+var RANGES = {
+  speeds: _speeds,
+  modes: _modes,
+  procedures: _procedures,
+  mediums: _mediums
 };
 
 return {
-  Capabilities: Capabilities,
-  Configuration: Configuration,
+  Port: Port,
+  Ports: Ports,
+  Profile: Profile,
   TIPS: TIPS,
   TESTS: TESTS,
-  MEDIUMS: Port.MEDIUMS,
-  MODES: Port.MODES,
-  SPEEDS: Port.SPEEDS
+  RANGES: RANGES
 };
 
 });

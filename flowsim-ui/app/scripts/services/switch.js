@@ -11,17 +11,17 @@ angular.module('flowsimUiApp')
   .factory('Switch', function(Datapath, Ports, Tables, Meters, Groups){
 
 function Switch(sw, profile) {
-  if(sw instanceof Switch || (typeof sw === 'object' && sw !== null)) {
+  if(_.isObject(sw)) {
     _.extend(this, sw);
-    this.datapath = new Datapath.Configuration(sw.datapath);
-    //this.ports    = new Ports.Configuration(sw.ports);
+    this.datapath = new Datapath.Datapath(sw.datapath);
+    this.ports    = new Ports.Ports(sw.ports);
     this.tables   = new Tables.Configuration(sw.tables);
     //this.meters   = new Meters.Configuration(sw.meters);
     //this.groups   = new Groups.Configuration(sw.groups);
   } else {
     this.name     = sw;
-    this.datapath = new Datapath.Configuration(null, profile.datapath);
-    //this.ports    = new Ports.Configuration(null, profile.ports);
+    this.datapath = new Datapath.Datapath(null, profile.datapath);
+    this.ports    = new Ports.Ports(null, profile.ports);
     this.tables   = new Tables.Configuration(null, profile.tables);
     //this.meters   = new Meters.Configuration(null, profile.meters);
     //this.groups   = new Groups.Configuration(null, profile.groups);
@@ -43,9 +43,36 @@ function createUI(swi, initialValue) {
   return new SwitchUI(swi, initialValue);
 }
 
+var TIPS = {
+  Datapath: Datapath.TIPS,
+  Ports: Ports.TIPS,
+  Tables: Tables.TIPS,
+  Groups: Groups.TIPS,
+  Meters: Meters.TIPS
+};
+
+var TESTS = {
+  Datapath: Datapath.TESTS,
+  Ports: Ports.TESTS,
+  Tables: Tables.TESTS,
+  Groups: Groups.TESTS,
+  Meters: Meters.TESTS
+};
+
+var RANGES = {
+  Datapath: Datapath.RANGES,
+  Ports: Ports.RANGES,
+  Tables: Tables.RANGES,
+  Groups: Groups.RANGES,
+  Meters: Meters.RANGES
+};
+
 return {
     create: create,
-    createUI: createUI
+    createUI: createUI,
+    TIPS: TIPS,
+    TESTS: TESTS,
+    RANGES: RANGES
 };
 
 });

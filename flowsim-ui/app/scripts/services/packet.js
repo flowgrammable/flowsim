@@ -141,7 +141,8 @@ return {
   createUI: createUI,
   createProtocol: createProtocol,
   createProtocolUI: createProtocolUI,
-  getPayloads: getPayloads
+  getPayloads: getPayloads,
+  Packet: Packet
 };
 
 });

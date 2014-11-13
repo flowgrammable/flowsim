@@ -66,12 +66,14 @@ $scope.instrucionList = [{
   set: [],
   list: []
 }];
+                                          Switch, Packet, Dataplane, Regex) {
+
     $scope.names = {};
     $scope.trace = null;
     $scope.simulation = null;
 
     // grab the available switches
-    $scope.switch_ = {
+    $scope.device = {
       name: '',
       names: []
     };
@@ -79,7 +81,7 @@ $scope.instrucionList = [{
       if(err) {
         console.log(err.details);
       } else {
-        $scope.switch_.names = result;
+        $scope.device.names = result;
       }
     });
 
@@ -112,16 +114,16 @@ $scope.instrucionList = [{
 
     $scope.delPacket = function(idx) {
       $scope.trace.del(idx);
-    }
+    };
 
-    $scope.$watch('switch_.name', function() {
+    $scope.$watch('device.name', function() {
       if($scope.trace) {
-        fgCache.get('switch', $scope.switch_.name, Switch,
-                    function(err, switch_) {
+        fgCache.get('switch', $scope.device.name, Switch,
+                    function(err, device) {
           if(err) {
             console.log(err.details);
           } else {
-            $scope.trace.switch_ = switch_;
+            $scope.trace.device = device;
           }
         });
       }
@@ -132,12 +134,10 @@ $scope.instrucionList = [{
     };
 
     $scope.addTrace = function(name, callback) {
-      if(name in $scope.names) {
+      if(!Regex.Identifier.test(name)) {
+        callback('Bad name');
+      } else if(name in $scope.names) {
         callback('Name exists');
-      } else if(name.length === 0) {
-        callback('Invalid name');
-      } else if(!/^[a-zA-Z_][a-zA-Z_0-9]*$/.test(name)) {
-        callback('Invalid name');
       } else {
         $scope.trace = fgCache.create('trace', name, Trace);
         $scope.names[name] = true;
@@ -165,8 +165,8 @@ $scope.instrucionList = [{
           console.log(err.details);
         } else {
           $scope.trace = result;
-          if($scope.trace.switch_) {
-            $scope.switch_.name = $scope.trace.switch_.name || '';
+          if($scope.trace.device) {
+            $scope.device.name = $scope.trace.device.name || '';
           }
         }
       });

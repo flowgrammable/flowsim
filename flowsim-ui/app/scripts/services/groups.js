@@ -65,7 +65,6 @@ function Capabilities(groups) {
       protocol: 'Internal',
       fields: [
         mkActionField('Output', true, 'forward'),
-        mkActionField('Drop', true, 'drop'),
         mkActionField('Set Group', true, 'set_group'),
         mkActionField('Set Queue', true, 'set_queue')
       ]
@@ -158,19 +157,19 @@ function Capabilities(groups) {
   }
 }
 
-Capabilities.prototype.openflow_1_0 = function() {
+Capabilities.prototype.ofp_1_0 = function() {
 };
 
-Capabilities.prototype.openflow_1_1 = function() {
+Capabilities.prototype.ofp_1_1 = function() {
 };
 
-Capabilities.prototype.openflow_1_2 = function() {
+Capabilities.prototype.ofp_1_2 = function() {
 };
 
-Capabilities.prototype.openflow_1_3 = function() {
+Capabilities.prototype.ofp_1_3 = function() {
 };
 
-Capabilities.prototype.openflow_1_4 = function() {
+Capabilities.prototype.ofp_1_4 = function() {
 };
 
 function Configuration(groups) {

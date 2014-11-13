@@ -8,14 +8,17 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Match', function(fgConstraints, ETHERNET, Utils) {
+  .factory('Match', function(fgConstraints) {
 
-function Match(match) {
-  if(match instanceof Match || match) {
-    _.extend(this, match);
-    _.each(match.matches, function(m) { return m.clone(); });
+function Match(match, label, matchObject) {
+  if(_.isObject(match)) {
+    this.label  = match.label;
+    this._match = matchObject.clone();
+  } else if(label && matchObject) {
+    this.label  = label;
+    this._match = matchObject;
   } else {
-    this.matches = [];
+    throw 'Match('+match+', '+label+', '+matchObject+')';
   }
 }
 
@@ -23,22 +26,38 @@ Match.prototype.clone = function() {
   return new Match(this);
 };
 
-Match.prototype.add = function(match) {
+function Set(set) {
+  if(_.isObject(set)) {
+    this.matches = _.map(set.matches, function(match) { 
+      return new Match(match);
+    });
+  } else {
+    this.matches = [];
+  }
+}
+
+Set.prototype.clone = function() {
+  return new Set(this);
+};
+
+Set.prototype.push = function(match) {
   this.matches.push(match);
 };
 
-Match.prototype.del = function(idx) {
-  this.matches.splice(idx, 1);
+Set.prototype.pop = function() {
+  if(this.matches.length) {
+    this.matches.splice(this.matches.length-1, 1);
+  }
 };
 
-Match.prototype.match = function(key) {
-  var i;
-  for(i=0; i<this.matches.length; i++) {
-    if(!this.matches[i].match(key)) {
-      return false;
-    }
+Set.prototype.match = function(key) {
+  // empty match set matches everything .. is default match
+  if(this.matches.length === 0) {
+    return true;
   }
-  return true;
+  return _.every(this.matches, function(match) {
+    return _(key).has(match.label) && match._match.match(key[match.label]);
+  });
 };
 
 function createMatch(protocol, field, key, wildcard, maskable, mask) {
@@ -53,10 +72,11 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
   };
 }
 
-Match.Profile = function(mat, match){
-  if(mat instanceof Match.Profile || (typeof mat === 'object' && mat !==null)){
-    _.extend(this, mat);
-    this.fields = _.map(mat.fields, function(f) { return _.clone(f); });
+Match.Profile = function(match){
+  if(match instanceof Match.Profile ||
+     (typeof match === 'object' && match !==null)){
+    _.extend(this, match);
+    this.fields = _.map(match.fields, function(f) { return _.clone(f); });
   } else {
     this.fields = [
     createMatch('Ingress', 'Port', 'in_port', true, false, 0),
@@ -98,7 +118,7 @@ Match.Profile = function(mat, match){
     createMatch('SCTP', 'Dst', 'sctp_dst', true, true, '0xffff')
     ];
   }
-}
+};
 
 Match.Profile.TIPS ={
   in_port: 'Match on ingress port',
@@ -168,36 +188,11 @@ Match.Profile.TESTS = {
   udp_dst: fgConstraints.isUInt(0, 0xffff),
   sctp_src: fgConstraints.isUInt(0, 0xffff),
   sctp_dst: fgConstraints.isUInt(0, 0xffff)
-}
-
-Match.Ethernet = {};
-
-Match.Ethernet.Src = function(addr, mask) {
-  this.match = new ETHERNET.MAC.Match(addr, mask);
-};
-
-Match.Ethernet.Src.prototype.match = function(key) {
-  return key.eth_src ? this.match.match(key.eth_src) : false;
-};
-
-Match.Ethernet.Dst = function(addr, mask) {
-  this.match = new ETHERNET.MAC.Match(addr, mask);
-};
-
-Match.Ethernet.Dst.prototype.match = function(key) {
-  return key.eth_dst ? this.match.match(key.eth_dst) : false;
-};
-
-Match.Ethernet.Type = function(value, mask) {
-  this.match = new Utils.UInt.Match(value, mask);
-};
-
-Match.Ethernet.Type.prototype.match = function(key) {
-  return key.eth_type ? this.match.match(key.eth_type) : false;
 };
 
 return {
   Match: Match,
+  Set: Set,
   Profile: Match.Profile
 };
 

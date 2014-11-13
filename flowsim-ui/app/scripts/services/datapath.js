@@ -8,95 +8,80 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Datapath', function(fgConstraints) {
+  .factory('Datapath', function(fgConstraints, UInt) {
 
-var defaultFragHandling = 'normal';
-var defaultMissSendLen  = 100;
+var defBufferCount  = 1024;
+var defIPReassembly = true;
 
-var fragOptions = [
-  'normal',
-  'drop',
-  'reassemble'
+var descLen   = 256;
+var serialLen = 32;
+
+var defMfrDesc   = 'Flowgrammable';
+var defHwDesc    = 'Flowsim, OpenFlow Dataplane Simulator';
+var defSwDesc    = 'Flowsim, OpenFlow Dataplane Simulator';
+var defSerialNum = '0.1';
+var defDpDesc    = 'Flowsim, OpenFlow Dataplane Simulator';
+
+var defMissSendLen  = 100;
+
+var _normal     = 'Normal';
+var _drop       = 'Drop';
+var _reassemble = 'Reassemble';
+
+var defFrag = _normal;
+var _fragOptions = [
+  _normal,
+  _drop,
+  _reassemble
 ];
 
-function Profile(datapath) {
-  if(datapath) {
+function Profile(datapath, dp_id) {
+  if(_.isObject(datapath)) {
     _.extend(this, datapath);
   } else {
-    // default constructor
-    this.datapath_id   = '01:23:45:67:89:ab'; // FIXME: bad default
-    this.n_buffers     = 1024;
-    this.ip_reassembly = true;
+    if(dp_id) {
+      this.datapath_id = dp_id;
+    } else {
+      this.datapath_id = (_(8).times(function() { 
+        return UInt.padZeros(_.random(0, 255).toString(16), 2);
+      })).join(':');
+    }
+    this.n_buffers     = defBufferCount;
+    this.ip_reassembly = defIPReassembly;
+
     // Descriptions
-    this.mfr_description = '';
-    this.hw_description  = '';
-    this.sw_description  = '';
-    this.serial_num      = '';
-    this.dp_description  = '';
+    this.mfr_description = defMfrDesc;
+    this.hw_description  = defHwDesc;
+    this.sw_description  = defSwDesc;
+    this.serial_num      = defSerialNum;
+    this.dp_description  = defDpDesc;
   }
 }
 
-Profile.prototype.openflow_1_0 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.0 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.0 Software';
-  this.dp_description  = 'Generic OpenFlow 1.0 Pipeline';
+Profile.prototype.clone = function() {
+  return new Profile(this);
 };
 
-Profile.prototype.openflow_1_1 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.1 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.1 Software';
-  this.dp_description  = 'Generic OpenFlow 1.1 Pipeline';
+Profile.prototype.getMACPrefix = function() {
+  return this.datapath_id.slice(0, 11); 
 };
 
-Profile.prototype.openflow_1_2 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.2 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.2 Software';
-  this.dp_description  = 'Generic OpenFlow 1.2 Pipeline';
-};
-
-Profile.prototype.openflow_1_3 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.3 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.3 Software';
-  this.dp_description  = 'Generic OpenFlow 1.3 Pipeline';
-};
-
-Profile.prototype.openflow_1_4 = function() {
-  this.ip_reassembly   = true;
-  this.mfr_description = 'Flowgrammable';
-  this.hw_description  = 'Generic OpenFlow 1.4 Switch';
-  this.sw_description  = 'Generic OpenFlow 1.4 Software';
-  this.dp_description  = 'Generic OpenFlow 1.4 Pipeline';
-};
+Profile.prototype.ofp_1_0 = function() {};
+Profile.prototype.ofp_1_1 = function() {};
+Profile.prototype.ofp_1_2 = function() {};
+Profile.prototype.ofp_1_3 = function() {};
+Profile.prototype.ofp_1_4 = function() {};
 
 function Datapath(datapath, profile) {
-  if(datapath instanceof Datapath ||
-    (typeof datapath === 'object' && datapath !== null)) {
+  if(_.isObject(datapath)) {
     _.extend(this, datapath);
-    this.capabilities = _.clone(datapath.capabilities);
+    this.capabilities = new Profile(datapath.capabilities);
   } else {
-      this.capabilities = {
-        ip_reassembly : profile.ip_reassembly
-      };
-
-      this.datapath_id   = profile.datapath_id;
-      this.n_buffers     = profile.n_buffers;
-      this.miss_send_len = defaultMissSendLen;
-
-      this.fragHandling = defaultFragHandling;
-
-      this.mfr_description = profile.mfr_description;
-      this.hw_description  = profile.hw_description;
-      this.sw_description  = profile.sw_description;
-      this.serial_num      = profile.serial_num;
-      this.dp_description  = profile.dp_description;
+    // Copy the profile
+    this.capabilities = new Profile(profile);
+    // Default the basic operations
+    this.miss_send_len = defMissSendLen;
+    this.fragHandling  = defFrag;
   }
 }
 
@@ -104,6 +89,7 @@ var TIPS = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',
   n_buffers: 'Number of packets that can be buffered for controller',
+  miss_send_len: 'Prefix of packet in bytes to send to controller',
   mfr_description: '',
   hw_description: '',
   sw_description: '',
@@ -114,16 +100,17 @@ var TIPS = {
 var TESTS = {
   datapath_id:     function() { return true; },
   n_buffers:       fgConstraints.isUInt(0, 0xffff),
-  mfr_description: function(v) { return !v || v.length <= 256 ; },
-  hw_description:  function(v) { return !v || v.length <= 256; },
-  sw_description:  function(v) { return !v || v.length <= 256; },
-  serial_num:      function(v) { return !v || v.length <= 32; },
-  dp_description:  function(v) { return !v || v.length <= 256; }
+  miss_send_len:   fgConstraints.isUInt(0, 0xffff),
+  mfr_description: function(v) { return !v || v.length <= descLen; },
+  hw_description:  function(v) { return !v || v.length <= descLen; },
+  sw_description:  function(v) { return !v || v.length <= descLen; },
+  serial_num:      function(v) { return !v || v.length <= serialLen; },
+  dp_description:  function(v) { return !v || v.length <= descLen; }
 };
 
 return {
-  Capabilities: Profile,
-  Configuration: Datapath,
+  Datapath: Datapath,
+  Profile: Profile,
   TIPS: TIPS,
   TESTS: TESTS
 };

@@ -1,18 +1,18 @@
 'use strict';
 
-describe('Service: protocols', function () {
+describe('Service: regex', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
 
   // instantiate service
-  var protocols;
-  beforeEach(inject(function (_Protocols_) {
-    protocols = _Protocols_;
+  var Regex;
+  beforeEach(inject(function (_Regex_) {
+    Regex = _Regex_;
   }));
 
   it('should do something', function () {
-    expect(!!protocols).toBe(true);
+    expect(!!Regex).toBe(true);
   });
 
 });

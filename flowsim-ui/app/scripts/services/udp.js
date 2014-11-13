@@ -1,62 +1,117 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .service('UDP', function(fgUI, fgConstraints){
+  .factory('UDP', function(UInt, fgUI, fgConstraints){
 
 var NAME = 'UDP';
+var BYTES = 8;
 
 var Payloads = {
  'Payload': 0
 };
 
-function _UDP(){
+function UDP(udp, src, dst){
+  if(_.isObject(udp)) {
+    this._src = mkPort(udp._src);
+    this._dst = mkPort(udp._dst);
+  } else {
+    this._src = mkPort(src);
+    this._dst = mkPort(dst);
+  }
   this.name = NAME;
-  this.bytes = 20;
-  this.fields = {
-    src: 0,
-    dst: 0
-  };
+  this.bytes = BYTES;
 }
 
-function _UDP_UI(udp){
-  udp = udp === undefined ? new _UDP() : udp;
-  this.name = NAME;
-  this.bytes = 8;
-  this.attrs = _.map(udp.fields, function(value, key){
-    switch(key) {
-      case 'src':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Source port');
-      case 'dst':
-        return mkLabelInput(key, value, fgConstraints.isUInt(0,0xffff),
-                                        'Destination Port');
-      default:
-        return mkLabelInput(key, value, function(){return true;}, 'Unknown');
-
-    }
-  });
+function mkUDP(src, dst) {
+  return new UDP(null, src, dst);
 }
 
-_UDP_UI.prototype.toBase = function() {
-  var result = new _UDP();
+UDP.prototype.clone = function() {
+  return new UDP(this);
+};
+
+function mkPort(port){
+  if(port instanceof UInt.UInt) {
+    return new UInt.UInt(port);
+  } else {
+    return new UInt.UInt(null, port, 2);
+  }
+}
+
+UDP.prototype.src = function(src) {
+  if(src) {
+    this._src = mkPort(src);
+  } else {
+    return this._src;
+  }
+};
+
+UDP.prototype.dst = function(dst) {
+  if(dst) {
+    this._dst = mkPort(dst);
+  } else {
+    return this._dst;
+  }
+};
+
+UDP.prototype.toString = function() {
+  return 'src: '+this._src.toString()+'\n'+
+         'dst: '+this._dst.toString();
+};
+
+// UI Interface:
+var TIPS = {
+  src: 'UDP source port',
+  dst: 'UDP destination port'
+};
+
+var TESTS = {
+  src:     UInt.is(16),
+  dst:     UInt.is(16)
+};
+
+function UDP_UI(udp){
+  udp = udp === undefined ? new UDP() : udp;
+  this.name = NAME;
+  this.bytes = BYTES;
+  this.attrs = [{
+    name: 'Src',
+    value: udp.src().toString(),
+    tip: 'Source port',
+    test: fgConstraints.isUInt(0,0xffff)
+  }, {
+    name: 'Dst',
+    value: udp.dst().toString(),
+    tip: 'Destination port',
+    test: fgConstraints.isUInt(0,0xffff)
+  }];
+}
+
+UDP_UI.prototype.toBase = function() {
+  var result = new UDP();
   result.name = this.name;
   result.bytes = this.bytes;
   result.fields = fgUI.stripLabelInputs(this.attrs);
   return result;
 };
 
-_UDP_UI.prototype.setPayload = function() {
+UDP_UI.prototype.setPayload = function() {
+  //FIXME
   return true;
 };
 
-this.name = NAME;
-this.Payloads = Object.keys(Payloads);
-this.create = function() {
-    return new _UDP();
-};
-
-this.createUI = function(UDP){
-  return new _UDP_UI(UDP);
+return {
+  name: NAME,
+  Payloads: _.keys(Payloads),
+  UDP: UDP,
+  mkPort: mkPort,
+  mkUDP: mkUDP,
+  src: '_src',
+  dst: '_dst',
+  create: function() { return new UDP(); },
+  createUI: function(UDP) { return new UDP_UI(UDP); },
+  TESTS:       TESTS,
+  TIPS:        TIPS
 };
 
 });

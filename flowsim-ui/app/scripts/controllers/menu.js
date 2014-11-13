@@ -25,7 +25,7 @@ angular.module('flowsimUiApp')
     $scope.save = function() {
       fgCache.save();
       $scope.dirty = false;
-    }
+    };
 
     window.onbeforeunload = function(event) {
       if($scope.dirty) {

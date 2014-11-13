@@ -32,7 +32,7 @@ angular.module('flowsimUiApp')
           function(err) {
             if(err) {
               if(err.detail.type === 'unknownVerificationToken'){
-                $scope.errorMsg = 'Rest token has expired'
+                $scope.errorMsg = 'Rest token has expired';
               } else {
                 $scope.errorMsg = err.message;
               }

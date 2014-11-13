@@ -15,20 +15,20 @@
 
   <div class="col-md-10" ng-show"trace">
     
-    <switch-view data="trace.switch_.ports"></switch-view>
+    <switch-view data="trace.device.ports"></switch-view>
 
     <div class="row">
       <div class="col-md-4">
         <h4>Switch</h4>
         <div class="input-group">
-          <select class="form-control" ng-model="switch_.name"
+          <select class="form-control" ng-model="device.name"
                   ng-changed="selectSwitch()">
-            <option ng-repeat="name in switch_.names">{{name}}</option>
+            <option ng-repeat="name in device.names">{{name}}</option>
           </select>
         </div>
       </div>
 
-      <div class="col-md-8" ng-show="trace.switch_">
+      <div class="col-md-8" ng-show="trace.device">
         <h4>Configure the trace</h4>
         <div class="input-group">
           <select class="form-control" ng-model="packet.name">
@@ -47,21 +47,40 @@
             <th>#</th>
             <th>Packet</th>
             <th>In Port</th>
+            <th>In Phy Port</th>
+            <th>Tunnel ID</th>
             <th></th>
           </thead>
           <tbody>
-            <tr ng-repeat="packet in trace.packets">
+            <tr ng-repeat="ev in trace.events">
               <td>{{$index+1}}</td>
-              <td>{{packet.name}}</td>
+              <td>{{ev.packet.name}}</td>
               <td>
-                <select class="form-control" ng-model="packet.in_port">
-                  <option ng-repeat="port in trace.switch_.ports.ports">
-                    {{port.port_id}}
-                  </option>
+                <select class="form-control" ng-model="ev.in_port"
+                        ng-options="port.id as port.id for port in
+                                   trace.device.ports.ports">
                 </select>
               </td>
-              <td><span class="glyphicon glyphicon-minus-sign"
-                        ng-click="delPacket($index)"></span></td>
+              <td>
+                <select class="form-control" ng-model="ev.in_phy_port"
+                        ng-options="port.id as port.name for port in
+                                   trace.device.ports.ports">
+                  <option value=""></option>
+                </select>
+              </td>
+              <td>
+                <div class="input-group">
+                  <label>
+                    <input type="text" class="form-control"
+                           ng-model="ev.tunnel">
+                  </label>
+                </div>
+              </td>
+              <td>
+                <span class="glyphicon glyphicon-minus-sign"
+                      ng-click="delPacket($index)">
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>

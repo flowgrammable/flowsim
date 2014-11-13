@@ -79,7 +79,7 @@ angular.module('flowsimUiApp')
             $scope.stack.slice(-1)[0].bytes = val;
           }
         }
-      }
+      };
 
       $scope.$watch('stack', function() {
         // directive runs before controller,
