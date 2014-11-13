@@ -18,11 +18,11 @@ $scope.ctx = {
   tableId: 0,
   bufferId: 0,
   actionSet: [{
-    name: 'eth',
+    name: 'eth0',
     value1: 'src0',
     value2: '1'
   },{
-    name: 'eth',
+    name: 'eth1',
     value1: 'dst',
     value2: '2'
   }],
@@ -30,11 +30,11 @@ $scope.ctx = {
   meter : 0
 };
 $scope.applyActionList=[{
-    name: 'eth',
+    name: 'eth2',
     value1: 'src0',
     value2: '1'
   },{
-    name: 'eth',
+    name: 'eth3',
     value1: 'dst',
     value2: '2'
   }];
@@ -267,7 +267,12 @@ $scope.instrucionList = [{
       $scope.makeTransition = $scope.moves[$scope.currStep];
         //simulate execution
       if($scope.makeTransition.to === 4 &&  $scope.makeTransition.clonePacket){
-        $scope.instrucionList.shift();
+        if($scope.instrucionList[0].name === "Apply" && _.size($scope.applyActionList) > 0){
+          $scope.ctx.actionSet.push($scope.applyActionList.shift());
+        }else{
+          $scope.instrucionList.shift();
+        }
+        
 
       }
       for(idx=0; idx<$scope.stages.length; ++idx) {
