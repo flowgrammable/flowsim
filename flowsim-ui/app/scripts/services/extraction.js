@@ -84,8 +84,8 @@ function extract_tcp(tcp, key) {
 }
 
 function extract_udp(udp, key) {
-  key.udp_src = udp.src;
-  key.udp_dst = udp.dst;
+  key.udp_src = udp.src();
+  key.udp_dst = udp.dst();
 }
 
 function extract(packet, key) {
@@ -132,6 +132,7 @@ return {
   extract_ethernet: extract_ethernet,
   extract_vlan: extract_vlan,
   extract_arp: extract_arp,
+  extract_udp: extract_udp,
   process: extract
 };
 
