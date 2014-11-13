@@ -58,6 +58,8 @@ Dataplane.prototype.arrival = function(packet, in_port, in_phy_port, tunnel) {
     var bufId = new this.datapath.bufAllocator.request();
     this.ctx  = new Context.Context(packet, bufId, in_port, in_phy_port, 
                                     tunnel);
+  } else {
+    throw 'Dataplane arrival failure: '+packet+', '+in_port+', '+in_phy_port+', '+tunnel+')';
   }
 };
 

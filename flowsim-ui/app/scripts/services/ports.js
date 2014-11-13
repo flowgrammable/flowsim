@@ -194,7 +194,7 @@ Ports.prototype.clone = function() {
 };
 
 Ports.prototype.ingress = function(packet, in_port) {
-  this.ports[in_port].ingress(packet);
+  return this.ports[in_port].ingress(packet);
 };
 
 Ports.prototype.egress = function(packet, out_port) {

@@ -72,44 +72,54 @@ Profile.prototype.ofp_1_2 = function() {};
 Profile.prototype.ofp_1_3 = function() {};
 Profile.prototype.ofp_1_4 = function() {};
 
-function Allocator(allocator, limit) {
+function Buffer(allocator, limit) {
   if(_.isObject(allocator)) {
     _.extend(this, allocator);
-    this.limit = _.clone(this.alloc);
+    this.alloc = _.clone(allocator.alloc);
+    console.log('copy cons');
   } else {
     this.alloc = {};
+    console.log('limit: '+limit);
     this.limit = limit;
   }
 }
 
-Allocator.prototype.clone = function() {
-  return new Allocator(this);
+Buffer.prototype.clone = function() {
+  return new Buffer(this);
 };
 
-Allocator.prototype.request = function() {
-  var id = _(_.range(this.limit)).find(function(_id) {
-    return !_(this.alloc).has(_id);
-  }, this);
-  this.alloc[id] = true;
-  return id;
+Buffer.prototype.request = function() {
+  var i;
+  console.log('llimit: '+this.limit);
+  for(i=0; i<this.limit; ++i) {
+    if(!_(this.alloc).has(i.toString())) {
+      this.alloc[id.toString()] = true;
+      return id;
+    }
+  }
+  throw 'Packet Buffer Exhaustion';
 };
 
-Allocator.prototype.release = function(id) {
-  delete this.alloc[id];
+Buffer.prototype.release = function(id) {
+  delete this.alloc[id.toString()];
 };
 
 function Datapath(datapath, profile) {
   if(_.isObject(datapath)) {
     _.extend(this, datapath);
     this.capabilities = new Profile(datapath.capabilities);
-    this.bufAllocator = new Allocator(datapath.bufAllocator);
+    this.bufAllocator = new Buffer(datapath.bufAllocator);
   } else {
     // Copy the profile
     this.capabilities = new Profile(profile);
+    console.log('t: '+_.keys(profile));
+    console.log('m: '+_.keys(this.capabilities));
+    console.log('bt: '+profile.n_buffers);
+    console.log('bm: '+this.capabilities.n_buffers);
     // Default the basic operations
     this.miss_send_len = defMissSendLen;
     this.fragHandling  = defFrag;
-    this.bufAllocator = new Allocator(null, this.capabilities.n_buffers);
+    this.bufAllocator = new Buffer(null, this.capabilities.n_buffers);
   }
 }
 
