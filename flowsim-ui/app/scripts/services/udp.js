@@ -106,6 +106,8 @@ return {
   name: NAME,
   Payloads: _.keys(Payloads),
   UDP: UDP,
+  src: '_src',
+  dst: '_dst',
   mkPort: mkPort,
   mkPortMatch: mkPortMatch,
   mkUDP: mkUDP,

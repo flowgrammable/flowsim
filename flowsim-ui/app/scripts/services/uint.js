@@ -84,6 +84,7 @@ function UInt(uint, value, bytes) {
     throw 'UInt('+uint+', '+value+', '+bytes+')';
   }
   // If converted value is negative, throw exception
+  // warning: can only check 1, 2, 3 byte uints for negativity...
   if (this.bytes < 4 && this.value < 0) {
     throw 'UInt('+uint+', '+value+', '+bytes+')';
   }

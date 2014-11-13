@@ -41,7 +41,7 @@ describe('Service: action', function () {
     MPLS = _MPLS_;
   }));
 
-  it('test', function () {
+  it('Ethernet test', function () {
     expect(!!Action).toBe(true);
 
     var set = new Action.Set();
