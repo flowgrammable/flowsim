@@ -194,6 +194,8 @@ Ports.prototype.clone = function() {
 };
 
 Ports.prototype.ingress = function(packet, in_port) {
+  console.log('id: '+in_port);
+  console.log('cnt: '+this.ports.length);
   this.ports[in_port].ingress(packet);
 };
 

@@ -45,6 +45,7 @@ Trace.prototype.clone = function() {
 };
 
 Trace.prototype.push = function(packet, in_port, in_phy_port, tunnel) {
+  console.log('tp: '+in_port);
   this.events.push(new Event(null, packet, in_port, in_phy_port, tunnel));
 };
 
