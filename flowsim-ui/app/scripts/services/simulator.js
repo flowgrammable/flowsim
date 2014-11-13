@@ -31,10 +31,10 @@ Simulation.prototype.step = function() {
 };
 
 Simulation.prototype.play = function(trace) {
-  this.packets = _(packets).map(function(packet) {
-    return packet.clone();
+  this.events = _(trace.events).map(function(ev) {
+    return ev.clone();
   });
-  this.dataplane = new Dataplane.Dataplane(trace.device);
+  //this.dataplane = new Dataplane.Dataplane(trace.device);
   this.active = true;
   this.stage = 0;
 };

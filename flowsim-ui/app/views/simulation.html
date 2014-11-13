@@ -1,38 +1,46 @@
 
 <div class="row">
   <div class="col-md-4">
-<!-- Primary simulator controls -->
-<div style="text-align:center">
-  <div class="btn-group">
-    <button type="button" class="btn btn-default" ng-click="stop()"
-            ng-disabled="!simulation.active">
-      <span class="glyphicon glyphicon-stop"></span>
-    </button>
-    <button type="button" class="btn btn-default" 
-            ng-click="play()"
-            ng-disabled="simulation.active">
-      <span class="glyphicon glyphicon-play"></span>
-    </button>
-    <button type="button" class="btn btn-default" ng-click="step()"
-            ng-disabled="!simulation.active">
-      <span class="glyphicon glyphicon-step-forward"></span>
-    </button>
+
+    <!-- Primary simulator controls -->
+    <div style="text-align:center">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default" ng-click="stop()"
+                ng-disabled="!simulation.active">
+          <span class="glyphicon glyphicon-stop"></span>
+        </button>
+        <button type="button" class="btn btn-default" 
+                ng-click="play()"
+                ng-disabled="simulation.active">
+          <span class="glyphicon glyphicon-play"></span>
+        </button>
+        <button type="button" class="btn btn-default" ng-click="step()"
+                ng-disabled="!simulation.active">
+          <span class="glyphicon glyphicon-step-forward"></span>
+        </button>
+      </div>
+    </div>
   </div>
-</div>
-</div>
-<div class="col-md-8">
-<div style="text-align: center">
-  <fg-simulation-view stages="stages" transitions="transitions" make-transition="makeTransition" animation-duration="600"></fg-simulation-view>
-</div>
-</div>
+
+  <!-- Dataplane Overivew Animation -->
+  <div class="col-md-8">
+    <div style="text-align: center">
+      <fg-simulation-view stages="stages" transitions="transitions" 
+                          make-transition="makeTransition" 
+                          animation-duration="600">
+      </fg-simulation-view>
+    </div>
+  </div>
+
 </div>
 
+<!-- Setup and Dataplane Stage Views -->
 <tabset>
   <tab heading="Setup" disabled=true active="!simulation.active">
     <ng-include src="'views/simulation/setup.html'"></ng-include>
   </tab>
   <tab ng-repeat="stage in simulation.stages()" heading="{{stage}}" disabled=true
-       active="simulation.stage === $index">
+       active="simulation.active && simulation.stage === $index">
     <ng-include src="'views/simulation/'+stage.toLowerCase()+'.html'">
     </ng-include>
   </tab>
