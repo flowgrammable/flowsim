@@ -84,6 +84,7 @@ Packet.prototype.clone = function() {
   tmp.protocols = _(this.protocols).map(function(protocol) {
     return protocol.clone();
   });
+  return tmp;
 };
 
 Packet.prototype.push = function(protocol) {

@@ -28,17 +28,7 @@ Simulation.prototype.step = function() {
 Simulation.prototype.play = function(trace) {
   this.dataplane = new Dataplane.Dataplane(trace.device);
   _(trace.events).each(function(ev) {
-    console.log('b:'+ev.packet instanceof Packet.Packet);
-    console.log('ui:'+ev.packet instanceof Packet.PacketUI);
-    var t = ev.clone();
-    console.log('input');
-    console.log('pkt: '+ev.packet.name);
-    console.log('ip: '+ev.in_port);
-    console.log('----------------');
-    console.log('input');
-    //console.log('pkt: '+t.packet.name);
-    console.log('ip: '+t.in_port);
-    this.dataplane.input(t.clone());
+    this.dataplane.input(ev.clone());
   }, this);
   this.active = true;
   this.stage = 0;

@@ -111,7 +111,8 @@ Dataplane.prototype.transition = function(state) {
 
 Dataplane.prototype.step = function() {
   if(this.currEvent === null) {
-    this.currEvent = this.inputQ.splice(0, 1);
+    this.currEvent = this.inputQ[0];
+    this.inputQ.splice(0, 1);
   }
 
   switch(this.state) {

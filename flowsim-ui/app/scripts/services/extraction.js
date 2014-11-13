@@ -133,7 +133,7 @@ return {
   extract_vlan: extract_vlan,
   extract_arp: extract_arp,
   extract_udp: extract_udp,
-  process: extract
+  extract: extract
 };
 
 });
