@@ -23,7 +23,7 @@ angular.module('flowsimUiApp')
       var port = $scope.device.ports.ports[id];
       port.config.port_down = !port.config.port_down;
       port.state.link_down = port.config.port_down;
-    }
+    };
 
     $scope.getSwitches = function(callback) {
       fgCache.getNames('switch', callback);

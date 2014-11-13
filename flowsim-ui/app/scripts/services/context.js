@@ -35,19 +35,24 @@ Key.prototype.clone = function() {
   return new Key(this);
 };
 
+Key.prototype.toView = function() {
+  // FIXME
+  return [];
+};
+
 function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(ctx)) {
     _.extend(this, ctx);
-    this.packet = ctx.packet.clone();
+    this.packet = ctx.packet;
 
     this._nxtTable = ctx._nxtTable;
     this._lstTable = ctx._lstTable;
 
-    this.key = ctx.key.clone();
+    this.key = new Key(ctx.key);
 
     this.actionSet      = new Action.Set(ctx.actionSet);
     this.instructionSet = new Instruction.Set(ctx.instructionSet);
-  } else if(packet && buffer_id && in_port) {
+  } else if(packet && _.isNumber(buffer_id) && _.isNumber(in_port)) {
     // store a reference to the packet and buffer id
     this.packet = packet;
     this.buffer = buffer_id;
@@ -61,7 +66,7 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
     this._lstTable = 0;
 
     // initialize the packet key
-    this.key = new Key(in_port, in_phy_port, tunnel_id);
+    this.key = new Key(null, in_port, in_phy_port, tunnel_id);
 
     // initialize an empty packet set
     this.actionSet      = new Action.Set();
@@ -75,6 +80,19 @@ Context.prototype.clone = function() {
   return new Context(this);
 };
 
+Context.prototype.toView = function() {
+  return {
+    bufferId: this.buffer,
+    packet: new Packet.PacketUI(this.packet),
+    meter: this.meter,
+    tableId: this.table(),
+    key: this.key.toView(),
+    actionSet: this.actionSet.toView(),
+    instructionSet: this.instructionSet.toView(),
+  };
+
+};
+
 Context.prototype.table = function(table) {
   if(table) {
     this._lstTable = table;
@@ -82,6 +100,10 @@ Context.prototype.table = function(table) {
   } else {
     return this._nxtTable;
   }
+};
+
+Context.prototype.setInstructions = function(ins) {
+  this.instructionSet = ins;
 };
 
 Context.prototype.meter = function(meter) {
