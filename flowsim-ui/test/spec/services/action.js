@@ -41,6 +41,11 @@ describe('Service: action', function () {
     MPLS = _MPLS_;
   }));
 
+  var UDP;
+  beforeEach(inject(function (_UDP_) {
+    UDP = _UDP_;
+  }));
+
   it('Ethernet test', function () {
     expect(!!Action).toBe(true);
 
@@ -429,7 +434,39 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].label().toString(16)).toBe('0x012345');
     expect(pkt.protocols[1].tc().toString(16)).toBe('0x02');
     expect(pkt.protocols[1].bos().toString(16)).toBe('0x01');
+  });
 
+  it('UDP test', function () {
+    expect(!!Action).toBe(true);
+    expect(!!UDP).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(UDP.mkUDP());
+
+    set.setField(new Action.SetField(
+      null,
+      UDP.name, UDP.src,
+      UDP.mkPort('9000')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('9000');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      UDP.name, UDP.dst,
+      UDP.mkPort('0xBEEF')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('9000');
+    expect(pkt.protocols[1].dst().toString(16)).toBe('0xbeef');
   });
 
 });
