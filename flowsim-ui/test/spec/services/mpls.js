@@ -89,4 +89,30 @@ describe('Service: MPLS', function () {
     expect(exact.match(a)).toBe(true);
     expect(exact.match(b)).toBe(false);
   });
+
+  it('MPLS TC match pass', function() {
+    var a = MPLS.mkTc('0x00');
+    var b = MPLS.mkTc('0xf0');
+    var c = MPLS.mkTc('0xff')
+
+    var every = MPLS.mkTcMatch('0x00', '0x00');
+    var multi = MPLS.mkTcMatch('0x10', '0x10');
+    var exact = MPLS.mkTcMatch('0xf0', '0xff');
+
+    expect(every.match(a)).toBe(true);
+    expect(every.match(b)).toBe(true);
+    expect(every.match(c)).toBe(true);
+
+    expect(multi.match(a)).toBe(false);
+    expect(multi.match(b)).toBe(true);
+    expect(multi.match(c)).toBe(true);
+
+    expect(exact.match(b)).toBe(true);
+    expect(exact.match(a)).toBe(false);
+    expect(exact.match(c)).toBe(false);
+  });
+
+  it('MPLS json construct', function(){
+    var a = mkMPLS
+  })
 });
