@@ -10,7 +10,62 @@
 angular.module('flowsimUiApp')
   .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace, 
                                           Switch, Packet, Dataplane) {
-
+//TODO - clean up this controller - move details to services
+//
+$scope.ctx = {
+  tableId: 0,
+  bufferId: 0,
+  actionSet: [{
+    name: 'eth',
+    value1: 'src0',
+    value2: '1'
+  },{
+    name: 'eth',
+    value1: 'dst',
+    value2: '2'
+  }],
+  packet: 0,
+  meter : 0
+};
+$scope.applyActionList=[{
+    name: 'eth',
+    value1: 'src0',
+    value2: '1'
+  },{
+    name: 'eth',
+    value1: 'dst',
+    value2: '2'
+  }];
+  $scope.writeActionSet=[{
+    name: 'Group',
+    value1: '2',
+    value2: '3'
+   }];
+$scope.instrucionList = [{
+  name: "Meter",
+  value: 1
+ 
+},{
+  name: "Apply",
+  value: 1
+  
+},{
+  name: "Clear",
+  value: 1
+},{
+  name: "Write",
+  value: 1
+},{
+  name: 'Metadata',
+  value: 1,
+  set: [],
+  list: []
+},{
+  name: 'Goto',
+  value: 1,
+  set: [],
+  list: []
+}];
     $scope.names = {};
     $scope.trace = null;
     $scope.simulation = null;
@@ -178,17 +233,15 @@ angular.module('flowsimUiApp')
       forward: false
     }];
     //for simulationView $watch
-    $scope.makeTransition = {
-        to:-1,
-        clonePacket : false
-        };
+    $scope.makeTransition =  null;
     $scope.play = function() {
       if($scope.active) {
         return;
       }
       $scope.active = true;
       $scope.stages[0].active = true;
-      $scope.makeTransition.to =0;
+      $scope.makeTransition ={to:0};
+
       $scope.simulation = new Dataplane.Dataplane($scope.trace, 
         function(next, cur) {
         });
@@ -201,22 +254,29 @@ angular.module('flowsimUiApp')
       $scope.active = false;
       $scope.simulation = null;
     };
-    $scope.moves =  [ {to: 1},{to: 2}, {to: 3}, {to: 4}, {to: 2}, {to: 3}, {to: 4}, {to: 4, clonePacket:true}, {to: 5}];
+    $scope.moves =  [ {to: 1},{to: 2}, {to: 3}, {to: 4},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true},{to: 4, clonePacket:true}, {to: 2}, {to: 3}, {to: 4}, {to: 4, clonePacket:true}, {to: 5}];
     $scope.currStep =0;
     $scope.step = function() {
       var idx;
       if(!$scope.active) {
         return;
       }
-        $scope.makeTransition = $scope.moves[$scope.currStep];
-        $scope.currStep++;
+      
+      $scope.makeTransition = $scope.moves[$scope.currStep];
+        //simulate execution
+      if($scope.makeTransition.to === 4 &&  $scope.makeTransition.clonePacket){
+        $scope.instrucionList.shift();
+
+      }
       for(idx=0; idx<$scope.stages.length; ++idx) {
         if($scope.stages[idx].active) {
           $scope.stages[idx].active = false;
-          $scope.stages[(idx+1)%$scope.stages.length].active = true;
+          $scope.stages[$scope.moves[$scope.currStep].to].active = true;
+          $scope.currStep++;
           return;
         }
       }
+      
       $scope.simluation.step();
     };
 
