@@ -116,10 +116,10 @@ function mkTtl(ttl){
 }
 
 IPv4.prototype.decTTL = function(){
-  if(this._ttl.value > 0){
+  if(this._ttl.value > 1){
     this._ttl = mkTtl(this._ttl.value - 1);
   } else {
-    this._ttl = mkTtl(0);
+    this._ttl = mkTtl(1);
   }
 };
 

@@ -336,7 +336,7 @@ describe('Service: action', function () {
     var pkt = new Packet.Packet('ipv4pack');
     var ttl = new IPV4.mkTtl('0x01');
     pkt.push(IPV4.mkIPv4(
-      '0x00', '0x00', '0x00', '0x02', '0.0.0.0', '0.0.0.0'
+      '0x00', '0x00', '0x00', '0x03', '0.0.0.0', '0.0.0.0'
     ));
 
     var act = new Action.DecTTL(null, IPV4.name);
@@ -353,7 +353,7 @@ describe('Service: action', function () {
       packet: pkt
     });
 
-    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x02');
 
     expect(set.actions.length).toBe(undefined);
 
@@ -365,7 +365,7 @@ describe('Service: action', function () {
       packet: pkt
     });
 
-    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x01');
 
     set.decTTL(new Action.DecTTL(
       null,
@@ -375,7 +375,7 @@ describe('Service: action', function () {
       packet: pkt
     });
 
-    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x01');
 
   });
 

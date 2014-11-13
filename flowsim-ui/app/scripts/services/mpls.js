@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('MPLS', function(fgConstraints, UInt){
+  .factory('MPLS', function(fgConstraints, UInt, ETHERNET, ARP){
 
 var NAME = 'MPLS';
 var BYTES = 4;
@@ -36,6 +36,10 @@ function MPLS(mpls, label, tc, bos, ttl){
 function mkMPLS(label, tc, bos, ttl){
   return new MPLS(null, label, tc, bos, ttl);
 }
+
+MPLS.prototype.clone = function() {
+  return new MPLS(this);
+};
 
 MPLS.prototype.label = function(label){
   if(label){
@@ -113,9 +117,51 @@ function mkTtl(input){
   return new UInt.UInt(null, input, 1);
 }
 
-function mkTtlMatch(value, mask){
-  return new UInt.Match(null, mkTtl(value), mkTtl(mask));
-}
+MPLS.prototype.decTTL = function(){
+  if(this._ttl.value > 1){
+    this._ttl = mkTtl(this._ttl.value - 1);
+  } else {
+    this._ttl = mkTtl(1);
+  }
+};
+
+MPLS.prototype.toString = function() {
+  return 'label: '+this._label.toString(16)+'\n'+
+         'tc:    '+this._tc.toString(16)+'\n'+
+         'bos:   '+this._bos.toString(16)+'\n'+
+         'ttl:   '+this._ttl.toString(16);
+};
+
+MPLS.prototype.insertHere = function(protocol) {
+  if(protocol.name !== ETHERNET.name ||
+      protocol.name !== ARP.name){
+    return true;
+  } else {
+    return false;
+  }
+};
+
+MPLS.prototype.setDefaults = function(protocols, index) {
+  if(protocols[index].name === this.name) {
+    this._label = protocols[index].label();
+    this._tc    = protocols[index].tc();
+    this._bos   = mkBos();
+    this._ttl   = protocols[index].ttl();
+  } else {
+    this._label = mkLabel();
+    this._tc    = mkTc();
+    this._bos   = mkBos();
+    this._ttl   = mkTtl(protocols[index+1].ttl().toString(16));
+  }
+};
+
+MPLS.prototype.popHere = function(protocol){
+  if(protocol.name === NAME){
+    return true;
+  }
+  return false;
+};
+
 
 var TIPS = {
   label: 'MPLS label',
@@ -172,27 +218,26 @@ MPLS_UI.prototype.clearPayload = function() {
 };
 
 return {
-  name: NAME,
-  MPLS: MPLS,
-  label: '_label',
-  tc: '_tc',
-  bos: '_bos',
-  ttl: '_ttl',
-  mkMPLS: mkMPLS,
-  mkLabel: mkLabel,
-  mkLabelMatch: mkLabelMatch,
-  mkTc: mkTc,
-  mkTcMatch: mkTcMatch,
-  mkBos: mkBos,
-  mkBosMatch: mkBosMatch,
-  mkTtl: mkTtl,
-  mkTtlMatch: mkTtlMatch,
-  MPLS_UI:   MPLS_UI,
-  create: function(mpls) { return new MPLS(mpls); },
-  createUI: function(mpls) {return new MPLS_UI(mpls); },
-  Payloads: Object.keys(Payloads),
-  TESTS: TESTS,
-  TIPS: TIPS
+  name:             NAME,
+  MPLS:             MPLS,
+  label:            '_label',
+  tc:               '_tc',
+  bos:              '_bos',
+  ttl:              '_ttl',
+  mkMPLS:           mkMPLS,
+  mkLabel:          mkLabel,
+  mkLabelMatch:     mkLabelMatch,
+  mkTc:             mkTc,
+  mkTcMatch:        mkTcMatch,
+  mkBos:            mkBos,
+  mkBosMatch:       mkBosMatch,
+  mkTtl:            mkTtl,
+  MPLS_UI:          MPLS_UI,
+  create:           function(mpls) { return new MPLS(mpls); },
+  createUI:         function(mpls) {return new MPLS_UI(mpls); },
+  Payloads:         Object.keys(Payloads),
+  TESTS:            TESTS,
+  TIPS:             TIPS
 };
 
 });

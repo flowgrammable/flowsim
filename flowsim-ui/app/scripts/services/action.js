@@ -303,12 +303,6 @@ Set.prototype.push_vlan = function(action) {
   }
 };
 
-Set.prototype.dec_ttl = function(action) {
-  if(action) {
-    this.actions.dec_ttl = action;
-  }
-};
-
 Set.prototype.setField = function(action) {
   if(!_(this.actions).has('setField')) {
     this.actions.setField = {};
