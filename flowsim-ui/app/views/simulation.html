@@ -39,7 +39,7 @@
   <tab heading="Setup" disabled=true active="!simulation.active">
     <ng-include src="'views/simulation/setup.html'"></ng-include>
   </tab>
-  <tab ng-repeat="stage in simulation.stages()" heading="{{stage}}" disabled=true
+  <tab ng-repeat="stage in simulation.stages" heading="{{stage}}" disabled=true
        active="simulation.active && simulation.stage === $index">
     <ng-include src="'views/simulation/'+stage.toLowerCase()+'.html'">
     </ng-include>
