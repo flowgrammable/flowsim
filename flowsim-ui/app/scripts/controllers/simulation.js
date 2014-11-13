@@ -9,7 +9,9 @@
  */
 angular.module('flowsimUiApp')
   .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace, 
-                                          Switch, Packet, Dataplane) {
+                                          Switch, Packet, Dataplane, Regex) {
+
+                                          
 //TODO - clean up this controller - move details to services
 //
 $scope.ctx = {
@@ -276,7 +278,6 @@ $scope.instrucionList = [{
           return;
         }
       }
-      
       $scope.simluation.step();
     };
 
