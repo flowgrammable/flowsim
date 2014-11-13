@@ -72,11 +72,11 @@ ARP.prototype.sha = function(sha) {
 
 
 function mkSha(sha){
-  return new ETHERNET.MAC(null, sha);
+  return new ETHERNET.mkMAC(sha);
 }
 
 function mkShaMatch(value, mask){
-  return new UInt.Match(null, mkSha(value)._mac, mkSha(mask)._mac);
+  return new ETHERNET.mkMACMatch(value, mask);
 }
 
 
