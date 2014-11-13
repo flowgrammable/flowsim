@@ -11,6 +11,14 @@ describe('Service: TCP', function () {
     TCP = _TCP_;
   }));
 
+  it('Port Construction Pass', function () {
+    expect(!!TCP).toBe(true);
+    
+    TCP.mkPort();
+    var port1 = TCP.mkPort('22');
+    TCP.mkPort(port1);
+  });
+
   it('Construction Pass', function () {
     expect(!!TCP).toBe(true);
 
@@ -26,9 +34,9 @@ describe('Service: TCP', function () {
   it('Construction Fail', function () {
     expect(!!TCP).toBe(true);
 
-    var PORT1 = 100000;
-    var PORT2 = -1;
-    var PORT3 = 22;
+    var PORT1 = '100000';
+    var PORT2 = '-1';
+    var PORT3 = '22';
 
     expect(function() {new TCP.TCP(null, PORT1, PORT3);}).toThrow();
     expect(function() {TCP.mkTCP(PORT1, PORT3);}).toThrow();
@@ -36,15 +44,37 @@ describe('Service: TCP', function () {
     expect(function() {TCP.mkTCP(PORT2, PORT3);}).toThrow();
   });
 
-/*  it('Match Tests', function () {
+  it('Match Tests', function () {
     expect(!!TCP).toBe(true);
 
-    var match = new TCP.UInt.Match(PORT1, PORT2);
-    var tcp2 = new TCP.
+    var port1 = TCP.mkPort('22');
+    var port2 = TCP.mkPort('2222');
+
+    var match1 = TCP.mkPortMatch('22', '0xffff');
+    var match2 = TCP.mkPortMatch('22', '0x0000');
+
+    expect(match1.match(port1)).toBe(true);
+    expect(match1.match(port2)).toBe(false);
+    expect(match2.match(port1)).toBe(true);
+    expect(match2.match(port2)).toBe(true);
+
+  });
+
+  it('Set fields Tests', function () {
+    expect(!!TCP).toBe(true);
+
+    
   });
 
   it('Equivalency Tests', function () {
-  });*/
+    expect(!!TCP).toBe(true);
+    
+    var tcp1 = JSON.stringify(TCP.mkTCP('22', '2222'));
+    var tcp2 = new TCP.TCP(JSON.parse(tcp1));
+
+    expect(tcp2.src).toBe('22');
+    expect(tcp2.dst).toBe('2222');
+  });
 
 /*  it('stringify Pass', function () {
     expect(!!TCP).toBe(true);

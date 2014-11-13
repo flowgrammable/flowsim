@@ -10,11 +10,11 @@ var Payloads = {};
 
 function TCP(tcp, src, dst){
   if(_.isObject(tcp)) {
-    this._src = new UInt.UInt(tcp._src);
-    this._dst = new UInt.UInt(tcp._dst);
+    this._src = mkPort(tcp._src);
+    this._dst = mkPort(tcp._dst);
   } else {
-    this._src = mkSrc(src);
-    this._dst = mkDst(dst);
+    this._src = mkPort(src);
+    this._dst = mkPort(dst);
   }
   this.name = NAME;
   this.bytes = BYTES;
@@ -22,7 +22,7 @@ function TCP(tcp, src, dst){
 
 TCP.prototype.src = function(src) {
   if(src) {
-    this._src = mkSrc(src);
+    this._src = mkPort(src);
   } else {
     return this._src;
   }
@@ -30,7 +30,7 @@ TCP.prototype.src = function(src) {
 
 TCP.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = mkDst(dst);
+    this._dst = mkPort(dst);
   } else {
     return this._dst;
   }
@@ -51,26 +51,22 @@ TCP.prototype.toString = function() {
          'dst: '+this._dst.toString();
 };
 
+function mkPort(port) {
+  if (port instanceof UInt.UInt) {
+    return new UInt.UInt(port);
+  } else {
+    return new UInt.UInt(null, port, 2);
+  }
+}
+
+function mkPortMatch(value, mask) {
+  return new UInt.Match(null, mkPort(value), mkPort(mask));
+}
+
 var TIPS = {
   src: 'TCP source port',
   dst: 'TCP destination port'
 };
-
-function mkSrc(input) {
-  return new UInt.UInt(null, input, 2);
-}
-
-function mkSrcMatch(value, mask) {
-  return new UInt.Match(null, mkSrc(value), mkSrc(mask));
-}
-
-function mkDst(input) {
-  return new UInt.UInt(null, input, 2);
-}
-
-function mkDstMatch(value, mask) {
-  return new UInt.Match(null, mkDst(value), mkDst(mask));
-}
 
 var TESTS = {
   src: UInt.is(16),
@@ -110,8 +106,8 @@ return {
   create: function(tcp) {return new TCP(tcp); },
   createUI: function(tcp) {return new TCP_UI(tcp); },
   Payloads: _(Payloads).keys(),
-  mkSrc: mkSrc,
-  mkDst: mkDst,
+  mkPort: mkPort,
+  mkPortMatch: mkPortMatch,
   mkTCP: mkTCP,
   TESTS: TESTS,
   TIPS: TIPS

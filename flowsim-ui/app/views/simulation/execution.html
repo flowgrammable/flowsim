@@ -4,29 +4,29 @@
  		 Instructions
 		</div>
 		<div class="actionGroup">
-		<div class="actionlist">
+		<div class="actionlist" >
 			<div style="height:10px"></div>
-			<div>Action List&nbsp;&nbsp;</div>
-			<div class="example-animate-container">
+			<div ng-show="applyActionList.length > 0">Action List&nbsp;&nbsp;</div>
+			<div ng-show="applyActionList.length > 0" class="example-animate-container">
    			   <div class="animate-repeat" ng-class="(applyActionList.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in applyActionList">
      		   {{action.name}}
      			</div>
       		</div>
       	</div>
-		<div class="actionset">
+		<div class="actionset" ng-show="writeActionSet.length > 0">
 			<div style="height:10px"></div>
-			<div>Action Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
-			<div class="example-animate-container">
+			<div ng-show="writeActionSet.length > 0">Action Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			<div ng-show="writeActionSet.length > 0" class="example-animate-container">
    			   <div class="animate-repeat" ng-class="(writeActionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in writeActionSet">
      		   		{{action.name}}
      			</div>
       		</div>
       	</div>
-      	<div style="height: 80px;" class="sim-exec-connection">
-      		<div style="height: 30px;width:35%" class="sim-exec-connection"></div>
+      	<div  ng-style="{'height':  80  + (6 - instrucionList.length )* 25  , 'border-width' : instrucionList.length > 4 && applyActionList.length > 0 ? '0 0 2 2':'0'}" class="sim-exec-connection" >
+      		<div ng-style="{'height':  30  + (6 - instrucionList.length )* 25,'width':'35%','border-width' : instrucionList.length > 2 && writeActionSet.length > 0 ? '0 0 2 2':'0'}" class="sim-exec-connection" ng-show="writeActionSet.length > 0"></div>
       	</div>
       	</div>
-      	<div class="instructionset">
+      	<div class="instructionset" >
 			<div style="height:128px"></div>
 			<div>Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
 			<div class="example-animate-container">
@@ -61,7 +61,7 @@
 		</div>
 	</div>
 	<div class="bottomBanner">
-		bottom
+		<fg-packet-view packet="packet" width="100%"></fg-packet-view>
 	</div>
 </div>
 

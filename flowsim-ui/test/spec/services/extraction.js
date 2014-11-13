@@ -26,6 +26,11 @@ describe('Service: extraction', function () {
     ARP = _ARP_;
   }));
 
+  var UDP;
+  beforeEach(inject(function (_UDP_) {
+    UDP = _UDP_;
+  }));
+
   var Context;
   beforeEach(inject(function (_Context_) {
     Context = _Context_;
@@ -104,6 +109,32 @@ describe('Service: extraction', function () {
     expect(key.arp_spa).toBe(arp.spa());
     expect(key.arp_tha).toBe(arp.tha());
     expect(key.arp_tpa).toBe(arp.tpa());
+  });
+
+  it('extraction UDP Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!UDP).toBe(true);
+    expect(!!Context).toBe(true);
+
+    // create protocols to match on
+
+    var udp1 = UDP.mkUDP(
+      65535,
+      21);
+
+    // create key to extract into
+    var key = new Context.Key(null, 0);
+
+    expect(key.udp_src).toBe(undefined);
+    expect(key.udp_dst).toBe(undefined);
+
+    extraction.extract_udp(udp1, key);
+
+    expect(key.udp_src).toBe(udp1.src());
+    expect(key.udp_dst).toBe(udp1.dst());
+
+    console.log(key.udp_src);
+    console.log(key.udp_dst);
   });
 
 });

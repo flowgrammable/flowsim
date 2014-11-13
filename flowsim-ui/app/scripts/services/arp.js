@@ -14,15 +14,15 @@ function ARP(arp, opcode, sha, spa, tha, tpa){
   if(_.isObject(arp)){
     this._opcode  = new UInt.UInt(arp._opcode);
     this._sha     = new ETHERNET.MAC(arp._sha);
-    this._spa     = new IPV4.IP(arp._spa);
+    this._spa     = new IPV4.Address(arp._spa);
     this._tha     = new ETHERNET.MAC(arp._tha);
-    this._tpa     = new IPV4.IP(arp._tpa);
+    this._tpa     = new IPV4.Address(arp._tpa);
   } else {
     this._opcode  = mkOpcode(opcode);
     this._sha     = ETHERNET.mkMAC(sha);
-    this._spa     = IPV4.mkIP(spa);
+    this._spa     = IPV4.mkAddress(spa);
     this._tha     = ETHERNET.mkMAC(tha);
-    this._tpa     = IPV4.mkIP(tpa);
+    this._tpa     = IPV4.mkAddress(tpa);
   }
   this.bytes = BYTES;
   this.name = NAME;
@@ -64,25 +64,38 @@ function mkOpcodeMatch(value, mask) {
 
 ARP.prototype.sha = function(sha) {
   if(sha) {
-    this._sha = new ETHERNET.mkMAC(sha);
+    this._sha = new ETHERNET.MAC(null, sha);
   } else {
     return this._sha;
   }
 };
 
-ARP.mkSha = ETHERNET.mkMAC;
-ARP.mkShaMatch = ETHERNET.mkMACMatch;
+
+function mkSha(sha){
+  return new ETHERNET.MAC(null, sha);
+}
+
+function mkShaMatch(value, mask){
+  return new UInt.Match(null, mkSha(value)._mac, mkSha(mask)._mac);
+}
+
 
 ARP.prototype.spa = function(spa) {
   if(spa) {
-    this._spa = new IPV4.mkIP(spa);
+    this._spa = new IPV4.mkAddress(spa);
   } else {
     return this._spa;
   }
 };
 
-ARP.mkSpa = IPV4.mkIP;
-ARP.mkSpaMatch = IPV4.mkIPMatch;
+function mkSpa(ip){
+  return new IPV4.mkAddress(ip);
+}
+
+function mkSpaMatch(value, mask){
+  return new IPV4.mkAddressMatch(value, mask);
+}
+
 
 ARP.prototype.tha = function(tha) {
   if(tha) {
@@ -92,19 +105,29 @@ ARP.prototype.tha = function(tha) {
   }
 };
 
-ARP.mkTha = ETHERNET.mkMAC;
-ARP.mkThaMatch = ETHERNET.mkMACMatch;
+function mkTha(mac){
+  return new ETHERNET.mkMAC(mac);
+}
+
+function mkThaMatch(value, mask){
+  return new ETHERNET.mkMACMatch(value, mask);
+}
 
 ARP.prototype.tpa = function(tpa) {
   if(tpa) {
-    this._tpa = new IPV4.mkIP(tpa);
+    this._tpa = new IPV4.mkAddress(tpa);
   } else {
     return this._tpa;
   }
 };
 
-ARP.mkTpa = IPV4.mkIP;
-ARP.mkTpaMatch = IPV4.mkIPMatch;
+function mkTpa(ip){
+  return new IPV4.mkAddress(ip);
+}
+
+function mkTpaMatch(value, mask){
+  return new IPV4.mkAddressMatch(value, mask);
+}
 
 ARP.prototype.toString = function() {
   return 'opcode: '+this._opcode.toString(16)+'\n'+
@@ -125,9 +148,9 @@ var TIPS = {
 var TESTS = {
   opcode: UInt.is(2),
   sha: ETHERNET.MAC.is,
-  spa: IPV4.IP.is,
+  spa: IPV4.Address.is,
   tha: ETHERNET.MAC.is,
-  tpa: IPV4.IP.is
+  tpa: IPV4.Address.is
 };
 
 function ARP_UI(arp) {
@@ -147,7 +170,7 @@ function ARP_UI(arp) {
   }, {
     name: 'SPA',
     value: arp.spa().toString(),
-    test: IPV4.IP.is,
+    test: IPV4.Address.is,
     tip: TIPS.spa
   }, {
     name: 'THA',
@@ -157,7 +180,7 @@ function ARP_UI(arp) {
   }, {
     name: 'TPA',
     value: arp.tpa().toString(),
-    test: IPV4.IP.is,
+    test: IPV4.Address.is,
     tip: TIPS.tpa
   }];
 }
@@ -188,14 +211,14 @@ return {
   mkARP:          mkARP,
   mkOpcode:       mkOpcode,
   mkOpcodeMatch:  mkOpcodeMatch,
-  mkSha:          ARP.mkSha,
-  mkShaMatch:     ARP.mkShaMatch,
-  mkSpa:          ARP.mkSpa,
-  mkSpaMatch:     ARP.mkSpaMatch,
-  mkTha:          ARP.mkTha,
-  mkThaMatch:     ARP.mkThaMatch,
-  mkTpa:          ARP.mkTpa,
-  mkTpaMatch:     ARP.mkTpaMatch,
+  mkSha:          mkSha,
+  mkShaMatch:     mkShaMatch,
+  mkSpa:          mkSpa,
+  mkSpaMatch:     mkSpaMatch,
+  mkTha:          mkTha,
+  mkThaMatch:     mkThaMatch,
+  mkTpa:          mkTpa,
+  mkTpaMatch:     mkTpaMatch,
   ARP_UI:         ARP_UI,
   create:         function(arp)   { return new ARP(arp); },
   createUI:       function(arp)   { return new ARP_UI(arp); },
