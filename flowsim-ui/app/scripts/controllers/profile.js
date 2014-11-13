@@ -20,6 +20,8 @@ angular.module('flowsimUiApp')
       ranges: Profile.RANGES
     };
 
+    console.log($scope.metadata.tips.Tables);
+
     $scope.versions = [
       'OpenFlow 1.0',
       'OpenFlow 1.1',
@@ -116,8 +118,8 @@ angular.module('flowsimUiApp')
         controller: 'DialogProfileMatchCtrl',
         size: 'lg',
         resolve: {
-          tips: function() { return $scope.tips.Tables.Table.Match; },
-          tests: function() { return $scope.tests.Tables.Table.Match; },
+          tips: function() { return $scope.metadata.tips.Tables.Table.Match; },
+          tests: function() { return $scope.metadata.tests.Tables.Table.Match; },
           match: function () {
             return $scope.profile.tables.tables[idx].match;
           }
@@ -134,8 +136,8 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: {
           name: function() { return 'Instruction'; },
-          tips: function() { return $scope.tips.Tables.Table.Instruction; },
-          tests: function() { return $scope.tests.Tables.Table.Instruction; },
+          tips: function() { return $scope.metadata.tips.Tables.Table.Instruction; },
+          tests: function() { return $scope.metadata.tests.Tables.Table.Instruction; },
           instruction: function () {
             return $scope.profile.tables.tables[idx].instruction;
           }
@@ -152,8 +154,8 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: {
           name: function() { return 'Miss'; },
-          tips: function() { return $scope.tips.Tables.Table.Miss; },
-          tests: function() { return $scope.tests.Tables.Table.Miss; },
+          tips: function() { return $scope.metadata.tips.Tables.Table.Miss; },
+          tests: function() { return $scope.metadata.tests.Tables.Table.Miss; },
           instruction: function() {
             return $scope.profile.tables.tables[idx].miss;
           }
