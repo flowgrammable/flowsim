@@ -80,8 +80,8 @@ function extract_sctp(sctp, key) {
 }
 
 function extract_tcp(tcp, key) {
-  key.tcp_src = tcp.src;
-  key.tcp_dst = tcp.dst;
+  key.tcp_src = tcp.src();
+  key.tcp_dst = tcp.dst();
 }
 
 function extract_udp(udp, key) {
@@ -134,6 +134,7 @@ return {
   extract_vlan: extract_vlan,
   extract_arp: extract_arp,
   extract_udp: extract_udp,
+  extract_tcp: extract_tcp,
   extract_ipv4: extract_ipv4,
   process: extract
 };
