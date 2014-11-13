@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(Context, UInt, Extraction) {
+  .factory('Dataplane', function(Context, UInt, Extraction, Instruction) {
 
 var ARRIVAL    = 'Arrival';
 var EXTRACTION = 'Extraction';
@@ -33,6 +33,7 @@ function Dataplane(device) {
     this.tables   = device.tables;
     this.groups   = device.groups;
     this.groupQ   = [];
+    this.instructionSet = new Instruction.Set();
     //this.meters   = device.meters;
 
     this.ctx   = null;
@@ -113,6 +114,7 @@ Dataplane.prototype.transition = function(state) {
 };
 
 Dataplane.prototype.step = function() {
+  var i;
   if(this.currEvent === null) {
     this.currEvent = this.inputQ[0];
     this.inputQ.splice(0, 1);
@@ -182,9 +184,18 @@ Dataplane.prototype.step = function() {
     default:
       throw 'Bad Dataplane state: ' + this.state;
   }
-  return _(State).indexOf(function(state) {
-    return state.toLowerCase() === this.state.toLowerCase();
-  }, this);
+  console.log('states: '+State);
+  console.log('state: '+this.state);
+  _.find(State, function(state, idx) {
+  });
+
+  for(i=0; i<State.length; i++) {
+    console.log(State[i].toLowerCase() + '===' + this.state.toLowerCase());
+    if(State[i].toLowerCase() === this.state.toLowerCase()) {
+      return i;
+    }
+  }
+  throw 'Bad state: '+i;
 };
 
 var Stages = _(State).reject(function(state) { 
