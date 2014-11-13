@@ -16,18 +16,13 @@ function Simulation() {
   this.dataplane = null;
 }
 
-Simulation.prototype.stages = function() {
-  return [
-    'Arrival',
-    'Choice',
-    'Selection',
-    'Execution',
-    'Egress'
-  ];
-};
+Simulation.prototype.stages = Dataplane.Stages;
 
 Simulation.prototype.step = function() {
-  this.dataplane.step();
+  this.stage = this.dataplane.step();
+  if(this.dataplane.idle()) {
+    this.stop();
+  }
 };
 
 Simulation.prototype.play = function(trace) {
