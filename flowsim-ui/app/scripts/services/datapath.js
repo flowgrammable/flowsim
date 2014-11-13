@@ -72,6 +72,32 @@ Profile.prototype.ofp_1_2 = function() {};
 Profile.prototype.ofp_1_3 = function() {};
 Profile.prototype.ofp_1_4 = function() {};
 
+function Allocator(allocator, limit) {
+  if(_.isObject(allocator)) {
+    _.extend(this, allocator);
+    this.limit = _.clone(this.alloc);
+  } else {
+    this.alloc = {};
+    this.limit = limit;
+  }
+}
+
+Allocator.prototype.clone = function() {
+  return new Allocator(this);
+};
+
+Allocator.prototype.request = function() {
+  var id = _(_.range(this.limit)).find(function(_id) {
+    return !_(this.alloc).has(_id);
+  }, this);
+  this.alloc[id] = true;
+  return id;
+};
+
+Allocator.prototype.release = function(id) {
+  delete this.alloc[id];
+};
+
 function Datapath(datapath, profile) {
   if(_.isObject(datapath)) {
     _.extend(this, datapath);
@@ -82,6 +108,7 @@ function Datapath(datapath, profile) {
     // Default the basic operations
     this.miss_send_len = defMissSendLen;
     this.fragHandling  = defFrag;
+    this.bufAllocator = new Allocator(null, this.capabilities.n_buffers);
   }
 }
 

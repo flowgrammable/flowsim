@@ -3,6 +3,16 @@
 angular.module('flowsimUiApp')
   .factory('Ports', function(UInt, ETHERNET, Regex) {
 
+var VPort = {
+  ALL:        0xfffffffc,
+  CONTROLLER: 0xfffffffd,
+  TABLE:      0xfffffffe,
+  IN_PORT:    0xfffffff9,
+  LOCAL:      0xfffffff8,
+  NORMAL:     0xfffffffa,
+  FLOOD:      0xfffffffb
+};
+
 var defPortCount   = 24;
 var defNamePrefix  = 'eth';
 var defPortStats   = true;
@@ -144,6 +154,23 @@ function Port(port, portProfile) {
   }
 }
 
+Port.prototype.ingress = function(packet) {
+  var drop = this.config.no_recv ? true : false;
+
+  // FIXME: stats goes here
+
+  return drop;
+};
+
+Port.prototype.egress = function(packet) {
+  var drop = this.config.no_fwd ? true : false;
+  drop = drop | (this.config.no_pkt_in && this.id === VPort.CONTROLLER);
+  
+  // FIXME: stats goes here
+
+  return drop;
+};
+
 Port.prototype.clone = function() {
   return new Port(this);
 };
@@ -164,6 +191,14 @@ function Ports(ports, profile) {
 
 Ports.prototype.clone = function() {
   return new Ports(this);
+};
+
+Ports.prototype.ingress = function(packet, in_port) {
+  this.ports[in_port].ingress(packet);
+};
+
+Ports.prototype.egress = function(packet, out_port) {
+  this.ports[out_port].egress(packet);
 };
 
 function PortProfile(portProfile, id, mac) {

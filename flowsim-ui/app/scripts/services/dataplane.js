@@ -5,33 +5,43 @@ angular.module('flowsimUiApp')
 
 
 var State = {
-  ARRIVAL: 'ARRIVAL',
+  INIT:       'INIT',
+  ARRIVAL:    'ARRIVAL',
   EXTRACTION: 'EXTRACTION',
-  CHOICE: 'CHOICE',
-  SELECTION: 'SELECTION',
-  EXECUTION: 'EXECUTION',
-  EGRESS: 'EGRESS',
-  FINAL: 'FINAL'
+  CHOICE:     'CHOICE',
+  SELECTION:  'SELECTION',
+  EXECUTION:  'EXECUTION',
+  EGRESS:     'EGRESS',
+  FINAL:      'FINAL'
 };
 
-function Dataplane(switch_, trace) {
-  if(switch_ && trace) {
-    this.ctx   = null;
-    this.state = State.ARRIVAL;
+function Dataplane(device) {
+  if(device && events) {
+    this.inputQ = [];
 
-    this.bufferIdAllocator = null;//new Utils.Allocator();
+    this.datapath = device.datapath;
+    this.ports    = device.ports;
+    this.tables   = device.tables;
+    //this.groups   = device.groups;
+    //this.meters   = device.meters;
 
-    // state machine references
-    this.table         = null;
-    this.instructions  = null;
+    this.ctx    = null;
+    this.state  = State.INIT;
   } else {
-    throw 'Bad Dataplane('+switch_+', '+trace+')';
+    throw 'Bad Dataplane('+device+', '+events+')';
   }
 }
 
+Dataplane.prototype.input = function(ev) {
+  this.inputQ.push(ev);
+};
+
 Dataplane.prototype.arrival = function(packet, in_port) {
-  var buffer_id = new this.bufferIdAllocator();
-  this.ctx      = new Context.Context(packet, buffer_id, in_port);
+  // Only process packets if the port allows it
+  if(this.ports.ingress(packet, in_port)) {
+    var bufId = new this.datapath.bufAllocator.request();
+    this.ctx  = new Context.Context(packet, bufId, in_port);
+  }
 };
 
 Dataplane.prototype.extraction = function() {
@@ -40,24 +50,20 @@ Dataplane.prototype.extraction = function() {
 
 Dataplane.prototype.choice = function() {
   this.table = this.switch_.tables.get(this.ctx.table());
-  if(this.table === null || this.table === undefined) {
+  if(!_isObject(this.table)) {
     throw 'Failed to load table: ' + this.ctx.table();
   }
 };
 
 Dataplane.prototype.selection = function() {
-  // look up the flow
-  var flow = this.table.lookup(this.ctx.key);
+  var flow = this.table.select(this.ctx.key);
   if(flow) {
-    // get a copy of the instructions
-    this.instructions = flow.instructions.clone();
+    this.ctx.setInstructions(flow.instructions.clone());
   }
 };
 
 Dataplane.prototype.execution = function() {
-  if(this.instructions) {
-    this.instructions.execute(this, this.ctx);
-  }
+  this.instructions.execute(this, this.ctx);
 };
 
 Dataplane.prototype.egress = function() {
