@@ -89,9 +89,104 @@ $scope.instrucionList = [{
 
     // grabe the available packets
     $scope.packet = {
-      name: '',
-      names: []
-    };
+  name: 'packet 1',
+  protocols: [{
+    name: 'Ethernet',
+    bytes: 14,
+    attrs: [{
+      name: 'Src',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet source address'
+    },{
+      name: 'Dst',
+      value: '00:11:22:33:44:55',
+      tip: 'Ethernet destination address'
+    },{
+      name: 'Type',
+      value: '0x8100',
+      tip: 'Typelen'
+    }]
+  }, {
+    name: 'VLAN',
+    bytes: 4,
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x03e8',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
+  }, {
+    name: 'VLAN',
+    bytes: 4,
+    attrs: [{
+      name: 'PCP',
+      value: '0x00',
+      tip: 'pcp'
+    },{
+      name: 'DEI',
+      value: '0x00',
+      tip: 'dei'
+    },{
+      name:'VID',
+      value: '0x0000',
+      tip: 'vid'
+    },{
+      name: 'Typelen',
+      value: '0x8100',
+      tip: 'typelen'
+    }]
+  }, {
+    name: 'IPv4',
+    bytes: 20,
+    attrs: [{
+      name: 'DSCP',
+      value: '0x00',
+      tip: 'dscp'
+    },{
+      name: 'ECN',
+      value: '0x00',
+      tip: 'ecn'
+    },{
+      name: 'Proto',
+      value: '0x06',
+      tip: 'protocol'
+    },{
+      name: 'Src',
+      value: '10.0.0.1',
+      tip: 'source address'
+    },{
+      name: 'Dst',
+      value: '11.1.1.1',
+      tip: 'destination address'
+    }]
+  }, {
+    name: 'TCP',
+    bytes: 20,
+    attrs: [{
+      name: 'Src',
+      value: '0xabcd',
+      tip: 'src port'
+    }, {
+      name: 'Dst',
+      value: '0xabcd',
+      tip: 'dst port'
+    }]
+  }, {
+    name: 'Payload',
+    bytes: 1000,
+  }]
+};
     fgCache.getNames('packet', function(err, result) {
       if(err) {
         console.log(err.details);
@@ -269,8 +364,14 @@ $scope.instrucionList = [{
       if($scope.makeTransition.to === 4 &&  $scope.makeTransition.clonePacket){
         if($scope.instrucionList[0].name === "Apply" && _.size($scope.applyActionList) > 0){
           $scope.applyActionList.shift();
+          if($scope.applyActionList.length===0){
+             $scope.instrucionList.shift();
+          }
         }else if ($scope.instrucionList[0].name === "Write" && _.size($scope.writeActionSet) > 0){
           $scope.ctx.actionSet.push($scope.writeActionSet.shift());
+          if($scope.writeActionSet.length===0){
+             $scope.instrucionList.shift();
+          }
         }else{
           $scope.instrucionList.shift();
         }
