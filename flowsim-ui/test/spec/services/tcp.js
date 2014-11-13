@@ -51,7 +51,7 @@ describe('Service: TCP', function () {
     var port2 = TCP.mkPort('2222');
 
     var match1 = TCP.mkPortMatch('22', '0xffff');
-    var match2 = TCP.mkPortMatch('22', '0x0000');
+    var match2 = TCP.mkPortMatch('0', '0x0000');
 
     expect(match1.match(port1)).toBe(true);
     expect(match1.match(port2)).toBe(false);
@@ -63,7 +63,15 @@ describe('Service: TCP', function () {
   it('Set fields Tests', function () {
     expect(!!TCP).toBe(true);
 
-    
+    var tcp1 = TCP.mkTCP('22','2222');
+    expect(tcp1.src().toString()).toBe('22');
+    expect(tcp1.dst().toString()).toBe('2222');
+
+    tcp1.src('2222');
+    tcp1.dst('22');
+
+    expect(tcp1.src().toString()).toBe('2222');
+    expect(tcp1.dst().toString()).toBe('22');
   });
 
   it('Equivalency Tests', function () {
