@@ -219,6 +219,7 @@ function Match(match, value, mask) {
   } else if(value.bytes === mask.bytes) {
     this.value = new UInt(value);
     this.mask  = new UInt(mask);
+    this.value = this.value.and(this.mask);
   } else {
     throw 'Match('+match+', '+value+', '+mask+')';
   }
