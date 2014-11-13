@@ -13,6 +13,7 @@ angular.module('flowsimUiApp')
 function Event(ev, packet, in_port, in_phy_port, tunnel) {
   if(_.isObject(ev)) {
     _.extend(this, ev);
+
     this.packet = ev.packet.clone();
   } else {
     this.packet  = packet;
@@ -44,9 +45,8 @@ Trace.prototype.clone = function() {
   return new Trace(this);
 };
 
-Trace.prototype.push = function(packet, in_port, in_phy_port, tunnel) {
-  console.log('tp: '+in_port);
-  this.events.push(new Event(null, packet, in_port, in_phy_port, tunnel));
+Trace.prototype.push = function(packet) {
+  this.events.push(new Event(null, packet));
 };
 
 Trace.prototype.del = function(idx) {

@@ -116,7 +116,6 @@ Dataplane.prototype.step = function() {
 
   switch(this.state) {
     case ARRIVAL:
-      console.log('arrival: '+this.currEvent);
       this.arrival(
           this.currEvent.packet, 
           this.currEvent.in_port, 
