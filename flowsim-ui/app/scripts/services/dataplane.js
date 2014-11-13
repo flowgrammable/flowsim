@@ -44,7 +44,7 @@ function Dataplane(device) {
 }
 
 Dataplane.prototype.toView = function() {
-  return this.ctx.toView();
+  return this.ctx ? this.ctx.toView() : null;
 };
 
 Dataplane.prototype.input = function(ev) {

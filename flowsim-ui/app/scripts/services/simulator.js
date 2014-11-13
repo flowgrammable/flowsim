@@ -26,7 +26,7 @@ Simulation.prototype.step = function() {
 };
 
 Simulation.prototype.toView = function() {
-  return this.dataplane.toView();
+  return this.dataplane ? this.dataplane.toView() : null;
 };
 
 Simulation.prototype.play = function(trace) {
