@@ -156,6 +156,18 @@ describe('Service: uint', function () {
 
   });
 
+  it('UInt Match - Wildcard', function() {
+    var type1 = new UInt.UInt(null, 0x0800, 2);
+    var type2 = new UInt.UInt(null, 0x1, 2);
+
+    var wildcard1 = new UInt.Match(null,
+        new UInt.UInt(null, 0x1, 2),
+        new UInt.UInt(null, 0x0, 2));
+
+    expect(wildcard1.match(type1)).toBe(true);
+    expect(wildcard1.match(type2)).toBe(true);
+  });
+
   it('UInt Match - Ethernet MAC', function() {
     var empty     = new UInt.UInt(null, null, 6);
     var broadcast = (new UInt.UInt(null, null, 6)).neg();

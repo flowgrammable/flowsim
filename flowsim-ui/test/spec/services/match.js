@@ -31,6 +31,11 @@ describe('Service: match', function () {
     ARP = _ARP_;
   }));
 
+  var UDP;
+  beforeEach(inject(function (_UDP_) {
+    UDP = _UDP_;
+  }));
+
   var Context;
   beforeEach(inject(function(_Context_) {
     Context = _Context_;
@@ -42,8 +47,9 @@ describe('Service: match', function () {
     expect(match.match(key)).toBe(true);
   });
 
-  it('IPv4 Match', function () {
+  it('Ethernet Match', function () {
     expect(!!Match).toBe(true);
+    expect(!!ETHERNET).toBe(true);
 
     var match = new Match.Set();
 
@@ -82,11 +88,11 @@ describe('Service: match', function () {
 
     key.eth_type = new ETHERNET.mkType('0x0806');
     expect(match.match(key)).toBe(false);
-
   });
 
   it('VLAN Match', function () {
     expect(!!Match).toBe(true);
+    expect(!!VLAN).toBe(true);
 
     var match = new Match.Set();
 
@@ -110,11 +116,11 @@ describe('Service: match', function () {
     key.vlan_pcp = new VLAN.mkPcp('0x00');
 
     expect(match.match(key)).toBe(true);
-
   });
 
   it('ARP Match', function () {
     expect(!!Match).toBe(true);
+    expect(!!ARP).toBe(true);
 
     var match = new Match.Set();
 
@@ -161,6 +167,70 @@ describe('Service: match', function () {
     /*key.arp_tha    = new ARP.mkTha('11:aa:bb:cc:dd:ee');
     key.arp_tpa    = new ARP.mkTpa('192.168.1.100');*/
 
+    expect(match.match(key)).toBe(true);
+  });
+
+  it('UDP Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!UDP).toBe(true);
+
+    var match = new Match.Set();
+    match.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65535, '0xffff')));
+    match.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    var key = new Context.Key(null, 0);
+    expect(match.match(key)).toBe(false);
+
+    key.udp_src = new UDP.mkPort(2345);
+    key.udp_dst = new UDP.mkPort(0);
+    expect(match.match(key)).toBe(false);
+
+    key.udp_src = new UDP.mkPort(65535);
+    key.udp_dst = new UDP.mkPort(0);
+    expect(match.match(key)).toBe(false);
+
+    key.udp_src = new UDP.mkPort(2345);
+    key.udp_dst = new UDP.mkPort(80);
+    expect(match.match(key)).toBe(false);
+
+    key.udp_src = new UDP.mkPort(65535);
+    key.udp_dst = new UDP.mkPort(80);
+    expect(match.match(key)).toBe(true);
+
+
+    var match = new Match.Set();
+    match.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65535, '0x0')));
+    match.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    var key = new Context.Key(null, 0);
+    expect(match.match(key)).toBe(false);
+
+    key.udp_src = new UDP.mkPort(2345);
+    key.udp_dst = new UDP.mkPort(0);
+    expect(match.match(key)).toBe(false);
+
+    key.udp_src = new UDP.mkPort(65535);
+    key.udp_dst = new UDP.mkPort(0);
+    expect(match.match(key)).toBe(false);
+
+    key.udp_src = new UDP.mkPort(2345);
+    key.udp_dst = new UDP.mkPort(80);
+    expect(match.match(key)).toBe(true);
+
+    key.udp_src = new UDP.mkPort(65535);
+    key.udp_dst = new UDP.mkPort(80);
     expect(match.match(key)).toBe(true);
 
   });

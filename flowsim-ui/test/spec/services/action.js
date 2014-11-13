@@ -41,6 +41,11 @@ describe('Service: action', function () {
     MPLS = _MPLS_;
   }));
 
+  var UDP;
+  beforeEach(inject(function (_UDP_) {
+    UDP = _UDP_;
+  }));
+
   it('Ethernet test', function () {
     expect(!!Action).toBe(true);
 
