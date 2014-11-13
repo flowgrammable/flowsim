@@ -7,32 +7,32 @@
  * # fgsimulationview
  */
 angular.module('flowsimUiApp')
-    .directive('fgSimulationView', function () {
+  .directive('fgSimulationView', function () {
 
-        return {
+    return {
+      restrict: 'E',
+      scope: {
+        stages: '=',
+        transitions: '=',
+        makeTransition: '=',
+        label: '@'
+      },
+      link: function postLink(scope, element, attrs) {
+        //directive attributes with defaults
+        var width        = parseInt(attrs.width) || 630,
+        height       = parseInt(attrs.height) || 100,
+        stageWidth   = parseInt(attrs.stageWidth) || 90,
+        stageHeight  = parseInt(attrs.stageHeight) || 30,
+        stagePadding = parseInt(attrs.stagePadding) || 30,
+        margin       = parseInt(attrs.margin) || 30,
+        animationDuration = parseInt(attrs.animationDuration) || 1500;
 
-            restrict: 'E',
-            scope: {
-                stages: '=',
-                transitions: '=',
-                makeTransition: '=',
-                label: '@'
-            },
-            link: function postLink(scope, element, attrs) {
-                //directive attributes with defaults
-                var width        = parseInt(attrs.width) || 630,
-                    height       = parseInt(attrs.height) || 100,
-                    stageWidth   = parseInt(attrs.stageWidth) || 90,
-                    stageHeight  = parseInt(attrs.stageHeight) || 30,
-                    stagePadding = parseInt(attrs.stagePadding) || 30,
-                    margin       = parseInt(attrs.margin) || 30,
-                    animationDuration = parseInt(attrs.animationDuration) || 1500;
-
-                var svg = d3.select(element[0])
-                    .append('svg')
-                    .attr('height', height)
-                    .attr('width', width)
-                    .attr('class', 'sim-container');
+    
+        var svg = d3.select(element[0])
+          .append('svg')
+          .attr('height', height)
+          .attr('width', width)
+          .attr('class', 'sim-container');
 
                 //Arrow definition
                 svg

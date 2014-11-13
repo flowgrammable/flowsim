@@ -72,19 +72,75 @@ Profile.prototype.ofp_1_2 = function() {};
 Profile.prototype.ofp_1_3 = function() {};
 Profile.prototype.ofp_1_4 = function() {};
 
+function Buffer(buffer, limit) {
+  if(_.isObject(buffer)) {
+    _.extend(this, buffer);
+    this.alloc = _.clone(buffer.alloc);
+  } else {
+    this.alloc = {};
+    this.limit = limit;
+  }
+}
+
+Buffer.prototype.clone = function() {
+  return new Buffer(this);
+};
+
+Buffer.prototype.request = function() {
+  var id;
+  for(id=0; id<this.limit; ++id) {
+    if(!_(this.alloc).has(id.toString())) {
+      this.alloc[id.toString()] = true;
+      return id;
+    }
+  }
+  throw 'Packet Buffer Exhaustion';
+};
+
+Buffer.prototype.release = function(id) {
+  delete this.alloc[id.toString()];
+};
+
 function Datapath(datapath, profile) {
   if(_.isObject(datapath)) {
     _.extend(this, datapath);
     this.capabilities = new Profile(datapath.capabilities);
+    this.bufAllocator = new Buffer(datapath.bufAllocator);
   } else {
     // Copy the profile
     this.capabilities = new Profile(profile);
     // Default the basic operations
     this.miss_send_len = defMissSendLen;
     this.fragHandling  = defFrag;
+    this.bufAllocator = new Buffer(null, this.capabilities.n_buffers);
   }
 }
 
+Datapath.prototype.ingress = function(packet) {
+  var storeOrDrop;
+  if(packet.fragment) {
+    switch(this.fragHandling) {
+      case _normal:
+        storeOrDrop = false;
+        break;
+      case _drop:
+        storeOrDrop = true;
+        break;
+      case _reassemble:
+        // FIXME implement fragmentation reassembly behavior
+        storeOrDrop = true;
+        break;
+      default:
+        throw 'Bad fragmentation behavior'+this.fragHandling;
+    }
+  } else {
+    storeOrDrop = false;
+  }
+  // Pipeline just wants to know if it can proceed
+  // with this packet
+  return !storeOrDrop;
+};
+    
 var TIPS = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',

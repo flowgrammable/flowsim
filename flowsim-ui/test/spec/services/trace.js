@@ -11,8 +11,20 @@ describe('Service: trace', function () {
     Trace = _Trace_;
   }));
 
-  it('should do something', function () {
+  it('Event Clone', function () {
     expect(!!Trace).toBe(true);
+
+    var pkt = {
+      name: 'pkt1',
+      clone: function() { return {
+        name: 'pkt1'
+      }; }
+    };
+    var ev1 = new Trace.Event(null, pkt);
+    var ev2 = new Trace.Event(ev1);
+
+    expect(ev1.packet.name).toBe('pkt1');
+    expect(ev2.packet.name).toBe('pkt1');
   });
 
 });

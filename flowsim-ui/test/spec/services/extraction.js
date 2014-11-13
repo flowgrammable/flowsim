@@ -31,6 +31,11 @@ describe('Service: extraction', function () {
     UDP = _UDP_;
   }));
 
+  var TCP;
+  beforeEach(inject(function (_TCP_) {
+    TCP = _TCP_;
+  }));
+
   var Context;
   beforeEach(inject(function (_Context_) {
     Context = _Context_;
@@ -132,6 +137,26 @@ describe('Service: extraction', function () {
 
     expect(key.udp_src).toBe(udp1.src());
     expect(key.udp_dst).toBe(udp1.dst());
+  });
+
+  it('extraction TCP Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!UDP).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var tcp1 = TCP.mkTCP(
+      '65535',
+      '0');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.tcp_src).toBe(undefined);
+    expect(key.tcp_dst).toBe(undefined);
+
+    extraction.extract_tcp(tcp1, key);
+
+    expect(key.tcp_src).toBe(tcp1.src());
+    expect(key.tcp_dst).toBe(tcp1.dst());
   });
 
 });

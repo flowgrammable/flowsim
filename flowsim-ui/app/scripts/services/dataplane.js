@@ -1,36 +1,71 @@
 'use strict';
 
-/**
- * @ngdoc service
- * @name flowsimUiApp.dataplane
- * @description
- * # dataplane
- * Service in the flowsimUiApp.
- */
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(Extraction, Instruction, Action, Context) {
+  .factory('Dataplane', function(Context, UInt, Extraction, Instruction) {
 
-function Dataplane(trace, transCallback) {
-  this.trace = trace;
-  this.evId  = 0;
-  this.ev    = trace.events[this.evId];
-  this.stage = 'arrival';
-  this.transCallback = transCallback;
+var ARRIVAL    = 'Arrival';
+var EXTRACTION = 'Extraction';
+var CHOICE     = 'Choice';
+var SELECTION  = 'Selection';
+var EXECUTION  = 'Execution';
+var GROUPS     = 'Groups';
+var EGRESS     = 'Egress';
+var FINAL      = 'Final';
 
-  this.ctx       = null;
-  this.prevTbl   = -1;
-  this._imEgress = [];
-  this._evEgress = [];
+var State = [
+  ARRIVAL, 
+  EXTRACTION,
+  CHOICE,  
+  SELECTION,
+  EXECUTION,
+  GROUPS,
+  EGRESS, 
+  FINAL,
+];
 
-  this.tables = trace.switch_.tables;
-  this.table  = null;
-  this.flow   = null;
+function Dataplane(device) {
+  if(device) {
+    this.currEvent = null;
+    this.inputQ    = [];
+
+    this.datapath = device.datapath;
+    this.ports    = device.ports;
+    this.tables   = device.tables;
+    this.groups   = device.groups;
+    this.groupQ   = [];
+    this.instructionSet = new Instruction.Set();
+    //this.meters   = device.meters;
+
+    this.ctx   = null;
+    this.state = ARRIVAL;
+  } else {
+    throw 'Bad Dataplane('+device+')';
+  }
 }
 
-Dataplane.prototype.arrival = function(pkt, in_port) {
-  this.ctx.packet      = pkt;
-  this.ctx.buffer_id   = 1;
-  this.ctx.key.in_port = in_port;
+Dataplane.prototype.toView = function() {
+  return this.ctx ? this.ctx.toView() : null;
+};
+
+Dataplane.prototype.input = function(ev) {
+  this.inputQ.push(ev);
+};
+
+Dataplane.prototype.idle = function() {
+  return this.state === FINAL;
+};
+
+Dataplane.prototype.arrival = function(packet, in_port, in_phy_port, tunnel) {
+  // Every packet is not injected into the pipeline
+  // A port can have: link down, admin down, or in no_recv state
+  // The dataplane could be: dropping fragments, or reassembling fragments
+  if(this.ports.ingress(packet, in_port) && this.datapath.ingress(packet)) {
+    var bufId = this.datapath.bufAllocator.request();
+    this.ctx  = new Context.Context(null, packet, bufId, in_port, in_phy_port, 
+                                    tunnel);
+  } else {
+    throw 'Dataplane arrival failure: '+packet+', '+in_port+', '+in_phy_port+', '+tunnel+')';
+  }
 };
 
 Dataplane.prototype.extraction = function() {
@@ -38,135 +73,138 @@ Dataplane.prototype.extraction = function() {
 };
 
 Dataplane.prototype.choice = function() {
-  this.table = this.tables[this.ctx._table];
+  this.table = this.tables.get(this.ctx.table());
+  if(!_.isObject(this.table)) {
+    throw 'Failed to load table: ' + this.ctx.table();
+  }
 };
 
-Dataplane.prototype.selection = function(table, key) {
-  return 'Im a flow';
+Dataplane.prototype.selection = function() {
+  var flow = this.table.select(this.ctx.key);
+  if(flow) {
+    this.ctx.setInstructions(flow.instructions.clone());
+  }
 };
 
-Dataplane.prototype.instruction = function(flow) {
-  flow.instructions.execute(this, this.ctx);
+Dataplane.prototype.execution = function() {
+  this.ctx.instructionSet.step(this, this.ctx);
 };
 
-Dataplane.prototype.action = function() {
-  this.ctx.actionSet.execute(this, this.ctx);
+Dataplane.prototype.output = function(pkt, id) {
+  this.ports.egress(pkt, id); 
+};
+
+Dataplane.prototype.group = function(pkt, id) {
+  this.groupQ.push({
+    id: id,
+    packet: pkt
+  });
+};
+
+Dataplane.prototype.groups = function() {
+  var g_ctx = this.groupQ.splice(0, 1);
+  this.groupQ.splice(0, 1);
+  if(g_ctx) {
+    // FIXME group processing goes here 
+  }
 };
 
 Dataplane.prototype.egress = function() {
-  if(this._imEgress.length > 0) {
-    this._imEgress.splice(0, 1);
-  } else if(this._evEgress.length > 0) {
-    this._evEgress.splice(0, 1);
-  }
+  this.ctx.actionSet.step(this, this.ctx);
 };
 
-Dataplane.prototype.output = function(port_id, group_id, ctx) {
-  if(this.stage === 'instruction') {
-    this._imEgress.push({
-      port_id: port_id,
-      group_id: group_id,
-      ctx: ctx
-    });
-  } else if(this.stage === 'action') {
-    this._evEgress.push({
-      port_id: port_id,
-      group_id: group_id,
-      ctx: ctx
-    });
-  } else {
-    throw 'Bad output state: '+ this.state;
-  }
-};
-
-Dataplane.prototype.loop = function(ctx) {
-  return this.prevTbl !== ctx._table;
-};
-
-Dataplane.prototype.hasImEgress = function() {
-  return this._imEgress.length > 0;
-};
-
-Dataplane.prototype.hasEvEgress = function() {
-  return this._evEgress.length > 0;
+Dataplane.prototype.transition = function(state) {
+  this.state = state;
 };
 
 Dataplane.prototype.step = function() {
-  // As long as there are packets to process
-  if(this.evId >= this.ev.length) {
-    return;
-  }
-  
-  // Initialize the context if null
-  if(this.ctx === null) {
-    this.ctx = new Context();
+  var i;
+  if(this.currEvent === null) {
+    this.currEvent = this.inputQ[0];
+    this.inputQ.splice(0, 1);
   }
 
-  switch(this.ctx.stage) {
-    case 'arrival':
-      // need to implement packet buffer mechanism
-      this.arrival(this.ev.packet, this.ev.in_port);
-      this.stage = 'extraction';
-      this.transCallback(null, 0);
+  switch(this.state) {
+    case ARRIVAL:
+      this.arrival(
+          this.currEvent.packet, 
+          this.currEvent.in_port, 
+          this.currEvent.in_phy_port, 
+          this.currEvent.tunnel);
+      this.transition(EXTRACTION);
       break;
-    case 'extraction':
+    case EXTRACTION:
       this.extraction();
-      this.stage = 'choice';
-      this.transCallback(0, 1);
+      this.transition(CHOICE);
       break;
-    case 'choice':
-      this.table = this.tables[this.ctx.tableId];
-      if(this.stage === 'extraction') {
-        this.transCallback(1, 2);
+    case CHOICE:
+      this.choice();
+      this.transition(SELECTION);
+      break;
+    case SELECTION:
+      this.selection();
+      this.transition(EXECUTION);
+      break;
+    case EXECUTION:
+      this.execution();
+      if(this.groupQ.length > 0) {
+        this.transition(GROUPS);
+      } else if(this.instructionSet.empty()) {
+        if(this.ctx.hasGoto()) {
+          this.transition(CHOICE);
+        } else {
+          this.transition(EGRESS);
+        }
       } else {
-        this.transCallback(4, 2);
+        this.transition(EXECUTION);
       }
-      this.stage = 'selection';
       break;
-    case 'selection':
-      this.flow = this.selection(this.table, this.ctx.key);
-      this.transCallback(2, 3);
-      this.tansition('instruction');
-      break;
-    case 'instruction':
-      this.prevTbl = this.ctx.table;
-      this.instruction(this.flow); 
-      this.transCallback(3, 4);
-      if(this.hasImEgress()) {
-        this.stage = 'egress';
-      } else if(this.loop(this.ctx)) {
-        this.stage = 'choice';
+    case GROUPS:
+      this.groups();
+      if(this.groupQ.length > 0) {
+        this.transition(GROUPS);
+      } else if(this.instructionSet.empty()) {
+        this.transition(EGRESS);
       } else {
-        this.stage ='action';
+        this.transition(EXECUTION);
       }
       break;
-    case 'action':
-      this.action();
-      this.transCallback(4, null);
-      this.ctx = null;
-      this.stage = 'egress';
-      break;
-    case 'egress':
-      if(this.hasImEgress()) {
-        this.transCallback(4, 4);
-      }
+    case EGRESS:
       this.egress();
-      if(!this.hasImEgress() && this.loop(this.ctx)) {
-        this.stage = 'choice';
+      if(this.groupQ.length > 0) {
+        this.transition(GROUPS);
+      } else if(this.ctx.actionSet.empty()) {
+        if(this.inputQ.length > 0) {
+          this.transition(ARRIVAL);
+        } else {
+          this.transition(FINAL);
+        }
+      } else {
+        this.transition(EGRESS);
       }
+      break;
+    case FINAL:
       break;
     default:
-      throw 'Bad stage: ' + this.stage;
+      throw 'Bad Dataplane state: ' + this.state;
   }
 
-  // Advance to the next packet in the trace if nothing more 
-  if(this._egress.length === 0 && this.ctx === null) {
-    this.evId += 1;
+  // return the appropriate state we are in
+  for(i=0; i<State.length; i++) {
+    if(State[i].toLowerCase() === this.state.toLowerCase()) {
+      return i;
+    }
   }
+  throw 'Bad state: '+i;
 };
+
+var Stages = _(State).reject(function(state) { 
+  return state === FINAL; 
+});
 
 return {
+  Stages: Stages,
   Dataplane: Dataplane
 };
-  
+
 });

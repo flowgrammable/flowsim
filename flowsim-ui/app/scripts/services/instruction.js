@@ -402,6 +402,11 @@ Set.prototype.clone = function() {
   return new Set(this);
 };
 
+Set.prototype.toView = function() {
+  return {
+  };
+};
+
 Set.prototype.apply = function(apply) {
   if(apply) {
     this._apply = new Apply(null, apply);
@@ -459,6 +464,11 @@ Set.prototype.step = function(dp, ctx) {
     return true;
   }
   return false;
+};
+
+Set.prototype.empty = function() {
+  return this._meter || this._clear || this._write || this._metadata || 
+         this._goto;
 };
 
 Set.prototype.execute = function(dp, ctx) {
