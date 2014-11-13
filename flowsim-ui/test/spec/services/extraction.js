@@ -132,9 +132,6 @@ describe('Service: extraction', function () {
 
     expect(key.udp_src).toBe(udp1.src());
     expect(key.udp_dst).toBe(udp1.dst());
-
-    console.log(key.udp_src);
-    console.log(key.udp_dst);
   });
 
 });
