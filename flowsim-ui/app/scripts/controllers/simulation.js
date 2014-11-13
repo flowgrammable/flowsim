@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace, 
-                                          Switch, Packet, Dataplane, Regex) {
+                                          Switch, Packet, Dataplane, Regex, Simulation) {
 
     $scope.names = {};
 
@@ -120,6 +120,24 @@ angular.module('flowsimUiApp')
      $rootScope.$broadcast('cleanCache');
    };
 
+  $scope.simulation = new Simulation.Simulation();
+  $scope.play = function() {
+    $scope.trace.get(function(err) {
+      if(err) {
+        console.log(err.details);
+      } else {
+        $scope.simulation.play($scope.trace);
+      }
+    }
+  };
+  $scope.stop = function() {
+    $scope.simulation.stop();
+  };
+  $scope.step = function() {
+    $scope.simulation.step();
+  };
+
+   /*
     $scope.active = false;
     $scope.stages = [{
       name: 'Packet Arrival',
@@ -213,5 +231,6 @@ angular.module('flowsimUiApp')
       }
       $scope.simluation.step();
     };
+    */
 
   });

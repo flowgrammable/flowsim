@@ -5,15 +5,16 @@
 <div style="text-align:center">
   <div class="btn-group">
     <button type="button" class="btn btn-default" ng-click="stop()"
-            ng-disabled="!active">
+            ng-disabled="!simulation.active">
       <span class="glyphicon glyphicon-stop"></span>
     </button>
-    <button type="button" class="btn btn-default" ng-click="play()"
-            ng-disabled="active">
+    <button type="button" class="btn btn-default" 
+            ng-click="play()"
+            ng-disabled="simulation.active">
       <span class="glyphicon glyphicon-play"></span>
     </button>
     <button type="button" class="btn btn-default" ng-click="step()"
-            ng-disabled="!active">
+            ng-disabled="!simulation.active">
       <span class="glyphicon glyphicon-step-forward"></span>
     </button>
   </div>
@@ -27,12 +28,13 @@
 </div>
 
 <tabset>
-  <tab heading="Setup" disabled=true active="!active">
+  <tab heading="Setup" disabled=true active="!simulation.active">
     <ng-include src="'views/simulation/setup.html'"></ng-include>
   </tab>
-  <tab ng-repeat="stage in stages" heading="{{stage.name}}" disabled=true
-       active="stage.active">
-    <ng-include src="'views/simulation/'+stage.label+'.html'"></ng-include>
+  <tab ng-repeat="stage in simulation.stages()" heading="{{stage}}" disabled=true
+       active="simulation.stage === $index">
+    <ng-include src="'views/simulation/'+stage.toLowerCase()+'.html'">
+    </ng-include>
   </tab>
 </tabset>
 
