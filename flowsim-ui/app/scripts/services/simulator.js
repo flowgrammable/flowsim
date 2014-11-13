@@ -39,8 +39,70 @@ Simulation.prototype.stop = function() {
   this.active    = false;
 };
 
+var Stages = [{
+  name: 'Arrival',
+  label: 'Arrival',
+  active: true
+}, {
+  name: 'Extraction',
+  label: 'Extraction',
+  active: true
+}, {
+  name: 'Choice',
+  label: 'Choice',
+  active: true
+}, {
+  name: 'Selection',
+  label: 'Selection',
+  active: true
+}, {
+  name: 'Execution',
+  label: 'Execution',
+  active: true
+}, {
+  name: 'Egress',
+  label: 'Egress',
+  active: true
+}];
+
+var Transitions = [{
+  from: null,
+  to: 0,
+  forward: true
+}, {
+  from: 0,
+  to: 1,
+  forward: true
+}, {
+  from: 1,
+  to: 2,
+  forward: true
+}, {
+  from: 2,
+  to: 3,
+  forward: true
+}, {
+  from: 3,
+  to: 4,
+  forward: true
+}, {
+  from: 4,
+  to: 5,
+  forward: true
+}, {
+  from: 5,
+  to: null,
+  forward: true
+}, {
+  from: 4,
+  to: 2,
+  forward: false
+}];
+
 return {
-  Simulation: Simulation
+  Simulation: Simulation,
+  Stages: Stages,
+  Transitions: Transitions
 };
 
 });

@@ -130,35 +130,8 @@ angular.module('flowsimUiApp')
 
   $scope.simulation = new Simulation.Simulation();
 
-  $scope.transitions = [{
-    from: null,
-      to: 0,
-      forward: true
-  }, {
-    from: 0,
-      to: 1,
-      forward: true
-  },{
-    from: 1,
-      to: 2,
-      forward: true
-  },{
-    from: 2,
-    to: 3,
-    forward: true
-  },{
-    from: 3,
-    to: 4,
-    forward: true
-  },{
-    from: 4,
-    to: null,
-    forward: true
-  },{
-    from: 4,
-    to: 2,
-    forward: false
-  }];
+  $scope.stages = Simulation.Stages;
+  $scope.transitions = Simulation.Transitions;
   
   $scope.makeTransition =  {to:-1};
   $scope.play = function() {
