@@ -7,12 +7,12 @@ describe('Service: simulator', function () {
 
   // instantiate service
   var Simulator;
-  beforeEach(inject(function (_Simulator_) {
-    Simulator = _Simulator_;
+  beforeEach(inject(function (_Simulation_) {
+    Simulator = _Simulation_;
   }));
 
   it('should do something', function () {
-    expect(!!simulator).toBe(true);
+    expect(!!Simulator).toBe(true);
   });
 
 });

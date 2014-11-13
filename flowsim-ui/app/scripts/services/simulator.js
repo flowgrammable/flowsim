@@ -33,7 +33,7 @@ Simulation.prototype.step = function() {
 Simulation.prototype.play = function(trace) {
   this.packets = _(packets).map(function(packet) {
     return packet.clone();
-  };
+  });
   this.dataplane = new Dataplane.Dataplane(trace.device);
   this.active = true;
   this.stage = 0;
@@ -46,8 +46,7 @@ Simulation.prototype.stop = function() {
 };
 
 return {
-  Simulation: Simulation,
-  Stages: Stages
+  Simulation: Simulation
 };
 
 });
