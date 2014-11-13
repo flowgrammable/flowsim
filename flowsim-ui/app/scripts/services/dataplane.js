@@ -187,7 +187,6 @@ Dataplane.prototype.step = function() {
 
   // return the appropriate state we are in
   for(i=0; i<State.length; i++) {
-    console.log(State[i].toLowerCase() + '===' + this.state.toLowerCase());
     if(State[i].toLowerCase() === this.state.toLowerCase()) {
       return i;
     }
