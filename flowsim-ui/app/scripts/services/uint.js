@@ -254,7 +254,7 @@ Match.prototype.match = function(val) {
   if(this.value.bytes !== val.bytes) {
     throw 'Match.match('+this.value.bytes+', '+val.bytes+')';
   } else if(this.value.bytes < 5) {
-    return (val.value & this.mask.value) === this.value.value;
+    return ((val.value & this.mask.value) >>> 0) === this.value.value;
   } else {
     return _.reduce(_.zip(val.value, this.mask.value, this.value.value),
       function(pass, triple) {
