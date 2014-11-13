@@ -115,6 +115,14 @@ function mkTtl(ttl){
   return new UInt.UInt(null, ttl, 1);
 }
 
+IPv4.prototype.decTTL = function(){
+  if(this._ttl.value > 0){
+    this._ttl = mkTtl(this._ttl.value - 1);
+  } else {
+    this._ttl = mkTtl(0);
+  }
+};
+
 IPv4.prototype.src = function(src) {
   if(src) {
     this._src = mkAddress(src);

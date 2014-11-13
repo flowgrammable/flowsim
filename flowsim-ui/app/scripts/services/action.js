@@ -122,6 +122,29 @@ SetTTL.prototype.step = function(dp, ctx) {
   }
 };
 
+function DecTTL(st, proto){
+  if(_.isObject(st)) {
+    _.extend(this, st);
+  } else {
+    this.protocol = proto;
+    this.field = '_ttl';
+  }
+}
+
+DecTTL.prototype.clone = function(){
+  return new DecTTL(this);
+};
+
+DecTTL.prototype.step = function(dp, ctx) {
+  var protocol = _.find(ctx.packet.protocols, function(protocol){
+    return protocol.name === this.protocol;
+  }, this);
+  if(protocol) {
+    protocol.decTTL();
+  } else {
+    console.log('DecTTL(%s) Miss', this.protocol);
+  }
+};
 
 function Push(psh, tag) {
   if(_.isObject(psh)) {
@@ -297,7 +320,6 @@ Set.prototype.setField = function(action) {
 };
 
 Set.prototype.setTTL = function(action) {
-  console.log('in set ttl:', action);
   if(!_(this.actions).has('setField')) {
     this.actions.setField = {};
   }
@@ -305,7 +327,16 @@ Set.prototype.setTTL = function(action) {
     this.actions.setField[action.protocol] = {};
   }
   this.actions.setField[action.protocol][action.field] = action;
-  console.log('this actions after:', this.actions);
+};
+
+Set.prototype.decTTL = function(action) {
+  if(!_(this.actions).has('setField')) {
+    this.actions.setField = {};
+  }
+  if(!_(this.actions.setField).has(action.protocol)) {
+    this.actions.setField[action.protocol] = {};
+  }
+  this.actions.setField[action.protocol][action.field] = action;
 };
 
 Set.prototype.queue = function(action) {
@@ -516,7 +547,8 @@ return {
   List: List,
   Push: Push,
   Pop: Pop,
-  SetTTL: SetTTL
+  SetTTL: SetTTL,
+  DecTTL: DecTTL
 };
 
 });
