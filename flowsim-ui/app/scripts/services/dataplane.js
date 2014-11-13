@@ -184,11 +184,8 @@ Dataplane.prototype.step = function() {
     default:
       throw 'Bad Dataplane state: ' + this.state;
   }
-  console.log('states: '+State);
-  console.log('state: '+this.state);
-  _.find(State, function(state, idx) {
-  });
 
+  // return the appropriate state we are in
   for(i=0; i<State.length; i++) {
     console.log(State[i].toLowerCase() + '===' + this.state.toLowerCase());
     if(State[i].toLowerCase() === this.state.toLowerCase()) {

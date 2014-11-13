@@ -461,6 +461,11 @@ Set.prototype.step = function(dp, ctx) {
   return false;
 };
 
+Set.prototype.empty = function() {
+  return this._meter || this._clear || this._write || this._metadata || 
+         this._goto;
+};
+
 Set.prototype.execute = function(dp, ctx) {
   while(this.step(dp, ctx)) {}
 };
