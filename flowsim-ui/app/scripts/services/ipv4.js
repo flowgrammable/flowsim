@@ -19,14 +19,14 @@ function IPv4(ipv4, dscp, ecn, proto, src, dst) {
     this._dscp = new UInt.UInt(ipv4._dscp);
     this._ecn  = new UInt.UInt(ipv4._ecn);
     this._proto = new UInt.UInt(ipv4._proto);
-    this._src   = new IP(ipv4._src);
-    this._dst   = new IP(ipv4._dst);
+    this._src   = new Address(ipv4._src);
+    this._dst   = new Address(ipv4._dst);
   } else {
     this._dscp = new UInt.UInt(null, dscp, 1);
     this._ecn  = new UInt.UInt(null, ecn, 1);
     this._proto = new UInt.UInt(null, proto, 1);
-    this._src   = mkIP(src);
-    this._dst   = mkIP(dst);
+    this._src   = mkAddress(src);
+    this._dst   = mkAddress(dst);
   }
   this.name = NAME;
   this.bytes = BYTES;
@@ -87,26 +87,26 @@ function mkProto(proto){
 
 IPv4.prototype.src = function(src) {
   if(src) {
-    this._src = mkIP(src);
+    this._src = mkAddress(src);
   } else {
     return this._src;
   }
 };
 
 function mkSrc(src){
-  return new IP(null, src);
+  return new Address(null, src);
 }
 
 IPv4.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = mkIP(dst);
+    this._dst = mkAddress(dst);
   } else {
     return this._dst;
   }
 };
 
 function mkDst(dst){
-  return new IP(null, dst);
+  return new Address(null, dst);
 }
 
 IPv4.prototype.clone = function() {
@@ -128,7 +128,7 @@ function dot2num(dot){
     return ((((((+d[0])*256)+(+d[1]))*256)+(+d[2]))*256)+(+d[3]);
 }
 
-function IP(ip, input){
+function Address(ip, input){
   var tmp;
   if(_.isObject(ip)) {
     this._ip = new UInt.UInt(ip._ip);
@@ -145,59 +145,59 @@ function IP(ip, input){
   }
 }
 
-IP.prototype.clone = function() {
-  return new IP(this);
+Address.prototype.clone = function() {
+  return new Address(this);
 };
 
-function mkIP(ip) {
+function mkAddress(ip) {
   if(_.isObject(ip)){
-    return new IP(ip);
+    return new Address(ip);
   } else {
-    return new IP(null, ip);
+    return new Address(null, ip);
   }
 }
 
-IP.equal = function(lhs, rhs) {
+Address.equal = function(lhs, rhs) {
   return UInt.equal(lhs._ip, rhs._ip);
 };
 
-IP.prototype.toString = function() {
+Address.prototype.toString = function() {
     return [(this._ip.value >> 24) & 255, (this._ip.value >> 16) & 255,
             (this._ip.value >> 8) & 255, this._ip.value & 255].join('.');
 };
 
-IP.Pattern = ipv4Pattern;
+Address.Pattern = ipv4Pattern;
 
-IP.is = function(ip) {
+Address.is = function(ip) {
   return ipv4Pattern.test(ip);
 };
 
-IP.Match = function(match, addr, mask){
+Address.Match = function(match, addr, mask){
   if(_.isObject(match)){
     this._match = new UInt.Match(match._match);
   } else {
-    this._match = new UInt.Match(null, mkIP(addr)._ip, mkIP(mask)._ip);
+    this._match = new UInt.Match(null, mkAddress(addr)._ip, mkAddress(mask)._ip);
   }
 };
 
-IP.Match.prototype.match = function(addr) {
+Address.Match.prototype.match = function(addr) {
   return this._match.match(addr._ip);
 };
 
-IP.Match.prototype.clone = function() {
-  return new IP.Match(this);
+Address.Match.prototype.clone = function() {
+  return new Address.Match(this);
 };
 
-function mkIPMatch(value, mask){
-  return new IP.Match(null, value, mask);
+function mkAddressMatch(value, mask){
+  return new Address.Match(null, value, mask);
 }
 
 var TESTS = {
   dscp: UInt.is(6),
   ecn: UInt.is(2),
   proto: UInt.is(8),
-  src: IP.is,
-  dst: IP.is
+  src: Address.is,
+  dst: Address.is
 };
 
 function IPv4_UI(ipv4){
@@ -264,9 +264,9 @@ return {
   create:     function(ipv4)    { return new IPv4(ipv4); },
   createUI:   function(ipv4)    { return new IPv4_UI(ipv4); },
   Payloads:   Object.keys(Payloads),
-  IP:         IP,
-  mkIP:       mkIP,
-  mkIPMatch:  mkIPMatch,
+  Address:    Address,
+  mkAddress:       mkAddress,
+  mkAddressMatch:  mkAddressMatch,
   mkIPv4:     mkIPv4,
   mkDscp:     mkDscp,
   mkEcn:      mkEcn,

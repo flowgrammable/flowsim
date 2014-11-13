@@ -19,23 +19,23 @@ describe('Service: IPV4', function () {
     expect(!!IPV4).toBe(true);
 
     expect(function() {
-      new IPV4.IPv4.IP('aaaa');
+      new IPV4.IPv4.Address('aaaa');
     }).toThrow();
 
     expect(function() {
-      new IPV4.IPv4.IP('888.888.88.888');
+      new IPV4.IPv4.Address('888.888.88.888');
     }).toThrow();
 
     expect(function() {
-      new IPV4.IPv4.IP('6.6.6.6.6');
+      new IPV4.IPv4.Address('6.6.6.6.6');
     }).toThrow();
 
     expect(function() {
-      new IPV4.IPv4.IP('6.6');
+      new IPV4.IPv4.Address('6.6');
     }).toThrow();
 
     expect(function() {
-      new IPV4.IPv4.IP('');
+      new IPV4.IPv4.Address('');
     }).toThrow();
 
   });
@@ -43,21 +43,21 @@ describe('Service: IPV4', function () {
   it('IPv4.IP Construction Pass', function(){
     expect(!!IPV4).toBe(true);
 
-    IPV4.mkIP();
+    IPV4.mkAddress();
 
-    new IPV4.IP();
-    new IPV4.IP('127.1.1.1');
-    new IPV4.IP(new IPV4.IP());
+    new IPV4.Address();
+    new IPV4.Address('127.1.1.1');
+    new IPV4.Address(new IPV4.Address());
   });
 
   it('IPv4.IP Match Pass', function() {
-    var ip1 = IPV4.mkIP('10.0.0.0');
-    var ip2 = IPV4.mkIP('255.255.255.255');
-    var ip3 = IPV4.mkIP('10.0.0.1');
+    var ip1 = IPV4.mkAddress('10.0.0.0');
+    var ip2 = IPV4.mkAddress('255.255.255.255');
+    var ip3 = IPV4.mkAddress('10.0.0.1');
 
-    var ipMatch = new IPV4.IP.Match(null, ip1, ip2);
-    var ipMatch2 = new IPV4.IP.Match(null, '0.0.0.0', '0.0.0.0');
-    var ipMatch3 = new IPV4.IP.Match(null, '1.0.0.0', '1.0.0.0');
+    var ipMatch = new IPV4.Address.Match(null, ip1, ip2);
+    var ipMatch2 = new IPV4.Address.Match(null, '0.0.0.0', '0.0.0.0');
+    var ipMatch3 = new IPV4.Address.Match(null, '1.0.0.0', '1.0.0.0');
 
     expect(ipMatch.match(ip1)).toBe(true);
     expect(ipMatch.match(ip3)).toBe(false);
