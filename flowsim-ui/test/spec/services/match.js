@@ -26,6 +26,11 @@ describe('Service: match', function () {
     VLAN = _VLAN_;
   }));
 
+  var MPLS;
+  beforeEach(inject(function (_MPLS_) {
+    MPLS = _MPLS_;
+  }));
+
   var ARP;
   beforeEach(inject(function (_ARP_) {
     ARP = _ARP_;
@@ -119,6 +124,42 @@ describe('Service: match', function () {
 
     key.vlan_vid = new VLAN.mkVid('0xffff');
     key.vlan_pcp = new VLAN.mkPcp('0x00');
+
+    expect(match.match(key)).toBe(true);
+  });
+
+  it('MPLS Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!MPLS).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'mpls_label',
+        new MPLS.mkLabelMatch('0x777777','0xffffff')));
+
+    match.push(
+      new Match.Match(null,
+        'mpls_tc',
+        new MPLS.mkTcMatch(
+          '0x03',
+          '0x03')));
+
+    match.push(
+      new Match.Match(null,
+        'mpls_bos',
+        new MPLS.mkBosMatch(
+          '0x00',
+          '0x00')));
+
+    expect(match.match(key)).toBe(false);
+
+    key.mpls_label = new MPLS.mkLabel('0x777777');
+    key.mpls_tc = new MPLS.mkTc('0x03');
+    key.mpls_bos = new MPLS.mkBos('0xaa');
 
     expect(match.match(key)).toBe(true);
   });

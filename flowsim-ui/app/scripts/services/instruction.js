@@ -403,8 +403,39 @@ Set.prototype.clone = function() {
 };
 
 Set.prototype.toView = function() {
-  return {
-  };
+  return [{
+    name: 'Meter',
+      value1: 1234
+  }, {
+    name: 'Apply',
+    set: [{
+      name: 'eth',
+      value1: 'src=',
+      value2: '01:00:00:00:00:00'
+    }, {
+      name: 'vlan',
+      value1: 'vid=',
+      value2: '2'
+    }, {
+      name: 'Output',
+      value1: 1
+    }]
+  },{
+    name: 'Clear'
+  },{
+    name: 'Write',
+    set: [{
+      name: 'group',
+      value1: 2
+    }]
+  },{
+    name: 'Metadata',
+    value1: '00:11:22:44:55:66:77,',
+    value2: '00:ff:ff:00:00:ff:ff'
+  },{
+    name: 'Goto',
+    value1: 5
+  }];
 };
 
 Set.prototype.apply = function(apply) {

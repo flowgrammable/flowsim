@@ -1,13 +1,11 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('MPLS', function(fgConstraints, UInt, ETHERNET, ARP){
+  .factory('MPLS', function(fgConstraints, UInt, ETHERNET, ARP, VLAN){
 
 var NAME = 'MPLS';
 var BYTES = 4;
 
-// MPLS Label is just 20 bits, so just match on 5 hex values
-var Pattern = /^[0-9a-fA-F]{1,5}$/;
 
 var Payloads = {
  'MPLS': 0x8847,
@@ -133,8 +131,8 @@ MPLS.prototype.toString = function() {
 };
 
 MPLS.prototype.insertHere = function(protocol) {
-  if(protocol.name !== ETHERNET.name ||
-      protocol.name !== ARP.name){
+  if(protocol.name !== ETHERNET.name &&
+      protocol.name !== ARP.name && protocol.name !== VLAN.name){
     return true;
   } else {
     return false;
@@ -151,7 +149,7 @@ MPLS.prototype.setDefaults = function(protocols, index) {
     this._label = mkLabel();
     this._tc    = mkTc();
     this._bos   = mkBos();
-    this._ttl   = mkTtl(protocols[index+1].ttl().toString(16));
+    this._ttl   = mkTtl(protocols[index].ttl().toString(16));
   }
 };
 
@@ -162,12 +160,15 @@ MPLS.prototype.popHere = function(protocol){
   return false;
 };
 
+MPLS.prototype.setPayload = function() {
+
+};
 
 var TIPS = {
   label: 'MPLS label',
   tc: 'Traffic Class',
   bos: 'Bottom of Stack',
-  ttl: 'Time to live'
+  ttl: 'Time To Live'
 };
 
 var TESTS = {

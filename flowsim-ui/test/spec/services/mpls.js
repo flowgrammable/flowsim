@@ -113,6 +113,24 @@ describe('Service: MPLS', function () {
   });
 
   it('MPLS json construct', function(){
-    var a = mkMPLS
+    var c = MPLS.mkMPLS('0xabcdef', '0xaa', '0x1', '0xff');
+
+    var j = JSON.stringify(c);
+    var j_ = new MPLS.MPLS(JSON.parse(j));
+
+    expect(j_.label().toString(16)).toBe('0xabcdef');
+    expect(j_.tc().toString(16)).toBe('0xaa');
+    expect(j_.bos().toString(16)).toBe('0x01');
+    expect(j_.ttl().toString(16)).toBe('0xff');
+
+    j_.label('0xbbbbbb');
+    j_.tc('0x33');
+    j_.bos('0x0');
+    j_.ttl('0x01');
+
+    expect(j_.label().toString(16)).toBe('0xbbbbbb');
+    expect(j_.tc().toString(16)).toBe('0x33');
+    expect(j_.bos().toString(16)).toBe('0x00');
+    expect(j_.ttl().toString(16)).toBe('0x01');
   })
 });
