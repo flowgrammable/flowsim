@@ -54,12 +54,16 @@ ARP.prototype.opcode = function(opcode) {
   }
 };
 
-function mkOpcode(input){
-  return new UInt.UInt(null, input, 2);
+function mkOpcode(op){
+  return new UInt.UInt(null, op, 2);
 }
 
 function mkOpcodeMatch(value, mask) {
-  return new UInt.Match(null, mkOpcode(value), mkOpcode(mask));
+  var tmp = new UInt.Match(null, mkOpcode(value), mkOpcode(mask));
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 ARP.prototype.sha = function(sha) {
@@ -76,9 +80,12 @@ function mkSha(sha){
 }
 
 function mkShaMatch(value, mask){
-  return new ETHERNET.mkMACMatch(value, mask);
+  var tmp = ETHERNET.mkMACMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
-
 
 ARP.prototype.spa = function(spa) {
   if(spa) {
@@ -93,7 +100,11 @@ function mkSpa(ip){
 }
 
 function mkSpaMatch(value, mask){
-  return new IPV4.mkAddressMatch(value, mask);
+  var tmp = IPV4.mkAddressMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 
@@ -110,7 +121,11 @@ function mkTha(mac){
 }
 
 function mkThaMatch(value, mask){
-  return new ETHERNET.mkMACMatch(value, mask);
+  var tmp = ETHERNET.mkMACMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 ARP.prototype.tpa = function(tpa) {
@@ -126,7 +141,11 @@ function mkTpa(ip){
 }
 
 function mkTpaMatch(value, mask){
-  return new IPV4.mkAddressMatch(value, mask);
+  var tmp = IPV4.mkAddressMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 ARP.prototype.toString = function() {

@@ -36,6 +36,11 @@ describe('Service: extraction', function () {
     IPV4 = _IPV4_;
   }));
 
+  var IPV6;
+  beforeEach(inject(function (_IPV6_) {
+    IPV6 = _IPV6_;
+  }));
+
   var UDP;
   beforeEach(inject(function (_UDP_) {
     UDP = _UDP_;
@@ -230,7 +235,7 @@ describe('Service: extraction', function () {
     expect(key.ipv6_src).toBe(undefined);
     expect(key.ipv6_dst).toBe(undefined);
 
-    extraction.extract_ipv6(p, key);
+    extraction.extract_ipv6(c, key);
 
     expect(key.ipv6_flabel).toBe(c.flabel());
     expect(key.ipv6_src).toBe(c.src());
