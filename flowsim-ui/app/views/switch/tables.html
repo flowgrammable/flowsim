@@ -35,11 +35,26 @@
         </tbody>
       </table>
 
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-addon"
+               tooltip="{{metadata.tips.Tables.n_tables}}">
+            Priority
+          </div>
+          <input class="form-control" type="text" style="max-width:100px"
+          ng-model="profile.tables.n_tables">
+          <button class="btn btn-primary">
+            Add Flow
+          </button>
+        </div>
+      </div>
+
 <table class="table table-striped">
   <thead>
     <th>Priority</th>
     <th>Match</th>
     <th>Instruction</th>
+    <th>Packets / Bytes</th>
     <th></th>
   </thead>
   <tbody>
@@ -47,24 +62,28 @@
     <td>100</td>
     <td>eth(src=x)</td>
     <td>write(eth(dst=0))</td>
+    <td>123 / 123412</td>
     <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   <tr>
     <td>10</td>
     <td>eth(src=x)</td>
     <td>write(eth(dst=0))</td>
+    <td>123 / 123412</td>
     <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   <tr>
     <td>1</td>
     <td>eth(src=x)</td>
     <td>write(eth(dst=0))</td>
+    <td>123 / 123412</td>
     <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   <tr>
     <td>0</td>
     <td>eth(src=x)</td>
     <td>write(eth(dst=0))</td>
+    <td>123 / 123412</td>
     <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   </tbody>
