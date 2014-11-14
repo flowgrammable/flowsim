@@ -36,9 +36,10 @@ function extract_arp(arp, key) {
 
 function extract_mpls(mpls, key) {
   key.mpls.push({
-    label : mpls.label,
-    tc    : mpls.tc,
-    bos   : mpls.bos
+    label : mpls.label(),
+    tc    : mpls.tc(),
+    bos   : mpls.bos(),
+    ttl   : mpls.ttl()
   });
 }
 
@@ -133,6 +134,7 @@ return {
   extract_ethernet: extract_ethernet,
   extract_vlan: extract_vlan,
   extract_arp: extract_arp,
+  extract_mpls: extract_mpls,
   extract_udp: extract_udp,
   extract_tcp: extract_tcp,
   extract_ipv4: extract_ipv4,

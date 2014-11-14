@@ -286,7 +286,7 @@ Set.prototype.push_mpls = function(action) {
       this.actions.push_mpls = [];
     }
 
-    this.actions.push_mpls = action;
+    this.actions.push_mpls.push(action);
   }
 };
 

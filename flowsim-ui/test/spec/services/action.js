@@ -512,6 +512,180 @@ describe('Service: action', function () {
 
   });
 
+  it('MPLS pushMPLS', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('mpls');
+    pkt.protocols[0].type('0x0800');
+    pkt.push(IPV4.mkIPv4('0x11','0x12', '0x06', '0x77','10.1.1.1','128.1.1.1'));
+
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x0800');
+
+    var mpls  = MPLS.mkMPLS();
+    set.push_mpls(new Action.Push(
+      null, new MPLS.MPLS()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    // set.actions.push_vlan should not exist
+    expect(set.actions.push_mpls).toBe(undefined);
+
+    // mpls
+    expect(pkt.protocols.length).toBe(3);
+
+    // Eth.type is 0x8100 (vlan)
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8847');
+    // default values for new tag
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x000000');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+
+    expect(set.actions.push_mpls).toBe(undefined);
+
+    pkt.protocols[1].label('0x777777');
+    pkt.protocols[1].tc('0x33');
+
+    var mpls  = MPLS.mkMPLS();
+    set.push_mpls(new Action.Push(
+      null, new MPLS.MPLS()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    // set.actions.push_vlan should not exist
+    expect(set.actions.push_mpls).toBe(undefined);
+
+    // mpls
+    expect(pkt.protocols.length).toBe(4);
+
+    // Eth.type is 0x8100 (vlan)
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8847');
+    // default values for new tag
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x777777');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x33');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+
+  });
+
+  it('MPLS popMPLS', function(){
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('mpls');
+    pkt.push(MPLS.mkMPLS());
+    pkt.push(IPV4.mkIPv4());
+    expect(pkt.protocols.length).toBe(3);
+
+    pkt.protocols[0].type('0x8847');
+    pkt.protocols[1].ttl('0x77');
+    pkt.protocols[2].ttl('0x77');
+
+    set.pop_mpls(new Action.Pop(
+      null, new MPLS.MPLS()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(set.actions.pop_mpls).toBe(undefined);
+
+    expect(pkt.protocols.length).toBe(2);
+
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x0800');
+
+
+    set.pop_mpls(new Action.Pop(
+      null, new MPLS.MPLS()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(set.actions.pop_mpls).toBe(undefined);
+    expect(pkt.protocols.length).toBe(2);
+
+  });
+
+  it('Pop MPLS & VLAN', function(){
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('pkt');
+    pkt.push(VLAN.mkVLAN('0x01','0x02','0x1111','0x8847'));
+    pkt.push(MPLS.mkMPLS('0x111111', '0x03', '0x00', '0x88'));
+    pkt.push(IPV4.mkIPv4());
+    expect(pkt.protocols.length).toBe(4);
+
+
+    set.pop_vlan(new Action.Pop( null,
+      new VLAN.VLAN()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols.length).toBe(3);
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8847');
+
+    set.pop_vlan(new Action.Pop( null,
+      new MPLS.MPLS()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols.length).toBe(2);
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x0800');
+
+
+  });
+
+  it('Push MPLS & VLAN', function(){
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('pkt');
+    pkt.protocols[0].type('0x0800');
+    pkt.push(IPV4.mkIPv4('0x00','0x00','0x06', '0x77'));
+    expect(pkt.protocols.length).toBe(2);
+
+
+    set.push_vlan(new Action.Push( null,
+      new VLAN.VLAN()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols.length).toBe(3);
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
+    expect(pkt.protocols[1].type().toString(16)).toBe('0x0800');
+
+    set.push_mpls(new Action.Push( null,
+      new MPLS.MPLS()
+    ));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols.length).toBe(4);
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
+    expect(pkt.protocols[1].type().toString(16)).toBe('0x8847');
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+
+
+  });
+
   it('MPLS SetField', function(){
 
     expect(!!Action).toBe(true);
@@ -592,6 +766,112 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].src().toString()).toBe('9000');
     expect(pkt.protocols[1].dst().toString(16)).toBe('0xbeef');
   });
+
+  it('MPLS SetTTL', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('ipv4pack');
+    var ttl = new MPLS.mkTtl('0x01');
+    pkt.push(MPLS.mkMPLS());
+
+    var act = new Action.SetTTL(null, MPLS.name, ttl);
+
+    expect(act.protocol).toBe('MPLS');
+    expect(act.value.toString(16)).toBe('0x01');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.setTTL(new Action.SetTTL(
+      null,
+      MPLS.name,
+      MPLS.mkTtl('0x01')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x000000');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x01');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.setTTL(new Action.SetTTL(
+      null,
+      MPLS.name,
+      MPLS.mkTtl('0x02')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x000000');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x02');
+
+  });
+
+  it('MPLS decTTL', function(){
+
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('ipv4pack');
+    pkt.push(MPLS.mkMPLS('0x666666', '0x00', '0x01', '0x77'));
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.decTTL(new Action.DecTTL(
+      null,
+      MPLS.name));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x666666');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x76');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.decTTL(new Action.DecTTL(
+      null,
+      MPLS.name));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x666666');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x75');
+
+    pkt.protocols[1].ttl('0x01');
+
+    expect(set.actions.length).toBe(undefined);
+
+    set.decTTL(new Action.DecTTL(
+      null,
+      MPLS.name));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].label().toString(16)).toBe('0x666666');
+    expect(pkt.protocols[1].tc().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].bos().toString(16)).toBe('0x01');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x01');
+
+  });
+
 
   it('TCP test', function () {
     expect(!!Action).toBe(true);
