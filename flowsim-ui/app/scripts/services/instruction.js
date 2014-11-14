@@ -468,6 +468,29 @@ Set.prototype.jump = function(jump) {
   }
 };
 
+Set.prototype.summarize = function() {
+  var result = [];
+  if(this._meter) {
+    result.push('meter');
+  }
+  if(!this._apply.empty()) {
+    result.push('apply');
+  }
+  if(this._clear) {
+    result.push('clear');
+  }
+  if(!this._write.empty()) {
+    result.push('write');
+  }
+  if(this._metadata) {
+    result.push('metadata');
+  }
+  if(this._goto) {
+    result.push('goto');
+  }
+  return result.join(', ');
+};
+
 Set.prototype.step = function(dp, ctx) {
   if(this._meter && this._meter.step(dp, ctx)) {
     delete this._meter;
