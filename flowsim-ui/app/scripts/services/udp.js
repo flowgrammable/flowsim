@@ -6,7 +6,9 @@ angular.module('flowsimUiApp')
 var NAME = 'UDP';
 var BYTES = 8;
 
-var Payloads = {};
+var Payloads = {
+  'Payload': 0
+};
 
 function UDP(udp, src, dst){
   if(_.isObject(udp)) {
@@ -54,7 +56,7 @@ UDP.prototype.src = function(src) {
 
 UDP.prototype.dst = function(dst) {
   if(dst) {
-    if(src instanceof UInt.UInt) {
+    if(dst instanceof UInt.UInt) {
       this._dst = new UInt.UInt(dst);
     } else {
       this._dst = new UInt.UInt(null, dst, 2);

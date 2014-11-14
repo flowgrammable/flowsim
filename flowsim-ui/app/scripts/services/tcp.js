@@ -6,7 +6,9 @@ angular.module('flowsimUiApp')
 var NAME = 'TCP';
 var BYTES = 20;
 
-var Payloads = {};
+var Payloads = {
+  'Payload': 0
+};
 
 function TCP(tcp, src, dst){
   if(_.isObject(tcp)) {
