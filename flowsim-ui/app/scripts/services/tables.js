@@ -22,6 +22,36 @@ var defMissContinue   = false;
 var defMissDrop       = false;
 var defMaxEntries     = 1024;
 
+function Priority(priority, priValue) {
+  if(_.isObject(priority)) {
+    _.extend(this, priority);
+    this.flows = _(priority).map(function(flow) {
+      return flow.clone();
+    });
+  } else {
+    this.flows = [];
+    this.priority = priValue;
+  }
+}
+
+Priority.prototype.clone = function() {
+  return new Priority(this);
+};
+
+Priority.prototype.add = function(flow) {
+  this.flows.push(flow);
+};
+
+Priority.prototype.del = function(idx) {
+  this.flows.splice(idx, 1);
+};
+
+Priority.prototype.select = function(key) {
+  return _(this.flows).find(function(flow) {
+    return flow.match.match(key);
+  });
+};
+
 function Table(table, tableProfile) {
   if(_.isObject(table)) {
     _.extend(this, table);
@@ -33,6 +63,7 @@ function Table(table, tableProfile) {
     this.max_entries = tableProfile.max_entries;
 
     this.priorities = [];
+    this.prioritiesPresent = {};
     this.miss = null;
   }
 }
@@ -42,7 +73,19 @@ Table.prototype.clone = function() {
 };
 
 Table.prototype.select = function(key) {
-  //FIXME: 
+};
+
+Table.prototype.add = function(priority, flow) {
+  if(!_(this.prioritiesPresent).has(priority.toString())) {
+    this.prioritiesPresent[priority.toString()] = true;
+  }
+
+};
+
+Table.prototype.del = function(priority, idx) {
+  if(_(this.prioritiesPresent).has(priority.toString())) {
+    this.prioritiesPresent[priority.toString()] = true;
+  }
 };
 
 function TableProfile(tableProfile, id) {

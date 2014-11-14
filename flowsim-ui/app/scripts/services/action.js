@@ -231,8 +231,21 @@ Set.prototype.clone = function() {
 };
 
 Set.prototype.toView = function() {
-  return {
-  };
+  return [{
+    name: 'eth',
+    value1: 'src=',
+    value2: '00:00:00:00:00:00'
+  },{
+    name: 'eth',
+    value1: 'dst=',
+    value2: '00:00:00:00:00:00'
+  },{
+    name: 'queue',
+    value1: 5
+  },{
+    name: 'Output',
+    value1: 2
+  }];
 };
 
 Set.prototype.clear = function() {
