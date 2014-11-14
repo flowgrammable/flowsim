@@ -50,13 +50,13 @@ describe('Service: IPV4', function () {
     new IPV4.Address(new IPV4.Address());
 
     var addressValue = IPV4.dot2num('128.255.255.255');
-    expect(addressValue).toBe(2164260863)
+    expect(addressValue).toBe(2164260863);
 
     var address1 = new IPV4.mkAddress('128.1.1.1');
     expect(address1._ip.value).toBe(2147549441);
 
     var address2 = new IPV4.mkAddress('255.255.255.255');
-    expect(address2._ip.value).toBe(4294967295)
+    expect(address2._ip.value).toBe(4294967295);
   });
 
   it('IPv4.IP Match Pass', function() {
