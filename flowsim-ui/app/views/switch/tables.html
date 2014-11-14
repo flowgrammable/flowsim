@@ -42,8 +42,8 @@
             Priority
           </div>
           <input class="form-control" type="text" style="max-width:100px"
-          ng-model="profile.tables.n_tables">
-          <button class="btn btn-primary">
+          ng-model="priority">
+          <button class="btn btn-primary" ng-click="newFlow()">
             Add Flow
           </button>
         </div>
@@ -55,6 +55,7 @@
     <th>Match</th>
     <th>Instruction</th>
     <th>Packets / Bytes</th>
+    <th></th>
   </thead>
   <tbody>
   <tr ng-click="openFlow(1)">
@@ -62,24 +63,30 @@
     <td>eth, mpls</td>
     <td>meter, apply, goto</td>
     <td>123 / 123412</td>
+    <td ng-click="delFlow();$event.stopPropagation()">
+      <span class="glyphicon glyphicon-minus-sign">
+      </td>
   </tr>
   <tr>
     <td>10</td>
     <td>eth, vlan, vlan</td>
     <td>meter, apply, goto</td>
     <td>123 / 123412</td>
+    <td><span class="glyphicon glyphicon-minus-sign"></td>
   </tr>
   <tr>
     <td>1</td>
     <td>eth, ipv6, icmpv6</td>
     <td>clear</td>
     <td>123 / 123412</td>
+    <td><span class="glyphicon glyphicon-minus-sign"></td>
   </tr>
   <tr>
     <td>0</td>
     <td>eth</td>
     <td>write</td>
     <td>123 / 123412</td>
+    <td><span class="glyphicon glyphicon-minus-sign"></td>
   </tr>
   </tbody>
 </table>

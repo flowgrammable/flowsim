@@ -8,10 +8,14 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchFlowCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow) {
+
+$scope.ok = function () {
+  $modalInstance.close(flow);
+};
+
+$scope.cancel = function () {
+  $modalInstance.dismiss('cancel');
+};
+
+});
