@@ -91,10 +91,10 @@ describe('Service: match', function () {
 
     expect(match.summarize().toString()).toBe('eth');
 
-  /*  match.push(
+    match.push(
       new Match.Match(null,
         'eth_type',
-        new ETHERNET.mkTypeMatch('0x0800', '0xffff'))); */
+        new ETHERNET.mkTypeMatch('0x0800', '0xffff')));
 
     expect(match.summarize().toString()).toBe('eth');
 
@@ -201,6 +201,8 @@ describe('Service: match', function () {
           '00:aa:bb:cc:dd:ee',
           'ff:ff:ff:ff:ff:ff')));
 
+    expect(match.summarize().toString()).toBe('arp');
+
     match.push(
       new Match.Match(null,
         'arp_spa',
@@ -222,6 +224,7 @@ describe('Service: match', function () {
           '192.168.1.100',
           '255.255.255.255')));
 
+    expect(match.summarize().toString()).toBe('arp');
     expect(match.match(key)).toBe(false);
 
     key.arp_opcode = ARP.mkOpcode('0x0023');

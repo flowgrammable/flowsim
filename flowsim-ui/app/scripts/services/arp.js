@@ -54,38 +54,16 @@ ARP.prototype.opcode = function(opcode) {
   }
 };
 
-function Opcode(op, input){
-  if(_.isObject(op)){
-    this._opcode = new UInt.UInt(op._op);
-  } else if(_.isString(input)){
-    this._opcode = new UInt.UInt(null, input, 2);
-  } else {
-    this._opcode = new UInt.UInt(null, null, 2);
-  }
-}
-
-Opcode.Match = function(match, value, mask){
-  if(_.isObject(match)) {
-    this._match = new UInt.Match(match._match);
-  } else {
-    this._match = new UInt.Match(null, mkOpcode(value)._opcode, mkOpcode(mask)._opcode);
-  }
-};
-
-Opcode.Match.prototype.match = function(opcode){
-  return this._match.match(opcode._opcode);
-};
-
-Opcode.Match.prototype.summarize = function(){
-  return 'arp';
-};
-
-function mkOpcode(input){
-  return new Opcode(null, input, 2);
+function mkOpcode(op){
+  return new UInt.UInt(null, op, 2);
 }
 
 function mkOpcodeMatch(value, mask) {
-  return new Opcode.Match(null, mkOpcode(value), mkOpcode(mask));
+  var tmp = new UInt.Match(null, mkOpcode(value), mkOpcode(mask));
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 ARP.prototype.sha = function(sha) {
@@ -102,9 +80,12 @@ function mkSha(sha){
 }
 
 function mkShaMatch(value, mask){
-  return new ETHERNET.mkMACMatch(value, mask);
+  var tmp = ETHERNET.mkMACMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
-
 
 ARP.prototype.spa = function(spa) {
   if(spa) {
@@ -119,7 +100,11 @@ function mkSpa(ip){
 }
 
 function mkSpaMatch(value, mask){
-  return new IPV4.mkAddressMatch(value, mask);
+  var tmp = IPV4.mkAddressMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 
@@ -136,7 +121,11 @@ function mkTha(mac){
 }
 
 function mkThaMatch(value, mask){
-  return new ETHERNET.mkMACMatch(value, mask);
+  var tmp = ETHERNET.mkMACMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 ARP.prototype.tpa = function(tpa) {
@@ -152,7 +141,11 @@ function mkTpa(ip){
 }
 
 function mkTpaMatch(value, mask){
-  return new IPV4.mkAddressMatch(value, mask);
+  var tmp = IPV4.mkAddressMatch(value, mask);
+  tmp.summarize = function() {
+    return 'arp';
+  };
+  return tmp;
 }
 
 ARP.prototype.toString = function() {
