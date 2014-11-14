@@ -8,5 +8,5 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MainCtrl', function ($scope) {
+  .controller('MainCtrl', function () {
   });
