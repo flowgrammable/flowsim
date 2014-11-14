@@ -67,6 +67,12 @@ describe('Service: match', function () {
     expect(match.match(key)).toBe(true);
   });
 
+  it('Match equality', function() {
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    expect(match1.equal(match2)).toBe(true);
+  });
+
   it('Ethernet Match', function () {
     expect(!!Match).toBe(true);
     expect(!!ETHERNET).toBe(true);
@@ -452,6 +458,8 @@ describe('Service: match', function () {
 
     var key = new Context.Key(null, 0);
 
+
+    expect(match.summarize().toString()).toBe('*');
     match.push(
       new Match.Match(null,
         'ipv6_flabel',
