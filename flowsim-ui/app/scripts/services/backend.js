@@ -59,10 +59,12 @@ angular.module('flowsimUiApp')
     }
 
     function post(path, data, callback) {
+      //FIXME this looks like left-overs from a service
       request(this, 'post', path, data, callback);
     }
 
     function update(path, data, callback) {
+      //FIXME this looks like left-overs from a service
       request(this, 'put', path, data, callback);
     }
 
