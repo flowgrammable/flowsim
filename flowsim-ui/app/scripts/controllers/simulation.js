@@ -13,61 +13,154 @@ angular.module('flowsimUiApp')
 
                                           
 //TODO - clean up this controller - move details to services
-//
+
 $scope.ctx = {
-  tableId: 0,
-  bufferId: 0,
+  table: 0,
+  buffer: 0x000000,
+  queue: 0,
+  meter: 0,
+  packet: $scope.packet,
   actionSet: [{
-    name: 'eth0',
-    value1: 'src0',
-    value2: '1'
+    name: 'eth',
+    value1: 'src=',
+    value2: '00:00:00:00:00:00'
   },{
-    name: 'eth1',
-    value1: 'dst',
-    value2: '2'
+    name: 'eth',
+    value1: 'dst=',
+    value2: '00:00:00:00:00:00'
+  },{
+    name: 'queue',
+    value1: 5
+  },{
+    name: 'Output',
+    value1: 2
   }],
-  packet: 0,
-  meter : 0
-};
-$scope.applyActionList=[{
-    name: 'eth2',
-    value1: 'src0',
-    value2: '1'
+  ins: [{
+    name: 'Meter',
+    value1: 1234
+  }, {
+    name: 'Apply',
+    set: [{
+      name: 'eth',
+      value1: 'src=',
+      value2: '01:00:00:00:00:00'
+    }, {
+      name: 'vlan',
+      value1: 'vid=',
+      value2: '2'
+    }, {
+      name: 'Output',
+      value1: 1
+    }]
   },{
-    name: 'eth3',
-    value1: 'dst',
-    value2: '2'
-  }];
-  $scope.writeActionSet=[{
-    name: 'Group',
-    value1: '2',
-    value2: '3'
-   }];
-$scope.instrucionList = [{
-  name: "Meter",
-  value: 1
- 
-},{
-  name: "Apply",
-  value: 1
-  
-},{
-  name: "Clear",
-  value: 1
-},{
-  name: "Write",
-  value: 1
-},{
-  name: 'Metadata',
-  value: 1,
-  set: [],
-  list: []
-},{
-  name: 'Goto',
-  value: 1,
-  set: [],
-  list: []
-}];
+    name: 'Clear'
+  },{
+    name: 'Write',
+    set: [{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    },{
+      name: 'group',
+      value1: 2
+    }]
+  },{
+    name: 'Metadata',
+    value1: '00:11:22:44:55:66:77,',
+    value2: '00:ff:ff:00:00:ff:ff'
+  },{
+    name: 'Goto',
+    value1: 5
+  }]
+};
+
+
+$scope.applyActionList=_.findWhere($scope.ctx.ins, {name: 'Apply'}).set;
+$scope.writeActionSet=_.findWhere($scope.ctx.ins, {name: 'Write'}).set;
+$scope.instrucionList = $scope.ctx.ins;
                                          
 
     $scope.names = {};

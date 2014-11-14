@@ -1,14 +1,12 @@
 <div class="blended_grid">
 	<div class="leftColumn">
-		<div class="instructions">
- 		 Instructions
-		</div>
+		
 		<div class="actionGroup">
 		<div class="actionlist" >
 			<div style="height:10px"></div>
 			<div ng-show="applyActionList.length > 0">Action List&nbsp;&nbsp;</div>
 			<div ng-show="applyActionList.length > 0" class="example-animate-container">
-   			   <div class="animate-repeat" ng-class="(applyActionList.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in applyActionList">
+   			   <div class="animate-repeat" ng-class="(applyActionList.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in applyActionList" tooltip="{{action.value1}}{{action.value2}}" tooltip-append-to-body="true">
      		   {{action.name}}
      			</div>
       		</div>
@@ -17,7 +15,7 @@
 			<div style="height:10px"></div>
 			<div ng-show="writeActionSet.length > 0">Action Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
 			<div ng-show="writeActionSet.length > 0" class="example-animate-container">
-   			   <div class="animate-repeat" ng-class="(writeActionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in writeActionSet">
+   			   <div class="animate-repeat" ng-class="(writeActionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in writeActionSet" tooltip="{{action.value1}}{{action.value2}}" tooltip-append-to-body="true">
      		   		{{action.name}}
      			</div>
       		</div>
@@ -53,9 +51,10 @@
 		</div>
 	</div>
 	<div class="rightContent">
-		<div>Action Set</div>
+		<div style ="width:120px; float: right;
+    clear: none;">Action Set</div>
 		<div class="right-animate-container">
-			<div class="right-animate-repeat" ng-class="(ctx.actionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in ctx.actionSet">
+			<div class="right-animate-repeat" ng-class="(ctx.actionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in ctx.actionSet" tooltip="{{action.value1}}{{action.value2}}" tooltip-append-to-body="true">
 				{{action.name}}
 			</div>
 		</div>
