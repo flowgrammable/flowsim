@@ -35,6 +35,13 @@ Match.prototype.summarize = function() {
   return this._match.summarize();
 };
 
+function getOptions(matchs) {
+
+}
+
+function mkByName(name) {
+}
+
 function Set(set) {
   if(_.isObject(set)) {
     this.matches = _.map(set.matches, function(match) {
@@ -233,6 +240,8 @@ Match.Profile.TESTS = {
 
 return {
   Match: Match,
+  getOptions: getOptions,
+  mkByName: mkByName,
   Set: Set,
   Profile: Match.Profile
 };
