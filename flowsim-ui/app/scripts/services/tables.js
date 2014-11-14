@@ -123,11 +123,13 @@ Table.prototype.add = function(priority, flow) {
     this.prioritiesPresent[priority.toString()] = true;
     priTable = new Priority(null, priority);
     this.priorities.push(priTable);
-    _(this.priorities).sortBy(function(_priority) {
+    this.priorities = _(this.priorities).sortBy(function(_priority) {
       return -_priority.priority;
     });
   } else {
-    priTable = this.priorities[priority.toString()];
+    priTable = _(this.priorities).find(function(priTbl) {
+      return priority === priTbl.priority;
+    }, this);
   }
   priTable.add(flow);
   this.stats.active++;
