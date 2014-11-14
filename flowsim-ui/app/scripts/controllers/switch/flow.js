@@ -13,6 +13,27 @@ angular.module('flowsimUiApp')
   $scope.flow = flow;
   $scope.matches = flow.match.toView();
   //$scope.options = Match.getOptions($scope.matches);
+  
+  $scope.insNames = [
+    'Meter', 'Apply', 'Clear', 'Write', 'Metadata', 'Goto'
+  ];
+
+  $scope.activeIns = {};
+  $scope.activeIdx = -1;
+
+  $scope.toggleIns = function(name) {
+    console.log('toggleIns');
+    if($scope.activeIns[name]) {
+      delete $scope.activeIns[name];
+    } else {
+      console.log('adding');
+      $scope.activeIns[name] = true;
+    }
+  };
+
+  $scope.setIns = function(idx) {
+    $scope.activeIdx = idx;
+  }
 
   $scope.setDirty = function() {
     // update the flow

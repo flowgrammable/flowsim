@@ -85,27 +85,99 @@
       <!-- Default panel contents -->
       <div class="panel-heading">
         <h4>Instruction Set</h4>
-        <button type="button" class="btn btn-primary btn-xs">
+        <button type="button" class="btn btn-xs btn-default"
+                ng-click="activeIns.meter = !activeIns.meter"
+                ng-class="{'btn-primary': activeIns.meter}">
           Meter
         </button>
-        <button type="button" class="btn btn-primary btn-xs">
+        <button type="button" class="btn btn-xs btn-default"
+                ng-click="activeIns.apply = !activeIns.apply"
+                ng-class="{'btn-primary': activeIns.apply}">
           Apply
         </button>
-        <button type="button" class="btn btn-primary btn-xs">
+        <button type="button" class="btn btn-xs btn-default"
+                ng-click="activeIns.clear = !activeIns.clear"
+                ng-class="{'btn-primary': activeIns.clear}">
           Clear
         </button>
-        <button type="button" class="btn btn-primary btn-xs">
+        <button type="button" class="btn btn-xs btn-default"
+                ng-click="activeIns.write = !activeIns.write"
+                ng-class="{'btn-primary': activeIns.write}">
           Write
         </button>
-        <button type="button" class="btn btn-primary btn-xs">
+        <button type="button" class="btn btn-xs btn-default"
+                ng-click="activeIns.metadata = !activeIns.metadata"
+                ng-class="{'btn-primary': activeIns.metadata}">
           Metadata
         </button>
-        <button type="button" class="btn btn-primary btn-xs">
+        <button type="button" class="btn btn-xs btn-default"
+                ng-click="activeIns._goto = !activeIns._goto"
+                ng-class="{'btn-primary': activeIns._goto}">
           Goto
         </button>
-    </div>
       </div>
-      stuff
+      <div class="row">
+        <div class="col-md-2">
+          <ul class="list-group">
+            <li class="list-group-item"
+                ng-show="activeIns.meter"
+                ng-class="{'active': activeIdx === 0}"
+                ng-click="activeIdx = 0">
+              Meter
+            </li>
+            <li class="list-group-item"
+                ng-show="activeIns.apply"
+                ng-class="{'active': activeIdx === 1}"
+                ng-click="activeIdx = 1">
+              Apply
+            </li>
+            <li class="list-group-item"
+                ng-show="activeIns.clear"
+                ng-class="{'active': activeIdx === 2}"
+                ng-click="activeIdx = 2">
+              Clear
+            </li>
+            <li class="list-group-item"
+                ng-show="activeIns.write"
+                ng-class="{'active': activeIdx === 3}"
+                ng-click="activeIdx = 3">
+              Write
+            </li>
+            <li class="list-group-item"
+                ng-show="activeIns.metadata"
+                ng-class="{'active': activeIdx === 4}"
+                ng-click="activeIdx = 4">
+              Metadata
+            </li>
+            <li class="list-group-item"
+                ng-show="activeIns.goto"
+                ng-class="{'active': activeIdx === 5}"
+                ng-click="activeIdx = 5">
+              Goto
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-10">
+          <div ng-show="activeIdx === 0">
+            meter stuff
+          </div>
+          <div ng-show="activeIdx === 1">
+            apply stuff
+          </div>
+          <div ng-show="activeIdx === 2">
+            clear stuff
+          </div>
+          <div ng-show="activeIdx === 3">
+            write stuff
+          </div>
+          <div ng-show="activeIdx === 4">
+            metadata stuff
+          </div>
+          <div ng-show="activeIdx === 5">
+            goto stuff
+          </div>
+        </div>
+      </div>
     </div>
 
 </div>
