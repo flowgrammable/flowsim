@@ -54,7 +54,11 @@ function mkFlabel(flabel) {
 }
 
 function mkFlabelMatch(value, mask){
-  return new UInt.Match(null, mkFlabel(value), mkFlabel(mask));
+  var tmp =  new UInt.Match(null, mkFlabel(value), mkFlabel(mask));
+  tmp.summarize = function() {
+    return 'ipv6';
+  };
+  return tmp;
 }
 
 IPv6.prototype.ttl = function(ttl){
@@ -244,6 +248,10 @@ Address.Match.prototype.clone = function() {
 
 Address.Match.prototype.match = function(addr) {
   return this._match.match(addr._ip);
+};
+
+Address.Match.prototype.summarize = function() {
+  return 'ipv6';
 };
 
 var TIPS = {
