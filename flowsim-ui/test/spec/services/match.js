@@ -70,6 +70,8 @@ describe('Service: match', function () {
 
     var key = new Context.Key(null, 0);
 
+
+
     match.push(
       new Match.Match(null,
         'eth_src',
@@ -78,17 +80,23 @@ describe('Service: match', function () {
           '00:00:00:00:00:00',
           '00:00:00:00:00:00')));
 
-    match.push(
-      new Match.Match(null,
-        'eth_dst',
-        ETHERNET.mkMACMatch(
-          'ff:ff:ff:ff:ff:ff',
-          'ff:ff:ff:ff:ff:ff')));
+    expect(match.summarize().toString()).toBe('eth');
 
     match.push(
       new Match.Match(null,
+        'eth_dst',
+        new ETHERNET.mkMACMatch(
+          'ff:ff:ff:ff:ff:ff',
+          'ff:ff:ff:ff:ff:ff')));
+
+    expect(match.summarize().toString()).toBe('eth');
+
+  /*  match.push(
+      new Match.Match(null,
         'eth_type',
-        ETHERNET.mkTypeMatch('0x0800', '0xffff')));
+        new ETHERNET.mkTypeMatch('0x0800', '0xffff'))); */
+
+    expect(match.summarize().toString()).toBe('eth');
 
     expect(match.match(key)).toBe(false);
 
@@ -103,6 +111,8 @@ describe('Service: match', function () {
 
     key.eth_type = new ETHERNET.mkType('0x0806');
     expect(match.match(key)).toBe(false);
+
+
   });
 
   it('VLAN Match', function () {
@@ -181,6 +191,8 @@ describe('Service: match', function () {
       new Match.Match(null,
         'arp_opcode',
         new ARP.mkOpcodeMatch('0x0023','0xffff')));
+
+    expect(match.summarize().toString()).toBe('arp');
 
     match.push(
       new Match.Match(null,

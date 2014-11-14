@@ -54,12 +54,38 @@ ARP.prototype.opcode = function(opcode) {
   }
 };
 
+function Opcode(op, input){
+  if(_.isObject(op)){
+    this._opcode = new UInt.UInt(op._op);
+  } else if(_.isString(input)){
+    this._opcode = new UInt.UInt(null, input, 2);
+  } else {
+    this._opcode = new UInt.UInt(null, null, 2);
+  }
+}
+
+Opcode.Match = function(match, value, mask){
+  if(_.isObject(match)) {
+    this._match = new UInt.Match(match._match);
+  } else {
+    this._match = new UInt.Match(null, mkOpcode(value)._opcode, mkOpcode(mask)._opcode);
+  }
+};
+
+Opcode.Match.prototype.match = function(opcode){
+  return this._match.match(opcode._opcode);
+};
+
+Opcode.Match.prototype.summarize = function(){
+  return 'arp';
+};
+
 function mkOpcode(input){
-  return new UInt.UInt(null, input, 2);
+  return new Opcode(null, input, 2);
 }
 
 function mkOpcodeMatch(value, mask) {
-  return new UInt.Match(null, mkOpcode(value), mkOpcode(mask));
+  return new Opcode.Match(null, mkOpcode(value), mkOpcode(mask));
 }
 
 ARP.prototype.sha = function(sha) {
