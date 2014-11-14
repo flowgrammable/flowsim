@@ -59,7 +59,7 @@ Priority.prototype.select = function(key) {
 };
 
 Priority.prototype.empty = function() {
-  return this.flows.length;
+  return this.flows.length === 0;
 };
 
 function Table(table, tableProfile) {
@@ -137,14 +137,16 @@ Table.prototype.del = function(priority, flow) {
   var priTable;
   var i;
   if(_(this.prioritiesPresent).has(priority.toString())) {
-    priTable = this.priorities[priority.toString()];
+    priTable = _(this.priorities).find(function(priTbl) {
+      return priority === priTbl.priority;
+    }, this);
     priTable.del(flow);
+    this.stats.active -= 1;
     if(priTable.empty()) {
       for(i=0; i<this.priorities.length; ++i) {
         if(this.priorities[i].priority === priority) {
           this.priorities.splice(i, 1);
           delete this.prioritiesPresent[priority.toString()];
-          this.stats.active -= 1;
           return;
         }
       }

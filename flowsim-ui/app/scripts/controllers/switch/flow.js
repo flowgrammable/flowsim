@@ -8,13 +8,12 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, Flow,
-                                          priority) {
+  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow) {
 
-  $scope.flow = new Flow.Flow(null, priority);
+  $scope.flow = flow;
 
 $scope.ok = function () {
-  $modalInstance.close($scope.flow);
+  $modalInstance.close(flow);
 };
 
 $scope.cancel = function () {
