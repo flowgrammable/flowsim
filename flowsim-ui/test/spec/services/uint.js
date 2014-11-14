@@ -156,6 +156,18 @@ describe('Service: uint', function () {
 
   });
 
+  it('UInt Match - Wildcard', function() {
+    var type1 = new UInt.UInt(null, 0x0800, 2);
+    var type2 = new UInt.UInt(null, 0x1, 2);
+
+    var wildcard1 = new UInt.Match(null,
+        new UInt.UInt(null, 0x1, 2),
+        new UInt.UInt(null, 0x0, 2));
+
+    expect(wildcard1.match(type1)).toBe(true);
+    expect(wildcard1.match(type2)).toBe(true);
+  });
+
   it('UInt Match - Ethernet MAC', function() {
     var empty     = new UInt.UInt(null, null, 6);
     var broadcast = (new UInt.UInt(null, null, 6)).neg();
@@ -226,6 +238,16 @@ describe('Service: uint', function () {
     expect(route2.match(dst1)).toBe(false);
     expect(route2.match(dst2)).toBe(true);
     expect(route2.match(dst3)).toBe(false);
+
+  });
+
+  it('UInt Exact', function(){
+    var route3 = new UInt.Match(null,
+      new UInt.UInt(null, 0xfedcbaaa, 4),
+      new UInt.UInt(null, 0xffffffff, 4));
+    var dst4 = new UInt.UInt(null, 0xfedcbaaa, 4);
+
+    expect(route3.match(dst4)).toBe(true);
   });
 
   it('UInt Mask', function() {
@@ -241,6 +263,22 @@ describe('Service: uint', function () {
 
     metadata.mask(value, mask2);
     expect(metadata.toString(16)).toBe('0x0802060404060208');
+  });
+
+  it('UInt toString', function() {
+    var uint32 = new UInt.UInt(null, 101, 4);
+    var uint24 = new UInt.UInt(null, 101, 3);
+    var uint16 = new UInt.UInt(null, 101, 2);
+    var uint8 = new UInt.UInt(null, 3, 1);
+
+    expect(uint32.toString()).toBe('101');
+    expect(uint32.toString(16)).toBe('0x00000065');
+    expect(uint24.toString()).toBe('101');
+    expect(uint24.toString(16)).toBe('0x000065');
+    expect(uint16.toString()).toBe('101');
+    expect(uint16.toString(16)).toBe('0x0065');
+    expect(uint8.toString()).toBe('3');
+    expect(uint8.toString(16)).toBe('0x03');
   });
 
 });

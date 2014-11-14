@@ -28,7 +28,7 @@ Match.prototype.clone = function() {
 
 function Set(set) {
   if(_.isObject(set)) {
-    this.matches = _.map(set.matches, function(match) { 
+    this.matches = _.map(set.matches, function(match) {
       return new Match(match);
     });
   } else {

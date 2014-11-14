@@ -19,8 +19,8 @@ var Pattern = /^([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})(-|:)([a-fA-F0-9]{1,2})
 
 function Ethernet(eth, src, dst, type) {
   if(_.isObject(eth)) {
-    this._src = new MAC(eth._src);
-    this._dst = new MAC(eth._dst);
+    this._src = mkMAC(eth._src);
+    this._dst = mkMAC(eth._dst);
     this._type = new UInt.UInt(eth._type);
   } else {
     this._src = mkMAC(src);

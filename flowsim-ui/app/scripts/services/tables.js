@@ -389,7 +389,7 @@ Profile.prototype.ofp_1_4 = function() {};
 
 var TIPS = {
   n_tables: 'Number of flow tables available',
-    Table: {
+  Table: {
     table_id:     'Unique table identifier',
     name:         'Descriptive name for flow table type',
     max_entries:  'Maximum flows supported',
@@ -405,11 +405,11 @@ var TIPS = {
 var TESTS = {
   n_tables: fgConstraints.isUInt(0,0xff),
   Table: {
-  name: function(n) { return Regex.Identifier.test(n); },
-  max_entries: fgConstraints.isUInt(0,0xffffffff),
-  Match: Match.Profile.TESTS,
-  Instruction: Instruction.Profile.TESTS,
-  Miss: Instruction.Profile.TESTS
+    name: function(n) { return Regex.Identifier.test(n); },
+    max_entries: fgConstraints.isUInt(0,0xffffffff),
+    Match: Match.Profile.TESTS,
+    Instruction: Instruction.Profile.TESTS,
+    Miss: Instruction.Profile.TESTS
   }
 };
 
@@ -417,8 +417,8 @@ var RANGES = {
 };
 
 return {
-  Capabilities: Profile,
-  Configuration: Tables,
+  Profile: Profile,
+  Tables: Tables,
   TIPS: TIPS,
   TESTS: TESTS,
   RANGES: RANGES

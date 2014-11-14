@@ -6,15 +6,17 @@ angular.module('flowsimUiApp')
 var NAME = 'TCP';
 var BYTES = 20;
 
-var Payloads = {};
+var Payloads = {
+  'Payload': 0
+};
 
 function TCP(tcp, src, dst){
   if(_.isObject(tcp)) {
-    this._src = mkPort(tcp._src);
-    this._dst = mkPort(tcp._dst);
+    this._src = new UInt.UInt(tcp._src);
+    this._dst = new UInt.UInt(tcp._dst);
   } else {
-    this._src = mkPort(src);
-    this._dst = mkPort(dst);
+    this._src = new UInt.UInt(null, src, 2);
+    this._dst = new UInt.UInt(null, dst, 2);
   }
   this.name = NAME;
   this.bytes = BYTES;
@@ -59,14 +61,14 @@ function mkPort(port) {
   }
 }
 
+function mkPortMatch(value, mask) {
+  return new UInt.Match(null, mkPort(value), mkPort(mask));
+}
+
 var TIPS = {
   src: 'TCP source port',
   dst: 'TCP destination port'
 };
-
-function mkPortMatch(value, mask) {
-  return new UInt.Match(null, mkPort(value), mkPort(mask));
-}
 
 var TESTS = {
   src: UInt.is(16),
@@ -107,6 +109,7 @@ return {
   createUI: function(tcp) {return new TCP_UI(tcp); },
   Payloads: _(Payloads).keys(),
   mkPort: mkPort,
+  mkPortMatch: mkPortMatch,
   mkTCP: mkTCP,
   TESTS: TESTS,
   TIPS: TIPS

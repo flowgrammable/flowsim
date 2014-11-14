@@ -96,6 +96,56 @@ Pop.prototype.step = function(dp, ctx) {
   }
 };
 
+function SetTTL(st, proto, value){
+  if(_.isObject(st)) {
+    _.extend(this, st);
+    this.value = st.value.clone();
+  } else {
+    this.protocol = proto;
+    this.value = value;
+    this.field = '_ttl';
+  }
+}
+
+SetTTL.prototype.clone = function(){
+  return new SetTTL(this);
+};
+
+SetTTL.prototype.step = function(dp, ctx) {
+  var protocol = _.find(ctx.packet.protocols, function(protocol){
+    return protocol.name === this.protocol;
+  }, this);
+  if(protocol) {
+    protocol[this.field] = this.value;
+  } else {
+    console.log('SetTTL(%s, %s) Miss', this.protocol, this.value.toString());
+  }
+};
+
+function DecTTL(st, proto){
+  if(_.isObject(st)) {
+    _.extend(this, st);
+  } else {
+    this.protocol = proto;
+    this.field = '_ttl';
+  }
+}
+
+DecTTL.prototype.clone = function(){
+  return new DecTTL(this);
+};
+
+DecTTL.prototype.step = function(dp, ctx) {
+  var protocol = _.find(ctx.packet.protocols, function(protocol){
+    return protocol.name === this.protocol;
+  }, this);
+  if(protocol) {
+    protocol.decTTL();
+  } else {
+    console.log('DecTTL(%s) Miss', this.protocol);
+  }
+};
+
 function Push(psh, tag) {
   if(_.isObject(psh)) {
     this.tag = psh.tag.clone();
@@ -180,6 +230,11 @@ Set.prototype.clone = function() {
   return new Set(this);
 };
 
+Set.prototype.toView = function() {
+  return {
+  };
+};
+
 Set.prototype.clear = function() {
   this.actions = {};
 };
@@ -253,13 +308,27 @@ Set.prototype.push_vlan = function(action) {
   }
 };
 
-Set.prototype.dec_ttl = function(action) {
-  if(action) {
-    this.actions.dec_ttl = action;
+Set.prototype.setField = function(action) {
+  if(!_(this.actions).has('setField')) {
+    this.actions.setField = {};
   }
+  if(!_(this.actions.setField).has(action.protocol)) {
+    this.actions.setField[action.protocol] = {};
+  }
+  this.actions.setField[action.protocol][action.field] = action;
 };
 
-Set.prototype.setField = function(action) {
+Set.prototype.setTTL = function(action) {
+  if(!_(this.actions).has('setField')) {
+    this.actions.setField = {};
+  }
+  if(!_(this.actions.setField).has(action.protocol)) {
+    this.actions.setField[action.protocol] = {};
+  }
+  this.actions.setField[action.protocol][action.field] = action;
+};
+
+Set.prototype.decTTL = function(action) {
   if(!_(this.actions).has('setField')) {
     this.actions.setField = {};
   }
@@ -331,6 +400,16 @@ Set.prototype.empty = function() {
 
 // Execute the action set in a precise ordering
 Set.prototype.step = function(dp, ctx) {
+
+  if(_(this.actions).has('setTTL')){
+    if(_(this.actions.setField).keys().length > 0) {
+      if(this.stepSetField(dp, ctx, IPV4.name)) {
+        return true;
+      } else {
+        throw 'Bad setTTL Keys: ' + this.actions.setTTL.keys();
+      }
+    }
+  }
 
   if(this.actions.copy_ttl_in) {
     this.actions.copy_ttl_in.step(dp, ctx);
@@ -436,6 +515,11 @@ List.prototype.clone = function() {
   return new List(this);
 };
 
+List.prototype.toView = function() {
+  return {
+  };
+};
+
 List.prototype.push = function(action) {
   this.actions.push(action);
 };
@@ -466,7 +550,9 @@ return {
   Set: Set,
   List: List,
   Push: Push,
-  Pop: Pop
+  Pop: Pop,
+  SetTTL: SetTTL,
+  DecTTL: DecTTL
 };
 
 });

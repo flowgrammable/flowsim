@@ -8,16 +8,16 @@ function Profile(profile) {
     _.extend(this, profile);
     this.datapath = new Datapath.Profile(profile.datapath);
     this.ports    = new Ports.Profile(profile.ports);
-    this.tables   = new Tables.Capabilities(profile.tables);
+    this.tables   = new Tables.Profile(profile.tables);
+    this.groups   = new Groups.Profile(profile.groups);
     this.meters   = new Meters.Capabilities(profile.meters);
-    this.groups   = new Groups.Capabilities(profile.groups);
   } else {
     this.name     = profile;
     this.datapath = new Datapath.Profile();
     this.ports    = new Ports.Profile(null, this.datapath.getMACPrefix());
-    this.tables   = new Tables.Capabilities();
+    this.tables   = new Tables.Profile();
+    this.groups   = new Groups.Profile();
     this.meters   = new Meters.Capabilities();
-    this.groups   = new Groups.Capabilities();
   }
 }
 

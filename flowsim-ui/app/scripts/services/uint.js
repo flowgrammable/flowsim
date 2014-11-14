@@ -83,6 +83,11 @@ function UInt(uint, value, bytes) {
   } else if(this.bytes > 4 && this.value.length > this.bytes) {
     throw 'UInt('+uint+', '+value+', '+bytes+')';
   }
+  // If converted value is negative, throw exception
+  // warning: can only check 1, 2, 3 byte uints for negativity...
+  if (this.bytes < 4 && this.value < 0) {
+    throw 'UInt('+uint+', '+value+', '+bytes+')';
+  }
 }
 
 UInt.prototype.clone = function() {
@@ -163,7 +168,11 @@ UInt.prototype.toString = function(base, sep) {
   var prefix = base === 16 ? '0x' : '';
   sep = sep ? sep : '';
   if(this.bytes < 5) {
-    return prefix + padZeros(this.value.toString(base), 2*this.bytes);
+    if(base === 16) {
+      return prefix + padZeros(this.value.toString(base), 2*this.bytes);
+    } else {
+      return prefix + this.value.toString(base);
+    }
   } else {
     return prefix + _(this.value).map(function(v) {
       return padZeros(v.toString(base), 2);
@@ -210,6 +219,7 @@ function Match(match, value, mask) {
   } else if(value.bytes === mask.bytes) {
     this.value = new UInt(value);
     this.mask  = new UInt(mask);
+    this.value = this.value.and(this.mask);
   } else {
     throw 'Match('+match+', '+value+', '+mask+')';
   }
@@ -245,7 +255,7 @@ Match.prototype.match = function(val) {
   if(this.value.bytes !== val.bytes) {
     throw 'Match.match('+this.value.bytes+', '+val.bytes+')';
   } else if(this.value.bytes < 5) {
-    return (val.value & this.mask.value) === this.value.value;
+    return ((val.value & this.mask.value) >>> 0) === this.value.value;
   } else {
     return _.reduce(_.zip(val.value, this.mask.value, this.value.value),
       function(pass, triple) {

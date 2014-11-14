@@ -6,15 +6,17 @@ angular.module('flowsimUiApp')
 var NAME = 'UDP';
 var BYTES = 8;
 
-var Payloads = {};
+var Payloads = {
+  'Payload': 0
+};
 
 function UDP(udp, src, dst){
   if(_.isObject(udp)) {
-    this._src = mkPort(udp._src);
-    this._dst = mkPort(udp._dst);
+    this._src = new UInt.UInt(udp._src);
+    this._dst = new UInt.UInt(udp._dst);
   } else {
-    this._src = mkPort(src);
-    this._dst = mkPort(dst);
+    this._src = new UInt.UInt(null, src, 2);
+    this._dst = new UInt.UInt(null, dst, 2);
   }
   this.name = NAME;
   this.bytes = BYTES;
@@ -36,9 +38,17 @@ function mkPort(port){
   }
 }
 
+function mkPortMatch(value, mask) {
+  return new UInt.Match(null, mkPort(value), mkPort(mask));
+}
+
 UDP.prototype.src = function(src) {
   if(src) {
-    this._src = mkPort(src);
+    if(src instanceof UInt.UInt) {
+      this._src = new UInt.UInt(src);
+    } else {
+      this._src = new UInt.UInt(null, src, 2);
+    }
   } else {
     return this._src;
   }
@@ -46,7 +56,11 @@ UDP.prototype.src = function(src) {
 
 UDP.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = mkPort(dst);
+    if(dst instanceof UInt.UInt) {
+      this._dst = new UInt.UInt(dst);
+    } else {
+      this._dst = new UInt.UInt(null, dst, 2);
+    }
   } else {
     return this._dst;
   }
@@ -86,28 +100,24 @@ function UDP_UI(udp){
 }
 
 UDP_UI.prototype.toBase = function() {
-  var result = new UDP();
-  result.name = this.name;
-  result.bytes = this.bytes;
-  result.fields = fgUI.stripLabelInputs(this.attrs);
-  return result;
+  return new UDP(null, this.attrs[0].value, this.attrs[1].value);
 };
 
 UDP_UI.prototype.setPayload = function() {
-  //FIXME
-  return true;
+  // do nothing
 };
 
 return {
   name: NAME,
   Payloads: _.keys(Payloads),
   UDP: UDP,
-  mkPort: mkPort,
-  mkUDP: mkUDP,
   src: '_src',
   dst: '_dst',
-  create: function() { return new UDP(); },
-  createUI: function(UDP) { return new UDP_UI(UDP); },
+  mkPort: mkPort,
+  mkPortMatch: mkPortMatch,
+  mkUDP: mkUDP,
+  create: function(udp) { return new UDP(udp); },
+  createUI: function(udp) { return new UDP_UI(udp); },
   TESTS:       TESTS,
   TIPS:        TIPS
 };

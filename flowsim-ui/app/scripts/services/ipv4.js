@@ -14,26 +14,28 @@ var Payloads = {
   'Payload' : 0
 };
 
-function IPv4(ipv4, dscp, ecn, proto, src, dst) {
+function IPv4(ipv4, dscp, ecn, proto, ttl, src, dst) {
   if(_.isObject(ipv4)) {
     this._dscp = new UInt.UInt(ipv4._dscp);
     this._ecn  = new UInt.UInt(ipv4._ecn);
     this._proto = new UInt.UInt(ipv4._proto);
-    this._src   = new IP(ipv4._src);
-    this._dst   = new IP(ipv4._dst);
+    this._src   = new Address(ipv4._src);
+    this._dst   = new Address(ipv4._dst);
+    this._ttl   = new UInt.UInt(ipv4._ttl);
   } else {
-    this._dscp = new UInt.UInt(null, dscp, 1);
-    this._ecn  = new UInt.UInt(null, ecn, 1);
-    this._proto = new UInt.UInt(null, proto, 1);
-    this._src   = mkIP(src);
-    this._dst   = mkIP(dst);
+    this._dscp = mkDscp(dscp);
+    this._ecn  = mkEcn(ecn);
+    this._proto = mkProto(proto);
+    this._src   = mkAddress(src);
+    this._dst   = mkAddress(dst);
+    this._ttl   = mkTtl(ttl);
   }
   this.name = NAME;
   this.bytes = BYTES;
 }
 
-function mkIPv4(dscp, ecn, proto, src, dst){
-  return new IPv4(null, dscp, ecn, proto, src, dst);
+function mkIPv4(dscp, ecn, proto, ttl, src, dst){
+  return new IPv4(null, dscp, ecn, proto, ttl, src, dst);
 }
 
 IPv4.prototype.dscp = function(dscp) {
@@ -52,6 +54,10 @@ function mkDscp(dscp){
   return new UInt.UInt(null, dscp, 1);
 }
 
+function mkDscpMatch(value, mask){
+  return new UInt.Match(null, mkDscp(value), mkDscp(mask));
+}
+
 IPv4.prototype.ecn = function(ecn) {
   if(ecn) {
     if(ecn instanceof UInt.UInt) {
@@ -66,6 +72,10 @@ IPv4.prototype.ecn = function(ecn) {
 
 function mkEcn(ecn){
   return new UInt.UInt(null, ecn, 1);
+}
+
+function mkEcnMatch(value, mask){
+  return new UInt.Match(null, mkEcn(value), mkEcn(mask));
 }
 
 IPv4.prototype.proto = function(proto) {
@@ -85,32 +95,77 @@ function mkProto(proto){
   return new UInt.UInt(null, proto, 1);
 }
 
+function mkProtoMatch(value, mask){
+  return new UInt.Match(null, mkProto(value), mkProto(mask));
+}
+
+IPv4.prototype.ttl = function(ttl) {
+  if(ttl){
+    if(ttl instanceof UInt.UInt) {
+      this._ttl = new UInt.UInt(ttl);
+    } else {
+      this._ttl = new UInt.UInt(null, ttl, 1);
+    }
+  } else {
+    return this._ttl;
+  }
+};
+
+function mkTtl(ttl){
+  return new UInt.UInt(null, ttl, 1);
+}
+
+IPv4.prototype.decTTL = function(){
+  if(this._ttl.value > 1){
+    this._ttl = mkTtl(this._ttl.value - 1);
+  } else {
+    this._ttl = mkTtl(1);
+  }
+};
+
 IPv4.prototype.src = function(src) {
   if(src) {
-    this._src = mkIP(src);
+    this._src = mkAddress(src);
   } else {
     return this._src;
   }
 };
 
 function mkSrc(src){
-  return new IP(null, src);
+  return new Address(null, src);
+}
+
+function mkSrcMatch(value, mask){
+  return new Address.Match(null, value, mask);
 }
 
 IPv4.prototype.dst = function(dst) {
   if(dst) {
-    this._dst = mkIP(dst);
+    this._dst = mkAddress(dst);
   } else {
     return this._dst;
   }
 };
 
 function mkDst(dst){
-  return new IP(null, dst);
+  return new Address(null, dst);
+}
+
+function mkDstMatch(value, mask){
+  return new Address.Match(null, value, mask);
 }
 
 IPv4.prototype.clone = function() {
   return new IPv4(this);
+};
+
+IPv4.prototype.toString = function(){
+  return 'dscp: '+this._dscp.toString(16)+'\n'+
+         'ecn:  '+this._ecn.toString(16)+'\n'+
+         'proto:'+this._proto.toString(16)+'\n'+
+         'ttl:  '+this._ttl.toString(16)+'\n'+
+         'src:  '+this._src.toString()+'\n'+
+         'dst:  '+this._dst.toString()+'\n';
 };
 
 var TIPS = {
@@ -118,7 +173,8 @@ var TIPS = {
   ecn: 'Explicit Congestion Notification',
   proto: 'Protocol',
   src: 'Source Address',
-  dst: 'Destination Address'
+  dst: 'Destination Address',
+  ttl: 'Time To Live'
 };
 
 var ipv4Pattern = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
@@ -128,7 +184,7 @@ function dot2num(dot){
     return ((((((+d[0])*256)+(+d[1]))*256)+(+d[2]))*256)+(+d[3]);
 }
 
-function IP(ip, input){
+function Address(ip, input){
   var tmp;
   if(_.isObject(ip)) {
     this._ip = new UInt.UInt(ip._ip);
@@ -145,59 +201,60 @@ function IP(ip, input){
   }
 }
 
-IP.prototype.clone = function() {
-  return new IP(this);
+Address.prototype.clone = function() {
+  return new Address(this);
 };
 
-function mkIP(ip) {
+function mkAddress(ip) {
   if(_.isObject(ip)){
-    return new IP(ip);
+    return new Address(ip);
   } else {
-    return new IP(null, ip);
+    return new Address(null, ip);
   }
 }
 
-IP.equal = function(lhs, rhs) {
+Address.equal = function(lhs, rhs) {
   return UInt.equal(lhs._ip, rhs._ip);
 };
 
-IP.prototype.toString = function() {
+Address.prototype.toString = function() {
     return [(this._ip.value >> 24) & 255, (this._ip.value >> 16) & 255,
             (this._ip.value >> 8) & 255, this._ip.value & 255].join('.');
 };
 
-IP.Pattern = ipv4Pattern;
+Address.Pattern = ipv4Pattern;
 
-IP.is = function(ip) {
+Address.is = function(ip) {
   return ipv4Pattern.test(ip);
 };
 
-IP.Match = function(match, addr, mask){
+Address.Match = function(match, addr, mask){
   if(_.isObject(match)){
     this._match = new UInt.Match(match._match);
   } else {
-    this._match = new UInt.Match(null, mkIP(addr)._ip, mkIP(mask)._ip);
+    this._match = new UInt.Match(null, mkAddress(addr)._ip, mkAddress(mask)._ip);
   }
 };
 
-IP.Match.prototype.match = function(addr) {
+Address.Match.prototype.match = function(addr) {
   return this._match.match(addr._ip);
 };
 
-IP.Match.prototype.clone = function() {
-  return new IP.Match(this);
+Address.Match.prototype.clone = function() {
+  return new Address.Match(this);
 };
 
-function mkIPMatch(value, mask){
-  return new IP.Match(null, value, mask);
+function mkAddressMatch(value, mask){
+  return new Address.Match(null, value, mask);
 }
 
 var TESTS = {
   dscp: UInt.is(6),
   ecn: UInt.is(2),
   proto: UInt.is(8),
-  src: IP.is,
-  dst: IP.is
+  src: Address.is,
+  dst: Address.is,
+  ttl: UInt.is(8)
 };
 
 function IPv4_UI(ipv4){
@@ -222,6 +279,12 @@ function IPv4_UI(ipv4){
     value: ipv4.proto().toString(16),
     test: TESTS.proto,
     tip: TIPS.proto
+  },
+  {
+    name: 'TTL',
+    value: ipv4.ttl().toString(16),
+    test: TESTS.ttl,
+    tip: TIPS.ttl
   },
   {
     name: 'Src',
@@ -253,28 +316,36 @@ IPv4_UI.prototype.clearPayload = function() {
 
 
 return {
-  name:       NAME,
-  IPv4:       IPv4,
-  dscp:       '_dscp',
-  ecn:        '_ecn',
-  proto:      '_proto',
-  src:        '_src',
-  dst:        '_dst',
-  IPv4_UI:    IPv4_UI,
-  create:     function(ipv4)    { return new IPv4(ipv4); },
-  createUI:   function(ipv4)    { return new IPv4_UI(ipv4); },
-  Payloads:   Object.keys(Payloads),
-  IP:         IP,
-  mkIP:       mkIP,
-  mkIPMatch:  mkIPMatch,
-  mkIPv4:     mkIPv4,
-  mkDscp:     mkDscp,
-  mkEcn:      mkEcn,
-  mkProto:    mkProto,
-  mkSrc:      mkSrc,
-  mkDst:      mkDst,
-  TESTS:      TESTS,
-  TIPS:       TIPS
+  name:           NAME,
+  IPv4:           IPv4,
+  dscp:           '_dscp',
+  ecn:            '_ecn',
+  proto:          '_proto',
+  src:            '_src',
+  dst:            '_dst',
+  ttl:            '_ttl',
+  IPv4_UI:        IPv4_UI,
+  create:         function(ipv4)    { return new IPv4(ipv4); },
+  createUI:       function(ipv4)    { return new IPv4_UI(ipv4); },
+  Payloads:       Object.keys(Payloads),
+  Address:        Address,
+  mkAddress:      mkAddress,
+  mkAddressMatch: mkAddressMatch,
+  mkIPv4:         mkIPv4,
+  mkDscp:         mkDscp,
+  mkDscpMatch:    mkDscpMatch,
+  mkEcn:          mkEcn,
+  mkEcnMatch:     mkEcnMatch,
+  mkProto:        mkProto,
+  mkProtoMatch:   mkProtoMatch,
+  mkTtl:          mkTtl,
+  mkSrc:          mkSrc,
+  mkSrcMatch:     mkSrcMatch,
+  mkDst:          mkDst,
+  mkDstMatch:     mkDstMatch,
+  dot2num:        dot2num,
+  TESTS:          TESTS,
+  TIPS:           TIPS
 };
 
 });

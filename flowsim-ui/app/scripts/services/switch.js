@@ -15,16 +15,16 @@ function Switch(sw, profile) {
     _.extend(this, sw);
     this.datapath = new Datapath.Datapath(sw.datapath);
     this.ports    = new Ports.Ports(sw.ports);
-    this.tables   = new Tables.Configuration(sw.tables);
+    this.tables   = new Tables.Tables(sw.tables);
+    this.groups   = new Groups.Groups(sw.groups);
     //this.meters   = new Meters.Configuration(sw.meters);
-    //this.groups   = new Groups.Configuration(sw.groups);
   } else {
     this.name     = sw;
     this.datapath = new Datapath.Datapath(null, profile.datapath);
     this.ports    = new Ports.Ports(null, profile.ports);
-    this.tables   = new Tables.Configuration(null, profile.tables);
+    this.tables   = new Tables.Tables(null, profile.tables);
+    this.groups   = new Groups.Groups(null, profile.groups);
     //this.meters   = new Meters.Configuration(null, profile.meters);
-    //this.groups   = new Groups.Configuration(null, profile.groups);
   }
 }
 
@@ -68,11 +68,11 @@ var RANGES = {
 };
 
 return {
-    create: create,
-    createUI: createUI,
-    TIPS: TIPS,
-    TESTS: TESTS,
-    RANGES: RANGES
+  create: create,
+  createUI: createUI,
+  TIPS: TIPS,
+  TESTS: TESTS,
+  RANGES: RANGES
 };
 
 });
