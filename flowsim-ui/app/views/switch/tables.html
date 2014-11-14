@@ -49,42 +49,37 @@
         </div>
       </div>
 
-<table class="table table-striped">
+<table class="table table-striped table-hover">
   <thead>
     <th>Priority</th>
     <th>Match</th>
     <th>Instruction</th>
     <th>Packets / Bytes</th>
-    <th></th>
   </thead>
   <tbody>
   <tr>
     <td>100</td>
-    <td>eth(src=x)</td>
-    <td>write(eth(dst=0))</td>
+    <td>eth, mpls</td>
+    <td>meter, apply, goto</td>
     <td>123 / 123412</td>
-    <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   <tr>
     <td>10</td>
-    <td>eth(src=x)</td>
-    <td>write(eth(dst=0))</td>
+    <td>eth, vlan, vlan</td>
+    <td>meter, apply, goto</td>
     <td>123 / 123412</td>
-    <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   <tr>
     <td>1</td>
-    <td>eth(src=x)</td>
-    <td>write(eth(dst=0))</td>
+    <td>eth, ipv6, icmpv6</td>
+    <td>clear</td>
     <td>123 / 123412</td>
-    <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   <tr>
     <td>0</td>
-    <td>eth(src=x)</td>
-    <td>write(eth(dst=0))</td>
+    <td>eth</td>
+    <td>write</td>
     <td>123 / 123412</td>
-    <td><span class="glyphicon glyphicon-minus-sign"></span></td>
   </tr>
   </tbody>
 </table>
