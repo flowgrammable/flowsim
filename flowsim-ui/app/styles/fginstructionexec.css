@@ -163,7 +163,7 @@
     list-style: none;
     margin: auto;
 / / padding : 0 10 px;
-    height: 170px;
+    height: 120px;
     width: 120px;
 / / position : relative;
     -webkit-transform: rotate(90deg);
@@ -198,7 +198,7 @@
 }
 
 .animate-repeat.ng-move,
-.animate-repeat.ng-enter,
+//.animate-repeat.ng-enter,
 .animate-repeat.ng-leave {
     -webkit-transition: all linear 1s;
     transition: all linear 1s;
@@ -206,7 +206,8 @@
 
 .animate-repeat.ng-leave.ng-leave-active,
 .animate-repeat.ng-move,
-.animate-repeat.ng-enter {
+.animate-repeat.ng-enter
+ {
     opacity: 0;
     max-height: 0;
 }

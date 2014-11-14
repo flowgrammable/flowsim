@@ -145,6 +145,8 @@ angular.module('flowsimUiApp')
       to: hideDetails($scope.simulation.stage) 
     };
     $scope.view = $scope.simulation.toView();
+
+
   };
 
   $scope.stop = function() {
@@ -157,6 +159,9 @@ angular.module('flowsimUiApp')
       to: hideDetails($scope.simulation.stage) 
     };
     $scope.view = $scope.simulation.toView();
+
+  
+     
   };
 
 });
