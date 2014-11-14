@@ -33,6 +33,10 @@ Flow.prototype.match = function(key) {
   }
 };
 
+Flow.prototype.equal = function(flow) {
+  return this.match.equal(flow.match);
+};
+
 return {
   Flow: Flow
 };

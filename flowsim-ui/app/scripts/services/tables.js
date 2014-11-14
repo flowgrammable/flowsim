@@ -42,8 +42,14 @@ Priority.prototype.add = function(flow) {
   this.flows.push(flow);
 };
 
-Priority.prototype.del = function(idx) {
-  this.flows.splice(idx, 1);
+Priority.prototype.del = function(flow) {
+  var idx;
+  for(idx=0; idx<this.flows.length; ++idx) {
+    if(this.flows[idx].equal(flow)) {
+      this.flows.splice(idx, 1);
+      return;
+    }
+  }
 };
 
 Priority.prototype.select = function(key) {
@@ -90,6 +96,14 @@ Table.prototype.clone = function() {
   return new Table(this);
 };
 
+Table.prototype.flatten = function() {
+  var list = [];
+  _(this.priorities).each(function(priority) {
+    list.push(priority.flows);
+  });
+  return _(list).flatten();
+};
+
 Table.prototype.select = function(key) {
   var i, flow;
   this.stats.lookup += 1;
@@ -119,12 +133,12 @@ Table.prototype.add = function(priority, flow) {
   this.stats.active++;
 };
 
-Table.prototype.del = function(priority, idx) {
+Table.prototype.del = function(priority, flow) {
   var priTable;
   var i;
   if(_(this.prioritiesPresent).has(priority.toString())) {
     priTable = this.priorities[priority.toString()];
-    priTable.del(idx);
+    priTable.del(flow);
     if(priTable.empty()) {
       for(i=0; i<this.priorities.length; ++i) {
         if(this.priorities[i].priority === priority) {

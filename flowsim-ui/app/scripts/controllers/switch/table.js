@@ -11,14 +11,16 @@ angular.module('flowsimUiApp')
   .controller('SwitchTableCtrl', function ($scope, $modal) {
 
   $scope.priority = null;
+  $scope.table = [];
 
-  $scope.active = 0;
-  $scope.toggle = function(idx) {
-    $scope.active = idx;
+  $scope.tableId = 0;
+  $scope.setTable = function(idx) {
+    $scope.tableId = idx;
+    $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
   };
 
-  $scope.delFlow = function() {
-    console.log('delFlow');
+  $scope.delFlow = function(idx) {
+    console.log('delFlow - table('+$scope.tableId+', '+idx+')');
   }
 
   $scope.newFlow = function() {
@@ -27,8 +29,11 @@ angular.module('flowsimUiApp')
       templateUrl: 'views/switch/flow.html',
       controller: 'SwitchFlowCtrl',
       size: 'lg',
-      resolve: { flow: function() { return flow; } }
+      resolve: { 
+        priority: function() { return $scope.priority; }
+      }
     }).result.then(function (flow) {
+      $scope.device.tables.tables[$scope.tableId].add(flow.priority, flow);
     });
   };
 

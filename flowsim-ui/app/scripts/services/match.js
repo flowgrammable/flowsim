@@ -26,6 +26,15 @@ Match.prototype.clone = function() {
   return new Match(this);
 };
 
+Match.prototype.equal = function(match) {
+  return this.label === match.label &&
+      this._match.equal(match._match);
+};
+
+Match.prototype.summarize = function() {
+  return this._match.summarize();
+};
+
 function Set(set) {
   if(_.isObject(set)) {
     this.matches = _.map(set.matches, function(match) {
@@ -58,6 +67,25 @@ Set.prototype.match = function(key) {
   return _.every(this.matches, function(match) {
     return _(key).has(match.label) && match._match.match(key[match.label]);
   });
+};
+
+Set.prototype.equal = function(set) {
+  var idx;
+  if(this.matches.length !== set.matches.length) {
+    return false;
+  }
+  for(idx=0; idx < this.matches.length; ++idx) {
+    if(!this.matches[idx].equal(set.matches[idx])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+Set.prototype.summarize = function() {
+  return _(_(this.matches).map(function(match) {
+    return match.summarize();
+  })).uniq();
 };
 
 function createMatch(protocol, field, key, wildcard, maskable, mask) {
