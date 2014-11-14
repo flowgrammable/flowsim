@@ -182,7 +182,11 @@ function mkType(input) {
 }
 
 function mkTypeMatch(value, mask) {
-  return new UInt.Match(null, mkType(value), mkType(mask));
+  var tmp =  new UInt.Match(null, mkType(value), mkType(mask));
+  tmp.summarize = function() {
+    return 'eth';
+  };
+  return tmp;
 }
 
 var TESTS = {
