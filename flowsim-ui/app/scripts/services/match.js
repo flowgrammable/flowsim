@@ -71,9 +71,15 @@ Set.prototype.match = function(key) {
 
 Set.prototype.equal = function(set) {
   var idx;
+  // can't be equal if different length
   if(this.matches.length !== set.matches.length) {
     return false;
   }
+  // empty sets are default match alls
+  if(this.matches.length === 0) {
+    return true;
+  }
+  // compare each match individually
   for(idx=0; idx < this.matches.length; ++idx) {
     if(!this.matches[idx].equal(set.matches[idx])) {
       return false;
@@ -83,6 +89,9 @@ Set.prototype.equal = function(set) {
 };
 
 Set.prototype.summarize = function() {
+  if(this.matches.length === 0) {
+    return ['*'];
+  }
   return _(_(this.matches).map(function(match) {
     return match.summarize();
   })).uniq();
