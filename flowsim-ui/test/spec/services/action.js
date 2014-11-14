@@ -51,6 +51,11 @@ describe('Service: action', function () {
     TCP = _TCP_;
   }));
 
+  var IPV6;
+  beforeEach(inject(function (_IPV6_) {
+    IPV6 = _IPV6_;
+  }));
+
   it('Ethernet test', function () {
     expect(!!Action).toBe(true);
 
@@ -908,4 +913,75 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].src().toString()).toBe('65535');
     expect(pkt.protocols[1].dst().toString()).toBe('65535');
   });
+
+  it('IPv6 setField test', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(IPV6.mkIPv6());
+
+    set.setField(new Action.SetField(
+      null,
+      IPV6.name, IPV6.src,
+      IPV6.mkAddress('2001:db8:0:0:0:ff00:42:8329')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('2001:db8:0:0:0:ff00:42:8329');
+    expect(pkt.protocols[1].dst().toString()).toBe('0:0:0:0:0:0:0:0');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].flabel().toString(16)).toBe('0x000000');
+
+    set.setField(new Action.SetField(
+      null,
+      IPV6.name, IPV6.dst,
+      IPV6.mkAddress('FE91:0000:0000:0000:0202:B3FF:FE1E:8329')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('2001:db8:0:0:0:ff00:42:8329');
+    expect(pkt.protocols[1].dst().toString()).toBe('fe91:0:0:0:202:b3ff:fe1e:8329');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].flabel().toString(16)).toBe('0x000000');
+
+    set.setField(new Action.SetField(
+      null,
+      IPV6.name, IPV6.flabel,
+      IPV6.mkFlabel('0x333333')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('2001:db8:0:0:0:ff00:42:8329');
+    expect(pkt.protocols[1].dst().toString()).toBe('fe91:0:0:0:202:b3ff:fe1e:8329');
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x00');
+    expect(pkt.protocols[1].flabel().toString(16)).toBe('0x333333');
+  });
+
+  it('IPv6 setTTL', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    var ttl = new IPV6.mkTtl('0x77');
+    pkt.push(IPV6.mkIPv6('0x123456', '0x02'));
+
+    set.setTTL(new Action.SetTTL(
+      null,
+      IPV6.name, ttl));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+
 });

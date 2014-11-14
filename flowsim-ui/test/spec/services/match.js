@@ -51,6 +51,11 @@ describe('Service: match', function () {
     Context = _Context_;
   }));
 
+  var IPV6;
+  beforeEach(inject(function(_IPV6_) {
+    IPV6 = _IPV6_;
+  }));
+
   it('Default Match', function() {
     var key = new Context.Key(null, 0);
     var match = new Match.Set();
@@ -320,5 +325,44 @@ describe('Service: match', function () {
     key.tcp_src = TCP.mkPort('22');
     key.tcp_dst = TCP.mkPort('65535');
     expect(match.match(key)).toBe(false);
+  });
+
+  it('IPV6 Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!IPV6).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'ipv6_flabel',
+        IPV6.mkFlabelMatch(
+          '22',
+          '0xffff')));
+
+    match.push(
+      new Match.Match(null,
+        'ipv6_src',
+        IPV6.mkAddressMatch(
+          '2001:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    match.push(
+      new Match.Match(null,
+        'ipv6_dst',
+        IPV6.mkAddressMatch(
+          '2002:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    expect(match.match(key)).toBe(false);
+
+    key.ipv6_flabel = IPV6.mkFlabel('22');
+    key.ipv6_src    = IPV6.mkAddress('2001:0db8:0000:0000:0000:ff00:0042:8329');
+    key.ipv6_dst    = IPV6.mkAddress('2002:0db8:0000:0000:0000:ff00:0042:8329');
+
+    expect(match.match(key)).toBe(true);
+
   });
 });
