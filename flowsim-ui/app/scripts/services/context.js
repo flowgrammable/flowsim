@@ -88,9 +88,8 @@ Context.prototype.toView = function() {
     tableId: this.table(),
     key: this.key.toView(),
     actionSet: this.actionSet.toView(),
-    instructionSet: this.instructionSet.toView(),
+    ins: this.instructionSet.toView(),
   };
-
 };
 
 Context.prototype.table = function(table) {
