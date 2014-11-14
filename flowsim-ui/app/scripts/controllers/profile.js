@@ -20,8 +20,6 @@ angular.module('flowsimUiApp')
       ranges: Profile.RANGES
     };
 
-    console.log($scope.metadata.tips.Tables);
-
     $scope.versions = [
       'OpenFlow 1.0',
       'OpenFlow 1.1',

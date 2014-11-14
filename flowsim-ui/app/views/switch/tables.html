@@ -1,28 +1,61 @@
 
+<br>
+
+<div class="row">
+  <div class="col-md-3">
+    <h4>Flow Tables</h4>
+    <ul class="list-group">
+      <li class="list-group-item" ng-repeat="table in device.tables.tables"
+      ng-class="{'active': $index === active}" ng-click="toggle($index)">
+        {{table.name}}
+      </li>
+    </ul>
+
+  </div>
+    <div class="col-md-9">
+
+      <table class="table table-striped">
+        <thead>
+          <th>Identifier</th>
+          <th>Name</th>
+          <th>Max Entries</th>
+          <th ng-if="device.tables.capabilities.table_stats">
+            Active / Lookup / Match
+          </th>
+        </thead>
+        <tbody>
+          <td>{{device.tables.tables[active].id}}</td>
+          <td>{{device.tables.tables[active].name}}</td>
+          <td>{{device.tables.tables[active].max_entries}}</td>
+          <td ng-if="device.tables.capabilities.table_stats">
+            {{device.tables.tables[active].stats.active}} /
+            {{device.tables.tables[active].stats.lookup}} /
+            {{device.tables.tables[active].stats.match}}
+          </td>
+        </tbody>
+      </table>
+
 <table class="table table-striped">
   <thead>
-    <th>Identifier</th>
-    <th>Name</th>
-    <th>Max Entries</th>
-    <th ng-if="device.tables.capabilities.table_stats">Active / Lookup / Match</th>
-    <th>Flow Capabilities</th>
+    <th>Priority</th>
+    <th>Match</th>
+    <th>Idle Timout</th>
+    <th>Hard Timout</th>
+    <th>Instruction</th>
+    <th>Cookie</th>
   </thead>
   <tbody>
-  <tr ng-repeat="table in device.tables.tables">
-    <td>{{table.id}}</td>
-    <td>{{table.name}}</td>
-    <td>{{table.max_entries}}</td>
-    <td ng-if="device.tables.capabilities.table_stats">
-      {{table.stats.active}} / {{table.stats.lookup}} / {{table.stats.match}}
-    </td>
-    <td>
-      <div class="btn-group btn-group-xs">
-        <button type="button" class="btn btn-default" ng-click="miss($index)">
-          Flows
-        </button>
-      </div>
-    </td>
+  <tr>
+    <td>100</td>
+    <td>eth(src=x)</td>
+    <td>0</td>
+    <td>20</td>
+    <td>write(eth(dst=0))</td>
+    <td>0x00ff00ff00ff</td>
   </tr>
   </tbody>
 </table>
+
+</div>
+</div>
 
