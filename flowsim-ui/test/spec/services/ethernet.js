@@ -145,6 +145,7 @@ describe('Service: ETHERNET', function () {
     expect(eth7.toString()).toBe(testStr);
     expect(eth8.toString()).toBe(testStr);
     expect(eth9.toString()).toBe(testStr);
+    expect(eth4.toString()).toBe(eth6.toString());
   });
 
   it('Ethernet Construction Fail', function() {
@@ -155,21 +156,21 @@ describe('Service: ETHERNET', function () {
       null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
-      '0xx0000')
+      '0xx0000');
     }).toThrow();
     expect(function() {
       new ETHERNET.Ethernet(
       null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
-      0x1ffff)
+      0x1ffff);
     }).toThrow();
     expect(function() {
       new ETHERNET.Ethernet(
       null,
       '00:00:00:00:00:00',
       '12:34:56:78:90:ab',
-      '0x1ffff')
+      '0x1ffff');
     }).toThrow();
   });
 
@@ -301,9 +302,9 @@ describe('Service: ETHERNET', function () {
       '0x0806'
       );
 
-    expect(function(){dhcp_disco.src('10::22:33:44:55')}).toThrow();
-    expect(function(){dhcp_disco.dst('01234')}).toThrow();
-    expect(function(){dhcp_disco.type('0xx800')}).toThrow();
+    expect(function(){dhcp_disco.src('10::22:33:44:55');}).toThrow();
+    expect(function(){dhcp_disco.dst('01234');}).toThrow();
+    expect(function(){dhcp_disco.type('0xx800');}).toThrow();
   });
 
   it('Ethernet toString Pass', function() {

@@ -93,7 +93,7 @@ describe('Service: MPLS', function () {
   it('MPLS TC match pass', function() {
     var a = MPLS.mkTc('0x00');
     var b = MPLS.mkTc('0xf0');
-    var c = MPLS.mkTc('0xff')
+    var c = MPLS.mkTc('0xff');
 
     var every = MPLS.mkTcMatch('0x00', '0x00');
     var multi = MPLS.mkTcMatch('0x10', '0x10');
@@ -132,5 +132,6 @@ describe('Service: MPLS', function () {
     expect(j_.tc().toString(16)).toBe('0x33');
     expect(j_.bos().toString(16)).toBe('0x00');
     expect(j_.ttl().toString(16)).toBe('0x01');
-  })
+  });
+
 });
