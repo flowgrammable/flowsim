@@ -62,7 +62,11 @@ function mkPort(port) {
 }
 
 function mkPortMatch(value, mask) {
-  return new UInt.Match(null, mkPort(value), mkPort(mask));
+  var match = new UInt.Match(null, mkPort(value), mkPort(mask));
+  match.summarize = function () {
+    return 'tcp'
+  };
+  return match;
 }
 
 var TIPS = {

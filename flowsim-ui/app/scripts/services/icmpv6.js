@@ -60,7 +60,7 @@ function mkCode(code) {
   }
 }
 
-/*function ICMPv6_UI(icmpv6){
+function ICMPv6_UI(icmpv6){
   icmpv6 = icmpv6 === undefined ? new ICMPv6() : icmpv6;
   this.name = NAME;
   this.bytes = 4;
@@ -93,6 +93,6 @@ return {
   name: NAME,
   create: function() { return new ICMPv6(); },
   createUI: function(icmpv6) { return new ICMPv6_UI(icmpv6); }
-};*/
+};
 
 });

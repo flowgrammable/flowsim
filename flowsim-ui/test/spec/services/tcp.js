@@ -74,13 +74,40 @@ describe('Service: TCP', function () {
     expect(tcp1.dst().toString()).toBe('22');
   });
 
-  it('Equivalency Tests', function () {
+  it('JSON Construction Equivalency Tests', function () {
     expect(!!TCP).toBe(true);
     
     var tcp1 = TCP.mkTCP('22', '2222');
     var tcp2 = new TCP.TCP(JSON.parse(JSON.stringify(tcp1)));
 
     expect(tcp2.toString()).toBe(tcp1.toString());
+  });
+
+  it('Summarize Tests', function () {
+    expect(!!TCP).toBe(true);
+
+    var match = TCP.mkPortMatch('65535', '0xffff');
+    expect(match.summarize()).toBe('tcp');
+  });
+
+  it('Equal Tests', function() {
+    expect(!!TCP).toBe(true);
+
+    var match1 = TCP.mkPortMatch('65535', '0xffff');
+    var match2 = TCP.mkPortMatch('65535', '0xffff');
+    var match4 = TCP.mkPortMatch('0', '0xffff');
+    var match5 = TCP.mkPortMatch('65535', '0xff00');
+
+    expect(match1.equal(match2)).toBe(true);
+    expect(match2.equal(match1)).toBe(true);
+
+    expect(match4.equal(match1)).toBe(false);
+    expect(match5.equal(match1)).toBe(false);
+    expect(match1.equal(match4)).toBe(false);
+    expect(match1.equal(match5)).toBe(false);
+
+    expect(match4.equal(match5)).toBe(false);
+    expect(match5.equal(match4)).toBe(false);
   });
 
 });
