@@ -56,7 +56,11 @@ function mkLabel(input){
 }
 
 function mkLabelMatch(value, mask){
-  return new UInt.Match(null, mkLabel(value), mkLabel(mask));
+  var tmp =  new UInt.Match(null, mkLabel(value), mkLabel(mask));
+  tmp.summarize = function() {
+    return 'mpls';
+  };
+  return tmp;
 }
 
 MPLS.prototype.tc = function(tc){
@@ -76,7 +80,11 @@ function mkTc(input){
 }
 
 function mkTcMatch(value, mask){
-  return new UInt.Match(null, mkTc(value), mkTc(mask));
+  var tmp =  new UInt.Match(null, mkTc(value), mkTc(mask));
+  tmp.summarize = function() {
+    return 'mpls';
+  };
+  return tmp;
 }
 
 MPLS.prototype.bos = function(bos){
@@ -96,7 +104,11 @@ function mkBos(input){
 }
 
 function mkBosMatch(value, mask){
-  return new UInt.Match(null, mkBos(value), mkBos(mask));
+  var tmp =  new UInt.Match(null, mkBos(value), mkBos(mask));
+  tmp.summarize = function() {
+    return 'mpls';
+  };
+  return tmp;
 }
 
 MPLS.prototype.ttl = function(ttl){

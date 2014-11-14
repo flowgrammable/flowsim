@@ -51,6 +51,11 @@ describe('Service: match', function () {
     Context = _Context_;
   }));
 
+  var IPV4;
+  beforeEach(inject(function(_IPV4_) {
+    IPV4 = _IPV4_;
+  }));
+
   var IPV6;
   beforeEach(inject(function(_IPV6_) {
     IPV6 = _IPV6_;
@@ -140,6 +145,61 @@ describe('Service: match', function () {
     key.vlan_vid = new VLAN.mkVid('0xffff');
     key.vlan_pcp = new VLAN.mkPcp('0x00');
 
+    expect(match.summarize().toString()).toBe('vlan');
+
+    expect(match.match(key)).toBe(true);
+  });
+
+  it('IPv4 Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!IPV4).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_dscp',
+        new IPV4.mkDscpMatch('0x01','0xff')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_ecn',
+        new IPV4.mkEcnMatch('0x02','0xff')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_proto',
+        new IPV4.mkProtoMatch('0x03','0xff')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_src',
+        new IPV4.mkAddressMatch('192.168.1.1','255.255.255.255')));
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_dst',
+        new IPV4.mkAddressMatch('128.1.1.1','255.255.255.255')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+    expect(match.match(key)).toBe(false);
+
+    key.ipv4_dscp = new IPV4.mkDscp('0x01');
+    key.ipv4_ecn  = new IPV4.mkEcn('0x02');
+    key.ipv4_proto = new IPV4.mkProto('0x03');
+    key.ipv4_src = new IPV4.mkAddress('192.168.1.1');
+    key.ipv4_dst = new IPV4.mkAddress('128.1.1.1');
+
+    expect(match.summarize().toString()).toBe('ipv4');
+
     expect(match.match(key)).toBe(true);
   });
 
@@ -171,7 +231,7 @@ describe('Service: match', function () {
           '0x00')));
 
     expect(match.match(key)).toBe(false);
-
+    expect(match.summarize().toString()).toBe('mpls');
     key.mpls_label = new MPLS.mkLabel('0x777777');
     key.mpls_tc = new MPLS.mkTc('0x03');
     key.mpls_bos = new MPLS.mkBos('0xaa');
