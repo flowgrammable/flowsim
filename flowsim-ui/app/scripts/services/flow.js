@@ -25,7 +25,7 @@ Flow.prototype.clone = function() {
   return new Flow(this);
 };
 
-Flow.prototype.select = function(key) {
+Flow.prototype.match = function(key) {
   if(this.match.match(key)) {
     return true;
   } else {

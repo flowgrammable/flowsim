@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .controller('SwitchCtrl', function ($scope, fgCache, Profile, Switch,
-                                      $rootScope, $modal) {
+                                      $rootScope, $modal, Regex) {
     $scope.names = {};
     $scope.device = null;
 
@@ -32,9 +32,7 @@ angular.module('flowsimUiApp')
     $scope.addSwitch = function(name, callback) {
       if(name in $scope.names) {
         callback('Name exists');
-      } else if(name.length === 0) {
-        callback('Invalid name');
-      } else if(!/^[a-zA-Z_][a-zA-Z_0-9]*$/.test(name)) {
+      } else if(!Regex.Identifier.test(name)) {
         callback('Invalid name');
       } else {
         fgCache.getNames('profile', function(err, result) {
@@ -87,7 +85,6 @@ angular.module('flowsimUiApp')
             console.log(err.details);
           } else {
             $scope.device = result;
-            //$scope.$broadcast('setSwitch', $scope.device);
           }
         });
       }
