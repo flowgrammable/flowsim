@@ -45,6 +45,10 @@ function Set(set) {
   }
 }
 
+Set.prototype.toView = function() {
+  return [];
+};
+
 Set.prototype.clone = function() {
   return new Set(this);
 };
