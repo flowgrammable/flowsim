@@ -100,19 +100,11 @@ function UDP_UI(udp){
 }
 
 UDP_UI.prototype.toBase = function() {
-  var result = new UDP();
-  //FIXME This is BAD!!!!! you are bypassing the constructor that established an
-  //invariant ... so now we can't depend on the invariant ....
-  //use the constructor, much like the force ... it will help you!!!
-  result.name = this.name;
-  result.bytes = this.bytes;
-  result.fields = fgUI.stripLabelInputs(this.attrs);
-  return result;
+  return new UDP(null, this.attrs[0].value, this.attrs[1].value);
 };
 
 UDP_UI.prototype.setPayload = function() {
-  //FIXME
-  return true;
+  // do nothing
 };
 
 return {
@@ -124,8 +116,8 @@ return {
   mkPort: mkPort,
   mkPortMatch: mkPortMatch,
   mkUDP: mkUDP,
-  create: function() { return new UDP(); },
-  createUI: function(UDP) { return new UDP_UI(UDP); },
+  create: function(udp) { return new UDP(udp); },
+  createUI: function(udp) { return new UDP_UI(udp); },
   TESTS:       TESTS,
   TIPS:        TIPS
 };
