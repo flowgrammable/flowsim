@@ -18,26 +18,19 @@ angular.module('flowsimUiApp')
     'Meter', 'Apply', 'Clear', 'Write', 'Metadata', 'Goto'
   ];
 
-  $scope.activeIns = {};
-  $scope.activeIdx = -1;
-
-  $scope.toggleIns = function(name) {
-    console.log('toggleIns');
-    if($scope.activeIns[name]) {
-      delete $scope.activeIns[name];
-    } else {
-      console.log('adding');
-      $scope.activeIns[name] = true;
-    }
+  $scope.activeIns = {
+    meter: false,
+    apply: false,
+    clear: false,
+    write: false,
+    metadata: false,
+    _goto: false
   };
+  $scope.activeIdx = -1;
 
   $scope.setIns = function(idx) {
     $scope.activeIdx = idx;
   }
-
-  $scope.setDirty = function() {
-    // update the flow
-  };
 
   $scope.createMatch = function(name) {
     $scope.matches.push(Match.mkByName(name));

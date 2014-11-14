@@ -86,32 +86,38 @@
       <div class="panel-heading">
         <h4>Instruction Set</h4>
         <button type="button" class="btn btn-xs btn-default"
-                ng-click="activeIns.meter = !activeIns.meter"
+                ng-click="activeIns.meter = !activeIns.meter;
+                          activeIdx = activeIdx === 0 ? -1 : activeIdx"
                 ng-class="{'btn-primary': activeIns.meter}">
           Meter
         </button>
         <button type="button" class="btn btn-xs btn-default"
-                ng-click="activeIns.apply = !activeIns.apply"
+                ng-click="activeIns.apply = !activeIns.apply;
+                          activeIdx = activeIdx === 1 ? -1 : activeIdx"
                 ng-class="{'btn-primary': activeIns.apply}">
           Apply
         </button>
         <button type="button" class="btn btn-xs btn-default"
-                ng-click="activeIns.clear = !activeIns.clear"
+                ng-click="activeIns.clear = !activeIns.clear;
+                          activeIdx = activeIdx === 2 ? -1 : activeIdx"
                 ng-class="{'btn-primary': activeIns.clear}">
           Clear
         </button>
         <button type="button" class="btn btn-xs btn-default"
-                ng-click="activeIns.write = !activeIns.write"
+                ng-click="activeIns.write = !activeIns.write;
+                          activeIdx = activeIdx === 3 ? -1 : activeIdx"
                 ng-class="{'btn-primary': activeIns.write}">
           Write
         </button>
         <button type="button" class="btn btn-xs btn-default"
-                ng-click="activeIns.metadata = !activeIns.metadata"
+                ng-click="activeIns.metadata = !activeIns.metadata;
+                activeIdx = activeIdx === 4 ? -1 : activeIdx"
                 ng-class="{'btn-primary': activeIns.metadata}">
           Metadata
         </button>
         <button type="button" class="btn btn-xs btn-default"
-                ng-click="activeIns._goto = !activeIns._goto"
+                ng-click="activeIns._goto = !activeIns._goto;
+                activeIdx = activeIdx === 5 ? -1 : activeIdx"
                 ng-class="{'btn-primary': activeIns._goto}">
           Goto
         </button>
@@ -150,7 +156,7 @@
               Metadata
             </li>
             <li class="list-group-item"
-                ng-show="activeIns.goto"
+                ng-show="activeIns._goto"
                 ng-class="{'active': activeIdx === 5}"
                 ng-click="activeIdx = 5">
               Goto
@@ -159,22 +165,267 @@
         </div>
         <div class="col-md-10">
           <div ng-show="activeIdx === 0">
-            meter stuff
+            <br>
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">
+                  Meter Id
+                </label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+            </form>
           </div>
           <div ng-show="activeIdx === 1">
-            apply stuff
+
+            <div class="row">
+            <div class="col-sm-6 col-sm-offset-2">
+            <table class="table table-striped table-hover tabled-centered">
+              <thead>
+                <th>Action List</th>
+                <th></th>
+              </thead>
+              <tbody>
+              <tr>
+                <td>
+                  eth(src=00:00:00:00:00:00)
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  eth(dst=01:03:30:03:00:00)
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  vlan(push)
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  copy(ttl, in)
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  output(10)
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+
+          <br>
+
+            <table class="table table-striped table-hover">
+              <thead>
+                <th>Type</th>
+                <th>Field</th>
+                <th>Action</th>
+                <th>Value</th>
+                <th></th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <select>
+                      <option>Output</option>
+                      <option>Group</option>
+                      <option>Queue</option>
+                      <option>Copy</option>
+                      <option>Ethernet</option>
+                      <option>VLAN</option>
+                      <option>MPLS</option>
+                      <option>ARP</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option>Src</option>
+                      <option>Dst</option>
+                      <option>Type</option>
+                      <option>TTL</option>
+                      <option>Code</option>
+                      <option>Protocol</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option>Set</option>
+                      <option>Push</option>
+                      <option>Pop</option>
+                      <option>Dec</option>
+                      <option>In</option>
+                      <option>Out</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text">
+                  </td>
+                  <td>
+                    <button class="btn btn-default">Add</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div ng-show="activeIdx === 2">
-            clear stuff
+            <h3>Clear the Action Set</h3>
           </div>
           <div ng-show="activeIdx === 3">
-            write stuff
+            <div class="row">
+            <div class="col-sm-6 col-sm-offset-2">
+            <table class="table table-striped table-hover tabled-centered">
+              <thead>
+                <th>Action Set</th>
+                <th></th>
+              </thead>
+              <tbody>
+              <tr>
+                <td>
+                  eth(src=00:00:00:00:00:00)
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  eth(dst=01:03:30:03:00:00)
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  vlan(push)
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  copy(ttl, in)
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  output(10)
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+
+          <br>
+
+            <table class="table table-striped table-hover">
+              <thead>
+                <th>Type</th>
+                <th>Field</th>
+                <th>Action</th>
+                <th>Value</th>
+                <th></th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <select>
+                      <option>Output</option>
+                      <option>Group</option>
+                      <option>Queue</option>
+                      <option>Copy</option>
+                      <option>Ethernet</option>
+                      <option>VLAN</option>
+                      <option>MPLS</option>
+                      <option>ARP</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option>Src</option>
+                      <option>Dst</option>
+                      <option>Type</option>
+                      <option>TTL</option>
+                      <option>Code</option>
+                      <option>Protocol</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select>
+                      <option>Set</option>
+                      <option>Push</option>
+                      <option>Pop</option>
+                      <option>Dec</option>
+                      <option>In</option>
+                      <option>Out</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text">
+                  </td>
+                  <td>
+                    <button class="btn btn-default">Add</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div ng-show="activeIdx === 4">
-            metadata stuff
+            <br>
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">
+                  Value
+                </label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">
+                  Mask
+                </label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+            </form>
           </div>
           <div ng-show="activeIdx === 5">
-            goto stuff
+            <br>
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">
+                  Table Id
+                </label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
