@@ -29,6 +29,32 @@ describe('Service: IPV6', function () {
     }).toThrow();
   });
 
+  it('IPv6 address equal', function(){
+    expect(!!IPV6).toBe(true);
+    var x = IPV6.mkAddress('2001:0db8:0000:0000:0000:ff00:0042:8329');
+    var y = IPV6.mkAddress('2001:0db8:0000:0000:0000:ff00:0042:8329');
+    var z = IPV6.mkAddress('2111:0db8:0000:0000:0000:ff00:0042:8329');
+
+    expect(x.equal(y)).toBe(true);
+    expect(x.equal(z)).toBe(false);
+  });
+
+  it('IPv6 Address Match equal', function(){
+    var match1 = new IPV6.Address.Match(null,
+      'abcd::0000',
+      '0001::0000');
+    var match2 = new IPV6.Address.Match(null,
+      'abcd::0000',
+      '0001::0000');
+
+    var match3 = new IPV6.Address.Match(null,
+      'abcd::0000',
+      '1234::0000');
+    expect(match1.equal(match2)).toBe(true);
+    expect(match1.equal(match3)).toBe(false);
+
+  })
+
   it('IPv6 Addres Match Multi', function(){
     var match1 = new IPV6.Address.Match(null,
       '0001::0000',

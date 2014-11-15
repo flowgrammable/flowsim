@@ -503,6 +503,8 @@ describe('Service: match', function () {
     expect(!!IPV6).toBe(true);
 
     var match = new Match.Set();
+    var match2 = new Match.Set();
+    var match3 = new Match.Set();
 
     var key = new Context.Key(null, 0);
 
@@ -537,6 +539,40 @@ describe('Service: match', function () {
     key.ipv6_dst    = IPV6.mkAddress('2002:0db8:0000:0000:0000:ff00:0042:8329');
 
     expect(match.match(key)).toBe(true);
+
+    match2.push(
+      new Match.Match(null,
+        'ipv6_flabel',
+        IPV6.mkFlabelMatch(
+          '22',
+          '0xffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match2.push(
+      new Match.Match(null,
+        'ipv6_src',
+        IPV6.mkAddressMatch(
+          '2001:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match2.push(
+      new Match.Match(null,
+        'ipv6_dst',
+        IPV6.mkAddressMatch(
+          '2002:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+    expect(match2.equal(match)).toBe(true);
+
+    match3.push(
+      new Match.Match(null,
+        'ipv6_src',
+        IPV6.mkAddressMatch(
+          '2001:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    expect(match3.equal(match)).toBe(false);
+    expect(match3.equal(match2)).toBe(false);
 
   });
 
