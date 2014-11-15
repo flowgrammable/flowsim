@@ -51,6 +51,11 @@ describe('Service: extraction', function () {
     TCP = _TCP_;
   }));
 
+  var SCTP;
+  beforeEach(inject(function (_SCTP_) {
+    SCTP = _SCTP_;
+  }));
+
   var ICMPV4;
   beforeEach(inject(function (_ICMPV4_) {
     ICMPV4 = _ICMPV4_;
@@ -182,6 +187,26 @@ describe('Service: extraction', function () {
 
     expect(key.tcp_src).toBe(tcp1.src());
     expect(key.tcp_dst).toBe(tcp1.dst());
+  });
+
+  it('extraction SCTP Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!SCTP).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var sctp1 = SCTP.mkSCTP(
+      '65535',
+      '0');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.sctp_src).toBe(undefined);
+    expect(key.sctp_dst).toBe(undefined);
+
+    extraction.extract_sctp(sctp1, key);
+
+    expect(key.sctp_src).toBe(sctp1.src());
+    expect(key.sctp_dst).toBe(sctp1.dst());
   });
 
   it('extraction IPV4 Pass', function () {
