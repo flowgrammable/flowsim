@@ -4,7 +4,7 @@ angular.module('flowsimUiApp')
   .factory('ICMPV6', function(fgUI, fgConstraints, UInt){
 
 var NAME = 'ICMPv6';
-var BYTES = 8; 
+var BYTES = 8;
 
 var Payloads = {
   'ND': 135,
@@ -105,14 +105,14 @@ function ICMPv6_UI(icmpv6){
   this.bytes = BYTES;
   this.attrs = [{
     name: 'Type',
-    value: icmpv6.type().toString(),
-    tip: 'ICMP message type',
-    test: fgConstraints.isUInt(0,0xff)
+    value: icmpv6.type().toString(16),
+    tip: TIPS.type,
+    test: TESTS.type
   }, {
     name: 'Code',
-    value: icmpv6.code().toString(),
-    tip: 'ICMP message code',
-    test: fgConstraints.isUInt(0,0xff)
+    value: icmpv6.code().toString(16),
+    tip: TIPS.code,
+    test: TESTS.code
   }];
 }
 
