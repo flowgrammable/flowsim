@@ -67,7 +67,7 @@ describe('Service: match', function () {
     expect(match.match(key)).toBe(true);
   });
 
-  it('Match equality', function() {
+  it('Match equality default', function() {
     var match1 = new Match.Set();
     var match2 = new Match.Set();
     expect(match1.equal(match2)).toBe(true);

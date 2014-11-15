@@ -128,8 +128,8 @@
             <li class="list-group-item"
                 ng-show="activeIns.meter"
                 ng-class="{'active': activeIdx === 0}"
-                ng-click="activeIdx = 0">
-              Meter
+                ng-click="activeIdx = activeIns.meter ? 0 : activeIdx">
+                Meter
             </li>
             <li class="list-group-item"
                 ng-show="activeIns.apply"
