@@ -582,6 +582,7 @@ describe('Service: match', function () {
 
     var match = new Match.Set();
     var match2 = new Match.Set();
+    var match3 = new Match.Set();
     var key = new Context.Key(null, 0);
 
     expect(match.summarize().toString()).toBe('*');
@@ -615,6 +616,81 @@ describe('Service: match', function () {
     )));
 
     expect(match2.equal(match)).toBe(true);
+
+    match3.push(
+      new Match.Match(null,
+        'ipv4_dscp',
+        new IPV4.mkDscpMatch(
+          '22',
+          '0xfe')));
+
+    expect(match3.summarize().toString()).toBe('ipv4');
+    match3.push(
+      new Match.Match(null,
+        'ipv4_src',
+        new IPV4.Address(null, '192.168.1.1', '255.255.255.255'
+    )));
+
+    expect(match2.equal(match3)).toBe(false);
+
+  });
+
+  it('MPLS Set match equal', function () {
+    expect(!!Match).toBe(true);
+    expect(!!MPLS).toBe(true);
+
+    var match = new Match.Set();
+    var match2 = new Match.Set();
+    var match3 = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    expect(match.summarize().toString()).toBe('*');
+    match.push(
+      new Match.Match(null,
+        'mpls_label',
+        new MPLS.mkLabelMatch(
+          '0xaaaaaa',
+          '0xffffff')));
+
+    expect(match.summarize().toString()).toBe('mpls');
+    match.push(
+      new Match.Match(null,
+        'mpls_tc',
+        new MPLS.mkTcMatch('0x01', '0x02'
+    )));
+
+    expect(match2.summarize().toString()).toBe('*');
+    match2.push(
+      new Match.Match(null,
+        'mpls_label',
+        new MPLS.mkLabelMatch(
+          '0xaaaaaa',
+          '0xffffff')));
+
+    expect(match2.summarize().toString()).toBe('mpls');
+    match2.push(
+      new Match.Match(null,
+        'mpls_tc',
+        new MPLS.mkTcMatch('0x01', '0x02'
+    )));
+
+    expect(match2.equal(match)).toBe(true);
+
+    match3.push(
+      new Match.Match(null,
+        'mpls_label',
+        new MPLS.mkLabelMatch(
+          '0xaaaaab',
+          '0xffffff')));
+
+    expect(match3.summarize().toString()).toBe('mpls');
+    match3.push(
+      new Match.Match(null,
+        'mpls_tc',
+        new MPLS.mkTcMatch('0x01', '0x02'
+    )));
+
+    expect(match2.equal(match3)).toBe(false);
 
   });
 });
