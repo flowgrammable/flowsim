@@ -229,6 +229,10 @@ Address.equal = function(lhs, rhs){
   return UInt.equal(lhs._ip, rhs._ip);
 };
 
+Address.prototype.equal = function(addr){
+  return this._ip.equal(addr._ip);
+};
+
 Address.prototype.toString = function() {
     return [(this._ip.value >> 24) & 255, (this._ip.value >> 16) & 255,
             (this._ip.value >> 8) & 255, this._ip.value & 255].join('.');

@@ -180,6 +180,10 @@ UInt.prototype.toString = function(base, sep) {
   }
 };
 
+UInt.prototype.equal = function(uint){
+  return this.bytes === uint.bytes && _.isEqual(this, uint);
+};
+
 function equal(lhs, rhs) {
   if(lhs.bytes !== rhs.bytes) {
     throw 'equal('+lhs.bytes+', '+rhs.bytes+')';

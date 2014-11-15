@@ -248,13 +248,29 @@ describe('Service: IPV4', function () {
   });
 
   it('IPV4 address match equal pass', function(){
-    var ip1 = IPV4.mkAddressMatch('1.1.1.1', '255.255.255.255');
+    var ip1 = IPV4.mkAddressMatch('1.1.1.1', '1.1.1.1');
     var ip2 = IPV4.mkAddressMatch('1.1.1.1', '255.255.255.255');
-    var ip3 = IPV4.mkAddressMatch('0.0.0.0', '255.255.255.255');
+    var ip3 = IPV4.mkAddressMatch('255.255.255.255', '1.1.1.1');
+    var ip4 = IPV4.mkAddressMatch('255.255.255.255', '255.255.255.255');
+    var ip5 = IPV4.mkAddressMatch('1.1.1.1', '1.1.1.1');
 
-    expect(ip1.equal(ip2)).toBe(true);
-    expect(ip1.equal(ip3)).toBe(false);
+    expect(ip1.equal(ip2)).toBe(false);
+    expect(ip1.equal(ip3)).toBe(true);
+    expect(ip1.equal(ip4)).toBe(false);
+    expect(ip1.equal(ip5)).toBe(true);
   });
 
+  it('IPV4 dscp match equal pass', function(){
+    var ip1 = IPV4.mkDscpMatch('0x01','0x01');
+    var ip2 = IPV4.mkDscpMatch('0x01','0x02');
+    var ip3 = IPV4.mkDscpMatch('0x02','0x01');
+    var ip4 = IPV4.mkDscpMatch('0x02','0x02');
+    var ip5 = IPV4.mkDscpMatch('0x01','0x01');
+
+    expect(ip1.equal(ip2)).toBe(false);
+    expect(ip1.equal(ip3)).toBe(false);
+    expect(ip1.equal(ip4)).toBe(false)
+    expect(ip1.equal(ip5)).toBe(true);
+  });
 
 });

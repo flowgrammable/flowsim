@@ -575,4 +575,46 @@ describe('Service: match', function () {
     expect(match.match(key)).toBe(false);
 
   });
+
+  it('IPv4 Set match equal', function () {
+    expect(!!Match).toBe(true);
+    expect(!!IPV4).toBe(true);
+
+    var match = new Match.Set();
+    var match2 = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    expect(match.summarize().toString()).toBe('*');
+    match.push(
+      new Match.Match(null,
+        'ipv4_dscp',
+        new IPV4.mkDscpMatch(
+          '22',
+          '0xff')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+    match.push(
+      new Match.Match(null,
+        'ipv4_src',
+        new IPV4.Address(null, '192.168.1.1', '255.255.255.255'
+    )));
+
+    expect(match2.summarize().toString()).toBe('*');
+    match2.push(
+      new Match.Match(null,
+        'ipv4_dscp',
+        new IPV4.mkDscpMatch(
+          '22',
+          '0xff')));
+
+    expect(match2.summarize().toString()).toBe('ipv4');
+    match2.push(
+      new Match.Match(null,
+        'ipv4_src',
+        new IPV4.Address(null, '192.168.1.1', '255.255.255.255'
+    )));
+
+    expect(match2.equal(match)).toBe(true);
+
+  });
 });

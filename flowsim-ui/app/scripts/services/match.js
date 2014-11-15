@@ -92,6 +92,8 @@ Set.prototype.equal = function(set) {
   }
   // compare each match individually
   for(idx=0; idx < this.matches.length; ++idx) {
+    console.log('matchesset:', set);
+    console.log('matches loop:', this.matches);
     if(!this.matches[idx].equal(set.matches[idx])) {
       return false;
     }
