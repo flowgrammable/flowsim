@@ -466,6 +466,52 @@ describe('Service: match', function () {
 
   });
 
+  it('UDP Match set', function(){
+    expect(!!Match).toBe(true);
+    expect(!!UDP).toBe(true);
+
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    match.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65535, '0xffff')));
+    match.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    match1.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65535, '0xffff')));
+
+    expect(match1.equal(match)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match)).toBe(true);
+
+    match2.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65534, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+    match2.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+  });
+
   it('TCP Match', function () {
     expect(!!Match).toBe(true);
     expect(!!TCP).toBe(true);
