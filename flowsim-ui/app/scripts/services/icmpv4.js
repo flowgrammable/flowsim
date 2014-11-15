@@ -31,6 +31,14 @@ function mkICMPV4(type, code, icmp_bytes) {
   return new ICMPV4(null, type, code, icmp_bytes);
 }
 
+function mkType(input) {
+  return new UInt.UInt(null, input, 1);
+}
+
+function mkCode(input) {
+  return new UInt.UInt(null, input, 1);
+}
+
 ICMPV4.prototype.clone = function() {
   return new ICMPV4(this);
 };
@@ -77,6 +85,29 @@ ICMPV4.prototype.toString = function() {
          'icmp_bytes: '+this._icmp_bytes.toString();
 };
 
+function mkTypeMatch(value, mask) {
+  var tmp = new UInt.Match(null, mkType(value), mkType(mask));
+  tmp.summarize = function() {
+    return 'icmpv4';
+  };
+  return tmp;
+}
+
+function mkCodeMatch(value, mask) {
+  var tmp = new UInt.Match(null, mkType(value), mkType(mask));
+  tmp.summarize = function() {
+    return 'icmpv4';
+  };
+  return tmp;
+}
+
+// TODO:
+// - match helper
+// - equal
+// - summarize
+// - match
+// - action
+
 
 // UI Interface:
 var TIPS = {
@@ -120,6 +151,10 @@ return {
   Payloads: _.keys(Payloads),
   ICMPV4: ICMPV4,
   mkICMPV4: mkICMPV4,
+  mkType: mkType,
+  mkCode: mkCode,
+  mkTypeMatch: mkTypeMatch,
+  mkCodeMatch: mkCodeMatch,
   create: function() { return new ICMPV4(); },
   createUI: function(ICMPV4) { return new ICMPV4_UI(ICMPV4); },
   TESTS: TESTS,

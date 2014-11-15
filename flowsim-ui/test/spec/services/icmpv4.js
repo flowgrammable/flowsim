@@ -39,6 +39,30 @@ describe('Service: ICMPV4', function () {
     expect(function(){ICMPV4.mkICMPV4('66422', 234, 100);}).toThrow();
   });
 
+  it('Make Helper Construction Pass', function () {
+    expect(!!ICMPV4).toBe(true);
+
+    var type = ICMPV4.mkType(13);
+    var code = ICMPV4.mkCode(2);
+
+    var ts_req1 = ICMPV4.mkICMPV4(type, code, 20);
+    var ts_req2 = new ICMPV4.ICMPV4(ts_req1);
+    var ts_req3 = new ICMPV4.ICMPV4(null, type, code, 20);
+    var ts_req4 = ts_req1.clone();
+
+    var testStr = ts_req1.toString();
+    expect(ts_req2.toString()).toBe(testStr);
+    expect(ts_req3.toString()).toBe(testStr);
+    expect(ts_req4.toString()).toBe(testStr);
+  });
+
+  it('Make Helper Construction Fail', function () {
+    expect(!!ICMPV4).toBe(true);
+
+    expect(function(){ ICMPV4.mkType(256); }).toThrow();
+    expect(function(){ ICMPV4.mkCode(-1); }).toThrow();
+  });
+
   it('Set Field Pass', function () {
     expect(!!ICMPV4).toBe(true);
 
@@ -85,6 +109,83 @@ describe('Service: ICMPV4', function () {
     expect(icmp1.type().toString()).toBe('124');
     expect(icmp1.code().toString()).toBe('255');
     expect(icmp1.icmp_bytes().toString()).toBe('74');
+  });
+
+  it('Type Match Pass', function() {
+    expect(!!ICMPV4).toBe(true);
+
+    var t1 = ICMPV4.mkType(13);
+    var t2 = ICMPV4.mkType(0);
+    var t3 = ICMPV4.mkType(99);
+    var t4 = ICMPV4.mkType(128);
+
+    var type = ICMPV4.mkType(13);
+
+    var everyType = new ICMPV4.mkTypeMatch(13, '0');
+    var multiType = new ICMPV4.mkTypeMatch(13, '0x80');
+    var exactType = new ICMPV4.mkTypeMatch(type, 0xff);
+
+    expect(everyType.match(t1)).toBe(true);
+    expect(everyType.match(t2)).toBe(true);
+    expect(everyType.match(t3)).toBe(true);
+    expect(everyType.match(t4)).toBe(true);
+
+    expect(multiType.match(t1)).toBe(true);
+    expect(multiType.match(t2)).toBe(true);
+    expect(multiType.match(t3)).toBe(true);
+    expect(multiType.match(t4)).toBe(false);
+
+    expect(exactType.match(t1)).toBe(true);
+    expect(exactType.match(t2)).toBe(false);
+    expect(exactType.match(t3)).toBe(false);
+    expect(exactType.match(t4)).toBe(false);
+  });
+
+  it('Code Match Pass', function() {
+    expect(!!ICMPV4).toBe(true);
+
+    var c1 = ICMPV4.mkCode(9);
+    var c2 = ICMPV4.mkCode(0);
+    var c3 = ICMPV4.mkCode(99);
+    var c4 = ICMPV4.mkCode(128);
+
+    var code = ICMPV4.mkCode(9);
+
+    var everyCode = new ICMPV4.mkCodeMatch(9, '0');
+    var multiCode = new ICMPV4.mkCodeMatch(9, '0xf0');
+    var exactCode = new ICMPV4.mkCodeMatch(code, 0xff);
+
+    expect(everyCode.match(c1)).toBe(true);
+    expect(everyCode.match(c2)).toBe(true);
+    expect(everyCode.match(c3)).toBe(true);
+    expect(everyCode.match(c4)).toBe(true);
+
+    expect(multiCode.match(c1)).toBe(true);
+    expect(multiCode.match(c2)).toBe(true);
+    expect(multiCode.match(c3)).toBe(false);
+    expect(multiCode.match(c4)).toBe(false);
+
+    expect(exactCode.match(c1)).toBe(true);
+    expect(exactCode.match(c2)).toBe(false);
+    expect(exactCode.match(c3)).toBe(false);
+    expect(exactCode.match(c4)).toBe(false);
+  });
+
+  it ('JSON stringify', function() {
+    expect(!!ICMPV4).toBe(true);
+
+    var icmp1 = ICMPV4.mkICMPV4(124, 255, 74);
+    var icmp1_json = JSON.stringify(icmp1);
+    var icmp1_ = new ICMPV4.ICMPV4(JSON.parse(icmp1_json));
+
+    expect(icmp1_.toString()).toBe(icmp1.toString());
+
+    var icmp2 = ICMPV4.mkICMPV4(124, 255);
+    var icmp2_json = JSON.stringify(icmp2);
+    var icmp2_ = new ICMPV4.ICMPV4(JSON.parse(icmp2_json));
+
+    expect(icmp2_.toString()).toBe(icmp2.toString());
+    expect(icmp1_.toString()).not.toBe(icmp2_.toString());
   });
 
 });
