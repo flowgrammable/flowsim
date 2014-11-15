@@ -641,7 +641,32 @@ describe('Service: match', function () {
         ARP.mkSpaMatch(
           '192.168.1.1', '222.222.22.222')));
 
-    expect(match.summarize().toString()).toBe('ipv6,mpls,eth,tcp,vlan,ipv4,arp');
+    match.push(
+      new Match.Match(null,
+        'icmpv6_type',
+        ICMPV6.mkTypeMatch(
+          '0x12', '0xff')));
+
+    match.push(
+      new Match.Match(null,
+        'icmpv4_type',
+        ICMPV4.mkTypeMatch(
+          '0x12', '0xff')));
+
+    match.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(
+          1234, '0xffff')));
+
+    match.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(
+          1234, '0xffff')));
+
+    expect(match.summarize().toString()).toBe(
+      'ipv6,mpls,eth,tcp,vlan,ipv4,arp,icmpv6,icmpv4,udp,sctp');
     expect(match.match(key)).toBe(false);
 
   });
