@@ -66,6 +66,11 @@ describe('Service: match', function () {
     ICMPV4 = _ICMPV4_;
   }));
 
+  var ICMPV6;
+  beforeEach(inject(function (_ICMPV6_) {
+    ICMPV6 = _ICMPV6_;
+  }));
+
   it('Default Match', function() {
     var key = new Context.Key(null, 0);
     var match = new Match.Set();
@@ -693,4 +698,42 @@ describe('Service: match', function () {
     expect(match2.equal(match3)).toBe(false);
 
   });
+
+  it('ICMPV6 Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!ICMPV6).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'icmpv6_type',
+        ICMPV6.mkTypeMatch(
+          '255',
+          '0xff')));
+
+    match.push(
+      new Match.Match(null,
+        'icmpv6_code',
+        ICMPV6.mkCodeMatch(
+          '0',
+          '0xff')));
+
+    expect(match.match(key)).toBe(false);
+
+    key.icmpv6_type = ICMPV6.mkType('255');
+    key.icmpv6_code = ICMPV6.mkType('0');
+
+    expect(match.match(key)).toBe(true);
+
+    key.icmpv6_type = ICMPV6.mkType('127');
+    expect(match.match(key)).toBe(false);
+
+    key.icmpv6_type = ICMPV6.mkType('255');
+    key.icmpv6_code = ICMPV6.mkType('127');
+    expect(match.match(key)).toBe(false);
+  });
+
 });

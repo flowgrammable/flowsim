@@ -65,11 +65,11 @@ function extract_icmpv4(icmpv4, key) {
 }
 
 function extract_icmpv6(icmpv6, key) {
-  key.icmpv6.type      = icmpv6.type;
-  key.icmpv6.code      = icmpv6.code;
-  key.icmpv6.nd_tgt    = icmpv6.ndTgtAddr;
-  key.icmpv6.nd_ll_src = icmpv6.ndLLSrc;
-  key.icmpv6.nd_ll_tgt = icmpv6.ndLLTgt;
+  key.icmpv6_type      = icmpv6.type();
+  key.icmpv6_code      = icmpv6.code();
+//  key.icmpv6.nd_tgt    = icmpv6.ndTgtAddr;
+//  key.icmpv6.nd_ll_src = icmpv6.ndLLSrc;
+//  key.icmpv6.nd_ll_tgt = icmpv6.ndLLTgt;
 }
 
 function extract_sctp(sctp, key) {
@@ -137,6 +137,7 @@ return {
   extract_ipv4: extract_ipv4,
   extract_ipv6: extract_ipv6,
   extract_icmpv4: extract_icmpv4,
+  extract_icmpv6: extract_icmpv6,
   extract: extract
 };
 

@@ -56,6 +56,11 @@ describe('Service: extraction', function () {
     ICMPV4 = _ICMPV4_;
   }));
 
+  var ICMPV6;
+  beforeEach(inject(function (_ICMPV6_) {
+    ICMPV6 = _ICMPV6_;
+  }));
+
   var Context;
   beforeEach(inject(function (_Context_) {
     Context = _Context_;
@@ -273,6 +278,24 @@ describe('Service: extraction', function () {
 //     extraction.extract(icmpTimeout, key);
 //     expect(key.icmpv4_type).toBe(icmpTimeout.type());
 //     expect(key.icmpv4_code).toBe(icmpTimeout.code());
+  });
+
+  it('extraction ICMPV6 Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!ICMPV6).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var icmp = ICMPV6.mkICMPv6('255', '0');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.icmpv6_type).toBe(undefined);
+    expect(key.icmpv6_code).toBe(undefined);
+
+    extraction.extract_icmpv6(icmp, key);
+
+    expect(key.icmpv6_type).toBe(icmp.type());
+    expect(key.icmpv6_code).toBe(icmp.code());
   });
 
 });

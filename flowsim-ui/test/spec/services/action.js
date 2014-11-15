@@ -61,6 +61,11 @@ describe('Service: action', function () {
     ICMPV4 = _ICMPV4_;
   }));
 
+  var ICMPV6;
+  beforeEach(inject(function (_ICMPV6_) {
+    ICMPV6 = _ICMPV6_;
+  }));
+
 
   it('Ethernet test', function () {
     expect(!!Action).toBe(true);
@@ -987,6 +992,42 @@ describe('Service: action', function () {
     });
 
     expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('ICMPV6 test', function () {
+    expect(!!Action).toBe(true);
+    expect(!!ICMPV6).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(ICMPV6.mkICMPv6());
+
+    expect(pkt.protocols[1].type().toString()).toBe('0');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV6.name, ICMPV6.type,
+      ICMPV6.mkType('255')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV6.name, ICMPV6.code,
+      ICMPV6.mkCode('127')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('127');
   });
 
 
