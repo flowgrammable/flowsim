@@ -148,6 +148,8 @@ ICMPV4_UI.prototype.setPayload = function() {
 
 return {
   name: NAME,
+  type: '_type',
+  code: '_code',
   Payloads: _.keys(Payloads),
   ICMPV4: ICMPV4,
   mkICMPV4: mkICMPV4,

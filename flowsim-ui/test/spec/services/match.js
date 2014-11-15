@@ -835,6 +835,42 @@ describe('Service: match', function () {
 
   });
 
+  it('ICMPV4 Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!ICMPV4).toBe(true);
+
+    var match = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'icmpv4_type',
+        ICMPV4.mkTypeMatch(
+          '255',
+          '0xff')));
+
+    match.push(
+      new Match.Match(null,
+        'icmpv4_code',
+        ICMPV4.mkCodeMatch(
+          '0',
+          '0xff')));
+
+    expect(match.match(key)).toBe(false);
+
+    key.icmpv4_type = ICMPV4.mkType('255');
+    key.icmpv4_code = ICMPV4.mkType('0');
+
+    expect(match.match(key)).toBe(true);
+
+    key.icmpv4_type = ICMPV4.mkType('127');
+    expect(match.match(key)).toBe(false);
+
+    key.icmpv4_type = ICMPV4.mkType('255');
+    key.icmpv4_code = ICMPV4.mkType('127');
+    expect(match.match(key)).toBe(false);
+  });
+
   it('ICMPV6 Match', function () {
     expect(!!Match).toBe(true);
     expect(!!ICMPV6).toBe(true);

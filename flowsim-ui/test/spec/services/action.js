@@ -1165,6 +1165,42 @@ describe('Service: action', function () {
     }).toThrow();
   });
 
+  it('ICMPV4 test', function () {
+    expect(!!Action).toBe(true);
+    expect(!!ICMPV4).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(ICMPV4.mkICMPV4());
+
+    expect(pkt.protocols[1].type().toString()).toBe('0');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV4.name, ICMPV4.type,
+      ICMPV4.mkType('255')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV4.name, ICMPV4.code,
+      ICMPV4.mkCode('127')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('127');
+  });
+
   it('ICMPV6 test', function () {
     expect(!!Action).toBe(true);
     expect(!!ICMPV6).toBe(true);
