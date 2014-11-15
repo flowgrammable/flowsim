@@ -46,6 +46,11 @@ describe('Service: match', function () {
     TCP = _TCP_;
   }));
 
+  var SCTP;
+  beforeEach(inject(function (_SCTP_) {
+    SCTP = _SCTP_;
+  }));
+
   var Context;
   beforeEach(inject(function(_Context_) {
     Context = _Context_;
@@ -507,6 +512,52 @@ describe('Service: match', function () {
       new Match.Match(null,
         'udp_dst',
         UDP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+  });
+
+  it('SCTP Match set', function(){
+    expect(!!Match).toBe(true);
+    expect(!!SCTP).toBe(true);
+
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    match.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(65535, '0xffff')));
+    match.push(
+      new Match.Match(null,
+        'sctp_dst',
+        SCTP.mkPortMatch(80, '0xffff')));
+
+    match1.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(65535, '0xffff')));
+
+    expect(match1.equal(match)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'sctp_dst',
+        SCTP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match)).toBe(true);
+
+    match2.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(65534, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+    match2.push(
+      new Match.Match(null,
+        'sctp_dst',
+        SCTP.mkPortMatch(80, '0xffff')));
 
     expect(match1.equal(match2)).toBe(false);
 

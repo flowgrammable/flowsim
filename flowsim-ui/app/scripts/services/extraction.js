@@ -73,8 +73,8 @@ function extract_icmpv6(icmpv6, key) {
 }
 
 function extract_sctp(sctp, key) {
-  key.sctp_src = sctp.src;
-  key.sctp_dst = sctp.dst;
+  key.sctp_src = sctp.src();
+  key.sctp_dst = sctp.dst();
 }
 
 function extract_tcp(tcp, key) {
@@ -134,6 +134,7 @@ return {
   extract_mpls: extract_mpls,
   extract_udp: extract_udp,
   extract_tcp: extract_tcp,
+  extract_sctp: extract_sctp,
   extract_ipv4: extract_ipv4,
   extract_ipv6: extract_ipv6,
   extract_icmpv4: extract_icmpv4,

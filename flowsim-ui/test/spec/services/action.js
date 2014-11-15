@@ -51,6 +51,11 @@ describe('Service: action', function () {
     TCP = _TCP_;
   }));
 
+  var SCTP;
+  beforeEach(inject(function (_SCTP_) {
+    SCTP = _SCTP_;
+  }));
+
   var IPV6;
   beforeEach(inject(function (_IPV6_) {
     IPV6 = _IPV6_;
@@ -889,7 +894,7 @@ describe('Service: action', function () {
   });
 
 
-  it('TCP test', function () {
+  it('TCP setField', function () {
     expect(!!Action).toBe(true);
     expect(!!TCP).toBe(true);
 
@@ -916,6 +921,42 @@ describe('Service: action', function () {
       null,
       TCP.name, TCP.dst,
       TCP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('65535');
+  });
+
+  it('SCTP testField', function () {
+    expect(!!Action).toBe(true);
+    expect(!!SCTP).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(SCTP.mkSCTP());
+
+    expect(pkt.protocols[1].src().toString()).toBe('0');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      SCTP.name, SCTP.src,
+      SCTP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      SCTP.name, SCTP.dst,
+      SCTP.mkPort('65535')));
 
     set.step(null, {
       packet: pkt
