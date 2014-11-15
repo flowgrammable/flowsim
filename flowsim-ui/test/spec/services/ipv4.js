@@ -238,5 +238,23 @@ describe('Service: IPV4', function () {
     expect(every.match(src3)).toBe(true);
   });
 
+  it('IPV4 address equal pass', function(){
+    var ip1 = IPV4.mkAddress('1.1.1.1');
+    var ip2 = IPV4.mkAddress('255.255.255.255');
+    var ip3 = IPV4.mkAddress('1.1.1.1');
+
+    expect(IPV4.Address.equal(ip1, ip3)).toBe(true);
+    expect(IPV4.Address.equal(ip2, ip3)).toBe(false);
+  });
+
+  it('IPV4 address match equal pass', function(){
+    var ip1 = IPV4.mkAddressMatch('1.1.1.1', '255.255.255.255');
+    var ip2 = IPV4.mkAddressMatch('1.1.1.1', '255.255.255.255');
+    var ip3 = IPV4.mkAddressMatch('0.0.0.0', '255.255.255.255');
+
+    expect(ip1.equal(ip2)).toBe(true);
+    expect(ip1.equal(ip3)).toBe(false);
+  });
+
 
 });

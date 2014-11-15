@@ -281,6 +281,71 @@ describe('Service: ARP', function () {
 
   });
 
+  it('TPA match equal Pass', function() {
+    var a = new ARP.mkTpaMatch('1.1.1.1', '1.1.1.1');
+    var b = new ARP.mkTpaMatch('2.2.2.2', '1.1.1.1');
+    var c = new ARP.mkTpaMatch('1.1.1.1', '2.2.2.2');
+    var d = new ARP.mkTpaMatch('2.2.2.2', '2.2.2.2');
+    var e = new ARP.mkTpaMatch('1.1.1.1', '1.1.1.1');
+
+    expect(a.equal(b)).toBe(false);
+    expect(a.equal(c)).toBe(false);
+    expect(a.equal(d)).toBe(false);
+    expect(a.equal(e)).toBe(true);
+  });
+
+  it('SPA match equal Pass', function() {
+    var a = new ARP.mkSpaMatch('1.1.1.1', '1.1.1.1');
+    var b = new ARP.mkSpaMatch('2.2.2.2', '1.1.1.1');
+    var c = new ARP.mkSpaMatch('1.1.1.1', '2.2.2.2');
+    var d = new ARP.mkSpaMatch('2.2.2.2', '2.2.2.2');
+    var e = new ARP.mkSpaMatch('1.1.1.1', '1.1.1.1');
+
+    expect(a.equal(b)).toBe(false);
+    expect(a.equal(c)).toBe(false);
+    expect(a.equal(d)).toBe(false);
+    expect(a.equal(e)).toBe(true);
+  });
+
+  it('SHA match equal Pass', function() {
+    var a = new ARP.mkShaMatch('01:01:01:01:01:01', '01:01:01:01:01:01');
+    var b = new ARP.mkShaMatch('02:02:02:02:02:02', '01:01:01:01:01:01');
+    var c = new ARP.mkShaMatch('01:01:01:01:01:01', '02:02:02:02:02:02');
+    var d = new ARP.mkShaMatch('02:02:02:02:02:02', '02:02:02:02:02:02');
+    var e = new ARP.mkShaMatch('01:01:01:01:01:01', '01:01:01:01:01:01');
+
+    expect(a.equal(b)).toBe(false);
+    expect(a.equal(c)).toBe(false);
+    expect(a.equal(d)).toBe(false);
+    expect(a.equal(e)).toBe(true);
+  });
+
+  it('THA match equal Pass', function() {
+    var a = new ARP.mkThaMatch('01:01:01:01:01:01', '01:01:01:01:01:01');
+    var b = new ARP.mkThaMatch('02:02:02:02:02:02', '01:01:01:01:01:01');
+    var c = new ARP.mkThaMatch('01:01:01:01:01:01', '02:02:02:02:02:02');
+    var d = new ARP.mkThaMatch('02:02:02:02:02:02', '02:02:02:02:02:02');
+    var e = new ARP.mkThaMatch('01:01:01:01:01:01', '01:01:01:01:01:01');
+
+    expect(a.equal(b)).toBe(false);
+    expect(a.equal(c)).toBe(false);
+    expect(a.equal(d)).toBe(false);
+    expect(a.equal(e)).toBe(true);
+  });
+
+  it('Opcode match equal Pass', function() {
+    var a = new ARP.mkOpcodeMatch('0x0001', '0x0001');
+    var b = new ARP.mkOpcodeMatch('0x0001', '0x0002');
+    var c = new ARP.mkOpcodeMatch('0x0002', '0x0001');
+    var d = new ARP.mkOpcodeMatch('0x0002', '0x0002');
+    var e = new ARP.mkOpcodeMatch('0x0001', '0x0001');
+
+    expect(a.equal(b)).toBe(false);
+    expect(a.equal(c)).toBe(false);
+    expect(a.equal(d)).toBe(false);
+    expect(a.equal(e)).toBe(true);
+  });
+
 
   it('should do something', function () {
     expect(!!ARP).toBe(true);

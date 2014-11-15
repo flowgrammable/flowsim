@@ -141,7 +141,7 @@ function mkTpa(ip){
 }
 
 function mkTpaMatch(value, mask){
-  var tmp = IPV4.mkAddressMatch(value, mask);
+  var tmp = new IPV4.Address.Match(null, value, mask);
   tmp.summarize = function() {
     return 'arp';
   };

@@ -125,7 +125,31 @@ describe('Service: VLAN', function () {
 
     vlan2_disco.type('0x0800');
     expect(vlan2_disco.type().toString(16)).toBe('0x0800');
+  });
 
+  it('Pcp match equal Pass', function() {
+    var a = new VLAN.mkPcpMatch('0x01', '0x01');
+    var b = new VLAN.mkPcpMatch('0x02', '0x01');
+    var c = new VLAN.mkPcpMatch('0x01', '0x02');
+    var d = new VLAN.mkPcpMatch('0x02', '0x02');
+    var e = new VLAN.mkPcpMatch('0x01', '0x01');
 
+    expect(a.equal(b)).toBe(false);
+    expect(a.equal(c)).toBe(false);
+    expect(a.equal(d)).toBe(false);
+    expect(a.equal(e)).toBe(true);
+  });
+
+  it('VID match equal Pass', function() {
+    var a = new VLAN.mkVidMatch('0x0001', '0x0001');
+    var b = new VLAN.mkVidMatch('0x0002', '0x0001');
+    var c = new VLAN.mkVidMatch('0x0001', '0x0002');
+    var d = new VLAN.mkVidMatch('0x0002', '0x0002');
+    var e = new VLAN.mkVidMatch('0x0001', '0x0001');
+
+    expect(a.equal(b)).toBe(false);
+    expect(a.equal(c)).toBe(false);
+    expect(a.equal(d)).toBe(false);
+    expect(a.equal(e)).toBe(true);
   });
 });

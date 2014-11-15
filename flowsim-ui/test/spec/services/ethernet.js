@@ -319,7 +319,7 @@ describe('Service: ETHERNET', function () {
     dhcp_disco.toString();
   });
 
-  it('Ethernet Match equal Pass', function() {
+  it('Ethernet MAC Match equal Pass', function() {
     expect(!!ETHERNET).toBe(true);
 
     var mac1 = ETHERNET.mkMAC('11:00:11:00:11:00');
@@ -355,10 +355,34 @@ describe('Service: ETHERNET', function () {
       '00:00:00:00:00:00'
       );
 
+    var match5 = new ETHERNET.MAC.Match(
+      null,
+      new ETHERNET.MAC(null, '00:00:00:00:00:11'),
+      'ff:ff:ff:ff:ff:ff'
+    );
+
     expect(match4.equal(match3)).toBe(true);
     expect(match3.equal(match4)).toBe(true);
 
-    expect(match4.equal(match2)).toBe(false); 
+    expect(match4.equal(match2)).toBe(false);
+    expect(match5.equal(match4)).toBe(false);
+  });
+
+  it('Ethernet Type Match equal Pass', function() {
+    expect(!!ETHERNET).toBe(true);
+
+    var match1 = ETHERNET.mkTypeMatch(
+      '0x8100', '0xffff');
+
+    var match2 = ETHERNET.mkTypeMatch(
+      '0x8100', '0xffff');
+
+    var match3 = ETHERNET.mkTypeMatch(
+      '0x8100', '0x0000');
+
+    expect(match1.equal(match2)).toBe(true);
+    expect(match1.equal(match3)).toBe(false);
+    expect(match2.equal(match3)).toBe(false);
   });
 
 });
