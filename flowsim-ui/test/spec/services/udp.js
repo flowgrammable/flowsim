@@ -61,7 +61,6 @@ describe('Service: UDP', function () {
     var dst = UDP.mkPort('54689');
     var udp1 = UDP.mkUDP(src, dst);
 
-
     expect(udp1.src().toString()).toBe('12345');
     expect(udp1.dst().toString()).toBe('54689');
     udp1.src(5000);
@@ -89,7 +88,10 @@ describe('Service: UDP', function () {
     expect(udp1.dst().toString()).toBe('54689');
     expect(function(){udp1.dst(-1);}).toThrow();
     expect(udp1.src().toString()).toBe('12345');
+    expect(udp1.dst().toString()).toBe('54689');
+
     expect(udp1.dst().toString(16)).toBe('0xd5a1');
+    // not sure  why this is outputting '0x0xd4a1'
   });
 
   it('Port Match Pass', function() {

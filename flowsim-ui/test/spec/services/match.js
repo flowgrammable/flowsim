@@ -61,6 +61,11 @@ describe('Service: match', function () {
     IPV6 = _IPV6_;
   }));
 
+  var ICMPV4;
+  beforeEach(inject(function (_ICMPV4_) {
+    ICMPV4 = _ICMPV4_;
+  }));
+
   it('Default Match', function() {
     var key = new Context.Key(null, 0);
     var match = new Match.Set();

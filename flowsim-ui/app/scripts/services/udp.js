@@ -118,8 +118,8 @@ return {
   mkUDP: mkUDP,
   create: function(udp) { return new UDP(udp); },
   createUI: function(udp) { return new UDP_UI(udp); },
-  TESTS:       TESTS,
-  TIPS:        TIPS
+  TESTS: TESTS,
+  TIPS: TIPS
 };
 
 });

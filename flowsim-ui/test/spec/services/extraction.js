@@ -51,6 +51,11 @@ describe('Service: extraction', function () {
     TCP = _TCP_;
   }));
 
+  var ICMPV4;
+  beforeEach(inject(function (_ICMPV4_) {
+    ICMPV4 = _ICMPV4_;
+  }));
+
   var Context;
   beforeEach(inject(function (_Context_) {
     Context = _Context_;
@@ -240,6 +245,34 @@ describe('Service: extraction', function () {
     expect(key.ipv6_flabel).toBe(c.flabel());
     expect(key.ipv6_src).toBe(c.src());
     expect(key.ipv6_dst).toBe(c.dst());
+  });
+
+  it('extraction ICMPV4 Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!ICMPV4).toBe(true);
+    expect(!!Context).toBe(true);
+
+    // create protocols to match
+    var icmpTimeout = ICMPV4.mkICMPV4(11, 0, 1604);
+
+    // create key to extract
+    var key = new Context.Key(null, 0);
+    expect(key.icmpv4_type).toBe(undefined);
+    expect(key.icmpv4_code).toBe(undefined);
+
+    extraction.extract_icmpv4(icmpTimeout, key);
+    expect(key.icmpv4_type).toBe(icmpTimeout.type());
+    expect(key.icmpv4_code).toBe(icmpTimeout.code());
+
+    // TODO, text extract(ctx)  over a context...
+
+//     var key2 = new Context.Key(null, 0);
+//     expect(key.icmpv4_type).toBe(undefined);
+//     expect(key.icmpv4_code).toBe(undefined);
+//
+//     extraction.extract(icmpTimeout, key);
+//     expect(key.icmpv4_type).toBe(icmpTimeout.type());
+//     expect(key.icmpv4_code).toBe(icmpTimeout.code());
   });
 
 });

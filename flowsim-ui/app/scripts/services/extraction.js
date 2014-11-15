@@ -60,8 +60,8 @@ function extract_ipv6(ipv6, key) {
 }
 
 function extract_icmpv4(icmpv4, key) {
-  key.icmpv4.type = icmpv4.type;
-  key.icmpv4.code = icmpv4.code;
+  key.icmpv4_type = icmpv4.type();
+  key.icmpv4_code = icmpv4.code();
 }
 
 function extract_icmpv6(icmpv6, key) {
@@ -136,6 +136,7 @@ return {
   extract_tcp: extract_tcp,
   extract_ipv4: extract_ipv4,
   extract_ipv6: extract_ipv6,
+  extract_icmpv4: extract_icmpv4,
   extract: extract
 };
 
