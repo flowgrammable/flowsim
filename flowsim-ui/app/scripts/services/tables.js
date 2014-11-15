@@ -42,29 +42,53 @@ Priority.prototype.add = function(flow) {
   this.flows.push(flow);
 };
 
-Priority.prototype.del = function(idx) {
-  this.flows.splice(idx, 1);
+Priority.prototype.del = function(flow) {
+  var idx;
+  for(idx=0; idx<this.flows.length; ++idx) {
+    if(this.flows[idx].equal(flow)) {
+      this.flows.splice(idx, 1);
+      return;
+    }
+  }
 };
 
 Priority.prototype.select = function(key) {
   return _(this.flows).find(function(flow) {
-    return flow.match.match(key);
+    return flow.match(key);
   });
+};
+
+Priority.prototype.empty = function() {
+  return this.flows.length === 0;
 };
 
 function Table(table, tableProfile) {
   if(_.isObject(table)) {
     _.extend(this, table);
-    this.capabilities = new TableProfile(table.capabilities);
+    this.capabilities      = new TableProfile(table.capabilities);
+    this.priorities        = new Priority(table.priorities);
+    this.prioritiesPresent = _.clone(table.priorities);
+
+    // FIXME ... need to add miss handler
+    
+    this.stats = _.clone(table.stats);
   } else {
     this.capabilities = new TableProfile(tableProfile);
-    this.id          = tableProfile.id;
-    this.name        = tableProfile.name;
-    this.max_entries = tableProfile.max_entries;
+    this.id           = tableProfile.id;
+    this.name         = tableProfile.name;
+    this.max_entries  = tableProfile.max_entries;
 
-    this.priorities = [];
+    this.priorities        = [];
     this.prioritiesPresent = {};
+
+    // FIXME .... not sure how to handle this ...
     this.miss = null;
+
+    this.stats = {
+      active: 0,
+      lookup: 0,
+      match: 0
+    };
   }
 }
 
@@ -72,19 +96,63 @@ Table.prototype.clone = function() {
   return new Table(this);
 };
 
+Table.prototype.flatten = function() {
+  var list = [];
+  _(this.priorities).each(function(priority) {
+    list.push(priority.flows);
+  });
+  return _(list).flatten();
+};
+
 Table.prototype.select = function(key) {
+  var i, flow;
+  this.stats.lookup += 1;
+  for(i=0; i<this.priorities.length; ++i) {
+    flow = this.priorities[i].select(key);
+    if(flow) {
+      this.stats.match += 1;
+      return flow;
+    }
+  }
 };
 
 Table.prototype.add = function(priority, flow) {
+  var priTable;
+  // Add the priority sub-table if not present
   if(!_(this.prioritiesPresent).has(priority.toString())) {
     this.prioritiesPresent[priority.toString()] = true;
+    priTable = new Priority(null, priority);
+    this.priorities.push(priTable);
+    this.priorities = _(this.priorities).sortBy(function(_priority) {
+      return -_priority.priority;
+    });
+  } else {
+    priTable = _(this.priorities).find(function(priTbl) {
+      return priority === priTbl.priority;
+    }, this);
   }
-
+  priTable.add(flow);
+  this.stats.active++;
 };
 
-Table.prototype.del = function(priority, idx) {
+Table.prototype.del = function(priority, flow) {
+  var priTable;
+  var i;
   if(_(this.prioritiesPresent).has(priority.toString())) {
-    this.prioritiesPresent[priority.toString()] = true;
+    priTable = _(this.priorities).find(function(priTbl) {
+      return priority === priTbl.priority;
+    }, this);
+    priTable.del(flow);
+    this.stats.active -= 1;
+    if(priTable.empty()) {
+      for(i=0; i<this.priorities.length; ++i) {
+        if(this.priorities[i].priority === priority) {
+          this.priorities.splice(i, 1);
+          delete this.prioritiesPresent[priority.toString()];
+          return;
+        }
+      }
+    }
   }
 };
 
@@ -98,8 +166,6 @@ function TableProfile(tableProfile, id) {
     this.id          = id;
     this.name        = defName + id;
     this.max_entries = defMaxEntries;
-    this.table_stats = defTableStats;
-    this.flow_stats  = defFlowStats;
     this.match       = new Match.Profile();
     this.instruction = new Instruction.Profile();
     this.miss        = new Instruction.Profile();
@@ -116,13 +182,12 @@ function Tables(tables, profile) {
     this.tables = _(tables.tables).map(function(table){
       return new Table(table);
     });
+    this.capabilities = new Profile(tables.capabilities);
   } else {
-    this.tables = _(profile.n_tables).times(function(id) {
-      return new Table(null, id, profile);
+    this.tables = _.map(profile.tables, function(_profile){
+      return new Table(null, _profile);
     });
-    this.tables = _.map(profile.tables, function(table){
-      return new Table(null, table);
-    });
+    this.capabilities = new Profile(profile);
   }
 }
 
@@ -144,6 +209,8 @@ function Profile(profile){
     });
   } else {
     this.n_tables = defTables;
+    this.table_stats = defTableStats;
+    this.flow_stats = defFlowStats;
     this.tables = _(this.n_tables).times(function(id) {
       return new TableProfile(null, id);
     });

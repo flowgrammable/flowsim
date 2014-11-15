@@ -50,25 +50,25 @@ describe('Service: uint', function () {
 
   it('UInt(null, 0x1ffff, 2) should fail', function() {
     expect(function() {
-      new UInt.UInt(null, 0x1ffff, 2)
+      new UInt.UInt(null, 0x1ffff, 2);
     }).toThrow();
   });
 
   it('UInt(null, "0x1ffff", 2) should fail', function() {
     expect(function() {
-      new UInt.UInt(null, '0x1ffff', 2)
+      new UInt.UInt(null, '0x1ffff', 2);
     }).toThrow();
   });
 
   it('UInt(null, -1, 2) should fail', function() {
     expect(function() {
-      new UInt.UInt(null, -1, 2)
+      new UInt.UInt(null, -1, 2);
     }).toThrow();
   });
 
   it('UInt(null, "-65536", 2) should fail', function() {
     expect(function() {
-      new UInt.UInt(null, '-65536', 2)
+      new UInt.UInt(null, '-65536', 2);
     }).toThrow();
   });
 

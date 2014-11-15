@@ -55,7 +55,11 @@ function mkDscp(dscp){
 }
 
 function mkDscpMatch(value, mask){
-  return new UInt.Match(null, mkDscp(value), mkDscp(mask));
+  var tmp =  new UInt.Match(null, mkDscp(value), mkDscp(mask));
+  tmp.summarize = function() {
+    return 'ipv4';
+  };
+  return tmp;
 }
 
 IPv4.prototype.ecn = function(ecn) {
@@ -75,7 +79,11 @@ function mkEcn(ecn){
 }
 
 function mkEcnMatch(value, mask){
-  return new UInt.Match(null, mkEcn(value), mkEcn(mask));
+  var tmp =  new UInt.Match(null, mkEcn(value), mkEcn(mask));
+  tmp.summarize = function() {
+    return 'ipv4';
+  };
+  return tmp;
 }
 
 IPv4.prototype.proto = function(proto) {
@@ -96,7 +104,11 @@ function mkProto(proto){
 }
 
 function mkProtoMatch(value, mask){
-  return new UInt.Match(null, mkProto(value), mkProto(mask));
+  var tmp =  new UInt.Match(null, mkProto(value), mkProto(mask));
+  tmp.summarize = function() {
+    return 'ipv4';
+  };
+  return tmp;
 }
 
 IPv4.prototype.ttl = function(ttl) {
@@ -242,6 +254,10 @@ Address.Match.prototype.match = function(addr) {
 
 Address.Match.prototype.clone = function() {
   return new Address.Match(this);
+};
+
+Address.Match.prototype.summarize = function() {
+  return 'ipv4';
 };
 
 function mkAddressMatch(value, mask){

@@ -44,22 +44,19 @@ function extract_mpls(mpls, key) {
 }
 
 function extract_ipv4(ipv4, key) {
-  key.ip_dscp  = ipv4.dscp();
-  key.ip_ecn   = ipv4.ecn();
-  key.ip_proto = ipv4.proto();
-  key.ip_ttl   = ipv4.ttl();
-  key.ip_src   = ipv4.src();
-  key.ip_dst   = ipv4.dst();
+  key.ipv4_dscp  = ipv4.dscp();
+  key.ipv4_ecn   = ipv4.ecn();
+  key.ipv4_proto = ipv4.proto();
+  key.ipv4_ttl   = ipv4.ttl();
+  key.ipv4_src   = ipv4.src();
+  key.ipv4_dst   = ipv4.dst();
 }
 
 function extract_ipv6(ipv6, key) {
-  key.ip_dscp    = ipv6.dscp;
-  key.ip_ecn     = ipv6.ecn;
-  key.ip_proto   = ipv6.proto;
-  key.ip_src     = ipv6.src;
-  key.ip_dst     = ipv6.dst;
-  key.flow_label = ipv6.flowLabel;
-  key.ext_hdr    = ipv6.extHdr;
+  key.ipv6_flabel = ipv6.flabel();
+  key.ipv6_ttl    = ipv6.ttl();
+  key.ipv6_src    = ipv6.src();
+  key.ipv6_dst    = ipv6.dst();
 }
 
 function extract_icmpv4(icmpv4, key) {
@@ -138,6 +135,7 @@ return {
   extract_udp: extract_udp,
   extract_tcp: extract_tcp,
   extract_ipv4: extract_ipv4,
+  extract_ipv6: extract_ipv6,
   extract: extract
 };
 

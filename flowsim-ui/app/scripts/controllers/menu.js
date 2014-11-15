@@ -8,8 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache,
-                                    $location, $modal, $route) {
+  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache) {
     $scope.authenticated = true;
     $scope.dirty = false;
     $scope.prev_host = '';
@@ -27,7 +26,7 @@ angular.module('flowsimUiApp')
       $scope.dirty = false;
     };
 
-    window.onbeforeunload = function(event) {
+    window.onbeforeunload = function() {
       if($scope.dirty) {
         return 'You have unsaved changes, are you sure you wish to leave without saving?';
       } else {

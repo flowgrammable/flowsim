@@ -23,7 +23,7 @@ angular.module('flowsimUiApp')
                     scope.applyActionList = _.findWhere(scope.view.instructionSet, {
                         name: 'Apply'
                     }).set;
-                    scope.writeActionSet = _.findWhere(scope.view.instructionSet, {
+                    scope.writeActionSet  = _.findWhere(scope.view.instructionSet, {
                         name: 'Write'
                     }).set;
                     scope.instrucionList = scope.view.instructionSet;

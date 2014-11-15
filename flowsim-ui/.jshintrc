@@ -20,6 +20,8 @@
   "smarttabs": true,
   "globals": {
     "angular": false,
-    "_": false
-  }
+    "_": false,
+    "d3": false
+  },
+  "maxerr": 1000
 }

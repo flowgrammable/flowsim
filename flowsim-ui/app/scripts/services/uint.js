@@ -233,6 +233,10 @@ Match.prototype.toString = function(base) {
   return this.value.toString(base) + '/' + this.mask.toString(base);
 };
 
+Match.prototype.equal = function(match) {
+  return equal(this.value, match.value) && equal(this.mask, match.value);
+};
+
 Match.mkWildcard = function(uint) {
   var bytes;
   if(uint instanceof UInt) {

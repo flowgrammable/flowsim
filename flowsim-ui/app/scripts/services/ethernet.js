@@ -161,8 +161,16 @@ MAC.Match.prototype.match = function(addr) {
   return this._match.match(addr._mac);
 };
 
+MAC.Match.prototype.equal = function(mac) {
+  return this._match.equal(mac._match);
+};
+
 MAC.Match.prototype.toString = function() {
   return this.addr.toString() + '/' + this.mask.toString();
+};
+
+MAC.Match.prototype.summarize = function() {
+  return 'eth';
 };
 
 function mkMACMatch(value, mask) {
@@ -174,7 +182,11 @@ function mkType(input) {
 }
 
 function mkTypeMatch(value, mask) {
-  return new UInt.Match(null, mkType(value), mkType(mask));
+  var tmp =  new UInt.Match(null, mkType(value), mkType(mask));
+  tmp.summarize = function() {
+    return 'eth';
+  };
+  return tmp;
 }
 
 var TESTS = {

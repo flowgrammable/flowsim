@@ -53,7 +53,11 @@ function mkPcp(input){
 }
 
 function mkPcpMatch(value, mask) {
-  return new UInt.Match(null, mkPcp(value), mkPcp(mask));
+  var tmp =  new UInt.Match(null, mkPcp(value), mkPcp(mask));
+  tmp.summarize = function() {
+    return 'vlan';
+  };
+  return tmp;
 }
 
 
@@ -94,7 +98,11 @@ function mkVid(input){
 }
 
 function mkVidMatch(value, mask) {
-  return new UInt.Match(null, mkVid(value), mkVid(mask));
+  var tmp =  new UInt.Match(null, mkVid(value), mkVid(mask));
+  tmp.summarize = function() {
+    return 'vlan';
+  };
+  return tmp;
 }
 
 VLAN.prototype.type = function(type){

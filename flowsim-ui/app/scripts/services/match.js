@@ -26,6 +26,22 @@ Match.prototype.clone = function() {
   return new Match(this);
 };
 
+Match.prototype.equal = function(match) {
+  return this.label === match.label &&
+      this._match.equal(match._match);
+};
+
+Match.prototype.summarize = function() {
+  return this._match.summarize();
+};
+
+function getOptions(matchs) {
+
+}
+
+function mkByName(name) {
+}
+
 function Set(set) {
   if(_.isObject(set)) {
     this.matches = _.map(set.matches, function(match) {
@@ -35,6 +51,10 @@ function Set(set) {
     this.matches = [];
   }
 }
+
+Set.prototype.toView = function() {
+  return [];
+};
 
 Set.prototype.clone = function() {
   return new Set(this);
@@ -58,6 +78,34 @@ Set.prototype.match = function(key) {
   return _.every(this.matches, function(match) {
     return _(key).has(match.label) && match._match.match(key[match.label]);
   });
+};
+
+Set.prototype.equal = function(set) {
+  var idx;
+  // can't be equal if different length
+  if(this.matches.length !== set.matches.length) {
+    return false;
+  }
+  // empty sets are default match alls
+  if(this.matches.length === 0) {
+    return true;
+  }
+  // compare each match individually
+  for(idx=0; idx < this.matches.length; ++idx) {
+    if(!this.matches[idx].equal(set.matches[idx])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+Set.prototype.summarize = function() {
+  if(this.matches.length === 0) {
+    return ['*'];
+  }
+  return _(_(this.matches).map(function(match) {
+    return match.summarize();
+  })).uniq();
 };
 
 function createMatch(protocol, field, key, wildcard, maskable, mask) {
@@ -192,6 +240,8 @@ Match.Profile.TESTS = {
 
 return {
   Match: Match,
+  getOptions: getOptions,
+  mkByName: mkByName,
   Set: Set,
   Profile: Match.Profile
 };

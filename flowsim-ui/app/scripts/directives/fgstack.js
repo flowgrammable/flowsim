@@ -70,6 +70,7 @@ angular.module('flowsimUiApp')
         $scope.popNode()();
       };
 
+      //FIXME ... this belongs else where
       $scope.calcPayloadBytes = function() {
         if($scope.stack && $scope.stack.slice(-1)[0].name === 'Payload'){
           val = parseInt($scope.stack.slice(-1)[0].attrs[0].value);

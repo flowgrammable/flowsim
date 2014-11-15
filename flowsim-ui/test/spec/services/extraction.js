@@ -26,6 +26,21 @@ describe('Service: extraction', function () {
     ARP = _ARP_;
   }));
 
+  var MPLS;
+  beforeEach(inject(function (_MPLS_) {
+    MPLS = _MPLS_;
+  }));
+
+  var IPV4;
+  beforeEach(inject(function (_IPV4_) {
+    IPV4 = _IPV4_;
+  }));
+
+  var IPV6;
+  beforeEach(inject(function (_IPV6_) {
+    IPV6 = _IPV6_;
+  }));
+
   var UDP;
   beforeEach(inject(function (_UDP_) {
     UDP = _UDP_;
@@ -157,6 +172,74 @@ describe('Service: extraction', function () {
 
     expect(key.tcp_src).toBe(tcp1.src());
     expect(key.tcp_dst).toBe(tcp1.dst());
+  });
+
+  it('extraction IPV4 Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!IPV4).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var ipv41 = IPV4.mkIPv4(
+      '0x12','0x43','0x06','0x77','192.168.1.1', '255.255.255.255');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.ipv4_dscp).toBe(undefined);
+    expect(key.ipv4_ecn).toBe(undefined);
+    expect(key.ipv4_proto).toBe(undefined);
+    expect(key.ipv4_src).toBe(undefined);
+    expect(key.ipv4_dst).toBe(undefined);
+
+    extraction.extract_ipv4(ipv41, key);
+
+    expect(key.ipv4_dscp).toBe(ipv41.dscp());
+    expect(key.ipv4_ecn).toBe(ipv41.ecn());
+    expect(key.ipv4_proto).toBe(ipv41.proto());
+    expect(key.ipv4_src).toBe(ipv41.src());
+    expect(key.ipv4_dst).toBe(ipv41.dst());
+  });
+
+  it('extraction MPLS Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!MPLS).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var mp1 = MPLS.mkMPLS(
+      '0x12345', '0x22', '0x01');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.mpls_label).toBe(undefined);
+    expect(key.mpls_bos).toBe(undefined);
+    expect(key.mpls_tc).toBe(undefined);
+
+    extraction.extract_mpls(mp1, key);
+
+    expect(key.mpls[0].label).toBe(mp1.label());
+    expect(key.mpls[0].bos).toBe(mp1.bos());
+    expect(key.mpls[0].tc).toBe(mp1.tc());
+  });
+
+  it('extraction IPV6 Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!IPV6).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var c = IPV6.mkIPv6('0xaaaaaa', '0x77',
+    '2001:0db8:0000:0000:0000:ff00:0042:8329',
+    'FE80:0000:0000:0000:0202:B3FF:FE1E:8329');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.ipv6_flabel).toBe(undefined);
+    expect(key.ipv6_src).toBe(undefined);
+    expect(key.ipv6_dst).toBe(undefined);
+
+    extraction.extract_ipv6(c, key);
+
+    expect(key.ipv6_flabel).toBe(c.flabel());
+    expect(key.ipv6_src).toBe(c.src());
+    expect(key.ipv6_dst).toBe(c.dst());
   });
 
 });

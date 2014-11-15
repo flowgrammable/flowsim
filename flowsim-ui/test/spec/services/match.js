@@ -51,10 +51,26 @@ describe('Service: match', function () {
     Context = _Context_;
   }));
 
+  var IPV4;
+  beforeEach(inject(function(_IPV4_) {
+    IPV4 = _IPV4_;
+  }));
+
+  var IPV6;
+  beforeEach(inject(function(_IPV6_) {
+    IPV6 = _IPV6_;
+  }));
+
   it('Default Match', function() {
     var key = new Context.Key(null, 0);
     var match = new Match.Set();
     expect(match.match(key)).toBe(true);
+  });
+
+  it('Match equality', function() {
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    expect(match1.equal(match2)).toBe(true);
   });
 
   it('Ethernet Match', function () {
@@ -65,6 +81,8 @@ describe('Service: match', function () {
 
     var key = new Context.Key(null, 0);
 
+
+
     match.push(
       new Match.Match(null,
         'eth_src',
@@ -73,17 +91,23 @@ describe('Service: match', function () {
           '00:00:00:00:00:00',
           '00:00:00:00:00:00')));
 
+    expect(match.summarize().toString()).toBe('eth');
+
     match.push(
       new Match.Match(null,
         'eth_dst',
-        ETHERNET.mkMACMatch(
+        new ETHERNET.mkMACMatch(
           'ff:ff:ff:ff:ff:ff',
           'ff:ff:ff:ff:ff:ff')));
+
+    expect(match.summarize().toString()).toBe('eth');
 
     match.push(
       new Match.Match(null,
         'eth_type',
-        ETHERNET.mkTypeMatch('0x0800', '0xffff')));
+        new ETHERNET.mkTypeMatch('0x0800', '0xffff')));
+
+    expect(match.summarize().toString()).toBe('eth');
 
     expect(match.match(key)).toBe(false);
 
@@ -98,6 +122,8 @@ describe('Service: match', function () {
 
     key.eth_type = new ETHERNET.mkType('0x0806');
     expect(match.match(key)).toBe(false);
+
+
   });
 
   it('VLAN Match', function () {
@@ -124,6 +150,61 @@ describe('Service: match', function () {
 
     key.vlan_vid = new VLAN.mkVid('0xffff');
     key.vlan_pcp = new VLAN.mkPcp('0x00');
+
+    expect(match.summarize().toString()).toBe('vlan');
+
+    expect(match.match(key)).toBe(true);
+  });
+
+  it('IPv4 Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!IPV4).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_dscp',
+        new IPV4.mkDscpMatch('0x01','0xff')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_ecn',
+        new IPV4.mkEcnMatch('0x02','0xff')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_proto',
+        new IPV4.mkProtoMatch('0x03','0xff')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_src',
+        new IPV4.mkAddressMatch('192.168.1.1','255.255.255.255')));
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_dst',
+        new IPV4.mkAddressMatch('128.1.1.1','255.255.255.255')));
+
+    expect(match.summarize().toString()).toBe('ipv4');
+    expect(match.match(key)).toBe(false);
+
+    key.ipv4_dscp = new IPV4.mkDscp('0x01');
+    key.ipv4_ecn  = new IPV4.mkEcn('0x02');
+    key.ipv4_proto = new IPV4.mkProto('0x03');
+    key.ipv4_src = new IPV4.mkAddress('192.168.1.1');
+    key.ipv4_dst = new IPV4.mkAddress('128.1.1.1');
+
+    expect(match.summarize().toString()).toBe('ipv4');
 
     expect(match.match(key)).toBe(true);
   });
@@ -156,7 +237,7 @@ describe('Service: match', function () {
           '0x00')));
 
     expect(match.match(key)).toBe(false);
-
+    expect(match.summarize().toString()).toBe('mpls');
     key.mpls_label = new MPLS.mkLabel('0x777777');
     key.mpls_tc = new MPLS.mkTc('0x03');
     key.mpls_bos = new MPLS.mkBos('0xaa');
@@ -177,12 +258,16 @@ describe('Service: match', function () {
         'arp_opcode',
         new ARP.mkOpcodeMatch('0x0023','0xffff')));
 
+    expect(match.summarize().toString()).toBe('arp');
+
     match.push(
       new Match.Match(null,
         'arp_sha',
         new ARP.mkShaMatch(
           '00:aa:bb:cc:dd:ee',
           'ff:ff:ff:ff:ff:ff')));
+
+    expect(match.summarize().toString()).toBe('arp');
 
     match.push(
       new Match.Match(null,
@@ -205,6 +290,7 @@ describe('Service: match', function () {
           '192.168.1.100',
           '255.255.255.255')));
 
+    expect(match.summarize().toString()).toBe('arp');
     expect(match.match(key)).toBe(false);
 
     key.arp_opcode = ARP.mkOpcode('0x0023');
@@ -320,5 +406,83 @@ describe('Service: match', function () {
     key.tcp_src = TCP.mkPort('22');
     key.tcp_dst = TCP.mkPort('65535');
     expect(match.match(key)).toBe(false);
+  });
+
+  it('IPV6 Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!IPV6).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'ipv6_flabel',
+        IPV6.mkFlabelMatch(
+          '22',
+          '0xffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match.push(
+      new Match.Match(null,
+        'ipv6_src',
+        IPV6.mkAddressMatch(
+          '2001:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match.push(
+      new Match.Match(null,
+        'ipv6_dst',
+        IPV6.mkAddressMatch(
+          '2002:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    expect(match.match(key)).toBe(false);
+
+    key.ipv6_flabel = IPV6.mkFlabel('22');
+    key.ipv6_src    = IPV6.mkAddress('2001:0db8:0000:0000:0000:ff00:0042:8329');
+    key.ipv6_dst    = IPV6.mkAddress('2002:0db8:0000:0000:0000:ff00:0042:8329');
+
+    expect(match.match(key)).toBe(true);
+
+  });
+
+  it('Match Summarize Pass', function () {
+    expect(!!Match).toBe(true);
+    expect(!!IPV6).toBe(true);
+
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+
+    expect(match.summarize().toString()).toBe('*');
+    match.push(
+      new Match.Match(null,
+        'ipv6_flabel',
+        IPV6.mkFlabelMatch(
+          '22',
+          '0xffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match.push(
+      new Match.Match(null,
+        'mpls_label',
+        MPLS.mkLabelMatch(
+          '0x123456', '0xffffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6,mpls');
+    match.push(
+      new Match.Match(null,
+        'ethernet_dst',
+        ETHERNET.mkMACMatch(
+          '00:bb:cc:aa:dd:ff', 'ff:ff:ff:ff:ff:ff')));
+
+    expect(match.summarize().toString()).toBe('ipv6,mpls,eth');
+    expect(match.match(key)).toBe(false);
+
   });
 });

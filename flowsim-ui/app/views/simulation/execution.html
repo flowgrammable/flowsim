@@ -1,33 +1,9 @@
-<div class="blended_grid">
-    <div class="leftColumn">
- 		<fg-instruction-set view="view"></fg-instruction-set>
+<div class="sim-exec-blended_grid">
+
+    <div class="sim-exec-leftColumn">
+        <fg-instruction-set view="view"></fg-instruction-set>
     </div>
 
 
-    <div class="topBanner">
-        <div class="righttable">
-            <table class="tblright">
-                <tr>
-                    <td class="color-prim">table : {{view.table}}</td>
-                    <td class="color-sec">buffer : {{view.buffer}}</td>
-                </tr>
-                <tr>
-                    <td class="color-sec">queue : {{view.queue}}</td>
-                    <td class="color-prim">meter : {{view.meter}}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="rightContent">
-        <div style="width:100%; text-align: right;
-    clear: none;">Action Set</div>
-        <div class="right-animate-container">
-            <div class="right-animate-repeat" ng-class="(ctx.actionSet.length  % 2)?($even?'color-prim':'color-sec'):($odd?'color-prim':'color-sec')" ng-repeat="action in ctx.actionSet" tooltip="{{action.value1}}{{action.value2}}" tooltip-append-to-body="true">
-                {{action.name}}
-            </div>
-        </div>
-    </div>
-    <div class="bottomBanner">
-        <fg-packet-view packet="view.packet" width="100%"></fg-packet-view>
-    </div>
+<fg-packet-ctx view="view"></fg-packet-ctx>
 </div>

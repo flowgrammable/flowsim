@@ -17,6 +17,21 @@
         </div>
       </div>
   </div>
+
+  <div class="col-md-X">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="profile.tables.table_stats">
+        Table Statistics
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="profile.tables.flow_stats">
+        Flow Statistics
+      </label>
+    </div>
+  </div>
 </div>
 
 <table class="table table-striped">
@@ -24,8 +39,6 @@
     <th>Identifier</th>
     <th>Name</th>
     <th>Max Entries</th>
-    <th>Table Stats</th>
-    <th>Flow Stats</th>
     <th>Flow Capabilities</th>
   </thead>
   <tbody>
@@ -44,12 +57,6 @@
         <input class="form-control" type="text" ng-model="table.max_entries"
                style="width:60px">
       </div>
-    </td>
-    <td>
-      <input type="checkbox" ng-model="table.table_stats">
-    </td>
-    <td>
-      <input type="checkbox" ng-model="table.flow_stats">
     </td>
     <td>
       <div class="btn-group btn-group-xs">
