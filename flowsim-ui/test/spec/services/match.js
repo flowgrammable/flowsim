@@ -61,16 +61,111 @@ describe('Service: match', function () {
     IPV6 = _IPV6_;
   }));
 
+  var ICMPV4;
+  beforeEach(inject(function (_ICMPV4_) {
+    ICMPV4 = _ICMPV4_;
+  }));
+
   it('Default Match', function() {
     var key = new Context.Key(null, 0);
     var match = new Match.Set();
     expect(match.match(key)).toBe(true);
   });
 
-  it('Match equality', function() {
+  it('Match equality default', function() {
     var match1 = new Match.Set();
     var match2 = new Match.Set();
     expect(match1.equal(match2)).toBe(true);
+  });
+
+  it('Match set equality', function() {
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    var match3 = new Match.Set();
+    var match4 = new Match.Set();
+    var match5 = new Match.Set();
+
+    match1.push(new Match.Match(null,
+      'eth_src',
+      new ETHERNET.MAC.Match(
+        null,
+        '00:11:22:33:44:55',
+        '00:11:22:33:44:55'
+      )));
+
+    match2.push(new Match.Match(null,
+      'eth_src',
+      new ETHERNET.MAC.Match(
+        null,
+        '00:11:22:33:44:55',
+        '00:11:22:33:44:55'
+      )));
+
+    match3.push(new Match.Match(null,
+      'eth_src',
+      new ETHERNET.MAC.Match(
+        null,
+        '00:00:22:33:44:55',
+        '00:11:22:33:44:55'
+      )));
+
+    match4.push(new Match.Match(null,
+      'eth_src',
+      new ETHERNET.MAC.Match(
+        null,
+        '00:11:22:33:44:55',
+        '00:00:22:33:44:55'
+      )));
+
+    match5.push(new Match.Match(null,
+      'eth_dst',
+      new ETHERNET.MAC.Match(
+        null,
+        '00:11:22:33:44:55',
+        '00:11:22:33:44:55'
+      )));
+
+    expect(match2.equal(match1)).toBe(true);
+    expect(match2.equal(match3)).toBe(false);
+    expect(match2.equal(match4)).toBe(false);
+
+    expect(match5.equal(match4)).toBe(false);
+    expect(match5.equal(match3)).toBe(false);
+    expect(match5.equal(match2)).toBe(false);
+    expect(match5.equal(match1)).toBe(false);
+
+    match1.push(new Match.Match(null,
+      'eth_dst',
+      new ETHERNET.MAC.Match(
+        null,
+        '00:11:22:33:44:55',
+        '00:11:22:33:44:55'
+      )));
+
+    match1.push(new Match.Match(null,
+      'eth_type',
+      ETHERNET.mkTypeMatch('0x8100', '0xfff')));
+
+    expect(match1.equal(match2)).toBe(false);
+    expect(match1.equal(match3)).toBe(false);
+    expect(match1.equal(match4)).toBe(false);
+    expect(match1.equal(match5)).toBe(false);
+
+    match2.push(new Match.Match(null,
+      'eth_dst',
+      new ETHERNET.MAC.Match(
+        null,
+        '00:11:22:33:44:55',
+        '00:11:22:33:44:55'
+      )));
+
+    match2.push(new Match.Match(null,
+      'eth_type',
+      ETHERNET.mkTypeMatch('0x8100', '0xfff')));
+
+    expect(match2.equal(match1)).toBe(true);
+    expect(match2.equal(match3)).toBe(false);
+
   });
 
   it('Ethernet Match', function () {
@@ -78,10 +173,7 @@ describe('Service: match', function () {
     expect(!!ETHERNET).toBe(true);
 
     var match = new Match.Set();
-
     var key = new Context.Key(null, 0);
-
-
 
     match.push(
       new Match.Match(null,
@@ -122,8 +214,6 @@ describe('Service: match', function () {
 
     key.eth_type = new ETHERNET.mkType('0x0806');
     expect(match.match(key)).toBe(false);
-
-
   });
 
   it('VLAN Match', function () {

@@ -28,7 +28,9 @@ angular.module('flowsimUiApp')
   }
 
   $scope.newFlow = function() {
-    var flow = new Flow.Flow(null, $scope.flow.priority);
+    var caps =  $scope.device.tables.tables[$scope.tableId].capabilities;
+    console.log(caps.instruction.caps);
+    var flow = new Flow.Flow(null, $scope.flow.priority, caps.instruction); 
     $modal.open({
       templateUrl: 'views/switch/flow.html',
       controller: 'SwitchFlowCtrl',

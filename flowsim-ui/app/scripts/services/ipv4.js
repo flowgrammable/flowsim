@@ -225,7 +225,7 @@ function mkAddress(ip) {
   }
 }
 
-Address.equal = function(lhs, rhs) {
+Address.equal = function(lhs, rhs){
   return UInt.equal(lhs._ip, rhs._ip);
 };
 
@@ -258,6 +258,10 @@ Address.Match.prototype.clone = function() {
 
 Address.Match.prototype.summarize = function() {
   return 'ipv4';
+};
+
+Address.Match.prototype.equal = function(addr){
+  return this._match.equal(addr._match);
 };
 
 function mkAddressMatch(value, mask){

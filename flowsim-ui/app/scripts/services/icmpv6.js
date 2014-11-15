@@ -4,17 +4,14 @@ angular.module('flowsimUiApp')
   .factory('ICMPV6', function(fgUI, fgConstraints, UInt){
 
 var NAME = 'ICMPv6';
-var BYTES = 4; //FIXME this isn't correct
-// why this is not correct? - Muxi
+var BYTES = 8; 
 
-var Payloads = {
-  'Payload': 0
-};
+var Payloads = {};
 
 function ICMPv6(icmpv6, type, code) {
   if(_.isObject(icmpv6)) {
-    this._type = new UInt.UInt(icmpv6.type);
-    this._code = new UInt.UInt(icmpv6.code);
+    this._type = new UInt.UInt(icmpv6._type);
+    this._code = new UInt.UInt(icmpv6._code);
   } else {
     this._type = new UInt.UInt(null, type, 1);
     this._code = new UInt.UInt(null, code, 1);
@@ -44,12 +41,31 @@ ICMPv6.prototype.code = function(code) {
   }
 };
 
+ICMPv6.prototype.clone = function () {
+  return new ICMPv6(this);
+};
+
+ICMPv6.prototype.toString = function () {
+  return 'type: ' + this._type.toString() + '\n' +
+         'code: ' + this._code.toString();
+};
+
+ICMPv6.prototype.setPayload = function () {};
+
 function mkType(type) {
   if (type instanceof UInt.UInt) {
     return new UInt.UInt(type);
   } else {
     return new UInt.UInt(null, type, 1);
   }
+}
+
+function mkTypeMatch(value, mask) {
+  var match = new UInt.Match(null, mkType(value), mkType(mask));
+  match.summarize = function () {
+    return 'icmpv6';
+  };
+  return match;
 }
 
 function mkCode(code) {
@@ -60,10 +76,28 @@ function mkCode(code) {
   }
 }
 
+function mkCodeMatch(value, mask) {
+  var match = new UInt.Match(null, mkCode(value), mkCode(mask));
+  match.summarize = function () {
+    return 'icmpv6';
+  };
+  return match;
+}
+
+var TIPS = {
+  type: 'ICMPv6 Type',
+  code: 'ICMPv6 Code'
+};
+
+var TESTS = {
+  type: UInt.is(8),
+  code: UInt.is(8)
+};
+
 function ICMPv6_UI(icmpv6){
-  icmpv6 = icmpv6 === undefined ? new ICMPv6() : icmpv6;
+  icmpv6 = icmpv6 ? new ICMPv6(icmpv6) : new ICMPv6();
   this.name = NAME;
-  this.bytes = 4;
+  this.bytes = BYTES;
   this.attrs = [{
     name: 'Type',
     value: icmpv6.type().toString(),
@@ -78,21 +112,27 @@ function ICMPv6_UI(icmpv6){
 }
 
 ICMPv6_UI.prototype.toBase = function() {
-  var result = new ICMPv6();
-  result.name = this.name;
-  result.bytes = this.bytes;
-  result.fields = fgUI.stripLabelInputs(this.attrs);
-  return result;
+  return new ICMPv6(null, this.attrs[0].value, this.attrs[1].value);
 };
 
-ICMPv6_UI.prototype.setPayload = function() {
-  return true;
-};
+ICMPv6_UI.prototype.setPayload = function() {};
 
 return {
   name: NAME,
-  create: function() { return new ICMPv6(); },
-  createUI: function(icmpv6) { return new ICMPv6_UI(icmpv6); }
+  type: '_type',
+  code: '_code',
+  ICMPv6: ICMPv6,
+  mkICMPv6: mkICMPv6,
+  ICMPv6_UI: ICMPv6_UI,
+  create: function(icmpv6) {return new ICMPv6(icmpv6);},
+  createUI: function(icmpv6ui) { return new ICMPv6_UI(icmpv6ui); },
+  Payloads: _(Payloads).keys(),
+  mkType: mkType,
+  mkTypeMatch: mkTypeMatch,
+  mkCode: mkCode,
+  mkCodeMatch: mkCodeMatch,
+  TESTS: TESTS,
+  TIPS: TIPS
 };
 
 });
