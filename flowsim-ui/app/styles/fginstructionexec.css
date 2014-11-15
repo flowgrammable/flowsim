@@ -1,16 +1,18 @@
 /* Styles go here */
+
 .sim-ins-color-prim
 {
     background-color: #c0224e;
 }
-
 .sim-ins-color-sec
 {
     background-color: #42a0ba;
 }
-
 .sim-exec-blended_grid
 {
+    font-weight: bold;
+    font-style: italic;
+
     display: block;
     overflow: auto;
 
@@ -19,7 +21,6 @@
 
     text-align: center;
 }
-
 .sim-exec-leftColumn
 {
     float: left;
@@ -28,23 +29,23 @@
     width: 360px;
     height: 700px;
 }
-
 .sim-ins-actionGroup
 {
     float: left;
 
     width: 66.66%;
 }
-
-.instructions
+.sim-ins-instructions
 {
     float: left;
     clear: none;
 
-    width: 100%;
-    height: 50px;
-}
+    width: 60%;
 
+    color: white;
+    border-radius: 4px;
+    background-color: #42a0ba;
+}
 .sim-ins-actionlist
 {
     float: left;
@@ -53,7 +54,6 @@
     width: 50%;
     height: 190px;
 }
-
 .sim-ins-actionset
 {
     float: left;
@@ -62,7 +62,6 @@
     width: 50%;
     height: 190px;
 }
-
 .sim-exec-connection
 {
     float: right;
@@ -76,7 +75,6 @@
     border: 2px solid #c0224e;
     border-width: 0 0 2px 2px;
 }
-
 .sim-ins-instructionset
 {
     float: left;
@@ -85,7 +83,6 @@
     width: 33.33%;
     height: 90%;
 }
-
 .sim-exec-topBanner
 {
     float: left;
@@ -94,7 +91,6 @@
     width: 540px;
     height: 50px;
 }
-
 .sim-exec-righttable
 {
     float: right;
@@ -103,7 +99,6 @@
     width: 200px;
     height: 50px;
 }
-
 .sim-exec-tblright
 {
     width: 100%;
@@ -114,15 +109,17 @@
 .sim-exec-tblright td,
 .sim-exec-tblright th
 {
+    font-weight: bold;
+    font-style: italic;
+
+    width: 50%;
+
     text-align: center;
 
     color: white;
     border: 1px solid white;
     border-width: 1px;
 }
-
-
-
 .leftContent
 {
     float: left;
@@ -131,21 +128,21 @@
     width: 330px;
     height: 500px;
 }
-
 .sim-exec-rightContent
 {
+    font-weight: bold;
+    font-style: italic;
+
     float: left;
     clear: none;
 
     width: 540px;
     height: 150px;
 }
-
 .ractionset
 {
     background-color: rgba(0, 0, 0, .4);
 }
-
 .sim-exec-bottomBanner
 {
     float: left;
@@ -154,32 +151,31 @@
     width: 540px;
     height: 300px;
 }
-
 .sim-ins-animate-container
 {
+    font-weight: bold;
+    font-style: italic;
+
     position: relative;
 
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display:         flex;
-            -webkit-flex-direction: column-reverse;
-                -ms-flex-direction: column-reverse;
-                    flex-direction: column-reverse;
+            flex-direction: column-reverse;
 
     width: 90%;
     height: 160px;
     margin: 0;
 
     list-style: none;
-    /*-webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-*/
 
     color: white;
     border-radius: 4px;
     background: lightgrey;
 
+    -webkit-flex-direction: column-reverse;
+        -ms-flex-direction: column-reverse;
     -webkit-box-orient: vertical;
     -webkit-box-direction: reverse;
     -webkit-flex-direction: column-reverse;
@@ -187,6 +183,9 @@
 }
 .sim-exec-right-animate-container
 {
+    font-weight: bold;
+    font-style: italic;
+
     float: right;
 
     width: 120px;
@@ -202,29 +201,27 @@
     border-radius: 4px;
     background: lightgrey;
 }
-
 .sim-ins-animate-repeat
 {
     display: block;
-    box-sizing:border-box;
+
+    box-sizing: border-box;
     height: 25px;
 }
-
 .sim-exec-right-animate-repeat
 {
     display: inline-block;
-    box-sizing:border-box;
-    height: 25px;
-    width: 100%;
-}
 
+    box-sizing: border-box;
+    width: 100%;
+    height: 25px;
+}
 .sim-ins-animate-repeat.ng-move,
 .sim-ins-animate-repeat.ng-leave
 {
     -webkit-transition: all ease-out .5s;
             transition: all ease-out .5s;
 }
-
 .sim-ins-animate-repeat.ng-leave.ng-leave-active,
 .sim-ins-animate-repeat.ng-move
 {
@@ -232,7 +229,6 @@
 
     opacity: 0;
 }
-
 .sim-ins-animate-repeat.ng-leave,
 .sim-ins-animate-repeat.ng-move.ng-move-activee
 {
@@ -240,7 +236,6 @@
 
     opacity: 1;
 }
-
 .sim-exec-right-animate-repeat.ng-move,
 .sim-exec-right-animate-repeat.ng-enter,
 .sim-exec-right-animate-repeat.ng-leave
@@ -248,7 +243,6 @@
     -webkit-transition: all ease-out .5s;
             transition: all ease-out .5s;
 }
-
 .sim-exec-right-animate-repeat.ng-leave.ng-leave-active,
 .sim-exec-right-animate-repeat.ng-move,
 .sim-exec-right-animate-repeat.ng-enter
@@ -257,7 +251,6 @@
 
     opacity: 0;
 }
-
 .sim-exec-right-animate-repeat.ng-leave,
 .sim-exec-right-animate-repeat.ng-move.ng-move-active,
 .sim-exec-right-animate-repeat.ng-enter.ng-enter-active

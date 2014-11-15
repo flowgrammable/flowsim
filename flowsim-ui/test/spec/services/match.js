@@ -508,6 +508,8 @@ describe('Service: match', function () {
     expect(!!IPV6).toBe(true);
 
     var match = new Match.Set();
+    var match2 = new Match.Set();
+    var match3 = new Match.Set();
 
     var key = new Context.Key(null, 0);
 
@@ -543,6 +545,40 @@ describe('Service: match', function () {
 
     expect(match.match(key)).toBe(true);
 
+    match2.push(
+      new Match.Match(null,
+        'ipv6_flabel',
+        IPV6.mkFlabelMatch(
+          '22',
+          '0xffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match2.push(
+      new Match.Match(null,
+        'ipv6_src',
+        IPV6.mkAddressMatch(
+          '2001:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match2.push(
+      new Match.Match(null,
+        'ipv6_dst',
+        IPV6.mkAddressMatch(
+          '2002:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+    expect(match2.equal(match)).toBe(true);
+
+    match3.push(
+      new Match.Match(null,
+        'ipv6_src',
+        IPV6.mkAddressMatch(
+          '2001:0db8:0000:0000:0000:ff00:0042:8329',
+          'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')));
+
+    expect(match3.equal(match)).toBe(false);
+    expect(match3.equal(match2)).toBe(false);
+
   });
 
   it('Match Summarize Pass', function () {
@@ -576,7 +612,36 @@ describe('Service: match', function () {
         ETHERNET.mkMACMatch(
           '00:bb:cc:aa:dd:ff', 'ff:ff:ff:ff:ff:ff')));
 
-    expect(match.summarize().toString()).toBe('ipv6,mpls,eth');
+    match.push(
+      new Match.Match(null,
+        'ethernet_src',
+        ETHERNET.mkMACMatch(
+          '00:bb:cc:aa:dd:ff', 'ff:ff:ff:ff:ff:ff')));
+
+    match.push(
+      new Match.Match(null,
+        'tcp_src',
+        TCP.mkPortMatch(
+          1234, '0xffff')));
+
+    match.push(
+      new Match.Match(null,
+        'vlan_vid',
+        VLAN.mkVidMatch(
+          22, '0xffff')));
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_dscp',
+        IPV4.mkDscpMatch(
+          22, '0xff')));
+    match.push(
+      new Match.Match(null,
+        'arp_spa',
+        ARP.mkSpaMatch(
+          '192.168.1.1', '222.222.22.222')));
+
+    expect(match.summarize().toString()).toBe('ipv6,mpls,eth,tcp,vlan,ipv4,arp');
     expect(match.match(key)).toBe(false);
 
   });

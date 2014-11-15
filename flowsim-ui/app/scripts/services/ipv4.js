@@ -327,7 +327,8 @@ function IPv4_UI(ipv4){
 
 IPv4_UI.prototype.toBase = function() {
   return new IPv4(null, this.attrs[0].value, this.attrs[1].value,
-      this.attrs[2].value, this.attrs[3].value, this.attrs[4].value);
+      this.attrs[2].value, this.attrs[3].value, this.attrs[4].value,
+      this.attrs[5].value);
 };
 
 IPv4_UI.prototype.setPayload = function(name) {
