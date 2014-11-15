@@ -989,5 +989,176 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
   });
 
+  it('CopyTTL In MPLS->IPv4', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    pkt.push(IPV4.mkIPv4());
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL In MPLS->IPv6', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    pkt.push(IPV6.mkIPv6());
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL In MPLS->MPLS', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    pkt.push(MPLS.mkMPLS());
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT MPLS<-MPLS', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS());
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT MPLS<-IPv4', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS());
+    pkt.push(IPV4.mkIPv4('0x01', '0x03', '0x06', '0x77',
+      '192.1.1.1', '2.2.2.2'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT MPLS<-IPv6', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS());
+    pkt.push(IPV6.mkIPv6('0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT Throw', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(VLAN.mkVLAN());
+    pkt.push(IPV6.mkIPv6('0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    expect(function(){
+      set.step(null, {
+        packet: pkt
+      });
+    }).toThrow();
+
+    var set1 = new Action.Set();
+    var pkt1 = new Packet.Packet('test');
+    pkt1.push(VLAN.mkVLAN());
+    expect(pkt1.protocols.length).toBe(2);
+
+    set1.copy_ttl_out(new Action.CopyTTLOut());
+
+    expect(function(){
+      set1.step(null, {
+        packet: pkt1
+      });
+    }).toThrow();
+  });
+
+  it('CopyTTLIN Throw', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(VLAN.mkVLAN());
+    pkt.push(IPV6.mkIPv6('0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    expect(function(){
+      set.step(null, {
+        packet: pkt
+      });
+    }).toThrow();
+
+    var set1 = new Action.Set();
+    var pkt1 = new Packet.Packet('test');
+    pkt1.push(VLAN.mkVLAN());
+    expect(pkt1.protocols.length).toBe(2);
+
+    set1.copy_ttl_out(new Action.CopyTTLOut());
+
+    expect(function(){
+      set1.step(null, {
+        packet: pkt1
+      });
+    }).toThrow();
+  });
+
 
 });
