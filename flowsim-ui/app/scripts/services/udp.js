@@ -39,7 +39,11 @@ function mkPort(port){
 }
 
 function mkPortMatch(value, mask) {
-  return new UInt.Match(null, mkPort(value), mkPort(mask));
+  var tmp = new UInt.Match(null, mkPort(value), mkPort(mask));
+  tmp.summarize = function() {
+    return 'udp';
+  };
+  return tmp;
 }
 
 UDP.prototype.src = function(src) {
