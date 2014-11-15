@@ -45,6 +45,14 @@ function Profile(profile){
       return _.clone(i);
     });
   } else {
+    this.support = {
+      apply    : true,
+      clear    : true,
+      write    : true,
+      metadata : true,
+      meter    : true,
+      goto_    : true
+    };
     this.caps = {
       apply    : true,
       clear    : true,

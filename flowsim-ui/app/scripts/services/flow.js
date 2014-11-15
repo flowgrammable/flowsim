@@ -10,15 +10,17 @@
 angular.module('flowsimUiApp')
   .factory('Flow', function(Match, Instruction) {
 
-function Flow(flow, priority) {
+function Flow(flow, priority, capabilities) {
   if(_.isObject(flow)) {
     _.extend(this, flow);
     this.match = new Match.Set(flow.match);
     this.ins   = new Instruction.Set(flow.ins);
+    this.capabilitie = flow.capabilities;
   } else {
     this.priority = priority;
     this.match = new Match.Set();
     this.ins   = new Instruction.Set();
+    this.capabilities = capabilities;
   }
 }
 
