@@ -234,7 +234,7 @@ Match.prototype.toString = function(base) {
 };
 
 Match.prototype.equal = function(match) {
-  return equal(this.value, match.value) && equal(this.mask, match.value);
+  return equal(this.value, match.value) && equal(this.mask, match.mask);
 };
 
 Match.mkWildcard = function(uint) {

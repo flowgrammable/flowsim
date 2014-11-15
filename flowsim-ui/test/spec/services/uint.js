@@ -281,4 +281,18 @@ describe('Service: uint', function () {
     expect(uint8.toString(16)).toBe('0x03');
   });
 
+  it('UInt equal', function() {
+    var uint1 = new UInt.UInt(null, 101, 4);
+    var uint2 = new UInt.UInt(null, 101, 4);
+
+    expect(UInt.equal(uint1, uint2)).toBe(true);
+  });
+
+  it('UInt Match equal', function() {
+    var uint1 = new UInt.Match(null, new UInt.UInt(null, 111,4), new UInt.UInt(null, 222,4));
+    var uint2 = new UInt.Match(null, new UInt.UInt(null, 111,4), new UInt.UInt(null, 222,4));
+
+    expect(uint1.equal(uint2)).toBe(true);
+  });
+
 });

@@ -125,6 +125,10 @@ MAC.equal = function(lhs, rhs) {
   return UInt.equal(lhs._mac, rhs._mac);
 };
 
+MAC.prototype.equal = function(lhs, rhs) {
+  return UInt.equal(lhs._mac, rhs._mac);
+};
+
 MAC.prototype.toString = function() {
   return _(this._mac.value).map(function(oct) {
     return UInt.padZeros(oct.toString(16), 2);
