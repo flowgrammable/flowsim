@@ -56,6 +56,12 @@ describe('Service: action', function () {
     IPV6 = _IPV6_;
   }));
 
+  var ICMPV4;
+  beforeEach(inject(function (_ICMPV4_) {
+    ICMPV4 = _ICMPV4_;
+  }));
+
+
   it('Ethernet test', function () {
     expect(!!Action).toBe(true);
 
