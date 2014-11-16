@@ -44,6 +44,35 @@ angular.module('flowsimUiApp')
     }
   };
 
+  $scope.match = {
+    category: '',
+    categories: ['Internal', 'Ethernet', 'VLAN', 'MPLS'],
+    field: '',
+    fields: ['Output', 'Group', 'Queue', 'Src', 'Dst', 'Type'],
+    value: '',
+    mask: ''
+  };
+
+  $scope.write = {
+    category: '',
+    categories: ['Internal', 'Ethernet', 'VLAN', 'MPLS'],
+    field: '',
+    fields: ['Output', 'Group', 'Queue', 'Src', 'Dst', 'Type'],
+    action: '',
+    actions: ['set', 'dec', 'push', 'pop'],
+    value: '',
+  };
+
+  $scope.apply = {
+    category: '',
+    categories: ['Internal', 'Ethernet', 'VLAN', 'MPLS'],
+    field: '',
+    fields: ['Output', 'Group', 'Queue', 'Src', 'Dst', 'Type'],
+    action: '',
+    actions: ['set', 'dec', 'push', 'pop'],
+    value: '',
+  };
+
 $scope.ok = function () {
   $modalInstance.close(flow);
 };
