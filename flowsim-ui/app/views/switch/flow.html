@@ -59,54 +59,54 @@
     </table>
   </div>
 
-    <div class="panel panel-default">
-      <!-- Default panel contents -->
-      <div class="panel-heading">
-        <h4>Instruction Set</h4>
-        <button type="button" class="btn btn-xs btn-default"
-                ng-show="flow.capabilities.caps.meter"
-                ng-click="activeIns.meter = !activeIns.meter;
-                          activeIdx = activeIdx === 0 ? -1 : activeIdx"
-                ng-class="{'btn-primary': activeIns.meter}">
-          Meter
-        </button>
-        <button type="button" class="btn btn-xs btn-default"
-                ng-show="flow.capabilities.caps.apply"
-                ng-click="activeIns.apply = !activeIns.apply;
-                          activeIdx = activeIdx === 1 ? -1 : activeIdx"
-                ng-class="{'btn-primary': activeIns.apply}">
-          Apply
-        </button>
-        <button type="button" class="btn btn-xs btn-default"
-                ng-show="flow.capabilities.caps.clear"
-                ng-click="activeIns.clear = !activeIns.clear;
-                          activeIdx = activeIdx === 2 ? -1 : activeIdx"
-                ng-class="{'btn-primary': activeIns.clear}">
-          Clear
-        </button>
-        <button type="button" class="btn btn-xs btn-default"
-                ng-show="flow.capabilities.caps.write"
-                ng-click="activeIns.write = !activeIns.write;
-                          activeIdx = activeIdx === 3 ? -1 : activeIdx"
-                ng-class="{'btn-primary': activeIns.write}">
-          Write
-        </button>
-        <button type="button" class="btn btn-xs btn-default"
-                ng-show="flow.capabilities.caps.metadata"
-                ng-click="activeIns.metadata = !activeIns.metadata;
-                activeIdx = activeIdx === 4 ? -1 : activeIdx"
-                ng-class="{'btn-primary': activeIns.metadata}">
-          Metadata
-        </button>
-        <button type="button" class="btn btn-xs btn-default"
-                ng-show="flow.capabilities.caps.goto_"
-                ng-click="activeIns._goto = !activeIns._goto;
-                activeIdx = activeIdx === 5 ? -1 : activeIdx"
-                ng-class="{'btn-primary': activeIns._goto}">
-          Goto
-        </button>
-      </div>
-      <div class="row">
+  <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+      <h4>Instruction Set</h4>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-show="flow.capabilities.instruction.caps.meter"
+              ng-click="activeIns.meter = !activeIns.meter;
+                        activeIdx = activeIdx === 0 ? -1 : activeIdx"
+              ng-class="{'btn-primary': activeIns.meter}">
+        Meter
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-show="flow.capabilities.instruction.caps.apply"
+              ng-click="activeIns.apply = !activeIns.apply;
+                        activeIdx = activeIdx === 1 ? -1 : activeIdx"
+              ng-class="{'btn-primary': activeIns.apply}">
+        Apply
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-show="flow.capabilities.instruction.caps.clear"
+              ng-click="activeIns.clear = !activeIns.clear;
+                        activeIdx = activeIdx === 2 ? -1 : activeIdx"
+              ng-class="{'btn-primary': activeIns.clear}">
+        Clear
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-show="flow.capabilities.instruction.caps.write"
+              ng-click="activeIns.write = !activeIns.write;
+                        activeIdx = activeIdx === 3 ? -1 : activeIdx"
+              ng-class="{'btn-primary': activeIns.write}">
+        Write
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-show="flow.capabilities.instruction.caps.metadata"
+              ng-click="activeIns.metadata = !activeIns.metadata;
+              activeIdx = activeIdx === 4 ? -1 : activeIdx"
+              ng-class="{'btn-primary': activeIns.metadata}">
+        Metadata
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-show="flow.capabilities.instruction.caps.goto_"
+              ng-click="activeIns._goto = !activeIns._goto;
+              activeIdx = activeIdx === 5 ? -1 : activeIdx"
+              ng-class="{'btn-primary': activeIns._goto}">
+        Goto
+      </button>
+    </div>
+    <div class="row">
         <div class="col-md-2">
           <ul class="list-group">
             <li class="list-group-item"
