@@ -3,32 +3,33 @@
 angular.module('flowsimUiApp')
   .factory('ICMPV4', function(UInt, fgUI, fgConstraints){
 
-var NAME = 'ICMPV4';
+var NAME = 'ICMPv4';
 var BYTES = 8;
 
 var Payloads = {};
 
-function ICMPV4(icmp, type, code, icmp_bytes){
+function ICMPV4(icmp, type, code){
   if(_.isObject(icmp)) {
     this._type = new UInt.UInt(icmp._type);
     this._code = new UInt.UInt(icmp._code);
-    this._icmp_bytes = new UInt.UInt(icmp._icmp_bytes);
   } else {
     this._type = new UInt.UInt(null, type, 1);
     this._code = new UInt.UInt(null, code, 1);
-    this._icmp_bytes = new UInt.UInt(null, icmp_bytes, 2);
   }
   this.name = NAME;
-  if (this._icmp_bytes > BYTES) {
-    this.bytes = this._icmp_bytes.value;
-  }
-  else {
-    this.bytes = BYTES;
-  }
+  this.bytes = BYTES;
 }
 
-function mkICMPV4(type, code, icmp_bytes) {
-  return new ICMPV4(null, type, code, icmp_bytes);
+function mkICMPV4(type, code) {
+  return new ICMPV4(null, type, code);
+}
+
+function mkType(input) {
+  return new UInt.UInt(null, input, 1);
+}
+
+function mkCode(input) {
+  return new UInt.UInt(null, input, 1);
 }
 
 ICMPV4.prototype.clone = function() {
@@ -59,24 +60,26 @@ ICMPV4.prototype.code = function(code) {
   }
 };
 
-ICMPV4.prototype.icmp_bytes = function(icmp_bytes) {
-  if(icmp_bytes) {
-    if(icmp_bytes instanceof UInt.UInt) {
-      this._icmp_bytes = new UInt.UInt(icmp_bytes);
-    } else {
-      this._icmp_bytes = new UInt.UInt(null, icmp_bytes, 2);
-    }
-  } else {
-    return this._icmp_bytes;
-  }
-};
-
 ICMPV4.prototype.toString = function() {
   return 'type: '+this._type.toString()+'\n'+
-         'code: '+this._code.toString()+'\n'+
-         'icmp_bytes: '+this._icmp_bytes.toString();
+         'code: '+this._code.toString();
 };
 
+function mkTypeMatch(value, mask) {
+  var tmp = new UInt.Match(null, mkType(value), mkType(mask));
+  tmp.summarize = function() {
+    return 'icmpv4';
+  };
+  return tmp;
+}
+
+function mkCodeMatch(value, mask) {
+  var tmp = new UInt.Match(null, mkType(value), mkType(mask));
+  tmp.summarize = function() {
+    return 'icmpv4';
+  };
+  return tmp;
+}
 
 // UI Interface:
 var TIPS = {
@@ -89,18 +92,18 @@ var TESTS = {
   code:     UInt.is(8)
 };
 
-function ICMPV4_UI(ICMPV4){
-  ICMPV4 = ICMPV4 === undefined ? new ICMPV4() : ICMPV4;
+function ICMPV4_UI(icmpv4){
+  icmpv4 = icmpv4 ? new ICMPV4(icmpv4) : new ICMPV4();
   this.name = NAME;
   this.bytes = 4;
   this.attrs = [{
     name: 'Type',
-    value: ICMPV4.type().toString(),
+    value: icmpv4.type().toString(),
     tip: 'ICMP message type',
     test: fgConstraints.isUInt(0, 0xff)
   }, {
     name: 'Code',
-    value: ICMPV4.code().toString(),
+    value: icmpv4.code().toString(),
     tip: 'ICMP message code',
     test: fgConstraints.isUInt(0, 0xff)
   }];
@@ -117,9 +120,15 @@ ICMPV4_UI.prototype.setPayload = function() {
 
 return {
   name: NAME,
+  type: '_type',
+  code: '_code',
   Payloads: _.keys(Payloads),
   ICMPV4: ICMPV4,
   mkICMPV4: mkICMPV4,
+  mkType: mkType,
+  mkCode: mkCode,
+  mkTypeMatch: mkTypeMatch,
+  mkCodeMatch: mkCodeMatch,
   create: function() { return new ICMPV4(); },
   createUI: function(ICMPV4) { return new ICMPV4_UI(ICMPV4); },
   TESTS: TESTS,

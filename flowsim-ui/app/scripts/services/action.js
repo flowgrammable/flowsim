@@ -96,6 +96,51 @@ Pop.prototype.step = function(dp, ctx) {
   }
 };
 
+function CopyTTLIn(){
+}
+
+CopyTTLIn.prototype.clone = function(){
+  return new CopyTTLIn();
+};
+
+CopyTTLIn.prototype.step = function(dp, ctx){
+  for(var i = 0; i < ctx.packet.protocols.length; i++){
+    if(ctx.packet.protocols[i].name === MPLS.name &&
+        (ctx.packet.protocols[i+1].name === IPV4.name ||
+         ctx.packet.protocols[i+1].name === IPV6.name ||
+         ctx.packet.protocols[i+1].name === MPLS.name)){
+         ctx.packet.protocols[i+1].ttl(ctx.packet.protocols[i].ttl());
+         return;
+    }
+  }
+  throw 'CopyTTLIn(%s, %s) Miss' + ctx.packet.protocols[i].name +
+        ctx.packet.protocols[i+1].name;
+};
+
+function CopyTTLOut(){
+}
+
+CopyTTLOut.prototype.clone = function(){
+  return new CopyTTLOut();
+};
+
+CopyTTLOut.prototype.step = function(dp, ctx){
+  for(var i = 0; i < ctx.packet.protocols.length; i++){
+    if(ctx.packet.protocols[i].name === MPLS.name &&
+         ctx.packet.protocols[i-1].name === MPLS.name){
+         ctx.packet.protocols[i-1].ttl(ctx.packet.protocols[i].ttl());
+         return;
+    } else if((ctx.packet.protocols[i].name === IPV4.name ||
+              ctx.packet.protocols[i].name === IPV6.name) &&
+              (ctx.packet.protocols[i-1].name === MPLS.name) ){
+                ctx.packet.protocols[i-1].ttl(ctx.packet.protocols[i].ttl());
+                return;
+              }
+  }
+  throw 'CopyTTLIn(%s, %s) Miss' + ctx.packet.protocols[i].name +
+        ctx.packet.protocols[i+1].name;
+};
+
 function SetTTL(st, proto, value){
   if(_.isObject(st)) {
     _.extend(this, st);
@@ -266,6 +311,12 @@ Set.prototype.copy_ttl_in = function(action) {
   }
 };
 
+Set.prototype.copy_ttl_out = function(action){
+  if(action){
+    this.actions.copy_ttl_out = action;
+  }
+};
+
 Set.prototype.pop_mpls = function(action) {
   if(action) {
     if(!_(this.actions).has('pop_mpls')) {
@@ -414,16 +465,6 @@ Set.prototype.empty = function() {
 // Execute the action set in a precise ordering
 Set.prototype.step = function(dp, ctx) {
 
-  if(_(this.actions).has('setTTL')){
-    if(_(this.actions.setField).keys().length > 0) {
-      if(this.stepSetField(dp, ctx, IPV4.name)) {
-        return true;
-      } else {
-        throw 'Bad setTTL Keys: ' + this.actions.setTTL.keys();
-      }
-    }
-  }
-
   if(this.actions.copy_ttl_in) {
     this.actions.copy_ttl_in.step(dp, ctx);
     delete this.actions.copy_ttl_in;
@@ -454,6 +495,16 @@ Set.prototype.step = function(dp, ctx) {
     this.actions.dec_ttl.step(dp, ctx);
     delete this.actions.dec_ttl;
     return true;
+  }
+
+  if(_(this.actions).has('setTTL')){
+    if(_(this.actions.setField).keys().length > 0) {
+      if(this.stepSetField(dp, ctx, IPV4.name)) {
+        return true;
+      } else {
+        throw 'Bad setTTL Keys: ' + this.actions.setTTL.keys();
+      }
+    }
   }
 
   if(_(this.actions).has('setField')) {
@@ -565,7 +616,9 @@ return {
   Push: Push,
   Pop: Pop,
   SetTTL: SetTTL,
-  DecTTL: DecTTL
+  DecTTL: DecTTL,
+  CopyTTLIn: CopyTTLIn,
+  CopyTTLOut: CopyTTLOut
 };
 
 });

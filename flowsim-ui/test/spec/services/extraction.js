@@ -51,9 +51,19 @@ describe('Service: extraction', function () {
     TCP = _TCP_;
   }));
 
+  var SCTP;
+  beforeEach(inject(function (_SCTP_) {
+    SCTP = _SCTP_;
+  }));
+
   var ICMPV4;
   beforeEach(inject(function (_ICMPV4_) {
     ICMPV4 = _ICMPV4_;
+  }));
+
+  var ICMPV6;
+  beforeEach(inject(function (_ICMPV6_) {
+    ICMPV6 = _ICMPV6_;
   }));
 
   var Context;
@@ -179,6 +189,26 @@ describe('Service: extraction', function () {
     expect(key.tcp_dst).toBe(tcp1.dst());
   });
 
+  it('extraction SCTP Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!SCTP).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var sctp1 = SCTP.mkSCTP(
+      '65535',
+      '0');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.sctp_src).toBe(undefined);
+    expect(key.sctp_dst).toBe(undefined);
+
+    extraction.extract_sctp(sctp1, key);
+
+    expect(key.sctp_src).toBe(sctp1.src());
+    expect(key.sctp_dst).toBe(sctp1.dst());
+  });
+
   it('extraction IPV4 Pass', function () {
     expect(!!extraction).toBe(true);
     expect(!!IPV4).toBe(true);
@@ -273,6 +303,24 @@ describe('Service: extraction', function () {
 //     extraction.extract(icmpTimeout, key);
 //     expect(key.icmpv4_type).toBe(icmpTimeout.type());
 //     expect(key.icmpv4_code).toBe(icmpTimeout.code());
+  });
+
+  it('extraction ICMPV6 Pass', function () {
+    expect(!!extraction).toBe(true);
+    expect(!!ICMPV6).toBe(true);
+    expect(!!Context).toBe(true);
+
+    var icmp = ICMPV6.mkICMPv6('255', '0');
+
+    var key = new Context.Key(null, 0);
+
+    expect(key.icmpv6_type).toBe(undefined);
+    expect(key.icmpv6_code).toBe(undefined);
+
+    extraction.extract_icmpv6(icmp, key);
+
+    expect(key.icmpv6_type).toBe(icmp.type());
+    expect(key.icmpv6_code).toBe(icmp.code());
   });
 
 });

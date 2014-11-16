@@ -51,6 +51,11 @@ describe('Service: action', function () {
     TCP = _TCP_;
   }));
 
+  var SCTP;
+  beforeEach(inject(function (_SCTP_) {
+    SCTP = _SCTP_;
+  }));
+
   var IPV6;
   beforeEach(inject(function (_IPV6_) {
     IPV6 = _IPV6_;
@@ -59,6 +64,11 @@ describe('Service: action', function () {
   var ICMPV4;
   beforeEach(inject(function (_ICMPV4_) {
     ICMPV4 = _ICMPV4_;
+  }));
+
+  var ICMPV6;
+  beforeEach(inject(function (_ICMPV6_) {
+    ICMPV6 = _ICMPV6_;
   }));
 
 
@@ -884,7 +894,7 @@ describe('Service: action', function () {
   });
 
 
-  it('TCP test', function () {
+  it('TCP setField', function () {
     expect(!!Action).toBe(true);
     expect(!!TCP).toBe(true);
 
@@ -911,6 +921,42 @@ describe('Service: action', function () {
       null,
       TCP.name, TCP.dst,
       TCP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('65535');
+  });
+
+  it('SCTP testField', function () {
+    expect(!!Action).toBe(true);
+    expect(!!SCTP).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(SCTP.mkSCTP());
+
+    expect(pkt.protocols[1].src().toString()).toBe('0');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      SCTP.name, SCTP.src,
+      SCTP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      SCTP.name, SCTP.dst,
+      SCTP.mkPort('65535')));
 
     set.step(null, {
       packet: pkt
@@ -989,5 +1035,247 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
   });
 
+  it('CopyTTL In MPLS->IPv4', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    pkt.push(IPV4.mkIPv4());
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL In MPLS->IPv6', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    pkt.push(IPV6.mkIPv6());
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL In MPLS->MPLS', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    pkt.push(MPLS.mkMPLS());
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[2].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT MPLS<-MPLS', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS());
+    pkt.push(MPLS.mkMPLS('0x123456', '0x22', '0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT MPLS<-IPv4', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS());
+    pkt.push(IPV4.mkIPv4('0x01', '0x03', '0x06', '0x77',
+      '192.1.1.1', '2.2.2.2'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT MPLS<-IPv6', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(MPLS.mkMPLS());
+    pkt.push(IPV6.mkIPv6('0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].ttl().toString(16)).toBe('0x77');
+  });
+
+  it('CopyTTL OUT Throw', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(VLAN.mkVLAN());
+    pkt.push(IPV6.mkIPv6('0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_out(new Action.CopyTTLOut());
+
+    expect(function(){
+      set.step(null, {
+        packet: pkt
+      });
+    }).toThrow();
+
+    var set1 = new Action.Set();
+    var pkt1 = new Packet.Packet('test');
+    pkt1.push(VLAN.mkVLAN());
+    expect(pkt1.protocols.length).toBe(2);
+
+    set1.copy_ttl_out(new Action.CopyTTLOut());
+
+    expect(function(){
+      set1.step(null, {
+        packet: pkt1
+      });
+    }).toThrow();
+  });
+
+  it('CopyTTLIN Throw', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(VLAN.mkVLAN());
+    pkt.push(IPV6.mkIPv6('0x01', '0x77'));
+    expect(pkt.protocols.length).toBe(3);
+
+    set.copy_ttl_in(new Action.CopyTTLIn());
+
+    expect(function(){
+      set.step(null, {
+        packet: pkt
+      });
+    }).toThrow();
+
+    var set1 = new Action.Set();
+    var pkt1 = new Packet.Packet('test');
+    pkt1.push(VLAN.mkVLAN());
+    expect(pkt1.protocols.length).toBe(2);
+
+    set1.copy_ttl_out(new Action.CopyTTLOut());
+
+    expect(function(){
+      set1.step(null, {
+        packet: pkt1
+      });
+    }).toThrow();
+  });
+
+  it('ICMPV4 test', function () {
+    expect(!!Action).toBe(true);
+    expect(!!ICMPV4).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(ICMPV4.mkICMPV4());
+
+    expect(pkt.protocols[1].type().toString()).toBe('0');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV4.name, ICMPV4.type,
+      ICMPV4.mkType('255')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV4.name, ICMPV4.code,
+      ICMPV4.mkCode('127')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('127');
+  });
+
+  it('ICMPV6 test', function () {
+    expect(!!Action).toBe(true);
+    expect(!!ICMPV6).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(ICMPV6.mkICMPv6());
+
+    expect(pkt.protocols[1].type().toString()).toBe('0');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV6.name, ICMPV6.type,
+      ICMPV6.mkType('255')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV6.name, ICMPV6.code,
+      ICMPV6.mkCode('127')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('127');
+  });
 
 });

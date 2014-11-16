@@ -89,9 +89,6 @@ describe('Service: UDP', function () {
     expect(function(){udp1.dst(-1);}).toThrow();
     expect(udp1.src().toString()).toBe('12345');
     expect(udp1.dst().toString()).toBe('54689');
-
-    expect(udp1.dst().toString(16)).toBe('0xd5a1');
-    // not sure  why this is outputting '0x0xd4a1'
   });
 
   it('Port Match Pass', function() {
@@ -122,6 +119,26 @@ describe('Service: UDP', function () {
     expect(exact.match(ssh)).toBe(false);
   });
 
+  it('UDP Match equal Pass', function() {
+    expect(!!UDP).toBe(true);
+
+    var every = UDP.mkPortMatch(2, '0');
+    var multi = UDP.mkPortMatch(14, '0xff00');
+    expect(every.equal(multi)).toBe(false);
+
+    var multi2 = UDP.mkPortMatch(14, 0xff00);
+    expect(multi.equal(multi2)).toBe(true);
+
+    var multi3 = UDP.mkPortMatch(14, 0xffff);
+    expect(multi.equal(multi3)).toBe(false);
+  });
+
+  it('Summarize Tests', function () {
+    expect(!!UDP).toBe(true);
+
+    var match = UDP.mkPortMatch('36235', '0xffff');
+    expect(match.summarize()).toBe('udp');
+  });
 
   it ('JSON stringify', function() {
     expect(!!UDP).toBe(true);

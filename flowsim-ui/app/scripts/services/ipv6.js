@@ -15,8 +15,6 @@ var Payloads = {
 };
 
 
-
-
 function IPv6(ipv6, flabel, ttl, src, dst) {
   if(_.isObject(ipv6)) {
     this._flabel = new UInt.UInt(ipv6._flabel);
@@ -218,6 +216,14 @@ Address.prototype.toString = function(){
   }).join(':');
 };
 
+Address.equal = function(lsh, rhs){
+  return UInt.equal(lsh._ip, rhs._ip);
+};
+
+Address.prototype.equal = function(addr){
+  return this._ip.equal(addr._ip);
+};
+
 function mkAddress(address){
   if(_.isObject(address)){
     return new Address(address);
@@ -248,6 +254,10 @@ Address.Match.prototype.clone = function() {
 
 Address.Match.prototype.match = function(addr) {
   return this._match.match(addr._ip);
+};
+
+Address.Match.prototype.equal = function(match){
+  return this._match.equal(match._match);
 };
 
 Address.Match.prototype.summarize = function() {
@@ -301,11 +311,9 @@ IPv6_UI.prototype.toBase = function() {
 };
 
 IPv6_UI.prototype.setPayload = function(name) {
-  this.attrs[2].value = Payloads[name] || 0;
 };
 
 IPv6_UI.prototype.clearPayload = function() {
-  this.attrs[2].value = 0;
 };
 
 return {
