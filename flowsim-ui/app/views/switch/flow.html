@@ -65,8 +65,7 @@
       <h4>Instruction Set</h4>
       <button type="button" class="btn btn-xs btn-default"
               ng-show="flow.capabilities.instruction.caps.meter"
-              ng-click="activeIns.meter = !activeIns.meter;
-                        activeIdx = activeIdx === 0 ? -1 : activeIdx"
+              ng-click="toggleMeter()"
               ng-class="{'btn-primary': activeIns.meter}">
         Meter
       </button>
@@ -79,8 +78,7 @@
       </button>
       <button type="button" class="btn btn-xs btn-default"
               ng-show="flow.capabilities.instruction.caps.clear"
-              ng-click="activeIns.clear = !activeIns.clear;
-                        activeIdx = activeIdx === 2 ? -1 : activeIdx"
+              ng-click="toggleClear()"
               ng-class="{'btn-primary': activeIns.clear}">
         Clear
       </button>
@@ -93,15 +91,13 @@
       </button>
       <button type="button" class="btn btn-xs btn-default"
               ng-show="flow.capabilities.instruction.caps.metadata"
-              ng-click="activeIns.metadata = !activeIns.metadata;
-              activeIdx = activeIdx === 4 ? -1 : activeIdx"
+              ng-click="toggleMetadata()"
               ng-class="{'btn-primary': activeIns.metadata}">
         Metadata
       </button>
       <button type="button" class="btn btn-xs btn-default"
               ng-show="flow.capabilities.instruction.caps.goto_"
-              ng-click="activeIns._goto = !activeIns._goto;
-              activeIdx = activeIdx === 5 ? -1 : activeIdx"
+              ng-click="toggleGoto()"
               ng-class="{'btn-primary': activeIns._goto}">
         Goto
       </button>
@@ -172,14 +168,15 @@
                   <th></th>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="action in applyList">
+                  <tr ng-repeat="action in applyList.actions">
                     <td>{{action.category}}</td>
-                    <td>{{action.field}}</td>
+                    <td>{{action.name}}</td>
                     <td>{{action.action}}</td>
-                    <td>{{action.value.toString()}}</td>
+                    <td>{{action.toValue()}}</td>
                     <td>
                       <span class="glyphicon glyphicon-minus-sign pull-right"
-                            ng-show="$index === $last">
+                            ng-show="$last"
+                            ng-click="popApply()">
                       </span>
                     </td>
                   </tr>

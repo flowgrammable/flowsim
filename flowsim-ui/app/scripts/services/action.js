@@ -20,11 +20,16 @@ function ActionField_UI(afu, category, name, key, Type, tip, test, action) {
     this.action   = action ? action : '-n/a-';
     this.enabled  = true;     // Availability of action ie. profile - OFP 1.X
     this.key      = key;
+    var that = this;
     this.mkType   = function() {
       // this is a fancy way of building a runtime constructor
       var args = [Type, null, null].concat(_(arguments).values());
       var T = _.bind.apply(null, args);
-      return new T();
+      var t = new T();
+      t.category = that.category;
+      t.name     = that.name;
+      t.action   = that.action;
+      return t;
     };
     this.tip = tip;
     this.test = test;
@@ -49,6 +54,10 @@ Output.prototype.clone = function() {
 
 Output.prototype.toString = function() {
   return 'output('+this.port_id+')';
+};
+
+Output.prototype.toValue = function() {
+  return this.port_id;
 };
 
 Output.prototype.step = function(dp, ctx) {
@@ -719,6 +728,10 @@ function List(list) {
   }
 }
 
+List.prototype.actions = function() {
+  return this.actions;
+};
+
 List.prototype.clone = function() {
   return new List(this);
 };
@@ -730,6 +743,10 @@ List.prototype.toView = function() {
 
 List.prototype.push = function(action) {
   this.actions.push(action);
+};
+
+List.prototype.pop = function() {
+  this.actions.pop();
 };
 
 List.prototype.empty = function() {

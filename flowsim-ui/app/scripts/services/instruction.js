@@ -148,6 +148,7 @@ Profile.TESTS = {
 
 Profile.Miss = Profile;
 
+/*
 function Apply(apply, actions) {
   if(_.isObject(apply)) {
     this.actions = apply.actions.clone();
@@ -176,6 +177,7 @@ Apply.prototype.execute = function(dp, ctx) {
     this.actions.step(dp, ctx);
   }
 };
+*/
 
 function Clear() {}
 
@@ -186,7 +188,7 @@ Clear.prototype.step = function(dp, ctx) {
 };
 
 Clear.prototype.execute = Clear.prototype.step;
-
+/*
 function Write(write, actions) {
   if(_.isObject(write)) {
     this.actions = write.actions.clone();
@@ -213,6 +215,7 @@ Write.prototype.execute = function(dp, ctx) {
 Write.prototype.empty = function(){
   return this.actions.empty();
 };
+*/
 
 function Metadata(meta, data, mask) {
   if(_.isObject(meta)) {
@@ -273,9 +276,9 @@ Goto.prototype.execute = Goto.prototype.step;
 function Set(set) {
   if(set) {
     this._meter    = set._meter ? new Meter(set._meter) : null;
-    this._apply    = new Apply(set._apply);
+    this._apply    = new Action.List(set._apply);
     this._clear    = set._clear ? new Clear(set._clear) : null;
-    this._write    = new Write(set._write);
+    this._write    = new Action.Set(set._write);
     this._metadata = set._metadata ? new Metadata(set._metadata) : null;
     this._goto     = set._goto ? new Goto(set._goto) : null;
   } else {
@@ -324,33 +327,83 @@ Set.prototype.toView = function() {
   }];
 };
 
+Set.prototype.clear = function(clear) {
+  if(clear) {
+    this._clear = new Clear();
+  } else if(clear === null) {
+    if(this._clear) {
+      delete this._clear;
+    }
+  } else {
+    return this._clear;
+  }
+};
+
 Set.prototype.apply = function(apply) {
   if(apply) {
-    this._apply = new Apply(null, apply);
+    this._apply = new Action.List(null, apply);
+  } else {
+    return this._apply;
   }
+};
+
+Set.prototype.pushApply = function(action) {
+  this._apply.push(action); 
+};
+
+Set.prototype.popApply = function() {
+  this._apply.pop();
 };
 
 Set.prototype.write = function(write) {
   if(write) {
-    this._write = new Write(null, write);
+    this._write = new Action.Set(null, write);
+  } else {
+    return this._write;
   }
 };
 
+Set.prototype.pushWrite = function(action) {
+  //FIXME
+};
+
+Set.prototype.popWrite = function() {
+  //FIXME
+};
+
 Set.prototype.metadata = function(metadata) {
-  if(metadata) {
+  if(_.isObject(metadata)) {
     this._metadata = new Metadata(null, metadata);
+  } else if(metadata === null) {
+    if(this._metadata) {
+      delete this._metadata;
+    }
+  } else {
+    return this._metadata;
   }
 };
 
 Set.prototype.meter = function(meter) {
-  if(meter) {
+  if(_.isObject(meter)) {
     this._meter = new Meter(null, meter);
+  } else if(meter === null) {
+    if(this._meter) {
+      delete this._meter;
+    }
+  } else {
+    return this._meter;
   }
 };
 
 Set.prototype.jump = function(jump) {
-  if(jump) {
+  if(_.isObject(jump)) {
     this._goto = new Goto(null, jump);
+  } else if(jump === null) {
+    if(this._goto) {
+      delete this._goto;
+    }
+  } else {
+    return this._goto;
   }
 };
 
@@ -416,8 +469,8 @@ Set.prototype.execute = function(dp, ctx) {
 };
 
 return {
-  Apply: Apply,
-  Write: Write,
+  Apply: Action.List,
+  Write: Action.Set,
   Metadata: Metadata,
   Meter: Meter,
   Goto: Goto,

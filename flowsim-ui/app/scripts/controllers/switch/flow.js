@@ -19,12 +19,12 @@ angular.module('flowsimUiApp')
   ];
 
   $scope.activeIns = {
-    meter: false,
-    apply: false,
-    clear: false,
-    write: false,
-    metadata: false,
-    _goto: false
+    meter: flow.ins.meter() ? true : false,
+    apply: flow.ins.apply().empty() ? false : true,
+    clear: flow.ins.clear() ? true : false,
+    write: flow.ins.write().empty() ? false : true,
+    metadata: flow.ins.metadata() ? true : false,
+    _goto: flow.ins.jump() ? true : false
   };
   $scope.activeIdx = -1;
 
@@ -32,24 +32,46 @@ angular.module('flowsimUiApp')
     $scope.activeIdx = idx;
   };
 
-  $scope.createMatch = function(name) {
-    $scope.matches.push(Match.mkByName(name));
-  //  $scope.options = Match.getOptions($scope.matches);
+  $scope.pushMatch = function(name) {
   };
 
   $scope.popMatch = function() {
-    if($scope.matches.length > 0) {
-      $scope.matches.splice(-1, 1);
-   //   $scope.options = Match.getOptions($scope.matches);
-    }
   };
-  
-  // Grab the subset that is available in our profile
-  /*$scope.matches = _(flow.capabilities.match.matches).filter(
-    function(match) {
-    return match.enabled;
-  });
-  */
+
+  $scope.toggleMeter = function() {
+    if($scope.flow.ins.meter()) {
+      $scope.flow.ins.meter(null);
+    }
+
+    $scope.activeIns.meter = !$scope.activeIns.meter;
+    $scope.activeIdx = activeIdx === 0 ? -1 : $scope.activeIdx
+  };
+
+  $scope.toggleClear = function() {
+    if($scope.flow.ins.clear()) {
+      $scope.flow.ins.clear(null);
+    } else {
+      $scope.flow.ins.clear(true);
+    }
+    $scope.activeIns.clear = !$scope.activeIns.clear;
+    $scope.activeIdx = activeIdx === 2 ? -1 : $scope.activeIdx
+  }
+
+  $scope.toggleMetadata = function() {
+    if($scope.flow.ins.metadata()) {
+      $scope.flow.ins.metadata(null);
+    }
+    $scope.activeIns.metadata = !$scope.activeIns.metadata;
+    $scope.activeIdx = activeIdx === 4 ? -1 : $scope.activeIdx
+  }
+
+  $scope.toggleGoto = function() {
+    if($scope.flow.ins.jump()) {
+      $scope.flow.ins.jump(null);
+    }
+    $scope.activeIns._goto = !$scope.activeIns._goto;
+    $scope.activeIdx = activeIdx === 5 ? -1 : $scope.activeIdx
+  }
 
   // Grab the subset that is available in our profile
   $scope.applyActions = _(_(flow.capabilities.instruction.apply).map(
@@ -134,8 +156,13 @@ angular.module('flowsimUiApp')
     if($scope.applyAction && $scope.applyAction.test($scope.apply.value)) {
       console.log('got an action to deal with');
       action = $scope.applyAction.mkType($scope.apply.value);
-      console.log(action.toString());
+      $scope.flow.ins.pushApply(action);
+      console.log(action);
     }
+  };
+
+  $scope.popApply = function() {
+    $scope.applyList.pop();
   };
 
   $scope.match = {
@@ -156,6 +183,8 @@ angular.module('flowsimUiApp')
     actions: ['set', 'dec', 'push', 'pop'],
     value: '',
   };
+
+  $scope.applyList = flow.ins.apply();
 
   $scope.apply = {
     category: '',
