@@ -30,7 +30,7 @@ angular.module('flowsimUiApp')
 
   $scope.setIns = function(idx) {
     $scope.activeIdx = idx;
-  }
+  };
 
   $scope.createMatch = function(name) {
     $scope.matches.push(Match.mkByName(name));
@@ -43,6 +43,45 @@ angular.module('flowsimUiApp')
    //   $scope.options = Match.getOptions($scope.matches);
     }
   };
+  
+  // Grab the subset that is available in our profile
+  /*$scope.matches = _(flow.capabilities.match.matches).filter(
+    function(match) {
+    return match.enabled;
+  });
+  */
+
+  // Grab the subset that is available in our profile
+  $scope.applyActions = _(_(flow.capabilities.instruction.apply).map(
+    function(category) {
+      return {
+        protocol: category.protocol,
+        actions: _(category.actions).filter(function(action) {
+          return action.enabled;
+        })
+      };
+  })).filter(function(category) {
+    return category.actions.length > 0;
+  });
+  $scope.applyActionNames = _($scope.applyActions).map(function(category) {
+    return category.protocol;
+  });
+
+  // Grab the subset that is available in our profile
+  $scope.writeActions = _(_(flow.capabilities.instruction.write).map(
+    function(category) {
+      return {
+        protocol: category.protocol,
+        actions: _(category.actions).filter(function(action) {
+          return action.enabled;
+        })
+      };
+  })).filter(function(category) {
+    return category.actions.length > 0;
+  });
+  $scope.writeActionNames = _($scope.writeActions).map(function(category) {
+    return category.protocol;
+  });
 
   $scope.match = {
     category: '',
@@ -55,7 +94,7 @@ angular.module('flowsimUiApp')
 
   $scope.write = {
     category: '',
-    categories: ['Internal', 'Ethernet', 'VLAN', 'MPLS'],
+    categories: $scope.writeActionNames,
     field: '',
     fields: ['Output', 'Group', 'Queue', 'Src', 'Dst', 'Type'],
     action: '',
@@ -65,31 +104,13 @@ angular.module('flowsimUiApp')
 
   $scope.apply = {
     category: '',
-    categories: ['Internal', 'Ethernet', 'VLAN', 'MPLS'],
+    categories: $scope.applyActionNames,
     field: '',
     fields: ['Output', 'Group', 'Queue', 'Src', 'Dst', 'Type'],
     action: '',
     actions: ['set', 'dec', 'push', 'pop'],
     value: '',
   };
-
-  // Grab the subset that is available in our profile
-  $scope.matchs = _(flow.capabilities.match.matches).filter(
-    function(match) {
-    return match.enabled;
-  });
-
-  // Grab the subset that is available in our profile
-  $scope.applyActions = _(flow.capabilities.instruction.apply).filter(
-    function(action) {
-      return action.enabled;
-  });
-
-  // Grab the subset that is available in our profile
-  $scope.writeActions = _(flow.capabilities.instruction.write).filter(
-    function(action) {
-      return action.enabled;
-  });
 
 $scope.ok = function () {
   $modalInstance.close(flow);
