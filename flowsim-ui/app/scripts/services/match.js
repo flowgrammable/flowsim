@@ -128,6 +128,7 @@ Match.Profile = function(match){
   } else {
     this.fields = [
     createMatch('Ingress', 'Port', 'in_port', true, false, 0),
+    createMatch('Physical', 'Port', 'phy_port', true, false, 0),
     createMatch('Ethernet', 'Src', 'eth_src', true, true, '0xffffffffffff'),
     createMatch('Ethernet', 'Dst', 'eth_dst', true, true, '0xffffffffffff'),
     createMatch('Ethernet', 'Type/Len', 'eth_typelen', true, false, '0xffff'),
@@ -171,6 +172,7 @@ Match.Profile = function(match){
 
 Match.Profile.TIPS ={
   in_port: 'Match on ingress port',
+  in_phy_port: 'Match on physical port',
   eth_src: 'Match on Ethernet source address',
   eth_dst: 'Match on Ethernet destination address',
   eth_typelen: 'Match on Ethernet type/length field',
@@ -205,6 +207,7 @@ Match.Profile.TIPS ={
 
 Match.Profile.TESTS = {
   in_port: fgConstraints.isUInt(0, 0xffffffff),
+  in_phy_port: fgConstraints.isUInt(0, 0xffffffff),
   eth_src: fgConstraints.isUInt(0, 0xffffffffffff),
   eth_dst: fgConstraints.isUInt(0, 0xffffffffffff),
   eth_typelen: fgConstraints.isUInt(0, 0xffff),

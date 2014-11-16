@@ -81,6 +81,11 @@ describe('Service: match', function () {
     ND = _ND_;
   }));
 
+  var INTERNALS;
+  beforeEach(inject(function (_INTERNALS_) {
+    INTERNALS = _INTERNALS_;
+  }));
+
   it('Default Match', function() {
     var key = new Context.Key(null, 0);
     var match = new Match.Set();
@@ -767,8 +772,13 @@ describe('Service: match', function () {
         SCTP.mkPortMatch(
           1234, '0xffff')));
 
+    match.push(
+      new Match.Match(null,
+        'internals_phyport',
+        INTERNALS.mkPhyportMatch('0x11223344')));
+
     expect(match.summarize().toString()).toBe(
-      'ipv6,mpls,eth,tcp,vlan,ipv4,arp,icmpv6,icmpv4,udp,sctp');
+      'ipv6,mpls,eth,tcp,vlan,ipv4,arp,icmpv6,icmpv4,udp,sctp,internals');
     expect(match.match(key)).toBe(false);
 
   });
@@ -990,7 +1000,123 @@ describe('Service: match', function () {
         ND.mkTargetMatch('b::b', 'c::c')));
 
     expect(match.equal(match2)).toBe(false);
+  });
 
+  it('Internals Match Per-Protocol Any Order Pass', function(){
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'internals_port',
+        INTERNALS.mkPortMatch('0x12345678')));
+
+    expect(match.summarize()[0]).toBe('internals');
+
+    match1.push(
+      new Match.Match(null,
+        'internals_phyPort',
+        INTERNALS.mkPhyportMatch('0x12345678')));
+
+    expect(match1.summarize()[0]).toBe('internals');
+
+    expect(match1.equal(match)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'internals_port',
+        INTERNALS.mkPortMatch('0x12345678')));
+
+    expect(match1.equal(match)).toBe(false);
+
+    match.push(
+      new Match.Match(null,
+        'internals_phyPort',
+        INTERNALS.mkPhyportMatch('0x12345678')));
+
+    expect(match1.equal(match)).toBe(true);
+
+  });
+
+  it('Internals Match', function(){
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'internals_port',
+        INTERNALS.mkPortMatch('0x12345678')));
+
+    expect(match.summarize()[0]).toBe('internals');
+
+    match.push(
+      new Match.Match(null,
+        'internals_phyPort',
+        INTERNALS.mkPhyportMatch('0x12345678')));
+
+    expect(match.summarize()[0]).toBe('internals');
+
+    expect(match1.equal(match)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'internals_port',
+        INTERNALS.mkPortMatch('0x12345678')));
+
+    match1.push(
+      new Match.Match(null,
+        'internals_phyPort',
+        INTERNALS.mkPhyportMatch('0x12345678')));
+
+    expect(match1.equal(match)).toBe(true);
+
+  });
+
+  it('Internals Match Category Order Fail', function(){
+    var match = new Match.Set();
+
+    match.push(
+      new Match.Match(null,
+        'ipv4_src',
+        IPV4.mkAddressMatch('192.168.1.1',
+        '222.222.222.222')));
+
+    expect(match.summarize()[0]).toBe('ipv4');
+
+    expect(function(){
+      match.push(
+        new Match.Match(null,
+          'eth_src',
+          ETHERNET.mkMACMatch('aa:bb:cc:dd:ee:ff',
+          'ff:ff:ff:ff:ff:ff')));
+    }).toThrow();
+  });
+
+  it('Internals match set equality', function() {
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+
+    match.push(
+      new Match.Match(null,
+        'internals_metadata',
+        INTERNALS.mkMetadataMatch(
+          '0x1122334455667788',
+          '0x1122334455667788'
+        )));
+
+    match1.push(
+      new Match.Match(null,
+        'internals_metadata',
+        INTERNALS.mkMetadataMatch(
+          '0x1122334455667788',
+          '0x1122334455667788'
+        )));
+
+    expect(match.equal(match1)).toBe(true);
 
   });
 
