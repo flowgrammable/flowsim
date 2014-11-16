@@ -83,6 +83,40 @@ angular.module('flowsimUiApp')
     return category.protocol;
   });
 
+  $scope.activeApplyCategory = null;
+  $scope.activeApplyField = [];
+
+  $scope.updateApplyCategory = function() {
+    console.log('update category: '+$scope.apply.category);
+    $scope.activeApplyCategory = _($scope.applyActions).find(
+      function(category) {
+        return category.protocol === $scope.apply.category;
+    });
+    $scope.apply.fields = _($scope.activeApplyCategory.actions).map(
+      function(action) {
+        return action.name;
+      });
+  };
+
+  $scope.updateApplyField = function() {
+    console.log('update category: '+$scope.apply.field);
+    $scope.activeApplyFields = ($scope.activeApplyCategory.actions).filter(
+      function(action) {
+        return action.name === $scope.apply.field;
+    });
+
+    $scope.apply.actions = _(_($scope.activeApplyFields).map(
+      function(action) {
+        return action.action ? action.action : '';
+    })).filter(function(action) {
+      return action.length > 0;
+    });
+  };
+
+  $scope.updateApplyAction = function() {
+    console.log('update category: '+$scope.apply.action);
+  };
+
   $scope.match = {
     category: '',
     categories: ['Internal', 'Ethernet', 'VLAN', 'MPLS'],

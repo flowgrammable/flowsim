@@ -187,24 +187,27 @@
                     <td>
                       <select class="form-control" ng-model="apply.category" 
                               ng-options="category as category for category in 
-                              apply.categories">
+                              apply.categories"
+                              ng-change="updateApplyCategory()">
                       </select>
                     </td>
                     <td>
                       <select class="form-control" ng-model="apply.field" 
                               ng-options="field as field for field in
-                              apply.fields">
+                              apply.fields"
+                              ng-change="updateApplyField()">
                       </select>
                     </td>
                     <td>
                       <select class="form-control" ng-model="apply.action" 
                               ng-options="action as action for action in
-                              apply.actions">
+                              apply.actions"
+                              ng-change="updateApplyAction()">
                       </select>
                     </td>
                     <td>
                       <input type="text" class="form-control"
-                             ng-model="apply.value">    
+                             ng-model="apply.value">
                     </td>
                     <td>
                       <button class="btn btn-default">Add</button>

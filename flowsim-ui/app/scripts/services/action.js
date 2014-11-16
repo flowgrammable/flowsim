@@ -93,7 +93,9 @@ function mkGroupField() {
     'Internal',   // Category of action
     'Group',      // Name of action
     'set_group',  // might be vestigal
-    Group         // Type name of action
+    Group,         // Type name of action
+    '',
+    function() { return true; }
   );
 }
 
@@ -123,7 +125,9 @@ function mkQueueField() {
     'Internal',   // Category of action
     'Queue',      // Name of action
     'set_queue',  // might be vestigal
-    Queue         // Type name of action
+    Queue,         // Type name of action
+    '',
+    function() { return true; }
   );
 }
 
@@ -168,6 +172,8 @@ function mkPopVLANField() {
     'Tag',      // Name of action
     'pop_vlan', // might be vestigal
     PopVLAN,    // Type name of action
+    '',
+    function() { return true; },
     'pop'       // Action behavior
   );
 }
@@ -187,6 +193,8 @@ function mkPopMPLSField() {
     'Tag',      // Name of action
     'pop_vlan', // might be vestigal
     PopMPLS,    // Type name of action
+    '',
+    function() { return true; },
     'pop'       // Action behavior
   );
 }
@@ -354,6 +362,8 @@ function mkSetEthSrcField() {
     'Src',          // Name of action
     'set_eth_src',  // might be vestigal
     SetField,       // Type name of action
+    '',
+    function() { return true; },
     'set'           // Action behavior
   );
 }
@@ -365,6 +375,8 @@ function mkSetEthDstField() {
     'Dst',          // Name of action
     'set_eth_dst',  // might be vestigal
     SetField,       // Type name of action
+    '',
+    function() { return true; },
     'set'           // Action behavior
   );
 }
@@ -376,6 +388,8 @@ function mkSetEthTypeField() {
     'Type',         // Name of action
     'set_eth_type', // might be vestigal
     SetField,       // Type name of action
+    '',
+    function() { return true; },
     'set'           // Action behavior
   );
 }
