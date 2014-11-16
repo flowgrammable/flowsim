@@ -55,6 +55,30 @@ describe('Service: internals', function () {
     expect(exact.match(b)).toBe(false);
     expect(exact.match(m)).toBe(false);
 
-  })
+  });
+
+  it('Internals Port Match Pass', function() {
+    var u = INTERNALS.mkPort('0x11223344');
+    var b = INTERNALS.mkPort('0x11111111');
+    var c = INTERNALS.mkPort('0x11223344');
+
+    var exact = INTERNALS.mkPortMatch(u);
+
+    expect(exact.match(c)).toBe(true);
+    expect(exact.match(b)).toBe(false);
+
+  });
+
+  it('Internals PhyPort Match Pass', function() {
+    var u = INTERNALS.mkPhyport('0x11223344');
+    var b = INTERNALS.mkPhyport('0x11111111');
+    var c = INTERNALS.mkPhyport('0x11223344');
+
+    var exact = INTERNALS.mkPhyportMatch(u);
+
+    expect(exact.match(c)).toBe(true);
+    expect(exact.match(b)).toBe(false);
+
+  });
 
 });
