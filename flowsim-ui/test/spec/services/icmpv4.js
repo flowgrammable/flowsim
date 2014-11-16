@@ -19,11 +19,10 @@ describe('Service: ICMPV4', function () {
     expect(!!ICMPV4).toBe(true);
 
     ICMPV4.mkICMPV4(null, 0, 0);
-    ICMPV4.mkICMPV4(null, 0, 0, 9);
 
-    var ts_req1 = ICMPV4.mkICMPV4(13, 2, 20);
+    var ts_req1 = ICMPV4.mkICMPV4(13, 2);
     var ts_req2 = new ICMPV4.ICMPV4(ts_req1);
-    var ts_req3 = new ICMPV4.ICMPV4(null, 13, 2, 20);
+    var ts_req3 = new ICMPV4.ICMPV4(null, 13, 2);
     var ts_req4 = ts_req1.clone();
 
     var testStr = ts_req1.toString();
@@ -35,8 +34,8 @@ describe('Service: ICMPV4', function () {
   it('Construction Fail', function () {
     expect(!!ICMPV4).toBe(true);
 
-    expect(function(){ICMPV4.mkICMPV4(0, 69422, 25);}).toThrow();
-    expect(function(){ICMPV4.mkICMPV4('66422', 234, 100);}).toThrow();
+    expect(function(){ICMPV4.mkICMPV4(0, 69422);}).toThrow();
+    expect(function(){ICMPV4.mkICMPV4('66422', 234);}).toThrow();
   });
 
   it('Make Helper Construction Pass', function () {
@@ -45,9 +44,9 @@ describe('Service: ICMPV4', function () {
     var type = ICMPV4.mkType(13);
     var code = ICMPV4.mkCode(2);
 
-    var ts_req1 = ICMPV4.mkICMPV4(type, code, 20);
+    var ts_req1 = ICMPV4.mkICMPV4(type, code);
     var ts_req2 = new ICMPV4.ICMPV4(ts_req1);
-    var ts_req3 = new ICMPV4.ICMPV4(null, type, code, 20);
+    var ts_req3 = new ICMPV4.ICMPV4(null, type, code);
     var ts_req4 = ts_req1.clone();
 
     var testStr = ts_req1.toString();
@@ -66,49 +65,34 @@ describe('Service: ICMPV4', function () {
   it('Set Field Pass', function () {
     expect(!!ICMPV4).toBe(true);
 
-    var icmp1 = ICMPV4.mkICMPV4(124, 255, 74);
+    var icmp1 = ICMPV4.mkICMPV4(124, 255);
 
     expect(icmp1.type().toString()).toBe('124');
     expect(icmp1.code().toString()).toBe('255');
-    expect(icmp1.icmp_bytes().toString()).toBe('74');
     icmp1.type(45);
     expect(icmp1.type().toString()).toBe('45');
     expect(icmp1.code().toString()).toBe('255');
-    expect(icmp1.icmp_bytes().toString()).toBe('74');
     icmp1.code('78');
     expect(icmp1.type().toString()).toBe('45');
     expect(icmp1.code().toString()).toBe('78');
-    expect(icmp1.icmp_bytes().toString()).toBe('74');
-    icmp1.icmp_bytes('140');
-    expect(icmp1.type().toString()).toBe('45');
-    expect(icmp1.code().toString()).toBe('78');
-    expect(icmp1.icmp_bytes().toString()).toBe('140');
   });
 
   it('Set Field Fail', function () {
     expect(!!ICMPV4).toBe(true);
 
-    expect(function(){ICMPV4.mkICMPV4(124, 256, 74);}).toThrow();
-    expect(function(){ICMPV4.mkICMPV4(124, 255, 65536);}).toThrow();
-    expect(function(){ICMPV4.mkICMPV4(256, 255, 0);}).toThrow();
+    expect(function(){ICMPV4.mkICMPV4(124, 256);}).toThrow();
+    expect(function(){ICMPV4.mkICMPV4(256, 255);}).toThrow();
 
-    var icmp1 = ICMPV4.mkICMPV4(124, 255, 74);
+    var icmp1 = ICMPV4.mkICMPV4(124, 255);
 
     expect(icmp1.type().toString()).toBe('124');
     expect(icmp1.code().toString()).toBe('255');
-    expect(icmp1.icmp_bytes().toString()).toBe('74');
     expect(function(){icmp1.type(256);}).toThrow();
     expect(icmp1.type().toString()).toBe('124');
     expect(icmp1.code().toString()).toBe('255');
-    expect(icmp1.icmp_bytes().toString()).toBe('74');
     expect(function(){icmp1.code(1000);}).toThrow();
     expect(icmp1.type().toString()).toBe('124');
     expect(icmp1.code().toString()).toBe('255');
-    expect(icmp1.icmp_bytes().toString()).toBe('74');
-    expect(function(){icmp1.src(2484);}).toThrow();
-    expect(icmp1.type().toString()).toBe('124');
-    expect(icmp1.code().toString()).toBe('255');
-    expect(icmp1.icmp_bytes().toString()).toBe('74');
   });
 
   it('Type Match Pass', function() {
@@ -174,13 +158,13 @@ describe('Service: ICMPV4', function () {
   it ('JSON stringify', function() {
     expect(!!ICMPV4).toBe(true);
 
-    var icmp1 = ICMPV4.mkICMPV4(124, 255, 74);
+    var icmp1 = ICMPV4.mkICMPV4(124, 255);
     var icmp1_json = JSON.stringify(icmp1);
     var icmp1_ = new ICMPV4.ICMPV4(JSON.parse(icmp1_json));
 
     expect(icmp1_.toString()).toBe(icmp1.toString());
 
-    var icmp2 = ICMPV4.mkICMPV4(124, 255);
+    var icmp2 = ICMPV4.mkICMPV4(124, 254);
     var icmp2_json = JSON.stringify(icmp2);
     var icmp2_ = new ICMPV4.ICMPV4(JSON.parse(icmp2_json));
 

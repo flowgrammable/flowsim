@@ -8,27 +8,20 @@ var BYTES = 8;
 
 var Payloads = {};
 
-function ICMPV4(icmp, type, code, icmp_bytes){
+function ICMPV4(icmp, type, code){
   if(_.isObject(icmp)) {
     this._type = new UInt.UInt(icmp._type);
     this._code = new UInt.UInt(icmp._code);
-    this._icmp_bytes = new UInt.UInt(icmp._icmp_bytes);
   } else {
     this._type = new UInt.UInt(null, type, 1);
     this._code = new UInt.UInt(null, code, 1);
-    this._icmp_bytes = new UInt.UInt(null, icmp_bytes, 2);
   }
   this.name = NAME;
-  if (this._icmp_bytes > BYTES) {
-    this.bytes = this._icmp_bytes.value;
-  }
-  else {
-    this.bytes = BYTES;
-  }
+  this.bytes = BYTES;
 }
 
-function mkICMPV4(type, code, icmp_bytes) {
-  return new ICMPV4(null, type, code, icmp_bytes);
+function mkICMPV4(type, code) {
+  return new ICMPV4(null, type, code);
 }
 
 function mkType(input) {
@@ -67,22 +60,9 @@ ICMPV4.prototype.code = function(code) {
   }
 };
 
-ICMPV4.prototype.icmp_bytes = function(icmp_bytes) {
-  if(icmp_bytes) {
-    if(icmp_bytes instanceof UInt.UInt) {
-      this._icmp_bytes = new UInt.UInt(icmp_bytes);
-    } else {
-      this._icmp_bytes = new UInt.UInt(null, icmp_bytes, 2);
-    }
-  } else {
-    return this._icmp_bytes;
-  }
-};
-
 ICMPV4.prototype.toString = function() {
   return 'type: '+this._type.toString()+'\n'+
-         'code: '+this._code.toString()+'\n'+
-         'icmp_bytes: '+this._icmp_bytes.toString();
+         'code: '+this._code.toString();
 };
 
 function mkTypeMatch(value, mask) {
@@ -100,14 +80,6 @@ function mkCodeMatch(value, mask) {
   };
   return tmp;
 }
-
-// TODO:
-// - match helper
-// - equal
-// - summarize
-// - match
-// - action
-
 
 // UI Interface:
 var TIPS = {
