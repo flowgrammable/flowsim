@@ -3,7 +3,7 @@
 angular.module('flowsimUiApp')
   .factory('ICMPV4', function(UInt, fgUI, fgConstraints){
 
-var NAME = 'ICMPV4';
+var NAME = 'ICMPv4';
 var BYTES = 8;
 
 var Payloads = {};
@@ -120,18 +120,18 @@ var TESTS = {
   code:     UInt.is(8)
 };
 
-function ICMPV4_UI(ICMPV4){
-  ICMPV4 = ICMPV4 === undefined ? new ICMPV4() : ICMPV4;
+function ICMPV4_UI(icmpv4){
+  icmpv4 = icmpv4 ? new ICMPV4(icmpv4) : new ICMPV4();
   this.name = NAME;
   this.bytes = 4;
   this.attrs = [{
     name: 'Type',
-    value: ICMPV4.type().toString(),
+    value: icmpv4.type().toString(),
     tip: 'ICMP message type',
     test: fgConstraints.isUInt(0, 0xff)
   }, {
     name: 'Code',
-    value: ICMPV4.code().toString(),
+    value: icmpv4.code().toString(),
     tip: 'ICMP message code',
     test: fgConstraints.isUInt(0, 0xff)
   }];

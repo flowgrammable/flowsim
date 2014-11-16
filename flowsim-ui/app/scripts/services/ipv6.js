@@ -311,11 +311,9 @@ IPv6_UI.prototype.toBase = function() {
 };
 
 IPv6_UI.prototype.setPayload = function(name) {
-  this.attrs[2].value = Payloads[name] || 0;
 };
 
 IPv6_UI.prototype.clearPayload = function() {
-  this.attrs[2].value = 0;
 };
 
 return {
