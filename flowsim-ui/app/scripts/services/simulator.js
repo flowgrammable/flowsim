@@ -64,6 +64,10 @@ var Stages = [{
   label: 'Execution',
   active: true
 }, {
+  name: 'Groups',
+  label: 'Groups',
+  active: true
+}, {
   name: 'Egress',
   label: 'Egress',
   active: true
@@ -94,9 +98,19 @@ var Transitions = [{
   to: 2,
   forward: false
 }, {
-  from: 4,
+  from: 6,
   to: null,
   forward: true
+},{
+  from: 4,
+  to: 5,
+  forward: true,
+  biDirectional: true
+},{
+  from: 5,
+  to: 6,
+  forward: true,
+  biDirectional : true
 }];
 
 return {
