@@ -44,7 +44,7 @@ angular.module('flowsimUiApp')
     }
 
     $scope.activeIns.meter = !$scope.activeIns.meter;
-    $scope.activeIdx = activeIdx === 0 ? -1 : $scope.activeIdx
+    $scope.activeIdx = $scope.activeIdx === 0 ? -1 : $scope.activeIdx
   };
 
   $scope.toggleClear = function() {
@@ -54,7 +54,7 @@ angular.module('flowsimUiApp')
       $scope.flow.ins.clear(true);
     }
     $scope.activeIns.clear = !$scope.activeIns.clear;
-    $scope.activeIdx = activeIdx === 2 ? -1 : $scope.activeIdx
+    $scope.activeIdx = $scope.activeIdx === 2 ? -1 : $scope.activeIdx
   }
 
   $scope.toggleMetadata = function() {
@@ -62,7 +62,7 @@ angular.module('flowsimUiApp')
       $scope.flow.ins.metadata(null);
     }
     $scope.activeIns.metadata = !$scope.activeIns.metadata;
-    $scope.activeIdx = activeIdx === 4 ? -1 : $scope.activeIdx
+    $scope.activeIdx = $scope.activeIdx === 4 ? -1 : $scope.activeIdx
   }
 
   $scope.toggleGoto = function() {
@@ -70,7 +70,7 @@ angular.module('flowsimUiApp')
       $scope.flow.ins.jump(null);
     }
     $scope.activeIns._goto = !$scope.activeIns._goto;
-    $scope.activeIdx = activeIdx === 5 ? -1 : $scope.activeIdx
+    $scope.activeIdx = $scope.activeIdx === 5 ? -1 : $scope.activeIdx
   }
 
   // Grab the subset that is available in our profile
