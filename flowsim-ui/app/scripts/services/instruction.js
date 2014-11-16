@@ -47,21 +47,9 @@ function Profile(profile){
     this.metadata = '0xffffffffffffffff';
     this.goto_ = [];
 /*
-    this.apply = [{
-      protocol: 'Internal',
-      fields: [
-        mkActionField('Output', true, 'forward'),
-        mkActionField('Group', true, 'set_group'),
-        mkActionField('Queue', true, 'set_queue')
-      ]
-    }, {
-      protocol: 'Ethernet',
-        fields: [
-          mkActionField('Src', true, 'set_eth_src', 'set'),
-          mkActionField('Dst', true, 'set_eth_dst', 'set'),
-          mkActionField('Type', true, 'set_eth_type', 'set')
-        ]
-    }, {
+ *  This is just as a reminder to move into action
+ *  using the new mkActionField mechanism ...
+ *
     protocol: 'ARP',
       fields: [
         mkActionField('Opcode', true, 'set_arp_op', 'set'),
@@ -79,7 +67,6 @@ function Profile(profile){
         mkActionField('TTL', true, 'set_mpls_ttl', 'set'),
         mkActionField('TTL', true, 'dec_mpls_ttl', 'dec'),
         mkActionField('Label', true, 'push_mpls', 'push'),
-        mkActionField('Label', true, 'pop_mpls', 'pop')
       ]
     }, {
       protocol: 'VLAN',
@@ -88,7 +75,6 @@ function Profile(profile){
         mkActionField('DEI', true, 'set_vlan_dei', 'set'),
         mkActionField('VID', true, 'set_vlan_vid', 'set'),
         mkActionField('Tag', true, 'push_vlan', 'push'),
-        mkActionField('Tag', true, 'pop_vlan', 'pop')
       ]
     }, {
       protocol: 'IPv4',
@@ -139,225 +125,6 @@ function Profile(profile){
         mkActionField('Dst', true, 'set_sctp_dst', 'set')
       ]
     }];
-
-    /*
-    this.apply2 = {
-      internal: {
-	      protocol: 'Internal',
-	      fields: [
-	        mkActionField('Output', true, 'forward'),
-	        mkActionField('Group', true, 'set_group'),
-	        mkActionField('Queue', true, 'set_queue')
-	      ]
-      },
-      ethernet: {
-	      protocol: 'Ethernet',
-	        fields: [
-	          mkActionField('Src', true, 'set_eth_src', 'set'),
-	          mkActionField('Dst', true, 'set_eth_dst', 'set'),
-	          mkActionField('Type', true, 'set_eth_type', 'set')
-	        ]
-      },
-      vlan: {
-	      protocol: 'VLAN',
-	      fields: [
-	        mkActionField('PCP', true, 'set_vlan_pcp', 'set'),
-	        mkActionField('DEI', true, 'set_vlan_dei', 'set'),
-	        mkActionField('VID', true, 'set_vlan_vid', 'set'),
-	        mkActionField('Tag', true, 'push_vlan', 'push'),
-	        mkActionField('Tag', true, 'pop_vlan', 'pop')
-	      ]
-      },
-      mpls: {
-	      protocol: 'MPLS',
-	      fields: [
-	        mkActionField('Label', true, 'set_mpls_label', 'set'),
-	        mkActionField('TC', true, 'set_mpls_tc', 'set'),
-	        mkActionField('BOS', true, 'set_mpls_bos', 'set'),
-	        mkActionField('TTL', true, 'set_mpls_ttl', 'set'),
-	        mkActionField('TTL', true, 'dec_mpls_ttl', 'dec'),
-	        mkActionField('Label', true, 'push_mpls', 'push'),
-	        mkActionField('Label', true, 'pop_mpls', 'pop')
-	      ]
-      },
-      arp: {
-	    protocol: 'ARP',
-	      fields: [
-	        mkActionField('Opcode', true, 'set_arp_op', 'set'),
-	        mkActionField('SHA', true, 'set_arp_sha', 'set'),
-	        mkActionField('SPA', true, 'set_arp_spa', 'set'),
-	        mkActionField('THA', true, 'set_arp_tha', 'set'),
-	        mkActionField('TPA', true, 'set_arp_tpa', 'set')
-	      ]
-      },
-      ipv4: {
-	      protocol: 'IPv4',
-	      fields: [
-	        mkActionField('DSCP', true, 'set_ip_dscp', 'set'),
-	        mkActionField('ECN', true, 'set_ip_ecn', 'set'),
-	        mkActionField('Proto', true, 'set_ip_proto', 'set'),
-	        mkActionField('Src', true, 'set_ipv4_src', 'set'),
-	        mkActionField('Dst', true, 'set_ipv4_dst', 'set'),
-	        mkActionField('TTL', true, 'set_nw_ttl', 'set'),
-	        mkActionField('TTL', true, 'dec_nw_ttl', 'dec')
-	      ]
-      },
-      ipv6: {
-	      protocol: 'IPv6',
-	      fields: [
-	        mkActionField('Src', true, 'set_ipv6_src', 'set'),
-	        mkActionField('Dst', true, 'set_ipv6_dst', 'set'),
-	        mkActionField('FLabel', true, 'set_ipv6_flabel', 'set')
-	      ]
-      },
-      icmpv4: {
-	      protocol: 'ICMPv4',
-	      fields: [
-	        mkActionField('Type', true, 'set_icmpv4_type', 'set'),
-	        mkActionField('Code', true, 'set_icmpv4_code', 'set')
-	      ]
-      },
-      icmpv6: {
-	      protocol: 'ICMPv6',
-	      fields: [
-	        mkActionField('Type', true, 'set_icmpv6_type', 'set'),
-	        mkActionField('Code', true, 'set_icmpv6_code', 'set')
-	      ]
-      },
-      tcp: {
-	      protocol: 'TCP',
-	      fields: [
-	        mkActionField('Src', true, 'set_tcp_src', 'set'),
-	        mkActionField('Dst', true, 'set_tcp_dst', 'set')
-	      ]
-      },
-      udp: {
-	      protocol: 'UDP',
-	      fields: [
-	        mkActionField('Src', true, 'set_udp_src', 'set'),
-	        mkActionField('Dst', true, 'set_udp_dst', 'set')
-	      ]
-      },
-      sctp: {
-      protocol: 'SCTP',
-      fields: [
-        mkActionField('Src', true, 'set_sctp_src', 'set'),
-        mkActionField('Dst', true, 'set_sctp_dst', 'set')
-      ]
-      }
-    };
-	this.apply = _(this.apply2).values();
-  */
-    /*
-	this.write2 = {};
-	
-	this.write2 = {
-    internal: {
-	    protocol: 'Internal',
-	    fields: [
-	      mkActionField('Output', true, 'forward'),
-	      mkActionField('Group', true, 'set_group'),
-	      mkActionField('Queue', true, 'set_queue')
-	    ]
-    },
-      ethernet: {
-	      protocol: 'Ethernet',
-	        fields: [
-	          mkActionField('Src', true, 'set_eth_src', 'set'),
-	          mkActionField('Dst', true, 'set_eth_dst', 'set'),
-	          mkActionField('Type', true, 'set_eth_type', 'set')
-	        ]
-      },
-      vlan: {
-	      protocol: 'VLAN',
-	      fields: [
-	        mkActionField('PCP', true, 'set_vlan_pcp', 'set'),
-	        mkActionField('DEI', true, 'set_vlan_dei', 'set'),
-	        mkActionField('VID', true, 'set_vlan_vid', 'set'),
-	        mkActionField('Tag', true, 'push_vlan', 'push'),
-	        mkActionField('Tag', true, 'pop_vlan', 'pop')
-	      ]
-      },
-      mpls: {
-	      protocol: 'MPLS',
-	      fields: [
-	        mkActionField('Label', true, 'set_mpls_label', 'set'),
-	        mkActionField('TC', true, 'set_mpls_tc', 'set'),
-	        mkActionField('BOS', true, 'set_mpls_bos', 'set'),
-	        mkActionField('TTL', true, 'set_mpls_ttl', 'set'),
-	        mkActionField('TTL', true, 'dec_mpls_ttl', 'dec'),
-	        mkActionField('Label', true, 'push_mpls', 'push'),
-	        mkActionField('Label', true, 'pop_mpls', 'pop')
-	      ]
-      },
-      arp: {
-	    protocol: 'ARP',
-	      fields: [
-	        mkActionField('Opcode', true, 'set_arp_op', 'set'),
-	        mkActionField('SHA', true, 'set_arp_sha', 'set'),
-	        mkActionField('SPA', true, 'set_arp_spa', 'set'),
-	        mkActionField('THA', true, 'set_arp_tha', 'set'),
-	        mkActionField('TPA', true, 'set_arp_tpa', 'set')
-	      ]
-      },
-      ipv4: {
-	      protocol: 'IPv4',
-	      fields: [
-	        mkActionField('DSCP', true, 'set_ip_dscp', 'set'),
-	        mkActionField('ECN', true, 'set_ip_ecn', 'set'),
-	        mkActionField('Proto', true, 'set_ip_proto', 'set'),
-	        mkActionField('Src', true, 'set_ipv4_src', 'set'),
-	        mkActionField('Dst', true, 'set_ipv4_dst', 'set'),
-	        mkActionField('TTL', true, 'set_nw_ttl', 'set'),
-	        mkActionField('TTL', true, 'dec_nw_ttl', 'dec')
-	      ]
-      },
-      ipv6: {
-	      protocol: 'IPv6',
-	      fields: [
-	        mkActionField('Src', true, 'set_ipv6_src', 'set'),
-	        mkActionField('Dst', true, 'set_ipv6_dst', 'set'),
-	        mkActionField('FLabel', true, 'set_ipv6_flabel', 'set')
-	      ]
-      },
-      icmpv4: {
-	      protocol: 'ICMPv4',
-	      fields: [
-	        mkActionField('Type', true, 'set_icmpv4_type', 'set'),
-	        mkActionField('Code', true, 'set_icmpv4_code', 'set')
-	      ]
-      },
-      icmpv6: {
-	      protocol: 'ICMPv6',
-	      fields: [
-	        mkActionField('Type', true, 'set_icmpv6_type', 'set'),
-	        mkActionField('Code', true, 'set_icmpv6_code', 'set')
-	      ]
-      },
-      tcp: {
-	      protocol: 'TCP',
-	      fields: [
-	        mkActionField('Src', true, 'set_tcp_src', 'set'),
-	        mkActionField('Dst', true, 'set_tcp_dst', 'set')
-	      ]
-      },
-      udp: {
-	      protocol: 'UDP',
-	      fields: [
-	        mkActionField('Src', true, 'set_udp_src', 'set'),
-	        mkActionField('Dst', true, 'set_udp_dst', 'set')
-	      ]
-      },
-      sctp: {
-        protocol: 'SCTP',
-        fields: [
-          mkActionField('Src', true, 'set_sctp_src', 'set'),
-          mkActionField('Dst', true, 'set_sctp_dst', 'set')
-        ]
-      }
-	};
-
-  this.write = _(this.write2).values();
   */
 }
 
