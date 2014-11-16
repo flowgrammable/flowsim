@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                               ICMPV6, SCTP, TCP, UDP, ND) {
 
-function ActionField_UI(afu, category, name, key, Type, action, tip, test) {
+function ActionField_UI(afu, category, name, key, Type, tip, test, action) {
   if(_.isObject(afu)) {
     _.extend(this, afu);
   } else {
