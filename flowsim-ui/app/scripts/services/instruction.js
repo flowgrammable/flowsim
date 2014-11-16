@@ -44,6 +44,8 @@ function Profile(profile){
 
     this.apply = Action.Available();
     this.write = Action.Available();
+    this.metadata = '0xffffffffffffffff';
+    this.goto_ = [];
 /*
     this.apply = [{
       protocol: 'Internal',
