@@ -81,11 +81,7 @@ function mkPhyportMatch(value){
 
 INTERNALS.prototype.metadata = function(metadata){
   if(metadata){
-    if(metadata instanceof UInt.UInt){
-      this._metadata = new UInt.UInt(metadata);
-    } else {
-      this._metadata = new UInt.UInt(null, metadata, 4);
-    }
+    this._metadata = mkMetadata(metadata);
   } else {
     return this._metadata;
   }
@@ -107,9 +103,10 @@ function Metadata(meta, input){
       throw 'Bad Meta: ' + input;
     }
     tmp =[];
-    this._meta = new UInt.UInt( null, _.map(_.range(8), function(i) {
-      return parseInt('0x'+input.substr(i+2, 2));
-    }), 8);
+    for(var i= 2; i<input.length; i+=2){
+      tmp.push(parseInt('0x'+input.substr(i, 2)));
+    }
+    this._meta = new UInt.UInt( null, tmp , 8);
   } else if(_.isArray(input)){
     this._meta = new UInt.UInt(null, input, 8);
   } else {
@@ -123,6 +120,12 @@ Metadata.is = function(meta){
 
 Metadata.prototype.clone = function() {
   return new Metadata(this);
+};
+
+Metadata.prototype.toString = function(){
+  return  '0x' + _(this._meta.value).map(function(oct) {
+    return oct.toString(16);
+  }).join('');
 };
 
 Metadata.Match = function(match, value, mask) {
@@ -165,6 +168,12 @@ INTERNALS.prototype.clone = function(){
   return new INTERNALS(this);
 };
 
+INTERNALS.prototype.toString = function(){
+  return 'in_port: '+this.port().toString()+'\n'+
+         'phy_port: '+this.phyPort().toString()+'\n'+
+         'metadata: '+this.metadata().toString();
+};
+
 var TESTS = {
   port: UInt.is(32),
   phyPort: UInt.is(32),
@@ -201,6 +210,9 @@ function INTERNALS_UI(inter) {
 return {
   name: NAME,
   INTERNALS: INTERNALS,
+  port: '_port',
+  phyPort: '_phyPort',
+  metadata: '_metadata',
   Metadata: Metadata,
   mkMetadata: mkMetadata,
   mkMetadataMatch: mkMetadataMatch,

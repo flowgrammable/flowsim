@@ -81,4 +81,16 @@ describe('Service: internals', function () {
 
   });
 
+  it('JSON construct', function(){
+    var intern = INTERNALS.mkInternals(
+      '0x11223344', '0x44332211', '0x1122334455667788');
+
+    var j = JSON.stringify(intern);
+    var j_ = new INTERNALS.INTERNALS(JSON.parse(j));
+
+    expect(j_.port().toString(16)).toBe('0x11223344');
+    expect(j_.phyPort().toString(16)).toBe('0x44332211');
+    expect(j_.metadata().toString(16)).toBe('0x1122334455667788');
+  });
+
 });
