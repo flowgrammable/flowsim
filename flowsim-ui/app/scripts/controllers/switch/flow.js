@@ -38,13 +38,26 @@ angular.module('flowsimUiApp')
   $scope.popMatch = function() {
   };
 
+  $scope.simpleIns = {
+    meter: '',
+    goto_: '',
+    metadataValue: '',
+    metadataMask: ''
+  };
+
   $scope.toggleMeter = function() {
     if($scope.flow.ins.meter()) {
       $scope.flow.ins.meter(null);
     }
 
     $scope.activeIns.meter = !$scope.activeIns.meter;
-    $scope.activeIdx = $scope.activeIdx === 0 ? -1 : $scope.activeIdx
+    $scope.activeIdx = $scope.activeIdx === 0 ? -1 : $scope.activeIdx;
+  };
+
+  $scope.setMeter = function() {
+    if($scope.simpleIns.meter.length > 0) {
+      //FIXME
+    }
   };
 
   $scope.toggleClear = function() {
@@ -54,24 +67,37 @@ angular.module('flowsimUiApp')
       $scope.flow.ins.clear(true);
     }
     $scope.activeIns.clear = !$scope.activeIns.clear;
-    $scope.activeIdx = $scope.activeIdx === 2 ? -1 : $scope.activeIdx
-  }
+    $scope.activeIdx = $scope.activeIdx === 2 ? -1 : $scope.activeIdx;
+  };
 
   $scope.toggleMetadata = function() {
     if($scope.flow.ins.metadata()) {
       $scope.flow.ins.metadata(null);
     }
     $scope.activeIns.metadata = !$scope.activeIns.metadata;
-    $scope.activeIdx = $scope.activeIdx === 4 ? -1 : $scope.activeIdx
-  }
+    $scope.activeIdx = $scope.activeIdx === 4 ? -1 : $scope.activeIdx;
+  };
+
+  $scope.setMetadata = function() {
+    if($scope.simpleIns.metadataValue.length > 0 &&
+        $scope.simpleIns.metadataMask.length > 0) {
+      //FIXME
+    }
+  };
 
   $scope.toggleGoto = function() {
     if($scope.flow.ins.jump()) {
       $scope.flow.ins.jump(null);
     }
     $scope.activeIns._goto = !$scope.activeIns._goto;
-    $scope.activeIdx = $scope.activeIdx === 5 ? -1 : $scope.activeIdx
-  }
+    $scope.activeIdx = $scope.activeIdx === 5 ? -1 : $scope.activeIdx;
+  };
+
+  $scope.setGoto = function() {
+    if($scope.simpleIns.goto_.length > 0) {
+      //FIXME
+    }
+  };
 
   // Grab the subset that is available in our profile
   $scope.applyActions = _(_(flow.capabilities.instruction.apply).map(
