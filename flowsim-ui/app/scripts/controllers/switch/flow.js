@@ -73,6 +73,24 @@ angular.module('flowsimUiApp')
     value: '',
   };
 
+  // Grab the subset that is available in our profile
+  $scope.matchs = _(flow.capabilities.match.matches).filter(
+    function(match) {
+    return match.enabled;
+  });
+
+  // Grab the subset that is available in our profile
+  $scope.applyActions = _(flow.capabilities.instruction.apply).filter(
+    function(action) {
+      return action.enabled;
+  });
+
+  // Grab the subset that is available in our profile
+  $scope.writeActions = _(flow.capabilities.instruction.write).filter(
+    function(action) {
+      return action.enabled;
+  });
+
 $scope.ok = function () {
   $modalInstance.close(flow);
 };

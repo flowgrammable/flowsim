@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                               ICMPV6, SCTP, TCP, UDP, ND) {
 
-function ActionField_UI(afu, category, name, key, Type, action) {
+function ActionField_UI(afu, category, name, key, Type, action, tip, test) {
   if(_.isObject(afu)) {
     _.extend(this, afu);
   } else {
@@ -26,6 +26,8 @@ function ActionField_UI(afu, category, name, key, Type, action) {
       var T = _.bind.apply(null, args);
       return new T();
     };
+    this.tip = tip;
+    this.test = test;
   }
 }
 
@@ -59,7 +61,9 @@ function mkOutputField() {
     'Internal',   // Category of action
     'Output',     // Name of action
     'forward',    // might be vestigal
-    Output        // Type name of action
+    Output,        // Type name of action
+    'Egress port id',
+    fgConstraints.isUInt(0, 0xffff)
   );
 }
 
