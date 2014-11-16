@@ -15,7 +15,7 @@ function Flow(flow, priority, capabilities) {
     _.extend(this, flow);
     this.match = new Match.Set(flow.match);
     this.ins   = new Instruction.Set(flow.ins);
-    this.capabilitie = flow.capabilities;
+    this.capabilities = flow.capabilities;
   } else {
     this.priority = priority;
     this.match = new Match.Set();

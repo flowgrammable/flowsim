@@ -348,7 +348,7 @@ Set.prototype.apply = function(apply) {
 };
 
 Set.prototype.pushApply = function(action) {
-  this._apply.push(action); 
+  this._apply.push(action);
 };
 
 Set.prototype.popApply = function() {
@@ -460,7 +460,7 @@ Set.prototype.step = function(dp, ctx) {
 };
 
 Set.prototype.empty = function() {
-  return this._meter || this._clear || this._write || this._metadata || 
+  return this._meter || this._clear || this._write || this._metadata ||
          this._goto;
 };
 

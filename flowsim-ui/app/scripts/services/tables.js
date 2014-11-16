@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Tables', function(Regex, fgConstraints, Match, Instruction) {
+  .factory('Tables', function(Regex, fgConstraints, Match, Instruction, Flow) {
 
 /* Default Construction Constants */
 var defTables = 8;
@@ -26,7 +26,8 @@ function Priority(priority, priValue) {
   if(_.isObject(priority)) {
     _.extend(this, priority);
     this.flows = _(priority).map(function(flow) {
-      return flow.clone();
+      //return flow.clone();
+      return new Flow.Flow(flow);
     });
   } else {
     this.flows = [];
@@ -66,11 +67,12 @@ function Table(table, tableProfile) {
   if(_.isObject(table)) {
     _.extend(this, table);
     this.capabilities      = new TableProfile(table.capabilities);
-    this.priorities        = new Priority(table.priorities);
+    this.priorities        = _(table.priorities).map(function(priority) {
+            return new Priority(priority); });
     this.prioritiesPresent = _.clone(table.priorities);
 
     // FIXME ... need to add miss handler
-    
+
     this.stats = _.clone(table.stats);
   } else {
     this.capabilities = new TableProfile(tableProfile);

@@ -352,6 +352,10 @@ SetField.prototype.toString = function() {
   return this.protocol+'('+this.field+'='+this.value.toString()+')';
 };
 
+SetField.prototype.toValue = function() {
+  return this.value;
+};
+
 SetField.prototype.step = function(dp, ctx) {
   var protocol = _.find(ctx.packet.protocols, function(protocol) {
     return protocol.name === this.protocol && _(protocol).has(this.field);
@@ -371,8 +375,8 @@ function mkSetEthSrcField() {
     'Src',          // Name of action
     'set_eth_src',  // might be vestigal
     SetField,       // Type name of action
-    '',
-    function() { return true; },
+    ETHERNET.TIPS.src,
+    ETHERNET.TESTS.src,
     'set'           // Action behavior
   );
 }
@@ -384,8 +388,8 @@ function mkSetEthDstField() {
     'Dst',          // Name of action
     'set_eth_dst',  // might be vestigal
     SetField,       // Type name of action
-    '',
-    function() { return true; },
+    ETHERNET.TIPS.dst,
+    ETHERNET.TESTS.dst,
     'set'           // Action behavior
   );
 }
@@ -397,8 +401,8 @@ function mkSetEthTypeField() {
     'Type',         // Name of action
     'set_eth_type', // might be vestigal
     SetField,       // Type name of action
-    '',
-    function() { return true; },
+    ETHERNET.TIPS.type,
+    ETHERNET.TESTS.type,
     'set'           // Action behavior
   );
 }
@@ -796,7 +800,9 @@ function cloneAvailable(a) {
     return {
       protocol: grouping.protocol,
       actions: _(grouping.actions).map(function(action) {
-        return action.clone();
+        //return action.clone();
+        //return _.clone(action);
+        return new ActionField_UI(action);
       })
     };
   });
