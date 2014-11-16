@@ -208,7 +208,7 @@ function INTERNALS_UI(inter) {
 }
 
 return {
-  name: NAME,
+  NAME: NAME,
   INTERNALS: INTERNALS,
   port: '_port',
   phyPort: '_phyPort',
