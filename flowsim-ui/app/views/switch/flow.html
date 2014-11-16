@@ -206,11 +206,19 @@
                       </select>
                     </td>
                     <td>
-                      <input type="text" class="form-control"
-                             ng-model="apply.value">
+                      <div class="form-group" 
+                           tooltip="{{applyAction ? applyAction.tip : ''}}"
+                           ng-class="{'has-error': applyAction &&
+                                      !applyAction.test(apply.value)}">
+                        <input type="text" class="form-control"
+                              ng-model="apply.value">
+                      </div>
                     </td>
                     <td>
-                      <button class="btn btn-default">Add</button>
+                      <button class="btn btn-default"
+                              ng-click="addApplyAction()">
+                        Add
+                      </button>
                     </td>
                   </tr>
                 </tbody>

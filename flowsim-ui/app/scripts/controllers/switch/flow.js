@@ -95,7 +95,10 @@ angular.module('flowsimUiApp')
     $scope.apply.fields = _($scope.activeApplyCategory.actions).map(
       function(action) {
         return action.name;
-      });
+    });
+    $scope.applyAction  = null;
+    $scope.apply.field  = '';
+    $scope.apply.action = '';
   };
 
   $scope.updateApplyField = function() {
@@ -111,10 +114,28 @@ angular.module('flowsimUiApp')
     })).filter(function(action) {
       return action.length > 0;
     });
+    $scope.applyAction = null;
+    $scope.apply.action = '';
   };
+
+  $scope.applyAction = null;
 
   $scope.updateApplyAction = function() {
     console.log('update category: '+$scope.apply.action);
+    $scope.applyAction = _($scope.activeApplyFields).find(
+      function(action) {
+        return action.name === $scope.apply.field && 
+               action.action === $scope.apply.action;
+    });
+  };
+
+  $scope.addApplyAction = function() {
+    var action;
+    if($scope.applyAction && $scope.applyAction.test($scope.apply.value)) {
+      console.log('got an action to deal with');
+      action = $scope.applyAction.mkType($scope.apply.value);
+      console.log(action.toString());
+    }
   };
 
   $scope.match = {
@@ -140,9 +161,9 @@ angular.module('flowsimUiApp')
     category: '',
     categories: $scope.applyActionNames,
     field: '',
-    fields: ['Output', 'Group', 'Queue', 'Src', 'Dst', 'Type'],
+    fields: [],
     action: '',
-    actions: ['set', 'dec', 'push', 'pop'],
+    actions: [],
     value: '',
   };
 
