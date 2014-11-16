@@ -17,10 +17,13 @@ angular.module('flowsimUiApp')
     $scope.tests = tests;
     $scope.instruction = instruction;
 
-    $scope.apply = instruction.apply2;
-    $scope.write = instruction.write2;
+    $scope.apply = instruction.apply;
+    $scope.write = instruction.write;
     $scope.applyRows = [];
     $scope.writeRows = [];
+
+    console.log($scope.apply);
+    console.log($scope.write);
 
     var i;
     var rowCount = Math.floor($scope.apply.length / 3);
@@ -32,13 +35,13 @@ angular.module('flowsimUiApp')
       $scope.applyRows.push($scope.apply.slice(i*3, amt))
     }
     
-    rowCount = Math.floor($scope.apply.length / 3);
+    rowCount = Math.floor($scope.write.length / 3);
     for(i=0; i < rowCount; ++i) {
-      $scope.writeRows.push($scope.apply.slice(i*3,i*3+3));
+      $scope.writeRows.push($scope.write.slice(i*3,i*3+3));
     }
-    if($scope.apply.length % 3) {
-      var amt = i*3 + $scope.apply.length - i*3;
-      $scope.writeRows.push($scope.apply.slice(i*3, amt))
+    if($scope.write.length % 3) {
+      var amt = i*3 + $scope.write.length - i*3;
+      $scope.writeRows.push($scope.write.slice(i*3, amt))
     }
 
     $scope.goto_ = {

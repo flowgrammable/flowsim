@@ -27,24 +27,8 @@ function Profile(profile){
   if(_.isObject(profile)) {
     _.extend(this, profile);
     this.caps = _.clone(profile.caps);
-    this.apply2 = Action.cloneAvailable(profile.apply2);
-    this.write2 = Action.cloneAvailable(profile.write2);
-    this.apply = _.map(profile.apply, function(i) {
-      return {
-        protocol: i.protocol,
-        fields: _.map(i.fields, function(j) {
-          return _.clone(j);
-        })
-      };
-    });
-    this.write = _.map(profile.write, function(i){
-      return {
-        protocol: i.protocol,
-        fields: _.map(i.fields, function(j) {
-          return _.clone(j);
-        })
-      };
-    });
+    this.apply = Action.cloneAvailable(profile.apply);
+    this.write = Action.cloneAvailable(profile.write);
     this.goto_ = _.map(profile.goto_, function(i) {
       return _.clone(i);
     });
@@ -58,9 +42,9 @@ function Profile(profile){
       goto_    : true
     };
 
-    this.apply2 = Action.Available();
-    this.write2 = Action.Available();
-
+    this.apply = Action.Available();
+    this.write = Action.Available();
+/*
     this.apply = [{
       protocol: 'Internal',
       fields: [
@@ -262,6 +246,7 @@ function Profile(profile){
     };
 	this.apply = _(this.apply2).values();
   */
+    /*
 	this.write2 = {};
 	
 	this.write2 = {
@@ -370,8 +355,8 @@ function Profile(profile){
       }
 	};
 
-
   this.write = _(this.write2).values();
+  */
 }
 
 }
