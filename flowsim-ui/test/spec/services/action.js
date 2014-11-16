@@ -51,6 +51,11 @@ describe('Service: action', function () {
     TCP = _TCP_;
   }));
 
+  var SCTP;
+  beforeEach(inject(function (_SCTP_) {
+    SCTP = _SCTP_;
+  }));
+
   var IPV6;
   beforeEach(inject(function (_IPV6_) {
     IPV6 = _IPV6_;
@@ -64,6 +69,11 @@ describe('Service: action', function () {
   var ICMPV6;
   beforeEach(inject(function (_ICMPV6_) {
     ICMPV6 = _ICMPV6_;
+  }));
+
+  var ND;
+  beforeEach(inject(function (_ND_) {
+    ND = _ND_;
   }));
 
 
@@ -889,7 +899,7 @@ describe('Service: action', function () {
   });
 
 
-  it('TCP test', function () {
+  it('TCP setField', function () {
     expect(!!Action).toBe(true);
     expect(!!TCP).toBe(true);
 
@@ -916,6 +926,42 @@ describe('Service: action', function () {
       null,
       TCP.name, TCP.dst,
       TCP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('65535');
+  });
+
+  it('SCTP testField', function () {
+    expect(!!Action).toBe(true);
+    expect(!!SCTP).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(SCTP.mkSCTP());
+
+    expect(pkt.protocols[1].src().toString()).toBe('0');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      SCTP.name, SCTP.src,
+      SCTP.mkPort('65535')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].src().toString()).toBe('65535');
+    expect(pkt.protocols[1].dst().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      SCTP.name, SCTP.dst,
+      SCTP.mkPort('65535')));
 
     set.step(null, {
       packet: pkt
@@ -1165,6 +1211,42 @@ describe('Service: action', function () {
     }).toThrow();
   });
 
+  it('ICMPV4 test', function () {
+    expect(!!Action).toBe(true);
+    expect(!!ICMPV4).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(ICMPV4.mkICMPV4());
+
+    expect(pkt.protocols[1].type().toString()).toBe('0');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV4.name, ICMPV4.type,
+      ICMPV4.mkType('255')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('0');
+
+    set.setField(new Action.SetField(
+      null,
+      ICMPV4.name, ICMPV4.code,
+      ICMPV4.mkCode('127')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].type().toString()).toBe('255');
+    expect(pkt.protocols[1].code().toString()).toBe('127');
+  });
+
   it('ICMPV6 test', function () {
     expect(!!Action).toBe(true);
     expect(!!ICMPV6).toBe(true);
@@ -1199,6 +1281,27 @@ describe('Service: action', function () {
 
     expect(pkt.protocols[1].type().toString()).toBe('255');
     expect(pkt.protocols[1].code().toString()).toBe('127');
+  });
+
+  it('ND setField test', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(ND.mkND());
+    set.setField(new Action.SetField(
+      null,
+      ND.name, ND.target,
+      ND.mkTarget('2001:db8:0:0:0:ff00:42:8329')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].target().toString()).toBe('2001:db8:0:0:0:ff00:42:8329');
+    expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
+
+
   });
 
 });

@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
-                              ICMPV6, SCTP, TCP, UDP) {
+                              ICMPV6, SCTP, TCP, UDP, ND) {
 
 function Output(output, port_id) {
   if(_.isObject(output)) {
@@ -532,6 +532,8 @@ Set.prototype.step = function(dp, ctx) {
       } else if(this.stepSetField(dp, ctx, SCTP.name)) {
         return true;
       } else if(this.stepSetField(dp, ctx, ETHERNET.name)) {
+        return true;
+      } else if(this.stepSetField(dp, ctx, ND.name)){
         return true;
       } else {
         throw 'Bad setField keys: '+this.actions.setField.keys();

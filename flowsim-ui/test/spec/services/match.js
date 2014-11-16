@@ -46,6 +46,11 @@ describe('Service: match', function () {
     TCP = _TCP_;
   }));
 
+  var SCTP;
+  beforeEach(inject(function (_SCTP_) {
+    SCTP = _SCTP_;
+  }));
+
   var Context;
   beforeEach(inject(function(_Context_) {
     Context = _Context_;
@@ -69,6 +74,11 @@ describe('Service: match', function () {
   var ICMPV6;
   beforeEach(inject(function (_ICMPV6_) {
     ICMPV6 = _ICMPV6_;
+  }));
+
+  var ND;
+  beforeEach(inject(function (_ND_) {
+    ND = _ND_;
   }));
 
   it('Default Match', function() {
@@ -466,6 +476,98 @@ describe('Service: match', function () {
 
   });
 
+  it('UDP Match set', function(){
+    expect(!!Match).toBe(true);
+    expect(!!UDP).toBe(true);
+
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    match.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65535, '0xffff')));
+    match.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    match1.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65535, '0xffff')));
+
+    expect(match1.equal(match)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match)).toBe(true);
+
+    match2.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(65534, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+    match2.push(
+      new Match.Match(null,
+        'udp_dst',
+        UDP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+  });
+
+  it('SCTP Match set', function(){
+    expect(!!Match).toBe(true);
+    expect(!!SCTP).toBe(true);
+
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    match.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(65535, '0xffff')));
+    match.push(
+      new Match.Match(null,
+        'sctp_dst',
+        SCTP.mkPortMatch(80, '0xffff')));
+
+    match1.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(65535, '0xffff')));
+
+    expect(match1.equal(match)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'sctp_dst',
+        SCTP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match)).toBe(true);
+
+    match2.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(65534, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+    match2.push(
+      new Match.Match(null,
+        'sctp_dst',
+        SCTP.mkPortMatch(80, '0xffff')));
+
+    expect(match1.equal(match2)).toBe(false);
+
+  });
+
   it('TCP Match', function () {
     expect(!!Match).toBe(true);
     expect(!!TCP).toBe(true);
@@ -641,7 +743,32 @@ describe('Service: match', function () {
         ARP.mkSpaMatch(
           '192.168.1.1', '222.222.22.222')));
 
-    expect(match.summarize().toString()).toBe('ipv6,mpls,eth,tcp,vlan,ipv4,arp');
+    match.push(
+      new Match.Match(null,
+        'icmpv6_type',
+        ICMPV6.mkTypeMatch(
+          '0x12', '0xff')));
+
+    match.push(
+      new Match.Match(null,
+        'icmpv4_type',
+        ICMPV4.mkTypeMatch(
+          '0x12', '0xff')));
+
+    match.push(
+      new Match.Match(null,
+        'udp_src',
+        UDP.mkPortMatch(
+          1234, '0xffff')));
+
+    match.push(
+      new Match.Match(null,
+        'sctp_src',
+        SCTP.mkPortMatch(
+          1234, '0xffff')));
+
+    expect(match.summarize().toString()).toBe(
+      'ipv6,mpls,eth,tcp,vlan,ipv4,arp,icmpv6,icmpv4,udp,sctp');
     expect(match.match(key)).toBe(false);
 
   });
@@ -764,6 +891,42 @@ describe('Service: match', function () {
 
   });
 
+  it('ICMPV4 Match', function () {
+    expect(!!Match).toBe(true);
+    expect(!!ICMPV4).toBe(true);
+
+    var match = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'icmpv4_type',
+        ICMPV4.mkTypeMatch(
+          '255',
+          '0xff')));
+
+    match.push(
+      new Match.Match(null,
+        'icmpv4_code',
+        ICMPV4.mkCodeMatch(
+          '0',
+          '0xff')));
+
+    expect(match.match(key)).toBe(false);
+
+    key.icmpv4_type = ICMPV4.mkType('255');
+    key.icmpv4_code = ICMPV4.mkType('0');
+
+    expect(match.match(key)).toBe(true);
+
+    key.icmpv4_type = ICMPV4.mkType('127');
+    expect(match.match(key)).toBe(false);
+
+    key.icmpv4_type = ICMPV4.mkType('255');
+    key.icmpv4_code = ICMPV4.mkType('127');
+    expect(match.match(key)).toBe(false);
+  });
+
   it('ICMPV6 Match', function () {
     expect(!!Match).toBe(true);
     expect(!!ICMPV6).toBe(true);
@@ -799,6 +962,36 @@ describe('Service: match', function () {
     key.icmpv6_type = ICMPV6.mkType('255');
     key.icmpv6_code = ICMPV6.mkType('127');
     expect(match.match(key)).toBe(false);
+  });
+
+  it('ND Match', function(){
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'nd_target',
+        ND.mkTargetMatch('b::b', 'a::a')));
+
+    expect(match.equal(match1)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'nd_target',
+        ND.mkTargetMatch('b::b', 'a::a')));
+
+    expect(match.equal(match1)).toBe(true);
+
+    match2.push(
+      new Match.Match(null,
+        'nd_target',
+        ND.mkTargetMatch('b::b', 'c::c')));
+
+    expect(match.equal(match2)).toBe(false);
+
+
   });
 
 });
