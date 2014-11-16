@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
   .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match) {
 
   $scope.flow = flow;
-  $scope.matches = flow.match.toView();
+  $scope.match = flow.match;
   //$scope.options = Match.getOptions($scope.matches);
   
   $scope.insNames = [
