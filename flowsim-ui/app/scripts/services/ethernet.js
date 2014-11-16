@@ -234,6 +234,36 @@ Ethernet_UI.prototype.clearPayload = function() {
   this.attrs[2].value = '0x0000';
 };
 
+var Operations = {
+  src: {
+    name: 'Src',
+    action: 'set',
+    constructor: mkMACMatch,
+    valueTest: MAC.is,
+    maskTest: MAC.is,
+    valueTip: 'Ethernet source MAC match value',
+    maskTip: 'Ethernet source MAC match mask'
+  }, 
+  dst: {
+    name: 'Dst',
+    action: 'set',
+    constructor: mkMACMatch,
+    valueTest: MAC.is,
+    maskTest: MAC.is,
+    valueTip: 'Ethernet destination MAC match value',
+    maskTip: 'Ethernet destination MAC match mask'
+  }, 
+  type: {
+    name: 'Type',
+    action: 'set',
+    constructor: mkTypeMatch,
+    valueTest: UInt.is(16),
+    maskTest: UInt.is(16),
+    valueTip: 'Ethernet type match value',
+    maskTip: 'Ethernet type match mask'
+  }, 
+};
+
 return {
   name:        NAME,
   src:         '_src',
@@ -251,7 +281,8 @@ return {
   mkTypeMatch: mkTypeMatch,
   mkEthernet:  mkEthernet,
   TESTS:       TESTS,
-  TIPS:        TIPS
+  TIPS:        TIPS,
+  Operations: Operations
 };
 
 });

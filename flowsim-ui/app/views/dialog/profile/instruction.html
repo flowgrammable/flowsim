@@ -5,6 +5,681 @@
 
 <div class="modal-body">
 
+  <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">
+
+      <button type="button" class="btn btn-xs btn-default"
+              ng-click="instruction.caps.meter = !instruction.caps.meter;
+              activeIdx = activeIdx === 0 ? -1 : activeIdx"
+              ng-class="{'btn-primary': instruction.caps.meter}">
+        Meter
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-click="instruction.caps.apply = !instruction.caps.apply;
+              activeIdx = activeIdx === 1 ? -1 : activeIdx"
+              ng-class="{'btn-primary': instruction.caps.apply}">
+        Apply
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-click="instruction.caps.clear = !instruction.caps.clear;
+              activeIdx = activeIdx === 2 ? -1 : activeIdx"
+              ng-class="{'btn-primary': instruction.caps.clear}">
+        Clear
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-click="instruction.caps.write = !instruction.caps.write;
+              activeIdx = activeIdx === 3 ? -1 : activeIdx"
+              ng-class="{'btn-primary': instruction.caps.write}">
+        Write 
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-click="instruction.caps.metadata = !instruction.caps.metadata;
+              activeIdx = activeIdx === 4 ? -1 : activeIdx"
+              ng-class="{'btn-primary': instruction.caps.metadata}">
+        Metadata
+      </button>
+      <button type="button" class="btn btn-xs btn-default"
+              ng-click="instruction.caps.goto_ = !instruction.caps.goto_;
+              activeIdx = activeIdx === 5 ? -1 : activeIdx"
+              ng-class="{'btn-primary': instruction.caps.goto_}">
+        Goto
+      </button>
+    </div>
+      <div class="row">
+        <div class="col-md-2">
+          <ul class="list-group">
+            <li class="list-group-item"
+                ng-show="instruction.caps.meter"
+                ng-class="{'active': activeIdx === 0}"
+                ng-click="activeIdx = instruction.caps.meter ? 0 : activeIdx">
+              Meter
+            </li>
+            <li class="list-group-item"
+                ng-show="instruction.caps.apply"
+                ng-class="{'active': activeIdx === 1}"
+                ng-click="activeIdx = instruction.caps.apply ? 1 : activeIdx">
+              Apply
+            </li>
+            <li class="list-group-item"
+                ng-show="instruction.caps.clear"
+                ng-class="{'active': activeIdx === 2}"
+                ng-click="activeIdx = instruction.caps.clear ? 2 : activeIdx">
+              Clear
+            </li>
+            <li class="list-group-item"
+                ng-show="instruction.caps.write"
+                ng-class="{'active': activeIdx === 3}"
+                ng-click="activeIdx = instruction.caps.write ? 3 : activeIdx">
+              Write
+            </li>
+            <li class="list-group-item"
+                ng-show="instruction.caps.metadata"
+                ng-class="{'active': activeIdx === 4}"
+                ng-click="activeIdx = instruction.caps.metadata ? 4 : activeIdx">
+              Metadata
+            </li>
+            <li class="list-group-item"
+                ng-show="instruction.caps.goto_"
+                ng-class="{'active': activeIdx === 5}"
+                ng-click="activeIdx = instruction.caps.goto_ ? 5 : activeIdx">
+              Goto
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-10">
+          <div ng-show="activeIdx === 0">
+            <h3>Metering - Enabled</h3>
+          </div>
+          <div ng-show="activeIdx === 1">
+
+            <div class="row">
+	
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.internal.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.internal.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.ethernet.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.ethernet.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.vlan.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.vlan.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+			<div class="row">
+	
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.mpls.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.mpls.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.arp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.arp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.ipv4.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.ipv4.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+			<div class="row">
+	
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.icmpv4.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.icmpv4.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.ipv6.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.ipv6.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.icmpv6.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.icmpv6.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+			<div class="row">
+	
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.tcp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.tcp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.udp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.udp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{apply.sctp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in apply.sctp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+          </div>
+          <div ng-show="activeIdx === 2">
+            <h3>Clearing Action Set - Enabled</h3>
+          </div>
+          <div ng-show="activeIdx === 3">
+
+			<div class="row">
+
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.internal.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.internal.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.ethernet.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.ethernet.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.vlan.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.vlan.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+			<div class="row">
+
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.mpls.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.mpls.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.arp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.arp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.ipv4.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.ipv4.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+			<div class="row">
+
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.icmpv4.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.icmpv4.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.ipv6.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.ipv6.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.icmpv6.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.icmpv6.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+			<div class="row">
+
+			  <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.tcp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.tcp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			 </div>
+
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.udp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.udp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+                <div class="panel-heading">
+					<h4>{{write.sctp.protocol}}</h4>
+				</div>
+                <table class="table table-striped table-hover">
+                  <tr ng-repeat="type in write.sctp.fields">
+                    <td>{{type.name}}</td>
+                    <td>{{type.action}}</td>
+                    <td>
+                      <button class="btn btn-xs btn-default"
+                              ng-click="type.enabled = !type.enabled"
+                              ng-class="{'btn-primary': type.enabled}">
+                        {{type.enabled ? 'Enabled' : 'Disabled'}}
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+			</div>
+
+            </div>
+
+          </div>
+          <div ng-show="activeIdx === 4">
+
+            <br>
+            <form class="form-horizontal" role="form">
+              <div class="form-group" ng-class="{'has-error':
+                !tests.metadata(instruction.metadata)}">
+                <label class="col-sm-2 control-label">
+                  Writable Bits
+                </label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" 
+                         ng-model="instruction.metadata">
+                </div>
+              </div>
+
+          </div>
+          <div ng-show="activeIdx === 5">
+       
+            <br>
+            <div class="col-sm-5">
+              <ul class="list-group">
+                <li class="list-group-item" ng-repeat="rng in instruction.goto_">
+                  {{rng.first}}
+                  {{'..'+rng.second}}
+                  <span ng-click="del($index)"
+                        class="glyphicon glyphicon-minus-sign pull-right"></span>
+                </li>
+              </ul>
+
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="0..255"
+                       ng-model="goto_.nextTables">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" 
+                          ng-click="add()">
+                    Add
+                  </button>
+                </span>
+              </div>
+              <div class="error" ng-show="errorMsg.length">
+                <h6>
+                  <span>{{errorMsg}}</span>
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--
   <div class="row">
   <div class="col-md-2">
     <div class="checkbox">
@@ -127,7 +802,7 @@
   </div>
 
 </div>
-
+-->
 </div>
 
 <div class="modal-footer">

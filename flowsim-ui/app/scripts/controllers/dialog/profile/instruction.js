@@ -17,6 +17,9 @@ angular.module('flowsimUiApp')
     $scope.tests = tests;
     $scope.instruction = instruction;
 
+    $scope.apply = instruction.apply2;
+    $scope.write = instruction.write2;
+
     $scope.goto_ = {
       nextTables : ''
     };
