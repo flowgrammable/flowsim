@@ -11,6 +11,28 @@ angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                               ICMPV6, SCTP, TCP, UDP, ND) {
 
+function ActionField_UI(afu, category, name, key, Type, action) {
+  if(_.isObject(afu)) {
+    _.extend(this, afu);
+  } else {
+    this.category = category;
+    this.name     = name;
+    this.action   = action ? action : '-n/a-';
+    this.enabled  = true;     // Availability of action ie. profile - OFP 1.X
+    this.key      = key;
+    this.mkType   = function() {
+      // this is a fancy way of building a runtime constructor
+      var args = [Type, null, null].concat(_(arguments).values());
+      var T = _.bind.apply(null, args);
+      return new T();
+    };
+  }
+}
+
+ActionField_UI.prototype.clone = function() {
+  return new ActionField_UI(this);
+};
+
 function Output(output, port_id) {
   if(_.isObject(output)) {
     _.extend(this, output);
@@ -30,6 +52,16 @@ Output.prototype.toString = function() {
 Output.prototype.step = function(dp, ctx) {
   dp.output(this.port_id, null, ctx);
 };
+
+function mkOutputField() {
+  return new ActionField_UI(
+    null,         // default construction
+    'Internal',   // Category of action
+    'Output',     // Name of action
+    'forward',    // might be vestigal
+    Output        // Type name of action
+  );
+}
 
 function Group(group, group_id) {
   if(_.isObject(group)) {
@@ -51,6 +83,16 @@ Group.prototype.step = function(dp, ctx) {
   dp.output(null, this.group_id, ctx);
 };
 
+function mkGroupField() {
+  return new ActionField_UI(
+    null,         // default construction
+    'Internal',   // Category of action
+    'Group',      // Name of action
+    'set_group',  // might be vestigal
+    Group         // Type name of action
+  );
+}
+
 function Queue(queue, queue_id) {
   if(_.isObject(queue)) {
     _.extend(this, queue);
@@ -71,9 +113,19 @@ Queue.prototype.step = function(dp, ctx) {
   ctx.queue_id = this.queue_id;
 };
 
+function mkQueueField() {
+  return new ActionField_UI(
+    null,         // default construction
+    'Internal',   // Category of action
+    'Queue',      // Name of action
+    'set_queue',  // might be vestigal
+    Queue         // Type name of action
+  );
+}
+
 function Pop(pop, tag){
   if(_.isObject(pop)) {
-    this.tag = pop.tag.clone();
+    this.tag = pop.tag;
   } else {
     this.tag = tag;
   }
@@ -84,17 +136,56 @@ Pop.prototype.clone = function() {
 };
 
 Pop.prototype.toString = function() {
-  return this.pop.toString();
+  return this.tag;
 };
 
 Pop.prototype.step = function(dp, ctx) {
   for(var i = 0; i < ctx.packet.protocols.length; i++){
-    if(this.tag.popHere(ctx.packet.protocols[i])){
+    if(this.tag.name === ctx.packet.protocols[i].name){
       ctx.packet.protocols.splice(i, 1);
+      // might need a check on this, seems like there should be boudns check
       ctx.packet.protocols[i-1].setPayload(ctx.packet.protocols[i].name);
     }
   }
 };
+
+function PopVLAN() {
+  this.tag = VLAN.name;
+}
+
+PopVLAN.prototype.clone    = Pop.prototype.clone;
+PopVLAN.prototype.toString = Pop.prototype.toString;
+PopVLAN.prototype.step     = Pop.prototype.step;
+
+function mkPopVLANField() {
+  return new ActionField_UI(
+    null,       // default construction
+    'VLAN',     // Category of action
+    'Tag',      // Name of action
+    'pop_vlan', // might be vestigal
+    PopVLAN,    // Type name of action
+    'pop'       // Action behavior
+  );
+}
+
+function PopMPLS() {
+  this.tag = MPLS.name;
+}
+
+PopMPLS.prototype.clone    = Pop.prototype.clone;
+PopMPLS.prototype.toString = Pop.prototype.toString;
+PopMPLS.prototype.step     = Pop.prototype.step;
+
+function mkPopMPLSField() {
+  return new ActionField_UI(
+    null,       // default construction
+    'MPLS',     // Category of action
+    'Tag',      // Name of action
+    'pop_vlan', // might be vestigal
+    PopMPLS,    // Type name of action
+    'pop'       // Action behavior
+  );
+}
 
 function CopyTTLIn(){
 }
@@ -251,6 +342,39 @@ SetField.prototype.step = function(dp, ctx) {
                 this.value.toString());
   }
 };
+
+function mkSetEthSrcField() {
+  return new ActionField_UI(
+    null,           // default construction
+    'Ethernet',     // Category of action
+    'Src',          // Name of action
+    'set_eth_src',  // might be vestigal
+    SetField,       // Type name of action
+    'set'           // Action behavior
+  );
+}
+
+function mkSetEthDstField() {
+  return new ActionField_UI(
+    null,           // default construction
+    'Ethernet',     // Category of action
+    'Dst',          // Name of action
+    'set_eth_dst',  // might be vestigal
+    SetField,       // Type name of action
+    'set'           // Action behavior
+  );
+}
+
+function mkSetEthTypeField() {
+  return new ActionField_UI(
+    null,           // default construction
+    'Ethernet',     // Category of action
+    'Type',         // Name of action
+    'set_eth_type', // might be vestigal
+    SetField,       // Type name of action
+    'set'           // Action behavior
+  );
+}
 
 function Set(set) {
   if(_.isObject(set)) {
@@ -608,6 +732,41 @@ List.prototype.execute = function(dp, ctx) {
   }
 };
 
+function Available() {
+  return [{
+    protocol: 'Internal',
+    actions: [
+      mkOutputField(),
+      mkGroupField(),
+      mkQueueField(),
+  ]}, {
+    protocol: 'Ethernet',
+    actions: [
+      mkSetEthSrcField(),
+      mkSetEthDstField(),
+      mkSetEthTypeField(),
+  ]}, {
+    protocol: 'VLAN',
+    actions: [
+      mkPopVLANField()
+  ]}, {
+    protocol: 'MPLS',
+    actions: [
+      mkPopMPLSField()
+  ]}];
+}
+
+function cloneAvailable(a) {
+  return _(a).map(function(grouping) {
+    return {
+      protocol: grouping.protocol,
+      actions: _(grouping.actions).map(function(action) {
+        return action.clone();
+      })
+    };
+  });
+}
+
 return {
   Output: Output,
   Group: Group,
@@ -620,7 +779,9 @@ return {
   SetTTL: SetTTL,
   DecTTL: DecTTL,
   CopyTTLIn: CopyTTLIn,
-  CopyTTLOut: CopyTTLOut
+  CopyTTLOut: CopyTTLOut,
+  Available: Available,
+  cloneAvailable: cloneAvailable
 };
 
 });

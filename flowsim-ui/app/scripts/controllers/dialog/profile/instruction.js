@@ -19,6 +19,27 @@ angular.module('flowsimUiApp')
 
     $scope.apply = instruction.apply2;
     $scope.write = instruction.write2;
+    $scope.applyRows = [];
+    $scope.writeRows = [];
+
+    var i;
+    var rowCount = Math.floor($scope.apply.length / 3);
+    for(i=0; i < rowCount; ++i) {
+      $scope.applyRows.push($scope.apply.slice(i*3,i*3+3));
+    }
+    if($scope.apply.length % 3) {
+      var amt = i*3 + $scope.apply.length - i*3;
+      $scope.applyRows.push($scope.apply.slice(i*3, amt))
+    }
+    
+    rowCount = Math.floor($scope.apply.length / 3);
+    for(i=0; i < rowCount; ++i) {
+      $scope.writeRows.push($scope.apply.slice(i*3,i*3+3));
+    }
+    if($scope.apply.length % 3) {
+      var amt = i*3 + $scope.apply.length - i*3;
+      $scope.writeRows.push($scope.apply.slice(i*3, amt))
+    }
 
     $scope.goto_ = {
       nextTables : ''

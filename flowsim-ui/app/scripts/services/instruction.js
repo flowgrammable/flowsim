@@ -27,6 +27,8 @@ function Profile(profile){
   if(_.isObject(profile)) {
     _.extend(this, profile);
     this.caps = _.clone(profile.caps);
+    this.apply2 = Action.cloneAvailable(profile.apply2);
+    this.write2 = Action.cloneAvailable(profile.write2);
     this.apply = _.map(profile.apply, function(i) {
       return {
         protocol: i.protocol,
@@ -55,6 +57,10 @@ function Profile(profile){
       meter    : true,
       goto_    : true
     };
+
+    this.apply2 = Action.Available();
+    this.write2 = Action.Available();
+
     this.apply = [{
       protocol: 'Internal',
       fields: [
@@ -148,6 +154,7 @@ function Profile(profile){
       ]
     }];
 
+    /*
     this.apply2 = {
       internal: {
 	      protocol: 'Internal',
@@ -254,6 +261,7 @@ function Profile(profile){
       }
     };
 	this.apply = _(this.apply2).values();
+  */
 	this.write2 = {};
 	
 	this.write2 = {
