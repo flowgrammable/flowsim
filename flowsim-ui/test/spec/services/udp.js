@@ -133,6 +133,13 @@ describe('Service: UDP', function () {
     expect(multi.equal(multi3)).toBe(false);
   });
 
+  it('Summarize Tests', function () {
+    expect(!!UDP).toBe(true);
+
+    var match = UDP.mkPortMatch('36235', '0xffff');
+    expect(match.summarize()).toBe('udp');
+  });
+
   it ('JSON stringify', function() {
     expect(!!UDP).toBe(true);
 

@@ -155,6 +155,37 @@ describe('Service: ICMPV4', function () {
     expect(exactCode.match(c4)).toBe(false);
   });
 
+  it('Type Match equal Pass', function() {
+    expect(!!ICMPV4).toBe(true);
+
+    var everyType = new ICMPV4.mkTypeMatch(13, '0x00');
+    var multiType = new ICMPV4.mkTypeMatch(13, '0x80');
+    var exactType = new ICMPV4.mkTypeMatch(13, '0xff');
+    expect(everyType.equal(multiType)).toBe(false);
+    expect(everyType.equal(exactType)).toBe(false);
+
+    var t1 = new ICMPV4.mkTypeMatch(13, '0');
+    expect(everyType.equal(t1)).toBe(true);
+
+    var t2 = new ICMPV4.mkTypeMatch(13, '0xff');
+    expect(exactType.equal(t2)).toBe(true);
+    expect(multiType.equal(t2)).toBe(false);
+
+    var t3 = new ICMPV4.mkTypeMatch(0, '0xff');
+    expect(exactType.equal(t3)).toBe(false);
+    expect(multiType.equal(t3)).toBe(false);
+  });
+
+  it('Summarize Tests', function () {
+    expect(!!ICMPV4).toBe(true);
+
+    var match = ICMPV4.mkTypeMatch('255', '0xff');
+    expect(match.summarize()).toBe('icmpv4');
+
+    var match = ICMPV4.mkCodeMatch('255', '0xff');
+    expect(match.summarize()).toBe('icmpv4');
+  });
+
   it ('JSON stringify', function() {
     expect(!!ICMPV4).toBe(true);
 
