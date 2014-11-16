@@ -142,7 +142,7 @@ Metadata.Match.prototype.match = function(meta){
 };
 
 Metadata.Match.prototype.equal = function(meta){
-  return this._match.equal(meta._meta);
+  return this._match.equal(meta._match);
 };
 
 Metadata.Match.prototype.summarize = function() {

@@ -772,8 +772,13 @@ describe('Service: match', function () {
         SCTP.mkPortMatch(
           1234, '0xffff')));
 
+    match.push(
+      new Match.Match(null,
+        'internals_phyport',
+        INTERNALS.mkPhyportMatch('0x11223344')));
+
     expect(match.summarize().toString()).toBe(
-      'ipv6,mpls,eth,tcp,vlan,ipv4,arp,icmpv6,icmpv4,udp,sctp');
+      'ipv6,mpls,eth,tcp,vlan,ipv4,arp,icmpv6,icmpv4,udp,sctp,internals');
     expect(match.match(key)).toBe(false);
 
   });
@@ -1089,7 +1094,29 @@ describe('Service: match', function () {
           ETHERNET.mkMACMatch('aa:bb:cc:dd:ee:ff',
           'ff:ff:ff:ff:ff:ff')));
     }).toThrow();
+  });
 
+  it('Internals match set equality', function() {
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+
+    match.push(
+      new Match.Match(null,
+        'internals_metadata',
+        INTERNALS.mkMetadataMatch(
+          '0x1122334455667788',
+          '0x1122334455667788'
+        )));
+
+    match1.push(
+      new Match.Match(null,
+        'internals_metadata',
+        INTERNALS.mkMetadataMatch(
+          '0x1122334455667788',
+          '0x1122334455667788'
+        )));
+
+    expect(match.equal(match1)).toBe(true);
 
   });
 
