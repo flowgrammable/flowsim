@@ -10,7 +10,7 @@
 
 angular.module('flowsimUiApp')
   .factory('Packet', function(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4,
-                            ICMPV6, TCP, UDP, SCTP, PAYLOAD) {
+                            ICMPV6, TCP, UDP, SCTP, ND, PAYLOAD) {
 
 var Protocols = {
   Ethernet: ETHERNET,
@@ -24,6 +24,7 @@ var Protocols = {
   TCP: TCP,
   UDP: UDP,
   SCTP: SCTP,
+  ND: ND,
   Payload: PAYLOAD
 };
 
@@ -51,6 +52,8 @@ function dispatch(name, method, p) {
       return UDP[method](p);
     case SCTP.name:
       return SCTP[method](p);
+    case ND.name:
+      return ND[method](p);
     case PAYLOAD.name:
       return PAYLOAD[method](p);
     default:

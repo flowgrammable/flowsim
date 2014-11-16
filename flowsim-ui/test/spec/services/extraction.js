@@ -66,6 +66,11 @@ describe('Service: extraction', function () {
     ICMPV6 = _ICMPV6_;
   }));
 
+  var ND;
+  beforeEach(inject(function (_ND_) {
+    ND = _ND_;
+  }));
+
   var Context;
   beforeEach(inject(function (_Context_) {
     Context = _Context_;
@@ -321,6 +326,16 @@ describe('Service: extraction', function () {
 
     expect(key.icmpv6_type).toBe(icmp.type());
     expect(key.icmpv6_code).toBe(icmp.code());
+  });
+
+  it('Extraction ND', function() {
+    var nd = ND.mkND('bb::bb', 'aa:bb:cc:dd:ee:ff');
+    var key = new Context.Key(null, 0);
+
+    extraction.extract_nd(nd, key);
+
+    expect(key.nd_target).toBe(nd.target());
+    expect(key.nd_hw).toBe(nd.hw());
   });
 
 });

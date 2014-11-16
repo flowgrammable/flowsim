@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .factory('Extraction', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
-                                  ICMPV6, SCTP, TCP, UDP) {
+                                  ICMPV6, SCTP, TCP, UDP, ND) {
 
 function extract_ethernet(eth, key) {
   key.eth_src  = eth.src();
@@ -87,6 +87,11 @@ function extract_udp(udp, key) {
   key.udp_dst = udp.dst();
 }
 
+function extract_nd(nd, key){
+  key.nd_target = nd.target();
+  key.nd_hw     = nd.hw();
+}
+
 function extract(ctx) {
   _.each(ctx.packet.protocols, function(protocol) {
     switch(protocol.name) {
@@ -114,6 +119,9 @@ function extract(ctx) {
       case ICMPV6.NAME:
         extract_icmpv6(protocol, ctx.key);
         break;
+      case ND.NAME:
+        extract_nd(protocol, ctx.key);
+        break;
       case SCTP.NAME:
         extract_sctp(protocol, ctx.key);
         break;
@@ -139,6 +147,7 @@ return {
   extract_ipv6: extract_ipv6,
   extract_icmpv4: extract_icmpv4,
   extract_icmpv6: extract_icmpv6,
+  extract_nd: extract_nd,
   extract: extract
 };
 

@@ -71,6 +71,11 @@ describe('Service: action', function () {
     ICMPV6 = _ICMPV6_;
   }));
 
+  var ND;
+  beforeEach(inject(function (_ND_) {
+    ND = _ND_;
+  }));
+
 
   it('Ethernet test', function () {
     expect(!!Action).toBe(true);
@@ -1276,6 +1281,27 @@ describe('Service: action', function () {
 
     expect(pkt.protocols[1].type().toString()).toBe('255');
     expect(pkt.protocols[1].code().toString()).toBe('127');
+  });
+
+  it('ND setField test', function () {
+    expect(!!Action).toBe(true);
+
+    var set = new Action.Set();
+    var pkt = new Packet.Packet('test');
+    pkt.push(ND.mkND());
+    set.setField(new Action.SetField(
+      null,
+      ND.name, ND.target,
+      ND.mkTarget('2001:db8:0:0:0:ff00:42:8329')));
+
+    set.step(null, {
+      packet: pkt
+    });
+
+    expect(pkt.protocols[1].target().toString()).toBe('2001:db8:0:0:0:ff00:42:8329');
+    expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
+
+
   });
 
 });

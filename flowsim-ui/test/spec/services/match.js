@@ -76,6 +76,11 @@ describe('Service: match', function () {
     ICMPV6 = _ICMPV6_;
   }));
 
+  var ND;
+  beforeEach(inject(function (_ND_) {
+    ND = _ND_;
+  }));
+
   it('Default Match', function() {
     var key = new Context.Key(null, 0);
     var match = new Match.Set();
@@ -957,6 +962,36 @@ describe('Service: match', function () {
     key.icmpv6_type = ICMPV6.mkType('255');
     key.icmpv6_code = ICMPV6.mkType('127');
     expect(match.match(key)).toBe(false);
+  });
+
+  it('ND Match', function(){
+    var match = new Match.Set();
+    var match1 = new Match.Set();
+    var match2 = new Match.Set();
+    var key = new Context.Key(null, 0);
+
+    match.push(
+      new Match.Match(null,
+        'nd_target',
+        ND.mkTargetMatch('b::b', 'a::a')));
+
+    expect(match.equal(match1)).toBe(false);
+
+    match1.push(
+      new Match.Match(null,
+        'nd_target',
+        ND.mkTargetMatch('b::b', 'a::a')));
+
+    expect(match.equal(match1)).toBe(true);
+
+    match2.push(
+      new Match.Match(null,
+        'nd_target',
+        ND.mkTargetMatch('b::b', 'c::c')));
+
+    expect(match.equal(match2)).toBe(false);
+
+
   });
 
 });

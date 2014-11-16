@@ -137,9 +137,7 @@ Match.Profile = function(match){
     createMatch('ARP', 'THA', 'arp_tha', true, true, '0xffffffffffff'),
     createMatch('ARP', 'TPA', 'arp_tpa', true, true, '0xffffffff'),
     createMatch('VLAN', 'PCP', 'vlan_pcp', true, true, '0x7'),
-    createMatch('VLAN', 'DEI', 'vlan_dei', true, true, '0x3'),
     createMatch('VLAN', 'VID', 'vlan_vid', true, true, '0x0fff'),
-    createMatch('VLAN', 'Type/Len', 'vlan_typelen', true, true, '0xffff'),
     createMatch('MPLS', 'Label', 'mpls_label', true, true, '0x0fffff'),
     createMatch('MPLS', 'Traffic Control', 'mpls_tc', true, true, '0x7'),
     createMatch('MPLS', 'BOS', 'mpls_bos', true, true, '0x0fffff'),
@@ -163,7 +161,10 @@ Match.Profile = function(match){
     createMatch('UDP', 'Src', 'udp_src', true, true, '0xffff'),
     createMatch('UDP', 'Dst', 'udp_dst', true, true, '0xffff'),
     createMatch('SCTP', 'Src', 'sctp_src', true, true, '0xffff'),
-    createMatch('SCTP', 'Dst', 'sctp_dst', true, true, '0xffff')
+    createMatch('SCTP', 'Dst', 'sctp_dst', true, true, '0xffff'),
+    createMatch('ND', 'Target', 'nd_target', true, true,
+    '0xffffffffffffffffffffffffffffffff'),
+    createMatch('ND', 'HW', 'nd_hw', true, true, '0xffffffffffff')
     ];
   }
 };
@@ -197,7 +198,9 @@ Match.Profile.TIPS ={
   udp_src: 'Match on UDP source',
   udp_dst: 'Match on UDP destination',
   sctp_src: 'Match on SCTP source',
-  sctp_dst: 'Match on SCTP destination'
+  sctp_dst: 'Match on SCTP destination',
+  nd_target: 'Match on Neighbor Discovery target',
+  nd_hw: 'Match on Neighbor Discovery link-layer'
 };
 
 Match.Profile.TESTS = {
@@ -235,7 +238,11 @@ Match.Profile.TESTS = {
   udp_src: fgConstraints.isUInt(0, 0xffff),
   udp_dst: fgConstraints.isUInt(0, 0xffff),
   sctp_src: fgConstraints.isUInt(0, 0xffff),
-  sctp_dst: fgConstraints.isUInt(0, 0xffff)
+  sctp_dst: fgConstraints.isUInt(0, 0xffff),
+  nd_target: fgConstraints.isUInt(0,
+    0xffffffffffffffffffffffffffffffff),
+  nd_hw: fgConstraints.isUInt(0,
+    0xffffffffffff)
 };
 
 return {
