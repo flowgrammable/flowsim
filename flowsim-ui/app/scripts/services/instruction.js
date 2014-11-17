@@ -341,14 +341,14 @@ Set.prototype.clear = function(clear) {
 
 Set.prototype.apply = function(apply) {
   if(apply) {
-    this._apply = new Action.List(null, apply);
+    this._apply = new Action.List(/*null,*/ apply);
   } else {
     return this._apply;
   }
 };
 
 Set.prototype.pushApply = function(action) {
-  this._apply.push(action); 
+  this._apply.push(action);
 };
 
 Set.prototype.popApply = function() {
@@ -460,7 +460,7 @@ Set.prototype.step = function(dp, ctx) {
 };
 
 Set.prototype.empty = function() {
-  return this._meter || this._clear || this._write || this._metadata || 
+  return this._meter || this._clear || this._write || this._metadata ||
          this._goto;
 };
 

@@ -13,7 +13,7 @@ angular.module('flowsimUiApp')
   $scope.flow = flow;
   $scope.match = flow.match;
   //$scope.options = Match.getOptions($scope.matches);
-  
+
   $scope.insNames = [
     'Meter', 'Apply', 'Clear', 'Write', 'Metadata', 'Goto'
   ];
@@ -172,13 +172,14 @@ angular.module('flowsimUiApp')
     console.log('update category: '+$scope.apply.action);
     $scope.applyAction = _($scope.activeApplyFields).find(
       function(action) {
-        return action.name === $scope.apply.field && 
+        return action.name === $scope.apply.field &&
                action.action === $scope.apply.action;
     });
   };
 
   $scope.addApplyAction = function() {
     var action;
+    console.log('scope apply action', $scope.applyAction);
     if($scope.applyAction && $scope.applyAction.test($scope.apply.value)) {
       console.log('got an action to deal with');
       action = $scope.applyAction.mkType($scope.apply.value);

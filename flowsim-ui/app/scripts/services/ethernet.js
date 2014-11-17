@@ -43,6 +43,10 @@ Ethernet.prototype.src = function(src) {
   }
 };
 
+Ethernet.prototype.src.toString = function(){
+  return "hi";
+}
+
 Ethernet.prototype.dst = function(dst) {
   if(dst) {
     this._dst = mkMAC(dst);
@@ -243,7 +247,7 @@ var Operations = {
     maskTest: MAC.is,
     valueTip: 'Ethernet source MAC match value',
     maskTip: 'Ethernet source MAC match mask'
-  }, 
+  },
   dst: {
     name: 'Dst',
     action: 'set',
@@ -252,7 +256,7 @@ var Operations = {
     maskTest: MAC.is,
     valueTip: 'Ethernet destination MAC match value',
     maskTip: 'Ethernet destination MAC match mask'
-  }, 
+  },
   type: {
     name: 'Type',
     action: 'set',
@@ -261,7 +265,7 @@ var Operations = {
     maskTest: UInt.is(16),
     valueTip: 'Ethernet type match value',
     maskTip: 'Ethernet type match mask'
-  }, 
+  },
 };
 
 return {

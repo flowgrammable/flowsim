@@ -266,7 +266,7 @@ function Profile(profile, macPrefix) {
     this.n_ports = defPortCount;
     this.macPrefix    = macPrefix;
     this.ports = _(this.n_ports).times(function(id) {
-      return new PortProfile(null, id, mkMAC(macPrefix, id));
+      return new PortProfile(null, id+1, mkMAC(macPrefix, id));
     });
     this.port_stats   = defPortStats;
     this.port_blocked = defPortBlocked;
