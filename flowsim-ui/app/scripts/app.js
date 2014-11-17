@@ -70,7 +70,7 @@ angular
         templateUrl: 'views/simulation.html',
         controller: 'SimulationCtrl'
       }) .when('/test', {
-        templateUrl: 'views/simulation/execution.html',
+        templateUrl: 'views/simulation/arrival.html',
         controller: 'TestCtrl'
       })
       .otherwise({

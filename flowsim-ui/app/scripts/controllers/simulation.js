@@ -146,7 +146,49 @@ angular.module('flowsimUiApp')
           //hideDetails($scope.simulation.stage) 
     };
     $scope.view = $scope.simulation.toView();
+    $scope.ctx = {
+            packetCnt: 5,
+            ctx: [{
+                name: 'buffer',
+                value: 12344
+            }, {
+                name: 'meter',
+                value: 124
+            }, {
+                name: 'table',
+                value: 0
+            }],
+            key: [{
+                name: 'Internal',
+                attrs: [{
+                    name: 'in_port',
+                    value: 4,
+                }, {
+                    name: 'in_phy_port',
+                    value: 6,
+                }, {
+                    name: 'tunnel',
+                    value: 12435
+                }]
+            }, {
+                name: 'Ethernet',
+                attrs: [{
+                    name: 'in_port',
+                    value: 4,
+                }, {
+                    name: 'in_phy_port',
+                    value: 6,
+                }, {
+                    name: 'tunnel',
+                    value: '0xffffffffffffffff'
+                }, {
+                    name: 'tunnel',
+                    value: 12435
+                }]
 
+            }]
+        };
+    $scope.packetName = 'pack1'; //TODO - add real name
 
   };
 
