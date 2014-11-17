@@ -122,14 +122,19 @@ ddescribe('Service: dataplane', function () {
   it('Instruction profile test', function(){
     var profile = new Instruction.Profile(null);
 
-    var j = JSON.stringify(profile);
-    var j_ = new Instruction.Profile(JSON.parse(j));
+    var test = profile.apply[0].actions[0];
+    delete test.name;
+    delete test.category;
+    delete test.action;
+    delete test.enabled;
+    delete test.key;
+    delete test.mkType;
+    console.log(test);
+    var j = JSON.stringify(test);
+    console.log(j);
 
-    var profile2 = new Instruction.Profile(profile);
-    expect(profile2.apply).toBe(Action.Available());
-
-   // expect(j_.apply).toBe(Action.Available());
-   // expect(j_.write).toBe(Action.Available());
+    //expect(j_.apply).toBe(Action.Available());
+    //expect(j_.write).toBe(Action.Available());
   });
 
   it('Table construction test', function(){
