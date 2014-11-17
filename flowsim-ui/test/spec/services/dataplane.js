@@ -119,6 +119,16 @@ ddescribe('Service: dataplane', function () {
     expect(j_.flows[0].ins._apply.actions[0].toValue()).toBe(1);
   });
 
+  it('Instruction profile test', function(){
+    var profile = new Instruction.Profile(null);
+
+    var j = JSON.stringify(profile);
+    var j_ = new Instruction.Profile(JSON.parse(j));
+
+    expect(j_.apply).toBe(Action.Available());
+    expect(j_.write).toBe(Action.Available());
+  });
+
   it('Table construction test', function(){
 
   });
