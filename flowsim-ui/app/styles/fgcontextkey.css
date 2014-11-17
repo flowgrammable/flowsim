@@ -1,0 +1,109 @@
+.ctx-key-color-prim
+{
+    background-color: #c0224e;
+}
+.ctx-key-color-sec
+{
+    background-color: #42a0ba;
+}
+.ctx-key-grid
+{
+	padding: 0;
+	margin: 0;
+   display: block;
+    overflow: auto;
+
+    width: 510px;
+    margin: 60px auto 0 auto;
+}
+.ctx-key-rightColumn
+{
+    float: right;
+    clear: none;
+
+    width: 260px;
+   
+}
+.ctx-key-leftColumn
+{
+    float: left;
+    clear: none;
+
+    width: 185px;
+    
+}
+.ctx-key-connector
+{
+    float: left;
+    clear: none;
+
+    width: 60px;
+    height:100px;
+    border: 2px solid #c0224e;
+  border-width: 0 0 2px 2px;
+    
+}
+.ctx-key-vis{
+	opacity: 0;
+	
+}
+.ctx-key-context{
+	font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+    padding: 2px;
+    position:relative;
+    
+}
+.ctx-key-header
+{
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+	
+    background-color:lightgrey;
+    border-radius: 4px;
+}
+.ctx-key-table
+{
+    padding: 2px;
+    padding-left: 10px;
+
+    color: white;
+}
+.ctx-key-keys
+{
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+
+    padding: 2px;
+    padding-left: 10px;
+
+    color: white;
+}
+.ctx-key-td
+{
+    -webkit-order: 1;
+    -ms-flex-order: 1;
+            order: 1;
+    -webkit-flex: 3 100%;
+        -ms-flex: 3 100%;
+            flex: 3 100%;
+}
+.ctx-key-name
+{
+    font-size: 14;
+    font-weight: bold;
+    font-style: italic;
+
+    text-align: right;
+
+    -webkit-order: 2;
+    -ms-flex-order: 2;
+            order: 2;
+    -webkit-flex: 1 30%;
+        -ms-flex: 1 30%;
+            flex: 1 30%;
+}

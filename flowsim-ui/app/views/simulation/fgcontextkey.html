@@ -1,0 +1,14 @@
+<div>
+    <div>
+        <div class="ctx-key-context">Context</div>
+        <div class="ctx-key-table" ng-repeat="row in ctx.ctx" ng-class-odd="'ctx-key-color-prim'" ng-class-even="'ctx-key-color-sec'">{{row.name + ' : ' + row.value}}</div>
+        <div class="ctx-key-header">
+            <div style="padding-left:10px">Key</div>
+            <div class="ctx-key-keys" ng-repeat="key in ctx.key" ng-class-odd="'ctx-key-color-prim'" ng-class-even="'ctx-key-color-sec'">
+                <div>
+                    <div class="ctx-key-td" ng-repeat="attr in key.attrs">{{attr.name + ' : ' + attr.value}}</div>
+                </div>
+                <div class="ctx-key-name">{{key.name}}</div>
+            </div>
+        </div>
+    </div>
