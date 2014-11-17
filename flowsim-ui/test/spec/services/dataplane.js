@@ -123,12 +123,6 @@ ddescribe('Service: dataplane', function () {
     var profile = new Instruction.Profile(null);
 
     var test = profile.apply[0].actions[0];
-    delete test.name;
-    delete test.category;
-    delete test.action;
-    delete test.enabled;
-    delete test.key;
-    delete test.mkType;
     console.log(test);
     var j = JSON.stringify(test);
     console.log(j);

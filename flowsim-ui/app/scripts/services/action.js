@@ -32,33 +32,12 @@ function ActionField_UI(afu, category, name, key, Type, tip, test, action) {
       return t;
     };
     this.tip = tip;
-    //this.test = test;
+    this.test = test;
   }
 }
 
 ActionField_UI.prototype.clone = function() {
   return new ActionField_UI(this);
-};
-
-ActionField_UI.prototype.test = function(value) {
-  switch(this.key) {
-    case 'set_eth_type':
-      return ETHERNET.TESTS.typelen(value);
-    case 'set_eth_dst':
-      return ETHERNET.TESTS.dst(value);
-    case 'set_eth_src':
-      return ETHERNET.TESTS.src(value);
-    case 'pop_mpls':
-      return true;
-    case 'pop_vlan':
-      return true;
-    case 'set_queue':
-      return true;
-    case 'set_group':
-      return true;
-    case 'forward':
-      return fgConstraints.isUInt(0, 0xffff);
-  }
 };
 
 function Output(output, port_id) {
