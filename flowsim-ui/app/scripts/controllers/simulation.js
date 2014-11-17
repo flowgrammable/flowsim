@@ -160,8 +160,6 @@ angular.module('flowsimUiApp')
       to: hideDetails($scope.simulation.stage) 
     };
     $scope.view = $scope.simulation.toView();
-
-  
      
   };
 

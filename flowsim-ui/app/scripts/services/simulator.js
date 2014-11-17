@@ -20,6 +20,7 @@ Simulation.prototype.stages = Dataplane.Stages;
 
 Simulation.prototype.step = function() {
   this.stage = this.dataplane.step();
+  this.view  = this.dataplane.toView();
   if(this.dataplane.idle()) {
     this.stop();
   }
