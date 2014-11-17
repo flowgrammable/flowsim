@@ -341,7 +341,7 @@ Set.prototype.clear = function(clear) {
 
 Set.prototype.apply = function(apply) {
   if(apply) {
-    this._apply = new Action.List(null, apply);
+    this._apply = new Action.List(/*null,*/ apply);
   } else {
     return this._apply;
   }

@@ -11,6 +11,11 @@ describe('Service: action', function () {
     Action = _Action_;
   }));
 
+  var fgConstraints;
+  beforeEach(inject(function (_fgConstraints_) {
+    fgConstraints = _fgConstraints_;
+  }));
+
   var Packet;
   beforeEach(inject(function (_Packet_) {
     Packet = _Packet_;
@@ -1300,8 +1305,29 @@ describe('Service: action', function () {
 
     expect(pkt.protocols[1].target().toString()).toBe('2001:db8:0:0:0:ff00:42:8329');
     expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
+  });
 
+  it('Output action construction', function(){
+    var out = new Action.Output(null, 1);
+    expect(out.toValue()).toBe(1);
 
+    var j = JSON.stringify(out);
+    var j_ = new Action.Output(JSON.parse(j));
+
+    expect(j_.toValue()).toBe(1);
+  });
+
+  it('ActionField_UI construction', function(){
+    var af = new Action.ActionField_UI(null,
+      'Internal', 'Output', 'forward', Action.Output, 'Egress port id',
+        fgConstraints.isUInt(0,0xffff));
+
+    var j = JSON.stringify(af);
+    var j_ = new Action.ActionField_UI(JSON.parse(j));
+
+    expect(j_.category).toBe('Internal');
+    expect(j_.name).toBe('Output');
+    expect(j_.key).toBe('forward');
   });
 
 });

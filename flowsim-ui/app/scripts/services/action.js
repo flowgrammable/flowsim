@@ -46,6 +46,7 @@ function Output(output, port_id) {
   } else {
     this.port_id = port_id;
   }
+  this.name = 'Output';
 }
 
 Output.prototype.clone = function() {
@@ -82,6 +83,7 @@ function Group(group, group_id) {
   } else {
     this.group_id = group_id;
   }
+  this.name = 'Group';
 }
 
 Group.prototype.clone = function() {
@@ -114,6 +116,7 @@ function Queue(queue, queue_id) {
   } else {
     this.queue_id = queue_id;
   }
+  this.name = 'Queue';
 }
 
 Queue.prototype.clone = function() {
@@ -146,6 +149,7 @@ function Pop(pop, tag){
   } else {
     this.tag = tag;
   }
+  this.name = 'Pop';
 }
 
 Pop.prototype.clone = function() {
@@ -209,6 +213,7 @@ function mkPopMPLSField() {
 }
 
 function CopyTTLIn(){
+  this.name = 'CopyTTLIn';
 }
 
 CopyTTLIn.prototype.clone = function(){
@@ -230,6 +235,7 @@ CopyTTLIn.prototype.step = function(dp, ctx){
 };
 
 function CopyTTLOut(){
+  this.name = 'CopyTTLOut';
 }
 
 CopyTTLOut.prototype.clone = function(){
@@ -262,6 +268,7 @@ function SetTTL(st, proto, value){
     this.value = value;
     this.field = '_ttl';
   }
+  this.name = 'SetTTL';
 }
 
 SetTTL.prototype.clone = function(){
@@ -286,6 +293,7 @@ function DecTTL(st, proto){
     this.protocol = proto;
     this.field = '_ttl';
   }
+  this.name = 'DecTTL';
 }
 
 DecTTL.prototype.clone = function(){
@@ -309,6 +317,7 @@ function Push(psh, tag) {
   } else {
     this.tag = tag;
   }
+  this.name = 'Push';
 }
 
 Push.prototype.clone = function() {
@@ -342,6 +351,7 @@ function SetField(sf, proto, field, value) {
     this.field    = field;
     this.value    = value;
   }
+  this.name = 'SetField';
 }
 
 SetField.prototype.clone = function() {
@@ -725,7 +735,32 @@ Set.prototype.execute = function(dp, ctx) {
 function List(list) {
   if(_.isObject(list)) {
     this.actions = _.map(list.actions, function(action) {
-      return action.clone();
+      //return action.clone();
+      switch(action.name){
+        case 'Output':
+          return new Output(action);
+        case 'SetField':
+          return new SetField(action);
+        case 'Group':
+          return new Group(action);
+        case 'Queue':
+          return new Queue(action);
+        case 'Push':
+          return new Push(action);
+        case 'Pop':
+          return new Pop(action);
+        case 'SetTTL':
+          return new SetTTL(action);
+        case 'DecTTL':
+          return new DecTTL(action);
+        case 'CopyTTLIn':
+          return new CopyTTLIn(action);
+        case 'CopyTTLOut':
+          return new CopyTTLOut(action);
+        default:
+          break;
+      }
+      //return new [action.name](action);
     });
   } else {
     this.actions = [];
@@ -822,7 +857,8 @@ return {
   CopyTTLIn: CopyTTLIn,
   CopyTTLOut: CopyTTLOut,
   Available: Available,
-  cloneAvailable: cloneAvailable
+  cloneAvailable: cloneAvailable,
+  ActionField_UI: ActionField_UI
 };
 
 });
