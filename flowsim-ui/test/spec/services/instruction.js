@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: instruction', function () {
+ddescribe('Service: instruction', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -38,15 +38,13 @@ describe('Service: instruction', function () {
   it('Create Instruction set, execute apply:pushvlan', function() {
     expect(!!Instruction).toBe(true);
     var set = new Instruction.Set();
-    var list = new Action.List();
-
-    list.push(new Action.Push(null, new VLAN.VLAN()));
-
-    var app = new Instruction.Apply(null, list);
-    set.apply(app);
 
     var pkt = new Packet.Packet('pack1');
     pkt.push(new IPV4.mkIPv4());
+
+    set._apply.push(new Action.Push(null, new VLAN.VLAN()));
+
+
 
     set.step(null, {
       packet: pkt
@@ -59,6 +57,23 @@ describe('Service: instruction', function () {
     expect(pkt.protocols[1].dei().toString(16)).toBe('0x00');
     expect(pkt.protocols[1].vid().toString(16)).toBe('0x0000');
     expect(pkt.protocols[1].type().toString(16)).toBe('0x0800');
+
+  });
+
+    it('Instruction profile construction: ', function(){
+    var prof = new Instruction.Profile();
+    
+    expect(prof.apply[0].protocol).toBe('Internal');
+    expect(prof.apply[0].actions[0].name).toBe('Output');
+
+    var j = JSON.stringify(prof);
+    var j_ = new Instruction.Profile(JSON.parse(j));
+    console.log('japp:', j_.apply);
+
+    expect(j_.apply.length).toBe(prof.apply.length);
+    expect(j_.apply[0].protocol).toBe('Internal');
+    console.log('j_',j_.apply[0].actions);
+    expect(j_.apply[0].actions[0].name).toBe('Output');
 
   });
 

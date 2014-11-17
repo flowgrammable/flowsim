@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('Service: dataplane', function () {
+describe('Service: dataplane', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -137,18 +137,5 @@ ddescribe('Service: dataplane', function () {
 
 
 
-
-  it('ActionField_UI construction', function(){
-    var af = new Action.ActionField_UI(null,
-      'Internal', 'Output', 'forward', Action.Output, 'Egress port id',
-        fgConstraints.isUInt(0,0xffff));
-
-    var j = JSON.stringify(af);
-    var j_ = new Action.ActionField_UI(JSON.parse(j));
-
-    expect(j_.category).toBe('Internal');
-    expect(j_.name).toBe('Output');
-    expect(j_.key).toBe('forward');
-  });
 
 });

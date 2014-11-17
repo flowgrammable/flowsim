@@ -12,9 +12,6 @@ angular.module('flowsimUiApp')
                               ICMPV6, SCTP, TCP, UDP, ND, fgConstraints) {
 
 function ActionField_UI(afu, category, name, key, Type, tip, test, action) {
-  if(_.isObject(afu)) {
-    _.extend(this, afu);
-  } else {
     this.category = category;
     this.name     = name;
     this.action   = action ? action : '-n/a-';
@@ -33,7 +30,6 @@ function ActionField_UI(afu, category, name, key, Type, tip, test, action) {
     };
     this.tip = tip;
     this.test = test;
-  }
 }
 
 ActionField_UI.prototype.clone = function() {
