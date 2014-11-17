@@ -190,7 +190,7 @@ function Tables(tables, profile) {
     this.tables = _.map(profile.tables, function(_profile){
       return new Table(null, _profile);
     });
-    this.capabilities = new Profile(profile);
+    this.capabilities = new Profile();
   }
 }
 
