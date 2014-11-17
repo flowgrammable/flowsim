@@ -29,7 +29,7 @@ angular.module('flowsimUiApp')
 
   $scope.newFlow = function() {
     var caps =  $scope.device.tables.tables[$scope.tableId].capabilities;
-    var flow = new Flow.Flow(null, $scope.flow.priority, caps); 
+    var flow = new Flow.Flow(null, $scope.flow.priority, caps);
     $modal.open({
       templateUrl: 'views/switch/flow.html',
       controller: 'SwitchFlowCtrl',
@@ -55,9 +55,16 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: { flow: function() { return flow; } }
       }).result.then(function () {
+        console.log('in open flow:', $scope.device.tables.tables[$scope.tableId]);
         $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
       });
     }
   };
+
+  $scope.$watch('device.tables.tables.length',function(){
+    if($scope.device && $scope.device.tables.tables.length > 0){
+      $scope.setTable(0);
+    }
+  });
 
 });

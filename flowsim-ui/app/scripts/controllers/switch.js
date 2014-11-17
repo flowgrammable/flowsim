@@ -85,6 +85,7 @@ angular.module('flowsimUiApp')
             console.log(err.details);
           } else {
             $scope.device = result;
+            console.log('scope device', $scope.device);
           }
         });
       }
@@ -97,5 +98,16 @@ angular.module('flowsimUiApp')
     $scope.setClean = function() {
       $rootScope.$broadcast('cleanCache');
     };
+
+    $scope.$watch('device', function(newValue, oldValue){
+
+      if($scope.device){ // watch for change if profile is loaded
+        if($scope.device.dirty){
+          $scope.setDirty();
+        } else if(oldValue && !oldValue.dirty) { // if old value was clean, then set dirty
+          $scope.device.dirty = true;
+        }
+      }
+    },true);
 
   });

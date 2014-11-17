@@ -40,6 +40,10 @@ ActionField_UI.prototype.clone = function() {
   return new ActionField_UI(this);
 };
 
+ActionField_UI.prototype.test = function() {
+  return true;
+};
+
 function Output(output, port_id) {
   if(_.isObject(output)) {
     _.extend(this, output);

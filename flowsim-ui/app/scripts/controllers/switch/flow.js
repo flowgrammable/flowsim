@@ -132,7 +132,7 @@ angular.module('flowsimUiApp')
   });
 
   $scope.activeApplyCategory = null;
-  $scope.activeApplyField = [];
+  $scope.activeApplyFields = [];
 
   $scope.updateApplyCategory = function() {
     console.log('update category: '+$scope.apply.category);
@@ -169,7 +169,6 @@ angular.module('flowsimUiApp')
   $scope.applyAction = null;
 
   $scope.updateApplyAction = function() {
-    console.log('update category: '+$scope.apply.action);
     $scope.applyAction = _($scope.activeApplyFields).find(
       function(action) {
         return action.name === $scope.apply.field &&
@@ -179,12 +178,10 @@ angular.module('flowsimUiApp')
 
   $scope.addApplyAction = function() {
     var action;
-    console.log('scope apply action', $scope.applyAction);
     if($scope.applyAction && $scope.applyAction.test($scope.apply.value)) {
       console.log('got an action to deal with');
       action = $scope.applyAction.mkType($scope.apply.value);
       $scope.flow.ins.pushApply(action);
-      console.log(action);
     }
   };
 

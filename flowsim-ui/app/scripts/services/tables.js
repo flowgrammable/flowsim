@@ -29,6 +29,7 @@ function Priority(priority, priValue) {
       //return flow.clone();
       return new Flow.Flow(flow);
     });
+    this.priority = priority;
   } else {
     this.flows = [];
     this.priority = priValue;
