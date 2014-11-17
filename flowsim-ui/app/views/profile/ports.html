@@ -114,7 +114,7 @@
   </thead>
   <tbody>
   <tr ng-repeat="port in profile.ports.ports">
-    <td>{{$index}}</td>
+     <td>{{port.id}}</td>
     <td>
       <div class="input-group" ng-class="{'has-error': !metadata.tests.Ports.mac(port.mac)}">
       <input class="form-control" type="text" ng-model="port.mac"
