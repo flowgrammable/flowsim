@@ -447,8 +447,16 @@ describe('/update', function(){
             if(err){
               console.log(err);
             } else {
-              assert(body.value);
-              done();
+              verificationToken = result.verification_token;
+              var token = {token: verificationToken};
+              client.query('subscriber/verify', 'POST', {}, token, function(err, res, body){
+              if(err){
+                console.log(err);
+              } else {
+                assert(body.value);
+                done();
+              }
+              });
             }
           });
         }
