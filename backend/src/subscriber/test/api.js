@@ -437,13 +437,22 @@ var passResetToken;
 
 describe('/update', function(){
   before(function(done){
-    store.getSubscriberByEmail(testEmail, function(err, result){
-      if(err){
-        console.log(err);
-      } else {
-        done();
-      }
-    });
+    testUtils.clearTables(['profile','packet', 'session', 'subscriber'],
+      function(err, result){
+        if(err){
+          console.log(err);
+        } else {
+          var subscriber = {email:testEmail, password: 'testpass'};
+          client.query('subscriber/register', 'POST', {}, subscriber, function(err, res, body){
+            if(err){
+              console.log(err);
+            } else {
+              assert(body.value);
+              done();
+            }
+          });
+        }
+      });
   });
   it('should return error when no old password is present', function(done){
     var update = {oldPassword: '', newPassword: 'newpassword'};
