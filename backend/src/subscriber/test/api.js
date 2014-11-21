@@ -41,7 +41,7 @@ describe('Subscriber', function(){
    * - profile
    */
   before(function(done){
-    testUtils.clearTables(['profile','packet', 'session', 'subscriber'],
+    testUtils.clearTables(['trace','switch','profile','packet', 'session', 'subscriber'],
       function(err, result){
         if(err){
           console.log(err);
@@ -212,7 +212,7 @@ describe('Logging in with a subscriber in CREATED state', function(){
    *
    */
   before(function(done){
-    testUtils.clearTables(['profile','packet', 'session', 'subscriber'],
+    testUtils.clearTables(['trace','switch','profile','packet', 'session', 'subscriber'],
       function(err, result){
         if(err){
           console.log(err);
@@ -437,7 +437,7 @@ var passResetToken;
 
 describe('/update', function(){
   before(function(done){
-    testUtils.clearTables(['profile','packet', 'session', 'subscriber'],
+    testUtils.clearTables(['trace','switch','profile','packet', 'session', 'subscriber'],
       function(err, result){
         if(err){
           console.log(err);
