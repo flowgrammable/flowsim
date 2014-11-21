@@ -448,7 +448,7 @@ describe('/update', function(){
               console.log(err);
             } else {
               store.getSubscriberByEmail(testEmail, function(err, result)
-              verificationToken = result.verification_token;
+              var verificationToken = result.verification_token;
               var token = {token: verificationToken};
               client.query('subscriber/verify', 'POST', {}, token, function(err, res, body){
                 if(err){
