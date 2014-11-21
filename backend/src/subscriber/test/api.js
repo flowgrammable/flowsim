@@ -21,7 +21,7 @@ var db = new pg.Database({database:{
 var store = new st.Storage(db, log);
 
 // Provide a test email address
-var testEmail = '';
+var testEmail = 'flowgrammabletest2@gmail.com';
 
 var url = 'https://127.0.0.1:8081/api/';
 
@@ -436,7 +436,15 @@ var passResetToken;
 });
 
 describe('/update', function(){
-  
+  before(function(done){
+    store.getSubscriberByEmail(testEmail, function(err, result){
+      if(err){
+        console.log(err);
+      } else {
+        done();
+      }
+    });
+  });
   it('should return error when no old password is present', function(done){
     var update = {oldPassword: '', newPassword: 'newpassword'};
     client.query('subscriber/update', 'POST', {}, update, function(err, res, body){
