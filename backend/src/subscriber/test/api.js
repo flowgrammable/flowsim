@@ -474,7 +474,7 @@ describe('/update', function(){
       });
   });
   it('should return error when no old password is present', function(done){
-    var update = {oldPassword: '', newPassword: 'newpassword'};
+    var update = {email: testEmail, token: accessToken, oldPassword: '', newPassword: 'newpassword'};
     client.query('subscriber/update', 'POST', {}, update, function(err, res, body){
       if(err){
         console.log(err);
