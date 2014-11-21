@@ -450,12 +450,20 @@ describe('/update', function(){
               verificationToken = result.verification_token;
               var token = {token: verificationToken};
               client.query('subscriber/verify', 'POST', {}, token, function(err, res, body){
-              if(err){
-                console.log(err);
-              } else {
-                assert(body.value);
-                done();
-              }
+                if(err){
+                  console.log(err);
+                } else {
+                  var login = {email: testEmail, password: 'testpass'};
+                  client.query('subscriber/login', 'POST', {}, login, function(err, res, body){
+                    if(err){
+                      console.log(err);
+                    } else {
+                      assert(body.value['x-access-token']);
+                      accessToken = body.value['x-access-token'];
+                      done();
+                    }
+                  });
+                }
               });
             }
           });
