@@ -436,6 +436,7 @@ var passResetToken;
 });
 
 describe('/update', function(){
+  this.timeout(5000);
   before(function(done){
     testUtils.clearTables(['trace','switch','profile','packet', 'session', 'subscriber'],
       function(err, result){
