@@ -485,7 +485,7 @@ describe('/update', function(){
     });
   });
   
-  it('should return error when old password is malformed', function(done){
+  /*it('should return error when old password is malformed', function(done){
     var update = {oldPassword: 'mal', newPassword: 'newpassword'};
     client.query('subscriber/update', 'POST', {}, update, function(err, res, body){
       if(err){
@@ -519,7 +519,7 @@ describe('/update', function(){
         done();
       }
     });
-  });
+  });*/
   
 });
 
