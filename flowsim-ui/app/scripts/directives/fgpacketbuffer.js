@@ -51,7 +51,7 @@ angular.module('flowsimUiApp')
 
                 }
                 scope.$watch('name', function(newData) {
-                    if (newData !== null && newData.length > 0) {
+                    if (!_.isUndefined(newData) && newData !== null && newData.length > 0) {
                         scope.addPacket(0, 0, '#c0224e', scope.name)
                             .transition()
                             .duration(animationDuration)
