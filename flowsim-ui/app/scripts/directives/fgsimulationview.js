@@ -36,35 +36,35 @@ angular.module('flowsimUiApp')
 
                 //Arrow definition
                 svg
-                    .append("svg:defs")
-                    .append("svg:marker")
-                    .attr("id", "arrow")
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 8)
-                    .attr("refY", 0)
-                    .attr("markerUnits", "strokeWidth")
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 6)
-                    .attr("orient", "auto")
-                    .append("svg:path")
-                    .attr("d", "M 0 -3 L 8 0 L 0 3 z")
-                    .style("stroke", "black")
-                    .style("fill", "black");
+                    .append('svg:defs')
+                    .append('svg:marker')
+                    .attr('id', 'arrow')
+                    .attr('viewBox', '0 -5 10 10')
+                    .attr('refX', 8)
+                    .attr('refY', 0)
+                    .attr('markerUnits', 'strokeWidth')
+                    .attr('markerWidth', 6)
+                    .attr('markerHeight', 6)
+                    .attr('orient', 'auto')
+                    .append('svg:path')
+                    .attr('d', 'M 0 -3 L 8 0 L 0 3 z')
+                    .style('stroke', 'black')
+                    .style('fill', 'black');
                 svg
-                    .append("svg:defs")
-                    .append("svg:marker")
-                    .attr("id", "backarrow")
-                    .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 0)
-                    .attr("refY", 0)
-                    .attr("markerUnits", "strokeWidth")
-                    .attr("markerWidth", 6)
-                    .attr("markerHeight", 6)
-                    .attr("orient", "auto")
-                    .append("svg:path")
-                    .attr("d", "M 0 0 L 8 3 L 8 -3 z")
-                    .style("stroke", "black")
-                    .style("fill", "black");
+                    .append('svg:defs')
+                    .append('svg:marker')
+                    .attr('id', 'backarrow')
+                    .attr('viewBox', '0 -5 10 10')
+                    .attr('refX', 0)
+                    .attr('refY', 0)
+                    .attr('markerUnits', 'strokeWidth')
+                    .attr('markerWidth', 6)
+                    .attr('markerHeight', 6)
+                    .attr('orient', 'auto')
+                    .append('svg:path')
+                    .attr('d', 'M 0 0 L 8 3 L 8 -3 z')
+                    .style('stroke', 'black')
+                    .style('fill', 'black');
                 var currentStage = -1;
                 scope.$watch('makeTransition', function(newData) {
                     scope.transition(newData, currentStage);
@@ -77,19 +77,19 @@ angular.module('flowsimUiApp')
                  * If fade:true provided Current Packet will fade away,
                  * @param  {[Object]} trans  {to: <number>, clonePacket: <bool>,cloneTo:<number>,fade:<bool>}
                  * @param  {[type]} currentStage current stage variable
-                 * @return {[type]}              
+                 * @return {[type]}
                  */
                 scope.transition = function(trans, currentStage) {
                     console.log('Transition:' + JSON.stringify(trans));
                     console.log('CurrentStage:' + currentStage);
-                    if(trans.fade){ //dropping the packet
+                    if (trans.fade) { //dropping the packet
                         svg.selectAll('.sim-packet')
-                                .transition()
-                                .style('display', 'none')
-                                .duration(animationDuration);
-                    }else
+                            .transition()
+                            .style('display', 'none')
+                            .duration(animationDuration);
+                    } else
                     if (trans.clonePacket) {
-                        var clonedPacket = svg.select('#packets')
+                        svg.select('#packets')
                             .append('rect')
                             .attr('class', 'sim-packet-copy')
                             .attr('height', stageHeight + 10)
@@ -111,8 +111,8 @@ angular.module('flowsimUiApp')
                                 .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
                         } else if (trans.to === currentStage) { //stay and try to transition first cloned packet from array
                             var currPackets = svg.selectAll('.sim-packet-copy')
-                                .filter(function(d, i) {
-                                    return parseInt(this.getAttribute('stage')) === currentStage
+                                .filter(function() {
+                                    return parseInt(this.getAttribute('stage')) === currentStage;
                                 });
 
                             d3.select(currPackets[0].pop()).transition()
@@ -154,9 +154,9 @@ angular.module('flowsimUiApp')
                         return; //don't render if there is no data
                     }
                     //Place holder for Active
-                    svg.append("g").attr("id", "packets");
-                    svg.append("g").attr("id", "stages");
-                    var packet = svg.select('#packets')
+                    svg.append('g').attr('id', 'packets');
+                    svg.append('g').attr('id', 'stages');
+                    svg.select('#packets')
                         .append('rect')
                         .attr('class', 'sim-packet')
 
@@ -166,11 +166,11 @@ angular.module('flowsimUiApp')
                         .attr('y', margin / 2 - 5)
                         .attr('ry', 10);
 
-                    var stages = svg.select('#stages').selectAll('g')
+                    stages = svg.select('#stages').selectAll('g')
                         .data(stages)
                         .enter()
                         .append('g')
-                        .attr("id", "stages")
+                        .attr('id', 'stages')
                         .attr('height', stageHeight)
                         .attr('width', stageWidth)
 
@@ -195,33 +195,34 @@ angular.module('flowsimUiApp')
                         .text(function(d) {
                             return d.label;
                         });
-                    svg.selectAll("polyline")
+                    svg.selectAll('polyline')
                         .data(transitions)
                         .enter()
 
-                    .append("polyline")
-                        .attr("points", function(d, i) {
+                    .append('polyline')
+                        .attr('points', function(d) {
+                            var x1, x2, y1, y2, y;
                             if (d.forward) {
-                                var x1 = d.from === null ? 0 : (d.from + 1) * (stageWidth + stagePadding);
-                                var x2 = d.to === null ? width : d.to * (stageWidth + stagePadding) + stagePadding;
-                                var y = margin / 2 + stageHeight / 2;
+                                x1 = d.from === null ? 0 : (d.from + 1) * (stageWidth + stagePadding);
+                                x2 = d.to === null ? width : d.to * (stageWidth + stagePadding) + stagePadding;
+                                y = margin / 2 + stageHeight / 2;
                                 return [x1, y, x2, y];
                             } // <== Add these
                             else {
-                                var x1 = (d.from + 1) * (stageWidth + stagePadding) - stageWidth / 2;
-                                var x2 = d.to * (stageWidth + stagePadding) + stagePadding + stageWidth / 2;
-                                var y1 = margin / 2 + stageHeight;
-                                var y2 = height - margin / 2 - 10;
+                                x1 = (d.from + 1) * (stageWidth + stagePadding) - stageWidth / 2;
+                                x2 = d.to * (stageWidth + stagePadding) + stagePadding + stageWidth / 2;
+                                y1 = margin / 2 + stageHeight;
+                                y2 = height - margin / 2 - 10;
                                 return [x1, y1, x1, y2, x2, y2, x2, y1];
                             }
 
                         })
-                        .style("stroke", "black")
-                        .style("fill", "none")
-                        .attr("stroke-width", 2)
-                        .attr("marker-end", "url(#arrow)")
-                        .attr("marker-start", function(d) {
-                            return d.biDirectional ? "url(#backarrow)" : "";
+                        .style('stroke', 'black')
+                        .style('fill', 'none')
+                        .attr('stroke-width', 2)
+                        .attr('marker-end', 'url(#arrow)')
+                        .attr('marker-start', function(d) {
+                            return d.biDirectional ? 'url(#backarrow)' : '';
                         });
 
 
