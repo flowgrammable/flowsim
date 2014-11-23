@@ -25,18 +25,18 @@ angular.module('flowsimUiApp')
 
                     var retVal = ins.name;
                     if (!_.isUndefined(ins.value1) && !_.isNull(ins.value1)) {
-                        retVal += "( " + ins.value1;
+                        retVal += '( ' + ins.value1;
                         if (!_.isUndefined(ins.value2) && !_.isNull(ins.value2)) {
-                            retVal += " , " + ins.value2;
+                            retVal += ' , ' + ins.value2;
                         }
-                        retVal += " )";
+                        retVal += ' )';
                     }
 
                     return retVal;
-                }
+                };
 
             },
-            link: function(scope, element, attrs) {
+            link: function(scope) {
 
                 scope.$watch('view', function() {
 
@@ -55,9 +55,9 @@ angular.module('flowsimUiApp')
                         scope.view.instructionSet.forEach(function(value , index , arr) {
                             instructions += value.name.substring(0, 1).toLowerCase();
                             if(index < arr.length -1 ){
-                                instructions += " / ";
+                                instructions += ' / ';
                             }
-                        })
+                        });
                         return instructions;
                     };
                     
