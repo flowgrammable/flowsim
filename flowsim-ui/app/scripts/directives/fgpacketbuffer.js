@@ -29,20 +29,20 @@ angular.module('flowsimUiApp')
                     .attr('class', 'ctx-key-header');
                 scope.addPacket = function(x, y, fill, name) {
                     var buffer = svg.append('g')
-                        .attr("id", "buffer")
+                        .attr('id', 'buffer')
                         .attr('transform', 'translate(' + x + ',' + y + ')');
 
                     buffer.append('rect')
                         .attr('fill', fill)
                         .attr('height', 70)
                         .attr('width', 35);
-                    buffer.append('text').style("fill", "white")
-                        .style("font-size", "16px")
-                        .attr("text-anchor", "middle")
-                        .attr("transform", "translate(12,35) rotate(90)").text(name);
+                    buffer.append('text').style('fill', 'white')
+                        .style('font-size', '16px')
+                        .attr('text-anchor', 'middle')
+                        .attr('transform', 'translate(12,35) rotate(90)').text(name);
                     return buffer;
 
-                }
+                };
                 for (var i = 0; i < 5; i++) {
                     var x = (i * 35 + 200);
                     var y = 0;
@@ -54,12 +54,12 @@ angular.module('flowsimUiApp')
                     if (newData !== null && newData.length > 0) {
                         scope.addPacket(0, 0, '#c0224e', scope.name)
                             .transition()
-                            .duration(3000)
+                            .duration(animationDuration)
                             .attr('transform', 'translate(165,0)');
                         d3.selectAll('.ctx-key-vis')
-                            .transition().delay(3000)
-                            .duration(1000)
-                            .style('opacity', '1')
+                            .transition().delay(animationDuration)
+                            .duration(animationDuration)
+                            .style('opacity', '1');
                     }
 
                 }, false);
