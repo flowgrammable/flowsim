@@ -835,9 +835,7 @@ function cloneAvailable(a) {
     return {
       protocol: grouping.protocol,
       actions: _(grouping.actions).map(function(action) {
-        //return action.clone();
-        //return _.clone(action);
-        return new ActionField_UI(action);
+        return _.clone(action);
       })
     };
   });
