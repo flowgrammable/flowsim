@@ -475,7 +475,7 @@ describe('/update', function(){
   });
   it('successful update should result in msg.success()', function(done){
     var update = {oldPassword: 'testpass', newPassword: 'newpassword'};
-    client.query('subscriber/verify', 'POST', {'x-access-token': accessToken}, update, function(err, res, body){
+    client.query('subscriber/update', 'POST', {'x-access-token': accessToken}, update, function(err, res, body){
       if(err){
         console.log(err);
       } else {
