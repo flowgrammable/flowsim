@@ -185,12 +185,10 @@ function Tables(tables, profile) {
     this.tables = _(tables.tables).map(function(table){
       return new Table(table);
     });
-    this.capabilities = new Profile(tables.capabilities);
   } else {
     this.tables = _.map(profile.tables, function(_profile){
       return new Table(null, _profile);
     });
-    this.capabilities = new Profile();
   }
 }
 
@@ -225,13 +223,15 @@ Profile.prototype.clone = function() {
 };
 
 Profile.prototype.rebuild = function() {
+  var that = this;
   if(this.n_tables === this.tables.length) {
     return;
   } else if(this.n_tables < this.tables.length) {
     this.tables.splice(this.n_tables, this.tables.length-this.n_tables);
   } else {
+    var prevLen = this.tables.length;
     _(this.n_tables-this.tables.length).times(function(id) {
-      this.tables.push(new TableProfile(null, id));
+      that.tables.push(new TableProfile(null, prevLen + id));
     });
   }
 };

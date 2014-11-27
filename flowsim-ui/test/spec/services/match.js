@@ -1120,4 +1120,14 @@ describe('Service: match', function () {
 
   });
 
+  it('Match profile construction Pass', function(){
+    var matchProfile = new Match.Profile();
+    expect(matchProfile.fields[0].field).toBe('Ingress Port');
+    matchProfile.fields[0].enabled = false;
+
+    var j = JSON.stringify(matchProfile);
+    var j_ = new Match.Profile(JSON.parse(j));
+    expect(j_.fields[0].enabled).toBe(false);
+  });
+
 });

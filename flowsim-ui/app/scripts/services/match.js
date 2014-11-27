@@ -121,14 +121,15 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
 }
 
 Match.Profile = function(match){
-  if(match instanceof Match.Profile ||
-     (typeof match === 'object' && match !==null)){
+  if(_.isObject(match)){
     _.extend(this, match);
     this.fields = _.map(match.fields, function(f) { return _.clone(f); });
   } else {
     this.fields = [
-    createMatch('Ingress', 'Port', 'in_port', true, false, 0),
-    createMatch('Physical', 'Port', 'phy_port', true, false, 0),
+    createMatch('Internal', 'Ingress Port', 'in_port', true, false, 0),
+    createMatch('Internal', 'Physical Port', 'in_phy_port', true, false, 0),
+    createMatch('Internal', 'Metadata', 'in_metadata', true, true, 0),
+    createMatch('Internal', 'Tunnel', 'in_tunnel', true, true, 0),
     createMatch('Ethernet', 'Src', 'eth_src', true, true, '0xffffffffffff'),
     createMatch('Ethernet', 'Dst', 'eth_dst', true, true, '0xffffffffffff'),
     createMatch('Ethernet', 'Type/Len', 'eth_typelen', true, false, '0xffff'),
@@ -163,9 +164,9 @@ Match.Profile = function(match){
     createMatch('UDP', 'Dst', 'udp_dst', true, true, '0xffff'),
     createMatch('SCTP', 'Src', 'sctp_src', true, true, '0xffff'),
     createMatch('SCTP', 'Dst', 'sctp_dst', true, true, '0xffff'),
-    createMatch('ND', 'Target', 'nd_target', true, true,
+    createMatch('IPv6 ND', 'Target', 'nd_target', true, true,
     '0xffffffffffffffffffffffffffffffff'),
-    createMatch('ND', 'HW', 'nd_hw', true, true, '0xffffffffffff')
+    createMatch('IPv6 ND', 'Link-Layer', 'nd_hw', true, true, '0xffffffffffff')
     ];
   }
 };
@@ -173,6 +174,8 @@ Match.Profile = function(match){
 Match.Profile.TIPS ={
   in_port: 'Match on ingress port',
   in_phy_port: 'Match on physical port',
+  in_metadata: 'Match on metadata',
+  in_tunnel: 'Match on metadata associated with a logical port',
   eth_src: 'Match on Ethernet source address',
   eth_dst: 'Match on Ethernet destination address',
   eth_typelen: 'Match on Ethernet type/length field',
@@ -182,9 +185,7 @@ Match.Profile.TIPS ={
   arp_tha: 'Match on Target hardware address',
   arp_tpa: 'Match on Target protocol address',
   vlan_pcp: 'Match on VLAN priority code',
-  vlan_dei: 'Match on VLAN',
   vlan_vid: 'Match on VLAN ID',
-  vlan_typelen: 'Match on VLAN Type/Len',
   mpls_label: 'Match on MPLS label',
   mpls_tc: 'Match on MPLS tc',
   mpls_bos: 'Match on MPLS bos',
@@ -195,19 +196,26 @@ Match.Profile.TIPS ={
   ipv4_dst: 'Match on IPv4 destination',
   ipv6_dst: 'Match on IPv6 destination',
   ipv6_src: 'Match on IPv6 source',
+  ipv6_flabel: 'Match on IPv6 Flow Label',
+  icmpv4_type: 'Match on ICMPv4 Type',
+  icmpv4_code: 'Match on ICMPv4 Code',
+  icmpv6_type: 'Match on ICMPv6 Type',
+  icmpv6_code: 'Match on ICMPv6 Code',
   tcp_src: 'Match on TCP source',
   tcp_dst: 'Match on TCP destination',
   udp_src: 'Match on UDP source',
   udp_dst: 'Match on UDP destination',
   sctp_src: 'Match on SCTP source',
   sctp_dst: 'Match on SCTP destination',
-  nd_target: 'Match on Neighbor Discovery target',
-  nd_hw: 'Match on Neighbor Discovery link-layer'
+  nd_target: 'Match on IPv6 Neighbor Discovery target',
+  nd_hw: 'Match on IPv6 Neighbor Discovery link-layer address'
 };
 
 Match.Profile.TESTS = {
   in_port: fgConstraints.isUInt(0, 0xffffffff),
   in_phy_port: fgConstraints.isUInt(0, 0xffffffff),
+  in_metadata: fgConstraints.isUInt(0, 0xffffffffffffffff),
+  in_tunnel: fgConstraints.isUInt(0, 0xffffffffffffffff),
   eth_src: fgConstraints.isUInt(0, 0xffffffffffff),
   eth_dst: fgConstraints.isUInt(0, 0xffffffffffff),
   eth_typelen: fgConstraints.isUInt(0, 0xffff),
@@ -236,6 +244,7 @@ Match.Profile.TESTS = {
     0xffffffffffffffffffffffffffffffff),
   ipv6_dst: fgConstraints.isUInt(0,
     0xffffffffffffffffffffffffffffffff),
+  ipv6_flabel: fgConstraints.isUInt(0,0xfffff),
   tcp_src: fgConstraints.isUInt(0, 0xffff),
   tcp_dst: fgConstraints.isUInt(0, 0xffff),
   udp_src: fgConstraints.isUInt(0, 0xffff),

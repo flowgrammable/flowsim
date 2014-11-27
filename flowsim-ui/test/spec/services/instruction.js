@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('Service: instruction', function () {
+describe('Service: instruction', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -62,7 +62,7 @@ ddescribe('Service: instruction', function () {
 
     it('Instruction profile construction: ', function(){
     var prof = new Instruction.Profile();
-    
+
     expect(prof.apply[0].protocol).toBe('Internal');
     expect(prof.apply[0].actions[0].name).toBe('Output');
 
