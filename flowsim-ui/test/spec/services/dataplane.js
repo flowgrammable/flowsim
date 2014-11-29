@@ -1,14 +1,13 @@
 'use strict';
 
-describe('Service: dataplane', function () {
-
+describe('Service: dataplane', function() {
   // load the service's module
   beforeEach(module('flowsimUiApp'));
 
   // instantiate service
-  var dataplane;
+  var Dataplane;
   beforeEach(inject(function (_Dataplane_) {
-    dataplane = _Dataplane_;
+    Dataplane = _Dataplane_;
   }));
 
   var Instruction;
@@ -41,101 +40,39 @@ describe('Service: dataplane', function () {
     Tables = _Tables_;
   }));
 
-  it('Output action construction', function(){
-    var out = new Action.Output(null, 1);
-    expect(out.toValue()).toBe(1);
+  var Profile;
+  beforeEach(inject(function (_Profile_) {
+    Profile = _Profile_;
+  }));
 
-    var j = JSON.stringify(out);
-    var j_ = new Action.Output(JSON.parse(j));
+  var Switch_;
+  beforeEach(inject(function(_Switch_) {
+    Switch_ = _Switch_;
+  }));
 
-    expect(j_.toValue()).toBe(1);
-  });
+  it('Device construction Pass', function(){
+      var prof = Profile.create('test profile name');
+      var swi = Switch_.create(null, prof);
 
-  it('Apply Instruction construction', function(){
-    var out = new Action.Output(null, 1);
-    var app = new Instruction.Apply();
-
-    expect(app.actions.length).toBe(0);
-    app.push(out);
-    expect(app.actions.length).toBe(1);
-
-    var j = JSON.stringify(app);
-
-    var j_ = new Instruction.Apply(JSON.parse(j));
-
-    expect(j_.actions[0].toValue()).toBe(1);
-
+      var dp = new Dataplane.Dataplane(swi);
   });
 
 
-  it('Instruction Set Construction', function(){
-    var out = new Action.Output(null, 1);
-    var app = new Instruction.Apply();
-    app.push(out);
-    expect(app.actions.length).toBe(1);
+  it('Device construction Fail', function(){
+      var prof = Profile.create('test profile name');
+      var swi = Switch_.create(null, prof);
 
-    var set = new Instruction.Set();
-    set.apply(app);
-    expect(set.apply().actions.length).toBe(1);
-
-    var j = JSON.stringify(set);
-    var j_ = new Instruction.Set(JSON.parse(j));
-
-    expect(j_.apply().actions.length).toBe(1);
-    expect(j_.apply().actions[0].toValue()).toBe(1);
-  });
-
-  it('Flow construction test', function(){
-    var flow = new Flow.Flow(null, 0, {});
-    var out = new Action.Output(null, 1);
-
-    flow.ins.pushApply(out);
-    expect(flow.ins._apply.actions.length).toBe(1);
-    expect(flow.ins._apply.actions[0].toValue()).toBe(1);
-
-    var j = JSON.stringify(flow);
-    var j_ = new Flow.Flow(JSON.parse(j));
-
-    expect(j_.ins._apply.actions.length).toBe(1);
-    expect(j_.ins._apply.actions[0].toValue()).toBe(1);
-
-  });
-
-  it('Priority construction test', function(){
-    var flow = new Flow.Flow(null, 1, {});
-    var out = new Action.Output(null, 1);
-    flow.ins.pushApply(out);
-
-    var priority = new Tables.Priority(null, 1);
-    priority.add(flow);
-    expect(priority.flows.length).toBe(1);
-
-
-    var j = JSON.stringify(priority);
-    var j_ = new Tables.Priority(JSON.parse(j));
-
-    expect(j_.flows.length).toBe(1);
-
-    expect(j_.flows[0].ins._apply.actions[0].toValue()).toBe(1);
-  });
-
-  it('Instruction profile test', function(){
-    var profile = new Instruction.Profile(null);
-
-    var test = profile.apply[0].actions[0];
-    console.log(test);
-    var j = JSON.stringify(test);
-    console.log(j);
-
-    //expect(j_.apply).toBe(Action.Available());
-    //expect(j_.write).toBe(Action.Available());
-  });
-
-  it('Table construction test', function(){
-
+      expect(function() {
+      var dp = new Dataplane.Dataplane();
+      }).toThrow();
   });
 
 
+  it('Device construction Pass', function(){
+      var prof = Profile.create('test profile name');
+      var swi = Switch_.create(null, prof);
 
+      var dp = new Dataplane.Dataplane(swi);
+  });
 
 });

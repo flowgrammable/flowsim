@@ -54,11 +54,11 @@ var _1Tbps = '1 Tbps';
 
 var defSpeed = _10Gbps;
 var _speeds = {
-  _10Mbps: _10Mbps, 
-  _100Mbps: _100Mbps, 
-  _1Gbps: _1Gbps, 
-  _10Gbps: _10Gbps, 
-  _40Gbps: _40Gbps, 
+  _10Mbps: _10Mbps,
+  _100Mbps: _100Mbps,
+  _1Gbps: _1Gbps,
+  _10Gbps: _10Gbps,
+  _40Gbps: _40Gbps,
   _100Gbps: _100Gbps,
   _1Tbps: _1Tbps
 };
@@ -165,7 +165,7 @@ Port.prototype.ingress = function(packet) {
 Port.prototype.egress = function(packet) {
   var drop = this.config.no_fwd ? true : false;
   drop = drop | (this.config.no_pkt_in && this.id === VPort.CONTROLLER);
-  
+
   // FIXME: stats goes here
 
   return drop;
@@ -206,7 +206,7 @@ function PortProfile(portProfile, id, mac) {
     _.extend(this, portProfile);
     this.ethernet = _.clone(portProfile.ethernet);
     this.optical  = _.clone(portProfile.optical);
-  } else {
+  } else if(_.isNumber(id) && _.isString(mac)) {
     this.id = id;
     this.mac = mac;
     this.name = defNamePrefix+id;
@@ -222,6 +222,8 @@ function PortProfile(portProfile, id, mac) {
     };
     this.optical = {
     };
+  } else {
+    throw 'PortProfile expected id and mac';
   }
 }
 
@@ -255,6 +257,25 @@ PortProfile.prototype.clone = function() {
   return new PortProfile(this);
 };
 
+PortProfile.prototype.toString = function(){
+  return 'id: '+this.id+'\n'+
+         'mac: '+this.mac+'\n'+
+         'name: '+this.name+'\n'+
+         'state:\n'+
+         '{ \n' +
+         ' link_down: '+this.state.link_down+'\n'+
+         '} \n' +
+         'ethernet:\n'+
+         '{ \n'+
+         ' speed: '+this.ethernet.speed+'\n'+
+         ' speeds: '+this.ethernet.speeds+'\n'+
+         ' medium: '+this.ethernet.medium+'\n'+
+         ' procedures: '+this.ethernet.procedures+'\n'+
+         ' curr_max_speed: '+this.ethernet.curr_max_speed+'\n'+
+         '}\n'+
+         'optical: {}';
+};
+
 function Profile(profile, macPrefix) {
   if(_.isObject(profile)) {
     _.extend(this, profile);
@@ -262,7 +283,7 @@ function Profile(profile, macPrefix) {
       return new PortProfile(port);
     });
     this.vports = _.clone(profile.vports);
-  } else {
+  } else if(_.isString(macPrefix)) {
     this.n_ports = defPortCount;
     this.macPrefix    = macPrefix;
     this.ports = _(this.n_ports).times(function(id) {
@@ -271,7 +292,16 @@ function Profile(profile, macPrefix) {
     this.port_stats   = defPortStats;
     this.port_blocked = defPortBlocked;
     this.vports = defVirtualPorts;
+  } else {
+    throw 'PortsProfile expected macPrefix';
   }
+}
+
+function mkPortsProfile(macPrefix){
+  macPrefix = macPrefix ? macPrefix : (_(4).times(function() {
+    return UInt.padZeros(_.random(0,255).toString(16), 2);
+  })).join(':');
+  return new Profile(null, macPrefix);
 }
 
 Profile.prototype.clone = function() {
@@ -288,9 +318,26 @@ Profile.prototype.rebuild = function() {
     base = this.ports.length;
     _(this.n_ports-this.ports.length).times(function(i) {
       var idx = base + i;
-      this.ports.push(new PortProfile(null, idx, mkMAC(this.macPrefix, idx)));
+      this.ports.push(new PortProfile(null, idx + 1, mkMAC(this.macPrefix, idx)));
     }, this);
   }
+};
+
+Profile.prototype.toString = function() {
+  return 'n_ports: '+this.n_ports+'\n'+
+         'macPrefix: '+this.macPrefix+'\n'+
+         'port_stats: '+this.port_stats+'\n'+
+         'port_blocked: '+this.port_blocked+'\n'+
+         'virtual_ports: '+this.virtual_ports+'\n'+
+         'ports: \n'+this.portsToString();
+};
+
+Profile.prototype.portsToString = function() {
+  var tmp = ' ';
+  for(var x=0; x<this.ports.length; x++){
+    tmp += this.ports[x].toString() +'\n';
+  }
+  return tmp;
 };
 
 function mkMAC(prefix, id) {
@@ -355,6 +402,9 @@ return {
   Port: Port,
   Ports: Ports,
   Profile: Profile,
+  PortProfile: PortProfile,
+  mkPortsProfile: mkPortsProfile,
+  mkMAC: mkMAC,
   TIPS: TIPS,
   TESTS: TESTS,
   RANGES: RANGES

@@ -46,7 +46,6 @@ function Profile(profile){
     this.write = Action.Available();
     this.metadata = '0xffffffffffffffff';
     this.goto_ = [];
-    console.log('in profile:', this.apply);
 /*
  *  This is just as a reminder to move into action
  *  using the new mkActionField mechanism ...

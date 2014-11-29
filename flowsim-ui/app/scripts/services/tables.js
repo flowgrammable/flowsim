@@ -223,7 +223,6 @@ Profile.prototype.clone = function() {
 };
 
 Profile.prototype.rebuild = function() {
-  var that = this;
   if(this.n_tables === this.tables.length) {
     return;
   } else if(this.n_tables < this.tables.length) {
@@ -231,8 +230,8 @@ Profile.prototype.rebuild = function() {
   } else {
     var prevLen = this.tables.length;
     _(this.n_tables-this.tables.length).times(function(id) {
-      that.tables.push(new TableProfile(null, prevLen + id));
-    });
+      this.tables.push(new TableProfile(null, prevLen + id));
+    }, this);
   }
 };
 

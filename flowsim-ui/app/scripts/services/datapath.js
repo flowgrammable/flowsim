@@ -42,7 +42,7 @@ function Profile(datapath, dp_id) {
     if(dp_id) {
       this.datapath_id = dp_id;
     } else {
-      this.datapath_id = (_(8).times(function() { 
+      this.datapath_id = (_(8).times(function() {
         return UInt.padZeros(_.random(0, 255).toString(16), 2);
       })).join(':');
     }
@@ -58,12 +58,26 @@ function Profile(datapath, dp_id) {
   }
 }
 
+function mkProfile(){
+  return new Profile();
+}
+
 Profile.prototype.clone = function() {
   return new Profile(this);
 };
 
 Profile.prototype.getMACPrefix = function() {
-  return this.datapath_id.slice(0, 11); 
+  return this.datapath_id.slice(0, 11);
+};
+
+Profile.prototype.toString = function(){
+  return 'id:              '+this.datapath_id+'\n'+
+         'n_buffers:       '+this.n_buffers+'\n'+
+         'mfr_description: '+this.mfr_description+'\n'+
+         'hw_description:  '+this.hw_description+'\n'+
+         'sw_description:  '+this.sw_description+'\n'+
+         'serial_num:      '+this.serial_num+'\n'+
+         'dp_description:  '+this.dp_description;
 };
 
 Profile.prototype.ofp_1_0 = function() {};
@@ -140,17 +154,17 @@ Datapath.prototype.ingress = function(packet) {
   // with this packet
   return !storeOrDrop;
 };
-    
+
 var TIPS = {
   datapath_id: 'Unique id of the datapath',
   ip_reassembly: 'Datapath can reassemble IP fragments',
   n_buffers: 'Number of packets that can be buffered for controller',
   miss_send_len: 'Prefix of packet in bytes to send to controller',
-  mfr_description: '',
-  hw_description: '',
-  sw_description: '',
-  serial_num: '',
-  dp_description: ''
+  mfr_description: 'Manufacturer description',
+  hw_description: 'Hardware description',
+  sw_description: 'Software description',
+  serial_num: 'Serial number',
+  dp_description: 'Description of datapath'
 };
 
 var TESTS = {
@@ -167,6 +181,7 @@ var TESTS = {
 return {
   Datapath: Datapath,
   Profile: Profile,
+  mkProfile: mkProfile,
   TIPS: TIPS,
   TESTS: TESTS
 };

@@ -68,13 +68,44 @@ describe('Service: instruction', function () {
 
     var j = JSON.stringify(prof);
     var j_ = new Instruction.Profile(JSON.parse(j));
-    console.log('japp:', j_.apply);
 
     expect(j_.apply.length).toBe(prof.apply.length);
     expect(j_.apply[0].protocol).toBe('Internal');
-    console.log('j_',j_.apply[0].actions);
     expect(j_.apply[0].actions[0].name).toBe('Output');
 
+  });
+
+  it('Apply Instruction construction', function(){
+    var out = new Action.Output(null, 1);
+    var app = new Instruction.Apply();
+
+    expect(app.actions.length).toBe(0);
+    app.push(out);
+    expect(app.actions.length).toBe(1);
+
+    var j = JSON.stringify(app);
+
+    var j_ = new Instruction.Apply(JSON.parse(j));
+
+    expect(j_.actions[0].toValue()).toBe(1);
+
+  });
+
+  it('Instruction Set Construction', function(){
+    var out = new Action.Output(null, 1);
+    var app = new Instruction.Apply();
+    app.push(out);
+    expect(app.actions.length).toBe(1);
+
+    var set = new Instruction.Set();
+    set.apply(app);
+    expect(set.apply().actions.length).toBe(1);
+
+    var j = JSON.stringify(set);
+    var j_ = new Instruction.Set(JSON.parse(j));
+
+    expect(j_.apply().actions.length).toBe(1);
+    expect(j_.apply().actions[0].toValue()).toBe(1);
   });
 
 });

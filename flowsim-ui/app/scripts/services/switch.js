@@ -18,13 +18,15 @@ function Switch(sw, profile) {
     this.tables   = new Tables.Tables(sw.tables);
     this.groups   = new Groups.Groups(sw.groups);
     //this.meters   = new Meters.Configuration(sw.meters);
-  } else {
+  } else if(_.isObject(profile)) {
     this.name     = sw;
     this.datapath = new Datapath.Datapath(null, profile.datapath);
     this.ports    = new Ports.Ports(null, profile.ports);
     this.tables   = new Tables.Tables(null, profile.tables);
     this.groups   = new Groups.Groups(null, profile.groups);
     //this.meters   = new Meters.Configuration(null, profile.meters);
+  } else {
+    throw 'Switch Construction: Expected profile';
   }
 }
 
