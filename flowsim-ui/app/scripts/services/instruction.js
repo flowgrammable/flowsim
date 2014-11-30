@@ -341,7 +341,7 @@ Set.prototype.clear = function(clear) {
 
 Set.prototype.apply = function(apply) {
   if(apply) {
-    this._apply = new Action.List(/*null,*/ apply);
+    this._apply = new Action.List(apply);
   } else {
     return this._apply;
   }
@@ -427,7 +427,7 @@ Set.prototype.summarize = function() {
   if(this._goto) {
     result.push('goto');
   }
-  return result.join(', ');
+  return result;
 };
 
 Set.prototype.step = function(dp, ctx) {

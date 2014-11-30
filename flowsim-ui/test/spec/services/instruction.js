@@ -108,4 +108,17 @@ describe('Service: instruction', function () {
     expect(j_.apply().actions[0].toValue()).toBe(1);
   });
 
+  it('Instruction Set summaraize', function(){
+    var out = new Action.Output(null, 1);
+    var is = new Instruction.Set();
+
+    is.pushApply(out);
+
+    expect(is.summarize()).toBe('apply');
+
+    is._write.output(out);
+    expect(is.summarize()).toBe('apply, write');
+
+  });
+
 });

@@ -29,7 +29,7 @@ function Priority(priority, priValue) {
       //return flow.clone();
       return new Flow.Flow(flow);
     });
-    this.priority = priority;
+    this.priority = priority.priority;
   } else {
     this.flows = [];
     this.priority = priValue;
@@ -143,7 +143,7 @@ Table.prototype.del = function(priority, flow) {
   var i;
   if(_(this.prioritiesPresent).has(priority.toString())) {
     priTable = _(this.priorities).find(function(priTbl) {
-      return priority === priTbl.priority;
+      return priority === flow.priority;
     }, this);
     priTable.del(flow);
     this.stats.active -= 1;
@@ -530,7 +530,9 @@ var RANGES = {
 
 return {
   Profile: Profile,
+  TableProfile: TableProfile,
   Tables: Tables,
+  Table: Table,
   TIPS: TIPS,
   TESTS: TESTS,
   RANGES: RANGES,

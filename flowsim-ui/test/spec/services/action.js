@@ -1317,17 +1317,74 @@ describe('Service: action', function () {
     expect(j_.toValue()).toBe(1);
   });
 
-  it('ActionField_UI construction', function(){
-    var af = new Action.ActionField_UI(null,
-      'Internal', 'Output', 'forward', Action.Output, 'Egress port id',
-        fgConstraints.isUInt(0,0xffff));
+  it('Action List Construction', function(){
+    var al = new Action.List();
+    var out = new Action.Output(null, 1);
+    var out2 = new Action.Output(null, 2);
+    expect(al.empty()).toBe(true);
 
-    var j = JSON.stringify(af);
-    var j_ = new Action.ActionField_UI(JSON.parse(j));
+    al.push(out);
+    expect(al.empty()).toBe(false);
 
-    expect(j_.category).toBe('Internal');
-    expect(j_.name).toBe('Output');
-    expect(j_.key).toBe('forward');
+    al.push(out2);
+    expect(al.actions.length).toBe(2);
   });
+
+  it('Action List push', function(){
+    var al = new Action.List();
+    var out = new Action.Output(null, 1);
+    var out2 = new Action.Output(null, 2);
+    expect(al.empty()).toBe(true);
+
+    al.push(out);
+    expect(al.empty()).toBe(false);
+
+    al.push(out2);
+    expect(al.actions.length).toBe(2);
+
+  });
+
+  it('Action List pop', function(){
+    var al = new Action.List();
+    var out = new Action.Output(null, 1);
+    var out2 = new Action.Output(null, 2);
+    expect(al.empty()).toBe(true);
+
+    al.push(out);
+    expect(al.empty()).toBe(false);
+
+    al.push(out2);
+    expect(al.actions.length).toBe(2);
+
+    al.pop();
+    expect(al.actions.length).toBe(1);
+    expect(al.actions[0].toValue()).toBe(1);
+
+  });
+
+  it('Action List copy construction', function(){
+    var al = new Action.List();
+    var out = new Action.Output(null, 1);
+    var out2 = new Action.Output(null, 2);
+    expect(al.empty()).toBe(true);
+
+    al.push(out);
+    expect(al.empty()).toBe(false);
+
+    al.push(out2);
+    expect(al.actions.length).toBe(2);
+
+    var j = JSON.stringify(al);
+    var j_ = new Action.List(JSON.parse(j));
+
+    expect(j_.actions.length).toBe(2);
+    expect(j_.actions[1].toValue()).toBe(2);
+
+    var al2 = new Action.List(j_);
+
+    expect(al2.actions.length).toBe(2);
+    expect(al2.actions[1].toValue()).toBe(2);
+  });
+
 
 });

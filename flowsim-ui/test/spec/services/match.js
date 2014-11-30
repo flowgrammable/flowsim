@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: match', function () {
+ddescribe('Service: match', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -1128,6 +1128,49 @@ describe('Service: match', function () {
     var j = JSON.stringify(matchProfile);
     var j_ = new Match.Profile(JSON.parse(j));
     expect(j_.fields[0].enabled).toBe(false);
+  });
+
+  it('MatchSet JSON construction', function(){
+    var match = new Match.Set();
+
+    var key = new Context.Key(null, 0);
+
+
+    expect(match.summarize().toString()).toBe('*');
+    match.push(
+    new Match.Match(null,
+    'ipv6_flabel',
+    IPV6.mkFlabelMatch(
+    '22',
+    '0xffff')));
+
+    expect(match.summarize().toString()).toBe('ipv6');
+    match.push(
+    new Match.Match(null,
+    'mpls_label',
+    MPLS.mkLabelMatch(
+    '0x123456', '0xffffff')));
+
+    var j = JSON.stringify(match);
+    var j_ = new Match.Set(JSON.parse(j));
+
+    expect(j_.equal(match)).toBe(true);
+  });
+
+  iit('Match JSON construction', function(){
+    var em = ETHERNET.mkMACMatch('aa:bb:cc:dd:ee:ff', 'bb:bb:bb:bb:bb:bb');
+
+    var j = JSON.stringify(em);
+    var j_ = new ETHERNET.MAC.Match(JSON.parse(j));
+
+    expect(em.equal(j_)).toBe(true);
+
+    var m = new Match.Match(null, 'eth_src', em);
+
+    var j = JSON.stringify(m);
+    var j_ = new Match.Match(JSON.parse(j));
+
+    expect(j_.equal(m)).toBe(true);
   });
 
 });

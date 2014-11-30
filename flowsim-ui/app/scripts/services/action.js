@@ -11,34 +11,30 @@ angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                               ICMPV6, SCTP, TCP, UDP, ND, fgConstraints) {
 
-function ActionField_UI(afu, category, name, key, Type, tip, test, action) {
-    this.category = category;
-    this.name     = name;
-    this.action   = action ? action : '-n/a-';
-    this.enabled  = true;     // Availability of action ie. profile - OFP 1.X
-    this.key      = key;
-    var that = this;
-    this.mkType   = function() {
-      // this is a fancy way of building a runtime constructor
-      var args = [Type, null, null].concat(_(arguments).values());
-      var T = _.bind.apply(null, args);
-      var t = new T();
-      t.category = that.category;
-      t.name     = that.name;
-      t.action   = that.action;
-      return t;
-    };
-    this.tip = tip;
-    this.test = test;
+function ActionField_UI(action, Type){
+  this.category = action.category;
+  this.name = action.name;
+  this.action = action.action;
+  this.key = action.key;
+  this.type = Type;
+  var that = this;
+  this.mkType = function() {
+    var args = [Type, null, null].concat(_(arguments).values());
+    var T = _.bind.apply(null, args);
+    var t = new T();
+    t.category = that.category;
+    t.name = that.name;
+    t.action = that.action;
+    return t;
+  };
+  this.tip = TIPS[action.name];
+  this.test = TESTS[action.name];
 }
 
 ActionField_UI.prototype.clone = function() {
   return new ActionField_UI(this);
 };
 
-ActionField_UI.prototype.test = function() {
-  return true;
-};
 
 function Output(output, port_id) {
   if(_.isObject(output)) {
@@ -806,7 +802,54 @@ List.prototype.execute = function(dp, ctx) {
   }
 };
 
+var TESTS = {
+  Output: fgConstraints.isUInt(0, 0xffffffff),
+};
+
+var TIPS = {
+  Output: 'set output port'
+};
+
+function mkOutputProfile(){
+  return {
+    category: 'Internal',
+    name: 'Output',
+    action: '-n/a-',
+    key: 'forward',
+    enabled: true
+  };
+}
+
+function mkGroupProfile(){
+  return {
+    category: 'Internal',
+    name: 'Group',
+    action: '-n/a-',
+    enabled: true
+  };
+}
+
+function mkQueueProfile(){
+  return {
+    category: 'Internal',
+    name: 'Queue',
+    action: '',
+    enabled: true
+  };
+}
+
 function Available() {
+  return [{
+    protocol: 'Internal',
+    actions: [
+      mkOutputProfile(),
+      mkGroupProfile(),
+      mkQueueProfile()
+    ]
+  }];
+}
+
+/*function Available() {
   return [{
     protocol: 'Internal',
     actions: [
@@ -829,6 +872,7 @@ function Available() {
       mkPopMPLSField()
   ]}];
 }
+*/
 
 function cloneAvailable(a) {
   return _(a).map(function(grouping) {
@@ -856,7 +900,9 @@ return {
   CopyTTLOut: CopyTTLOut,
   Available: Available,
   cloneAvailable: cloneAvailable,
-  ActionField_UI: ActionField_UI
+  ActionField_UI: ActionField_UI,
+  TESTS: TESTS,
+  TIPS: TIPS
 };
 
 });

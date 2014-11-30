@@ -379,8 +379,8 @@ Profile.prototype.ofp_1_4 = function() {
 };
 
 var TIPS = {
-  mac: 'a',
-  name: 'b',
+  mac: 'Hardware Address',
+  name: 'Port name',
   speed: 'c',
   mode: 'd',
   medium: 'e'

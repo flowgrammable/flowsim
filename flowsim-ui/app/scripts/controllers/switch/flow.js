@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match) {
+  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match, Action) {
 
   $scope.flow = flow;
   $scope.match = flow.match;
@@ -104,8 +104,12 @@ angular.module('flowsimUiApp')
     function(category) {
       return {
         protocol: category.protocol,
-        actions: _(category.actions).filter(function(action) {
-          return action.enabled;
+        actions: _(category.actions).map(function(action) {
+          if(action.enabled){
+            return new Action.ActionField_UI(action, Action[action.name]);
+          } else {
+            return;
+          }
         })
       };
   })).filter(function(category) {
@@ -150,7 +154,7 @@ angular.module('flowsimUiApp')
   };
 
   $scope.updateApplyField = function() {
-    console.log('update category: '+$scope.apply.field);
+    console.log('update field: '+$scope.apply.field);
     $scope.activeApplyFields = ($scope.activeApplyCategory.actions).filter(
       function(action) {
         return action.name === $scope.apply.field;
@@ -179,7 +183,6 @@ angular.module('flowsimUiApp')
   $scope.addApplyAction = function() {
     var action;
     if($scope.applyAction && $scope.applyAction.test($scope.apply.value)) {
-      console.log('got an action to deal with');
       action = $scope.applyAction.mkType($scope.apply.value);
       $scope.flow.ins.pushApply(action);
     }
