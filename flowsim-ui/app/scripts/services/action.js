@@ -61,6 +61,10 @@ function ActionProfile(ap, category, field, action, enabled) {
   }
 }
 
+ActionProfile.prototype.clone = function() {
+  return new ActionProfile(this);
+};
+
 function ActionField_UI(category, name, action, Type, ){
   this.category = category;
   this.name     = name;
