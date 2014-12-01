@@ -1307,14 +1307,12 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
   });
 
-  it('Output action construction', function(){
-    var out = new Action.Output(null, 1);
-    expect(out.toValue()).toBe(1);
-
-    var j = JSON.stringify(out);
-    var j_ = new Action.Output(JSON.parse(j));
-
-    expect(j_.toValue()).toBe(1);
+  iit('Output action construction', function(){
+    var ap = new Action.ActionProfile(null, 'Internal', 'Output', '--n/a--', true);
+    console.log(ap);
+    var o = ap.mkType(5);
+    console.log(o);
+    expect(o.port_id).toBe('5');
   });
 
   it('Action List Construction', function(){

@@ -13,7 +13,7 @@ angular.module('flowsimUiApp')
 
 var TIPS = {
   Internal: {
-    output: {
+    Output: {
       '--n/a--': "Forward the packet out a port"
     },
     group: {
@@ -71,7 +71,7 @@ function getType(category, field, action) {
   return getGeneric('Types', Types, category, field, action);
 }
 
-function ActionProfile(ap, category, field, action) {
+function ActionProfile(ap, category, field, action, enabled) {
   var that;
   if(_.isObject(ap)) {
     _.extend(this, ap);
@@ -93,14 +93,14 @@ function ActionProfile(ap, category, field, action) {
     t.field = that.field;
     t.action = that.action;
     return t;
-  }
+  };
 }
 
 ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
 };
 
-function ActionField_UI(category, name, action, Type, ){
+function ActionField_UI(category, name, action, Type ){
   this.category = category;
   this.name     = name;
   this.action   = action;
@@ -124,13 +124,22 @@ ActionField_UI.prototype.clone = function() {
 };
 
 
+function mkOutput(){
+  return new ActionProfile(
+    null,
+    'Internal',
+    'Output',
+    '--n/a--',
+    true
+  );
+};
+
 function Output(output, port_id) {
   if(_.isObject(output)) {
     _.extend(this, output);
   } else {
     this.port_id = port_id;
   }
-  this.name = 'Output';
 }
 
 Output.prototype.clone = function() {
@@ -886,41 +895,6 @@ List.prototype.execute = function(dp, ctx) {
   }
 };
 
-var TESTS = {
-  Output: fgConstraints.isUInt(0, 0xffffffff),
-};
-
-var TIPS = {
-  Output: 'set output port'
-};
-
-function mkOutputProfile(){
-  return {
-    category: 'Internal',
-    name: 'Output',
-    action: '-n/a-',
-    key: 'forward',
-    enabled: true
-  };
-}
-
-function mkGroupProfile(){
-  return {
-    category: 'Internal',
-    name: 'Group',
-    action: '-n/a-',
-    enabled: true
-  };
-}
-
-function mkQueueProfile(){
-  return {
-    category: 'Internal',
-    name: 'Queue',
-    action: '',
-    enabled: true
-  };
-}
 
 function Available() {
   return [{
@@ -970,6 +944,7 @@ function cloneAvailable(a) {
 }
 
 return {
+  ActionProfile: ActionProfile,
   Output: Output,
   Group: Group,
   Queue: Queue,
@@ -986,7 +961,8 @@ return {
   cloneAvailable: cloneAvailable,
   ActionField_UI: ActionField_UI,
   TESTS: TESTS,
-  TIPS: TIPS
+  TIPS: TIPS,
+  Types: Types
 };
 
 });
