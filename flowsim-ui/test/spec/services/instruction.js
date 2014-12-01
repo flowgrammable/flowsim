@@ -114,10 +114,10 @@ describe('Service: instruction', function () {
 
     is.pushApply(out);
 
-    expect(is.summarize()).toBe('apply');
+    expect(is.summarize()[0]).toBe('apply');
 
     is._write.output(out);
-    expect(is.summarize()).toBe('apply, write');
+    expect(is.summarize()[1]).toBe('write');
 
   });
 

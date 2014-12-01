@@ -55,7 +55,6 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: { flow: function() { return flow; } }
       }).result.then(function () {
-        console.log('in open flow:', $scope.device.tables.tables[$scope.tableId]);
         $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
       });
     }

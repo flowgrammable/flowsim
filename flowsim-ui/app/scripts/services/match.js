@@ -8,12 +8,32 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Match', function(fgConstraints) {
+  .factory('Match', function(fgConstraints, ETHERNET, UInt) {
+
+function MatchField_UI(match, Type){
+  console.log('type in mfui:', Type);
+  this.category = match.category;
+  this.field = match.field;
+  this.key = match.key;
+  this.type = Type;
+  var that = this;
+  this.mkType = function() {
+    var args = [Type, null, null].concat(_(arguments).values());
+    var T = _.bind.apply(null, args);
+    var t = new T();
+    var m = new Match(null, that.key, t._match);
+    m.category = that.category;
+    m.field = that.field;
+    m.value = arguments[0];
+    m.mask = arguments[1];
+    return m;
+  }
+}
 
 function Match(match, label, matchObject) {
   if(_.isObject(match)) {
     this.label  = match.label;
-    this._match = matchObject.clone();
+    this._match = mkByName(match); //matchObject.clone();
   } else if(label && matchObject) {
     this.label  = label;
     this._match = matchObject;
@@ -39,7 +59,31 @@ function getOptions(matchs) {
 
 }
 
-function mkByName(name) {
+function mkByValue(match) {
+  switch(match.key){
+    case 'eth_dst':
+    case 'eth_src':
+      return ETHERNET.mkMACMatch;
+    case 'eth_type':
+      return ETHERNET.mkTypeMatch;
+    default:
+      break;
+  }
+}
+
+function mkByName(match) {
+  switch(match.label){
+    case 'eth_dst':
+    case 'eth_src':
+    case 'arp_sha':
+    case 'arp_tha':
+      return new ETHERNET.MAC.Match(match._match);
+    case 'eth_type':
+    case 'internals_port':
+      return new UInt.Match(match._match);
+    default:
+      break;
+  }
 }
 
 function Set(set) {
@@ -53,6 +97,7 @@ function Set(set) {
 }
 
 Set.prototype.toView = function() {
+  console.log('in toView:', this.matches);
   return [];
 };
 
@@ -103,14 +148,15 @@ Set.prototype.summarize = function() {
   if(this.matches.length === 0) {
     return ['*'];
   }
-  return _(_(this.matches).map(function(match) {
+  return ['*'];
+  /* _(_(this.matches).map(function(match) {
     return match.summarize();
-  })).uniq();
+  })).uniq(); */
 };
 
-function createMatch(protocol, field, key, wildcard, maskable, mask) {
+function createMatch(category, field, key, wildcard, maskable, mask) {
   return {
-    protocol: protocol,
+    category: category,
     field: field,
     key: key,
     enabled: true,
@@ -120,6 +166,26 @@ function createMatch(protocol, field, key, wildcard, maskable, mask) {
   };
 }
 
+function Available(){
+  return [{
+    category: 'Ethernet',
+    fields: [
+      createMatch('Ethernet', 'Src', 'eth_src', true, true, '0xffffffffffff'),
+      createMatch('Ethernet', 'Dst', 'eth_dst', true, true, '0xffffffffffff'),
+      createMatch('Ethernet', 'Type/Len', 'eth_typelen', true, false, '0xffff')
+    ]
+  }];
+}
+
+Match.Profile = function(match){
+  if(_.isObject(match)){
+    _.extend(this, match);
+    this.matches = _.map(match.matches, function(f) {return _.clone(f);});
+  } else {
+    this.matches = Available();
+  }
+}
+/*
 Match.Profile = function(match){
   if(_.isObject(match)){
     _.extend(this, match);
@@ -127,7 +193,7 @@ Match.Profile = function(match){
   } else {
     this.fields = [
     createMatch('Internal', 'Ingress Port', 'in_port', true, false, 0),
-    createMatch('Internal', 'Physical Port', 'in_phy_port', true, false, 0),
+    createMatch('Internal', 'Physical Port', 'in_phyPort', true, false, 0),
     createMatch('Internal', 'Metadata', 'in_metadata', true, true, 0),
     createMatch('Internal', 'Tunnel', 'in_tunnel', true, true, 0),
     createMatch('Ethernet', 'Src', 'eth_src', true, true, '0xffffffffffff'),
@@ -170,10 +236,10 @@ Match.Profile = function(match){
     ];
   }
 };
-
+*/
 Match.Profile.TIPS ={
   in_port: 'Match on ingress port',
-  in_phy_port: 'Match on physical port',
+  in_phyPort: 'Match on physical port',
   in_metadata: 'Match on metadata',
   in_tunnel: 'Match on metadata associated with a logical port',
   eth_src: 'Match on Ethernet source address',
@@ -213,7 +279,7 @@ Match.Profile.TIPS ={
 
 Match.Profile.TESTS = {
   in_port: fgConstraints.isUInt(0, 0xffffffff),
-  in_phy_port: fgConstraints.isUInt(0, 0xffffffff),
+  in_phyPort: fgConstraints.isUInt(0, 0xffffffff),
   in_metadata: fgConstraints.isUInt(0, 0xffffffffffffffff),
   in_tunnel: fgConstraints.isUInt(0, 0xffffffffffffffff),
   eth_src: fgConstraints.isUInt(0, 0xffffffffffff),
@@ -258,8 +324,10 @@ Match.Profile.TESTS = {
 };
 
 return {
+  MatchField_UI: MatchField_UI,
   Match: Match,
   getOptions: getOptions,
+  mkByValue: mkByValue,
   mkByName: mkByName,
   Set: Set,
   Profile: Match.Profile

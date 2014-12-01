@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
   .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match, Action) {
 
   $scope.flow = flow;
-  $scope.match = flow.match;
+  //$scope.match = flow.match;
   //$scope.options = Match.getOptions($scope.matches);
 
   $scope.insNames = [
@@ -33,6 +33,7 @@ angular.module('flowsimUiApp')
   };
 
   $scope.pushMatch = function(name) {
+    $scope.matchList.push(name);
   };
 
   $scope.popMatch = function() {
@@ -96,6 +97,60 @@ angular.module('flowsimUiApp')
   $scope.setGoto = function() {
     if($scope.simpleIns.goto_.length > 0) {
       //FIXME
+    }
+  };
+
+  // Grab match subset
+  $scope.matches = _(_(flow.capabilities.match.matches).map(
+    function(category){
+      return {
+        category: category.category,
+        fields: _(category.fields).map(function(field) {
+          if(field.enabled){
+            return new Match.MatchField_UI(field, Match.mkByValue(field));
+          } else {
+            return;
+          }
+        })
+      };
+    })).filter(function(category) {
+      return category.fields.length > 0;
+    });
+
+  $scope.matchNames = _($scope.matches).map(function(category){
+    return category.category;
+  });
+
+  $scope.activeMatchCategory = null;
+  $scope.activeMatchFields = [];
+
+  $scope.updateMatchCategory = function() {
+    $scope.activeMatchCategory = _($scope.matches).find(
+      function(category) {
+        return category.category === $scope.match.category;
+      });
+    $scope.match.fields = _($scope.activeMatchCategory.fields).map(
+      function(match) {
+        return match.field;
+      });
+
+    //$scope.activeMatch = null;
+    $scope.match.field = '';
+  };
+
+  $scope.updateMatch = function() {
+    $scope.activeMatchField = _($scope.activeMatchCategory.fields).find(
+      function(match){
+        return match.field === $scope.match.field;
+      });
+  };
+
+  $scope.addMatch = function() {
+    var match;
+    if($scope.match){
+      match = $scope.activeMatchField.mkType($scope.match.value, $scope.match.mask);
+      $scope.flow.match.push(match);
+      $scope.pushMatch(match);
     }
   };
 
@@ -194,9 +249,9 @@ angular.module('flowsimUiApp')
 
   $scope.match = {
     category: '',
-    categories: ['Internal', 'Ethernet', 'VLAN', 'MPLS'],
+    categories: $scope.matchNames,
     field: '',
-    fields: ['Output', 'Group', 'Queue', 'Src', 'Dst', 'Type'],
+    fields: [],
     value: '',
     mask: ''
   };
@@ -212,6 +267,13 @@ angular.module('flowsimUiApp')
   };
 
   $scope.applyList = flow.ins.apply();
+
+//  $scope.matchList = flow.match.matches;
+
+  $scope.matchList =  _(flow.match.matches).map(
+    function(match){
+            return new Match.MatchField_UI(match, Match.mkByValue(match.field));
+          });
 
   $scope.apply = {
     category: '',

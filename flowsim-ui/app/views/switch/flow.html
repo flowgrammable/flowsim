@@ -24,8 +24,8 @@
         <tr ng-repeat="match in matchList">
           <td>{{match.category}}</td>
           <td>{{match.field}}</td>
-          <td>{{match.value.toStrin()}}</td>
-          <td>{{match.mask.toString()}}</td>
+          <td>{{match.value}}</td>
+          <td>{{match.mask}}</td>
           <td>
             <span class="glyphicon glyphicon-minus-sign pull-right"
                   ng-show="$index === $last">
@@ -34,25 +34,29 @@
         </tr>
         <tr>
           <td>
-            <select class="form-control" ng-model="match.category" 
-                    ng-options="category as category for category in 
-                    match.categories">
+            <select class="form-control" ng-model="match.category"
+                    ng-options="category as category for category in
+                    match.categories" ng-change="updateMatchCategory()">
+                    <option value="">-- Choose Category --</option>
             </select>
           </td>
           <td>
-            <select class="form-control" ng-model="match.field" 
+            <select class="form-control" ng-model="match.field"
                     ng-options="field as field for field in
-                    match.fields">
+                    match.fields" ng-change="updateMatch()">
             </select>
           </td>
           <td>
+            <div class="form-group"
+            tooltip="{{match ? match.tip : ''}}">
             <input type="text" class="form-control" ng-model="match.value">
+          </div>
           </td>
         <td>
-          <input type="text" class="form-control" ng-model="match.mask">    
+          <input type="text" class="form-control" ng-model="match.mask">
         </td>
         <td>
-          <button class="btn btn-default">Add</button>
+          <button class="btn btn-default" ng-click="addMatch()">Add</button>
         </td>
       </tr>
       </tbody>
@@ -183,28 +187,28 @@
                   </tr>
                   <tr>
                     <td>
-                      <select class="form-control" ng-model="apply.category" 
-                              ng-options="category as category for category in 
+                      <select class="form-control" ng-model="apply.category"
+                              ng-options="category as category for category in
                               apply.categories"
                               ng-change="updateApplyCategory()">
                       </select>
                     </td>
                     <td>
-                      <select class="form-control" ng-model="apply.field" 
+                      <select class="form-control" ng-model="apply.field"
                               ng-options="field as field for field in
                               apply.fields"
                               ng-change="updateApplyField()">
                       </select>
                     </td>
                     <td>
-                      <select class="form-control" ng-model="apply.action" 
+                      <select class="form-control" ng-model="apply.action"
                               ng-options="action as action for action in
                               apply.actions"
                               ng-change="updateApplyAction()">
                       </select>
                     </td>
                     <td>
-                      <div class="form-group" 
+                      <div class="form-group"
                            tooltip="{{applyAction ? applyAction.tip : ''}}"
                            ng-class="{'has-error': applyAction &&
                                       !applyAction.test(apply.value)}">
@@ -221,7 +225,7 @@
                   </tr>
                 </tbody>
               </table>
-            
+
           </div>
           <div ng-show="activeIdx === 2">
             <h3>Clear the Action Set</h3>
@@ -250,26 +254,26 @@
                 </tr>
                 <tr>
                   <td>
-                    <select class="form-control" ng-model="write.category" 
-                            ng-options="category as category for category in 
+                    <select class="form-control" ng-model="write.category"
+                            ng-options="category as category for category in
                             write.categories">
                     </select>
                   </td>
                   <td>
-                    <select class="form-control" ng-model="write.field" 
+                    <select class="form-control" ng-model="write.field"
                             ng-options="field as field for field in
                             write.fields">
                     </select>
                   </td>
                   <td>
-                    <select class="form-control" ng-model="write.action" 
+                    <select class="form-control" ng-model="write.action"
                             ng-options="action as action for action in
                             write.actions">
                     </select>
                   </td>
                   <td>
                     <input type="text" class="form-control"
-                           ng-model="write.value">    
+                           ng-model="write.value">
                   </td>
                   <td>
                     <button class="btn btn-default">Add</button>
@@ -325,4 +329,3 @@
   <button class="btn btn-primary" ng-click="ok()">Ok</button>
   <button class="btn btn-primary" ng-click="cancel()">Cancel</button>
 </div>
-

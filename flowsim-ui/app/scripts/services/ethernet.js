@@ -174,7 +174,10 @@ MAC.Match.prototype.equal = function(mac) {
 };
 
 MAC.Match.prototype.toString = function() {
-  return this.addr.toString() + '/' + this.mask.toString();
+  var tmp = [];
+  tmp.push(this.addr.toString());
+  tmp.push(this.mask.toString());
+  return tmp;
 };
 
 MAC.Match.prototype.summarize = function() {
