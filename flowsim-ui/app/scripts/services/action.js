@@ -14,10 +14,10 @@ angular.module('flowsimUiApp')
 var TIPS = {
   Internal: {
     output: {
-      'n/a': "Forward the packet out a port"
+      '--n/a--': "Forward the packet out a port"
     },
     group: {
-      'n/a': "Forward the packet to a group"
+      '--n/a--': "Forward the packet to a group"
     }
   },
   Ethernet: {
@@ -31,9 +31,19 @@ var TIPS = {
 };
 
 var TESTS = {
+  Internal: {
+    Output: {
+      '--n/a--': fgConstraints.isUInt(0, 0xffff)
+    }
+  }
 };
 
 var Types = {
+  Internal: {
+    Output: {
+      '--n/a--': Output
+    }
+  }
 };
 
 function getGeneric(name, store, category, field, action) {
@@ -61,14 +71,14 @@ function getType(category, field, action) {
   return getGeneric('Types', Types, category, field, action);
 }
 
-function ActionProfile(ap, category, field, action, enabled) {
+function ActionProfile(ap, category, field, action) {
   var that;
   if(_.isObject(ap)) {
     _.extend(this, ap);
   } else {
     this.category = category;
     this.field    = field;
-    this.action   = action;
+    this.action   = action ? action : '--n/a--';
     this.enabled  = enabled;
   }
   this.tip    = getTIPS(category, field, action);
@@ -141,13 +151,9 @@ Output.prototype.step = function(dp, ctx) {
 
 function mkOutputField() {
   return new ActionField_UI(
-    null,         // default construction
-    'Internal',   // Category of action
-    'Output',     // Name of action
-    'forward',    // might be vestigal
-    Output,        // Type name of action
-    'Egress port id',
-    fgConstraints.isUInt(0, 0xffff)
+    null,       // default construction
+    'Internal', // Category of action
+    'Output'    // Name of action
   );
 }
 
