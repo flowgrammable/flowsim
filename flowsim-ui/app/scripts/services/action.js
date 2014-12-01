@@ -11,13 +11,64 @@ angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                               ICMPV6, SCTP, TCP, UDP, ND, fgConstraints) {
 
-function ActionField_UI(action, Type){
-  this.category = action.category;
-  this.name = action.name;
-  this.action = action.action;
-  this.key = action.key;
-  this.type = Type;
-  var that = this;
+function getGeneric(name, store, category, field, action) {
+  if(!_(store).has(category)) {
+    throw name + ' missing: ' + category;
+  }
+  if(!_(store[category]).has(field)) {
+    throw name + ' missing: ' + field;
+  }
+  if(!_(store[category][field]).has(action)) {
+    throw name + ' missing: ' + action;
+  }
+  return store[category][field][action];
+}
+
+function getTIPS(category, field, action) {
+  return getGeneric('TIPS', TIPS, category, field, action);
+}
+
+function getTESTS(category, field, action) {
+  return getGeneric('TESTS', TESTS, category, field, action);
+}
+
+function getType(category, field, action) {
+  return getGeneric('Types', Types, category, field, action);
+}
+
+function ActionProfile(ap, category, field, action, enabled) {
+  var that;
+  if(_.isObject(ap)) {
+    _.extend(this, ap);
+  } else {
+    this.category = category;
+    this.field    = field;
+    this.action   = action;
+    this.enabled  = enabled;
+  }
+  this.tip    = getTIPS(category, field, action);
+  this.test   = getTESTS(category, field, action);
+  that = this;
+  this.mkType = function() {
+    var Type = getType(that.category, that.field, that.action);
+    var args = [Type, null, null].concat(_(arguments).values());
+    var T = _.bind.apply(null, args);
+    var t = new T();
+    t.category = that.category;
+    t.field = that.field;
+    t.action = that.action;
+    return t;
+  }
+}
+
+function ActionField_UI(category, name, action, Type, ){
+  this.category = category;
+  this.name     = name;
+  this.action   = action;
+  this.type     = Type;
+  this.tip      = TIPS[name];
+  this.test     = TESTS[name];
+  var that      = this;
   this.mkType = function() {
     var args = [Type, null, null].concat(_(arguments).values());
     var T = _.bind.apply(null, args);
@@ -27,8 +78,6 @@ function ActionField_UI(action, Type){
     t.action = that.action;
     return t;
   };
-  this.tip = TIPS[action.name];
-  this.test = TESTS[action.name];
 }
 
 ActionField_UI.prototype.clone = function() {
