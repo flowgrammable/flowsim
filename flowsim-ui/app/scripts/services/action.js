@@ -11,6 +11,31 @@ angular.module('flowsimUiApp')
   .factory('Action', function(ETHERNET, VLAN, MPLS, ARP, IPV4, IPV6, ICMPV4,
                               ICMPV6, SCTP, TCP, UDP, ND, fgConstraints) {
 
+var TIPS = {
+  Internal: {
+    output: {
+      'n/a': "Forward the packet out a port"
+    },
+    group: {
+      'n/a': "Forward the packet to a group"
+    }
+  },
+  Ethernet: {
+    Src: {
+      set: "Write Ethernet sourcd"
+    },
+    Dst: {
+      set: "Write Ethernet destination"
+    }
+  }
+};
+
+var TESTS = {
+};
+
+var Types = {
+};
+
 function getGeneric(name, store, category, field, action) {
   if(!_(store).has(category)) {
     throw name + ' missing: ' + category;
