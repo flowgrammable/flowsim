@@ -1312,7 +1312,7 @@ describe('Service: action', function () {
     console.log(ap);
     var o = ap.mkType(5);
     console.log(o);
-    expect(o.port_id).toBe('5');
+    expect(o.port_id).toBe(5);
   });
 
   it('Action List Construction', function(){
