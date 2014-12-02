@@ -100,30 +100,6 @@ ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
 };
 
-function ActionField_UI(category, name, action, Type ){
-  this.category = category;
-  this.name     = name;
-  this.action   = action;
-  this.type     = Type;
-  this.tip      = TIPS[name];
-  this.test     = TESTS[name];
-  var that      = this;
-  this.mkType = function() {
-    var args = [Type, null, null].concat(_(arguments).values());
-    var T = _.bind.apply(null, args);
-    var t = new T();
-    t.category = that.category;
-    t.name = that.name;
-    t.action = that.action;
-    return t;
-  };
-}
-
-ActionField_UI.prototype.clone = function() {
-  return new ActionField_UI(this);
-};
-
-
 function mkOutput(){
   return new ActionProfile(
     null,
@@ -957,7 +933,6 @@ return {
   CopyTTLOut: CopyTTLOut,
   Available: Available,
   cloneAvailable: cloneAvailable,
-  ActionField_UI: ActionField_UI,
   TESTS: TESTS,
   TIPS: TIPS,
   Types: Types

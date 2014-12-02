@@ -1308,20 +1308,9 @@ describe('Service: action', function () {
   });
 
 
-  function A() {
-    this.mkType = function() {
-      var args = Array.prototype.slice.call(arguments);
-      console.log(args);
-      console.log(_(args).keys());
-      console.log(_(args).values());
-    }
-  }
-
-  iit('Output action construction', function(){
+  it('Output action construction', function(){
     var ap = new Action.ActionProfile(null, 'Internal', 'Output');
-    console.log(ap);
     var o = ap.mkType(5);
-    console.log(o);
     expect(o.port_id).toBe(5);
   });
 
