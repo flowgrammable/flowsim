@@ -1307,10 +1307,12 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
   });
 
-  iit('Output action construction', function(){
-    var ap = new Action.ActionProfile(null, 'Internal', 'Output', '--n/a--', true);
+  it('Output action construction', function(){
+    var ap = new Action.ActionProfile(null, 'Internal', 'Output');
     console.log(ap);
+    console.log('calling');
     var o = ap.mkType(5);
+    console.log('called');
     console.log(o);
     expect(o.port_id).toBe(5);
   });
