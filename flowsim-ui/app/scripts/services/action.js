@@ -16,13 +16,16 @@ var TIPS = {
     Output: {
       '--n/a--': "Forward the packet out a port"
     },
-    group: {
+    Group: {
       '--n/a--': "Forward the packet to a group"
+    },
+    Queue: {
+      '--n/a--': "Use the designated queue on the egress port"
     }
   },
   Ethernet: {
     Src: {
-      set: "Write Ethernet sourcd"
+      set: "Write Ethernet source"
     },
     Dst: {
       set: "Write Ethernet destination"
@@ -34,6 +37,12 @@ var TESTS = {
   Internal: {
     Output: {
       '--n/a--': fgConstraints.isUInt(0, 0xffff)
+    },
+    Group: {
+      '--n/a--': fgConstraints.isUInt(0, 0xffffffff)
+    },
+    Queue: {
+      '--n/a--': fgConstraints.isUInt(0, 0xffffffff)
     }
   }
 };
@@ -42,6 +51,12 @@ var Types = {
   Internal: {
     Output: {
       '--n/a--': Output
+    },
+    Group: {
+       '--n/a--': Group
+    },
+    Queue: {
+       '--n/a--': Queue
     }
   }
 };
@@ -100,7 +115,7 @@ ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
 };
 
-function mkOutput(){
+function mkOutputProfile(){
   return new ActionProfile(
     null,
     'Internal',
@@ -161,15 +176,11 @@ Group.prototype.step = function(dp, ctx) {
   dp.output(null, this.group_id, ctx);
 };
 
-function mkGroupField() {
-  return new ActionField_UI(
+function mkGroupProfile() {
+  return new ActionProfile(
     null,         // default construction
     'Internal',   // Category of action
-    'Group',      // Name of action
-    'set_group',  // might be vestigal
-    Group,         // Type name of action
-    '',
-    function() { return true; }
+    'Group'      // Name of action
   );
 }
 
@@ -194,15 +205,11 @@ Queue.prototype.step = function(dp, ctx) {
   ctx.queue_id = this.queue_id;
 };
 
-function mkQueueField() {
-  return new ActionField_UI(
+function mkQueueProfile() {
+  return new ActionProfile(
     null,         // default construction
     'Internal',   // Category of action
-    'Queue',      // Name of action
-    'set_queue',  // might be vestigal
-    Queue,         // Type name of action
-    '',
-    function() { return true; }
+    'Queue'      // Name of action
   );
 }
 
@@ -932,10 +939,10 @@ return {
   CopyTTLIn: CopyTTLIn,
   CopyTTLOut: CopyTTLOut,
   Available: Available,
-  cloneAvailable: cloneAvailable,
-  TESTS: TESTS,
-  TIPS: TIPS,
-  Types: Types
+  cloneAvailable: cloneAvailable
+  //TESTS: TESTS,
+  //TIPS: TIPS,
+  //Types: Types
 };
 
 });
