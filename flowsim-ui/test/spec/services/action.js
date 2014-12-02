@@ -1307,8 +1307,18 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
   });
 
+
+  function A() {
+    this.mkType = function() {
+      var args = Array.prototype.slice.call(arguments);
+      console.log(args);
+      console.log(_(args).keys());
+      console.log(_(args).values());
+    }
+  }
+
   iit('Output action construction', function(){
-    var ap = new Action.ActionProfile(null, 'Internal', 'Output', '--n/a--', true);
+    var ap = new Action.ActionProfile(null, 'Internal', 'Output');
     console.log(ap);
     var o = ap.mkType(5);
     console.log(o);

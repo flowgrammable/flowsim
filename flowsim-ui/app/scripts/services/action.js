@@ -48,13 +48,13 @@ var Types = {
 
 function getGeneric(name, store, category, field, action) {
   if(!_(store).has(category)) {
-    throw name + ' missing: ' + category;
+    throw name+' missing: '+category;
   }
   if(!_(store[category]).has(field)) {
-    throw name + ' missing: ' + field;
+    throw name+'['+category+']'+' missing: '+field;
   }
   if(!_(store[category][field]).has(action)) {
-    throw name + ' missing: ' + action;
+    throw name+'['+category+']'+'['+field+']'+' missing: '+action;
   }
   return store[category][field][action];
 }
@@ -71,7 +71,7 @@ function getType(category, field, action) {
   return getGeneric('Types', Types, category, field, action);
 }
 
-function ActionProfile(ap, category, field, action, enabled) {
+function ActionProfile(ap, category, field, action) {
   var that;
   if(_.isObject(ap)) {
     _.extend(this, ap);
@@ -79,14 +79,14 @@ function ActionProfile(ap, category, field, action, enabled) {
     this.category = category;
     this.field    = field;
     this.action   = action ? action : '--n/a--';
-    this.enabled  = enabled;
+    this.enabled  = true;
   }
-  this.tip    = getTIPS(category, field, action);
-  this.test   = getTESTS(category, field, action);
-  that = this;
+  this.tip  = getTIPS(this.category, this.field, this.action);
+  this.test = getTESTS(this.category, this.field, this.action);
+  that      = this;
   this.mkType = function() {
     var Type = getType(that.category, that.field, that.action);
-    var args = [Type, null, null].concat(_(arguments).values());
+    var args = [Type, null, null].concat(Array.prototype.slice.call(arguments));
     var T = _.bind.apply(null, args);
     var t = new T();
     t.category = that.category;
@@ -128,9 +128,7 @@ function mkOutput(){
   return new ActionProfile(
     null,
     'Internal',
-    'Output',
-    '--n/a--',
-    true
+    'Output'
   );
 };
 
