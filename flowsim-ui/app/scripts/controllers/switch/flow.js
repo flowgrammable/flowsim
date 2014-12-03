@@ -156,6 +156,10 @@ angular.module('flowsimUiApp')
     }
   };
 
+  $scope.addApplyAction = function(action) {
+    flow.ins.pushApply(action);
+  };
+
   // Grab the subset that is available in our profile
   /*
   $scope.applyActions = _(_(flow.capabilities.instruction.apply).map(

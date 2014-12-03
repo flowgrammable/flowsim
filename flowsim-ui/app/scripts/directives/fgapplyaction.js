@@ -92,7 +92,6 @@ angular.module('flowsimUiApp')
           var action;
           if($scope.applyAction && $scope.applyAction.test($scope.actionValue)){
             action = $scope.applyAction.mkType($scope.actionValue);
-            $scope.flow.ins.pushApply(action);
             $scope.addActionCB()(action);
           }
         };
