@@ -18,8 +18,6 @@ angular.module('flowsimUiApp')
       },
       controller: function($scope) {
 
-        console.log('hello');
-
         // Input selectors and box
         $scope.actionCategory = '';
         $scope.actionField    = '';
@@ -50,10 +48,10 @@ angular.module('flowsimUiApp')
               return category.protocol === $scope.actionCategory;
             });
             
-          $scope.actionFields = _($scope.activeCategory.actions).map(
+          $scope.actionFields = _(_($scope.activeCategory.actions).map(
             function(action) {
               return action.field;
-            });
+            })).unique();
           $scope.applyAction  = null;
           $scope.actionField  = '';
           $scope.actionAction = '';
@@ -91,8 +89,12 @@ angular.module('flowsimUiApp')
 
         // Add the action ... invoke the callback
         $scope.addAction = function() {
-          // FIXME
-          $scope.addActionCB()();
+          var action;
+          if($scope.applyAction && $scope.applyAction.test($scope.actionValue)){
+            action = $scope.applyAction.mkType($scope.actionValue);
+            $scope.flow.ins.pushApply(action);
+            $scope.addActionCB()(action);
+          }
         };
 
       }

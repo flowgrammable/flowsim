@@ -45,7 +45,7 @@
         <div class="form-group"
          tooltip="{{applyAction ? applyAction.tip :''}}"
          ng-class="{'has-error': applyAction &&
-         !applyAction.test(apply.value)}">
+         !applyAction.test(actionValue)}">
           <input type="text" class="form-control"
              ng-model="actionValue">
         </div>
