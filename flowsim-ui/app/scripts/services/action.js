@@ -226,14 +226,6 @@ Output.prototype.step = function(dp, ctx) {
   dp.output(this.port_id, null, ctx);
 };
 
-function mkOutputField() {
-  return new ActionField_UI(
-    null,       // default construction
-    'Internal', // Category of action
-    'Output'    // Name of action
-  );
-}
-
 function Group(group, group_id) {
   if(_.isObject(group)) {
     _.extend(this, group);
@@ -253,6 +245,10 @@ Group.prototype.toString = function() {
 
 Group.prototype.step = function(dp, ctx) {
   dp.output(null, this.group_id, ctx);
+};
+
+Group.prototype.toValue = function() {
+  return this.group_id;
 };
 
 function mkGroupProfile() {
@@ -278,6 +274,10 @@ Queue.prototype.clone = function() {
 
 Queue.prototype.toString = function() {
   return 'queue('+this.queue_id+')';
+};
+
+Queue.prototype.toValue = function() {
+  return this.queue_id;
 };
 
 Queue.prototype.step = function(dp, ctx) {
