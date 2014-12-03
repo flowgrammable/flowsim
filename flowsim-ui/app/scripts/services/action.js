@@ -30,6 +30,27 @@ var TIPS = {
     Dst: {
       set: "Write Ethernet destination"
     }
+  },
+  VLAN: {
+    ID: {
+      set: "set the outter VLAN ID"
+    },
+    Priority: {
+      set: "set the VLAN Priority"
+    },
+    Tag: {
+      push: "push a new VLAN tag",
+      pop: "pop the outter VLAN tag"
+    }
+  },
+  MPLS: {
+    Label: {
+      set: "set the outter MPLS label"
+    },
+    Tag: {
+      push: "push a new outer label",
+      pop: "pop the outer label"
+    }
   }
 };
 
@@ -44,6 +65,35 @@ var TESTS = {
     Queue: {
       '--n/a--': fgConstraints.isUInt(0, 0xffffffff)
     }
+  },
+  Ethernet: {
+    Src: {
+      set: function() { return true; }
+    },
+    Dst: {
+      set: function() { return true; }
+    }
+  },
+  VLAN: {
+    ID: {
+      set: function() { return true; }
+    },
+    Priority: {
+      set: function() { return true; }
+    },
+    Tag: {
+      push: function() { return true; },
+      pop: function() { return true; }
+    }
+  },
+  MPLS: {
+    Label: {
+      set: function() { return true; }
+    },
+    Tag: {
+      push: function() { return true; },
+      pop: function() { return true; }
+    }
   }
 };
 
@@ -57,6 +107,35 @@ var Types = {
     },
     Queue: {
        '--n/a--': Queue
+    }
+  },
+  Ethernet: {
+    Src: {
+      set: SetField 
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  VLAN: {
+    ID: {
+      set: SetField
+    },
+    Priority: {
+      set: SetField
+    },
+    Tag: {
+      push: PushVLAN,
+      pop: PopVLAN
+    }
+  },
+  MPLS: {
+    Label: {
+      set: SetField
+    },
+    Tag: {
+      push: PushMPLS,
+      pop: PopMPLS
     }
   }
 };
@@ -248,16 +327,39 @@ PopVLAN.prototype.clone    = Pop.prototype.clone;
 PopVLAN.prototype.toString = Pop.prototype.toString;
 PopVLAN.prototype.step     = Pop.prototype.step;
 
-function mkPopVLANField() {
-  return new ActionField_UI(
+function mkSetVLANIDProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'VLAN',     // Category of action
+    'ID',      // Name of action
+    'set'       // Action behavior
+  );
+}
+
+function mkSetVLANPriorityProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'VLAN',     // Category of action
+    'Priority',      // Name of action
+    'set'       // Action behavior
+  );
+}
+
+function mkPopVLANProfile() {
+  return new ActionProfile(
     null,       // default construction
     'VLAN',     // Category of action
     'Tag',      // Name of action
-    'pop_vlan', // might be vestigal
-    PopVLAN,    // Type name of action
-    '',
-    function() { return true; },
     'pop'       // Action behavior
+  );
+}
+
+function mkPushVLANProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'VLAN',     // Category of action
+    'Tag',      // Name of action
+    'push'       // Action behavior
   );
 }
 
@@ -269,16 +371,30 @@ PopMPLS.prototype.clone    = Pop.prototype.clone;
 PopMPLS.prototype.toString = Pop.prototype.toString;
 PopMPLS.prototype.step     = Pop.prototype.step;
 
-function mkPopMPLSField() {
-  return new ActionField_UI(
+function mkSetMPLSLabelProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'MPLS',     // Category of action
+    'Label',      // Name of action
+    'set'       // Action behavior
+  );
+}
+
+function mkPopMPLSProfile() {
+  return new ActionProfile(
     null,       // default construction
     'MPLS',     // Category of action
     'Tag',      // Name of action
-    'pop_mpls', // might be vestigal
-    PopMPLS,    // Type name of action
-    '',
-    function() { return true; },
     'pop'       // Action behavior
+  );
+}
+
+function mkPushMPLSProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'MPLS',     // Category of action
+    'Tag',      // Name of action
+    'push'       // Action behavior
   );
 }
 
@@ -409,8 +525,23 @@ Push.prototype.step = function(dp, ctx) {
     }
   }
   throw 'Push failed';
-
 };
+
+function PushVLAN() {
+  this.tag = VLAN.name;
+}
+
+PushVLAN.prototype.clone    = Push.prototype.clone;
+PushVLAN.prototype.toString = Push.prototype.toString;
+PushVLAN.prototype.step     = Push.prototype.step;
+
+function PushMPLS() {
+  this.tag = MPLS.name;
+}
+
+PushMPLS.prototype.clone    = Push.prototype.clone;
+PushMPLS.prototype.toString = Push.prototype.toString;
+PushMPLS.prototype.step     = Push.prototype.step;
 
 function SetField(sf, proto, field, value) {
   if(_.isObject(sf)) {
@@ -448,41 +579,20 @@ SetField.prototype.step = function(dp, ctx) {
   }
 };
 
-function mkSetEthSrcField() {
-  return new ActionField_UI(
+function mkSetEthSrcProfile() {
+  return new ActionProfile(
     null,           // default construction
     'Ethernet',     // Category of action
     'Src',          // Name of action
-    'set_eth_src',  // might be vestigal
-    SetField,       // Type name of action
-    ETHERNET.TIPS.src,
-    ETHERNET.TESTS.src,
     'set'           // Action behavior
   );
 }
 
-function mkSetEthDstField() {
-  return new ActionField_UI(
+function mkSetEthDstProfile() {
+  return new ActionProfile(
     null,           // default construction
     'Ethernet',     // Category of action
     'Dst',          // Name of action
-    'set_eth_dst',  // might be vestigal
-    SetField,       // Type name of action
-    ETHERNET.TIPS.dst,
-    ETHERNET.TESTS.dst,
-    'set'           // Action behavior
-  );
-}
-
-function mkSetEthTypeField() {
-  return new ActionField_UI(
-    null,           // default construction
-    'Ethernet',     // Category of action
-    'Type',         // Name of action
-    'set_eth_type', // might be vestigal
-    SetField,       // Type name of action
-    ETHERNET.TIPS.typelen,
-    ETHERNET.TESTS.typelen,
     'set'           // Action behavior
   );
 }
@@ -885,33 +995,30 @@ function Available() {
       mkGroupProfile(),
       mkQueueProfile()
     ]
-  }];
-}
-
-/*function Available() {
-  return [{
-    protocol: 'Internal',
-    actions: [
-      mkOutputField(),
-      mkGroupField(),
-      mkQueueField(),
-  ]}, {
+  }, {
     protocol: 'Ethernet',
     actions: [
-      mkSetEthSrcField(),
-      mkSetEthDstField(),
-      mkSetEthTypeField(),
-  ]}, {
+      mkSetEthSrcProfile(),
+      mkSetEthDstProfile(),
+    ]
+  }, {
     protocol: 'VLAN',
     actions: [
-      mkPopVLANField()
-  ]}, {
+      mkSetVLANIDProfile(),
+      mkSetVLANPriorityProfile(),
+      mkPushVLANProfile(),
+      mkPopVLANProfile()
+    ]
+  }, {
     protocol: 'MPLS',
     actions: [
-      mkPopMPLSField()
-  ]}];
+      mkSetMPLSLabelProfile(),
+      // FIXME there are others ...
+      mkPushMPLSProfile(),
+      mkPopMPLSProfile()
+    ]
+  }];
 }
-*/
 
 function cloneAvailable(a) {
   return _(a).map(function(grouping) {

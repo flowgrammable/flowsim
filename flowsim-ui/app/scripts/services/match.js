@@ -185,6 +185,11 @@ Match.Profile = function(match){
     this.matches = Available();
   }
 }
+
+Match.Profile.prototype.clone = function() {
+  return new Match.Profile(this);
+};
+
 /*
 Match.Profile = function(match){
   if(_.isObject(match)){

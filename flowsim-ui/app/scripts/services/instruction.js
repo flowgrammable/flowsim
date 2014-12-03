@@ -61,20 +61,16 @@ function Profile(profile){
     }, {
       protocol: 'MPLS',
       fields: [
-        mkActionField('Label', true, 'set_mpls_label', 'set'),
         mkActionField('TC', true, 'set_mpls_tc', 'set'),
         mkActionField('BOS', true, 'set_mpls_bos', 'set'),
         mkActionField('TTL', true, 'set_mpls_ttl', 'set'),
         mkActionField('TTL', true, 'dec_mpls_ttl', 'dec'),
-        mkActionField('Label', true, 'push_mpls', 'push'),
       ]
     }, {
       protocol: 'VLAN',
       fields: [
         mkActionField('PCP', true, 'set_vlan_pcp', 'set'),
-        mkActionField('DEI', true, 'set_vlan_dei', 'set'),
         mkActionField('VID', true, 'set_vlan_vid', 'set'),
-        mkActionField('Tag', true, 'push_vlan', 'push'),
       ]
     }, {
       protocol: 'IPv4',
@@ -127,6 +123,10 @@ function Profile(profile){
     }];
   */
 }
+
+Profile.prototype.clone = function() {
+  return new Profile(this);
+};
 
 }
 

@@ -1307,7 +1307,6 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
   });
 
-
   it('Output action construction', function(){
     var ap = new Action.ActionProfile(null, 'Internal', 'Output');
     var o = ap.mkType(5);

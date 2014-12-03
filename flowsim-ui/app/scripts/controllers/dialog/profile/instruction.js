@@ -82,6 +82,7 @@ angular.module('flowsimUiApp')
         }
       }
     };
+
     $scope.del = function(idx) {
       $scope.instruction.goto_.splice(idx, 1);
     };

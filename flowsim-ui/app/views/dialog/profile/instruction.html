@@ -106,7 +106,7 @@
                       </div>
                       <table class="table table-striped table-hover">
                         <tr ng-repeat="type in col.actions">
-                          <td>{{type.name}}</td>
+                          <td>{{type.field}}</td>
                           <td>{{type.action}}</td>
                           <td>
                             <button class="btn btn-xs btn-default"
@@ -142,7 +142,7 @@
                       </div>
                       <table class="table table-striped table-hover">
                         <tr ng-repeat="type in col.actions">
-                          <td>{{type.name}}</td>
+                          <td>{{type.field}}</td>
                           <td>{{type.action}}</td>
                           <td>
                             <button class="btn btn-xs btn-default"
@@ -211,130 +211,6 @@
     </div>
   </div>
 
-<!--
-  <div class="row">
-  <div class="col-md-2">
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="instruction.caps.apply">
-        Apply
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="instruction.caps.clear">
-        Clear
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="instruction.caps.write">
-        Write
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="instruction.caps.metadata">
-        Metadata
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="instruction.caps.meter">
-        Meter
-      </label>
-    </div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" ng-model="instruction.caps.goto_">
-        Goto
-      </label>
-    </div>
-  </div>
-  
-  <div class="col-md-3" ng-show="instruction.caps.apply">
-    <h4 tooltip="{{tips.apply}}">Apply Actions</h4>
-    <accordion>
-      <accordion-group ng-repeat="proto in instruction.apply"
-                       heading="{{proto.protocol}}">
-        <div class="list-group">
-          <div ng-repeat="field in proto.fields" class="list-group-item">
-            {{field.name}}
-            <div class="pull-right">
-              <input type="checkbox" class="pull-right" ng-model="field.value">
-            </div>
-          </div>
-        </div>
-      </accordion-group>
-    </accordion>
-  </div>
-
-  <div class="col-md-3" ng-show="instruction.caps.write">
-    <h4 tooltip="{{tips.write}}">Write Actions</h4>
-    <accordion>
-      <accordion-group ng-repeat="proto in instruction.write"
-                       heading="{{proto.protocol}}">
-        <div class="list-group">
-          <div ng-repeat="field in proto.fields" class="list-group-item">
-            {{field.name}}
-            <div class="pull-right">
-              <input type="checkbox" class="pull-right" ng-model="field.value">
-            </div>
-          </div>
-        </div>
-      </accordion-group>
-    </accordion>
-  </div>
-
-  <div class="col-md-3">
-
-    <div ng-show="instruction.caps.metadata">
-      <h4 tooltips="{{tips.metadata}}">Metadata</h4>
-      <div class="input-group" ng-class="{'has-error':
-        !tests.metadata(instruction.metadata)}">
-        <span class="input-group-addon">
-          Bits
-        </span>
-        <input type="text" class="form-control" ng-model="instruction.metadata">
-      </div>
-    </div>
-
-    <div ng-show="instruction.caps.goto_">
-      <h4 tooltips="{{tips.goto_}}">Goto</h4>
-      <accordion>
-        <accordion-group heading="Next Tables">
-          <ul class="list-group">
-            <li class="list-group-item" ng-repeat="rng in instruction.goto_">
-              {{rng.first}}
-              {{'..'+rng.second}}
-              <span ng-click="del($index)"
-                    class="glyphicon glyphicon-minus-sign pull-right"></span>
-            </li>
-          </ul>
-
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="0..255"
-                   ng-model="goto_.nextTables">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" 
-                      ng-click="add()">
-                Add
-              </button>
-            </span>
-          </div>
-          <div class="error" ng-show="errorMsg.length">
-            <h6>
-              <span>{{errorMsg}}</span>
-            </h6>
-          </div>
-
-        </accordion-group>
-      </accordion>
-    </div>
-  </div>
-
-</div>
--->
 </div>
 
 <div class="modal-footer">
