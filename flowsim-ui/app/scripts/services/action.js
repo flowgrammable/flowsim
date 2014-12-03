@@ -46,12 +46,75 @@ var TIPS = {
   MPLS: {
     Label: {
       set: "set the outter MPLS label"
+      dec: "decrement MPLS TTL"
+    },
+    TTL: {
+      set: "set MPLS ttl"
+    },
+    BOS: {
+      set: "set Bottom of Stack bit"
     },
     Tag: {
       push: "push a new outer label",
       pop: "pop the outer label"
     }
-  }
+  },
+  ARP: {
+    Opcode: {
+      set: "Set ARP opcode"
+    },
+    SHA: {
+      set: "Set source hardware address"
+    },
+    SPA: {
+      set: "Set source protocol address"
+    },
+    THA: {
+      set: "Set target hardware address"
+    },
+    TPA: {
+      set: "Set target protocol address"
+    }
+  },
+  IPv4: {
+    DSCP: {
+      set: "Set differentiated services code type"
+    },
+    ECN : {
+      set: "Set explicit congestion notification"
+    },
+    Proto: {
+      set: "Set protocol type"
+    },
+    Src: {
+      set: "Set source address"
+    },
+    Dst: {
+      set: "Set destination address"
+    }
+    TTL: {
+      set: "Set TTL"
+      dec: "Decrement TTL"
+      copy_out: "Copy TTL out"
+      copy_in: "Copy TTL in"
+    }
+  },
+  IPv6: {
+    Src: {
+      set: "Set source address"
+    },
+    Dst: {
+      set: "Set destination address"
+    },
+    Flabel: {
+      set: "Set flabel"
+    },
+    TTL: {
+      set: "Set TTL"
+      dec: "Decrement TTL"
+    }
+  },
+
 };
 
 var TESTS = {
@@ -68,18 +131,18 @@ var TESTS = {
   },
   Ethernet: {
     Src: {
-      set: function() { return true; }
+      set: ETHERNET.MAC.is
     },
     Dst: {
-      set: function() { return true; }
+      set: ETHERNET.MAC.is
     }
   },
   VLAN: {
     ID: {
-      set: function() { return true; }
+      set: VLAN.TESTS.vid
     },
     Priority: {
-      set: function() { return true; }
+      set: VLAN.TESTS.pcp
     },
     Tag: {
       push: function() { return true; },
@@ -88,11 +151,34 @@ var TESTS = {
   },
   MPLS: {
     Label: {
-      set: function() { return true; }
+      set: MPLS.TESTS.label
+    },
+    TTL: {
+      set: MPLS.TESTS.ttl
+    },
+    BOS: {
+      set: MPLS.TESTS.bos
     },
     Tag: {
       push: function() { return true; },
       pop: function() { return true; }
+    }
+  },
+  ARP: {
+    Opcode: {
+      set: fgconstraints.isUInt(0,0x2);
+    }
+    SHA: {
+      set: ETHERNET.MAC.is
+    },
+    SPA: {
+      set: IPV4.Address.is
+    },
+    THA: {
+      set: ETHERNET.MAC.is
+    },
+    TPA: {
+      set: IPV4.Address.is
     }
   }
 };
@@ -111,7 +197,7 @@ var Types = {
   },
   Ethernet: {
     Src: {
-      set: SetField 
+      set: mkSetFieldEthSrc()
     },
     Dst: {
       set: SetField
@@ -133,9 +219,29 @@ var Types = {
     Label: {
       set: SetField
     },
+    TTL: {
+      set: SetTTL.bind
+    },
+    BOS: {
+      set: SetField
+    },
     Tag: {
       push: PushMPLS,
       pop: PopMPLS
+    }
+  },
+  ARP: {
+    THA: {
+      set: SetField
+    },
+    TPA: {
+      set: SetField
+    },
+    SHA: {
+      set: SetField
+    },
+    SPA: {
+      set: SetField
     }
   }
 };
@@ -380,6 +486,24 @@ function mkSetMPLSLabelProfile() {
   );
 }
 
+function mkSetMPLSTTLProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'set'
+  );
+}
+
+function mkSetMPLSBOSProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'BOS',
+    'set'
+  );
+}
+
 function mkPopMPLSProfile() {
   return new ActionProfile(
     null,       // default construction
@@ -397,6 +521,43 @@ function mkPushMPLSProfile() {
     'push'       // Action behavior
   );
 }
+
+function mkSetARPSHAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'SHA',
+    'set'
+  );
+}
+
+function mkSetARPSPAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'SPA',
+    'set'
+  );
+}
+
+function mkSetARPTHAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'THA',
+    'set'
+  );
+}
+
+function mkSetARPTPAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'TPA',
+    'set'
+  );
+}
+
 
 function CopyTTLIn(){
   this.name = 'CopyTTLIn';
@@ -548,7 +709,7 @@ function SetField(sf, proto, field, value) {
     _.extend(this, sf);
     this.value = sf.value.clone();
   } else {
-    this.protocol = proto;
+    this.category = proto;
     this.field    = field;
     this.value    = value;
   }
@@ -566,6 +727,13 @@ SetField.prototype.toString = function() {
 SetField.prototype.toValue = function() {
   return this.value;
 };
+
+function mkSetFieldEthSrc(){
+  var tmp = _.partial(SetField, null, 'Ethernet', 'Src');
+  console.log(tmp.toString());
+  console.log(tmp('a'));
+  return tmp;
+}
 
 SetField.prototype.step = function(dp, ctx) {
   var protocol = _.find(ctx.packet.protocols, function(protocol) {
@@ -1013,9 +1181,19 @@ function Available() {
     protocol: 'MPLS',
     actions: [
       mkSetMPLSLabelProfile(),
+      mkSetMPLSTTLProfile(),
+      mkSetMPLSBOSProfile(),
       // FIXME there are others ...
       mkPushMPLSProfile(),
       mkPopMPLSProfile()
+    ]
+  }, {
+    protocol: 'ARP',
+    actions: [
+      mkSetARPSHAProfile(),
+      mkSetARPSPAProfile(),
+      mkSetARPTHAProfile(),
+      mkSetARPTPAProfile()
     ]
   }];
 }
@@ -1046,10 +1224,10 @@ return {
   CopyTTLIn: CopyTTLIn,
   CopyTTLOut: CopyTTLOut,
   Available: Available,
-  cloneAvailable: cloneAvailable
+  cloneAvailable: cloneAvailable,
   //TESTS: TESTS,
   //TIPS: TIPS,
-  //Types: Types
+  Types: Types
 };
 
 });
