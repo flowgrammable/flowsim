@@ -14,104 +14,104 @@ angular.module('flowsimUiApp')
 var TIPS = {
   Internal: {
     Output: {
-      '--n/a--': "Forward the packet out a port"
+      '--n/a--': 'Forward the packet out a port'
     },
     Group: {
-      '--n/a--': "Forward the packet to a group"
+      '--n/a--': 'Forward the packet to a group'
     },
     Queue: {
-      '--n/a--': "Use the designated queue on the egress port"
+      '--n/a--': 'Use the designated queue on the egress port'
     }
   },
   Ethernet: {
     Src: {
-      set: "Write Ethernet source"
+      set: 'Write Ethernet source'
     },
     Dst: {
-      set: "Write Ethernet destination"
+      set: 'Write Ethernet destination'
     }
   },
   VLAN: {
     ID: {
-      set: "set the outter VLAN ID"
+      set: 'set the outter VLAN ID'
     },
     Priority: {
-      set: "set the VLAN Priority"
+      set: 'set the VLAN Priority'
     },
     Tag: {
-      push: "push a new VLAN tag",
-      pop: "pop the outter VLAN tag"
+      push: 'push a new VLAN tag',
+      pop: 'pop the outter VLAN tag'
     }
   },
   MPLS: {
     Label: {
-      set: "set the outter MPLS label",
-      dec: "decrement MPLS TTL"
+      set: 'set the outter MPLS label',
+      dec: 'decrement MPLS TTL'
     },
     TTL: {
-      set: "set MPLS ttl"
+      set: 'set MPLS ttl'
     },
     BOS: {
-      set: "set Bottom of Stack bit"
+      set: 'set Bottom of Stack bit'
     },
     Tag: {
-      push: "push a new outer label",
-      pop: "pop the outer label"
+      push: 'push a new outer label',
+      pop: 'pop the outer label'
     }
   },
   ARP: {
     Opcode: {
-      set: "Set ARP opcode"
+      set: 'Set ARP opcode'
     },
     SHA: {
-      set: "Set source hardware address"
+      set: 'Set source hardware address'
     },
     SPA: {
-      set: "Set source protocol address"
+      set: 'Set source protocol address'
     },
     THA: {
-      set: "Set target hardware address"
+      set: 'Set target hardware address'
     },
     TPA: {
-      set: "Set target protocol address"
+      set: 'Set target protocol address'
     }
   },
   IPv4: {
     DSCP: {
-      set: "Set differentiated services code type"
+      set: 'Set differentiated services code type'
     },
     ECN : {
-      set: "Set explicit congestion notification"
+      set: 'Set explicit congestion notification'
     },
     Proto: {
-      set: "Set protocol type"
+      set: 'Set protocol type'
     },
     Src: {
-      set: "Set source address"
+      set: 'Set source address'
     },
     Dst: {
-      set: "Set destination address"
+      set: 'Set destination address'
     },
     TTL: {
-      set: "Set TTL",
-      dec: "Decrement TTL",
-      copy_out: "Copy TTL out",
-      copy_in: "Copy TTL in"
+      set: 'Set TTL',
+      dec: 'Decrement TTL',
+      copy_out: 'Copy TTL out',
+      copy_in: 'Copy TTL in'
     }
   },
   IPv6: {
     Src: {
-      set: "Set source address"
+      set: 'Set source address'
     },
     Dst: {
-      set: "Set destination address"
+      set: 'Set destination address'
     },
     Flabel: {
-      set: "Set flabel"
+      set: 'Set flabel'
     },
     TTL: {
-      set: "Set TTL",
-      dec: "Decrement TTL"
+      set: 'Set TTL',
+      dec: 'Decrement TTL'
     }
   },
 
@@ -290,6 +290,7 @@ function ActionProfile(ap, category, field, action) {
     var T = _.bind.apply(null, args);
     var t = new T();
     t.category = that.category;
+    t.protocol = that.category;
     t.field = that.field;
     t.action = that.action;
     return t;
@@ -306,7 +307,7 @@ function mkOutputProfile(){
     'Internal',
     'Output'
   );
-};
+}
 
 function Output(output, port_id) {
   if(_.isObject(output)) {
@@ -709,7 +710,7 @@ function SetField(sf, value, proto, field) {
     _.extend(this, sf);
     this.value = sf.value.clone();
   } else {
-    this.category = proto;
+    this.protocol = proto;
     this.field    = field;
     this.value    = value;
   }
