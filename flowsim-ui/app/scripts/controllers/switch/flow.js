@@ -13,6 +13,8 @@ angular.module('flowsimUiApp')
   $scope.flow = flow;
   //$scope.match = flow.match;
   //$scope.options = Match.getOptions($scope.matches);
+  $scope.applyActions = flow.capabilities.instruction.apply;
+  $scope.writeActions = flow.capabilities.instruction.write;
 
   $scope.insNames = [
     'Meter', 'Apply', 'Clear', 'Write', 'Metadata', 'Goto'
@@ -155,6 +157,7 @@ angular.module('flowsimUiApp')
   };
 
   // Grab the subset that is available in our profile
+  /*
   $scope.applyActions = _(_(flow.capabilities.instruction.apply).map(
     function(category) {
       return {
@@ -246,6 +249,7 @@ angular.module('flowsimUiApp')
   $scope.popApply = function() {
     $scope.applyList.pop();
   };
+  */
 
   $scope.match = {
     category: '',
