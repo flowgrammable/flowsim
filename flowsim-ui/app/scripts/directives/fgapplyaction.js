@@ -45,14 +45,43 @@ angular.module('flowsimUiApp')
 
         // Update the depdendent drop boxes
         $scope.updateApplyCategory = function() {
+          $scope.activeCategory = _($scope.available).find(
+            function(category) {
+              return category.protocol === $scope.actionCategory;
+            });
+            
+          $scope.actionFields = _($scope.activeCategory.actions).map(
+            function(action) {
+              return action.field;
+            });
+          $scope.applyAction  = null;
+          $scope.actionField  = '';
+          $scope.actionAction = '';
         };
 
         // Update the depdendent drop boxes
         $scope.updateApplyField = function() {
+          $scope.activeField = ($scope.activeCategory.actions).filter(
+            function(action) {
+              return action.field === $scope.actionField;
+            });
+          $scope.actionActions = _(_($scope.activeField).map(
+            function(action) {
+              return action.action ? action.action : '';
+            })).filter(function(action) {
+              return action.length > 0;
+            });
+           $scope.applyAction = null;
+           $scope.actionAction = '';
         };
 
         // Update the depdendent drop boxes
         $scope.updateApplyAction = function() {
+          $scope.applyAction = _($scope.activeField).find(
+            function(action) {
+              return action.field === $scope.actionField &&
+                     action.action === $scope.actionAction;
+            });
         };
 
         // Remove the last action
