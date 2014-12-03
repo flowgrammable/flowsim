@@ -45,7 +45,7 @@ var TIPS = {
   },
   MPLS: {
     Label: {
-      set: "set the outter MPLS label"
+      set: "set the outter MPLS label",
       dec: "decrement MPLS TTL"
     },
     TTL: {
@@ -91,11 +91,11 @@ var TIPS = {
     },
     Dst: {
       set: "Set destination address"
-    }
+    },
     TTL: {
-      set: "Set TTL"
-      dec: "Decrement TTL"
-      copy_out: "Copy TTL out"
+      set: "Set TTL",
+      dec: "Decrement TTL",
+      copy_out: "Copy TTL out",
       copy_in: "Copy TTL in"
     }
   },
@@ -110,7 +110,7 @@ var TIPS = {
       set: "Set flabel"
     },
     TTL: {
-      set: "Set TTL"
+      set: "Set TTL",
       dec: "Decrement TTL"
     }
   },
@@ -166,8 +166,8 @@ var TESTS = {
   },
   ARP: {
     Opcode: {
-      set: fgconstraints.isUInt(0,0x2);
-    }
+      set: fgConstraints.isUInt(0,0x2)
+    },
     SHA: {
       set: ETHERNET.MAC.is
     },
@@ -197,7 +197,7 @@ var Types = {
   },
   Ethernet: {
     Src: {
-      set: mkSetFieldEthSrc()
+      set: SetField
     },
     Dst: {
       set: SetField
@@ -704,7 +704,7 @@ PushMPLS.prototype.clone    = Push.prototype.clone;
 PushMPLS.prototype.toString = Push.prototype.toString;
 PushMPLS.prototype.step     = Push.prototype.step;
 
-function SetField(sf, proto, field, value) {
+function SetField(sf, value, proto, field) {
   if(_.isObject(sf)) {
     _.extend(this, sf);
     this.value = sf.value.clone();
@@ -727,13 +727,6 @@ SetField.prototype.toString = function() {
 SetField.prototype.toValue = function() {
   return this.value;
 };
-
-function mkSetFieldEthSrc(){
-  var tmp = _.partial(SetField, null, 'Ethernet', 'Src');
-  console.log(tmp.toString());
-  console.log(tmp('a'));
-  return tmp;
-}
 
 SetField.prototype.step = function(dp, ctx) {
   var protocol = _.find(ctx.packet.protocols, function(protocol) {
