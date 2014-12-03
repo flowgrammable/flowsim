@@ -162,24 +162,6 @@ angular.module('flowsimUiApp')
 
   // Grab the subset that is available in our profile
   /*
-  $scope.applyActions = _(_(flow.capabilities.instruction.apply).map(
-    function(category) {
-      return {
-        protocol: category.protocol,
-        actions: _(category.actions).map(function(action) {
-          if(action.enabled){
-            return new Action.ActionField_UI(action, Action[action.name]);
-          } else {
-            return;
-          }
-        })
-      };
-  })).filter(function(category) {
-    return category.actions.length > 0;
-  });
-  $scope.applyActionNames = _($scope.applyActions).map(function(category) {
-    return category.protocol;
-  });
 
   // Grab the subset that is available in our profile
   $scope.writeActions = _(_(flow.capabilities.instruction.write).map(
@@ -196,63 +178,6 @@ angular.module('flowsimUiApp')
   $scope.writeActionNames = _($scope.writeActions).map(function(category) {
     return category.protocol;
   });
-
-  $scope.activeApplyCategory = null;
-  $scope.activeApplyFields = [];
-
-  $scope.updateApplyCategory = function() {
-    console.log('update category: '+$scope.apply.category);
-    $scope.activeApplyCategory = _($scope.applyActions).find(
-      function(category) {
-        return category.protocol === $scope.apply.category;
-    });
-    $scope.apply.fields = _($scope.activeApplyCategory.actions).map(
-      function(action) {
-        return action.name;
-    });
-    $scope.applyAction  = null;
-    $scope.apply.field  = '';
-    $scope.apply.action = '';
-  };
-
-  $scope.updateApplyField = function() {
-    console.log('update field: '+$scope.apply.field);
-    $scope.activeApplyFields = ($scope.activeApplyCategory.actions).filter(
-      function(action) {
-        return action.name === $scope.apply.field;
-    });
-
-    $scope.apply.actions = _(_($scope.activeApplyFields).map(
-      function(action) {
-        return action.action ? action.action : '';
-    })).filter(function(action) {
-      return action.length > 0;
-    });
-    $scope.applyAction = null;
-    $scope.apply.action = '';
-  };
-
-  $scope.applyAction = null;
-
-  $scope.updateApplyAction = function() {
-    $scope.applyAction = _($scope.activeApplyFields).find(
-      function(action) {
-        return action.name === $scope.apply.field &&
-               action.action === $scope.apply.action;
-    });
-  };
-
-  $scope.addApplyAction = function() {
-    var action;
-    if($scope.applyAction && $scope.applyAction.test($scope.apply.value)) {
-      action = $scope.applyAction.mkType($scope.apply.value);
-      $scope.flow.ins.pushApply(action);
-    }
-  };
-
-  $scope.popApply = function() {
-    $scope.applyList.pop();
-  };
   */
 
   $scope.match = {
