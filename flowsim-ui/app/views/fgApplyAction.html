@@ -21,33 +21,33 @@
     </tr>
     <tr>
       <td>
-        <select class="form-control" ng-model="actionCategory"
+        <select class="form-control" ng-model="active.category"
             ng-options="category as category for category in
-            actionCategories"
+            active.categories"
             ng-change="updateApplyCategory()">
         </select>
       </td>
       <td>
-        <select class="form-control" ng-model="actionField"
+        <select class="form-control" ng-model="active.field"
             ng-options="field as field for field in
-            actionFields"
+            active.fields"
             ng-change="updateApplyField()">
         </select>
       </td>
       <td>
-        <select class="form-control" ng-model="actionAction"
+        <select class="form-control" ng-model="active.action"
             ng-options="action as action for action in
-            actionActions"
+            active.actions"
             ng-change="updateApplyAction()">
         </select>
       </td>
       <td>
         <div class="form-group"
-         tooltip="{{applyAction ? applyAction.tip :''}}"
-         ng-class="{'has-error': applyAction &&
-         !applyAction.test(actionValue)}">
+         tooltip="{{active.type ? active.type.tip :''}}"
+         ng-class="{'has-error': active.type &&
+         !active.type.test(active.value)}">
           <input type="text" class="form-control"
-             ng-model="actionValue">
+             ng-model="active.value">
         </div>
       </td>
       <td>

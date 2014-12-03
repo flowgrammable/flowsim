@@ -643,7 +643,7 @@ function DecTTL(st, proto){
   this.name = 'DecTTL';
 }
 
-DecTTL.prototype.clone = function(){
+DecTTL.prototype.clone = function() {
   return new DecTTL(this);
 };
 

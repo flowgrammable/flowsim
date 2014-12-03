@@ -19,10 +19,16 @@ angular.module('flowsimUiApp')
       controller: function($scope) {
 
         // Input selectors and box
-        $scope.actionCategory = '';
-        $scope.actionField    = '';
-        $scope.actionAction   = '';
-        $scope.actionValue    = '';
+        $scope.active = {
+          categories: [],
+          fields: [],
+          actions: [],
+          category: '',
+          field: '',
+          action: '',
+          value: '',
+          type: null
+        };
 
         // Build a top-level list of available apply actions
         $scope.available = _($scope.toplevel).map(function(category) {
@@ -37,7 +43,7 @@ angular.module('flowsimUiApp')
         });
 
         // Build a top-level list of avaiable apply action names
-        $scope.actionCategories = _($scope.available).map(function(category) {
+        $scope.active.categories = _($scope.available).map(function(category) {
           return category.protocol;
         });
 
@@ -45,41 +51,47 @@ angular.module('flowsimUiApp')
         $scope.updateApplyCategory = function() {
           $scope.activeCategory = _($scope.available).find(
             function(category) {
-              return category.protocol === $scope.actionCategory;
+              return category.protocol === $scope.active.category;
             });
             
-          $scope.actionFields = _(_($scope.activeCategory.actions).map(
+          $scope.active.fields = _(_($scope.activeCategory.actions).map(
             function(action) {
               return action.field;
             })).unique();
-          $scope.applyAction  = null;
-          $scope.actionField  = '';
-          $scope.actionAction = '';
+
+          $scope.active.type   = null;
+          $scope.active.value  = '';
+          $scope.active.action = '';
+          $scope.active.field  = '';
+          $scope.active.actions = [];
         };
 
         // Update the depdendent drop boxes
         $scope.updateApplyField = function() {
           $scope.activeField = ($scope.activeCategory.actions).filter(
             function(action) {
-              return action.field === $scope.actionField;
+              return action.field === $scope.active.field;
             });
-          $scope.actionActions = _(_($scope.activeField).map(
+          $scope.active.actions = _(_($scope.activeField).map(
             function(action) {
               return action.action ? action.action : '';
             })).filter(function(action) {
               return action.length > 0;
             });
-           $scope.applyAction = null;
-           $scope.actionAction = '';
+
+          $scope.active.type   = null;
+          $scope.active.value  = '';
+          $scope.active.action = '';
         };
 
         // Update the depdendent drop boxes
         $scope.updateApplyAction = function() {
-          $scope.applyAction = _($scope.activeField).find(
+          $scope.active.type = _($scope.activeField).find(
             function(action) {
-              return action.field === $scope.actionField &&
-                     action.action === $scope.actionAction;
+              return action.field === $scope.active.field &&
+                     action.action === $scope.active.action;
             });
+          $scope.active.value = '';  
         };
 
         // Remove the last action
@@ -90,9 +102,22 @@ angular.module('flowsimUiApp')
         // Add the action ... invoke the callback
         $scope.addAction = function() {
           var action;
-          if($scope.applyAction && $scope.applyAction.test($scope.actionValue)){
-            action = $scope.applyAction.mkType($scope.actionValue);
+          if($scope.active.type && 
+             $scope.active.type.test($scope.active.value)) {
+
+            action = $scope.active.type.mkType($scope.active.value);
             $scope.addActionCB()(action);
+         
+            $scope.active.type     = null;
+            $scope.active.action   = ''; 
+            $scope.active.value    = '';
+            $scope.active.action   = '';
+            $scope.active.field    = '';
+            $scope.active.category = '';
+            $scope.active.fields  = [];
+            $scope.active.actions = [];
+          } else {
+            console.log('can not add');
           }
         };
 
