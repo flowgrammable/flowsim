@@ -11,15 +11,34 @@
 angular.module('flowsimUiApp')
   .factory('Noproto', function(UInt) {
 
-function Match(match, protocol, field, bitwidth, value, mask) {
+var testFuncs = {};
+
+function setTestFunction(protocol, field, func, profile) {
+  var key = protocol + '-' + field + (profile ? '-profile' : '');
+  testFuncs[key] = func;
+}
+
+function getTestFunction(protocol, field, profile) {
+  var key = protocol + '-' + field + (profile ? '-profile' : '');
+  if(!_(testFuncs).has(key)) {
+    throw 'Bad testFunc key: '+ key;
+  }
+  return testFuncs[key];
+}
+
+function Match(match, protocol, field, bitwidth, tip, wildcardable, maskable, 
+               value, mask) {
   if(_(match).isObject) {
     _.extend(this, match);
     this._match = match._match.clone();
   } else {
     // Store some of the metadata
-    this.protocol = protocol;
-    this.field    = field;
-    this.bitwidth = bitwidth;
+    this.protocol     = protocol;
+    this.field        = field;
+    this.bitwidth     = bitwidth;
+    this.tip          = tip;
+    this.wildcardable = wildcardable;
+    this.maskable     = maskable;
     // Remember the mask input
     this.value = value;
     this.mask  = mask;
@@ -35,7 +54,15 @@ function Match(match, protocol, field, bitwidth, value, mask) {
         new UInt.UInt(null, mask, Math.ceil(this.bitwidth / 8))
       );
     }
+    
+    // Attach the necessary tool tips
+    this.valueTip = this.tip + ' to match against';
+    this.maskTip  = 'Bitmask to use in match';
   }
+
+  // Set the input test functions
+  this.valueTest = getTestFunction(this.protocol, this.field);
+  this.maskTest  = getTestFunction(this.protocol, this.field);
 }
 
 Match.prototype.clone = function() {
@@ -61,11 +88,21 @@ function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
     this.wildcardable = wildcardable;
     this.maskable     = maskable;
     this.maskableBits = '';
+    
+    // Attach the necessary tool tips
+    this.enabledTip      = this.tip+' matching';
+    this.wildcardableTip = this.tip+' wildcard matching';
+    this.maskableTip     = this.tip+' bitmask matching';
+    this.maskableBitsTip = 'Indicate which bits are maskable';
   }
   // Match Constructor
   this.mkType = function(value, mask) {
-    return new Match(null, this.protocol, this.field, this.bitwidth, value, mask);
+    return new Match(null, this.protocol, this.field, this.bitwidth, this.tip,
+                     value, mask);
   };
+
+  // Attach the necessary input test function
+  this.maskableBitsTest = getTestFunction(this.protocol, this.field, 'profile');
 }
 
 MatchProfile.prototype.clone = function() {
@@ -82,7 +119,13 @@ function Action(action, protocol, field, bitwidth, op, value) {
     this.op       = op;
 
     this.value = value;
+
+    // Attach the necessary tool tips
+    this.valueTip = 'Value to set the '+this.tip;
   }
+
+  // Attach the necessary test function
+  this.valueTest = getTestFunction(this.protocol, this.field);
 }
 
 Action.prototype.clone = function() {
@@ -126,6 +169,8 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
     this.op       = op;
     // UI Editable properties
     this.enabled = enabled;
+
+    this.enabledTip = this.tip+' modification';
   }
   // Action Constructor
   this.mkType = function(value) {
