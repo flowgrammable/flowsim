@@ -11,24 +11,46 @@
 angular.module('flowsimUiApp')
   .factory('Noproto', function(UInt) {
 
+
+// store of value construction functions
+var consFuncs = {};
+
+// store of test functions
 var testFuncs = {};
 
-function setTestFunction(protocol, field, func, profile) {
-  var key = protocol + '-' + field + (profile ? '-profile' : '');
+// test function store setter
+function setTestFunction(protocol, field, func) {
+  var key = protocol + '-' + field;
   testFuncs[key] = func;
 }
 
-function getTestFunction(protocol, field, profile) {
-  var key = protocol + '-' + field + (profile ? '-profile' : '');
+// cons function store setter
+function setConsFunction(protocol, field, func) {
+  var key = protocol + '-' + field;
+  consFuncs[key] = func;
+}
+
+// test function store getter
+function getTestFunction(protocol, field) {
+  var key = protocol + '-' + field;
   if(!_(testFuncs).has(key)) {
     throw 'Bad testFunc key: '+ key;
   }
   return testFuncs[key];
 }
 
-function Match(match, protocol, field, bitwidth, tip, wildcardable, maskable, 
-               value, mask) {
-  if(_(match).isObject) {
+// cons function store getter
+function getConsFunction(protocol, field) {
+  var key = protocol + '-' + field;
+  if(!_(testFuncs).has(key)) {
+    throw 'Bad consFunc key: '+ key;
+  }
+  return consFuncs[key];
+}
+
+function Match(match, protocol, field, bitwidth, tip, value, mask) {
+  var consFunc;
+  if(_(match).isObject()) {
     _.extend(this, match);
     this._match = match._match.clone();
   } else {
@@ -37,32 +59,23 @@ function Match(match, protocol, field, bitwidth, tip, wildcardable, maskable,
     this.field        = field;
     this.bitwidth     = bitwidth;
     this.tip          = tip;
-    this.wildcardable = wildcardable;
-    this.maskable     = maskable;
     // Remember the mask input
     this.value = value;
     this.mask  = mask;
     // If no mask, make it an exact match
+    consFunc = getConsFunction(this.protocol, this.field);
     if(!mask || mask.length === 0) {
       this._match = UInt.mkExact(
-        new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8))
+        new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8))
       );
     } else {
       // otherwise use the mask
       this._match = new UInt.Match(null, 
-        new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8)),
-        new UInt.UInt(null, mask, Math.ceil(this.bitwidth / 8))
+        new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8)),
+        new UInt.UInt(null, consFunc(mask), Math.ceil(this.bitwidth / 8))
       );
     }
-    
-    // Attach the necessary tool tips
-    this.valueTip = this.tip + ' to match against';
-    this.maskTip  = 'Bitmask to use in match';
   }
-
-  // Set the input test functions
-  this.valueTest = getTestFunction(this.protocol, this.field);
-  this.maskTest  = getTestFunction(this.protocol, this.field);
 }
 
 Match.prototype.clone = function() {
@@ -75,7 +88,7 @@ Match.prototype.match = function(value) {
 
 function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
                       maskable) {
-  if(_(mp).isObject) {
+  if(_(mp).isObject()) {
     _.extend(this, mp);
   } else {
     // Fixed properties
@@ -89,11 +102,15 @@ function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
     this.maskable     = maskable;
     this.maskableBits = '';
     
-    // Attach the necessary tool tips
+    // Attach the necessary tool tips -- profile
     this.enabledTip      = this.tip+' matching';
     this.wildcardableTip = this.tip+' wildcard matching';
     this.maskableTip     = this.tip+' bitmask matching';
     this.maskableBitsTip = 'Indicate which bits are maskable';
+
+    // Attach the necessary tool tips -- object cons
+    this.valueTip = this.tip + ' to match against';
+    this.maskTip  = 'Bitmask to use in match';
   }
   // Match Constructor
   this.mkType = function(value, mask) {
@@ -101,8 +118,12 @@ function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
                      value, mask);
   };
 
-  // Attach the necessary input test function
-  this.maskableBitsTest = getTestFunction(this.protocol, this.field, 'profile');
+  // Attach the necessary input test function -- profile
+  this.maskableBitsTest = getTestFunction(this.protocol, this.field);
+
+  // Attach the necessary input test function -- object cons
+  this.valueTest = getTestFunction(this.protocol, this.field);
+  this.maskTest  = getTestFunction(this.protocol, this.field);
 }
 
 MatchProfile.prototype.clone = function() {
@@ -110,7 +131,8 @@ MatchProfile.prototype.clone = function() {
 };
 
 function Action(action, protocol, field, bitwidth, op, value) {
-  if(_(action).isObject) {
+  var consFunc;
+  if(_(action).isObject()) {
     _.extend(this, action);
   } else {
     this.protocol = protocol;
@@ -118,14 +140,13 @@ function Action(action, protocol, field, bitwidth, op, value) {
     this.bitwidth = bitwidth;
     this.op       = op;
 
-    this.value = value;
+    // UI Editable property
+    this.value  = value;
 
-    // Attach the necessary tool tips
-    this.valueTip = 'Value to set the '+this.tip;
+    consFunc = getConsFunction(this.protocol, this.field);
+    this._value = new UInt.UInt(null, consFunc(this.value), 
+                                Math.ceil(this.bitwidth / 8));
   }
-
-  // Attach the necessary test function
-  this.valueTest = getTestFunction(this.protocol, this.field);
 }
 
 Action.prototype.clone = function() {
@@ -158,7 +179,7 @@ Action.prototype.step = function(dp, ctx) {
 };
 
 function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
-  if(_(ap).isObject) {
+  if(_(ap).isObject()) {
     _.extend(this, ap);
   } else {
     // Fiexed properties
@@ -169,14 +190,19 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
     this.op       = op;
     // UI Editable properties
     this.enabled = enabled;
-
+    // Attach the tool tip -- profile
     this.enabledTip = this.tip+' modification';
+    // Attach the tool tip -- object cons
+    this.valueTip = 'Value to set the '+this.tip;
   }
   // Action Constructor
   this.mkType = function(value) {
     return new Action(null, this.protocol, this.field, this.bitwidth, this.op, 
                       value);
   };
+
+  // Attach the input test function -- object cons
+  this.valueTest = getTestFunction(this.protocol, this.field);
 }
 
 ActionProfile.prototype.clone = function() {
@@ -212,7 +238,7 @@ function Field(params) {
   // Display string conversion function
   this.toString = params.toString || null;
   // Display string describing the field
-  this.tip = params.tip || this.protoName + ' ' + this.name;
+  this.tip = params.tip || this.protocol + ' ' + this.name;
 }
 
 Field.prototype.attachDefaultFunctions = function() {
@@ -221,6 +247,7 @@ Field.prototype.attachDefaultFunctions = function() {
   if(this.testStr === null) {
     this.testStr = UInt.is(this.bitwidth);
   }
+  setTestFunction(this.protocol, this.name, this.testStr);
   // Attach a generic toString function
   if(this.toString === null) {
     this.toString = function(value, base) {
@@ -283,7 +310,7 @@ function Protocol(params) {
   this.popable = params.popable || false;
   // Construct the protocol fields
   this.fields = _(params.fields).map(function(field) {
-    field.protoName = this.name;
+    field.protocol = this.name;
     return new Field(field);
   }, this);
   // Attach a name/key for each field
@@ -322,17 +349,17 @@ Protocol.prototype.getActionProfile = function(op) {
 Protocol.prototype.getActionProfiles = function() {
   var result = [];
   if(this.pushable) {
-    result.append(this.getActionProfile('push'));
+    result.push(this.getActionProfile('push'));
   }
   if(this.popable) {
-    result.append(this.getActionProfile('pop'));
+    result.push(this.getActionProfile('pop'));
   }
   _(this.fields).each(function(field) {
     if(field.setable) {
-      result.append(field.getActionProfile('set'));
+      result.push(field.getActionProfile('set'));
     }
     if(field.decable) {
-      result.append(field.getActionProfile('dec'));
+      result.push(field.getActionProfile('dec'));
     }
   });
   return result;

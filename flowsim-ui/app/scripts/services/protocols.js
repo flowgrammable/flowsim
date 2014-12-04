@@ -29,17 +29,40 @@ var Protocols = [
 
 // Build a listing of all protocols supported
 var noprotoProtocols = _(Protocols).map(function(protocol) {
-  new Noproto.Protocol(protocol);
+  return new Noproto.Protocol(protocol);
 });
 
-// Extract the set of protocol match profiles
-var MatchProfiles = _(noprotoProtocols).map(function(protocol) {
-  return protocol.getMatchProfiles();
-});
+function MatchProfiles(mp) {
+  if(_(mp).isObject()) {
+    this.profiles = _(mp.profiles).map(function(profile) {
+      return profile.clone();
+    });
+  } else {
+    this.profiles = _(_(noprotoProtocols).map(function(protocol) {
+      return protocol.getMatchProfiles();
+    })).flatten();
+  }
+}
 
-var ActionProfiles = _(noprotoProtocols).map(function(protocol) {
-  return protocol.getActionProfiles();
-});
+MatchProfiles.prototype.clone = function() {
+  return new MatchProfiles(this);
+};
+
+function ActionProfiles(ap) {
+  if(_(ap).isObject()) {
+    this.profiles = _(ap.profiles).map(function(profile) {
+      return profile.clone();
+    });
+  } else {
+    this.profiles = _(_(noprotoProtocols).map(function(protocol) {
+      return protocol.getActionProfiles();
+    })).flatten();
+  }
+}
+
+ActionProfiles.prototype.clone = function() {
+  return new ActionProfiles(this);
+};
 
 return {
   MatchProfiles: MatchProfiles,
