@@ -12,7 +12,6 @@ angular.module('flowsimUiApp')
   .factory('Noproto', function(UInt) {
 
 function Match(match, protocol, field, bitwidth, value, mask) {
-  var tmp;
   if(_(match).isObject) {
     _.extend(this, match);
     this._match = match._match.clone();
@@ -35,6 +34,7 @@ function Match(match, protocol, field, bitwidth, value, mask) {
         new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8)),
         new UInt.UInt(null, mask, Math.ceil(this.bitwidth / 8))
       );
+    }
   }
 }
 
@@ -74,7 +74,7 @@ MatchProfile.prototype.clone = function() {
 
 function Action(action, protocol, field, bitwidth, op, value) {
   if(_(action).isObject) {
-    _.extend(this, aciton);
+    _.extend(this, action);
   } else {
     this.protocol = protocol;
     this.field    = field;
@@ -89,7 +89,7 @@ Action.prototype.clone = function() {
   return new Action(this);
 };
 
-Aciton.prototype.step = function(dp, ctx) {
+Action.prototype.step = function(dp, ctx) {
   switch(this.op) {
     case 'set':
       // copy the new field value
@@ -219,7 +219,7 @@ Field.prototype.getActionProfile = function(op) {
     this.name,
     this.bitwidth,
     this.tip,
-    this.op,
+    op,
     // Default enable the action
     true
   );
