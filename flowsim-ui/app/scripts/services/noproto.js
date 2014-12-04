@@ -27,12 +27,14 @@ function Match(match, protocol, field, bitwidth, value, mask) {
     // If no mask, make it an exact match
     if(!mask || mask.length === 0) {
       this._match = UInt.mkExact(
-        new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8)));
+        new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8))
+      );
     } else {
       // otherwise use the mask
       this._match = new UInt.Match(null, 
         new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8)),
-        new UInt.UInt(null, mask, Math.ceil(this.bitwidth / 8)));
+        new UInt.UInt(null, mask, Math.ceil(this.bitwidth / 8))
+      );
   }
 }
 
@@ -90,16 +92,22 @@ Action.prototype.clone = function() {
 Aciton.prototype.step = function(dp, ctx) {
   switch(this.op) {
     case 'set':
+      // copy the new field value
       break;
     case 'push':
+      // push an outer tag/label
       break;
     case 'pop':
+      // pop an outer tag/label
       break;
     case 'dec':
+      // decrement a field
       break;
     case 'copy-in':
+      // copy an outer header ttl to an inner header
       break;
     case 'copy-out':
+      // copy a next to outer header ttl to the outer header
       break;
     default:
       throw 'Bad Action op: '+this.op;
@@ -120,8 +128,9 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
     this.enabled = enabled;
   }
   // Action Constructor
-  this.mkType = function() {
-    return new Action(null, this.protocol, this.field, this.bitwidth, this
+  this.mkType = function(value) {
+    return new Action(null, this.protocol, this.field, this.bitwidth, this.op, 
+                      value);
   };
 }
 
@@ -254,10 +263,14 @@ Protocol.prototype.getMatchProfiles = function() {
 Protocol.prototype.getActionProfile = function(op) {
   return new ActionProfile(
     null,
+    // Display names for the UI
     this.name,
     'tag',
     0,
-    op
+    '',
+    op,
+    // Default enable the action
+    true
   );
 };
 
@@ -287,3 +300,4 @@ return {
 };
 
 });
+

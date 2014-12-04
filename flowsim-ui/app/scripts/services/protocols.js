@@ -8,9 +8,12 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Protocols', function(Noproto, Ethernet2) {
+  .factory('Protocols', function(Noproto, Internal, Ethernet2) {
+
+// Inser new protocols below ...
  
 var Protocols = [
+  Internal.Internal,
   Ethernet2.Ethernet,
   //VLAN2.VLAN,
   //MPLS2.MPLS,
@@ -18,7 +21,10 @@ var Protocols = [
   //IPv42.IPv4,
   //ICMPv42.ICMPv4
   //IPv62.IPv6,
-  //ICMPv62.ICMPv6
+  //ICMPv62.ICMPv6,
+  //TCP2.TCP,
+  //SCTP2.SCTP,
+  //UDP2.UDP
 ];
 
 // Build a listing of all protocols supported
