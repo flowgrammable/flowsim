@@ -111,9 +111,59 @@ var TIPS = {
     },
     TTL: {
       set: 'Set TTL',
-      dec: 'Decrement TTL'
+      dec: 'Decrement TTL',
+      copy_out: 'Copy TTL out',
+      copy_in: 'Copy TTL in'
     }
   },
+  ICMPv4: {
+    Type: {
+      set: 'Set type'
+    },
+    Code: {
+      set: 'Set code'
+    }
+  },
+  ICMPv6: {
+    Type: {
+      set: 'Set type'
+    },
+    Code: {
+      set: 'Set code'
+    }
+  },
+  TCP: {
+    Src: {
+      set: 'Set source port'
+    },
+    Dst: {
+      set: 'Set destination port'
+    }
+  },
+  UDP: {
+    Src: {
+      set: 'Set source port'
+    },
+    Dst: {
+      set: 'Set destination port'
+    }
+  },
+  SCTP: {
+    Src: {
+      set: 'Set source port'
+    },
+    Dst: {
+      set: 'Set destination port'
+    }
+  },
+  ND: {
+    Target: {
+      set: 'Set target'
+    },
+    HW: {
+      set: 'Set hardware address'
+    }
+  }
 
 };
 
@@ -151,7 +201,8 @@ var TESTS = {
   },
   MPLS: {
     Label: {
-      set: MPLS.TESTS.label
+      set: MPLS.TESTS.label,
+      dec: function() { return true; }
     },
     TTL: {
       set: MPLS.TESTS.ttl
@@ -179,6 +230,94 @@ var TESTS = {
     },
     TPA: {
       set: IPV4.Address.is
+    }
+  },
+  IPv4: {
+    DSCP: {
+      set: IPV4.TESTS.dscp
+    },
+    ECN: {
+      set: IPV4.TESTS.ecn
+    },
+    Proto: {
+      set: IPV4.TESTS.proto
+    },
+    Src: {
+      set: IPV4.Address.is
+    },
+    Dst: {
+      set: IPV4.Address.is
+    },
+    TTL: {
+      set: IPV4.TESTS.ttl,
+      dec: function() { return true; },
+      copy_out: function() { return true; },
+      copy_in: function() { return true; }
+    }
+  },
+  IPv6: {
+    Src: {
+      set: IPV6.Address.is
+    },
+    Dst: {
+      set: IPV6.Address.is
+    },
+    Flabel: {
+      set: IPV6.TESTS.flabel
+    },
+    TTL: {
+      set: IPV6.TESTS.ttl,
+      dec: function() { return true; },
+      copy_out: function() { return true; },
+      copy_in: function() { return true; },
+    }
+  },
+  ICMPv4: {
+    Type: {
+      set: ICMPV4.TESTS.type
+    },
+    Code: {
+      set: ICMPV4.TESTS.code
+    }
+  },
+  ICMPv6: {
+    Type: {
+      set: ICMPV6.TESTS.type
+    },
+    Code: {
+      set: ICMPV6.TESTS.code
+    }
+  },
+  TCP: {
+    Src: {
+      set: TCP.TESTS.src
+    },
+    Dst: {
+      set: TCP.TESTS.dst
+    }
+  },
+  UDP: {
+    Src: {
+      set: UDP.TESTS.src
+    },
+    Dst: {
+      set: UDP.TESTS.dst
+    }
+  },
+  SCTP: {
+    Src: {
+      set: SCTP.TESTS.src
+    },
+    Dst: {
+      set: SCTP.TESTS.dst
+    }
+  },
+  ND: {
+    Target: {
+      set: ND.TESTS.target
+    },
+    HW: {
+      set: ND.TESTS.hw
     }
   }
 };
@@ -231,6 +370,9 @@ var Types = {
     }
   },
   ARP: {
+    Opcode: {
+      set: SetField
+    },
     THA: {
       set: SetField
     },
@@ -241,6 +383,94 @@ var Types = {
       set: SetField
     },
     SPA: {
+      set: SetField
+    }
+  },
+  IPv4: {
+    DSCP: {
+      set: SetField
+    },
+    ECN : {
+      set: SetField
+    },
+    Proto: {
+      set: SetField
+    },
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    },
+    TTL: {
+      set: SetField,
+      dec: DecTTL,
+      copy_out: CopyTTLOut,
+      copy_in: CopyTTLIn
+    }
+  },
+  IPv6: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    },
+    Flabel: {
+      set: SetField
+    },
+    TTL: {
+      set: SetField,
+      dec: DecTTL,
+      copy_out: CopyTTLOut,
+      copy_in: CopyTTLIn
+    }
+  },
+  ICMPv4: {
+    Type: {
+      set: SetField
+    },
+    Code: {
+      set: SetField
+    }
+  },
+  ICMPv6: {
+    Type: {
+      set: SetField
+    },
+    Code: {
+      set: SetField
+    }
+  },
+  TCP: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  UDP: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  SCTP: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  ND: {
+    Target: {
+      set: SetField
+    },
+    HW: {
       set: SetField
     }
   }
@@ -523,6 +753,15 @@ function mkPushMPLSProfile() {
   );
 }
 
+function mkSetARPOpcodeProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'Opcode',
+    'set'
+  );
+}
+
 function mkSetARPSHAProfile() {
   return new ActionProfile(
     null,
@@ -558,6 +797,233 @@ function mkSetARPTPAProfile() {
     'set'
   );
 }
+
+
+function mkSetIPV4DSCPProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'DSCP',
+    'set'
+  );
+}
+
+function mkSetIPV4ECNProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'ECN',
+    'set'
+  );
+}
+
+function mkSetIPV4SrcProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'Src',
+    'set'
+  );
+}
+
+function mkSetIPV4DstProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'Dst',
+    'set'
+  );
+}
+
+function mkIPV4DecTTLProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'TTL',
+    'dec'
+  );
+}
+
+function mkIPV4CopyTTLOutProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'TTL',
+    'copy_out'
+  );
+}
+
+function mkIPV4CopyTTLInProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'TTL',
+    'copy_in'
+  );
+}
+
+function mkIPV6setSrcProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'Src',
+    'set'
+  );
+}
+
+function mkIPV6setDstProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'Dst',
+    'set'
+  );
+}
+
+function mkIPV6setFlabelProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'Flabel',
+    'set'
+  );
+}
+
+function mkIPV6DecTTLProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'TTL',
+    'dec'
+  );
+}
+
+function mkIPV6CopyTTLOutProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'TTL',
+    'copy_out'
+  );
+}
+
+function mkIPV6CopyTTLInProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'TTL',
+    'copy_in'
+  );
+}
+
+function mkICMPv4setTypeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv4',
+    'Type',
+    'set'
+  );
+}
+
+function mkICMPv4setCodeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv4',
+    'Code',
+    'set'
+  );
+}
+
+function mkICMPv6setTypeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv6',
+    'Type',
+    'set'
+  );
+}
+
+function mkICMPv6setCodeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv4',
+    'Code',
+    'set'
+  );
+}
+
+function mkTCPsetSrcProfile() {
+  return new ActionProfile(
+    null,
+    'TCP',
+    'Src',
+    'set'
+  );
+}
+
+function mkTCPsetDstProfile() {
+  return new ActionProfile(
+    null,
+    'TCP',
+    'Dst',
+    'set'
+  );
+}
+
+function mkUDPsetSrcProfile() {
+  return new ActionProfile(
+    null,
+    'UDP',
+    'Src',
+    'set'
+  );
+}
+
+function mkUDPsetDstProfile() {
+  return new ActionProfile(
+    null,
+    'UDP',
+    'Dst',
+    'set'
+  );
+}
+
+function mkSCTPsetSrcProfile() {
+  return new ActionProfile(
+    null,
+    'SCTP',
+    'Src',
+    'set'
+  );
+}
+
+function mkSCTPsetDstProfile() {
+  return new ActionProfile(
+    null,
+    'SCTP',
+    'Dst',
+    'set'
+  );
+}
+
+function mkNDsetTargetProfile() {
+  return new ActionProfile(
+    null,
+    'ND',
+    'Target',
+    'set'
+  );
+}
+
+function mkNDsetHWProfile() {
+  return new ActionProfile(
+    null,
+    'ND',
+    'HW',
+    'set'
+  );
+}
+
 
 
 function CopyTTLIn(){
@@ -1177,10 +1643,68 @@ function Available() {
   }, {
     protocol: 'ARP',
     actions: [
+      mkSetARPOpcodeProfile(),
       mkSetARPSHAProfile(),
       mkSetARPSPAProfile(),
       mkSetARPTHAProfile(),
       mkSetARPTPAProfile()
+    ]
+  },{
+    protocol: 'IPv4',
+    actions: [
+      mkSetIPV4DSCPProfile(),
+      mkSetIPV4ECNProfile(),
+      mkSetIPV4SrcProfile(),
+      mkSetIPV4DstProfile(),
+      mkIPV4DecTTLProfile(),
+      mkIPV4CopyTTLOutProfile(),
+      mkIPV4CopyTTLInProfile()
+    ]
+  },{
+    protocol: 'IPv6',
+    actions: [
+      mkIPV6setSrcProfile(),
+      mkIPV6setDstProfile(),
+      mkIPV6setFlabelProfile(),
+      mkIPV6DecTTLProfile(),
+      mkIPV6CopyTTLOutProfile(),
+      mkIPV6CopyTTLInProfile()
+    ]
+  },{
+    protocol: 'ICMPv4',
+    actions: [
+      mkICMPv4setTypeProfile(),
+      mkICMPv4setCodeProfile()
+    ]
+  },{
+    protocol: 'ICMPv6',
+    actions: [
+      mkICMPv6setTypeProfile(),
+      mkICMPv6setCodeProfile()
+    ]
+  },{
+    protocol: 'TCP',
+    actions: [
+      mkTCPsetSrcProfile(),
+      mkTCPsetDstProfile()
+    ]
+  },{
+    protocol: 'UDP',
+    actions: [
+      mkUDPsetSrcProfile(),
+      mkUDPsetDstProfile()
+    ]
+  },{
+    protocol: 'SCTP',
+    actions: [
+      mkSCTPsetSrcProfile(),
+      mkSCTPsetDstProfile()
+    ]
+  },{
+    protocol: 'ND',
+    actions: [
+      mkNDsetTargetProfile(),
+      mkNDsetHWProfile()
     ]
   }];
 }
