@@ -6,6 +6,13 @@ function isMAC(str) {
   return macPattern.test(str);
 }
 
+function consMAC(str) {
+  var tmp = input.match(macPattern);
+  return _(_.range(6)).map(function(i) {
+    return parseInt('0x'+tmp[2*i+1]);
+  });
+}
+
 function dispMAC(array) {
   return array[0].toString(16) + ':' +
          array[1].toString(16) + ':' +
@@ -39,7 +46,7 @@ describe('Service: noproto', function () {
         matchable: true,
         setable: true,
         testStr: isMAC,
-        consStr: function() { return [0, 0, 0, 0, 0, 0] },
+        consStr: consMAC,
         dispStr: dispMAC,
         tip: 'Ethernet Src MAC Address'
       }, {
@@ -48,7 +55,7 @@ describe('Service: noproto', function () {
         matchable: true,
         setable: true,
         testStr: isMAC,
-        consStr: function() { return [0, 0, 0, 0, 0, 0] },
+        consStr: consMAC,
         dispStr: dispMAC,
         tip: 'Ethernet Dst MAC Address'
       }, {
@@ -56,7 +63,6 @@ describe('Service: noproto', function () {
         bitwidth: 16,
         matchable: true,
         testStr: UInt.is(16),
-        consStr: function() { return [0, 0, 0, 0, 0, 0] },
         dispStr: function(val) { 
           return '0x' + UInt.padZeros(val.toString(16), 4);
         },
