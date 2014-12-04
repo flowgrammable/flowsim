@@ -45,11 +45,13 @@ var TIPS = {
   },
   MPLS: {
     Label: {
-      set: 'set the outter MPLS label',
-      dec: 'decrement MPLS TTL'
+      set: 'set the outter MPLS label'
     },
     TTL: {
-      set: 'set MPLS ttl'
+      set: 'set MPLS ttl',
+      dec: 'decrement MPLS TTL',
+      copy_in: 'Copy TTL in',
+      copy_out: 'Copy TTL out'
     },
     BOS: {
       set: 'set Bottom of Stack bit'
@@ -202,10 +204,12 @@ var TESTS = {
   MPLS: {
     Label: {
       set: MPLS.TESTS.label,
-      dec: function() { return true; }
     },
     TTL: {
-      set: MPLS.TESTS.ttl
+      set: MPLS.TESTS.ttl,
+      dec: function() { return true; },
+      copy_in: function() { return true; },
+      copy_out: function() { return true; }
     },
     BOS: {
       set: MPLS.TESTS.bos
@@ -725,6 +729,34 @@ function mkSetMPLSTTLProfile() {
     'set'
   );
 }
+
+function mkMPLSDecTTLProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'dec'
+  );
+}
+
+function mkMPLSCopyTTLInProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'copy_in'
+  );
+}
+
+function mkMPLSCopyTTLOutProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'copy_out'
+  );
+}
+
 
 function mkSetMPLSBOSProfile() {
   return new ActionProfile(
@@ -1635,8 +1667,10 @@ function Available() {
     actions: [
       mkSetMPLSLabelProfile(),
       mkSetMPLSTTLProfile(),
+      mkMPLSDecTTLProfile(),
+      mkMPLSCopyTTLOutProfile(),
+      mkMPLSCopyTTLInProfile(),
       mkSetMPLSBOSProfile(),
-      // FIXME there are others ...
       mkPushMPLSProfile(),
       mkPopMPLSProfile()
     ]
