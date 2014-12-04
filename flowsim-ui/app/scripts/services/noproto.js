@@ -11,7 +11,40 @@
 angular.module('flowsimUiApp')
   .factory('Noproto', function(UInt) {
 
-function MatchProfile(mp, protocol, field, tip, enabled, wildcardable, 
+function Match(match, protocol, field, bitwidth, value, mask) {
+  var tmp;
+  if(_(match).isObject) {
+    _.extend(this, match);
+    this._match = match._match.clone();
+  } else {
+    // Store some of the metadata
+    this.protocol = protocol;
+    this.field    = field;
+    this.bitwidth = bitwidth;
+    // Remember the mask input
+    this.value = value;
+    this.mask  = mask;
+    // If no mask, make it an exact match
+    if(!mask || mask.length === 0) {
+      this._match = UInt.mkExact(
+        new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8)));
+    } else {
+      // otherwise use the mask
+      this._match = new UInt.Match(null, 
+        new UInt.UInt(null, value, Math.ceil(this.bitwidth / 8)),
+        new UInt.UInt(null, mask, Math.ceil(this.bitwidth / 8)));
+  }
+}
+
+Match.prototype.clone = function() {
+  return new Match(this);
+};
+
+Match.prototype.match = function(value) {
+  return this._match.match(value);
+};
+
+function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
                       maskable) {
   if(_(mp).isObject) {
     _.extend(this, mp);
@@ -19,6 +52,7 @@ function MatchProfile(mp, protocol, field, tip, enabled, wildcardable,
     // Fixed properties
     this.protocol = protocol;
     this.field    = field;
+    this.bitwidth = bitwidth;
     this.tip      = tip;
     // UI Editable properties
     this.enabled      = enabled;
@@ -26,23 +60,69 @@ function MatchProfile(mp, protocol, field, tip, enabled, wildcardable,
     this.maskable     = maskable;
     this.maskableBits = '';
   }
+  // Match Constructor
+  this.mkType = function(value, mask) {
+    return new Match(null, this.protocol, this.field, this.bitwidth, value, mask);
+  };
 }
 
 MatchProfile.prototype.clone = function() {
   return new MatchProfile(this);
 };
 
-function ActionProfile(ap, protocol, field, tip, enabled) {
+function Action(action, protocol, field, bitwidth, op, value) {
+  if(_(action).isObject) {
+    _.extend(this, aciton);
+  } else {
+    this.protocol = protocol;
+    this.field    = field;
+    this.bitwidth = bitwidth;
+    this.op       = op;
+
+    this.value = value;
+  }
+}
+
+Action.prototype.clone = function() {
+  return new Action(this);
+};
+
+Aciton.prototype.step = function(dp, ctx) {
+  switch(this.op) {
+    case 'set':
+      break;
+    case 'push':
+      break;
+    case 'pop':
+      break;
+    case 'dec':
+      break;
+    case 'copy-in':
+      break;
+    case 'copy-out':
+      break;
+    default:
+      throw 'Bad Action op: '+this.op;
+  }
+};
+
+function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
   if(_(ap).isObject) {
     _.extend(this, ap);
   } else {
     // Fiexed properties
     this.protocol = protocol;
     this.field    = field;
+    this.bitwidth = bitwidth;
     this.tip      = tip;
+    this.op       = op;
     // UI Editable properties
     this.enabled = enabled;
   }
+  // Action Constructor
+  this.mkType = function() {
+    return new Action(null, this.protocol, this.field, this.bitwidth, this
+  };
 }
 
 ActionProfile.prototype.clone = function() {
@@ -91,7 +171,7 @@ Field.prototype.attachDefaultFunctions = function() {
   if(this.toString === null) {
     this.toString = function(value, base) {
       if(_(value).isArray) {
-        return "0x"+_(value).map(function(octet) {
+        return '0x'+_(value).map(function(octet) {
           return UInt.padZeros(octet.toString(16), 2);
         });
       } else if(_(value).isFinite()) {
@@ -109,9 +189,11 @@ Field.prototype.attachDefaultFunctions = function() {
 
 Field.prototype.getMatchProfile = function() {
   return new MatchProfile(
+    null,
     // Display names for the UI
     this.protocol,
     this.name,
+    this.bitwidth,
     this.tip,
     // Default enable the match
     true,   // available
@@ -120,12 +202,15 @@ Field.prototype.getMatchProfile = function() {
   );
 };
 
-Field.prototype.getActionProfile = function() {
+Field.prototype.getActionProfile = function(op) {
   return new ActionProfile(
+    null,
     // Display names for the UI
     this.protocol,
     this.name,
+    this.bitwidth,
     this.tip,
+    this.op,
     // Default enable the action
     true
   );
@@ -166,27 +251,36 @@ Protocol.prototype.getMatchProfiles = function() {
   });
 };
 
+Protocol.prototype.getActionProfile = function(op) {
+  return new ActionProfile(
+    null,
+    this.name,
+    'tag',
+    0,
+    op
+  );
+};
+
 Protocol.prototype.getActionProfiles = function() {
   var result = [];
   if(this.pushable) {
-    //FIXME
-    //result.concat();
+    result.append(this.getActionProfile('push'));
   }
   if(this.popable) {
-    //FIXME
-    //result.concat();
+    result.append(this.getActionProfile('pop'));
   }
-  result.concat(_(this.fields).filter(function(field) {
-    return field.setable || field.decable;
-  }).map(function(field) {
-    return field.getActionProfile();
-  }));
+  _(this.fields).each(function(field) {
+    if(field.setable) {
+      result.append(field.getActionProfile('set'));
+    }
+    if(field.decable) {
+      result.append(field.getActionProfile('dec'));
+    }
+  });
   return result;
 };
 
 // Extraction
-
-// Action
 
 return {
   Protocol: Protocol
