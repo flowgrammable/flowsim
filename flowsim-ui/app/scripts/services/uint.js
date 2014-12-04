@@ -33,12 +33,19 @@ function maxFromBytes(val) {
 
 function is(bits) {
   return function(val) {
-    var tmp;
+    var tmp, pos;
     if(_.isFinite(val) && (val % 1 === 0)) {
       return 0 <= val && val <= maxFromBits(bits);
     } else if(_.isString(val) && Pattern.test(val)) {
-      tmp = parseInt(val);
-      return 0 <= val && val <= maxFromBits(bits);
+      if(bits <= 32) {
+        tmp = parseInt(val);
+        return 0 <= tmp && tmp <= maxFromBits(bits);
+      } else {
+        //FIXME
+        pos = val.indexOf('0x');
+        pos = pos === -1 ? 0 : 2;
+        tmp = val.substring(pos, bits-(bits/4));
+      }
     }
     return false;
   };

@@ -10,7 +10,7 @@ function isMAC(str) {
 }
 
 function consMAC(str) {
-  var tmp = input.match(macPattern);
+  var tmp = str.match(macPattern);
   return _(_.range(6)).map(function(i) {
     return parseInt('0x'+tmp[2*i+1]);
   });

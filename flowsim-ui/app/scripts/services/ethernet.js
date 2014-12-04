@@ -43,10 +43,6 @@ Ethernet.prototype.src = function(src) {
   }
 };
 
-Ethernet.prototype.src.toString = function(){
-  return "hi";
-}
-
 Ethernet.prototype.dst = function(dst) {
   if(dst) {
     this._dst = mkMAC(dst);
