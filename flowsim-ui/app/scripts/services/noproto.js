@@ -103,9 +103,9 @@ function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
     this.maskableBits = '';
     
     // Attach the necessary tool tips -- profile
-    this.enabledTip      = this.tip+' matching';
-    this.wildcardableTip = this.tip+' wildcard matching';
-    this.maskableTip     = this.tip+' bitmask matching';
+    this.enabledTip      = 'Enable/Disable '+this.tip+' matching';
+    this.wildcardableTip = 'Enable/Disable '+this.tip+' wildcard matching';
+    this.maskableTip     = 'Enable/Disable '+this.tip+' bitmask matching';
     this.maskableBitsTip = 'Indicate which bits are maskable';
 
     // Attach the necessary tool tips -- object cons

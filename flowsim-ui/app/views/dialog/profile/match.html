@@ -9,23 +9,30 @@
       <th>Protocol</th>
       <th>Field</th>
       <th>Enabled</th>
-      <th>Wildcard</th>
+      <th>Wildcardable</th>
       <th>Maskable</th>
       <th>Mask</th>
     </thead>
     <tbody>
-      <tr ng-repeat="m in match.fields">
-        <td>{{m.protocol}}</td>
-        <td><div tooltip="{{tips[m.key]}}">{{m.field}}</div></td>
-        <td><input type="checkbox" ng-model="m.enabled"></td>
-        <td><input type="checkbox" ng-model="m.wildcardable" 
-                   ng-disabled="!m.enabled"></td>
-        <td><input type="checkbox" ng-model="m.maskable"
-                   ng-disabled="!m.enabled"></td>
+      <tr ng-repeat="profile in match.profiles">
+        <td>{{profile.protocol}}</td>
+        <td><div tooltip="{{profile.tip}}">{{profile.field}}</div></td>
+        <td><input type="checkbox" ng-model="profile.enabled"
+                   tooltip="{{profile.enabledTip}}"></td>
+        <td><input type="checkbox" ng-model="profile.wildcardable" 
+                   ng-disabled="!profile.enabled"
+                   tooltip="{{profile.wildcardableTip}}"></td>
+        <td><input type="checkbox" ng-model="profile.maskable"
+                   ng-disabled="!profile.enabled"
+                   tooltip="{{profile.maskableTip}}"></td>
         <td>
-          <div ng-class="{'has-error': !tests[m.key](m.mask)}">
-          <input class="form-control" type="text" ng-model="m.mask"
-                 style="width:150px" ng-disabled="!m.maskable ||!m.enabled">
+          <div ng-class="{'has-error':
+               profile.enabled && profile.maskable &&
+               !profile.maskableBitsTest(profile.maskableBits)}">
+            <input class="form-control" type="text" 
+                   ng-model="profile.maskableBits" style="width:150px" 
+                   tooltip="{{profile.maskableBitsTip}}"
+                   ng-disabled="!profile.maskable ||!profile.enabled">
           </div>
         </td>
       </tr>
