@@ -907,13 +907,9 @@ Set.prototype.setTTL = function(action) {
 };
 
 Set.prototype.decTTL = function(action) {
-  if(!_(this.actions).has('setField')) {
-    this.actions.setField = {};
+  if(action){
+    this.actions.dec_ttl = action;
   }
-  if(!_(this.actions.setField).has(action.protocol)) {
-    this.actions.setField[action.protocol] = {};
-  }
-  this.actions.setField[action.protocol][action.field] = action;
 };
 
 Set.prototype.queue = function(action) {
@@ -1009,16 +1005,6 @@ Set.prototype.step = function(dp, ctx) {
     this.actions.dec_ttl.step(dp, ctx);
     delete this.actions.dec_ttl;
     return true;
-  }
-
-  if(_(this.actions).has('setTTL')){
-    if(_(this.actions.setField).keys().length > 0) {
-      if(this.stepSetField(dp, ctx, IPV4.name)) {
-        return true;
-      } else {
-        throw 'Bad setTTL Keys: ' + this.actions.setTTL.keys();
-      }
-    }
   }
 
   if(_(this.actions).has('setField')) {
