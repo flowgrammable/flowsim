@@ -41,9 +41,10 @@ describe('Service: instruction', function () {
 
     var pkt = new Packet.Packet('pack1');
     pkt.push(new IPV4.mkIPv4());
+    pkt.protocols[0].type('0x0800');
 
     set._apply.push(new Action.Push(null, new VLAN.VLAN()));
-
+    expect(pkt.protocols[0].type().toString(16)).toBe('0x0800');
 
 
     set.step(null, {
@@ -60,18 +61,18 @@ describe('Service: instruction', function () {
 
   });
 
-    it('Instruction profile construction: ', function(){
+  it('Instruction profile construction: ', function(){
     var prof = new Instruction.Profile();
 
     expect(prof.apply[0].protocol).toBe('Internal');
-    expect(prof.apply[0].actions[0].name).toBe('Output');
+    expect(prof.apply[0].actions[0].field).toBe('Output');
 
     var j = JSON.stringify(prof);
     var j_ = new Instruction.Profile(JSON.parse(j));
 
     expect(j_.apply.length).toBe(prof.apply.length);
     expect(j_.apply[0].protocol).toBe('Internal');
-    expect(j_.apply[0].actions[0].name).toBe('Output');
+    expect(j_.apply[0].actions[0].field).toBe('Output');
 
   });
 

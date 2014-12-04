@@ -677,16 +677,22 @@ Push.prototype.toString = function() {
 };
 
 Push.prototype.step = function(dp, ctx) {
+  if(ctx.packet.protocols.length === 1){
+    this.tag.setDefaults(ctx.packet.protocols, 0);
+    ctx.packet.protocols.push(this.tag);
+    ctx.packet.protocols[0].setPayload(this.tag.name);
+  } else {
   for(var i = 0; i < ctx.packet.protocols.length; i++){
     if(this.tag.insertHere(ctx.packet.protocols[i])){
       this.tag.setDefaults(ctx.packet.protocols, i);
       ctx.packet.protocols.splice(i, 0, this.tag);
-      ctx.packet.protocols[i-1].setPayload(ctx.packet.protocols[i].name);
-      ctx.packet.protocols[i].setPayload(ctx.packet.protocols[i+1].name);
+      ctx.packet.protocols[i-1].setPayload(this.tag.name);
       return;
     }
   }
   throw 'Push failed';
+  }
+
 };
 
 function PushVLAN() {
@@ -762,7 +768,7 @@ function mkSetEthDstProfile() {
 function Set(set) {
   if(_.isObject(set)) {
     //FIXME: implement
-    _.each(set.actions, function(key) {
+    _.each(set.actions, function(value, key) {
       if(key === 'setField') {
       } else if(key === 'pop_mpls') {
       } else if(key === 'pop_pbb') {
@@ -770,6 +776,7 @@ function Set(set) {
       } else if(key === 'pop_mpls') {
       } else if(key === 'pop_pbb') {
       } else if(key === 'pop_vlan') {
+      } else if(key === 'push_vlan'){
       } else {
       }
     }, this);

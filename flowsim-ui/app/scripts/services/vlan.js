@@ -134,17 +134,20 @@ VLAN.prototype.insertHere = function(protocol) {
 };
 
 VLAN.prototype.setDefaults = function(protocols, index) {
-  if(protocols[index].name === this.name) {
-    this._vid = protocols[index].vid();
-    this._pcp = protocols[index].pcp();
+    if(protocols.length === 1){
+      this._vid  = mkVid();
+      this._pcp  = mkPcp();
+      this._type = mkType();
+    } else if(protocols[index].name === NAME){
+      this._vid  = protocols[index].vid();
+      this._pcp  = protocols[index].pcp();
+      this._type = protocols[index-1].type();
+    } else {
+      this._vid = mkVid();
+      this._pcp = mkPcp();
+      this._type = protocols[index-1].type();
+    }
     this._dei = mkDei();
-    this._type = mkType('0x8100');
-  } else {
-    this._vid = mkVid();
-    this._pcp = mkPcp();
-    this._dei = mkDei();
-    this._type = mkType(protocols[index-1].type().toString(16));
-  }
 };
 
 VLAN.prototype.popHere = function(protocol){

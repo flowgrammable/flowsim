@@ -90,8 +90,9 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      Ethernet.name, Ethernet.src,
-      Ethernet.mkMAC('01:03:05:07:09:0b')));
+      Ethernet.mkMAC('01:03:05:07:09:0b'),
+      Ethernet.name, Ethernet.src
+      ));
 
     set.step(null, {
       packet: pkt
@@ -103,8 +104,7 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      Ethernet.name, Ethernet.dst,
-      Ethernet.mkMAC('ff:ff:ff:ff:ff:ff')));
+      Ethernet.mkMAC('ff:ff:ff:ff:ff:ff'), Ethernet.name, Ethernet.dst));
 
     set.step(null, {
       packet: pkt
@@ -116,8 +116,8 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      Ethernet.name, Ethernet.type,
-      Ethernet.mkType('0x0806')));
+      Ethernet.mkType('0x0806'),
+      Ethernet.name, Ethernet.type ));
 
     set.step(null, {
       packet: pkt
@@ -137,9 +137,8 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      ARP.name, ARP.opcode,
-      ARP.mkOpcode('0x0001')));
-
+      ARP.mkOpcode('0x0001'),
+      ARP.name, ARP.opcode));
     set.step(null, {
       packet: pkt
     });
@@ -152,8 +151,8 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      ARP.name, ARP.sha,
-      ARP.mkSha('ff:ff:ff:ff:ff:ff')));
+      ARP.mkSha('ff:ff:ff:ff:ff:ff'),
+      ARP.name, ARP.sha));
 
     set.step(null, {
       packet: pkt
@@ -167,8 +166,8 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      ARP.name, ARP.spa,
-      ARP.mkSpa('1.1.1.1')));
+      ARP.mkSpa('1.1.1.1'),
+      ARP.name, ARP.spa));
 
     set.step(null, {
       packet: pkt
@@ -182,8 +181,7 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      ARP.name, ARP.tha,
-      ARP.mkTha('22:22:22:22:22:22')));
+      ARP.mkTha('22:22:22:22:22:22'),ARP.name, ARP.tha));
 
     set.step(null, {
       packet: pkt
@@ -197,8 +195,7 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      ARP.name, ARP.tpa,
-      ARP.mkTpa('127.0.0.1')));
+      ARP.mkTpa('127.0.0.1'),ARP.name, ARP.tpa));
 
     set.step(null, {
       packet: pkt
@@ -212,8 +209,8 @@ describe('Service: action', function () {
 
     set.setField(new Action.SetField(
       null,
-      ARP.name, ARP.spa,
-      ARP.mkSpa('192.192.192.192')
+
+      ARP.mkSpa('192.192.192.192'),      ARP.name, ARP.spa
     ));
 
     set.step(null, {
@@ -237,9 +234,9 @@ describe('Service: action', function () {
     pkt.push(IPV4.mkIPv4());
 
     set.setField(new Action.SetField(
-      null,
-      IPV4.name, IPV4.dscp,
-      IPV4.mkDscp('0x01')));
+      null,IPV4.mkDscp('0x01'),
+      IPV4.name, IPV4.dscp
+      ));
 
     set.step(null, {
       packet: pkt
@@ -252,9 +249,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0.0.0.0');
 
     set.setField(new Action.SetField(
-      null,
-      IPV4.name, IPV4.ecn,
-      IPV4.mkEcn('0x1')));
+      null,IPV4.mkEcn('0x1'),
+      IPV4.name, IPV4.ecn
+      ));
 
     set.step(null, {
       packet: pkt
@@ -267,9 +264,8 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0.0.0.0');
 
     set.setField(new Action.SetField(
-      null,
-      IPV4.name, IPV4.proto,
-      IPV4.mkProto('0x06')));
+      null,IPV4.mkProto('0x06'),
+      IPV4.name, IPV4.proto));
 
     set.step(null, {
       packet: pkt
@@ -282,9 +278,8 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0.0.0.0');
 
     set.setField(new Action.SetField(
-      null,
-      IPV4.name, IPV4.src,
-      IPV4.mkSrc('192.168.1.1')));
+      null,IPV4.mkSrc('192.168.1.1'),
+      IPV4.name, IPV4.src ));
 
     set.step(null, {
       packet: pkt
@@ -297,9 +292,8 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0.0.0.0');
 
     set.setField(new Action.SetField(
-      null,
-      IPV4.name, IPV4.dst,
-      IPV4.mkDst('1.1.1.1')));
+      null,IPV4.mkDst('1.1.1.1'),
+      IPV4.name, IPV4.dst));
 
     set.step(null, {
       packet: pkt
@@ -312,7 +306,7 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('1.1.1.1');
   });
 
-  it('IPv4 SetTTL', function(){
+  it('IPv4 Set TTL field', function(){
 
     expect(!!Action).toBe(true);
 
@@ -328,10 +322,10 @@ describe('Service: action', function () {
 
     expect(set.actions.length).toBe(undefined);
 
-    set.setTTL(new Action.SetTTL(
-      null,
-      IPV4.name,
-      IPV4.mkTtl('0x01')));
+    set.setTTL(new Action.SetField(
+      null,IPV4.mkTtl('0x01'),
+      IPV4.name, IPV4.ttl
+      ));
 
     set.step(null, {
       packet: pkt
@@ -346,10 +340,10 @@ describe('Service: action', function () {
 
     expect(set.actions.length).toBe(undefined);
 
-    set.setTTL(new Action.SetTTL(
-      null,
-      IPV4.name,
-      IPV4.mkTtl('0x02')));
+    set.setTTL(new Action.SetField(
+      null,IPV4.mkTtl('0x02'),
+      IPV4.name, IPV4.ttl
+      ));
 
     set.step(null, {
       packet: pkt
@@ -424,9 +418,9 @@ describe('Service: action', function () {
     pkt.push(VLAN.mkVLAN());
 
     set.setField(new Action.SetField(
-      null,
-      VLAN.name, VLAN.pcp,
-      VLAN.mkPcp('0x01')));
+      null,VLAN.mkPcp('0x01'),
+      VLAN.name, VLAN.pcp
+      ));
 
     set.step(null, {
       packet: pkt
@@ -438,9 +432,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].type().toString(16)).toBe('0x0000');
 
     set.setField(new Action.SetField(
-      null,
-      VLAN.name, VLAN.dei,
-      VLAN.mkDei('0x02')));
+      null,VLAN.mkDei('0x02'),
+      VLAN.name, VLAN.dei
+      ));
 
     set.step(null, {
       packet: pkt
@@ -452,9 +446,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].type().toString(16)).toBe('0x0000');
 
     set.setField(new Action.SetField(
-      null,
-      VLAN.name, VLAN.vid,
-      VLAN.mkVid('0x444')));
+      null,VLAN.mkVid('0x444'),
+      VLAN.name, VLAN.vid
+      ));
 
     set.step(null, {
       packet: pkt
@@ -608,6 +602,51 @@ describe('Service: action', function () {
 
   });
 
+  it('MPLS push single', function(){
+    var pkt = new Packet.Packet('test packet');
+    var as = new Action.Set();
+    var pmpls = new Action.Push(null, new MPLS.MPLS());
+    var pmpls2 = new Action.Push(null, new MPLS.MPLS());
+    var pmpls3 = new Action.Push(null, new MPLS.MPLS());
+
+    as.push_mpls(pmpls);
+    as.push_mpls(pmpls2);
+    as.push_mpls(pmpls3);
+
+
+    var sf = new Action.SetField(null,
+      Ethernet.mkMAC('aa:bb:cc:dd:ee:ff'),
+      Ethernet.name, Ethernet.type);
+
+      as.setField(sf);
+
+      as.step(null,{
+        packet: pkt
+      });
+
+      expect(pkt.protocols.length).toBe(2);
+      expect(pkt.protocols[1].name).toBe('MPLS');
+      expect(pkt.protocols[0].type().toString(16)).toBe('0x8847');
+
+      as.step(null,{
+        packet: pkt
+      });
+
+      expect(pkt.protocols.length).toBe(3);
+      expect(pkt.protocols[1].name).toBe('MPLS');
+      expect(pkt.protocols[2].name).toBe('MPLS');
+      expect(pkt.protocols[0].type().toString(16)).toBe('0x8847');
+
+      as.step(null,{
+        packet: pkt
+      });
+
+      expect(pkt.protocols.length).toBe(4);
+      expect(pkt.protocols[1].name).toBe('MPLS');
+      expect(pkt.protocols[2].name).toBe('MPLS');
+
+  });
+
   it('MPLS popMPLS', function(){
     var set = new Action.Set();
     var pkt = new Packet.Packet('mpls');
@@ -726,9 +765,9 @@ describe('Service: action', function () {
     pkt.push(MPLS.mkMPLS());
 
     set.setField(new Action.SetField(
-      null,
-      MPLS.name, MPLS.label,
-      MPLS.mkLabel('0x012345')));
+      null,MPLS.mkLabel('0x012345'),
+      MPLS.name, MPLS.label
+      ));
 
     set.step(null, {
       packet: pkt
@@ -739,9 +778,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
 
     set.setField(new Action.SetField(
-      null,
-      MPLS.name, MPLS.tc,
-      MPLS.mkTc('0x02')));
+      null,MPLS.mkTc('0x02'),
+      MPLS.name, MPLS.tc
+      ));
 
     set.step(null, {
       packet: pkt
@@ -752,9 +791,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].bos().toString(16)).toBe('0x00');
 
     set.setField(new Action.SetField(
-      null,
-      MPLS.name, MPLS.bos,
-      MPLS.mkBos('0x1')));
+      null,MPLS.mkBos('0x1'),
+      MPLS.name, MPLS.bos
+      ));
 
     set.step(null, {
       packet: pkt
@@ -774,9 +813,9 @@ describe('Service: action', function () {
     pkt.push(UDP.mkUDP());
 
     set.setField(new Action.SetField(
-      null,
-      UDP.name, UDP.src,
-      UDP.mkPort('9000')));
+      null,UDP.mkPort('9000'),
+      UDP.name, UDP.src
+      ));
 
     set.step(null, {
       packet: pkt
@@ -786,9 +825,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      UDP.name, UDP.dst,
-      UDP.mkPort('0xBEEF')));
+      null,UDP.mkPort('0xBEEF'),
+      UDP.name, UDP.dst
+      ));
 
     set.step(null, {
       packet: pkt
@@ -916,9 +955,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      TCP.name, TCP.src,
-      TCP.mkPort('65535')));
+      null,TCP.mkPort('65535'),
+      TCP.name, TCP.src
+      ));
 
     set.step(null, {
       packet: pkt
@@ -928,9 +967,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      TCP.name, TCP.dst,
-      TCP.mkPort('65535')));
+      null,TCP.mkPort('65535'),
+      TCP.name, TCP.dst
+      ));
 
     set.step(null, {
       packet: pkt
@@ -952,9 +991,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      SCTP.name, SCTP.src,
-      SCTP.mkPort('65535')));
+      null,SCTP.mkPort('65535'),
+      SCTP.name, SCTP.src
+      ));
 
     set.step(null, {
       packet: pkt
@@ -964,9 +1003,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].dst().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      SCTP.name, SCTP.dst,
-      SCTP.mkPort('65535')));
+      null,SCTP.mkPort('65535'),
+      SCTP.name, SCTP.dst
+      ));
 
     set.step(null, {
       packet: pkt
@@ -984,9 +1023,9 @@ describe('Service: action', function () {
     pkt.push(IPV6.mkIPv6());
 
     set.setField(new Action.SetField(
-      null,
-      IPV6.name, IPV6.src,
-      IPV6.mkAddress('2001:db8:0:0:0:ff00:42:8329')));
+      null,IPV6.mkAddress('2001:db8:0:0:0:ff00:42:8329'),
+      IPV6.name, IPV6.src
+      ));
 
     set.step(null, {
       packet: pkt
@@ -998,9 +1037,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].flabel().toString(16)).toBe('0x000000');
 
     set.setField(new Action.SetField(
-      null,
-      IPV6.name, IPV6.dst,
-      IPV6.mkAddress('FE91:0000:0000:0000:0202:B3FF:FE1E:8329')));
+      null,IPV6.mkAddress('FE91:0000:0000:0000:0202:B3FF:FE1E:8329'),
+      IPV6.name, IPV6.dst
+      ));
 
     set.step(null, {
       packet: pkt
@@ -1012,9 +1051,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].flabel().toString(16)).toBe('0x000000');
 
     set.setField(new Action.SetField(
-      null,
-      IPV6.name, IPV6.flabel,
-      IPV6.mkFlabel('0x333333')));
+      null,IPV6.mkFlabel('0x333333'),
+      IPV6.name, IPV6.flabel
+      ));
 
     set.step(null, {
       packet: pkt
@@ -1228,9 +1267,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].code().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      ICMPV4.name, ICMPV4.type,
-      ICMPV4.mkType('255')));
+      null,ICMPV4.mkType('255'),
+      ICMPV4.name, ICMPV4.type
+      ));
 
     set.step(null, {
       packet: pkt
@@ -1240,9 +1279,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].code().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      ICMPV4.name, ICMPV4.code,
-      ICMPV4.mkCode('127')));
+      null,ICMPV4.mkCode('127'),
+      ICMPV4.name, ICMPV4.code
+      ));
 
     set.step(null, {
       packet: pkt
@@ -1264,9 +1303,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].code().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      ICMPV6.name, ICMPV6.type,
-      ICMPV6.mkType('255')));
+      null,ICMPV6.mkType('255'),
+      ICMPV6.name, ICMPV6.type
+      ));
 
     set.step(null, {
       packet: pkt
@@ -1276,9 +1315,9 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].code().toString()).toBe('0');
 
     set.setField(new Action.SetField(
-      null,
-      ICMPV6.name, ICMPV6.code,
-      ICMPV6.mkCode('127')));
+      null,ICMPV6.mkCode('127'),
+      ICMPV6.name, ICMPV6.code
+      ));
 
     set.step(null, {
       packet: pkt
@@ -1295,9 +1334,9 @@ describe('Service: action', function () {
     var pkt = new Packet.Packet('test');
     pkt.push(ND.mkND());
     set.setField(new Action.SetField(
-      null,
-      ND.name, ND.target,
-      ND.mkTarget('2001:db8:0:0:0:ff00:42:8329')));
+      null,ND.mkTarget('2001:db8:0:0:0:ff00:42:8329'),
+      ND.name, ND.target
+      ));
 
     set.step(null, {
       packet: pkt
@@ -1307,11 +1346,55 @@ describe('Service: action', function () {
     expect(pkt.protocols[1].hw().toString()).toBe('00:00:00:00:00:00');
   });
 
-  it('Output action construction', function(){
+  it('Output action mkType', function(){
     var ap = new Action.ActionProfile(null, 'Internal', 'Output');
     var o = ap.mkType(5);
     expect(o.port_id).toBe(5);
+
+    var j = JSON.stringify(o);
+    var j_ = new Action.Output(JSON.parse(j));
+
+    expect(j_.port_id).toBe(5);
+
+    var j2 = JSON.stringify(ap);
+    var j2_ = new Action.ActionProfile(JSON.parse(j2));
+    expect(j2_.tip).toBe('Forward the packet out a port');
+
+    var o2 = j2_.mkType(5);
+    expect(o2.port_id).toBe(5);
+    expect(j2_.test(5)).toBe(true);
+    expect(j2_.test(-1)).toBe(false);
   });
+
+  it('Output action profile construction', function(){
+    var ap = new Action.ActionProfile(null, 'Internal', 'Output');
+    expect(ap.action).toBe('--n/a--');
+    var j = JSON.stringify(ap);
+    var j_ = new Action.ActionProfile(JSON.parse(j));
+
+    expect(j_.enabled).toBe(true);
+    j_.enabled = false;
+
+    var j2 = JSON.stringify(j_);
+    var j2_ = new Action.ActionProfile(JSON.parse(j2));
+
+    expect(j2_.enabled).toBe(false);
+  });
+
+  it('setField action profile construction', function(){
+    var ap = new Action.ActionProfile(null, 'Ethernet', 'Src', 'set');
+    expect(ap.test('zz')).toBe(false);
+    var a = ap.mkType('zz');
+    expect(a.name).toBe('SetField');
+    expect(a.category).toBe('Ethernet');
+    console.log(a);
+    var b = ap.mkType('aa:bb:cc:dd:ee:ff');
+
+    expect(b.value).toBe('aa:bb:cc:dd:ee:ff');
+
+  });
+
+
 
   it('Action List Construction', function(){
     var al = new Action.List();
@@ -1374,12 +1457,7 @@ describe('Service: action', function () {
     var j_ = new Action.List(JSON.parse(j));
 
     expect(j_.actions.length).toBe(2);
-    expect(j_.actions[1].toValue()).toBe(2);
 
-    var al2 = new Action.List(j_);
-
-    expect(al2.actions.length).toBe(2);
-    expect(al2.actions[1].toValue()).toBe(2);
   });
 
 
