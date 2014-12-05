@@ -11,7 +11,13 @@ angular.module('flowsimUiApp')
   .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match, Action) {
 
   $scope.flow = flow;
-  //$scope.match = flow.match;
+  $scope.match = flow.match;
+
+  // Set the flow match/action profile/capabilities
+  $scope.matchProfiles = flow.capabilities.match;
+  $scope.applyProfiles = flow.capabilities.instruction.apply;
+  $scope.writeProfiles = flow.capabilities.instruction.write;
+
   //$scope.options = Match.getOptions($scope.matches);
   $scope.applyActions = flow.capabilities.instruction.apply;
   $scope.writeActions = flow.capabilities.instruction.write;

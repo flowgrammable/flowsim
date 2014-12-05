@@ -11,56 +11,7 @@
     <div class="panel-heading">
       <h4>Match Set</h4>
     </div>
-
-    <table class="table table-striped table-hover tabled-centered">
-      <thead>
-        <th>Category</th>
-        <th>Field</th>
-        <th>Value</th>
-        <th>Mask</th>
-        <th></th>
-      </thead>
-      <tbody>
-        <tr ng-repeat="match in matchList">
-          <td>{{match.category}}</td>
-          <td>{{match.field}}</td>
-          <td>{{match.value}}</td>
-          <td>{{match.mask}}</td>
-          <td>
-            <span class="glyphicon glyphicon-minus-sign pull-right"
-                  ng-show="$index === $last">
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <select class="form-control" ng-model="match.category"
-                    ng-options="category as category for category in
-                    match.categories" ng-change="updateMatchCategory()">
-                    <option value="">-- Choose Category --</option>
-            </select>
-          </td>
-          <td>
-            <select class="form-control" ng-model="match.field"
-                    ng-options="field as field for field in
-                    match.fields" ng-change="updateMatch()">
-            </select>
-          </td>
-          <td>
-            <div class="form-group"
-            tooltip="{{match ? match.tip : ''}}">
-            <input type="text" class="form-control" ng-model="match.value">
-          </div>
-          </td>
-        <td>
-          <input type="text" class="form-control" ng-model="match.mask">
-        </td>
-        <td>
-          <button class="btn btn-default" ng-click="addMatch()">Add</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <fg-match profiles="matchProfiles" matches="" add-match=""></fg-match>
   </div>
 
   <div class="panel panel-default">

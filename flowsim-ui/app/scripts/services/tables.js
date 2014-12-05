@@ -8,7 +8,8 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Tables', function(Regex, fgConstraints, Match, Instruction, Flow) {
+  .factory('Tables', function(Regex, fgConstraints, Match, Instruction, Flow, 
+                              Protocols) {
 
 /* Default Construction Constants */
 var defTables = 8;
@@ -162,16 +163,17 @@ Table.prototype.del = function(priority, flow) {
 function TableProfile(tableProfile, id) {
   if(_.isObject(tableProfile)) {
     _.extend(this, tableProfile);
-    this.match       = new Match.Profile(tableProfile.match);
-    this.instruction = new Instruction.Profile(tableProfile.instruction);
-    this.miss        = new Instruction.Profile(tableProfile.miss);
+    this.match       = tableProfile.match.clone();
+    this.instruction = tableProfile.instruction.clone();
+    this.miss        = tableProfile.miss.clone();
   } else {
     this.id          = id;
     this.name        = defName + id;
     this.max_entries = defMaxEntries;
-    this.match       = new Match.Profile();
-    this.instruction = new Instruction.Profile();
-    this.miss        = new Instruction.Profile();
+
+    this.match       = new Protocols.MatchProfiles();
+    this.instruction = new Protocols.ActionProfiles();
+    this.miss        = new Protocols.ActionProfiles();
   }
 }
 
