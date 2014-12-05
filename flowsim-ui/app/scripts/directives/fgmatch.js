@@ -90,11 +90,14 @@ angular.module('flowsimUiApp')
           var match;
 
           // Value must be valid
+          // If 
           // If mask is present, then mask must be valid
           if($scope.active.value.length > 0 && 
              $scope.active.type.valueTest($scope.active.value) && 
              ($scope.active.mask.length === 0 || 
-             $scope.active.type.maskTest($scope.active.mask))) {
+             (($scope.active.type.wildcardable && $scope.active.value === '0') ||
+              ($scope.active.type.maskable && 
+               $scope.active.type.maskTest($scope.active.mask))))) {
 
             // Construct the match
             match = $scope.active.type.mkType($scope.active.value, 
