@@ -51,6 +51,95 @@ function is(bits) {
   };
 }
 
+// Construct a function that converts a string to a value with a specific
+// underlying bit precision. If the bit precision is 32 or less, the result
+// is a natural number. If the bit precision is greater than 32, the result
+// is an array of natural numbers where each cell is [0..255].
+//
+// consStr :: String -> Nat | [Nat] if bits > 32
+//
+function consStr(bits) {
+  var bytes = Math.ceil(bits / 8);
+  var hbytes = Math.ciel(bits / 4);
+  return function(val) {
+    var i;
+    var array = [];
+    // We should not have bad input at this point
+    if(!Pattern.test(val)) {
+      throw 'Bad consStr('+bits+')('+val+')';
+    }
+    // Return the value if the precision is 32 or under
+    val = parseInt(val);
+    if(val <= maxFromBits(32) && bits <= 32) {
+      return val;
+    } 
+    // Throw an execption if the value is too large for the precision
+    if(bits <= 32) {
+      throw 'Bad consStr('+bits+')('+val+')';
+    }
+    // Return the easy case of 0
+    if(val === '0') {
+      return _(bytes).range(function() {
+        return 0;
+      });
+    } 
+    // Otherwise must be hex
+    if(/^0x/.test(val)) {
+      // Chop the '0x' prefix for easier handling
+      val.splice(0, 2);
+      // Input is larger than allowable
+      if(val.length > hbytes) {
+        throw 'Bad consStr('+bits+')('+val+')';
+      }
+      // Work from the back of the input
+      val.reverse();
+      for(i=0; i<bytes; ++i) {
+        // We are out of input just return a 0
+        if(val.length === 0) {
+          array.push(0);
+        // We only have a half-octect of input
+        } else if(val.length === 1) {
+          // parse just a half-octect and remove
+          array.push(parseInt(val.splice(0, 1), 16));
+        // Otherwise we have a full octet of input
+        } else {
+          // parse a full octect and remove
+          array.push(parseInt(val.splice(0, 2), 16));
+        }
+      }
+      // Fix the array orientation and return
+      array.reverse();
+      return array;
+    } else {
+      // We don't know what it is ... hard fail
+      throw 'Bad consStr('+bits+')('+val+')';
+    }
+  };
+}
+
+// Construct a funtion that converts either a natural number or array of natural
+// numbers to a user display string.
+//
+// toString :: Nat | [Nat] -> String
+//
+function toString(bits) {
+  return function(value, base) {
+    if(_(value).isArray()) {
+      return '0x'+_(value).map(function(octet) {
+        return UInt.padZeros(octet.toString(16), 2);
+      });
+    } else if(_(value).isFinite()) {
+      if(base === 16) {
+        return '0x'+UInt.padZeros(value.toString(16), 2*(bits/8));
+      } else {
+        return value.toString(base);
+      }
+    } else {
+      throw 'toString on bad value: '+value;
+    }
+  };
+}
+
 function UInt(uint, value, bytes) {
   if(_.isObject(uint)) {
     if(uint.bytes > 4) {
@@ -287,6 +376,8 @@ return {
   maxFromBits: maxFromBits,
   maxFromBytes: maxFromBytes,
   is: is,
+  consStr: consStr,
+  toString: toString,
   UInt: UInt,
   and: and,
   or: or,

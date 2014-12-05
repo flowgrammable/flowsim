@@ -262,7 +262,6 @@ function Field(params) {
 }
 
 Field.prototype.attachDefaultFunctions = function() {
-  var bitwidth = this.bitwidth;
   // Attach a generic string input test function
   if(this.testStr === null) {
     this.testStr = UInt.is(this.bitwidth);
@@ -276,23 +275,6 @@ Field.prototype.attachDefaultFunctions = function() {
   // Attach a generic toString function
   if(this.toString === null) {
     this.toString = UInt.toString(this.bitwidth);
-    /*
-    this.toString = function(value, base) {
-      if(_(value).isArray) {
-        return '0x'+_(value).map(function(octet) {
-          return UInt.padZeros(octet.toString(16), 2);
-        });
-      } else if(_(value).isFinite()) {
-        if(base === 16) {
-          return '0x'+UInt.padZeros(value.toString(16), 2*(bitwidth/8));
-        } else {
-          return value.toString(base);
-        }
-      } else {
-        throw 'toString on bad value: '+value;
-      }
-    };
-    */
   }
   setToStringFunction(this.protocol, this.name, this.toString);
 };
