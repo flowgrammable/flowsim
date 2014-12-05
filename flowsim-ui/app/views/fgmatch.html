@@ -46,7 +46,8 @@
       <td>
         <div ng-class="{'has-error': active.mask.length > 0 &&
                                     ((active.type.wildcardable &&
-                                     active.mask !== '0') ||
+                                     !active.type.maskable &&
+                                      active.mask !== '0') ||
                                      active.type.maskable &&
                                      !active.type.maskTest(active.mask))}">
           <input type="text" class="form-control" ng-model="active.mask"
