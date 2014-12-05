@@ -4,7 +4,7 @@ angular.module('flowsimUiApp')
   .factory('Internal', function() {
 
 var Internal = {
-  name: 'Intenral',
+  name: 'Internal',
   fields: [{
     name: 'In_Port',
     bitwidth: 32,

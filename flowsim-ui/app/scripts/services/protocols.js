@@ -65,6 +65,7 @@ ActionProfiles.prototype.clone = function() {
 };
 
 return {
+  Root: ['Internal', 'Ethernet'],
   MatchProfiles: MatchProfiles,
   ActionProfiles: ActionProfiles
 };
