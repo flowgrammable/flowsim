@@ -163,9 +163,9 @@ Table.prototype.del = function(priority, flow) {
 function TableProfile(tableProfile, id) {
   if(_.isObject(tableProfile)) {
     _.extend(this, tableProfile);
-    this.match       = tableProfile.match.clone();
-    this.instruction = tableProfile.instruction.clone();
-    this.miss        = tableProfile.miss.clone();
+    this.match       = new Protocols.MatchProfiles(tableProfile.match);
+    this.instruction = new Protocols.ActionProfiles(tableProfile.instruction);
+    this.miss        = new Protocols.ActionProfiles(tableProfile.miss);
   } else {
     this.id          = id;
     this.name        = defName + id;
