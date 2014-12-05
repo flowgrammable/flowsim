@@ -151,10 +151,9 @@ Set.prototype.summarize = function() {
   if(this.matches.length === 0) {
     return ['*'];
   }
-  return ['*'];
-  /* _(_(this.matches).map(function(match) {
-    return match.summarize();
-  })).uniq(); */
+  return _(_(this.matches).map(function(match) {
+    return match.summary;
+  })).unique();
 };
 
 function createMatch(category, field, key, wildcard, maskable, mask) {

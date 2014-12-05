@@ -65,7 +65,7 @@ function getToStringFunction(protocol, field) {
   return toStringFuncs[key];
 }
 
-function Match(match, protocol, field, bitwidth, tip, value, mask) {
+function Match(match, protocol, summary, field, bitwidth, tip, value, mask) {
   var consFunc;
   if(_(match).isObject()) {
     _.extend(this, match);
@@ -73,6 +73,7 @@ function Match(match, protocol, field, bitwidth, tip, value, mask) {
   } else {
     // Store some of the metadata
     this.protocol     = protocol;
+    this.summary      = summary;
     this.field        = field;
     this.bitwidth     = bitwidth;
     this.tip          = tip;
@@ -81,7 +82,6 @@ function Match(match, protocol, field, bitwidth, tip, value, mask) {
     this.mask  = mask;
     // If no mask, make it an exact match
     consFunc = getConsFunction(this.protocol, this.field);
-    console.log(consFunc);
     if(!mask || mask.length === 0) {
       this._match = UInt.mkExact(
         new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8))
@@ -104,13 +104,14 @@ Match.prototype.match = function(value) {
   return this._match.match(value);
 };
 
-function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
-                      maskable) {
+function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled, 
+                      wildcardable, maskable) {
   if(_(mp).isObject()) {
     _.extend(this, mp);
   } else {
     // Fixed properties
     this.protocol = protocol;
+    this.summary  = summary;
     this.field    = field;
     this.bitwidth = bitwidth;
     this.tip      = tip;
@@ -132,8 +133,8 @@ function MatchProfile(mp, protocol, field, bitwidth, tip, enabled, wildcardable,
   }
   // Match Constructor
   this.mkType = function(value, mask) {
-    return new Match(null, this.protocol, this.field, this.bitwidth, this.tip,
-                     value, mask);
+    return new Match(null, this.protocol, this.summary, this.field, 
+                     this.bitwidth, this.tip, value, mask);
   };
 
   // Attach the necessary input test function -- profile
@@ -242,7 +243,7 @@ function Field(params) {
   // Display string for this field
   this.name = params.name;
   // Display string that is small
-  this.shortName = params.shortName || this.name.toLowerCase();
+  this.summary = params.shortName || this.name.toLowerCase().slice(0, 4);
   // Bit precision of this field
   this.bitwidth = params.bitwidth;
   // Can this field be matched against
@@ -284,6 +285,7 @@ Field.prototype.getMatchProfile = function() {
     null,
     // Display names for the UI
     this.protocol,
+    this.summary,
     this.name,
     this.bitwidth,
     this.tip,
@@ -321,7 +323,8 @@ function Protocol(params) {
   this.popable = params.popable || false;
   // Construct the protocol fields
   this.fields = _(params.fields).map(function(field) {
-    field.protocol = this.name;
+    field.protocol   = this.name;
+    field.shortName  = this.shortName;
     return new Field(field);
   }, this);
   // Attach a name/key for each field
