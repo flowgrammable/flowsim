@@ -109,10 +109,11 @@ angular.module('flowsimUiApp')
             $scope.config.push(match);
           
             // Clear the dependent properties
-            $scope.active.field = '';
-            $scope.active.value = '';
-            $scope.active.mask  = '';
-            $scope.active.type = null;
+            $scope.active.protocol = '';
+            $scope.active.field    = '';
+            $scope.active.value    = '';
+            $scope.active.mask     = '';
+            $scope.active.type     = null;
           }
         };
 
