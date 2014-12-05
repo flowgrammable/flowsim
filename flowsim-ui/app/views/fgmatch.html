@@ -22,14 +22,18 @@
     <tr>
       <td>
         <select class="form-control" ng-model="active.protocol"
-            ng-options="protocol as protocol for protocol in active.protocols"
             ng-change="updateProtocol()">
+          <option ng-repeat="protocol in active.protocols" value="{{protocol}}">
+            {{protocol}}
+          </option>
         </select>
       </td>
       <td>
         <select class="form-control" ng-model="active.field"
-            ng-options="field as field for field in active.fields" 
             ng-change="updateField()">
+          <option ng-repeat="field in active.fields" value="{{field}}">
+            {{field}}
+          </option>
         </select>
       </td>
       <td>

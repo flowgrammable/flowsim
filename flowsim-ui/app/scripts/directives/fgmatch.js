@@ -26,9 +26,9 @@ angular.module('flowsimUiApp')
 
         $scope.active = {
           protocols: Protocols.Root,
-          protocol: '',
+          protocol: '-- choose protocol --',
           fields: [],
-          field: '',
+          field: '-- choose field --',
           value: '',
           mask: '',
           type: null
