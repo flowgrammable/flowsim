@@ -158,6 +158,7 @@ angular.module('flowsimUiApp')
             $scope.use($scope.active.type);
             // Clear the dependent properties
             $scope.active.protocol = '';
+            $scope.active.fields   = [];
             $scope.active.field    = '';
             $scope.active.value    = '';
             $scope.active.mask     = '';
