@@ -71,7 +71,9 @@ function Table(table, tableProfile) {
     this.capabilities      = new TableProfile(table.capabilities);
     this.priorities        = _(table.priorities).map(function(priority) {
                                     return new Priority(priority); });
-    this.prioritiesPresent = _.clone(table.prioritiesPresent);
+    this.prioritiesPresent = _(table.priorities).each(function(priority) {
+      this.prioritiesPresent[priority.priority] = priority;
+    }, this);
 
     // FIXME ... need to add miss handler
 
