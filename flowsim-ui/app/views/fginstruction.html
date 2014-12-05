@@ -1,0 +1,92 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Instruction Set</h4>
+    <span ng-repeat="ins in instructions">
+      <button type="button" class="btn btn-xs btn-default"
+              ng-click="ins.enabled = !ins.enabled;
+                        active.index = active.index === $index ? -1 : active.index" 
+              ng-class="{'btn-primary': ins.enabled}">
+        {{ins.name}}
+      </button>
+    </span>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <ul class="list-group">
+        <li ng-repeat="ins in instructions" class="list-group-item"
+            ng-class="{'active': active.index === $index}"
+            ng-show="ins.enabled" ng-click="active.index = $index">
+          {{ins.name}}
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-10">
+      <div ng-show="active.index === 0">
+        <br>
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              Meter Id
+            </label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control"
+                     ng-model="active.meter">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div ng-show="active.index === 1">
+        <fg-apply-actions toplevel="applyActions" action-list="applyList"
+                          add-action="addApplyAction">
+        </fg-apply-actions>
+      </div>
+      <div ng-show="active.index === 2">
+        <h3>Clear the Action Set</h3>
+      </div>
+      <div ng-show="active.index === 3">
+        <fg-write-actions toplevel="writeActions" action-list="writeList"
+                          add-action="addWriteAction">
+        </fg-write-actions>
+      </div>
+      <div ng-show="active.index === 4">
+        <br>
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              Value
+            </label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control"
+              ng-model="active.metadataValue">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              Mask
+            </label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control"
+              ng-model="active.metadataMask">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div ng-show="active.index === 5">
+        <br>
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              Table Id
+            </label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control"
+                     ng-model="active.gotoValue">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
