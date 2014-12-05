@@ -6,7 +6,7 @@ angular.module('flowsimUiApp')
       templateUrl: 'views/fginstruction.html',
       restrict: 'E',
       scope: {
-        capabilities: '='
+        flow: '='
       },
       controller: function($scope) {
         $scope.active = {

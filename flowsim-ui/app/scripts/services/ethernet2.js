@@ -51,9 +51,6 @@ var Ethernet = {
     name: 'Type',
     bitwidth: 16,
     matchable: true,
-    dispStr: function(val) { 
-      return '0x' + UInt.padZeros(val.toString(16), 4);
-    },
     tip: 'Ethernet Payload Type/Length'
   }]
 };

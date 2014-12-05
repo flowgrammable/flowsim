@@ -307,7 +307,12 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
   };
 
   // Attach the input test function -- object cons
-  this.valueTest = getTestFunction(this.protocol, this.field);
+  if(this.field === 'tag') {
+    // FIXME ... this is a hack
+    this.valueTest = function() { return true; }
+  } else {
+    this.valueTest = getTestFunction(this.protocol, this.field);
+  }
 }
 
 ActionProfile.prototype.clone = function() {
