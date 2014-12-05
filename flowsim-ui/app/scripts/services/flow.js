@@ -36,6 +36,13 @@ Flow.prototype.match = function(key) {
   }
 };
 
+Flow.prototype.assign = function(flow) {
+  this.priority     = flow.priority;
+  this.match        = flow.match;
+  this.ins          = flow.ins;
+  this.capabilities = flow.capabilities;
+}
+
 Flow.prototype.equal = function(flow) {
   return this.match.equal(flow.match);
 };

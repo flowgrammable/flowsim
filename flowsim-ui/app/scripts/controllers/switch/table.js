@@ -57,7 +57,7 @@ angular.module('flowsimUiApp')
           return flow.clone(); 
         } }
       }).result.then(function (nflow) {
-        $scope.table[idx] = nflow;
+        flow.assign(nflow);
         $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
       });
     }
