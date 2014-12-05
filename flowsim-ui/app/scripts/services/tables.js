@@ -27,7 +27,6 @@ function Priority(priority, priValue) {
   if(_.isObject(priority)) {
     _.extend(this, priority);
     this.flows = _(priority.flows).map(function(flow) {
-      //return flow.clone();
       return new Flow.Flow(flow);
     });
     this.priority = priority.priority;

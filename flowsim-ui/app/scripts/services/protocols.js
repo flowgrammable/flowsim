@@ -8,14 +8,14 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Protocols', function(Noproto, Internal, Ethernet2) {
+  .factory('Protocols', function(Noproto, Internal, Ethernet2, VLAN2) {
 
 // Inser new protocols below ...
  
 var Protocols = [
   Internal.Internal,
   Ethernet2.Ethernet,
-  //VLAN2.VLAN,
+  VLAN2.VLAN,
   //MPLS2.MPLS,
   //ARP2.ARP,
   //IPv42.IPv4,
@@ -67,7 +67,7 @@ ActionProfiles.prototype.clone = function() {
 // Dependency graph
 var _Graph = {
   Ethernet: Ethernet2.Payloads,
-  //VLAN: VLAN2.Payloads,
+  VLAN: VLAN2.Payloads,
   //MPLS: MPLS2.Payloads,
   //ARP: ARP2.Payloads,
   //IPv4: IPv42.Payloads,
