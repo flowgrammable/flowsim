@@ -12,6 +12,7 @@ angular.module('flowsimUiApp')
 
   $scope.flow = flow;
   $scope.match = flow.match;
+  console.log('match set len: '+flow.match.get().length);
   console.log('match: '+flow.match.get());
 
   // Set the flow match/action profile/capabilities

@@ -18,8 +18,9 @@ angular.module('flowsimUiApp')
       controller: function($scope) {
 
         // Get the underlying match set
-        console.log($scope.matchSet);
+        console.log('mS: '+$scope.matchSet);
         $scope.matches = $scope.matchSet.get();
+        console.log('ms: '+$scope.matches);
        
         // Initialize our control variables
         $scope.active = {

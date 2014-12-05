@@ -379,6 +379,8 @@ Protocol.prototype.getActionProfiles = function() {
 // Extraction
 
 return {
+  MatchProfile: MatchProfile,
+  ActionProfile: ActionProfile,
   Protocol: Protocol
 };
 
