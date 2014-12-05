@@ -8,17 +8,17 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Flow', function(Match, Instruction) {
+  .factory('Flow', function(Noproto, Instruction) {
 
 function Flow(flow, priority, capabilities) {
   if(_.isObject(flow)) {
     _.extend(this, flow);
-    this.match        = new Match.Set(flow.match);
+    this.match        = new Noproto.MatchSet(flow.match);
     this.ins          = new Instruction.Set(flow.ins);
     this.capabilities = flow.capabilities;
   } else {
     this.priority     = priority;
-    this.match        = new Match.Set();
+    this.match        = new Noproto.MatchSet();
     this.ins          = new Instruction.Set();
     this.capabilities = capabilities;
   }

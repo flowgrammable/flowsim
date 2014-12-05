@@ -54,11 +54,6 @@ angular.module('flowsimUiApp')
         controller: 'SwitchFlowCtrl',
         size: 'lg',
         resolve: { flow: function() { 
-          var tmp = flow.clone();
-          console.log('base len: '+flow.match.get().length);
-          console.log('base p: '+flow.match.get()[0].protocol);
-          console.log('clone len: '+tmp.match.get().length);
-          console.log('clone p: '+tmp.match.get()[0].protocol);
           return flow.clone(); 
         } }
       }).result.then(function (nflow) {

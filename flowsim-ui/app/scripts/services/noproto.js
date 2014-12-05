@@ -18,6 +18,7 @@ var consFuncs = {};
 // store of test functions
 var testFuncs = {};
 
+// store of pretty printer functions
 var toStringFuncs = {};
 
 // test function store setter
@@ -83,15 +84,15 @@ function Match(match, protocol, summary, field, bitwidth, tip, value, mask) {
   }
   // If no mask, make it an exact match
   consFunc = getConsFunction(this.protocol, this.field);
-  if(!mask || mask.length === 0) {
+  if(!this.mask || this.mask.length === 0) {
     this._match = UInt.mkExact(
-      new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8))
+      new UInt.UInt(null, consFunc(this.value), Math.ceil(this.bitwidth / 8))
     );
   } else {
     // otherwise use the mask
     this._match = new UInt.Match(null, 
-      new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8)),
-      new UInt.UInt(null, consFunc(mask), Math.ceil(this.bitwidth / 8))
+      new UInt.UInt(null, consFunc(this.value), Math.ceil(this.bitwidth / 8)),
+      new UInt.UInt(null, consFunc(this.mask), Math.ceil(this.bitwidth / 8))
     );
   }
 }
@@ -157,7 +158,7 @@ MatchProfile.prototype.clone = function() {
 };
 
 function MatchSet(ms) {
-  if(_(ms).isObject) {
+  if(_(ms).isObject()) {
     this.set = _(ms.set).map(function(match) {
       return new Match(match);
     });
@@ -460,6 +461,7 @@ Protocol.prototype.getActionProfiles = function() {
 
 return {
   MatchProfile: MatchProfile,
+  MatchSet: MatchSet,
   ActionProfile: ActionProfile,
   Protocol: Protocol
 };
