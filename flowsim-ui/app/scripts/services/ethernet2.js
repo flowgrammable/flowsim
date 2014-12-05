@@ -59,20 +59,12 @@ var Ethernet = {
 };
 
 var Payloads = {
-  VLAN: {
-    type: 0x8100
-  }, 
-  MPLS: {
-    type: 0x8847
-  },
-  ARP: {
-    type: 0x0806
-  },
-  IPv4: {
-    type: 0x0800
-  },
-  IPv6: {
-    type: 0x86dd
+  Type: {
+    '0x8100': 'VLAN',
+    '0x8847': 'MPLS',
+    '0x0806': 'ARP',
+    '0x0800': 'IPv4',
+    '0x86dd': 'IPv6'
   }
 };
 

@@ -42,7 +42,7 @@ angular.module('flowsimUiApp')
           function(profile) {
             return profile.clone();
           })).filter(function(profile) {
-            return _(Protocols.Root).indexOf(profile.protocol) != -1;
+            return _(Protocols.Root).indexOf(profile.protocol) !== -1;
           });
         
         // Provide a unique array of strings for display
@@ -56,7 +56,8 @@ angular.module('flowsimUiApp')
         // Intialize the used profile to empty
         $scope.usedProfiles = [];
 
-        $scope.use = function(profile) {
+        // Update our book keeping for using a profile
+        $scope.use = function(profile, value) {
           // Remove from availableProfiles
           $scope.availableProfiles = _($scope.availableProfiles).reject(
             function(_profile) {
@@ -65,11 +66,18 @@ angular.module('flowsimUiApp')
             });
           // Add to usedProfiles
           $scope.usedProfiles.push(profile);
+          // Locate any new profiles
+          $scope.availableProfiles.concat(_($scope.enabledProfiles).filter(
+            function(_profile) {
+              return Protocols.Graph(profile.protocol, profile.field, value) ===
+                     _profile.protocol;
+            }));
           // Update availabe list
           $scope.updateProtocolsDisplay();
         };
 
-        $scope.free = function(profile) {
+        // Update our book keeping for freeing a profile
+        $scope.free = function(profile, value) {
           // Remove from usedProfiles
           $scope.usedProfiles = _($scope.usedProfiles).reject(
             function(_profile) {
@@ -78,6 +86,12 @@ angular.module('flowsimUiApp')
             });
           // Add to availableProfiles
           $scope.availableProfiles.push(profile);
+          // Remove any available protocols that are dependencies of profile
+          $scope.availableProfiles = _($scope.availableProfiles).reject(
+            function(_profile) {
+              return Protocols.Graph(profile.protocol, profile.field, value) ===
+                     _profile.protocol;
+            });
           // Update availabe list
           $scope.updateProtocolsDisplay();
         };
@@ -135,7 +149,7 @@ angular.module('flowsimUiApp')
           // Clear the dependent properties
           $scope.active.value = '';
           $scope.active.mask  = '';
-        }
+        };
 
         $scope.addMatch = function() {
           var match;
