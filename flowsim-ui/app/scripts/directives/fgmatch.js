@@ -13,14 +13,12 @@ angular.module('flowsimUiApp')
       restrict: 'E',
       scope: {
         profiles: '=',
-        matchSet: '='
+        config: '='
       },
       controller: function($scope) {
 
         // Get the underlying match set
-        console.log('mS: '+$scope.matchSet);
-        $scope.matches = $scope.matchSet.get();
-        console.log('ms: '+$scope.matches);
+        $scope.matches = $scope.config.get();
        
         // Initialize our control variables
         $scope.active = {
@@ -95,7 +93,6 @@ angular.module('flowsimUiApp')
           var match;
 
           // Value must be valid
-          // If 
           // If mask is present, then mask must be valid
           if($scope.active.value.length > 0 && 
              $scope.active.type.valueTest($scope.active.value) && 
@@ -109,7 +106,7 @@ angular.module('flowsimUiApp')
                                               $scope.active.mask);
 
             // Use the callback
-            $scope.matchSet.push(match);
+            $scope.config.push(match);
           
             // Clear the dependent properties
             $scope.active.field = '';
@@ -120,7 +117,7 @@ angular.module('flowsimUiApp')
         };
 
         $scope.popMatch = function() {
-          $scope.matchSet.pop();
+          $scope.config.pop();
         };
       }
     };
