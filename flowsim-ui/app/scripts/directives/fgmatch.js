@@ -17,23 +17,46 @@ angular.module('flowsimUiApp')
         addMatchCB: '&addMatch'
       },
       controller: function($scope) {
-
-        // Grab the toplevel profiles
-        $scope.availableProfiles = _($scope.profiles.profiles).filter(
-          function(profile) {
-            return profile.enabled;
-          });
-
+        
         $scope.active = {
-          protocols: Protocols.Root,
-          protocol: '-- choose protocol --',
+          protocols: [],
+          protocol: '',
           fields: [],
-          field: '-- choose field --',
+          field: '',
           value: '',
           mask: '',
           type: null
         };
 
+        // Grab the toplevel profiles
+        $scope.enabledProfiles = _($scope.profiles.profiles).filter(
+          function(profile) {
+            return profile.enabled;
+          });
+
+        // Initialize based on root
+        $scope.availableProfiles = _(_($scope.enabledProfiles).map(
+          function(profile) {
+            return profile.clone();
+          })).filter(function(profile) {
+            return _(Protocols.Root).indexOf(profile.protocol) != -1;
+          });
+
+        // Provide a unique array of strings for display
+        $scope.updateProtocolsDisplay = function() {
+          $scope.active.protocols = _(_($scope.availableProfiles).map(
+            function(profile) { 
+              return profile.protocol; 
+            })).unique();
+        };
+
+        // Go through each active match and 
+        _($scope.matches).each(function(match) {
+        });
+
+        // Update the protocol display list
+        $scope.updateProtocolsDisplay();
+          
         $scope.updateProtocol = function() {
 
           $scope.active.fields = _(_($scope.availableProfiles).filter(
