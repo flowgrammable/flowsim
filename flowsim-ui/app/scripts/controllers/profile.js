@@ -119,7 +119,7 @@ angular.module('flowsimUiApp')
           tips: function() { return $scope.metadata.tips.Tables.Table.Match; },
           tests: function() { return $scope.metadata.tests.Tables.Table.Match; },
           match: function () {
-            return $scope.profile.tables.tables[idx].match;
+            return $scope.profile.tables.tables[idx].match.clone();
           }
         }
       }).result.then(function (match) {
@@ -137,7 +137,7 @@ angular.module('flowsimUiApp')
           tips: function() { return $scope.metadata.tips.Tables.Table.Instruction; },
           tests: function() { return $scope.metadata.tests.Tables.Table.Instruction; },
           instruction: function () {
-            return $scope.profile.tables.tables[idx].instruction;
+            return $scope.profile.tables.tables[idx].instruction.clone();
           }
         }
       }).result.then(function (instruction) {
@@ -155,7 +155,7 @@ angular.module('flowsimUiApp')
           tips: function() { return $scope.metadata.tips.Tables.Table.Miss; },
           tests: function() { return $scope.metadata.tests.Tables.Table.Miss; },
           instruction: function() {
-            return $scope.profile.tables.tables[idx].miss;
+            return $scope.profile.tables.tables[idx].miss.clone();
           }
         }
       }).result.then(function(miss) {

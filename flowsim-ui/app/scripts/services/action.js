@@ -14,26 +14,314 @@ angular.module('flowsimUiApp')
 var TIPS = {
   Internal: {
     Output: {
-      '--n/a--': "Forward the packet out a port"
+      '--n/a--': 'Forward the packet out a port'
     },
-    group: {
-      '--n/a--': "Forward the packet to a group"
+    Group: {
+      '--n/a--': 'Forward the packet to a group'
+    },
+    Queue: {
+      '--n/a--': 'Use the designated queue on the egress port'
     }
   },
   Ethernet: {
     Src: {
-      set: "Write Ethernet sourcd"
+      set: 'Write Ethernet source'
     },
     Dst: {
-      set: "Write Ethernet destination"
+      set: 'Write Ethernet destination'
+    }
+  },
+  VLAN: {
+    ID: {
+      set: 'set the outter VLAN ID'
+    },
+    Priority: {
+      set: 'set the VLAN Priority'
+    },
+    Tag: {
+      push: 'push a new VLAN tag',
+      pop: 'pop the outter VLAN tag'
+    }
+  },
+  MPLS: {
+    Label: {
+      set: 'set the outter MPLS label'
+    },
+    TTL: {
+      set: 'set MPLS ttl',
+      dec: 'decrement MPLS TTL',
+      copy_in: 'Copy TTL in',
+      copy_out: 'Copy TTL out'
+    },
+    BOS: {
+      set: 'set Bottom of Stack bit'
+    },
+    Tag: {
+      push: 'push a new outer label',
+      pop: 'pop the outer label'
+    }
+  },
+  ARP: {
+    Opcode: {
+      set: 'Set ARP opcode'
+    },
+    SHA: {
+      set: 'Set source hardware address'
+    },
+    SPA: {
+      set: 'Set source protocol address'
+    },
+    THA: {
+      set: 'Set target hardware address'
+    },
+    TPA: {
+      set: 'Set target protocol address'
+    }
+  },
+  IPv4: {
+    DSCP: {
+      set: 'Set differentiated services code type'
+    },
+    ECN : {
+      set: 'Set explicit congestion notification'
+    },
+    Proto: {
+      set: 'Set protocol type'
+    },
+    Src: {
+      set: 'Set source address'
+    },
+    Dst: {
+      set: 'Set destination address'
+    },
+    TTL: {
+      set: 'Set TTL',
+      dec: 'Decrement TTL',
+      copy_out: 'Copy TTL out',
+      copy_in: 'Copy TTL in'
+    }
+  },
+  IPv6: {
+    Src: {
+      set: 'Set source address'
+    },
+    Dst: {
+      set: 'Set destination address'
+    },
+    Flabel: {
+      set: 'Set flabel'
+    },
+    TTL: {
+      set: 'Set TTL',
+      dec: 'Decrement TTL',
+      copy_out: 'Copy TTL out',
+      copy_in: 'Copy TTL in'
+    }
+  },
+  ICMPv4: {
+    Type: {
+      set: 'Set type'
+    },
+    Code: {
+      set: 'Set code'
+    }
+  },
+  ICMPv6: {
+    Type: {
+      set: 'Set type'
+    },
+    Code: {
+      set: 'Set code'
+    }
+  },
+  TCP: {
+    Src: {
+      set: 'Set source port'
+    },
+    Dst: {
+      set: 'Set destination port'
+    }
+  },
+  UDP: {
+    Src: {
+      set: 'Set source port'
+    },
+    Dst: {
+      set: 'Set destination port'
+    }
+  },
+  SCTP: {
+    Src: {
+      set: 'Set source port'
+    },
+    Dst: {
+      set: 'Set destination port'
+    }
+  },
+  ND: {
+    Target: {
+      set: 'Set target'
+    },
+    HW: {
+      set: 'Set hardware address'
     }
   }
+
 };
 
 var TESTS = {
   Internal: {
     Output: {
       '--n/a--': fgConstraints.isUInt(0, 0xffff)
+    },
+    Group: {
+      '--n/a--': fgConstraints.isUInt(0, 0xffffffff)
+    },
+    Queue: {
+      '--n/a--': fgConstraints.isUInt(0, 0xffffffff)
+    }
+  },
+  Ethernet: {
+    Src: {
+      set: ETHERNET.MAC.is
+    },
+    Dst: {
+      set: ETHERNET.MAC.is
+    }
+  },
+  VLAN: {
+    ID: {
+      set: VLAN.TESTS.vid
+    },
+    Priority: {
+      set: VLAN.TESTS.pcp
+    },
+    Tag: {
+      push: function() { return true; },
+      pop: function() { return true; }
+    }
+  },
+  MPLS: {
+    Label: {
+      set: MPLS.TESTS.label,
+    },
+    TTL: {
+      set: MPLS.TESTS.ttl,
+      dec: function() { return true; },
+      copy_in: function() { return true; },
+      copy_out: function() { return true; }
+    },
+    BOS: {
+      set: MPLS.TESTS.bos
+    },
+    Tag: {
+      push: function() { return true; },
+      pop: function() { return true; }
+    }
+  },
+  ARP: {
+    Opcode: {
+      set: fgConstraints.isUInt(0,0x2)
+    },
+    SHA: {
+      set: ETHERNET.MAC.is
+    },
+    SPA: {
+      set: IPV4.Address.is
+    },
+    THA: {
+      set: ETHERNET.MAC.is
+    },
+    TPA: {
+      set: IPV4.Address.is
+    }
+  },
+  IPv4: {
+    DSCP: {
+      set: IPV4.TESTS.dscp
+    },
+    ECN: {
+      set: IPV4.TESTS.ecn
+    },
+    Proto: {
+      set: IPV4.TESTS.proto
+    },
+    Src: {
+      set: IPV4.Address.is
+    },
+    Dst: {
+      set: IPV4.Address.is
+    },
+    TTL: {
+      set: IPV4.TESTS.ttl,
+      dec: function() { return true; },
+      copy_out: function() { return true; },
+      copy_in: function() { return true; }
+    }
+  },
+  IPv6: {
+    Src: {
+      set: IPV6.Address.is
+    },
+    Dst: {
+      set: IPV6.Address.is
+    },
+    Flabel: {
+      set: IPV6.TESTS.flabel
+    },
+    TTL: {
+      set: IPV6.TESTS.ttl,
+      dec: function() { return true; },
+      copy_out: function() { return true; },
+      copy_in: function() { return true; },
+    }
+  },
+  ICMPv4: {
+    Type: {
+      set: ICMPV4.TESTS.type
+    },
+    Code: {
+      set: ICMPV4.TESTS.code
+    }
+  },
+  ICMPv6: {
+    Type: {
+      set: ICMPV6.TESTS.type
+    },
+    Code: {
+      set: ICMPV6.TESTS.code
+    }
+  },
+  TCP: {
+    Src: {
+      set: TCP.TESTS.src
+    },
+    Dst: {
+      set: TCP.TESTS.dst
+    }
+  },
+  UDP: {
+    Src: {
+      set: UDP.TESTS.src
+    },
+    Dst: {
+      set: UDP.TESTS.dst
+    }
+  },
+  SCTP: {
+    Src: {
+      set: SCTP.TESTS.src
+    },
+    Dst: {
+      set: SCTP.TESTS.dst
+    }
+  },
+  ND: {
+    Target: {
+      set: ND.TESTS.target
+    },
+    HW: {
+      set: ND.TESTS.hw
     }
   }
 };
@@ -42,19 +330,165 @@ var Types = {
   Internal: {
     Output: {
       '--n/a--': Output
+    },
+    Group: {
+       '--n/a--': Group
+    },
+    Queue: {
+       '--n/a--': Queue
+    }
+  },
+  Ethernet: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  VLAN: {
+    ID: {
+      set: SetField
+    },
+    Priority: {
+      set: SetField
+    },
+    Tag: {
+      push: PushVLAN,
+      pop: PopVLAN
+    }
+  },
+  MPLS: {
+    Label: {
+      set: SetField
+    },
+    TTL: {
+      set: SetTTL.bind
+    },
+    BOS: {
+      set: SetField
+    },
+    Tag: {
+      push: PushMPLS,
+      pop: PopMPLS
+    }
+  },
+  ARP: {
+    Opcode: {
+      set: SetField
+    },
+    THA: {
+      set: SetField
+    },
+    TPA: {
+      set: SetField
+    },
+    SHA: {
+      set: SetField
+    },
+    SPA: {
+      set: SetField
+    }
+  },
+  IPv4: {
+    DSCP: {
+      set: SetField
+    },
+    ECN : {
+      set: SetField
+    },
+    Proto: {
+      set: SetField
+    },
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    },
+    TTL: {
+      set: SetField,
+      dec: DecTTL,
+      copy_out: CopyTTLOut,
+      copy_in: CopyTTLIn
+    }
+  },
+  IPv6: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    },
+    Flabel: {
+      set: SetField
+    },
+    TTL: {
+      set: SetField,
+      dec: DecTTL,
+      copy_out: CopyTTLOut,
+      copy_in: CopyTTLIn
+    }
+  },
+  ICMPv4: {
+    Type: {
+      set: SetField
+    },
+    Code: {
+      set: SetField
+    }
+  },
+  ICMPv6: {
+    Type: {
+      set: SetField
+    },
+    Code: {
+      set: SetField
+    }
+  },
+  TCP: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  UDP: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  SCTP: {
+    Src: {
+      set: SetField
+    },
+    Dst: {
+      set: SetField
+    }
+  },
+  ND: {
+    Target: {
+      set: SetField
+    },
+    HW: {
+      set: SetField
     }
   }
 };
 
 function getGeneric(name, store, category, field, action) {
   if(!_(store).has(category)) {
-    throw name + ' missing: ' + category;
+    throw name+' missing: '+category;
   }
   if(!_(store[category]).has(field)) {
-    throw name + ' missing: ' + field;
+    throw name+'['+category+']'+' missing: '+field;
   }
   if(!_(store[category][field]).has(action)) {
-    throw name + ' missing: ' + action;
+    throw name+'['+category+']'+'['+field+']'+' missing: '+action;
   }
   return store[category][field][action];
 }
@@ -96,10 +530,11 @@ function ActionProfile(ap, category, field, action) {
      console.log(_(arguments).keys());
      console.log(_(arguments).values());
     var Type = getType(that.category, that.field, that.action);
-    var args = [Type, null, null].concat(_(arguments).values());
+    var args = [Type, null, null].concat(Array.prototype.slice.call(arguments));
     var T = _.bind.apply(null, args);
     var t = new T();
     t.category = that.category;
+    t.protocol = that.category;
     t.field = that.field;
     t.action = that.action;
     return t;
@@ -110,36 +545,13 @@ ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
 };
 
-function ActionField_UI(category, name, action, Type ){
-  this.category = category;
-  this.name     = name;
-  this.action   = action;
-  this.type     = Type;
-  this.tip      = TIPS[name];
-  this.test     = TESTS[name];
-  var that      = this;
-  this.mkType = function() {
-    var args = [Type, null, null].concat(_(arguments).values());
-    var T = _.bind.apply(null, args);
-    var t = new T();
-    t.category = that.category;
-    t.name = that.name;
-    t.action = that.action;
-    return t;
-  };
-}
-
-ActionField_UI.prototype.clone = function() {
-  return new ActionField_UI(this);
-};
-
-function mkOutput(){
+function mkOutputProfile(){
   return new ActionProfile(
     null,
     'Internal',
     'Output'
   );
-};
+}
 
 function Output(output, port_id) {
   if(_.isObject(output)) {
@@ -165,14 +577,6 @@ Output.prototype.step = function(dp, ctx) {
   dp.output(this.port_id, null, ctx);
 };
 
-function mkOutputField() {
-  return new ActionField_UI(
-    null,       // default construction
-    'Internal', // Category of action
-    'Output'    // Name of action
-  );
-}
-
 function Group(group, group_id) {
   if(_.isObject(group)) {
     _.extend(this, group);
@@ -194,15 +598,15 @@ Group.prototype.step = function(dp, ctx) {
   dp.output(null, this.group_id, ctx);
 };
 
-function mkGroupField() {
-  return new ActionField_UI(
+Group.prototype.toValue = function() {
+  return this.group_id;
+};
+
+function mkGroupProfile() {
+  return new ActionProfile(
     null,         // default construction
     'Internal',   // Category of action
-    'Group',      // Name of action
-    'set_group',  // might be vestigal
-    Group,         // Type name of action
-    '',
-    function() { return true; }
+    'Group'      // Name of action
   );
 }
 
@@ -223,19 +627,19 @@ Queue.prototype.toString = function() {
   return 'queue('+this.queue_id+')';
 };
 
+Queue.prototype.toValue = function() {
+  return this.queue_id;
+};
+
 Queue.prototype.step = function(dp, ctx) {
   ctx.queue_id = this.queue_id;
 };
 
-function mkQueueField() {
-  return new ActionField_UI(
+function mkQueueProfile() {
+  return new ActionProfile(
     null,         // default construction
     'Internal',   // Category of action
-    'Queue',      // Name of action
-    'set_queue',  // might be vestigal
-    Queue,         // Type name of action
-    '',
-    function() { return true; }
+    'Queue'      // Name of action
   );
 }
 
@@ -274,16 +678,39 @@ PopVLAN.prototype.clone    = Pop.prototype.clone;
 PopVLAN.prototype.toString = Pop.prototype.toString;
 PopVLAN.prototype.step     = Pop.prototype.step;
 
-function mkPopVLANField() {
-  return new ActionField_UI(
+function mkSetVLANIDProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'VLAN',     // Category of action
+    'ID',      // Name of action
+    'set'       // Action behavior
+  );
+}
+
+function mkSetVLANPriorityProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'VLAN',     // Category of action
+    'Priority',      // Name of action
+    'set'       // Action behavior
+  );
+}
+
+function mkPopVLANProfile() {
+  return new ActionProfile(
     null,       // default construction
     'VLAN',     // Category of action
     'Tag',      // Name of action
-    'pop_vlan', // might be vestigal
-    PopVLAN,    // Type name of action
-    '',
-    function() { return true; },
     'pop'       // Action behavior
+  );
+}
+
+function mkPushVLANProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'VLAN',     // Category of action
+    'Tag',      // Name of action
+    'push'       // Action behavior
   );
 }
 
@@ -295,18 +722,351 @@ PopMPLS.prototype.clone    = Pop.prototype.clone;
 PopMPLS.prototype.toString = Pop.prototype.toString;
 PopMPLS.prototype.step     = Pop.prototype.step;
 
-function mkPopMPLSField() {
-  return new ActionField_UI(
+function mkSetMPLSLabelProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'MPLS',     // Category of action
+    'Label',      // Name of action
+    'set'       // Action behavior
+  );
+}
+
+function mkSetMPLSTTLProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'set'
+  );
+}
+
+function mkMPLSDecTTLProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'dec'
+  );
+}
+
+function mkMPLSCopyTTLInProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'copy_in'
+  );
+}
+
+function mkMPLSCopyTTLOutProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'TTL',
+    'copy_out'
+  );
+}
+
+
+function mkSetMPLSBOSProfile() {
+  return new ActionProfile(
+    null,
+    'MPLS',
+    'BOS',
+    'set'
+  );
+}
+
+function mkPopMPLSProfile() {
+  return new ActionProfile(
     null,       // default construction
     'MPLS',     // Category of action
     'Tag',      // Name of action
-    'pop_mpls', // might be vestigal
-    PopMPLS,    // Type name of action
-    '',
-    function() { return true; },
     'pop'       // Action behavior
   );
 }
+
+function mkPushMPLSProfile() {
+  return new ActionProfile(
+    null,       // default construction
+    'MPLS',     // Category of action
+    'Tag',      // Name of action
+    'push'       // Action behavior
+  );
+}
+
+function mkSetARPOpcodeProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'Opcode',
+    'set'
+  );
+}
+
+function mkSetARPSHAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'SHA',
+    'set'
+  );
+}
+
+function mkSetARPSPAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'SPA',
+    'set'
+  );
+}
+
+function mkSetARPTHAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'THA',
+    'set'
+  );
+}
+
+function mkSetARPTPAProfile() {
+  return new ActionProfile(
+    null,
+    'ARP',
+    'TPA',
+    'set'
+  );
+}
+
+
+function mkSetIPV4DSCPProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'DSCP',
+    'set'
+  );
+}
+
+function mkSetIPV4ECNProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'ECN',
+    'set'
+  );
+}
+
+function mkSetIPV4SrcProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'Src',
+    'set'
+  );
+}
+
+function mkSetIPV4DstProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'Dst',
+    'set'
+  );
+}
+
+function mkIPV4DecTTLProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'TTL',
+    'dec'
+  );
+}
+
+function mkIPV4CopyTTLOutProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'TTL',
+    'copy_out'
+  );
+}
+
+function mkIPV4CopyTTLInProfile() {
+  return new ActionProfile(
+    null,
+    'IPv4',
+    'TTL',
+    'copy_in'
+  );
+}
+
+function mkIPV6setSrcProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'Src',
+    'set'
+  );
+}
+
+function mkIPV6setDstProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'Dst',
+    'set'
+  );
+}
+
+function mkIPV6setFlabelProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'Flabel',
+    'set'
+  );
+}
+
+function mkIPV6DecTTLProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'TTL',
+    'dec'
+  );
+}
+
+function mkIPV6CopyTTLOutProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'TTL',
+    'copy_out'
+  );
+}
+
+function mkIPV6CopyTTLInProfile() {
+  return new ActionProfile(
+    null,
+    'IPv6',
+    'TTL',
+    'copy_in'
+  );
+}
+
+function mkICMPv4setTypeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv4',
+    'Type',
+    'set'
+  );
+}
+
+function mkICMPv4setCodeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv4',
+    'Code',
+    'set'
+  );
+}
+
+function mkICMPv6setTypeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv6',
+    'Type',
+    'set'
+  );
+}
+
+function mkICMPv6setCodeProfile() {
+  return new ActionProfile(
+    null,
+    'ICMPv4',
+    'Code',
+    'set'
+  );
+}
+
+function mkTCPsetSrcProfile() {
+  return new ActionProfile(
+    null,
+    'TCP',
+    'Src',
+    'set'
+  );
+}
+
+function mkTCPsetDstProfile() {
+  return new ActionProfile(
+    null,
+    'TCP',
+    'Dst',
+    'set'
+  );
+}
+
+function mkUDPsetSrcProfile() {
+  return new ActionProfile(
+    null,
+    'UDP',
+    'Src',
+    'set'
+  );
+}
+
+function mkUDPsetDstProfile() {
+  return new ActionProfile(
+    null,
+    'UDP',
+    'Dst',
+    'set'
+  );
+}
+
+function mkSCTPsetSrcProfile() {
+  return new ActionProfile(
+    null,
+    'SCTP',
+    'Src',
+    'set'
+  );
+}
+
+function mkSCTPsetDstProfile() {
+  return new ActionProfile(
+    null,
+    'SCTP',
+    'Dst',
+    'set'
+  );
+}
+
+function mkNDsetTargetProfile() {
+  return new ActionProfile(
+    null,
+    'ND',
+    'Target',
+    'set'
+  );
+}
+
+function mkNDsetHWProfile() {
+  return new ActionProfile(
+    null,
+    'ND',
+    'HW',
+    'set'
+  );
+}
+
+
 
 function CopyTTLIn(){
   this.name = 'CopyTTLIn';
@@ -392,7 +1152,7 @@ function DecTTL(st, proto){
   this.name = 'DecTTL';
 }
 
-DecTTL.prototype.clone = function(){
+DecTTL.prototype.clone = function() {
   return new DecTTL(this);
 };
 
@@ -425,20 +1185,41 @@ Push.prototype.toString = function() {
 };
 
 Push.prototype.step = function(dp, ctx) {
+  if(ctx.packet.protocols.length === 1){
+    this.tag.setDefaults(ctx.packet.protocols, 0);
+    ctx.packet.protocols.push(this.tag);
+    ctx.packet.protocols[0].setPayload(this.tag.name);
+  } else {
   for(var i = 0; i < ctx.packet.protocols.length; i++){
     if(this.tag.insertHere(ctx.packet.protocols[i])){
       this.tag.setDefaults(ctx.packet.protocols, i);
       ctx.packet.protocols.splice(i, 0, this.tag);
-      ctx.packet.protocols[i-1].setPayload(ctx.packet.protocols[i].name);
-      ctx.packet.protocols[i].setPayload(ctx.packet.protocols[i+1].name);
+      ctx.packet.protocols[i-1].setPayload(this.tag.name);
       return;
     }
   }
   throw 'Push failed';
+  }
 
 };
 
-function SetField(sf, proto, field, value) {
+function PushVLAN() {
+  this.tag = VLAN.name;
+}
+
+PushVLAN.prototype.clone    = Push.prototype.clone;
+PushVLAN.prototype.toString = Push.prototype.toString;
+PushVLAN.prototype.step     = Push.prototype.step;
+
+function PushMPLS() {
+  this.tag = MPLS.name;
+}
+
+PushMPLS.prototype.clone    = Push.prototype.clone;
+PushMPLS.prototype.toString = Push.prototype.toString;
+PushMPLS.prototype.step     = Push.prototype.step;
+
+function SetField(sf, value, proto, field) {
   if(_.isObject(sf)) {
     _.extend(this, sf);
     this.value = sf.value.clone();
@@ -474,41 +1255,20 @@ SetField.prototype.step = function(dp, ctx) {
   }
 };
 
-function mkSetEthSrcField() {
-  return new ActionField_UI(
+function mkSetEthSrcProfile() {
+  return new ActionProfile(
     null,           // default construction
     'Ethernet',     // Category of action
     'Src',          // Name of action
-    'set_eth_src',  // might be vestigal
-    SetField,       // Type name of action
-    ETHERNET.TIPS.src,
-    ETHERNET.TESTS.src,
     'set'           // Action behavior
   );
 }
 
-function mkSetEthDstField() {
-  return new ActionField_UI(
+function mkSetEthDstProfile() {
+  return new ActionProfile(
     null,           // default construction
     'Ethernet',     // Category of action
     'Dst',          // Name of action
-    'set_eth_dst',  // might be vestigal
-    SetField,       // Type name of action
-    ETHERNET.TIPS.dst,
-    ETHERNET.TESTS.dst,
-    'set'           // Action behavior
-  );
-}
-
-function mkSetEthTypeField() {
-  return new ActionField_UI(
-    null,           // default construction
-    'Ethernet',     // Category of action
-    'Type',         // Name of action
-    'set_eth_type', // might be vestigal
-    SetField,       // Type name of action
-    ETHERNET.TIPS.typelen,
-    ETHERNET.TESTS.typelen,
     'set'           // Action behavior
   );
 }
@@ -516,7 +1276,7 @@ function mkSetEthTypeField() {
 function Set(set) {
   if(_.isObject(set)) {
     //FIXME: implement
-    _.each(set.actions, function(key) {
+    _.each(set.actions, function(value, key) {
       if(key === 'setField') {
       } else if(key === 'pop_mpls') {
       } else if(key === 'pop_pbb') {
@@ -524,6 +1284,7 @@ function Set(set) {
       } else if(key === 'pop_mpls') {
       } else if(key === 'pop_pbb') {
       } else if(key === 'pop_vlan') {
+      } else if(key === 'push_vlan'){
       } else {
       }
     }, this);
@@ -654,13 +1415,9 @@ Set.prototype.setTTL = function(action) {
 };
 
 Set.prototype.decTTL = function(action) {
-  if(!_(this.actions).has('setField')) {
-    this.actions.setField = {};
+  if(action){
+    this.actions.dec_ttl = action;
   }
-  if(!_(this.actions.setField).has(action.protocol)) {
-    this.actions.setField[action.protocol] = {};
-  }
-  this.actions.setField[action.protocol][action.field] = action;
 };
 
 Set.prototype.queue = function(action) {
@@ -756,16 +1513,6 @@ Set.prototype.step = function(dp, ctx) {
     this.actions.dec_ttl.step(dp, ctx);
     delete this.actions.dec_ttl;
     return true;
-  }
-
-  if(_(this.actions).has('setTTL')){
-    if(_(this.actions.setField).keys().length > 0) {
-      if(this.stepSetField(dp, ctx, IPV4.name)) {
-        return true;
-      } else {
-        throw 'Bad setTTL Keys: ' + this.actions.setTTL.keys();
-      }
-    }
   }
 
   if(_(this.actions).has('setField')) {
@@ -911,33 +1658,100 @@ function Available() {
       mkGroupProfile(),
       mkQueueProfile()
     ]
-  }];
-}
-
-/*function Available() {
-  return [{
-    protocol: 'Internal',
-    actions: [
-      mkOutputField(),
-      mkGroupField(),
-      mkQueueField(),
-  ]}, {
+  }, {
     protocol: 'Ethernet',
     actions: [
-      mkSetEthSrcField(),
-      mkSetEthDstField(),
-      mkSetEthTypeField(),
-  ]}, {
+      mkSetEthSrcProfile(),
+      mkSetEthDstProfile(),
+    ]
+  }, {
     protocol: 'VLAN',
     actions: [
-      mkPopVLANField()
-  ]}, {
+      mkSetVLANIDProfile(),
+      mkSetVLANPriorityProfile(),
+      mkPushVLANProfile(),
+      mkPopVLANProfile()
+    ]
+  }, {
     protocol: 'MPLS',
     actions: [
-      mkPopMPLSField()
-  ]}];
+      mkSetMPLSLabelProfile(),
+      mkSetMPLSTTLProfile(),
+      mkMPLSDecTTLProfile(),
+      mkMPLSCopyTTLOutProfile(),
+      mkMPLSCopyTTLInProfile(),
+      mkSetMPLSBOSProfile(),
+      mkPushMPLSProfile(),
+      mkPopMPLSProfile()
+    ]
+  }, {
+    protocol: 'ARP',
+    actions: [
+      mkSetARPOpcodeProfile(),
+      mkSetARPSHAProfile(),
+      mkSetARPSPAProfile(),
+      mkSetARPTHAProfile(),
+      mkSetARPTPAProfile()
+    ]
+  },{
+    protocol: 'IPv4',
+    actions: [
+      mkSetIPV4DSCPProfile(),
+      mkSetIPV4ECNProfile(),
+      mkSetIPV4SrcProfile(),
+      mkSetIPV4DstProfile(),
+      mkIPV4DecTTLProfile(),
+      mkIPV4CopyTTLOutProfile(),
+      mkIPV4CopyTTLInProfile()
+    ]
+  },{
+    protocol: 'IPv6',
+    actions: [
+      mkIPV6setSrcProfile(),
+      mkIPV6setDstProfile(),
+      mkIPV6setFlabelProfile(),
+      mkIPV6DecTTLProfile(),
+      mkIPV6CopyTTLOutProfile(),
+      mkIPV6CopyTTLInProfile()
+    ]
+  },{
+    protocol: 'ICMPv4',
+    actions: [
+      mkICMPv4setTypeProfile(),
+      mkICMPv4setCodeProfile()
+    ]
+  },{
+    protocol: 'ICMPv6',
+    actions: [
+      mkICMPv6setTypeProfile(),
+      mkICMPv6setCodeProfile()
+    ]
+  },{
+    protocol: 'TCP',
+    actions: [
+      mkTCPsetSrcProfile(),
+      mkTCPsetDstProfile()
+    ]
+  },{
+    protocol: 'UDP',
+    actions: [
+      mkUDPsetSrcProfile(),
+      mkUDPsetDstProfile()
+    ]
+  },{
+    protocol: 'SCTP',
+    actions: [
+      mkSCTPsetSrcProfile(),
+      mkSCTPsetDstProfile()
+    ]
+  },{
+    protocol: 'ND',
+    actions: [
+      mkNDsetTargetProfile(),
+      mkNDsetHWProfile()
+    ]
+  }];
 }
-*/
 
 function cloneAvailable(a) {
   return _(a).map(function(grouping) {
@@ -966,9 +1780,8 @@ return {
   CopyTTLOut: CopyTTLOut,
   Available: Available,
   cloneAvailable: cloneAvailable,
-  ActionField_UI: ActionField_UI,
-  TESTS: TESTS,
-  TIPS: TIPS,
+  //TESTS: TESTS,
+  //TIPS: TIPS,
   Types: Types
 };
 

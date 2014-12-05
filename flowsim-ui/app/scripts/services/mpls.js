@@ -152,7 +152,12 @@ MPLS.prototype.insertHere = function(protocol) {
 };
 
 MPLS.prototype.setDefaults = function(protocols, index) {
-  if(protocols[index].name === this.name) {
+  if(protocols.length === 1){
+    this._label = mkLabel();
+    this._tc = mkTc();
+    this._bos = mkBos();
+    this._ttl = mkTtl();
+  } else if(protocols[index].name === this.name) {
     this._label = protocols[index].label();
     this._tc    = protocols[index].tc();
     this._bos   = mkBos();

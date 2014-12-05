@@ -1,0 +1,62 @@
+
+<table class="table table-striped table-hover tabled-centered">
+  <thead>
+    <th>Category</th>
+    <th>Field</th>
+    <th>Action</th>
+    <th>Value</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="action in actionList.actions">
+      <td>{{action.category}}</td>
+      <td>{{action.field}}</td>
+      <td>{{action.action}}</td>
+      <td>{{action.toValue()}}</td>
+      <td>
+        <span class="glyphicon glyphicon-minus-sign pull-right"
+              ng-show="$last" ng-click="popAction()">
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <select class="form-control" ng-model="active.category"
+            ng-options="category as category for category in
+            active.categories"
+            ng-change="updateApplyCategory()">
+        </select>
+      </td>
+      <td>
+        <select class="form-control" ng-model="active.field"
+            ng-options="field as field for field in
+            active.fields"
+            ng-change="updateApplyField()">
+        </select>
+      </td>
+      <td>
+        <select class="form-control" ng-model="active.action"
+            ng-options="action as action for action in
+            active.actions"
+            ng-change="updateApplyAction()">
+        </select>
+      </td>
+      <td>
+        <div class="form-group"
+         tooltip="{{active.type ? active.type.tip :''}}"
+         ng-class="{'has-error': active.type &&
+         !active.type.test(active.value)}">
+          <input type="text" class="form-control"
+             ng-model="active.value">
+        </div>
+      </td>
+      <td>
+        <button class="btn btn-default"
+            ng-click="addAction()">
+          Add
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

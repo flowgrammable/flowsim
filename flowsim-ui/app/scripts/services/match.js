@@ -11,7 +11,6 @@ angular.module('flowsimUiApp')
   .factory('Match', function(fgConstraints, ETHERNET, UInt) {
 
 function MatchField_UI(match, Type){
-  console.log('type in mfui:', Type);
   this.category = match.category;
   this.field = match.field;
   this.key = match.key;
@@ -185,6 +184,11 @@ Match.Profile = function(match){
     this.matches = Available();
   }
 }
+
+Match.Profile.prototype.clone = function() {
+  return new Match.Profile(this);
+};
+
 /*
 Match.Profile = function(match){
   if(_.isObject(match)){
