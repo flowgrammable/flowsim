@@ -70,49 +70,51 @@ function consStr(bits) {
   var bytes = Math.ceil(bits / 8);
   var hbytes = Math.ceil(bits / 4);
   return function(val) {
-    var i;
+    var i, tmp;
     var array = [];
     // We should not have bad input at this point
     if(!Pattern.test(val)) {
       throw 'Bad consStr('+bits+')('+val+')';
     }
     // Return the value if the precision is 32 or under
-    val = parseInt(val);
-    if(val <= maxFromBits(32) && bits <= 32) {
-      return val;
+    tmp = parseInt(val);
+    if(tmp <= maxFromBits(32) && bits <= 32) {
+      return tmp;
     } 
     // Throw an execption if the value is too large for the precision
     if(bits <= 32) {
       throw 'Bad consStr('+bits+')('+val+')';
     }
     // Return the easy case of 0
-    if(val === '0') {
+    if(tmp === '0') {
       return _(bytes).range(function() {
         return 0;
       });
     } 
     // Otherwise must be hex
     if(/^0x/.test(val)) {
+
+      tmp = val.split('');
       // Chop the '0x' prefix for easier handling
-      val.splice(0, 2);
+      tmp.splice(0, 2);
       // Input is larger than allowable
-      if(val.length > hbytes) {
-        throw 'Bad consStr('+bits+')('+val+')';
+      if(tmp.length > hbytes) {
+        throw 'Bad consStr('+bits+')('+tmp+')';
       }
       // Work from the back of the input
-      val.reverse();
+      tmp.reverse();
       for(i=0; i<bytes; ++i) {
         // We are out of input just return a 0
-        if(val.length === 0) {
+        if(tmp.length === 0) {
           array.push(0);
         // We only have a half-octect of input
-        } else if(val.length === 1) {
+        } else if(tmp.length === 1) {
           // parse just a half-octect and remove
-          array.push(parseInt(val.splice(0, 1), 16));
+          array.push(parseInt(tmp.splice(0, 1), 16));
         // Otherwise we have a full octet of input
         } else {
           // parse a full octect and remove
-          array.push(parseInt(val.splice(0, 2), 16));
+          array.push(parseInt(tmp.splice(0, 2).join(''), 16));
         }
       }
       // Fix the array orientation and return
@@ -134,11 +136,11 @@ function toString(bits) {
   return function(value, base) {
     if(_(value).isArray()) {
       return '0x'+_(value).map(function(octet) {
-        return UInt.padZeros(octet.toString(16), 2);
-      });
+        return padZeros(octet.toString(16), 2);
+      }).join('');
     } else if(_(value).isFinite()) {
       if(base === 16) {
-        return '0x'+UInt.padZeros(value.toString(16), 2*(bits/8));
+        return '0x'+padZeros(value.toString(16), 2*(bits/8));
       } else {
         return value.toString(base);
       }

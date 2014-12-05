@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: uint', function () {
+ddescribe('Service: uint', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -293,6 +293,100 @@ describe('Service: uint', function () {
     var uint2 = new UInt.Match(null, new UInt.UInt(null, 111,4), new UInt.UInt(null, 222,4));
 
     expect(uint1.equal(uint2)).toBe(true);
+  });
+
+  it('Uint consStr throw', function(){
+
+  expect(function(){
+    var f = UInt.consStr('');
+    var t =  f('');
+  }).toThrow();
+
+    expect(function(){
+      var f = consStr();
+      f('0x01');
+    }).toThrow();
+
+    expect(function(){
+      var f = consStr(8);
+      f();
+    }).toThrow();
+
+    expect(function(){
+      var f = consStr(32);
+      f('0x1ffffffff');
+    }).toThrow(); 
+
+    expect(function(){
+      var f = consStr(-1);
+      f('0xff');
+    }).toThrow();
+
+    expect(function(){
+      var f = consStr(32);
+      f('zz');
+    }).toThrow();
+
+    expect(function(){
+      var f = consStr(32);
+      f('1');
+    }).toThrow();
+
+    expect(function(){
+      var f = consStr(4);
+      f('0x1f');
+    }).toThrow();
+
+    expect(function(){
+      var f = consStr(32);
+      var t = f('0x0x11');
+    }).toThrow();
+
+    // why is this throwing?
+    expect(function(){
+      var f = consStr(32);
+      f('0x00000101');
+    }).toThrow();
+
+  });
+
+  it('UInt consStr natural number', function(){
+    var num = UInt.consStr(32);
+    expect(num('0xffffffff')).toBe(4294967295);
+    expect(num('0x0')).toBe(0);
+    expect(num('0x0a')).toBe(10);
+    expect(num('0x0')).toBe(0);
+    expect(num('0x00000101')).toBe(257);
+  });
+
+  it('Uint consStr array', function(){
+    var num = UInt.consStr(33);
+    expect(num('0x1ffffffff')[0]).toBe(1);
+    expect(num('0x1ffffffff')[1]).toBe(255);
+    expect(num('0x1')[4]).toBe(1);
+  });
+
+  it('UInt toString natural ', function(){
+    var str = UInt.toString(32);
+    expect(str(1,16)).toBe('0x00000001');
+    expect(str(4294967295, 16)).toBe('0xffffffff');
+  });
+
+  it('UInt toString throw', function(){
+ //   expect(function(){
+  //    var str = UInt.toString('');
+  //    var t = str(33, 16);
+  //  }).toThrow();
+
+    expect(function(){
+      var str = UInt.toString({a:'1'});
+      var t = str('a', 16);
+    }).toThrow();
+  });
+
+  it('UInt toString array', function(){
+    var str = UInt.toString(33);
+    expect(str([0,0,0,0,1],16)).toBe('0x0000000001')
   });
 
 });
