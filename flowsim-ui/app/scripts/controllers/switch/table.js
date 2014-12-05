@@ -53,8 +53,16 @@ angular.module('flowsimUiApp')
         templateUrl: 'views/switch/flow.html',
         controller: 'SwitchFlowCtrl',
         size: 'lg',
-        resolve: { flow: function() { return flow; } }
-      }).result.then(function () {
+        resolve: { flow: function() { 
+          var tmp = flow.clone();
+          console.log('base len: '+flow.match.get().length);
+          console.log('base p: '+flow.match.get()[0].protocol);
+          console.log('clone len: '+tmp.match.get().length);
+          console.log('clone p: '+tmp.match.get()[0].protocol);
+          return flow.clone(); 
+        } }
+      }).result.then(function (nflow) {
+        $scope.table[idx] = nflow;
         $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
       });
     }

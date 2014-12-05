@@ -8,7 +8,8 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match, Action) {
+  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match, 
+                                          Action) {
 
   // Attach the match/instruciton/miss properties
   $scope.match       = flow.match;

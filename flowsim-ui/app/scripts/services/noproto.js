@@ -80,24 +80,31 @@ function Match(match, protocol, summary, field, bitwidth, tip, value, mask) {
     // Remember the mask input
     this.value = value;
     this.mask  = mask;
-    // If no mask, make it an exact match
-    consFunc = getConsFunction(this.protocol, this.field);
-    if(!mask || mask.length === 0) {
-      this._match = UInt.mkExact(
-        new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8))
-      );
-    } else {
-      // otherwise use the mask
-      this._match = new UInt.Match(null, 
-        new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8)),
-        new UInt.UInt(null, consFunc(mask), Math.ceil(this.bitwidth / 8))
-      );
-    }
+  }
+  // If no mask, make it an exact match
+  consFunc = getConsFunction(this.protocol, this.field);
+  if(!mask || mask.length === 0) {
+    this._match = UInt.mkExact(
+      new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8))
+    );
+  } else {
+    // otherwise use the mask
+    this._match = new UInt.Match(null, 
+      new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8)),
+      new UInt.UInt(null, consFunc(mask), Math.ceil(this.bitwidth / 8))
+    );
   }
 }
 
 Match.prototype.clone = function() {
   return new Match(this);
+};
+
+Match.prototype.equal = function(match) {
+  return this.protocol === match.protocol &&
+         this.field === match.field &&
+         this.bitwidth === match.bitwidth &&
+         this._match.equal(match._match);
 };
 
 Match.prototype.match = function(value) {
@@ -149,6 +156,76 @@ MatchProfile.prototype.clone = function() {
   return new MatchProfile(this);
 };
 
+function MatchSet(ms) {
+  if(_(ms).isObject) {
+    this.set = _(ms.set).map(function(match) {
+      return new Match(match);
+    });
+  } else {
+    this.set = [];
+  }
+}
+
+MatchSet.prototype.clone = function() {
+  return new MatchSet(this);
+};
+
+// Return a reference to the undrelying array
+MatchSet.prototype.get = function() {
+  return this.set;
+};
+
+// Push a new match into the set
+MatchSet.prototype.push = function(match) {
+  this.set.push(match);
+};
+
+// Pop the top of the set if non-empty
+MatchSet.prototype.pop = function() {
+  if(this.set.length > 0) {
+    this.set.splice(-1,1);
+  }
+};
+
+MatchSet.prototype.equal = function(set) {
+  var idx;
+  // Unequal lengths can't be equal
+  if(this.set.length !== set.length) { return false; }
+  // Equal lengths and empty are equal
+  if(this.set.length === 0) { return true; }
+  // Look for strict equality
+  for(idx=0; idx < this.set.length; ++idx) {
+    if(!this.set[idx].equal(set.matches[idx])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+MatchSet.prototype.match = function(key) {
+  // The empty set matches everything
+  if(this.set.length === 0) { return true; }
+  return _(this.set).every(function(match) {
+    return _(key).has(match.protocol) &&
+           _(key[match.protocol]).has(match.field) &&
+           match.matches(key[match.protocol][match.field]);
+  });
+};
+
+MatchSet.prototype.summarize = function() {
+  // Empty set is the default match '*'
+  if(this.set.length === 0) { return ['*']; }
+  // Otherwise build a unique list of shortNames/summaries
+  return _(_(this.set).map(function(match) {
+    return match.summary;
+  })).unique();
+};
+
+MatchSet.prototype.toView = function () {
+  // FIXME
+  return [];
+};
+
 function Action(action, protocol, field, bitwidth, op, value) {
   var consFunc;
   if(_(action).isObject()) {
@@ -161,11 +238,11 @@ function Action(action, protocol, field, bitwidth, op, value) {
 
     // UI Editable property
     this.value  = value;
-
-    consFunc = getConsFunction(this.protocol, this.field);
-    this._value = new UInt.UInt(null, consFunc(this.value), 
-                                Math.ceil(this.bitwidth / 8));
   }
+
+  consFunc = getConsFunction(this.protocol, this.field);
+  this._value = new UInt.UInt(null, consFunc(this.value), 
+                              Math.ceil(this.bitwidth / 8));
 }
 
 Action.prototype.clone = function() {
