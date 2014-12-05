@@ -157,6 +157,7 @@ MatchProfile.prototype.clone = function() {
   return new MatchProfile(this);
 };
 
+// Array wrapper with some extra match-y operations
 function MatchSet(ms) {
   if(_(ms).isObject()) {
     this.set = _(ms.set).map(function(match) {
@@ -187,6 +188,13 @@ MatchSet.prototype.pop = function() {
     this.set.splice(-1,1);
   }
 };
+
+MatchSet.prototype.peekTop = function() {
+  if(this.set.length === 0) {
+    throw 'Failed to peekTop on empty MatchSet';
+  }
+  return this.set[this.set.length-1];
+}
 
 MatchSet.prototype.equal = function(set) {
   var idx;

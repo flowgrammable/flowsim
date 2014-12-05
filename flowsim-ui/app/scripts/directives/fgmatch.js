@@ -44,6 +44,55 @@ angular.module('flowsimUiApp')
           })).filter(function(profile) {
             return _(Protocols.Root).indexOf(profile.protocol) != -1;
           });
+        
+        // Provide a unique array of strings for display
+        $scope.updateProtocolsDisplay = function() {
+          $scope.active.protocols = _(_($scope.availableProfiles).map(
+            function(profile) { 
+              return profile.protocol; 
+            })).unique();
+        };
+
+        // Intialize the used profile to empty
+        $scope.usedProfiles = [];
+
+        $scope.use = function(profile) {
+          // Remove from availableProfiles
+          $scope.availableProfiles = _($scope.availableProfiles).reject(
+            function(_profile) {
+              return profile.protocol === _profile.protocol && 
+                     profile.field === _profile.field;
+            });
+          // Add to usedProfiles
+          $scope.usedProfiles.push(profile);
+          // Update availabe list
+          $scope.updateProtocolsDisplay();
+        };
+
+        $scope.free = function(profile) {
+          // Remove from usedProfiles
+          $scope.usedProfiles = _($scope.usedProfiles).reject(
+            function(_profile) {
+              return profile.protocol === _profile.protocol && 
+                     profile.field === _profile.field;
+            });
+          // Add to availableProfiles
+          $scope.availableProfiles.push(profile);
+          // Update availabe list
+          $scope.updateProtocolsDisplay();
+        };
+        
+        // Go through each active match and 
+        _($scope.matches).each(function(match) {
+          var candidate = _($scope.availableProfiles).find(function(profile) {
+            return profile.protocol === match.protocol &&
+                   profile.field === match.field;
+          });
+          if(candidate === undefined) {
+            throw 'Failed to find: '+match+ 'in availableProfiles';
+          }
+          $scope.use(candidate);
+        });
 
         // Provide a unique array of strings for display
         $scope.updateProtocolsDisplay = function() {
@@ -53,13 +102,11 @@ angular.module('flowsimUiApp')
             })).unique();
         };
 
-        // Go through each active match and 
-        _($scope.matches).each(function(match) {
-        });
-
         // Update the protocol display list
         $scope.updateProtocolsDisplay();
-          
+         
+        // On protocol selection - update the field choices,
+        // clear the active field and inputs
         $scope.updateProtocol = function() {
 
           $scope.active.fields = _(_($scope.availableProfiles).filter(
@@ -76,6 +123,7 @@ angular.module('flowsimUiApp')
           $scope.active.type = null;
         };
 
+        // On field selection - set the active type and clear inputs
         $scope.updateField = function() {
 
           $scope.active.type = _($scope.availableProfiles).find(
@@ -104,10 +152,10 @@ angular.module('flowsimUiApp')
             // Construct the match
             match = $scope.active.type.mkType($scope.active.value, 
                                               $scope.active.mask);
-
-            // Use the callback
+            // Push the new match onto the match set
             $scope.config.push(match);
-          
+            // Run the available/used profile book keeping
+            $scope.use($scope.active.type);
             // Clear the dependent properties
             $scope.active.protocol = '';
             $scope.active.field    = '';
@@ -118,6 +166,20 @@ angular.module('flowsimUiApp')
         };
 
         $scope.popMatch = function() {
+          // Peek at the topmost match
+          var m = $scope.config.peekTop();
+          // Find the used profile that belongs to that match
+          var profile = _($scope.usedProfiles).find(function(_profile) {
+            return _profile.protocol === m.protocol &&
+                   _profile.field === m.field;
+          });
+          // Fail on the impossible .. throw indicates bug
+          if(profile === undefined) {
+            throw 'Failed to find usedProfile '+m;
+          }
+          // Run the used/available book keeping on the profile
+          $scope.free(profile);
+          // Remove the match
           $scope.config.pop();
         };
       }
