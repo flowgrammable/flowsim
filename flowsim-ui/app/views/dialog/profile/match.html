@@ -28,6 +28,7 @@
         <td>
           <div ng-class="{'has-error':
                profile.enabled && profile.maskable &&
+               profile.maskableBits.length > 0 && 
                !profile.maskableBitsTest(profile.maskableBits)}">
             <input class="form-control" type="text" 
                    ng-model="profile.maskableBits" style="width:150px" 
