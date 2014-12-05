@@ -18,6 +18,8 @@ var consFuncs = {};
 // store of test functions
 var testFuncs = {};
 
+var toStringFuncs = {};
+
 // test function store setter
 function setTestFunction(protocol, field, func) {
   var key = protocol + '-' + field;
@@ -28,6 +30,12 @@ function setTestFunction(protocol, field, func) {
 function setConsFunction(protocol, field, func) {
   var key = protocol + '-' + field;
   consFuncs[key] = func;
+}
+
+// cons function store setter
+function setToStringFunction(protocol, field, func) {
+  var key = protocol + '-' + field;
+  toStringFuncs[key] = func;
 }
 
 // test function store getter
@@ -48,6 +56,15 @@ function getConsFunction(protocol, field) {
   return consFuncs[key];
 }
 
+// cons function store getter
+function getToStringFunction(protocol, field) {
+  var key = protocol + '-' + field;
+  if(!_(toStringFuncs).has(key)) {
+    throw 'Bad toStringFunc key: '+ key;
+  }
+  return toStringFuncs[key];
+}
+
 function Match(match, protocol, field, bitwidth, tip, value, mask) {
   var consFunc;
   if(_(match).isObject()) {
@@ -64,6 +81,7 @@ function Match(match, protocol, field, bitwidth, tip, value, mask) {
     this.mask  = mask;
     // If no mask, make it an exact match
     consFunc = getConsFunction(this.protocol, this.field);
+    console.log(consFunc);
     if(!mask || mask.length === 0) {
       this._match = UInt.mkExact(
         new UInt.UInt(null, consFunc(value), Math.ceil(this.bitwidth / 8))
@@ -237,6 +255,8 @@ function Field(params) {
   this.testStr = params.testStr || null;
   // Display string conversion function
   this.toString = params.toString || null;
+  // String constructor function
+  this.consStr = params.consStr || null;
   // Display string describing the field
   this.tip = params.tip || this.protocol + ' ' + this.name;
 }
@@ -248,8 +268,15 @@ Field.prototype.attachDefaultFunctions = function() {
     this.testStr = UInt.is(this.bitwidth);
   }
   setTestFunction(this.protocol, this.name, this.testStr);
+  // Attach a generic string value constructor
+  if(this.consStr === null) {
+    this.consStr = UInt.cons(this.bitwidth);
+  }
+  setConsFunction(this.protocol, this.name, this.consStr);
   // Attach a generic toString function
   if(this.toString === null) {
+    this.toString = UInt.toString(this.bitwidth);
+    /*
     this.toString = function(value, base) {
       if(_(value).isArray) {
         return '0x'+_(value).map(function(octet) {
@@ -265,7 +292,9 @@ Field.prototype.attachDefaultFunctions = function() {
         throw 'toString on bad value: '+value;
       }
     };
+    */
   }
+  setToStringFunction(this.protocol, this.name, this.toString);
 };
 
 Field.prototype.getMatchProfile = function() {
