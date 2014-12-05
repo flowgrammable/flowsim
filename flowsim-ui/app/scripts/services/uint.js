@@ -68,7 +68,7 @@ function is(bits) {
 //
 function consStr(bits) {
   var bytes = Math.ceil(bits / 8);
-  var hbytes = Math.ciel(bits / 4);
+  var hbytes = Math.ceil(bits / 4);
   return function(val) {
     var i;
     var array = [];

@@ -269,7 +269,7 @@ Field.prototype.attachDefaultFunctions = function() {
   setTestFunction(this.protocol, this.name, this.testStr);
   // Attach a generic string value constructor
   if(this.consStr === null) {
-    this.consStr = UInt.cons(this.bitwidth);
+    this.consStr = UInt.consStr(this.bitwidth);
   }
   setConsFunction(this.protocol, this.name, this.consStr);
   // Attach a generic toString function
