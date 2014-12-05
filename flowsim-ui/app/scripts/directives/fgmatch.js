@@ -88,12 +88,19 @@ angular.module('flowsimUiApp')
 
         $scope.addMatch = function() {
           var match;
+
+          // Value must be valid
+          // If mask is present, then mask must be valid
           if($scope.active.value.length > 0 && 
              $scope.active.type.valueTest($scope.active.value) && 
              ($scope.active.mask.length === 0 || 
              $scope.active.type.maskTest($scope.active.mask))) {
+
+            // Construct the match
             match = $scope.active.type.mkType($scope.active.value, 
                                               $scope.active.mask);
+
+            // Use the callback
             $scope.addMatchCB()(match);
           
             // Clear the dependent properties
