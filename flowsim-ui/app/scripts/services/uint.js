@@ -33,18 +33,26 @@ function maxFromBytes(val) {
 
 function is(bits) {
   return function(val) {
-    var tmp, pos;
+    // Test the numeric range if a number
     if(_.isFinite(val) && (val % 1 === 0)) {
       return 0 <= val && val <= maxFromBits(bits);
-    } else if(_.isString(val) && Pattern.test(val)) {
+    // Othrwise validate is an actual string
+    } else if(_(val).isString() && Pattern.test(val)) {
+      // Check is simple range check if under 32 bits
       if(bits <= 32) {
-        tmp = parseInt(val);
-        return 0 <= tmp && tmp <= maxFromBits(bits);
+        val = parseInt(val);
+        return val <= maxFromBits(bits);
+      // If over 32 bits its a little more complex
       } else {
-        //FIXME
-        pos = val.indexOf('0x');
-        pos = pos === -1 ? 0 : 2;
-        tmp = val.substring(pos, bits-(bits/4));
+        // Allow zero without '0x' prefix
+        if(val === '0') { return true; }
+        // Otherwise require the '0x' prefix for > 32 bit values
+        if(!/^0x/.test(val)) { return false; }
+        // Remove the '0x' prefix
+        val.splice(0, 2);
+        // Technically this will not be accurate for bit counts with
+        // modulo 1, 2, and 3 .... FIXME
+        return val.length <= Math.ceil(bits/4);
       }
     }
     return false;
