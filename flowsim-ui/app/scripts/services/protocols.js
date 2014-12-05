@@ -35,7 +35,7 @@ var noprotoProtocols = _(Protocols).map(function(protocol) {
 function MatchProfiles(mp) {
   if(_(mp).isObject()) {
     this.profiles = _(mp.profiles).map(function(profile) {
-      return profile.clone();
+      return new Noproto.MatchProfile(profile);
     });
   } else {
     this.profiles = _(_(noprotoProtocols).map(function(protocol) {
@@ -51,7 +51,7 @@ MatchProfiles.prototype.clone = function() {
 function ActionProfiles(ap) {
   if(_(ap).isObject()) {
     this.profiles = _(ap.profiles).map(function(profile) {
-      return profile.clone();
+      return new Noproto.ActionProfile(profile);
     });
   } else {
     this.profiles = _(_(noprotoProtocols).map(function(protocol) {

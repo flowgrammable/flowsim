@@ -95,6 +95,10 @@ function Set(set) {
   }
 }
 
+Set.prototype.get = function() {
+  return this.matches;
+};
+
 Set.prototype.toView = function() {
   console.log('in toView:', this.matches);
   return [];

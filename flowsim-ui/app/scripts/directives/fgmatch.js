@@ -13,11 +13,15 @@ angular.module('flowsimUiApp')
       restrict: 'E',
       scope: {
         profiles: '=',
-        matches: '=',
-        addMatchCB: '&addMatch'
+        matchSet: '='
       },
       controller: function($scope) {
-        
+
+        // Get the underlying match set
+        console.log($scope.matchSet);
+        $scope.matches = $scope.matchSet.get();
+       
+        // Initialize our control variables
         $scope.active = {
           protocols: [],
           protocol: '',
@@ -104,7 +108,7 @@ angular.module('flowsimUiApp')
                                               $scope.active.mask);
 
             // Use the callback
-            $scope.addMatchCB()(match);
+            $scope.matchSet.push(match);
           
             // Clear the dependent properties
             $scope.active.field = '';
@@ -115,7 +119,7 @@ angular.module('flowsimUiApp')
         };
 
         $scope.popMatch = function() {
-          $scope.matches.pop();
+          $scope.matchSet.pop();
         };
       }
     };
