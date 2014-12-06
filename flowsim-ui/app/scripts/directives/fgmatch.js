@@ -67,14 +67,12 @@ angular.module('flowsimUiApp')
           // Add to usedProfiles
           $scope.usedProfiles.push(profile);
           // Locate any new profiles
-          $scope.availableProfiles.concat(_($scope.enabledProfiles).filter(
+          $scope.availableProfiles = $scope.availableProfiles.concat(
+            _($scope.enabledProfiles).filter(
             function(_profile) {
-              console.log('candidate: '+_profile.protocol);
-              console.log('result: '+Protocols.Graph(profile.protocol, profile.field, value));
-              console.log('===: '+Protocols.Graph(profile.protocol, profile.field, value) ===
-                     _profile.protocol);
-              return Protocols.Graph(profile.protocol, profile.field, value) ===
-                     _profile.protocol;
+              var candidate = _profile.protocol;
+              var result = Protocols.Graph(profile.protocol, profile.field, value);
+              return candidate === result;
             }));
           // Update availabe list
           $scope.updateProtocolsDisplay();
