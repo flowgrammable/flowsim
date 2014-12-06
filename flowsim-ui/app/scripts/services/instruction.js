@@ -8,18 +8,8 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Instruction', function(fgConstraints, Action) {
+  .factory('Instruction', function(fgConstraints, Action, Protocols) {
 
-
-function mkActionField(name, enabled, key, action) {
-  action = action ? action : '-n/a-';
-  return {
-    name: name,
-    action: action,
-    enabled: enabled,
-    key: key
-  };
-}
 
 var Instruction = {};
 
@@ -27,8 +17,8 @@ function Profile(profile){
   if(_.isObject(profile)) {
     _.extend(this, profile);
     this.caps = _.clone(profile.caps);
-    this.apply = Action.cloneAvailable(profile.apply);
-    this.write = Action.cloneAvailable(profile.write);
+    this.apply = new Protocols.ActionProfiles(profile.apply);
+    this.write = new Protocols.ActionProfiles(profile.write);
     this.goto_ = _.map(profile.goto_, function(i) {
       return _.clone(i);
     });
@@ -42,86 +32,10 @@ function Profile(profile){
       goto_    : true
     };
 
-    this.apply = Action.Available();
-    this.write = Action.Available();
+    this.apply = new Protocols.ActionProfiles();
+    this.write = new Protocols.ActionProfiles();
     this.metadata = '0xffffffffffffffff';
     this.goto_ = [];
-/*
- *  This is just as a reminder to move into action
- *  using the new mkActionField mechanism ...
- *
-    protocol: 'ARP',
-      fields: [
-        mkActionField('Opcode', true, 'set_arp_op', 'set'),
-        mkActionField('SHA', true, 'set_arp_sha', 'set'),
-        mkActionField('SPA', true, 'set_arp_spa', 'set'),
-        mkActionField('THA', true, 'set_arp_tha', 'set'),
-        mkActionField('TPA', true, 'set_arp_tpa', 'set')
-      ]
-    }, {
-      protocol: 'MPLS',
-      fields: [
-        mkActionField('TC', true, 'set_mpls_tc', 'set'),
-        mkActionField('BOS', true, 'set_mpls_bos', 'set'),
-        mkActionField('TTL', true, 'set_mpls_ttl', 'set'),
-        mkActionField('TTL', true, 'dec_mpls_ttl', 'dec'),
-      ]
-    }, {
-      protocol: 'VLAN',
-      fields: [
-        mkActionField('PCP', true, 'set_vlan_pcp', 'set'),
-        mkActionField('VID', true, 'set_vlan_vid', 'set'),
-      ]
-    }, {
-      protocol: 'IPv4',
-      fields: [
-        mkActionField('DSCP', true, 'set_ip_dscp', 'set'),
-        mkActionField('ECN', true, 'set_ip_ecn', 'set'),
-        mkActionField('Proto', true, 'set_ip_proto', 'set'),
-        mkActionField('Src', true, 'set_ipv4_src', 'set'),
-        mkActionField('Dst', true, 'set_ipv4_dst', 'set'),
-        mkActionField('TTL', true, 'set_nw_ttl', 'set'),
-        mkActionField('TTL', true, 'dec_nw_ttl', 'dec')
-      ]
-    }, {
-      protocol: 'IPv6',
-      fields: [
-        mkActionField('Src', true, 'set_ipv6_src', 'set'),
-        mkActionField('Dst', true, 'set_ipv6_dst', 'set'),
-        mkActionField('FLabel', true, 'set_ipv6_flabel', 'set')
-      ]
-    }, {
-      protocol: 'ICMPv4',
-      fields: [
-        mkActionField('Type', true, 'set_icmpv4_type', 'set'),
-        mkActionField('Code', true, 'set_icmpv4_code', 'set')
-      ]
-    }, {
-      protocol: 'ICMPv6',
-      fields: [
-        mkActionField('Type', true, 'set_icmpv6_type', 'set'),
-        mkActionField('Code', true, 'set_icmpv6_code', 'set')
-      ]
-    }, {
-      protocol: 'TCP',
-      fields: [
-        mkActionField('Src', true, 'set_tcp_src', 'set'),
-        mkActionField('Dst', true, 'set_tcp_dst', 'set')
-      ]
-    }, {
-      protocol: 'UDP',
-      fields: [
-        mkActionField('Src', true, 'set_udp_src', 'set'),
-        mkActionField('Dst', true, 'set_udp_dst', 'set')
-      ]
-    }, {
-      protocol: 'SCTP',
-      fields: [
-        mkActionField('Src', true, 'set_sctp_src', 'set'),
-        mkActionField('Dst', true, 'set_sctp_dst', 'set')
-      ]
-    }];
-  */
 }
 
 Profile.prototype.clone = function() {
@@ -148,37 +62,6 @@ Profile.TESTS = {
 
 Profile.Miss = Profile;
 
-/*
-function Apply(apply, actions) {
-  if(_.isObject(apply)) {
-    this.actions = apply.actions.clone();
-  } else {
-    this.actions = actions;
-  }
-}
-
-Apply.prototype.clone = function() {
-  return new Apply(this);
-};
-
-Apply.prototype.step = function(dp, ctx) {
-  if(this.actions.empty()) {
-    return;
-  }
-  return this.actions.step(dp, ctx);
-};
-
-Apply.prototype.empty = function() {
-  return this.actions.empty();
-};
-
-Apply.prototype.execute = function(dp, ctx) {
-  while(!this.actions.empty()) {
-    this.actions.step(dp, ctx);
-  }
-};
-*/
-
 function Clear() {}
 
 Clear.prototype.clone = function() { return new Clear(); };
@@ -188,34 +71,6 @@ Clear.prototype.step = function(dp, ctx) {
 };
 
 Clear.prototype.execute = Clear.prototype.step;
-/*
-function Write(write, actions) {
-  if(_.isObject(write)) {
-    this.actions = write.actions.clone();
-  } else {
-    this.actions = actions;
-  }
-}
-
-Write.prototype.clone = function() {
-  return new Write(this);
-};
-
-Write.prototype.step = function(dp, ctx) {
-  if(this.actions.empty()) {
-    return;
-  }
-  ctx.actionSet.push(this.actions.get());
-};
-
-Write.prototype.execute = function(dp, ctx) {
-  ctx.actionSet.concat(this.actions);
-};
-
-Write.prototype.empty = function(){
-  return this.actions.empty();
-};
-*/
 
 function Metadata(meta, data, mask) {
   if(_.isObject(meta)) {

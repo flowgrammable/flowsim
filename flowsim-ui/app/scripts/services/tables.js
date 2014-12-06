@@ -165,16 +165,16 @@ function TableProfile(tableProfile, id) {
   if(_.isObject(tableProfile)) {
     _.extend(this, tableProfile);
     this.match       = new Protocols.MatchProfiles(tableProfile.match);
-    this.instruction = new Protocols.ActionProfiles(tableProfile.instruction);
-    this.miss        = new Protocols.ActionProfiles(tableProfile.miss);
+    this.instruction = new Instruction.Profile(tableProfile.instruction);
+    this.miss        = new Instruction.Profile(tableProfile.miss);
   } else {
     this.id          = id;
     this.name        = defName + id;
     this.max_entries = defMaxEntries;
 
     this.match       = new Protocols.MatchProfiles();
-    this.instruction = new Protocols.ActionProfiles();
-    this.miss        = new Protocols.ActionProfiles();
+    this.instruction = new Instruction.Profile();
+    this.miss        = new Instruction.Profile();
   }
 }
 
