@@ -44,6 +44,7 @@ angular.module('flowsimUiApp')
                                                         name, instruction) {
     $scope.name = name;
     $scope.instruction = instruction;
+    // Provide a specific ordering for the view
     $scope.instructions = [
       instruction.meter,
       instruction.apply,
@@ -64,13 +65,6 @@ angular.module('flowsimUiApp')
     $scope.writeRows = orderProfiles(instruction.write.profiles.profiles);
 
     $scope.ok = function() {
-      // Only copy the metadata if its valid
-      if($scope.active.metadataMaskableBits.length > 0 &&
-         $scope.active.metadataMaskableBitsTest(
-           $scope.active.metadataMaskableBits)) {
-        $scope.instruction.metadata = $scope.active.metadataMaskableBits;
-      }
-
       $modalInstance.close($scope.instruction);
     };
 

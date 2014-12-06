@@ -106,21 +106,8 @@
         <div ng-show="active.index === 4">
 
           <br>
-          <form class="form-horizontal" role="form">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">
-                Writable Bits
-              </label>
-              <div class="col-sm-5" ng-class="{'has-error': 
-                instruction.metadata.maskableBits.length > 0 &&
-                !instruction.metadata.maskableBitsTest(
-                  instruction.metadata.maskableBits)}">
-                <input type="text" class="form-control" 
-                       tooltip="{{instruction.metadata.maskableBitsTip}}"
-                       ng-model="instruction.metadata.maskableBits">
-              </div>
-            </div>
-          </form>
+          <fg-metadata-profile metadata="instruction.metadata">
+          </fg-metadata-profile>
 
         </div>
         <div ng-show="active.index === 5">

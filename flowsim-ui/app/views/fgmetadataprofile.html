@@ -1,0 +1,23 @@
+
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <dl class="dl-horizontal">
+    <dt>Maskable Bits</dt>
+    <dd>{{metadata.maskableBits}}</dd>
+  </dl>
+    <div class="input-group col-sm-5" 
+         ng-class="{'has-error': active.value.length > 0 &&
+                    !metadata.maskableBitsTest(active.value)}">
+      <input type="text" class="form-control" ng-model="active.value"
+             tooltip="{{metadata.maskableBitsTip}}">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="set()"
+                ng-disabled="active.value.length === 0 ||
+                !metadata.maskableBitsTest(active.value)">
+          Set
+        </button>
+      </span>
+    </div>
+  </div>
+</form>
+
