@@ -50,6 +50,7 @@
                           <td>{{type.action}}</td>
                           <td>
                             <button class="btn btn-xs btn-default"
+                                    tooltip="{{type.enabledTip}}"
                                     ng-click="type.enabled = !type.enabled"
                                     ng-class="{'btn-primary': type.enabled}">
                               {{type.enabled ? 'Enabled' : 'Disabled'}}
@@ -86,6 +87,7 @@
                           <td>{{type.action}}</td>
                           <td>
                             <button class="btn btn-xs btn-default"
+                                    tooltip="{{type.enabledTip}}"
                                     ng-click="type.enabled = !type.enabled"
                                     ng-class="{'btn-primary': type.enabled}">
                               {{type.enabled ? 'Enabled' : 'Disabled'}}
