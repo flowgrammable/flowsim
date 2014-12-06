@@ -22,25 +22,25 @@
     <td>{{port.name}}</td>
     <td>
       <button type="button" class="btn btn-default btn-xs"
-              ng-class="{'active': !port.config.port_down}"
+        ng-class="{'btn-primary': !port.config.port_down}"
               ng-click="togglePort(port.id)"
               style="outline:none">
-        Down
+        {{port.config.port_down ? 'Down' : 'Up'}}
       </button>
       <button type="button" class="btn btn-default btn-xs"
-              ng-class="{'active': !port.config.no_recv}"
+              ng-class="{'btn-primary': !port.config.no_recv}"
               ng-click="port.config.no_recv = !port.config.no_recv">
-        Recv
+        {{port.config.no_recv ? 'No Recv' : 'Recv'}}
       </button>
       <button type="button" class="btn btn-default btn-xs"
-               ng-class="{'active': !port.config.no_fwd}"
+               ng-class="{'btn-primary': !port.config.no_fwd}"
               ng-click="port.config.no_fwd = !port.config.no_fwd">
-        Fwd
+        {{port.config.no_fwd ? 'No Fwd' : 'Fwd'}}
       </button>
       <button type="button" class="btn btn-default btn-xs"
-              ng-class="{'active': !port.config.no_pkt_in}"
+              ng-class="{'btn-primary': !port.config.no_pkt_in}"
               ng-click="port.config.no_pkt_in = !port.config.no_pkt_in">
-        PktIn
+        {{port.config.no_pkt_in ? 'No PktIn' : 'PktIn'}}
       </button>
     </td>
     <td>

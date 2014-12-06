@@ -20,7 +20,7 @@ angular.module('flowsimUiApp')
     };
 
     $scope.togglePort = function(id) {
-      var port = $scope.device.ports.ports[id];
+      var port = $scope.device.ports.ports[id-1];
       port.config.port_down = !port.config.port_down;
       port.state.link_down = port.config.port_down;
     };
