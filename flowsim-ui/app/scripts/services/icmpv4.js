@@ -3,7 +3,7 @@
 angular.module('flowsimUiApp')
   .factory('ICMPV4', function(UInt, fgUI, fgConstraints){
 
-var NAME = 'ICMPv4';
+var NAME = 'ICMPV4';
 var BYTES = 8;
 
 var Payloads = {};

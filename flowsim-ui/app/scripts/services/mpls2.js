@@ -1,31 +1,37 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('VLAN2', function() {
+  .factory('MPLS2', function() {
 
-var VLAN = {
-  name: 'VLAN',
-  shortName: 'vlan',
+var MPLS = {
+  name: 'MPLS',
   bytes: 4,
-  pushable: true,
-  popable: true,
   fields: [{
-    name: 'PCP',
+    name: 'Label',
+    bitwidth: 20,
+    matchable: true,
+    setable: true,
+    tip: 'Label'
+  },{
+    name: 'TC',
     bitwidth: 3,
     matchable: true,
     setable: true,
-    tip: 'Priority Code Point'
+    tip: 'Traffic Class'
   },{
-    name: 'VID',
-    bitwidth: 12,
+    name: 'BOS',
+    bitwidth: 1,
     matchable: true,
     setable: true,
-    tip: 'VLAN identifier'
+    tip: 'Bottom of Stack'
   },{
-    name: 'Type',
-    bitwidth: 16,
+    name: 'TTL',
+    bitwidth: 8,
     matchable: false,
-    setable: false,
+    setable: true,
+    decable: true,
+    copyIn: true,
+    copyOut: true
   },{
     name: 'tag',
     bitwidth: 0,
@@ -35,16 +41,13 @@ var VLAN = {
 
 var Payloads = {
   Type: {
-    '0x8100': 'VLAN',
-    '0x8847': 'MPLS',
-    '0x0806': 'ARP',
     '0x0800': 'IPv4',
     '0x86dd': 'IPv6'
   }
 };
 
 return {
-  VLAN: VLAN,
+  MPLS: MPLS,
   Payloads: Payloads
 };
 

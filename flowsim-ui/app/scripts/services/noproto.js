@@ -194,7 +194,7 @@ MatchSet.prototype.peekTop = function() {
     throw 'Failed to peekTop on empty MatchSet';
   }
   return this.set[this.set.length-1];
-}
+};
 
 MatchSet.prototype.equal = function(set) {
   var idx;
@@ -309,7 +309,7 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
   // Attach the input test function -- object cons
   if(this.field === 'tag') {
     // FIXME ... this is a hack
-    this.valueTest = function() { return true; }
+    this.valueTest = function() { return true; };
   } else {
     this.valueTest = getTestFunction(this.protocol, this.field);
   }
@@ -343,6 +343,10 @@ function Field(params) {
   this.setable = params.setable || false;
   // Can this feild be decremented
   this.decable = params.decable || false;
+  // Can this field be copied in
+  this.copyIn = params.copyIn || false;
+  // Can this field be copied out
+  this.copyOut = params.copyOut || false;
   // String input test function 
   this.testStr = params.testStr || null;
   // Display string conversion function
@@ -465,6 +469,12 @@ Protocol.prototype.getActionProfiles = function() {
     }
     if(field.decable) {
       result.push(field.getActionProfile('dec'));
+    }
+    if(field.copyIn) {
+      result.push(field.getActionProfile('copyIn'));
+    }
+    if(field.copyOut) {
+      result.push(field.getActionProfile('copyOut'));
     }
   });
   return result;

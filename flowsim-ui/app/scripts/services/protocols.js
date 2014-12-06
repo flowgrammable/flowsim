@@ -8,7 +8,8 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Protocols', function(Noproto, Internal, Ethernet2, VLAN2) {
+  .factory('Protocols', function(Noproto, Internal, Ethernet2, 
+        VLAN2, ARP2, IPv42, MPLS2, ICMPv42, IPv62, ICMPv62, TCP2, SCTP2, UDP2) {
 
 // Inser new protocols below ...
  
@@ -16,15 +17,15 @@ var Protocols = [
   Internal.Internal,
   Ethernet2.Ethernet,
   VLAN2.VLAN,
-  //MPLS2.MPLS,
-  //ARP2.ARP,
-  //IPv42.IPv4,
-  //ICMPv42.ICMPv4,
-  //IPv62.IPv6,
-  //ICMPv62.ICMPv6,
-  //TCP2.TCP,
-  //SCTP2.SCTP,
-  //UDP2.UDP
+  MPLS2.MPLS,
+  ARP2.ARP,
+  IPv42.IPv4,
+  ICMPv42.ICMPv4,
+  IPv62.IPv6,
+  ICMPv62.ICMPv6,
+  TCP2.TCP,
+  SCTP2.SCTP,
+  UDP2.UDP
 ];
 
 // Build a listing of all protocols supported
@@ -68,15 +69,15 @@ ActionProfiles.prototype.clone = function() {
 var _Graph = {
   Ethernet: Ethernet2.Payloads,
   VLAN: VLAN2.Payloads,
-  //MPLS: MPLS2.Payloads,
-  //ARP: ARP2.Payloads,
-  //IPv4: IPv42.Payloads,
-  //ICMPv4: ICMPv42.Payloads,
-  //IPv6: IPv62.Payloads,
-  //ICMPv6: ICMPv62.Payloads,
-  //TCP: TCP2.Payloads,
-  //SCTP: SCTP2.Payloads,
-  //UDP: UDP2.Payloads
+  MPLS: MPLS2.Payloads,
+  ARP: ARP2.Payloads,
+  IPv4: IPv42.Payloads,
+  ICMPv4: ICMPv42.Payloads,
+  IPv6: IPv62.Payloads,
+  ICMPv6: ICMPv62.Payloads,
+  TCP: TCP2.Payloads,
+  SCTP: SCTP2.Payloads,
+  UDP: UDP2.Payloads
 };
 
 // Simple dependency search function
