@@ -39,8 +39,7 @@ var Payloads = {
     '0x8847': 'MPLS',
     '0x0806': 'ARP',
     '0x0800': 'IPv4',
-    '0x86dd': 'IPv6',
-    'Payload': 0
+    '0x86dd': 'IPv6'
   }
 };
 
