@@ -45,14 +45,14 @@
   <tr ng-repeat="table in profile.tables.tables">
     <td>{{table.id}}</td>
     <td>
-      <div class="form-group" tooltip="{{tips.Tables.Table.name}}"
+      <div tooltip="{{tips.Tables.Table.name}}"
            ng-class="{'has-error': !metadata.tests.Tables.Table.name(table.name)}">
         <input class="form-control" type="text" ng-model="table.name"
                style="width:100px">
       </div>
     </td>
     <td>
-      <div class="form-group" tooltip="{{tips.Tables.Table.max_entries}}"
+      <div tooltip="{{tips.Tables.Table.max_entries}}"
            ng-class="{'has-error': !metadata.tests.Tables.Table.max_entries(table.max_entries)}">
         <input class="form-control" type="text" ng-model="table.max_entries"
                style="width:60px">

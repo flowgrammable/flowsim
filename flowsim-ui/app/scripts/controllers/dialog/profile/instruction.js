@@ -22,9 +22,6 @@ angular.module('flowsimUiApp')
     $scope.applyRows = [];
     $scope.writeRows = [];
 
-    console.log($scope.apply);
-    console.log($scope.write);
-
     var i;
     var rowCount = Math.floor($scope.apply.length / 3);
     for(i=0; i < rowCount; ++i) {
