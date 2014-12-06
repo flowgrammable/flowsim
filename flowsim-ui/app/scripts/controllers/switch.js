@@ -85,7 +85,6 @@ angular.module('flowsimUiApp')
             console.log(err.details);
           } else {
             $scope.device = result;
-            console.log('scope device', $scope.device);
           }
         });
       }
