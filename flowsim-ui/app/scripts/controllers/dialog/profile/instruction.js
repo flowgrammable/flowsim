@@ -26,6 +26,9 @@ function orderProfiles(profiles) {
     }
     tmp.push(profile);
   });
+  if(tmp.length > 0) {
+    protocols.push(tmp);
+  }
   protocols = _(protocols).reject(function(protocol) {
     return protocol.length === 0;
   });
