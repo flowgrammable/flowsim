@@ -122,36 +122,12 @@
 
         </div>
         <div ng-show="active.index === 5">
-       
-            <br>
-            <div class="col-sm-5">
-              <ul class="list-group">
-                <li class="list-group-item" ng-repeat="rng in instruction.goto_">
-                  {{rng.first}}
-                  {{'..'+rng.second}}
-                  <span ng-click="del($index)"
-                        class="glyphicon glyphicon-minus-sign pull-right"></span>
-                </li>
-              </ul>
-
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="0..255"
-                       ng-model="goto_.nextTables">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" 
-                          ng-click="add()">
-                    Add
-                  </button>
-                </span>
-              </div>
-              <div class="error" ng-show="errorMsg.length">
-                <h6>
-                  <span>{{errorMsg}}</span>
-                </h6>
-              </div>
-            </div>
-
+          <br>
+          <div class="col-sm-5">
+            <fg-goto set="instruction.goto_"></fg-set>
+          </div>
         </div>
+
         </div>
       </div>
     </div>

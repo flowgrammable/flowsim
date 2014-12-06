@@ -1,0 +1,23 @@
+
+<ul class="list-group">
+  <li class="list-group-item" ng-repeat="rng in set">
+    {{rng[0] === rng[1] ? rng[0] : rng[0]+'..'+rng[1]}}
+    <span ng-click="del($index)" 
+          class="glyphicon glyphicon-minus-sign pull-right"></span>
+  </li>
+</ul>
+ 
+<div class="input-group"
+     ng-class="{'has-error': goto_.value.length > 0 &&
+                            !goto_.test(goto_.value)}">
+  <input type="text" class="form-control" 
+         ng-model="goto_.value"
+         tooltip="{{goto_.tip}}">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="add()"
+            ng-disabled="goto_.value.length === 0 || !goto_.test(goto_.value)">
+      Add
+    </button>
+  </span>
+</div>
+
