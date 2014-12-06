@@ -9,8 +9,10 @@
  */
 angular.module('flowsimUiApp')
   .controller('DialogProfileMatchCtrl', function ($scope, $modalInstance, 
-                                                  match) {
-    $scope.match = match;
+                                                  match, tableName, tableId) {
+    $scope.match     = match;
+    $scope.tableName = tableName;
+    $scope.tableId   = tableId;
 
     $scope.ok = function() {
       $modalInstance.close($scope.match);

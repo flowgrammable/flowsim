@@ -41,8 +41,12 @@ function orderProfiles(profiles) {
 
 angular.module('flowsimUiApp')
   .controller('DialogProfileInstructionCtrl', function ($scope, $modalInstance, 
-                                                        name, instruction) {
-    $scope.name = name;
+                                                        name, instruction, 
+                                                        tableName, tableId) {
+    $scope.name      = name;
+    $scope.tableName = tableName;
+    $scope.tableId   = tableId;
+
     $scope.instruction = instruction;
     // Provide a specific ordering for the view
     $scope.instructions = [

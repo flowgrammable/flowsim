@@ -116,6 +116,12 @@ angular.module('flowsimUiApp')
         controller: 'DialogProfileMatchCtrl',
         size: 'lg',
         resolve: {
+          tableName: function() { 
+            return $scope.profile.tables.tables[idx].name; 
+          },
+          tableId: function() { 
+            return $scope.profile.tables.tables[idx].id; 
+          },
           match: function () {
             return $scope.profile.tables.tables[idx].match.clone();
           }
@@ -132,6 +138,12 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: {
           name: function() { return 'Instruction'; },
+          tableName: function() { 
+            return $scope.profile.tables.tables[idx].name; 
+          },
+          tableId: function() { 
+            return $scope.profile.tables.tables[idx].id; 
+          },
           instruction: function () {
             return $scope.profile.tables.tables[idx].instruction.clone();
           }
@@ -148,6 +160,12 @@ angular.module('flowsimUiApp')
         size: 'lg',
         resolve: {
           name: function() { return 'Miss'; },
+          tableName: function() { 
+            return $scope.profile.tables.tables[idx].name; 
+          },
+          tableId: function() { 
+            return $scope.profile.tables.tables[idx].id; 
+          },
           instruction: function() {
             return $scope.profile.tables.tables[idx].miss.clone();
           }
