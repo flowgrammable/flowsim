@@ -10,11 +10,10 @@ angular.module('flowsimUiApp')
         set: '='
       },
       controller: function($scope) {
-        console.log('blah');
-        console.log($scope.set.profile);
         $scope.active = {
           index: -1,
         };
+
         $scope.instructions = [
           $scope.set.meter,
           $scope.set.apply,
@@ -23,6 +22,16 @@ angular.module('flowsimUiApp')
           $scope.set.metadata,
           $scope.set.goto_
         ];
+
+        $scope.addApplyAction = function() {
+        };
+        $scope.popApplyAction = function() {
+        };
+
+        $scope.addWriteAction = function() {
+        };
+        $scope.popWriteAction = function() {
+        };
       }
     };
   });

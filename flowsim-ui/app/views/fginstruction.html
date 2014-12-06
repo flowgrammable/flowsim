@@ -43,16 +43,18 @@
         </form>
       </div>
       <div ng-show="active.index === 1">
-        <fg-apply-actions toplevel="applyActions" action-list="applyList"
-                          add-action="addApplyAction">
+        <fg-apply-actions toplevel="set.profile.apply.profiles.profiles" 
+                          match="match.set"
+                          actions="set.apply.actions">
         </fg-apply-actions>
       </div>
       <div ng-show="active.index === 2">
         <h3>Clear the Action Set</h3>
       </div>
       <div ng-show="active.index === 3">
-        <fg-write-actions toplevel="writeActions" action-list="writeList"
-                          add-action="addWriteAction">
+        <fg-write-actions toplevel="set.profile.write.profiles.profiles" 
+                          match="match.set"
+                          actions="set.write.actions">
         </fg-write-actions>
       </div>
       <div ng-show="active.index === 4">

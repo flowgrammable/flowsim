@@ -12,9 +12,9 @@ angular.module('flowsimUiApp')
       templateUrl: 'views/fgWriteAction.html',
       restrict: 'E',
       scope: {
-        toplevel:     '=',
-        actionList:   '=',
-        addActionCB:  '&addAction'
+        toplevel: '=',
+        match:    '=',
+        actions:  '='
       },
       controller: function($scope) {
 

@@ -12,113 +12,123 @@ angular.module('flowsimUiApp')
       templateUrl: 'views/fgApplyAction.html',
       restrict: 'E',
       scope: {
-        toplevel:     '=',
-        actionList:   '=',
-        addActionCB:  '&addAction'
+        toplevel: '=',
+        match:    '=',
+        actions:  '='
       },
       controller: function($scope) {
 
         // Input selectors and box
         $scope.active = {
-          categories: [],
-          fields: [],
-          actions: [],
-          category: '',
-          field: '',
-          action: '',
-          value: '',
-          type: null
+          protocols: [],
+          fields:    [],
+          ops:       [],
+          protocol:  '',
+          field:     '',
+          op:        '',
+          value:     '',
+          type:      null
         };
 
-        // Build a top-level list of available apply actions
-        $scope.available = _($scope.toplevel).map(function(category) {
-          return {
-            protocol: category.protocol,
-            actions: _(category.actions).filter(function(action) {
-              return action.enabled;
-            })
-          };
-        }).filter(function(category) {
-          return category.actions.length > 0;
+        // Build a top-level list of enabled actions
+        $scope.enabledProfiles = _($scope.toplevel).filter(function(profile) {
+          return profile.enabled;
         });
+
+        // Filter out all protocols that are not present in match
+        $scope.availableProfiles = _($scope.enabledProfiles).filter(
+          function(profile) {
+            return profile.protocol === 'Internal' || 
+                   profile.protocol === 'Ethernet';
+            //FIXME
+          });
 
         // Build a top-level list of avaiable apply action names
-        $scope.active.categories = _($scope.available).map(function(category) {
-          return category.protocol;
-        });
+        $scope.active.protocols = _(_($scope.availableProfiles).map(
+          function(profile) {
+            return profile.protocol;
+          })).unique();
 
         // Update the depdendent drop boxes
-        $scope.updateApplyCategory = function() {
-          $scope.activeCategory = _($scope.available).find(
-            function(category) {
-              return category.protocol === $scope.active.category;
+        $scope.updateProtocol = function() {
+          $scope.activeFieldss = _($scope.availableProfiles).filter(
+            function(profile) {
+              return profile.protocol === $scope.active.protocol;
             });
             
-          $scope.active.fields = _(_($scope.activeCategory.actions).map(
-            function(action) {
-              return action.field;
+          $scope.active.fields = _(_($scope.activeFields).filter(
+            function(profile) {
+              return profile.field;
             })).unique();
 
-          $scope.active.type   = null;
-          $scope.active.value  = '';
-          $scope.active.action = '';
-          $scope.active.field  = '';
+          $scope.active.type    = null;
+          $scope.active.value   = '';
+          $scope.active.op      = '';
+          $scope.active.field   = '';
           $scope.active.actions = [];
         };
 
         // Update the depdendent drop boxes
-        $scope.updateApplyField = function() {
-          $scope.activeField = ($scope.activeCategory.actions).filter(
-            function(action) {
-              return action.field === $scope.active.field;
+        $scope.updateField = function() {
+          $scope.activeOps = _($scope.activeFields).filter(
+            function(profile) {
+              return profile.field === $scope.active.field;
             });
-          $scope.active.actions = _(_($scope.activeField).map(
-            function(action) {
-              return action.action ? action.action : '';
-            })).filter(function(action) {
-              return action.length > 0;
+          $scope.active.ops = _($scope.activeOps).map(
+            function(profile) {
+              return profile.op;
             });
 
           $scope.active.type   = null;
           $scope.active.value  = '';
-          $scope.active.action = '';
+          $scope.active.op     = '';
         };
 
         // Update the depdendent drop boxes
-        $scope.updateApplyAction = function() {
-          $scope.active.type = _($scope.activeField).find(
-            function(action) {
-              return action.field === $scope.active.field &&
-                     action.action === $scope.active.action;
+        $scope.updateAction = function() {
+          $scope.active.type = _($scope.activeOps).find(
+            function(profile) {
+              return profile.op === $scope.active.op;
             });
           $scope.active.value = '';  
         };
 
         // Remove the last action
         $scope.popAction = function() {
-          $scope.actionList.pop();
+          if($scope.actions.length > 0) {
+            $scope.actions.splice(-1, 1);
+         
+            // Flush the inputs on modification
+            $scope.active.type     = null;
+            $scope.active.value    = '';
+            $scope.active.op       = '';
+            $scope.active.field    = '';
+            $scope.active.protocol = '';
+            $scope.active.fields   = [];
+            $scope.active.ops      = [];
+          }
         };
 
         // Add the action ... invoke the callback
         $scope.addAction = function() {
           var action;
-          if($scope.active.type && 
-             $scope.active.type.test($scope.active.value)) {
-
-            action = $scope.active.type.mkType($scope.active.value);
-            $scope.addActionCB()(action);
-         
-            $scope.active.type     = null;
-            $scope.active.action   = ''; 
-            $scope.active.value    = '';
-            $scope.active.action   = '';
-            $scope.active.field    = '';
-            $scope.active.category = '';
-            $scope.active.fields  = [];
-            $scope.active.actions = [];
-          } else {
-            console.log('can not add');
+          if(!$scope.active.type || 
+             !$scope.active.type.test($scope.active.value)) {
+            throw 'Add apply action failed: '+$scope.active.value;
           }
+
+          // Construct the aciton type and add to the list
+          action = $scope.active.type.mkType($scope.active.value);
+          $scope.actions.push(action);
+        
+          // Clearn the selectors and inputs
+          $scope.active.type     = null;
+          $scope.active.value    = '';
+          $scope.active.op       = '';
+          $scope.active.field    = '';
+          $scope.active.protocol = '';
+          $scope.active.fields   = [];
+          $scope.active.ops      = [];
         };
 
       }
