@@ -11,6 +11,7 @@
 
       <span ng-repeat="ins in instructions">
         <button type="button" class="btn btn-xs btn-default"
+                tooltip="{{'Enable/Disable '+ins.name+ ' instruction'}}"
                 ng-click="ins.enabled = !ins.enabled;
                 active.index = active.index === $index ? -1 : active.index" 
                 ng-class="{'btn-primary': ins.enabled}">
@@ -111,11 +112,12 @@
                 Writable Bits
               </label>
               <div class="col-sm-5" ng-class="{'has-error': 
-                active.metadataMaskableBits.length > 0 &&
-                !active.metadataMaskableBitsTest(active.metadataMaskableBits)}">
+                instruction.metadata.maskableBits.length > 0 &&
+                !instruction.metadata.maskableBitsTest(
+                  instruction.metadata.maskableBits)}">
                 <input type="text" class="form-control" 
-                       tooltip="{{active.metadataMaskableBitsTip}}"
-                       ng-model="active.metadataMaskableBits">
+                       tooltip="{{instruction.metadata.maskableBitsTip}}"
+                       ng-model="instruction.metadata.maskableBits">
               </div>
             </div>
           </form>
@@ -124,7 +126,7 @@
         <div ng-show="active.index === 5">
           <br>
           <div class="col-sm-5">
-            <fg-goto set="instruction.goto_"></fg-set>
+            <fg-goto set="instruction.goto_.targets"></fg-set>
           </div>
         </div>
 

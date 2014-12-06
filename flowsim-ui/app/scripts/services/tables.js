@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .factory('Tables', function(Regex, fgConstraints, Match, Instruction, Flow, 
-                              Protocols) {
+                              Protocols, Instruction2) {
 
 /* Default Construction Constants */
 var defTables = 8;
@@ -165,16 +165,16 @@ function TableProfile(tableProfile, id) {
   if(_.isObject(tableProfile)) {
     _.extend(this, tableProfile);
     this.match       = new Protocols.MatchProfiles(tableProfile.match);
-    this.instruction = new Instruction.Profile(tableProfile.instruction);
-    this.miss        = new Instruction.Profile(tableProfile.miss);
+    this.instruction = new Instruction2.Profile(tableProfile.instruction);
+    this.miss        = new Instruction2.Profile(tableProfile.miss);
   } else {
     this.id          = id;
     this.name        = defName + id;
     this.max_entries = defMaxEntries;
 
     this.match       = new Protocols.MatchProfiles();
-    this.instruction = new Instruction.Profile();
-    this.miss        = new Instruction.Profile();
+    this.instruction = new Instruction2.Profile();
+    this.miss        = new Instruction2.Profile();
   }
 }
 
