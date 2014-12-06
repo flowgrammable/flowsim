@@ -22,9 +22,11 @@
     <tr>
       <td>
         <select class="form-control" ng-model="active.category"
-            ng-options="category as category for category in
-            active.categories"
             ng-change="updateApplyCategory()">
+          <option ng-repeat="category in active.protocols" 
+                  value="{{protocols}}">
+            {{category}}
+          </option>
         </select>
       </td>
       <td>
@@ -32,6 +34,10 @@
             ng-options="field as field for field in
             active.fields"
             ng-change="updateApplyField()">
+          <option ng-repeat="field in active.fields"
+                  value="{{field}}">
+            {{field}}
+          </option>
         </select>
       </td>
       <td>
