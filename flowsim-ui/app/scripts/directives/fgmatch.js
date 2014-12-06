@@ -198,6 +198,13 @@ angular.module('flowsimUiApp')
           $scope.free(profile, m.value);
           // Remove the match
           $scope.config.pop();
+          // Clear the dependent properties
+          $scope.active.protocol = '';
+          $scope.active.fields   = [];
+          $scope.active.field    = '';
+          $scope.active.value    = '';
+          $scope.active.mask     = '';
+          $scope.active.type     = null;
         };
       }
     };
