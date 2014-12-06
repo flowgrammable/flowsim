@@ -7,7 +7,7 @@
  * # fgApplyAction
  */
 angular.module('flowsimUiApp')
-  .directive('fgApplyActions', function () {
+  .directive('fgApplyActions', function (Protocols) {
     return {
       templateUrl: 'views/fgApplyAction.html',
       restrict: 'E',
@@ -39,8 +39,11 @@ angular.module('flowsimUiApp')
         $scope.availableProfiles = _($scope.enabledProfiles).filter(
           function(profile) {
             return profile.protocol === 'Internal' || 
-                   profile.protocol === 'Ethernet';
-            //FIXME
+                   profile.protocol === 'Ethernet' ||
+                   _($scope.match).some(function(_match) {
+                     return Protocols.Graph(_match.protocol, _match.field, 
+                                            _match.value) === profile.protocol;
+                   });
           });
 
         // Build a top-level list of avaiable apply action names
