@@ -83,7 +83,7 @@ var _Graph = {
 function Graph(protocol, field, value) {
   if(!_(_Graph).has(protocol)) { return ''; }
   if(!_(_Graph[protocol]).has(field)) { return ''; }
-  if(!_(_Graph[protocol][value]).has(value)) { return ''; }
+  if(!_(_Graph[protocol][field]).has(value)) { return ''; }
   return _Graph[protocol][field][value];
 }
 

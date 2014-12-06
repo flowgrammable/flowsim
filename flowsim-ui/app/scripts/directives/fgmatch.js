@@ -69,6 +69,10 @@ angular.module('flowsimUiApp')
           // Locate any new profiles
           $scope.availableProfiles.concat(_($scope.enabledProfiles).filter(
             function(_profile) {
+              console.log('candidate: '+_profile.protocol);
+              console.log('result: '+Protocols.Graph(profile.protocol, profile.field, value));
+              console.log('===: '+Protocols.Graph(profile.protocol, profile.field, value) ===
+                     _profile.protocol);
               return Protocols.Graph(profile.protocol, profile.field, value) ===
                      _profile.protocol;
             }));
@@ -169,7 +173,7 @@ angular.module('flowsimUiApp')
             // Push the new match onto the match set
             $scope.config.push(match);
             // Run the available/used profile book keeping
-            $scope.use($scope.active.type);
+            $scope.use($scope.active.type, $scope.active.value);
             // Clear the dependent properties
             $scope.active.protocol = '';
             $scope.active.fields   = [];
@@ -193,7 +197,7 @@ angular.module('flowsimUiApp')
             throw 'Failed to find usedProfile '+m;
           }
           // Run the used/available book keeping on the profile
-          $scope.free(profile);
+          $scope.free(profile, m.value);
           // Remove the match
           $scope.config.pop();
         };
