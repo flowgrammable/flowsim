@@ -6,11 +6,11 @@ angular.module('flowsimUiApp')
 
 var addressPattern = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/;
 
-function isAddress(str){
+function isAddress(str) {
   return addressPattern.test(str);
 }
 
-function consAddress(str){
+function consAddress(str) {
   var tmp = str.split('.');
   return ((((((+tmp[0])*256)+(+tmp[1]))*256)+(+tmp[2]))*256)+(+tmp[3]);
 }
