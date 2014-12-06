@@ -41,8 +41,8 @@ function orderProfiles(profiles) {
 
 angular.module('flowsimUiApp')
   .controller('DialogProfileInstructionCtrl', function ($scope, $modalInstance, 
-                                                        fgConstraints, name,
-                                                        instruction) {
+                                                        fgConstraints, name, 
+                                                        UInt, instruction) {
     $scope.name = name;
     $scope.instruction = instruction;
 
@@ -71,7 +71,9 @@ angular.module('flowsimUiApp')
     $scope.active = {
       index: -1,
       // Input values
-      metadataMaskableBits: '',
+      metadataMaskableBits: instruction.metadata,
+      metadataMaskableBitsTip: 'Determine which metadata bits can be masked',
+      metadataMaskableBitsTest: UInt.is(64),
       gotoValue: '',
       gotoValues: []
     };
@@ -134,6 +136,13 @@ angular.module('flowsimUiApp')
       $scope.instruction.caps.write    = $scope.instructions[3].enabled;
       $scope.instruction.caps.metadata = $scope.instructions[4].enabled;
       $scope.instruction.caps.goto_    = $scope.instructions[5].enabled;
+
+      // Only copy the metadata if its valid
+      if($scope.active.metadataMaskableBits.length > 0 &&
+         $scope.active.metadataMaskableBitsTest(
+           $scope.active.metadataMaskableBits)) {
+        $scope.instruction.metadata = $scope.active.metadataMaskableBits;
+      }
 
       $modalInstance.close($scope.instruction);
     };

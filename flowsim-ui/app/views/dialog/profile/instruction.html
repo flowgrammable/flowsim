@@ -104,18 +104,21 @@
         </div>
         <div ng-show="active.index === 4">
 
-            <br>
-            <form class="form-horizontal" role="form">
-              <div class="form-group" ng-class="{'has-error':
-                !tests.metadata(instruction.metadata)}">
-                <label class="col-sm-2 control-label">
-                  Writable Bits
-                </label>
-                <div class="col-sm-5">
-                  <input type="text" class="form-control" 
-                         ng-model="instruction.metadata">
-                </div>
+          <br>
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">
+                Writable Bits
+              </label>
+              <div class="col-sm-5" ng-class="{'has-error': 
+                active.metadataMaskableBits.length > 0 &&
+                !active.metadataMaskableBitsTest(active.metadataMaskableBits)}">
+                <input type="text" class="form-control" 
+                       tooltip="{{active.metadataMaskableBitsTip}}"
+                       ng-model="active.metadataMaskableBits">
               </div>
+            </div>
+          </form>
 
         </div>
         <div ng-show="active.index === 5">
