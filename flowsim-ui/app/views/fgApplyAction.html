@@ -24,7 +24,7 @@
         <select class="form-control" ng-model="active.protocol"
             tooltip="Select a protocol header to modify"
             ng-change="updateProtocol()">
-          <option ng-repeat="protocol in active.protocols" value="{{protocols}}">
+          <option ng-repeat="protocol in active.protocols" value="{{protocol}}">
             {{protocol}}
           </option>
         </select>
@@ -52,6 +52,7 @@
              ng-class="{'has-error': active.type && active.value.length > 0 &&
                         !active.type.test(active.value)}">
           <input type="text" class="form-control" ng-model="active.value"
+                 ng-disabled="active.op !== 'set'"
                  tooltip="{{active.type ? active.type.tip :''}}">
         </div>
       </td>

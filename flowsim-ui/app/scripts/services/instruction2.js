@@ -196,13 +196,13 @@ Set.prototype.summarize = function() {
   if(this.meter.enabled) {
     result.push(this.meter.name.toLowerCase());
   }
-  if(this.apply.enabled) {
+  if(this.apply.enabled && this.apply.actions.length > 0) {
     result.push(this.apply.name.toLowerCase());
   }
   if(this.clear.enabled) {
     result.push(this.clear.name.toLowerCase());
   }
-  if(this.write.enabled) {
+  if(this.write.enabled && this.write.actions.length > 0) {
     result.push(this.write.name.toLowerCase());
   }
   if(this.metadata.enabled) {

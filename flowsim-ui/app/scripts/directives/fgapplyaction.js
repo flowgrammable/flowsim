@@ -36,15 +36,24 @@ angular.module('flowsimUiApp')
         });
 
         // Filter out all protocols that are not present in match
-        $scope.availableProfiles = _($scope.enabledProfiles).filter(
-          function(profile) {
-            return profile.protocol === 'Internal' || 
-                   profile.protocol === 'Ethernet' ||
-                   _($scope.match).some(function(_match) {
-                     return Protocols.Graph(_match.protocol, _match.field, 
-                                            _match.value) === profile.protocol;
-                   });
-          });
+        $scope.updateProfiles = function() {
+          $scope.availableProfiles = _($scope.enabledProfiles).filter(
+            function(profile) {
+              return profile.protocol === 'Internal' || 
+                     profile.protocol === 'Ethernet' ||
+                     _($scope.match).some(function(_match) {
+                       return Protocols.Graph(_match.protocol, _match.field, 
+                                             _match.value) === profile.protocol;
+                    });
+            });
+        };
+        $scope.updateProfiles();
+        // Re-run on changes to the underlying match set ... new protocols may
+        // be available upon more matches
+        $scope.$watch('match', function() { 
+          console.log('match change');
+          $scope.updateProfiles(); 
+        });
 
         // Build a top-level list of avaiable apply action names
         $scope.active.protocols = _(_($scope.availableProfiles).map(
@@ -54,12 +63,12 @@ angular.module('flowsimUiApp')
 
         // Update the depdendent drop boxes
         $scope.updateProtocol = function() {
-          $scope.activeFieldss = _($scope.availableProfiles).filter(
+          $scope.activeFields = _($scope.availableProfiles).filter(
             function(profile) {
               return profile.protocol === $scope.active.protocol;
             });
             
-          $scope.active.fields = _(_($scope.activeFields).filter(
+          $scope.active.fields = _(_($scope.activeFields).map(
             function(profile) {
               return profile.field;
             })).unique();
@@ -88,7 +97,7 @@ angular.module('flowsimUiApp')
         };
 
         // Update the depdendent drop boxes
-        $scope.updateAction = function() {
+        $scope.updateOp = function() {
           $scope.active.type = _($scope.activeOps).find(
             function(profile) {
               return profile.op === $scope.active.op;
