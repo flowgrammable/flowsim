@@ -11,7 +11,7 @@ var VLAN = {
   popable: true,
   fields: [{
     name: 'PCP',
-    bidwidth: 3,
+    bitwidth: 3,
     matchable: true,
     setable: true,
     testStr: UInt.is(3),
@@ -20,7 +20,7 @@ var VLAN = {
     tip: 'Priority Code Point'
   }, {
     name: 'DEI',
-    bidwidth: 1,
+    bitwidth: 1,
     matchable: false,
     setable: false,
     testStr: UInt.is(1),
@@ -29,7 +29,7 @@ var VLAN = {
     tip: 'Drop eligible indicator'
   }, {
     name: 'VID',
-    bidwidth: 12,
+    bitwidth: 12,
     matchable: true,
     setable: true,
     testStr: UInt.is(12),
