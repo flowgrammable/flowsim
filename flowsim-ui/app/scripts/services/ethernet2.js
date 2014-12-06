@@ -37,7 +37,7 @@ var Ethernet = {
     testStr: isMAC,
     consStr: consMAC,
     dispStr: dispMAC,
-    tip: 'Ethernet Src MAC Address'
+    tip: 'Src MAC Address'
   }, {
     name: 'Dst',
     bitwidth: 48,
@@ -46,12 +46,12 @@ var Ethernet = {
     testStr: isMAC,
     consStr: consMAC,
     dispStr: dispMAC,
-    tip: 'Ethernet Dst MAC Address'
+    tip: 'Dst MAC Address'
   }, {
     name: 'Type',
     bitwidth: 16,
     matchable: true,
-    tip: 'Ethernet Payload Type/Length'
+    tip: 'Payload Type/Length'
   }]
 };
 

@@ -10,17 +10,17 @@ var Internal = {
     name: 'In_Port',
     bitwidth: 32,
     matchable: true,
-    tip: 'Ingress Logical Port'
+    tip: 'Logical Port'
   }, {
     name: 'In_Phy_Port',
     bitwidth: 32,
     matchable: true,
-    tip: 'Ingress Physical Port'
+    tip: 'Physical Port'
   }, {
     name: 'Tunnel_ID',
     bitwidth: 32,
     matchable: true,
-    tip: 'Ingress Tunnel ID'
+    tip: 'Tunnel ID'
   }, {
     name: 'Output',
     bitwidth: 32,

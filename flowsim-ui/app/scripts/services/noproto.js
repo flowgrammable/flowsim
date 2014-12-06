@@ -130,13 +130,13 @@ function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled,
     this.maskableBits = '';
     
     // Attach the necessary tool tips -- profile
-    this.enabledTip      = 'Enable/Disable '+this.tip+' matching';
-    this.wildcardableTip = 'Enable/Disable '+this.tip+' wildcard matching';
-    this.maskableTip     = 'Enable/Disable '+this.tip+' bitmask matching';
+    this.enabledTip      = 'Enable/Disable '+this.protocol+' '+this.tip+' matching';
+    this.wildcardableTip = 'Enable/Disable '+this.protocol+' '+this.tip+' wildcard matching';
+    this.maskableTip     = 'Enable/Disable '+this.protocol+' '+this.tip+' bitmask matching';
     this.maskableBitsTip = 'Indicate which bits are maskable';
 
     // Attach the necessary tool tips -- object cons
-    this.valueTip = this.tip + ' to match against';
+    this.valueTip = this.protocol+' '+this.tip + ' to match against';
     this.maskTip  = 'Bitmask to use in match';
   }
   // Match Constructor
@@ -296,9 +296,9 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
     // UI Editable properties
     this.enabled = enabled;
     // Attach the tool tip -- profile
-    this.enabledTip = this.tip+' modification';
+    this.enabledTip = this.protocol+' '+this.tip+' modification';
     // Attach the tool tip -- object cons
-    this.valueTip = 'Value to set the '+this.tip;
+    this.valueTip = 'Value to set the '+this.protocol+' '+this.tip;
   }
   // Action Constructor
   this.mkType = function(value) {
@@ -354,7 +354,7 @@ function Field(params) {
   // String constructor function
   this.consStr = params.consStr || null;
   // Display string describing the field
-  this.tip = params.tip || this.protocol + ' ' + this.name;
+  this.tip = params.tip || this.name;
 }
 
 Field.prototype.attachDefaultFunctions = function() {
