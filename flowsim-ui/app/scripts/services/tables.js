@@ -67,9 +67,11 @@ Priority.prototype.empty = function() {
 function Table(table, tableProfile) {
   if(_.isObject(table)) {
     _.extend(this, table);
-    this.capabilities      = new TableProfile(table.capabilities);
-    this.priorities        = _(table.priorities).map(function(priority) {
-                                    return new Priority(priority); });
+    this.capabilities = new TableProfile(table.capabilities);
+    this.priorities   = _(table.priorities).map(
+      function(priority) {
+        return new Priority(priority); 
+      });
     this.prioritiesPresent = _(table.priorities).each(function(priority) {
       this.prioritiesPresent[priority.priority] = priority;
     }, this);

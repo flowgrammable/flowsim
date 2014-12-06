@@ -4,6 +4,9 @@
     <h4>Instruction Set</h4>
     <span ng-repeat="ins in instructions">
       <button type="button" class="btn btn-xs btn-default"
+              tooltip="{{'Add/Remove '+ins.name}}"
+              ng-show="set.profile[ins.name.toLowerCase()].enabled ||
+                       set.profile[ins.name.toLowerCase()+'_'].enabled"
               ng-click="ins.enabled = !ins.enabled;
                         active.index = active.index === $index ? -1 : active.index" 
               ng-class="{'btn-primary': ins.enabled}">
@@ -15,6 +18,7 @@
     <div class="col-md-2">
       <ul class="list-group">
         <li ng-repeat="ins in instructions" class="list-group-item"
+            tooltip="{{ins.tip}}"
             ng-class="{'active': active.index === $index}"
             ng-show="ins.enabled" ng-click="active.index = $index">
           {{ins.name}}
@@ -29,9 +33,11 @@
             <label class="col-sm-2 control-label">
               Meter Id
             </label>
-            <div class="col-sm-5">
+            <div class="col-sm-5"
+                 ng-class="{'has-error': set.meter.id.length > 0 &&
+                             !set.meter.idTest(set.meter.id)}">
               <input type="text" class="form-control"
-                     ng-model="active.meter">
+                     tooltip="{{set.meter.idTip}}" ng-model="set.meter.id">
             </div>
           </div>
         </form>
@@ -56,18 +62,24 @@
             <label class="col-sm-2 control-label">
               Value
             </label>
-            <div class="col-sm-5">
+            <div class="col-sm-5" ng-class="{'has-error':
+              set.metadata.value.length > 0 &&
+              !set.metadata.valueTest(set.metadata.value)}">
               <input type="text" class="form-control"
-              ng-model="active.metadataValue">
+                     tooltip="{{set.metadata.valueTip}}"
+                     ng-model="set.metadata.value">
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label">
               Mask
             </label>
-            <div class="col-sm-5">
+            <div class="col-sm-5" ng-class="{'has-error':
+              set.metadata.mask.length > 0 &&
+              !set.metadata.maskTest(set.metadata.mask)}">
               <input type="text" class="form-control"
-              ng-model="active.metadataMask">
+                     tooltip="{{set.metadata.maskTip}}"
+                     ng-model="set.metadata.mask">
             </div>
           </div>
         </form>
@@ -79,9 +91,12 @@
             <label class="col-sm-2 control-label">
               Table Id
             </label>
-            <div class="col-sm-5">
+            <div class="col-sm-5" ng-class="{'has-error':
+              set.goto_.target.length > 0 &&
+              !set.goto_.targetTest(set.goto_.target)}">
               <input type="text" class="form-control"
-                     ng-model="active.gotoValue">
+                     tooltip="{{set.goto_.targetTip}}"
+                     ng-model="set.goto_.target">
             </div>
           </div>
         </form>

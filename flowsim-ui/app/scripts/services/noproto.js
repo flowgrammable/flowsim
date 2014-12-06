@@ -485,6 +485,7 @@ Protocol.prototype.getActionProfiles = function() {
 return {
   MatchProfile: MatchProfile,
   MatchSet: MatchSet,
+  Action: Action,
   ActionProfile: ActionProfile,
   Protocol: Protocol
 };
