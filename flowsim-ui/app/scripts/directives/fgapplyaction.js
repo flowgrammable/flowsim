@@ -42,24 +42,30 @@ angular.module('flowsimUiApp')
               return profile.protocol === 'Internal' || 
                      profile.protocol === 'Ethernet' ||
                      _($scope.match).some(function(_match) {
-                       return Protocols.Graph(_match.protocol, _match.field, 
-                                             _match.value) === profile.protocol;
+                       var candidate = Protocols.Graph(_match.protocol, 
+                                                       _match.field, 
+                                                       _match.value);
+                       return candidate === profile.protocol;
                     });
             });
         };
         $scope.updateProfiles();
+
+        // Build a top-level list of avaiable apply action names
+        $scope.updateProtocols = function() {
+          $scope.active.protocols = _(_($scope.availableProfiles).map(
+            function(profile) {
+              return profile.protocol;
+            })).unique();
+          };
+        $scope.updateProtocols();
+        
         // Re-run on changes to the underlying match set ... new protocols may
         // be available upon more matches
         $scope.$watch('match', function() { 
-          console.log('match change');
           $scope.updateProfiles(); 
-        });
-
-        // Build a top-level list of avaiable apply action names
-        $scope.active.protocols = _(_($scope.availableProfiles).map(
-          function(profile) {
-            return profile.protocol;
-          })).unique();
+          $scope.updateProtocols();
+        }, true);
 
         // Update the depdendent drop boxes
         $scope.updateProtocol = function() {
@@ -125,7 +131,7 @@ angular.module('flowsimUiApp')
         $scope.addAction = function() {
           var action;
           if(!$scope.active.type || 
-             !$scope.active.type.test($scope.active.value)) {
+             !$scope.active.type.valueTest($scope.active.value)) {
             throw 'Add apply action failed: '+$scope.active.value;
           }
 

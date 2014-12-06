@@ -50,17 +50,17 @@
       <td>
         <div class="form-group"
              ng-class="{'has-error': active.type && active.value.length > 0 &&
-                        !active.type.test(active.value)}">
+                        !active.type.valueTest(active.value)}">
           <input type="text" class="form-control" ng-model="active.value"
                  ng-disabled="active.op !== 'set'"
-                 tooltip="{{active.type ? active.type.tip :''}}">
+                 tooltip="{{active.type ? active.type.valueTip :''}}">
         </div>
       </td>
       <td>
         <button class="btn btn-default" ng-click="addAction()"
                 ng-disabled="active.value.length === 0 || 
                              active.type === null ||
-                            !active.type.test(active.value)">
+                            !active.type.valueTest(active.value)">
           Add
         </button>
       </td>
