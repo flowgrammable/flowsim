@@ -50,7 +50,14 @@ angular.module('flowsimUiApp')
         $scope.updateProfiles = function() {
           $scope.availableProfiles =_($scope.enabledProfiles).filter(
             function(profile) {
-              return _($scope.match).some(
+              return ((profile.protocol === 'Internal' || 
+                       profile.protocol === 'Ethernet') &&
+                     _($scope.usedProfiles).find(function(_profile) {
+                      return profile.protocol === _profile.protocol &&
+                             profile.field === _profile.field &&
+                             profile.op === _profile.op;
+                     }) === undefined) ||
+                     _($scope.match).some(
                 function(_match) {
                   var candidate = Protocols.Graph(_match.protocol,
                                                   _match.field,
@@ -88,7 +95,7 @@ angular.module('flowsimUiApp')
           // Add to usedProfiles
           $scope.usedProfiles.push(profile);
           // Locate any new profiles
-          $scope.updateProtocolsDisplay();
+          $scope.updateProtocols();
         };
        
         // Update our book keeping for freeing a profile
@@ -103,7 +110,7 @@ angular.module('flowsimUiApp')
           // Add to availableProfiles
           $scope.availableProfiles.push(profile);
           // Update availabe list
-          $scope.updateProtocolsDisplay();
+          $scope.updateProtocols();
         };
 
         // Re-run on changes to the underlying match set ... new protocols may
