@@ -35,79 +35,37 @@ angular.module('flowsimUiApp')
           return profile.enabled;
         });
 
-        // Filter out all protocols that are not present in match
-        $scope.updateProfiles = function() {
-          $scope.availableProfiles = _($scope.enabledProfiles).filter(
-            function(profile) {
-              return profile.protocol === 'Internal' || 
-                     profile.protocol === 'Ethernet' ||
-                     _($scope.match).some(function(_match) {
-                       var candidate = Protocols.Graph(_match.protocol, 
-                                                       _match.field, 
-                                                       _match.value);
-                       return candidate === profile.protocol;
-                    });
-            });
-        };
-        $scope.updateProfiles();
-
+        // Initialize based on root
+        $scope.availableProfiles = _(_($scope.enabledProfiles).map(
+          function(profile) {
+            return profile.clone();
+          })).filter(function(profile) {
+            return _(Protocols.Root).indexOf(profile.protocol) !== -1;
+          });
+        
         // Intialize the used profile to empty
         $scope.usedProfiles = [];
 
-        // Update our book keeping for using a profile
-        $scope.use = function(profile, value) {
-          // Remove from availableProfiles
-          $scope.availableProfiles = _($scope.availableProfiles).reject(
-            function(_profile) {
-              return profile.protocol === _profile.protocol &&
-                     profile.field === _profile.field;
-              });
-          // Add to usedProfiles
-          $scope.usedProfiles.push(profile);
-          // Locate any new profiles
-          $scope.availableProfiles = $scope.availableProfiles.concat(
-            _($scope.enabledProfiles).filter(
-              function(_profile) {
-                var candidate = _profile.protocol;
-                var result = Protocols.Graph(profile.protocol, profile.field, 
-                                             value);
-                return candidate === result;
-              }));
-          // Update availabe list
-          $scope.updateProtocolsDisplay();
+        // Filter out all protocols that are not present in match
+        $scope.updateProfiles = function() {
+          $scope.availableProfiles =_($scope.enabledProfiles).filter(
+            function(profile) {
+              return _($scope.match).some(
+                function(_match) {
+                  var candidate = Protocols.Graph(_match.protocol,
+                                                  _match.field,
+                                                  _match.value);
+                  // Add any new profiles that are enabled/available/not used
+                  return candidate === profile.protocol &&
+                         _($scope.usedProfiles).find(function(_profile) {
+                            return profile.protocol === _profile.protocol &&
+                                   profile.field === _profile.field &&
+                                   profile.op === _profile.op;
+                         }) === undefined;
+                });
+            });
         };
-       
-        // Update our book keeping for freeing a profile
-        $scope.free = function(profile, value) {
-          // Remove from usedProfiles
-          $scope.usedProfiles = _($scope.usedProfiles).reject(
-            function(_profile) {
-              return profile.protocol === _profile.protocol &&
-                     profile.field === _profile.field;
-              });
-          // Add to availableProfiles
-          $scope.availableProfiles.push(profile);
-          // Remove any available protocols that are dependencies of profile
-          $scope.availableProfiles = _($scope.availableProfiles).reject(
-            function(_profile) {
-              return Protocols.Graph(profile.protocol, profile.field, value) ===
-                     _profile.protocol;
-              });
-          // Update availabe list
-          $scope.updateProtocolsDisplay();
-        };
-
-        // Go through each active match and 
-        _($scope.matches).each(function(match) {
-          var candidate = _($scope.availableProfiles).find(function(profile) {
-            return profile.protocol === match.protocol &&
-                   profile.field === match.field;
-          });
-          if(candidate === undefined) {
-            throw 'Failed to find: '+match+ 'in availableProfiles';
-          }
-          $scope.use(candidate);
-        });
+        $scope.updateProfiles();
 
         // Build a top-level list of avaiable apply action names
         $scope.updateProtocols = function() {
@@ -115,13 +73,43 @@ angular.module('flowsimUiApp')
             function(profile) {
               return profile.protocol;
             })).unique();
-          };
+        };
         $scope.updateProtocols();
-        
+
+        // Update our book keeping for using a profile
+        $scope.use = function(profile) {
+          // Remove from availableProfiles
+          $scope.availableProfiles = _($scope.availableProfiles).reject(
+            function(_profile) {
+              return profile.protocol === _profile.protocol &&
+                     profile.field === _profile.field &&
+                     profile.op === _profile.op;
+              });
+          // Add to usedProfiles
+          $scope.usedProfiles.push(profile);
+          // Locate any new profiles
+          $scope.updateProtocolsDisplay();
+        };
+       
+        // Update our book keeping for freeing a profile
+        $scope.free = function(profile) {
+          // Remove from usedProfiles
+          $scope.usedProfiles = _($scope.usedProfiles).reject(
+            function(_profile) {
+              return profile.protocol === _profile.protocol &&
+                     profile.field === _profile.field && 
+                     profile.op === _profile.op;
+              });
+          // Add to availableProfiles
+          $scope.availableProfiles.push(profile);
+          // Update availabe list
+          $scope.updateProtocolsDisplay();
+        };
+
         // Re-run on changes to the underlying match set ... new protocols may
         // be available upon more matches
-        $scope.$watch('match', function() { 
-          $scope.updateProfiles(); 
+        $scope.$watch('match', function() {
+          $scope.updateProfiles();
           $scope.updateProtocols();
         }, true);
 
@@ -172,17 +160,19 @@ angular.module('flowsimUiApp')
         // Remove the last action
         $scope.popAction = function() {
           if($scope.actions.length > 0) {
+            var a = $scope.actions.splice(-1, 1);
             // Find the used profile that belongs to that match
             var profile = _($scope.usedProfiles).find(function(_profile) {
-              return _profile.protocol === m.protocol &&
-                     _profile.field === m.field;
+              return _profile.protocol === a.protocol &&
+                     _profile.field === a.field &&
+                     _profile.op === a.op;
             });
             // Fail on the impossible .. throw indicates bug
             if(profile === undefined) {
-              throw 'Failed to find usedProfile '+m;
+              throw 'Failed to find usedProfile '+a;
             }
             // Run the used/available book keeping on the profile
-            $scope.free(profile, m.value);
+            $scope.free(profile);
 
             $scope.actions.splice(-1, 1);
          
@@ -210,7 +200,7 @@ angular.module('flowsimUiApp')
           $scope.actions.push(action);
 
           // Run the available/used profile book keeping
-          $scope.use($scope.active.type, $scope.active.value);
+          $scope.use($scope.active.type);
         
           // Clearn the selectors and inputs
           $scope.active.type     = null;
