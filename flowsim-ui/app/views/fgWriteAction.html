@@ -8,11 +8,11 @@
     <th></th>
   </thead>
   <tbody>
-    <tr ng-repeat="action in actionList.actions">
+    <tr ng-repeat="action in actions">
       <td>{{action.protocol}}</td>
       <td>{{action.field}}</td>
-      <td>{{action.action}}</td>
-      <td>{{action.toValue()}}</td>
+      <td>{{action.op}}</td>
+      <td>{{action.value}}</td>
       <td>
         <span class="glyphicon glyphicon-minus-sign pull-right"
               ng-show="$last" ng-click="popAction()">
@@ -21,38 +21,46 @@
     </tr>
     <tr>
       <td>
-        <select class="form-control" ng-model="active.category"
-            ng-options="category as category for category in
-            active.categories"
-            ng-change="updateApplyCategory()">
+        <select class="form-control" ng-model="active.protocol"
+            tooltip="Select a protocol header to modify"
+            ng-change="updateProtocol()">
+          <option ng-repeat="protocol in active.protocols" value="{{protocol}}">
+            {{protocol}}
+          </option>
         </select>
       </td>
       <td>
         <select class="form-control" ng-model="active.field"
-            ng-options="field as field for field in
-            active.fields"
-            ng-change="updateApplyField()">
+            tooltip="Select a field of a protocol header to modify"
+            ng-change="updateField()">
+          <option ng-repeat="field in active.fields" value="{{field}}">
+            {{field}}
+          </option>
         </select>
       </td>
       <td>
-        <select class="form-control" ng-model="active.action"
-            ng-options="action as action for action in
-            active.actions"
-            ng-change="updateApplyAction()">
+        <select class="form-control" ng-model="active.op"
+            tooltip="Select the type of modification for the protocol header field"
+            ng-change="updateOp()">
+          <option ng-repeat="op in active.ops" value="{{op}}">
+            {{op}}
+          </option>
         </select>
       </td>
       <td>
         <div class="form-group"
-         tooltip="{{active.type ? active.type.tip :''}}"
-         ng-class="{'has-error': active.type &&
-         !active.type.test(active.value)}">
-          <input type="text" class="form-control"
-             ng-model="active.value">
+             ng-class="{'has-error': active.type && active.value.length > 0 &&
+                        !active.type.valueTest(active.value)}">
+          <input type="text" class="form-control" ng-model="active.value"
+                 ng-disabled="active.op !== 'set'"
+                 tooltip="{{active.type ? active.type.valueTip :''}}">
         </div>
       </td>
       <td>
-        <button class="btn btn-default"
-            ng-click="addAction()">
+        <button class="btn btn-default" ng-click="addAction()"
+                ng-disabled="active.value.length === 0 || 
+                             active.type === null ||
+                            !active.type.valueTest(active.value)">
           Add
         </button>
       </td>
