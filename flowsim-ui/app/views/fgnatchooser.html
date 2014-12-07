@@ -1,0 +1,14 @@
+
+<div class="input-group"
+     ng-class="{'has-error': active.value.length > 0 && 
+                             !test(active.value)}">
+  <input type="text" class="form-control" ng-model="active.value" 
+         tooltip="{{tip}}" placeholder="Flow Priority">
+  <span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="set()"
+            ng-disabled="active.value.length === 0 || !test(active.value)">
+      {{label}}
+    </button>
+  </span>
+</div>
+

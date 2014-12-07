@@ -27,9 +27,9 @@ angular.module('flowsimUiApp')
     $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
   }
 
-  $scope.newFlow = function() {
+  $scope.newFlow = function(priority) {
     var caps =  $scope.device.tables.tables[$scope.tableId].capabilities;
-    var flow = new Flow.Flow(null, $scope.flow.priority, caps);
+    var flow = new Flow.Flow(null, priority, caps);
     $modal.open({
       templateUrl: 'views/switch/flow.html',
       controller: 'SwitchFlowCtrl',
@@ -42,7 +42,6 @@ angular.module('flowsimUiApp')
     }).result.then(function (flow) {
       $scope.device.tables.tables[$scope.tableId].add(flow.priority, flow);
       $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
-      $scope.flow.priority = null;
     });
   };
 

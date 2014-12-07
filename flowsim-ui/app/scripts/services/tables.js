@@ -190,10 +190,12 @@ function Tables(tables, profile) {
     this.tables = _(tables.tables).map(function(table){
       return new Table(table);
     });
+    this.capabilities = new Profile(tables.capabilities);
   } else {
     this.tables = _.map(profile.tables, function(_profile){
       return new Table(null, _profile);
     });
+    this.capabilities = profile.clone();
   }
 }
 
