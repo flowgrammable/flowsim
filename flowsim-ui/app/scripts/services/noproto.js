@@ -335,6 +335,12 @@ ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
 };
 
+function FieldP(field, fieldp) {
+  if(_(field).isObject()) {
+  } else {
+  }
+}
+
 function Field(params) {
   if(!params.protocol) {
     throw 'Fail Construction: Field('+params.protocol+')';
@@ -429,6 +435,23 @@ Field.prototype.getActionProfile = function(op) {
   );
 };
 
+function ProtocolP(protocol, name, bytes, fields) {
+  if(_(protocol).isObject()) {
+    _.extend(this, protocol);
+    this.fields = _(protocol.fields).map(function(field) {
+      return new FieldP(field);
+    });
+  } else {
+    this.name = name;
+    this.bytes = bytes;
+    this.fields = fields;
+  }
+}
+
+ProtocolP.prototype.clone = function() {
+  return new ProtocolP(this);
+};
+
 function Protocol(params) {
   // Display string of the protocol
   this.name = params.name;
@@ -457,6 +480,15 @@ function Protocol(params) {
   }, this);
 }
 
+Protocol.prototype.getProtocol = function() {
+  return new ProtocolP(null,
+    this.name,
+    this.bytes,
+    _(this.fields).map(function(field) {
+      return new FieldP(null, field);
+    }));
+};
+
 Protocol.prototype.getMatchProfiles = function() {
   return _(this.fields).filter(function(field) {
     return field.matchable;
@@ -467,7 +499,7 @@ Protocol.prototype.getMatchProfiles = function() {
 
 Protocol.prototype.getExtractions = function() {
   return _(this.fields).filter(function(field) {
-    return fields.matchable;
+    return field.matchable;
   }).map(function(field) {
     return field.getExtractor();
   });
