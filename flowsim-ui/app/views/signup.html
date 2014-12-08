@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h3 class="modal-title">Coming Soon</h3>
+</div>
+<div class="modal-body">
+  Flowsim will be live soon. Get notified when it's launched!
+      <form ng-submit="signup()" name="regForm" novalidate role="form">
+        <div class="form-group">
+          <input name="email" type="email" class="form-control"
+            id="email" placeholder="Enter email" ng-model="email"
+            required>
+          <div class="error" ng-show="emailMsg.length">
+            <span>{{emailMsg}}</span>
+          </div>
+        </div>
+      </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="signup()">Notify Me</button>
+</div>

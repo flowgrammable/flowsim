@@ -134,6 +134,31 @@ Controller.prototype.logout = function(sessionID, callback) {
     });
 };
 
+Controller.prototype.mailerSignup = function(email, srcIP, callback) {
+  var current, token, that;
+  current = new Date();
+  token = uuid.v4();
+  tmpPassword = ' ';
+  that = this;
+  this.storage.createSubscriber(email, tmpPassword, current.toISOString(), srcIP,
+    token, function(err, sub) {
+
+    var subject, body;
+    if(err) {
+      that.logger.error(err);
+      delete err.detail.err;
+      callback(err);
+    } else {
+      subject = 'Flowsim launching this winter';
+      body = that.template.render('mailerSignup', {
+        baseUrl: that.server.baseUrl()
+      });
+      that.mailer.send(email, subject, body);
+      callback(null, msg.success());
+    }
+  });
+};
+
 Controller.prototype.register = function(email, pwd, srcIp, callback) {
   var current, token, hash, that;
   current = new Date();

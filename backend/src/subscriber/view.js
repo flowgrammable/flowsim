@@ -63,6 +63,20 @@ function logout(view) {
   };
 }
 
+function mailerSignup(view){
+  return function(req, res, next){
+    var responder = util.Responder(res, next);
+    if(!req.body.email) {
+      responder(msg.missingEmail());
+    } else if(!validator.isEmail(req.body.email)) {
+      responder(msg.malformedEmail());
+    } else {
+      view.controller.mailerSignup(req.body.email, 
+        req.connection.remoteAddress, responder);
+    }
+  };
+}
+
 function register(view) {
   return function(req, res, next) {
     var responder = util.Responder(res, next);
@@ -177,6 +191,10 @@ function View(c, subscriberLogger) {
       method: 'post',
       path: 'update',
       handler: util.requiresAuth(update(this))
+    }, {
+      method: 'post',
+      path: 'mailersignup',
+      handler: mailerSignup(this)
     }
   ];
 }

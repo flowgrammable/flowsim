@@ -34,6 +34,10 @@ angular
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl'
       })
+      .when('/subscriber/signup', {
+        templateUrl: 'views/signup.html',
+        controller: 'SignupCtrl'
+      })
       .when('/subscriber/reset/:token', {
         templateUrl: 'views/reset.html',
         controller: 'ResetCtrl'

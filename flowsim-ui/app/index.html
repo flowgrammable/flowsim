@@ -59,11 +59,8 @@
             </ul>
             <form class="navbar-form navbar-right" role="form" 
                   ng-hide="authenticated">
-              <a href="#subscriber/login" class="btn btn-success">
-                Login
-              </a>
-              <a href="#subscriber/register" class="btn btn-success">
-                Register
+              <a ng-click="signup()" class="btn btn-success">
+                Sign up
               </a>
             </form>
             <form class="navbar-form navbar-right" role="form"
@@ -235,6 +232,7 @@
         <script src="scripts/services/instruction2.js"></script>
         <script src="scripts/directives/fgmetadataprofile.js"></script>
         <script src="scripts/directives/fgnatchooser.js"></script>
+        <script src="scripts/controllers/signup.js"></script>
         <!-- endbuild -->
 </body>
 </html>
