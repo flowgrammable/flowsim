@@ -24,8 +24,9 @@ var VLAN = {
   },{
     name: 'Type',
     bitwidth: 16,
-    matchable: false,
+    matchable: true,
     setable: false,
+    tip: 'Type Length'
   },{
     name: 'tag',
     bitwidth: 0,

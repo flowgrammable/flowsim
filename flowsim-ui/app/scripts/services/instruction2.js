@@ -38,12 +38,12 @@ function Profile(profile) {
     this.clear = {
       name: 'Clear',
       enabled: true,
-      tip: 'Clears packet context\'s action set'
+      tip: 'Clears packet contexts action set'
     };
     this.write = {
       name: 'Write',
       enabled: true,
-      tip: 'Merges action set with packet context\'s action set',
+      tip: 'Merges action set with packet contexts action set',
       profiles: new Protocols.ActionProfiles()
     };
     this.metadata = {
@@ -108,12 +108,12 @@ function Set(set, profile) {
     this.clear = {
       name: 'Clear',
       enabled: false,
-      tip: 'Clears packet context\'s action set'
+      tip: 'Clears packet contexts action set'
     };
     this.write = {
       name: 'Write',
       enabled: false,
-      tip: 'Merges action set with packet context\'s action set',
+      tip: 'Merges action set with packet contexts action set',
       actions: []
     };
     this.metadata = {

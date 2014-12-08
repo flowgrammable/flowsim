@@ -50,7 +50,7 @@ var IPv4 = {
     name: 'Proto',
     bitwidth: 8,
     matchable: true,
-    setable: true,
+    setable: false,
     tip: 'Protocol'
   },{
     name: 'Src',

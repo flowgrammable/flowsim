@@ -8,14 +8,18 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Flow', function(Noproto, Instruction2) {
+  .factory('Flow', function($injector, Noproto, Instruction2) {
+
+var Tables;
 
 function Flow(flow, priority, capabilities) {
+  // tmp fix for circular dependency Tables -> Flow -> Tables -> Profile
+  if (!Tables) { Tables = $injector.get('Tables'); }
   if(_.isObject(flow)) {
     _.extend(this, flow);
     this.match        = new Noproto.MatchSet(flow.match);
     this.ins          = new Instruction2.Set(flow.ins);
-    this.capabilities = flow.capabilities;
+    this.capabilities = new Tables.TableProfile(flow.capabilities);
   } else {
     this.priority     = priority;
     this.match        = new Noproto.MatchSet();
@@ -41,7 +45,7 @@ Flow.prototype.assign = function(flow) {
   this.match        = flow.match;
   this.ins          = flow.ins;
   this.capabilities = flow.capabilities;
-}
+};
 
 Flow.prototype.equal = function(flow) {
   return this.match.equal(flow.match);
