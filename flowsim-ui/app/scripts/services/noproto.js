@@ -70,7 +70,6 @@ function Match(match, protocol, summary, field, bitwidth, tip, value, mask) {
   var consFunc;
   if(_(match).isObject()) {
     _.extend(this, match);
-    this._match = match._match.clone();
   } else {
     // Store some of the metadata
     this.protocol     = protocol;
