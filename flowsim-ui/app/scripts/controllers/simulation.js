@@ -145,52 +145,7 @@ angular.module('flowsimUiApp')
       to: $scope.simulation.stage
           //hideDetails($scope.simulation.stage) 
     };
-    console.log($scope.simulation);
     $scope.ctx = $scope.simulation.toView();
-    $scope.packetName = $scope.ctx.packet.name;
-    /*{
-            packetCnt: 5,
-            ctx: [{
-                name: 'buffe',
-                value: 12344
-            }, {
-                name: 'meter',
-                value: 124
-            }, {
-                name: 'table',
-                value: 0
-            }],
-            key: [{
-                name: 'Internal',
-                attrs: [{
-                    name: 'in_port',
-                    value: 4,
-                }, {
-                    name: 'in_phy_port',
-                    value: 6,
-                }, {
-                    name: 'tunnel',
-                    value: 12435
-                }]
-            }, {
-                name: 'Ethernet',
-                attrs: [{
-                    name: 'in_port',
-                    value: 4,
-                }, {
-                    name: 'in_phy_port',
-                    value: 6,
-                }, {
-                    name: 'tunnel',
-                    value: '0xffffffffffffffff'
-                }, {
-                    name: 'tunnel',
-                    value: 12435
-                }]
-
-            }]
-        };
-        */
   };
 
   $scope.stop = function() {
@@ -203,6 +158,8 @@ angular.module('flowsimUiApp')
       to: hideDetails($scope.simulation.stage) 
     };
     $scope.ctx        = $scope.simulation.toView();
+    console.log('post step');
+    console.log($scope.ctx);
     $scope.packetName = $scope.ctx.packet.name;
   };
 

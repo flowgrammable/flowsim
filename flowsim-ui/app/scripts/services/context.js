@@ -12,15 +12,27 @@ angular.module('flowsimUiApp')
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
-    _.extend(this, key);
+    if(key.in_port) {
+      this.in_port = new UInt.UInt(key.in_port);
+    }
+    if(key.in_phy_port) {
+      this.in_phy_port = new UInt.UInt(key.in_phy_port);
+    }
+    if(key.tunnel_id) {
+      this.tunnel_id = new UInt.UInt(key.tunnel_id);
+    }
     this.metadata = key.metadata.clone();
     this.vlan     = _.map(key.vlan, function(tag) { return tag.clone(); });
     this.mpls     = _.map(key.mpls, function(tag) { return tag.clone(); });
   } else if(_.isFinite(in_port)) {
     // Initialize input information
-    this.in_port     = in_port;
-    this.in_phy_port = in_phy_port;
-    this.tunnel_id   = tunnel_id;
+    this.in_port     = new UInt.UInt(null, in_port, 4);
+    if(in_phy_port !== undefined && in_phy_port !== null) {
+      this.in_phy_port = new UInt.UInt(null, in_phy_port, 4);
+    }
+    if(tunnel_id !== undefined && tunnel_id !== null) {
+      this.tunnel_id   = new UInt.UInt(null, tunnel_id, 4);
+    }
     this.metadata    = new UInt.UInt(null, null, 8);
 
     // Initialize array for stacks
@@ -36,8 +48,34 @@ Key.prototype.clone = function() {
 };
 
 Key.prototype.toView = function() {
-  // FIXME
-  return [];
+  var result = [{
+    name: 'Internal',
+    attrs: [{
+      name: 'in_port',
+      value: this.in_port.toString()
+    }]
+  }];
+  
+  if(this.in_phy_port !== undefined && this.in_phy_port !== null) {
+    result[0].attrs.push({
+      name: 'in_phy_port',
+      value: this.in_phy_port.toString()
+    });
+  }
+
+  if(this.tunnel_id !== undefined && this.tunnel_id !== null) {
+    result[0].attrs.push({
+      name: 'tunnel_id',
+      value: this.tunnel_id.toString()
+    });
+  }
+  if(this.metadata !== undefined && this.metadata !== null) {
+    result[0].attrs.push({
+      name: 'metadata',
+      value: this.metadata.toString(16)
+    });
+  }
+  return result;
 };
 
 function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
@@ -81,29 +119,21 @@ Context.prototype.clone = function() {
 };
 
 Context.prototype.toView = function() {
-  console.log('context toview');
-  return [{
-    name: 'buffer',
-    value: this.buffer
-  }, {
-    name: 'meter',
-    value: this.meter
-  }, {
-    name: 'table',
-    value: this.table()
-  }, {
-    name: 'packet',
-    value: new Packet.PacketUI(this.packet)
-  }, {
-    name: 'Key',
-    value: this.key.toView()
-  }, {
-    name: 'Instruction Set',
-    value: this.instructionSet.toView()
-  }, {
-    name: 'Action Set',
-    value: this.actionSet.toView()
-  }];
+  var result = {
+    ctx: [{
+      name: 'buffer',
+      value: this.buffer
+    }, {
+      name: 'table',
+      value: this.table()
+    }],
+    actionSet: this.instructionSet.toView(),
+    instructionSet: this.actionSet.toView(),
+    key: this.key.toView(),
+    packet: new Packet.PacketUI(this.packet)
+  };
+
+  return result;
 };
 
 Context.prototype.table = function(table) {
@@ -148,17 +178,6 @@ Context.prototype.writeActions = function(actions) {
 
 Context.prototype.hasGoto = function() {
   return this._nxtTable !== this._lstTable;
-};
-
-Context.prototype.toView = function() {
-  return {
-    table: this.nxtTable,
-    meter: this.meter,
-    buffer: this.buffer,
-    packet: Packet.createUI(this.packet),   // FIXME: normalize
-    actionSet: this.actionSet.toView(),
-    instructionSet: this.instructionSet.toView() 
-  };
 };
 
 return {

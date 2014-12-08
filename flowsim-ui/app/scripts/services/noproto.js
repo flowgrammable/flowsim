@@ -112,6 +112,23 @@ Match.prototype.match = function(value) {
   return this._match.match(value);
 };
 
+function Extractor(extractor, protocol, field) {
+  if(_(extractor).isObject()) {
+    _.extend(this, extractor);
+  } else {
+    this.protocol = protocol;
+    this.field    = field;
+  }
+}
+
+Extractor.prototype.clone = function() {
+  return new Extractor(this);
+};
+
+Extractor.prototype.extract = function(key, packet) {
+  key[this.protocol][this.field] = packet[this.protocol][this.field];
+};
+
 function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled, 
                       wildcardable, maskable) {
   if(_(mp).isObject()) {
@@ -391,6 +408,14 @@ Field.prototype.getMatchProfile = function() {
   );
 };
 
+Field.prototype.getExtractor = function() {
+  return new Extractor(
+    null,
+    this.protocol,
+    this.name
+  );
+};
+
 Field.prototype.getActionProfile = function(op) {
   return new ActionProfile(
     null,
@@ -438,6 +463,14 @@ Protocol.prototype.getMatchProfiles = function() {
     return field.matchable;
   }).map(function(field) {
     return field.getMatchProfile();
+  });
+};
+
+Protocol.prototype.getExtractions = function() {
+  return _(this.fields).filter(function(field) {
+    return fields.matchable;
+  }).map(function(field) {
+    return field.getExtractor();
   });
 };
 
