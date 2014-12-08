@@ -145,11 +145,13 @@ angular.module('flowsimUiApp')
       to: $scope.simulation.stage
           //hideDetails($scope.simulation.stage) 
     };
-    $scope.view = $scope.simulation.toView();
-    $scope.ctx = {
+    console.log($scope.simulation);
+    $scope.ctx = $scope.simulation.toView();
+    $scope.packetName = $scope.ctx.packet.name;
+    /*{
             packetCnt: 5,
             ctx: [{
-                name: 'buffer',
+                name: 'buffe',
                 value: 12344
             }, {
                 name: 'meter',
@@ -188,8 +190,7 @@ angular.module('flowsimUiApp')
 
             }]
         };
-    $scope.packetName = 'pack1'; //TODO - add real name
-
+        */
   };
 
   $scope.stop = function() {
@@ -201,8 +202,8 @@ angular.module('flowsimUiApp')
     $scope.makeTransition = { 
       to: hideDetails($scope.simulation.stage) 
     };
-    $scope.view = $scope.simulation.toView();
-     
+    $scope.ctx        = $scope.simulation.toView();
+    $scope.packetName = $scope.ctx.packet.name;
   };
 
 });

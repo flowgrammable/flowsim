@@ -81,15 +81,29 @@ Context.prototype.clone = function() {
 };
 
 Context.prototype.toView = function() {
-  return {
-    bufferId: this.buffer,
-    packet: new Packet.PacketUI(this.packet),
-    meter: this.meter,
-    tableId: this.table(),
-    key: this.key.toView(),
-    actionSet: this.actionSet.toView(),
-    ins: this.instructionSet.toView(),
-  };
+  console.log('context toview');
+  return [{
+    name: 'buffer',
+    value: this.buffer
+  }, {
+    name: 'meter',
+    value: this.meter
+  }, {
+    name: 'table',
+    value: this.table()
+  }, {
+    name: 'packet',
+    value: new Packet.PacketUI(this.packet)
+  }, {
+    name: 'Key',
+    value: this.key.toView()
+  }, {
+    name: 'Instruction Set',
+    value: this.instructionSet.toView()
+  }, {
+    name: 'Action Set',
+    value: this.actionSet.toView()
+  }];
 };
 
 Context.prototype.table = function(table) {

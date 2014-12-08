@@ -41,9 +41,11 @@ function Dataplane(device) {
   } else {
     throw 'Bad Dataplane('+device+')';
   }
+  this.pause = false;
 }
 
 Dataplane.prototype.toView = function() {
+  console.log('dataplane toview');
   return this.ctx ? this.ctx.toView() : null;
 };
 
@@ -114,11 +116,23 @@ Dataplane.prototype.egress = function() {
 };
 
 Dataplane.prototype.transition = function(state) {
-  this.state = state;
+  this.nextState = state;
+  this.pause     = true;
 };
 
 Dataplane.prototype.step = function() {
   var i;
+
+  if(this.pause) {
+    this.state = this.nextState;
+    this.pause = false;
+    for(i=0; i<State.length; i++) {
+      if(State[i].toLowerCase() === this.state.toLowerCase()) {
+        return i;
+      }
+    }
+  }
+
   if(this.currEvent === null) {
     this.currEvent = this.inputQ[0];
     this.inputQ.splice(0, 1);

@@ -27,6 +27,7 @@ Simulation.prototype.step = function() {
 };
 
 Simulation.prototype.toView = function() {
+  console.log('sim toview');
   return this.dataplane ? this.dataplane.toView() : null;
 };
 
