@@ -9,22 +9,21 @@
  */
 
 angular.module('flowsimUiApp')
-  .factory('Packet', function(ETHERNET, VLAN, ARP, MPLS, IPV4, IPV6, ICMPV4,
-                            ICMPV6, TCP, UDP, SCTP, ND, PAYLOAD) {
+  .factory('Packet', function(Ethernet, VLAN, ARP, MPLS, IPv4, IPv6, ICMPv4,
+                            ICMPv6, TCP, UDP, SCTP, PAYLOAD) {
 
 var Protocols = {
-  Ethernet: ETHERNET,
+  Ethernet: Ethernet,
   VLAN: VLAN,
   ARP: ARP,
   MPLS: MPLS,
-  IPv4: IPV4,
-  IPv6: IPV6,
-  ICMPv4: ICMPV4,
-  ICMPv6: ICMPV6,
+  IPv4: IPv4,
+  IPv6: IPv6,
+  ICMPv4: ICMPv4,
+  ICMPv6: ICMPv6,
   TCP: TCP,
   UDP: UDP,
   SCTP: SCTP,
-  ND: ND,
   Payload: PAYLOAD
 };
 
@@ -107,7 +106,7 @@ Packet.prototype.pop = function() {
 function PacketUI(pkt) {
   if(typeof pkt === 'string') {
     this.name = pkt;
-    this.protocols = [createProtocolUI(ETHERNET.name)];
+    this.protocols = [createProtocolUI(Ethernet.Ethernet.name)];
     this.bytes = this.protocols[0].bytes;
   } else {
     this.name = pkt.name;

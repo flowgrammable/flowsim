@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Flow', function($injector, Noproto, Instruction2) {
+  .factory('Flow', function($injector, Noproto, Instruction) {
 
 var Tables;
 
@@ -18,12 +18,12 @@ function Flow(flow, priority, capabilities) {
   if(_.isObject(flow)) {
     _.extend(this, flow);
     this.match        = new Noproto.MatchSet(flow.match);
-    this.ins          = new Instruction2.Set(flow.ins);
+    this.ins          = new Instruction.Set(flow.ins);
     this.capabilities = new Tables.TableProfile(flow.capabilities);
   } else {
     this.priority     = priority;
     this.match        = new Noproto.MatchSet();
-    this.ins          = new Instruction2.Set(null, capabilities.instruction);
+    this.ins          = new Instruction.Set(null, capabilities.instruction);
     this.capabilities = capabilities;
   }
 }

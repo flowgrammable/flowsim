@@ -27,8 +27,8 @@ describe('Service: ICMPv6', function () {
     expect(!!ICMPV6).toBe(true);
 
     var icmpv61 = new ICMPV6.ICMPv6(null, '0xff', '255');
-    var icmpv62 = new ICMPV6.ICMPv6(icmpv61);
-    icmpv62.clone();
+    var ICMPv6 = new ICMPV6.ICMPv6(icmpv61);
+    ICMPv6.clone();
     ICMPV6.mkICMPv6('0', '255');
   });
   
@@ -90,9 +90,9 @@ describe('Service: ICMPv6', function () {
     expect(!!ICMPV6).toBe(true);
     
     var icmpv61 = ICMPV6.mkICMPv6('0', '255');
-    var icmpv62 = new ICMPV6.ICMPv6(JSON.parse(JSON.stringify(icmpv61)));
+    var ICMPv6 = new ICMPV6.ICMPv6(JSON.parse(JSON.stringify(icmpv61)));
 
-    expect(icmpv62.toString()).toBe(icmpv61.toString());
+    expect(ICMPv6.toString()).toBe(icmpv61.toString());
   });
 
   it('Summarize Tests', function () {

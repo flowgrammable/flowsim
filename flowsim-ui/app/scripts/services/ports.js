@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Ports', function(UInt, ETHERNET, Regex) {
+  .factory('Ports', function(UInt, Ethernet, Regex) {
 
 var VPort = {
   ALL:        0xfffffffc,
@@ -387,7 +387,7 @@ var TIPS = {
 };
 
 var TESTS = {
-  mac: ETHERNET.MAC.is,
+  mac: Ethernet.isMAC,
   name: function(v) { return Regex.Identifier.test(v); }
 };
 

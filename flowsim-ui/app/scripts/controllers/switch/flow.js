@@ -8,8 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, Match, 
-                                          Action) {
+  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow){
 
   // Attach the match/instruciton/miss properties
   $scope.priority     = flow.priority;

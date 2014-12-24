@@ -99,8 +99,8 @@ describe('Service: VLAN', function () {
   it('Vlan Set Field Pass', function() {
     var vlan_disco = VLAN.mkVLAN('0x01','0x02', '0x1111', '0x0800');
 
-    var vlan2 = JSON.stringify(vlan_disco);
-    var vlan2_disco = new VLAN.VLAN(JSON.parse(vlan2));
+    var VLAN = JSON.stringify(vlan_disco);
+    var VLAN_disco = new VLAN.VLAN(JSON.parse(VLAN));
 
     vlan_disco.pcp('0x01');
     expect(vlan_disco.pcp().toString(16)).toBe('0x01');
@@ -114,17 +114,17 @@ describe('Service: VLAN', function () {
     vlan_disco.type('0x0800');
     expect(vlan_disco.type().toString(16)).toBe('0x0800');
 
-    vlan2_disco.pcp('0x01');
-    expect(vlan2_disco.pcp().toString(16)).toBe('0x01');
+    VLAN_disco.pcp('0x01');
+    expect(VLAN_disco.pcp().toString(16)).toBe('0x01');
 
-    vlan2_disco.dei('0x02');
-    expect(vlan2_disco.dei().toString(16)).toBe('0x02');
+    VLAN_disco.dei('0x02');
+    expect(VLAN_disco.dei().toString(16)).toBe('0x02');
 
-    vlan2_disco.vid('0x7777');
-    expect(vlan2_disco.vid().toString(16)).toBe('0x7777');
+    VLAN_disco.vid('0x7777');
+    expect(VLAN_disco.vid().toString(16)).toBe('0x7777');
 
-    vlan2_disco.type('0x0800');
-    expect(vlan2_disco.type().toString(16)).toBe('0x0800');
+    VLAN_disco.type('0x0800');
+    expect(VLAN_disco.type().toString(16)).toBe('0x0800');
   });
 
   it('Pcp match equal Pass', function() {

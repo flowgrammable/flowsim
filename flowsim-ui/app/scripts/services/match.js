@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Match', function(fgConstraints, ETHERNET, UInt) {
+  .factory('Match', function(fgConstraints, Ethernet, UInt) {
 
 function MatchField_UI(match, Type){
   this.category = match.category;
@@ -62,9 +62,9 @@ function mkByValue(match) {
   switch(match.key){
     case 'eth_dst':
     case 'eth_src':
-      return ETHERNET.mkMACMatch;
+      //return ETHERNET.mkMACMatch;
     case 'eth_type':
-      return ETHERNET.mkTypeMatch;
+      //return ETHERNET.mkTypeMatch;
     default:
       break;
   }
@@ -76,10 +76,10 @@ function mkByName(match) {
     case 'eth_src':
     case 'arp_sha':
     case 'arp_tha':
-      return new ETHERNET.MAC.Match(match._match);
+      //return new ETHERNET.MAC.Match(match._match);
     case 'eth_type':
     case 'internals_port':
-      return new UInt.Match(match._match);
+      //return new UInt.Match(match._match);
     default:
       break;
   }

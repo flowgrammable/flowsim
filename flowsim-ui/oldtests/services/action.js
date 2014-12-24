@@ -606,11 +606,11 @@ describe('Service: action', function () {
     var pkt = new Packet.Packet('test packet');
     var as = new Action.Set();
     var pmpls = new Action.Push(null, new MPLS.MPLS());
-    var pmpls2 = new Action.Push(null, new MPLS.MPLS());
+    var pMPLS = new Action.Push(null, new MPLS.MPLS());
     var pmpls3 = new Action.Push(null, new MPLS.MPLS());
 
     as.push_mpls(pmpls);
-    as.push_mpls(pmpls2);
+    as.push_mpls(pMPLS);
     as.push_mpls(pmpls3);
 
 

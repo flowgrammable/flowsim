@@ -8,8 +8,8 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Tables', function(Regex, fgConstraints, Match, Instruction, Flow, 
-                              Protocols, Instruction2) {
+  .factory('Tables', function(Regex, fgConstraints, Match, Flow, 
+                              Protocols, Instruction) {
 
 /* Default Construction Constants */
 var defTables = 8;
@@ -167,16 +167,16 @@ function TableProfile(tableProfile, id) {
   if(_.isObject(tableProfile)) {
     _.extend(this, tableProfile);
     this.match       = new Protocols.MatchProfiles(tableProfile.match);
-    this.instruction = new Instruction2.Profile(tableProfile.instruction);
-    this.miss        = new Instruction2.Profile(tableProfile.miss);
+    this.instruction = new Instruction.Profile(tableProfile.instruction);
+    this.miss        = new Instruction.Profile(tableProfile.miss);
   } else {
     this.id          = id;
     this.name        = defName + id;
     this.max_entries = defMaxEntries;
 
     this.match       = new Protocols.MatchProfiles();
-    this.instruction = new Instruction2.Profile();
-    this.miss        = new Instruction2.Profile();
+    this.instruction = new Instruction.Profile();
+    this.miss        = new Instruction.Profile();
   }
 }
 
@@ -514,10 +514,10 @@ var TIPS = {
     max_entries:  'Maximum flows supported',
     table_stats:  'Ability of table to record lookup statistics',
     flow_stats:   'Ability of flow to record match statistics',
-    flow_caps:    'Match, Instruction, and Actions to support',
-    Match:        Match.Profile.TIPS,
-    Instruction:  Instruction.Profile.TIPS,
-    Miss:         Instruction.Profile.TIPS
+    flow_caps:    'Match, Instruction, and Actions to support'
+    //Match:        Match.Profile.TIPS,
+    //Instruction:  Instruction.Profile.TIPS,
+    //Miss:         Instruction.Profile.TIPS
   }
 };
 
@@ -525,10 +525,10 @@ var TESTS = {
   n_tables: fgConstraints.isUInt(0,0xff),
   Table: {
     name: function(n) { return Regex.Identifier.test(n); },
-    max_entries: fgConstraints.isUInt(0,0xffffffff),
-    Match: Match.Profile.TESTS,
-    Instruction: Instruction.Profile.TESTS,
-    Miss: Instruction.Profile.TESTS
+    max_entries: fgConstraints.isUInt(0,0xffffffff)
+   // Match: Match.Profile.TESTS,
+    //Instruction: Instruction.Profile.TESTS,
+    //Miss: Instruction.Profile.TESTS
   }
 };
 

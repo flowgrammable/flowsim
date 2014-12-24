@@ -78,9 +78,9 @@ describe('Service: TCP', function () {
     expect(!!TCP).toBe(true);
     
     var tcp1 = TCP.mkTCP('22', '2222');
-    var tcp2 = new TCP.TCP(JSON.parse(JSON.stringify(tcp1)));
+    var TCP = new TCP.TCP(JSON.parse(JSON.stringify(tcp1)));
 
-    expect(tcp2.toString()).toBe(tcp1.toString());
+    expect(TCP.toString()).toBe(tcp1.toString());
   });
 
   it('Summarize Tests', function () {
