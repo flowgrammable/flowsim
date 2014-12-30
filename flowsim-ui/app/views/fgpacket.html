@@ -1,0 +1,44 @@
+
+<h4 ng-transclude>
+  <!-- transclude the list title -->
+</h4>
+
+<h5 ng-hide="packet">
+  No items selected for display.
+</h5>
+
+<div ng-show="packet">
+
+  <accordion close-others="true">
+    <accordion-group ng-repeat="protocol in packet.protocols">
+
+      <!-- Print the heading and delete button if last element -->
+      <accordion-heading>
+        {{protocol.name}}
+        <span ng-if="$last && $index!==0"
+              class="glyphicon glyphicon-minus-sign pull-right" 
+              ng-click="popProtocol()"></span>
+      </accordion-heading>
+  
+      <!-- Print a label and input box for each field -->
+      <fg-label-input ng-repeat="field in protocol.fields" item="field">
+      </fg-label-input>
+
+    </accordion-group>
+  </accordion>
+
+  <div class="input-group">
+    <select class="form-control" ng-model="nodeType">
+      <option ng-repeat="(name, value) in options">{{value}}</option>
+    </select>
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button" ng-click="addProtocol()">
+        Add
+      </button>
+    </span>
+  </div>
+  
+  <br>
+ 
+</div>
+

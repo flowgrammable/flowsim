@@ -92,7 +92,9 @@ return {
   Root: ['Internal', 'Ethernet'],
   Graph: Graph,
   MatchProfiles: MatchProfiles,
-  ActionProfiles: ActionProfiles
+  ActionProfiles: ActionProfiles,
+  Protocols: noprotoProtocols,
+  Payloads: _Graph
 };
 
 });
