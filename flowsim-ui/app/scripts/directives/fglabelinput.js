@@ -13,6 +13,15 @@ angular.module('flowsimUiApp')
       restrict: 'E',
       scope: {
         item: '='
+      },
+      link: function($scope){
+        console.log('val:', $scope.item.value.value);
+        $scope.str = $scope.item.dispStr($scope.item.value.value);
+        $scope.updateValue = function() {
+          if($scope.item.testStr($scope.str)){
+            $scope.item.value.value = $scope.item.consStr($scope.str);
+          }
+        }
       }
     };
   });

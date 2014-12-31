@@ -37,6 +37,7 @@ var Ethernet = {
     testStr: isMAC,
     consStr: consMAC,
     dispStr: dispMAC,
+    defaultValue: [0,0,0,0,0,0], 
     tip: 'Src MAC Address'
   }, {
     name: 'Dst',
@@ -46,6 +47,7 @@ var Ethernet = {
     testStr: isMAC,
     consStr: consMAC,
     dispStr: dispMAC,
+    defaultValue: [0,0,0,0,0,0],
     tip: 'Dst MAC Address'
   }, {
     name: 'Type',

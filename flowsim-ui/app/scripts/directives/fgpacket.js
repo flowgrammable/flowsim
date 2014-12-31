@@ -16,13 +16,11 @@ angular.module('flowsimUiApp')
         $scope.loaded = false;
         $scope.nodeType = '';  // input type to create node
         $scope.options  = {};  // input select options
-
        $scope.addProtocol = function() {
           var tmp = _(Protocols.Protocols).find(function(proto){
             return $scope.nodeType === proto.name;
           });
-          $scope.packet.push(tmp);
-          console.log($scope.packet);
+          $scope.packet.push(tmp.clone().getProtocol());
           $scope.nodeType = '';
        }
 

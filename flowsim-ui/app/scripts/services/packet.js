@@ -10,7 +10,7 @@
 
 angular.module('flowsimUiApp')
   .factory('Packet', function(Ethernet, VLAN, ARP, MPLS, IPv4, IPv6, ICMPv4,
-                            ICMPv6, TCP, UDP, SCTP, PAYLOAD, Protocols) {
+                            ICMPv6, TCP, UDP, SCTP, PAYLOAD, Protocols, Noproto) {
 
 /*var Protocols = {
   Ethernet: Ethernet,
@@ -25,7 +25,7 @@ angular.module('flowsimUiApp')
   UDP: UDP,
   SCTP: SCTP,
   Payload: PAYLOAD
-}; */
+}; 
 
 function dispatch(name, method, p) {
   switch(name) {
@@ -70,24 +70,40 @@ function createProtocolUI(p) {
   } else {
     return dispatch(p.name, 'createUI', p);
   }
+} */
+
+function createProtocol2(proto){
+  var tmp;
+  if(typeof proto === 'String'){
+    tmp = new _(Protocols.Protocols).find(function(protocol){
+      return protocol.name === proto;
+    });
+    return tmp.clone().getProtocol();
+  } else {
+    tmp = _(Protocols.Protocols).find(function(protocol){
+      return protocol.name === proto.name;
+    });
+    console.log('tmp', tmp);
+    tmp = new tmp(proto);
+    return tmp.getProtocol();
+  }
 }
 
-function createProtocol2(name){
-  var tmp = _(Protocols.Protocols).find(function(protocol){
-    return protocol.name === name;
-  });
-  _(tmp.fields).each(function(field){
-    //field.value = '';
-  }, this);
-  return tmp;
-}
-
-function Packet2(name) {
-  this.name = name;
-  this.protocols = [
-    createProtocol2(Ethernet.Ethernet.name)
-  ];
-  this.bytes = Ethernet.bytes;
+function Packet2(pkt) {
+  if(_(pkt).isObject()){
+    console.log('rebuilding');
+    this.name = pkt.name;
+    this.bytes = pkt.bytes;
+    this.protocols = _(pkt.protocols).map(function(proto){
+      return createProtocol2(proto);
+    }, this);
+  } else {
+    this.name = pkt;
+    this.protocols = [
+      new createProtocol2(Ethernet.Ethernet.name)
+    ];
+    this.bytes = Ethernet.bytes;
+  }
 }
 
 Packet2.prototype.push = function(protocol) {
@@ -99,23 +115,15 @@ Packet2.prototype.pop = function() {
   if(this.protocols.length === 0) {
     return;
   }
-
   this.bytes -= this.protocols[this.protocols.length-1].bytes;
   this.protocols.splice(this.protocols.length-1);
 };
 
 Packet2.prototype.toBase = function() {
-  var tmp = {};
-  tmp.bytes = this.bytes;
-  tmp.name = this.name;
-  tmp.protocols = [];
-  _(this.protocols).each(function(proto){
-    tmp.protocols.push({name: proto.name, bytes: proto.bytes, fields: proto.fields});
-  }, this);
-  return tmp;
+  return this;
 }
 
-function Packet(name) {
+/*function Packet(name) {
   this.name = name;
   this.protocols = [
     createProtocol(ETHERNET.name)
@@ -171,11 +179,11 @@ PacketUI.prototype.toBase = function() {
 
 PacketUI.prototype.top = function() {
   return this.protocols.length ? this.protocols[this.protocols.length-1] : null;
-};
+}; 
 
 function create(name) {
   return new Packet(name);
-}
+}*/
 
 /*function createUI(pkt) {
   return new PacketUI(pkt);
@@ -196,13 +204,13 @@ function getPayloads(name) {
 
 
 return {
-  create: create,
+  //create: create,
   createUI: createUI,
-  createProtocol: createProtocol,
-  createProtocolUI: createProtocolUI,
-  getPayloads: getPayloads,
-  Packet: Packet,
-  PacketUI: PacketUI
+  //createProtocol: createProtocol,
+  //createProtocolUI: createProtocolUI,
+  //getPayloads: getPayloads,
+  //Packet: Packet,
+  //PacketUI: PacketUI
 };
 
 });

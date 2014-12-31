@@ -169,10 +169,10 @@ function UInt(uint, value, bytes) {
   } else if(_.isArray(value)) {
     this.value = value;
     this.bytes = bytes ? _.max([bytes, value.length]) : value.length;
-  } else if(_.isFinite(value) && (value % 1 === 0)) {
+  } else if(_.isFinite(value) && (value % 1 === 0) && (bytes < 5)) {
     this.value = value;
     this.bytes = bytes ? bytes : 4;
-  } else if((_.isUndefined(value) || _.isNull(value)) && bytes && bytes > 0) {
+  } else if((_.isUndefined(value) || _.isNull(value) || value === 0) && bytes >= 0) {
     if(bytes < 5) {
       this.value = 0;
       this.bytes = bytes;

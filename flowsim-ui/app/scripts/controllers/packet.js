@@ -61,9 +61,8 @@ angular.module('flowsimUiApp')
           } else {
             $scope.names[result.name] = true;
             $scope.packet = result;
+            console.log('getting packet', $scope.packet);
             len = $scope.packet.protocols.length;
-            $scope.options = $scope.getProtocols(
-              $scope.packet.protocols[len-1].name);
           }
         });
       }
@@ -84,7 +83,7 @@ angular.module('flowsimUiApp')
       $rootScope.$broadcast('cleanCache');
     };
 
-    $scope.getProtocols = function(name) {
+    /*$scope.getProtocols = function(name) {
       return Packet.getPayloads(name);
     };
 
@@ -105,6 +104,6 @@ angular.module('flowsimUiApp')
         $scope.options = $scope.getProtocols(
             $scope.packet.protocols[len-2].name);
       }
-    };
+    }; */
 
   });

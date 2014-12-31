@@ -335,10 +335,13 @@ ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
 };
 
-function FieldP(field, fieldp) {
-  if(_(field).isObject()) {
-  } else {
-  }
+function FieldP(field) {
+    this.name = field.name;
+    this.testStr = field.testStr;
+    this.dispStr = field.dispStr;
+    this.consStr = field.consStr;
+    this.bitwidth = field.bitwidth;
+    this.value = field.value;
 }
 
 function Field(params) {
@@ -372,9 +375,11 @@ function Field(params) {
   // String input test function 
   this.testStr = params.testStr || null;
   // Display string conversion function
-  this.toString = params.toString || null;
+  this.dispStr = params.dispStr || null;
   // String constructor function
   this.consStr = params.consStr || null;
+  // Default value
+  this.value = params.value ? new UInt.UInt(params.value) : new UInt.UInt(null, 0, Math.floor(this.bitwidth/8));
   // Display string describing the field
   this.tip = params.tip || this.name;
 }
@@ -391,10 +396,10 @@ Field.prototype.attachDefaultFunctions = function() {
   }
   setConsFunction(this.protocol, this.name, this.consStr);
   // Attach a generic toString function
-  if(this.toString === null) {
-    this.toString = UInt.toString(this.bitwidth);
+  if(this.dispStr === null) {
+    this.dispStr = UInt.toString(this.bitwidth);
   }
-  setToStringFunction(this.protocol, this.name, this.toString);
+  setToStringFunction(this.protocol, this.name, this.dispStr);
 };
 
 Field.prototype.getMatchProfile = function() {
@@ -440,7 +445,7 @@ function ProtocolP(protocol, name, bytes, fields) {
     _.extend(this, protocol);
     this.fields = _(protocol.fields).map(function(field) {
       return new FieldP(field);
-    });
+    }, this);
   } else {
     this.name = name;
     this.bytes = bytes;
@@ -485,8 +490,8 @@ Protocol.prototype.getProtocol = function() {
     this.name,
     this.bytes,
     _(this.fields).map(function(field) {
-      return new FieldP(null, field);
-    }));
+      return new FieldP(field);
+    }, this));
 };
 
 Protocol.prototype.getMatchProfiles = function() {
@@ -544,6 +549,10 @@ Protocol.prototype.getActionProfiles = function() {
   return result;
 };
 
+Protocol.prototype.clone = function(){
+  return new Protocol(this);
+};
+
 // Extraction
 
 return {
@@ -551,7 +560,8 @@ return {
   MatchSet: MatchSet,
   Action: Action,
   ActionProfile: ActionProfile,
-  Protocol: Protocol
+  Protocol: Protocol,
+  ProtocolP: ProtocolP
 };
 
 });
