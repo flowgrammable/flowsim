@@ -16,16 +16,20 @@ angular.module('flowsimUiApp')
         $scope.loaded = false;
         $scope.nodeType = '';  // input type to create node
         $scope.options  = {};  // input select options
+
        $scope.addProtocol = function() {
-          var tmp = _(Protocols.Protocols).find(function(proto){
-            return $scope.nodeType === proto.name;
-          });
-          $scope.packet.push(tmp.clone().getProtocol());
+          $scope.packet.pushPayload($scope.nodeType);
           $scope.nodeType = '';
+          $scope.setOptions();
        }
 
        $scope.popProtocol = function() {
-          $scope.packet.pop();
+          $scope.packet.popPayload();
+          $scope.setOptions();
+       }
+
+       $scope.setOptions = function() {
+        $scope.options = _.values(Protocols.Payloads[$scope.packet.protocols[$scope.packet.protocols.length - 1].name])[0];
        }
 
       //FIXME ... this belongs else where
@@ -46,11 +50,10 @@ angular.module('flowsimUiApp')
         // need to rework
         if($scope.loaded){
           $scope.calcPayloadBytes();
-          $scope.setDirty()();
         }
         if($scope.packet){
           $scope.loaded = true;
-          $scope.options = _.values(Protocols.Payloads[$scope.packet.protocols[$scope.packet.protocols.length - 1].name])[0];
+          $scope.setOptions(); 
         }
       }, true);
 

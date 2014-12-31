@@ -37,12 +37,12 @@ angular.module('flowsimUiApp')
             scope.packet.protocols.width =
               scope.packet.protocols[i].bytes*100.0/scope.packet.bytes;
 
-            if (scope.packet.protocols[i].attrs &&
-                scope.packet.protocols[i].attrs.length) {
+            if (scope.packet.protocols[i].fields &&
+                scope.packet.protocols[i].fields.length) {
 
               //Heigh of fields block
               scope.packet.protocols[i].fieldBlockHeight =
-                scope.packet.protocols[i].attrs.length*fieldLineHeight;
+                scope.packet.protocols[i].fields.length*fieldLineHeight;
 
               //Distance from center of fields block down to stack of protocols
               //(height of the connecting line)
@@ -52,7 +52,7 @@ angular.module('flowsimUiApp')
 
               //Next block moves down
               curFieldBlockYOffsetLines +=
-                scope.packet.protocols[i].attrs.length +
+                scope.packet.protocols[i].fields.length +
                 linesBetweenFieldBlocks;
             }
           }

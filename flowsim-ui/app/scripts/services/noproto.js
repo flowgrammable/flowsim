@@ -335,14 +335,6 @@ ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
 };
 
-function FieldP(field) {
-    this.name = field.name;
-    this.testStr = field.testStr;
-    this.dispStr = field.dispStr;
-    this.consStr = field.consStr;
-    this.bitwidth = field.bitwidth;
-    this.value = field.value;
-}
 
 function Field(params) {
   if(!params.protocol) {
@@ -378,10 +370,10 @@ function Field(params) {
   this.dispStr = params.dispStr || null;
   // String constructor function
   this.consStr = params.consStr || null;
-  // Default value
-  this.value = params.value ? new UInt.UInt(params.value) : new UInt.UInt(null, 0, Math.floor(this.bitwidth/8));
   // Display string describing the field
   this.tip = params.tip || this.name;
+  // Does this field indicate payload?
+  this.payloadField = params.payloadField || false;
 }
 
 Field.prototype.attachDefaultFunctions = function() {
@@ -440,6 +432,16 @@ Field.prototype.getActionProfile = function(op) {
   );
 };
 
+function FieldP(field) {
+    this.name = field.name;
+    this.testStr = field.testStr;
+    this.dispStr = field.dispStr;
+    this.consStr = field.consStr;
+    this.bitwidth = field.bitwidth;
+    this.payloadField = field.payloadField;
+    this.value = field.value ? new UInt.UInt(field.value) : new UInt.UInt(null, 0, Math.floor(this.bitwidth/8));
+}
+
 function ProtocolP(protocol, name, bytes, fields) {
   if(_(protocol).isObject()) {
     _.extend(this, protocol);
@@ -485,13 +487,16 @@ function Protocol(params) {
   }, this);
 }
 
-Protocol.prototype.getProtocol = function() {
-  return new ProtocolP(null,
-    this.name,
-    this.bytes,
-    _(this.fields).map(function(field) {
-      return new FieldP(field);
-    }, this));
+Protocol.prototype.getProtocol = function(flds) {
+    return new ProtocolP(null,
+      this.name,
+      this.bytes,
+      _(this.fields).map(function(field) {
+        if(flds){
+          field.value = flds.shift().value;
+        }
+        return new FieldP(field);
+      }, this));
 };
 
 Protocol.prototype.getMatchProfiles = function() {

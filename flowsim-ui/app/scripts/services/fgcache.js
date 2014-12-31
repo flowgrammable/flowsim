@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('fgCache', function(Subscriber) {
+  .factory('fgCache', function(Subscriber, $rootScope) {
 
     var post    = {};     // (base,UI) ready for HTTP POST
     var update  = {};     // (base,UI) ready for HTTP UPDATE
@@ -117,6 +117,7 @@ angular.module('flowsimUiApp')
                                 function(err) {
               if(err) {
                 // in case save fails
+                $rootScope.$broadcast('dirtyCache');
                 post[type][key].dirty = true;
                 console.log(err.details);
               } else {
@@ -137,6 +138,7 @@ angular.module('flowsimUiApp')
                                   function(err) {
               if(err) {
                 // in case save fails
+                $rootScope.$broadcast('dirtyCache');
                 update[type][key].dirty = true;
               }
             });
@@ -148,6 +150,7 @@ angular.module('flowsimUiApp')
           Subscriber.httpDelete('/api/'+type+'/'+key, {},
                                 function(err) {
             if(err) {
+              $rootScope.$broadcast('dirtyCache');
               console.log(err.details);
             } else {
               delete _delete[type][key];

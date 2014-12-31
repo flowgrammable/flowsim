@@ -61,7 +61,6 @@ angular.module('flowsimUiApp')
           } else {
             $scope.names[result.name] = true;
             $scope.packet = result;
-            console.log('getting packet', $scope.packet);
             len = $scope.packet.protocols.length;
           }
         });

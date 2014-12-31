@@ -27,8 +27,8 @@
   </accordion>
 
   <div class="input-group">
-    <select class="form-control" ng-model="nodeType">
-      <option ng-repeat="(name, value) in options">{{value}}</option>
+    <select class="form-control" ng-model="nodeType" 
+      ng-options="key as value for (key, value) in options">
     </select>
     <span class="input-group-btn">
       <button class="btn btn-default" type="button" ng-click="addProtocol()">

@@ -51,7 +51,8 @@ var IPv4 = {
     bitwidth: 8,
     matchable: true,
     setable: false,
-    tip: 'Protocol'
+    tip: 'Protocol',
+    payloadField: true
   },{
     name: 'Src',
     bitwidth: 32,

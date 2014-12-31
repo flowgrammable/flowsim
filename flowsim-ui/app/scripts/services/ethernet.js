@@ -53,7 +53,8 @@ var Ethernet = {
     name: 'Type',
     bitwidth: 16,
     matchable: true,
-    tip: 'Payload Type/Length'
+    tip: 'Payload Type/Length',
+    payloadField: true
   }]
 };
 

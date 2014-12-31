@@ -11,12 +11,12 @@
       <div class="rnn-title">{{protocol.name}}</div>
       <div class="rnn-connection" 
            ng-style="{'height': protocol.fieldBlockYOffset}" 
-           ng-show="protocol.attrs && protocol.attrs.length"></div>
+           ng-show="protocol.fields && protocol.fields.length"></div>
       <div class="rnn-fields-holder" 
            ng-style="{'top': -protocol.fieldBlockHeight/2}" 
-           ng-show="protocol.attrs && protocol.attrs.length">
-        <div class="rnn-field" ng-repeat="field in protocol.attrs">
-          {{field.name}}: {{field.value}}
+           ng-show="protocol.fields && protocol.fields.length">
+        <div class="rnn-field" ng-repeat="field in protocol.fields">
+          {{field.name}}: {{field.dispStr(field.value.value, 16)}}
         </div>
       </div>
     </div>

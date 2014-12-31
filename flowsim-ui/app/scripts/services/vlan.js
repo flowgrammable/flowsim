@@ -26,7 +26,8 @@ var VLAN = {
     bitwidth: 16,
     matchable: true,
     setable: false,
-    tip: 'Type Length'
+    tip: 'Type Length',
+    payloadField: true
   },{
     name: 'tag',
     bitwidth: 0,

@@ -9,208 +9,101 @@
  */
 
 angular.module('flowsimUiApp')
-  .factory('Packet', function(Ethernet, VLAN, ARP, MPLS, IPv4, IPv6, ICMPv4,
-                            ICMPv6, TCP, UDP, SCTP, PAYLOAD, Protocols, Noproto) {
+  .factory('Packet', function(Ethernet, Protocols, Noproto, UInt) {
 
-/*var Protocols = {
-  Ethernet: Ethernet,
-  VLAN: VLAN,
-  ARP: ARP,
-  MPLS: MPLS,
-  IPv4: IPv4,
-  IPv6: IPv6,
-  ICMPv4: ICMPv4,
-  ICMPv6: ICMPv6,
-  TCP: TCP,
-  UDP: UDP,
-  SCTP: SCTP,
-  Payload: PAYLOAD
-}; 
-
-function dispatch(name, method, p) {
-  switch(name) {
-    case ETHERNET.name:
-      return ETHERNET[method](p);
-    case VLAN.name:
-      return VLAN[method](p);
-    case MPLS.name:
-     return MPLS[method](p);
-    case ARP.name:
-      return ARP[method](p);
-    case IPV4.name:
-      return IPV4[method](p);
-    case IPV6.name:
-      return IPV6[method](p);
-    case ICMPV4.name:
-      return ICMPV4[method](p);
-    case ICMPV6.name:
-      return ICMPV6[method](p);
-    case TCP.name:
-      return TCP[method](p);
-    case UDP.name:
-      return UDP[method](p);
-    case SCTP.name:
-      return SCTP[method](p);
-    case ND.name:
-      return ND[method](p);
-    case PAYLOAD.name:
-      return PAYLOAD[method](p);
-    default:
-      return null;
-  }
-}
-
-function createProtocol(name) {
-  return dispatch(name, 'create');
-}
-
-function createProtocolUI(p) {
-  if(typeof p === 'string') {
-    return dispatch(p, 'createUI');
-  } else {
-    return dispatch(p.name, 'createUI', p);
-  }
-} */
-
-function createProtocol2(proto){
+function createProtocol(proto){
   var tmp;
-  if(typeof proto === 'String'){
-    tmp = new _(Protocols.Protocols).find(function(protocol){
+  // if new proto build from string, else build from json
+  if(_(proto).isString()){
+    tmp = _(Protocols.Protocols).find(function(protocol){
       return protocol.name === proto;
     });
+    // Clone Noproto protocol and get packet data
     return tmp.clone().getProtocol();
   } else {
     tmp = _(Protocols.Protocols).find(function(protocol){
       return protocol.name === proto.name;
     });
-    console.log('tmp', tmp);
-    tmp = new tmp(proto);
-    return tmp.getProtocol();
+    return tmp.clone().getProtocol(proto.fields);
   }
 }
 
-function Packet2(pkt) {
+function Packet(pkt) {
   if(_(pkt).isObject()){
-    console.log('rebuilding');
     this.name = pkt.name;
     this.bytes = pkt.bytes;
     this.protocols = _(pkt.protocols).map(function(proto){
-      return createProtocol2(proto);
+      return createProtocol(proto);
     }, this);
   } else {
     this.name = pkt;
     this.protocols = [
-      new createProtocol2(Ethernet.Ethernet.name)
+     createProtocol(Ethernet.Ethernet.name)
     ];
     this.bytes = Ethernet.bytes;
   }
 }
 
-Packet2.prototype.push = function(protocol) {
-  this.protocols.push(protocol);
-  this.bytes += protocol.bytes;
-};
+Packet.prototype.toBase = function() {
+  return this;
+}
 
-Packet2.prototype.pop = function() {
-  if(this.protocols.length === 0) {
+Packet.prototype.popPayload = function() {
+  if(this.protocols.length === 0){
     return;
   }
   this.bytes -= this.protocols[this.protocols.length-1].bytes;
   this.protocols.splice(this.protocols.length-1);
-};
 
-Packet2.prototype.toBase = function() {
-  return this;
-}
-
-/*function Packet(name) {
-  this.name = name;
-  this.protocols = [
-    createProtocol(ETHERNET.name)
-  ];
-  this.bytes = this.protocols[0].bytes;
-}
-
-Packet.prototype.clone = function() {
-  var tmp = new Packet(this.name);
-  tmp.bytes = this.bytes;
-  tmp.protocols = _(this.protocols).map(function(protocol) {
-    return protocol.clone();
+  // Find payload field of last protocol
+  var lastProtocol = _(this.protocols).last();
+  // find payload field if any
+  var payloadField = _(lastProtocol.fields).find(function(field){
+    return field.payloadField;
   });
-  return tmp;
-};
-
-Packet.prototype.push = function(protocol) {
-  this.protocols.push(protocol);
-  this.bytes += protocol.bytes;
-};
-
-Packet.prototype.pop = function() {
-  if(this.protocols.length === 0) {
-    return;
+  // if last protocol has a payload field, zero it out
+  if(payloadField){
+    payloadField.value = new UInt.UInt(null, 0, Math.floor(payloadField.bitwidth/8));
   }
+}
 
-  this.bytes -= this.protocols[this.protocols.length-1].bytes;
-  this.prototocols.splice(this.protocols.length-1);
-};
+// 1. Sets payload type of last protocol in packet
+// 2. adds new protocol to packet
+// TODO: break this up
+Packet.prototype.pushPayload = function(protoValue) {
+  // get last protocol in protocols[]
+  var lastProtocol = _(this.protocols).last();
+  // find field that indicates payload
+  var payloadField = _(lastProtocol.fields).find(function(field){
+    return field.payloadField;
+  });
+  // if field is found then set payload
+  if(payloadField){
+    payloadField.value = new UInt.UInt(null, protoValue, Math.floor(payloadField.bitwidth/8));
+  }
+  // Find new protocol
+  var newProtoname = _.values(Protocols.Payloads[lastProtocol.name])[0][protoValue];
 
-function PacketUI(pkt) {
-  if(typeof pkt === 'string') {
-    this.name = pkt;
-    this.protocols = [createProtocolUI(Ethernet.Ethernet.name)];
-    this.bytes = this.protocols[0].bytes;
+  // if new proto found then create and push new protocol
+  if(newProtoname){
+  var newProto = _(Protocols.Protocols).find(function(proto){
+    // Get payload type
+    return newProtoname === proto.name;
+  });
+  newProto = newProto.clone().getProtocol();
+  this.protocols.push(newProto);
+  this.bytes += newProto.bytes;
   } else {
-    this.name = pkt.name;
-    this.bytes = pkt.bytes;
-    this.protocols = _.map(pkt.protocols, function(p) {
-      return createProtocolUI(p);
-    });
+    throw 'Cant add proto: ' + protoValue;
   }
 }
-
-PacketUI.prototype.toBase = function() {
-  var result = new Packet(this.name);
-  result.bytes = this.bytes;
-  result.protocols = _.map(this.protocols, function(pUI) {
-    return pUI.toBase();
-  });
-  return result;
-};
-
-PacketUI.prototype.top = function() {
-  return this.protocols.length ? this.protocols[this.protocols.length-1] : null;
-}; 
-
-function create(name) {
-  return new Packet(name);
-}*/
-
-/*function createUI(pkt) {
-  return new PacketUI(pkt);
-}*/
 
 function createUI(pkt){
-  return new Packet2(pkt);
+  return new Packet(pkt);
 }
-
-
-function getPayloads(name) {
-  if(name in Protocols) {
-    return Protocols[name].Payloads;
-  } else {
-    return [];
-  }
-}
-
 
 return {
-  //create: create,
-  createUI: createUI,
-  //createProtocol: createProtocol,
-  //createProtocolUI: createProtocolUI,
-  //getPayloads: getPayloads,
-  //Packet: Packet,
-  //PacketUI: PacketUI
+  createUI: createUI
 };
 
 });
