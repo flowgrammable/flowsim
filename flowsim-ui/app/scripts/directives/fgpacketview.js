@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .directive('fgPacketView', function() {
+  .directive('fgPacketView', function(Protocols) {
     return {
       restrict: 'E',
       templateUrl: 'views/fgpacketview.html',
@@ -13,7 +13,9 @@ angular.module('flowsimUiApp')
       link: function(scope) {
         //Line height in fields block. Should be same as style in css file.
         //.rnn-field { font-size: 12px; }
-
+        scope.dispStr = function(protoname, fieldname){
+          return Protocols.getField(protoname, fieldname).dispStr;
+        }
         var i, fieldLineHeight;
 
         fieldLineHeight = 12; //px

@@ -28,6 +28,15 @@ var Protocols = [
   UDP.UDP
 ];
 
+function getField(protoName, fieldName){
+  var protocol = _(noprotoProtocols).find(function(proto){
+    return proto.name === protoName;
+  });
+  return _(protocol.fields).find(function(field){
+    return fieldName === field.name;
+  });
+}
+
 // Build a listing of all protocols supported
 var noprotoProtocols = _(Protocols).map(function(protocol) {
   return new Noproto.Protocol(protocol);
@@ -94,7 +103,8 @@ return {
   MatchProfiles: MatchProfiles,
   ActionProfiles: ActionProfiles,
   Protocols: noprotoProtocols,
-  Payloads: _Graph
+  Payloads: _Graph,
+  getField: getField
 };
 
 });

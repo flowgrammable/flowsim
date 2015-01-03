@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
         packet: '=',
         setDirty: '&'      // callback for persisting changes
       },
-      controller: function($scope) {
+      controller: function($scope, $rootScope) {
         $scope.loaded = false;
         $scope.nodeType = '';  // input type to create node
         $scope.options  = {};  // input select options
@@ -21,11 +21,13 @@ angular.module('flowsimUiApp')
           $scope.packet.pushPayload($scope.nodeType);
           $scope.nodeType = '';
           $scope.setOptions();
+          $rootScope.$broadcast('dirtyCache');
        }
 
        $scope.popProtocol = function() {
           $scope.packet.popPayload();
           $scope.setOptions();
+          $rootScope.$broadcast('dirtyCache');
        }
 
        $scope.setOptions = function() {

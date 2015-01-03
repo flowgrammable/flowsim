@@ -7,22 +7,24 @@
  * # fgLabelInput
  */
 angular.module('flowsimUiApp')
-  .directive('fgLabelInput', function ($rootScope) {
+  .directive('fgLabelInput', function ($rootScope, Protocols) {
     return {
       templateUrl: 'views/fglabelinput.html',
       restrict: 'E',
       scope: {
-        item: '='
+        item: '=',
+        proto: '@'
       },
       link: function($scope){
+        $scope.field = Protocols.getField($scope.proto, $scope.item.name);
         $scope.updateValue = function() {
-          if($scope.item.testStr($scope.str)){
-            $scope.item.value.value = $scope.item.consStr($scope.str);
+          if($scope.field.testStr($scope.str)){
+            $scope.item.value.value = $scope.field.consStr($scope.str);
             $rootScope.$broadcast('dirtyCache');
           }
         }
         $scope.$watch('item.value.value', function(){
-          $scope.str = $scope.item.dispStr($scope.item.value.value, 16);
+          $scope.str = $scope.field.dispStr($scope.item.value.value, 16);
         }, true);
       }
     };

@@ -41,23 +41,18 @@ function Protocol(proto, name, bytes, fields){
     this.name = name;
     this.bytes = bytes;
     this.fields = _(fields).map(function(f){
-      return new Field(null, f.name, f.tip, f.bitwidth, f.testStr, 
-        f.consStr, f.dispStr, f.payloadField);
+      return new Field(null, f.name, f.bitwidth, f.payloadField);
     }, this);
   }
 }
 
-function Field(fld, name, tip, bitwidth, testStr, consStr, dispStr, payloadField){
+function Field(fld, name, bitwidth, payloadField){
   if(_.isObject(fld)){
     _.extend(this, fld);
     this.value = new UInt.UInt(fld.value);
   } else {
     this.name = name;
-    this.tip = tip;
     this.bitwidth = bitwidth;
-    this.testStr = testStr;
-    this.consStr = consStr;
-    this.dispStr = dispStr;
     this.payloadField = payloadField;
     this.value = new UInt.UInt(null, 0, Math.floor(bitwidth/8));
   }
@@ -125,6 +120,10 @@ Packet.prototype.clone = function(){
 
 Packet.prototype.toBase = function(){
   return this;
+};
+
+Packet.prototype.toView = function(){
+
 };
 
 function createUI(pkt){
