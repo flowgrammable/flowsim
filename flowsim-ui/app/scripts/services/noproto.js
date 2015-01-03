@@ -432,33 +432,6 @@ Field.prototype.getActionProfile = function(op) {
   );
 };
 
-function FieldP(field) {
-    this.name = field.name;
-    this.testStr = field.testStr;
-    this.dispStr = field.dispStr;
-    this.consStr = field.consStr;
-    this.bitwidth = field.bitwidth;
-    this.payloadField = field.payloadField;
-    this.value = field.value ? new UInt.UInt(field.value) : new UInt.UInt(null, 0, Math.floor(this.bitwidth/8));
-}
-
-function ProtocolP(protocol, name, bytes, fields) {
-  if(_(protocol).isObject()) {
-    _.extend(this, protocol);
-    this.fields = _(protocol.fields).map(function(field) {
-      return new FieldP(field);
-    }, this);
-  } else {
-    this.name = name;
-    this.bytes = bytes;
-    this.fields = fields;
-  }
-}
-
-ProtocolP.prototype.clone = function() {
-  return new ProtocolP(this);
-};
-
 function Protocol(params) {
   // Display string of the protocol
   this.name = params.name;
@@ -486,18 +459,6 @@ function Protocol(params) {
     field.attachDefaultFunctions();
   }, this);
 }
-
-Protocol.prototype.getProtocol = function(flds) {
-    return new ProtocolP(null,
-      this.name,
-      this.bytes,
-      _(this.fields).map(function(field) {
-        if(flds){
-          field.value = flds.shift().value;
-        }
-        return new FieldP(field);
-      }, this));
-};
 
 Protocol.prototype.getMatchProfiles = function() {
   return _(this.fields).filter(function(field) {
@@ -558,6 +519,7 @@ Protocol.prototype.clone = function(){
   return new Protocol(this);
 };
 
+
 // Extraction
 
 return {
@@ -565,8 +527,7 @@ return {
   MatchSet: MatchSet,
   Action: Action,
   ActionProfile: ActionProfile,
-  Protocol: Protocol,
-  ProtocolP: ProtocolP
+  Protocol: Protocol
 };
 
 });

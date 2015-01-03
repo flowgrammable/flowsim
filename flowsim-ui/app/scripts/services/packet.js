@@ -12,19 +12,54 @@ angular.module('flowsimUiApp')
   .factory('Packet', function(Ethernet, Protocols, Noproto, UInt) {
 
 function createProtocol(proto){
-  var tmp;
-  // if new proto build from string, else build from json
+  var noProto;
   if(_(proto).isString()){
-    tmp = _(Protocols.Protocols).find(function(protocol){
+    noProto = _(Protocols.Protocols).find(function(protocol){
       return protocol.name === proto;
     });
-    // Clone Noproto protocol and get packet data
-    return tmp.clone().getProtocol();
+    noProto = noProto.clone();
+    return new Protocol(null, noProto.name, noProto.bytes, noProto.fields);
   } else {
-    tmp = _(Protocols.Protocols).find(function(protocol){
+    noProto = _(Protocols.Protocols).find(function(protocol){
       return protocol.name === proto.name;
     });
-    return tmp.clone().getProtocol(proto.fields);
+    noProto = noProto.clone();
+    _(noProto.fields).each(function(field){
+      field.value = proto.fields.shift().value;
+    });
+    return new Protocol(noProto);
+  }
+}
+
+function Protocol(proto, name, bytes, fields){
+  if(_.isObject(proto)){
+    _.extend(this, proto);
+    this.fields = _(proto.fields).map(function(f){
+      return new Field(f);
+    },this);
+  } else {
+    this.name = name;
+    this.bytes = bytes;
+    this.fields = _(fields).map(function(f){
+      return new Field(null, f.name, f.tip, f.bitwidth, f.testStr, 
+        f.consStr, f.dispStr, f.payloadField);
+    }, this);
+  }
+}
+
+function Field(fld, name, tip, bitwidth, testStr, consStr, dispStr, payloadField){
+  if(_.isObject(fld)){
+    _.extend(this, fld);
+    this.value = new UInt.UInt(fld.value);
+  } else {
+    this.name = name;
+    this.tip = tip;
+    this.bitwidth = bitwidth;
+    this.testStr = testStr;
+    this.consStr = consStr;
+    this.dispStr = dispStr;
+    this.payloadField = payloadField;
+    this.value = new UInt.UInt(null, 0, Math.floor(bitwidth/8));
   }
 }
 
@@ -44,12 +79,8 @@ function Packet(pkt) {
   }
 }
 
-Packet.prototype.toBase = function() {
-  return this;
-}
-
 Packet.prototype.popPayload = function() {
-  if(this.protocols.length === 0){
+  if(this.protocols.length === 1){
     return;
   }
   this.bytes -= this.protocols[this.protocols.length-1].bytes;
@@ -65,7 +96,7 @@ Packet.prototype.popPayload = function() {
   if(payloadField){
     payloadField.value = new UInt.UInt(null, 0, Math.floor(payloadField.bitwidth/8));
   }
-}
+};
 
 // 1. Sets payload type of last protocol in packet
 // 2. adds new protocol to packet
@@ -83,27 +114,28 @@ Packet.prototype.pushPayload = function(protoValue) {
   }
   // Find new protocol
   var newProtoname = _.values(Protocols.Payloads[lastProtocol.name])[0][protoValue];
-
-  // if new proto found then create and push new protocol
-  if(newProtoname){
-  var newProto = _(Protocols.Protocols).find(function(proto){
-    // Get payload type
-    return newProtoname === proto.name;
-  });
-  newProto = newProto.clone().getProtocol();
+  var newProto = createProtocol(newProtoname);
   this.protocols.push(newProto);
   this.bytes += newProto.bytes;
-  } else {
-    throw 'Cant add proto: ' + protoValue;
-  }
-}
+};
+
+Packet.prototype.clone = function(){
+  return new Packet(this);
+};
+
+Packet.prototype.toBase = function(){
+  return this;
+};
 
 function createUI(pkt){
   return new Packet(pkt);
 }
 
 return {
-  createUI: createUI
+  createUI: createUI,
+  Packet: Packet,
+  Field: Field,
+  Protocol: Protocol
 };
 
 });
