@@ -8,12 +8,12 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Trace', function trace() {
+  .factory('Trace', function(Packet) {
 
 function Event(ev, packet, in_port, in_phy_port, tunnel) {
   if(_.isObject(ev)) {
     _.extend(this, ev);
-    this.packet = ev.packet.clone();
+    this.packet = new Packet.Packet(ev.packet);
   } else {
     this.packet  = packet;
 
@@ -65,7 +65,8 @@ function createUI(trace) {
 return {
   create: create,
   createUI: createUI,
-  Event: Event
+  Event: Event,
+  Trace: Trace
 };
 
 });

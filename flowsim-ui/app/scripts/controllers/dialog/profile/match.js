@@ -9,10 +9,15 @@
  */
 angular.module('flowsimUiApp')
   .controller('DialogProfileMatchCtrl', function ($scope, $modalInstance, 
-                                                  match, tableName, tableId) {
+                                                  match, tableName, tableId, Noproto) {
     $scope.match     = match;
     $scope.tableName = tableName;
     $scope.tableId   = tableId;
+
+
+    $scope.tip = function(protocol, tip, type){
+      return Noproto.MatchTips(protocol, tip, type);
+    };
 
     $scope.ok = function() {
       $modalInstance.close($scope.match);

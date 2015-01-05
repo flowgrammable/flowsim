@@ -7,7 +7,7 @@
  * # fgMatch
  */
 angular.module('flowsimUiApp')
-  .directive('fgMatch', function (Protocols) {
+  .directive('fgMatch', function (Protocols, Noproto) {
     return {
       templateUrl: 'views/fgmatch.html',
       restrict: 'E',
@@ -20,6 +20,9 @@ angular.module('flowsimUiApp')
         // Get the underlying match set
         $scope.matches = $scope.config.get();
        
+        $scope.tip = function(protocol, tip, type){
+          return Noproto.MatchTips(protocol, tip, type);
+        }
         // Initialize our control variables
         $scope.active = {
           protocols: [],

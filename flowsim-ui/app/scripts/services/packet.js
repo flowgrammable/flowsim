@@ -54,7 +54,7 @@ function Field(fld, name, bitwidth, payloadField){
     this.name = name;
     this.bitwidth = bitwidth;
     this.payloadField = payloadField;
-    this.value = new UInt.UInt(null, 0, Math.floor(bitwidth/8));
+    this.value = new UInt.UInt(null, 0, Math.ceil(bitwidth/8));
   }
 }
 
@@ -89,7 +89,7 @@ Packet.prototype.popPayload = function() {
   });
   // if last protocol has a payload field, zero it out
   if(payloadField){
-    payloadField.value = new UInt.UInt(null, 0, Math.floor(payloadField.bitwidth/8));
+    payloadField.value = new UInt.UInt(null, 0, Math.ceil(payloadField.bitwidth/8));
   }
 };
 
@@ -105,7 +105,7 @@ Packet.prototype.pushPayload = function(protoValue) {
   });
   // if field is found then set payload
   if(payloadField){
-    payloadField.value = new UInt.UInt(null, protoValue, Math.floor(payloadField.bitwidth/8));
+    payloadField.value = new UInt.UInt(null, protoValue, Math.ceil(payloadField.bitwidth/8));
   }
   // Find new protocol
   var newProtoname = _.values(Protocols.Payloads[lastProtocol.name])[0][protoValue];

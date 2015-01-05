@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Context', function(Action, Instruction, UInt, Packet) {
+  .factory('Context', function(Action, Instruction, UInt, Packet, Noproto) {
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
@@ -21,7 +21,7 @@ function Key(key, in_port, in_phy_port, tunnel_id) {
     if(key.tunnel_id) {
       this.tunnel_id = new UInt.UInt(key.tunnel_id);
     }
-    this.metadata = key.metadata.clone();
+    this.metadata = new UInt.UInt(key.metadata);
     this.vlan     = _.map(key.vlan, function(tag) { return tag.clone(); });
     this.mpls     = _.map(key.mpls, function(tag) { return tag.clone(); });
   } else if(_.isFinite(in_port)) {
@@ -81,7 +81,7 @@ Key.prototype.toView = function() {
 function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(ctx)) {
     _.extend(this, ctx);
-    this.packet = ctx.packet;
+    this.packet = new Packet.Packet(ctx.packet);
 
     this._nxtTable = ctx._nxtTable;
     this._lstTable = ctx._lstTable;
@@ -130,7 +130,7 @@ Context.prototype.toView = function() {
     actionSet: this.instructionSet.toView(),
     instructionSet: this.actionSet.toView(),
     key: this.key.toView(),
-    packet: new Packet.PacketUI(this.packet)
+    packet: this.packet.toView()
   };
 
   return result;

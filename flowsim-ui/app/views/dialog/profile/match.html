@@ -18,13 +18,13 @@
         <td>{{profile.protocol}}</td>
         <td><div tooltip="{{profile.tip}}">{{profile.field}}</div></td>
         <td><input type="checkbox" ng-model="profile.enabled"
-                   tooltip="{{profile.enabledTip}}"></td>
+                   tooltip="{{tip(profile.protocol, profile.tip, 'enabled')}}"></td>
         <td><input type="checkbox" ng-model="profile.wildcardable" 
                    ng-disabled="!profile.enabled"
-                   tooltip="{{profile.wildcardableTip}}"></td>
+                   tooltip="{{tip(profile.protocol, profile.tip, 'wildcardable')}}"></td>
         <td><input type="checkbox" ng-model="profile.maskable"
                    ng-disabled="!profile.enabled"
-                   tooltip="{{profile.maskableTip}}"></td>
+                   tooltip="{{tip(profile.protocol, profile.tip, 'maskable')}}"></td>
         <td>
           <div ng-class="{'has-error':
                profile.enabled && profile.maskable &&
@@ -32,7 +32,7 @@
                !profile.maskableBitsTest(profile.maskableBits)}">
             <input class="form-control" type="text" 
                    ng-model="profile.maskableBits" style="width:150px" 
-                   tooltip="{{profile.maskableBitsTip}}"
+                   tooltip="{{tip(profile.protocol, profile.tip, 'maskableBits')}}"
                    ng-disabled="!profile.maskable ||!profile.enabled">
           </div>
         </td>

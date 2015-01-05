@@ -8,7 +8,7 @@
     <th></th>
   </thead>
   <tbody>
-    <tr ng-repeat="match in matches">
+     <tr ng-repeat="match in matches">
       <td>{{match.protocol}}</td>
       <td>{{match.field}}</td>
       <td>{{match.value}}</td>
@@ -39,8 +39,9 @@
       <td>
         <div ng-class="{'has-error': active.value.length > 0 && 
                                      !active.type.valueTest(active.value)}">
-          <input type="text" class="form-control" ng-model="active.value" 
-                 tooltip="{{active.type.valueTip}}">
+           <input type="text" class="form-control" ng-model="active.value">
+          <!-- <fg-field-form ng-model="active.value" 
+              protocol="{{active.protocol}}" field="{{active.field}}"/> -->
         </div>
       </td>
       <td>
@@ -51,7 +52,7 @@
                                      active.type.maskable &&
                                      !active.type.maskTest(active.mask))}">
           <input type="text" class="form-control" ng-model="active.mask"
-                 tooltip="{{active.type.maskTip}}"
+                 tooltip="{{tip('mask')}}"
                  ng-disabled="!active.type.wildcardable &&
                               !active.type.maskable">
         </div>

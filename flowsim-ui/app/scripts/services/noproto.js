@@ -128,6 +128,22 @@ Extractor.prototype.extract = function(key, packet) {
   key[this.protocol][this.field] = packet[this.protocol][this.field];
 };
 
+// Removed tips from being saved to backend
+// MatchTips called from controllers/dialog/profile/match.js
+function MatchTips(protocol, tip, type){
+  // Protocol and tip are not always defined
+  var check = (protocol && tip) ? protocol+' '+tip : 'Value';
+  var tips = {
+    enabled:       'Enable/Disable '+protocol+' '+tip+' matching',
+    wildcardable:  'Enable/Disable '+protocol+' '+tip+' wildcard matching',
+    maskable:      'Enable/Disable '+protocol+' '+tip+' bitmask matching',
+    maskableBits:  'Indicate which bits are maskable',
+    value:          check + ' to match against',
+    mask:          'Bitmask to use in match'
+  };
+  return tips[type];
+}
+
 function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled, 
                       wildcardable, maskable) {
   if(_(mp).isObject()) {
@@ -144,16 +160,7 @@ function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled,
     this.wildcardable = wildcardable;
     this.maskable     = maskable;
     this.maskableBits = '';
-    
-    // Attach the necessary tool tips -- profile
-    this.enabledTip      = 'Enable/Disable '+this.protocol+' '+this.tip+' matching';
-    this.wildcardableTip = 'Enable/Disable '+this.protocol+' '+this.tip+' wildcard matching';
-    this.maskableTip     = 'Enable/Disable '+this.protocol+' '+this.tip+' bitmask matching';
-    this.maskableBitsTip = 'Indicate which bits are maskable';
-
-    // Attach the necessary tool tips -- object cons
-    this.valueTip = this.protocol+' '+this.tip + ' to match against';
-    this.maskTip  = 'Bitmask to use in match';
+  
   }
   // Match Constructor
   this.mkType = function(value, mask) {
@@ -527,7 +534,8 @@ return {
   MatchSet: MatchSet,
   Action: Action,
   ActionProfile: ActionProfile,
-  Protocol: Protocol
+  Protocol: Protocol,
+  MatchTips: MatchTips
 };
 
 });
