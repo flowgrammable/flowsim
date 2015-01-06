@@ -97,6 +97,9 @@ Packet.prototype.popPayload = function() {
 // 2. adds new protocol to packet
 // TODO: break this up
 Packet.prototype.pushPayload = function(protoValue) {
+  if(!protoValue){
+    return;
+  }
   // get last protocol in protocols[]
   var lastProtocol = _(this.protocols).last();
   // find field that indicates payload
