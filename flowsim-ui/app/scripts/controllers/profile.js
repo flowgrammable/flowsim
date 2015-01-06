@@ -13,7 +13,6 @@ angular.module('flowsimUiApp')
 
     $scope.names = {};
     $scope.profile = null;
-
     $scope.metadata = {
       tips:  Profile.TIPS,
       tests: Profile.TESTS,

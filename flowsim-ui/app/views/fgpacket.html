@@ -20,8 +20,12 @@
       </accordion-heading>
   
       <!-- Print a label and input box for each field -->
-      <fg-label-input ng-repeat="field in protocol.fields" item="field" proto="{{protocol.name}}">
-      </fg-label-input>
+        <div ng-repeat="field in protocol.fields" class="input-group input-group-sm">
+          <span class="input-group-addon" style="width:100px" >
+            {{field.name}}
+          </span>
+        <fg-field-validation uint="field.value" protocol="{{protocol.name}}" field="{{field.name}}"/>
+      </div>
 
     </accordion-group>
   </accordion>
