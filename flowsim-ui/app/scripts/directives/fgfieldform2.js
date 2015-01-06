@@ -18,12 +18,16 @@ angular.module('flowsimUiApp')
         str: '=',
         uint: '=',
         tip: '@',
-        disabled: '=ngDisabled'
+        disableField: '=ngDisabled'
       },
       link: function postLink(scope, element, attrs) {
         var fieldInfo = {};
 
-        scope.local = {};
+        scope.local = {
+          disableField: false,
+          str: '',
+          defaultValue: ''
+        };
         scope.getFieldUtils = function(){
           scope.noProtoField = Protocols.getField(scope.protocol, scope.field);
           if(!scope.tip){
@@ -35,7 +39,7 @@ angular.module('flowsimUiApp')
 
         scope.validateField = function(){
           if(scope.noProtoField.testStr(scope.local.str)){
-            scope.local.invalidStr = false;
+            element.removeClass('has-error');
             if(scope.str){
               scope.str = scope.local.str;
             }
@@ -43,7 +47,7 @@ angular.module('flowsimUiApp')
               scope.uint.value = scope.noProtoField.consStr(scope.local.str);
             }
           } else {
-            scope.local.invalidStr = true;
+            element.addClass('has-error');          
           }
         }
 
@@ -63,9 +67,9 @@ angular.module('flowsimUiApp')
             scope.getFieldUtils();
             scope.setDefault();
             scope.validateField();
-            scope.local.disabled = false;
+            scope.local.disableField = false;
           } else {
-            scope.local.disabled = true;
+            scope.local.disableField = true;
             scope.local.str = '';
           }
         }, true);
