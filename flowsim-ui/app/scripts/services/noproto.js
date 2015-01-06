@@ -94,6 +94,7 @@ function Match(match, protocol, summary, field, bitwidth, tip, value, mask) {
       new UInt.UInt(null, consFunc(this.mask), Math.ceil(this.bitwidth / 8))
     );
   }
+
 }
 
 Match.prototype.clone = function() {

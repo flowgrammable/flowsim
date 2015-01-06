@@ -28,11 +28,11 @@ var VLAN = {
     setable: false,
     tip: 'Type Length',
     payloadField: true
-  },{
+  }/*,{
     name: 'tag',
     bitwidth: 0,
     strTest: function() { return true; }
-  }]
+  }*/]
 };
 
 var Payloads = {

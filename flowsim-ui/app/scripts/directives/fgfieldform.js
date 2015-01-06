@@ -19,6 +19,10 @@ angular.module('flowsimUiApp')
       link: function(scope, iElement, iAttrs, ngModelCtrl) {
         var protofield = {}; 
 
+
+        ngModelCtrl.$render = function(){
+          scope.localValue = ngModelCtrl.$viewValue.value;
+        };
         scope.configField = function(){
           scope.noProtoField = Protocols.getField(scope.protocol, scope.field);
         
@@ -41,9 +45,7 @@ angular.module('flowsimUiApp')
           ngModelCtrl.$formatters[0] = toView;
           ngModelCtrl.$parsers[0] = toModel;
 
-          ngModelCtrl.$render = function(){
-            scope.localValue = ngModelCtrl.$viewValue.value;
-          };
+
 
           if(!ngModelCtrl.$isEmpty(scope.localValue)){
             ngModelCtrl.$render(); 
