@@ -13,7 +13,8 @@ angular.module('flowsimUiApp')
       restrict: 'E',
       replace: false,
       scope: {
-        field: '='
+        field: '=',
+        setDirty: '&'
       },
       link: function postLink(scope, element, attrs) {
         scope.local = {};
@@ -22,7 +23,7 @@ angular.module('flowsimUiApp')
           if(scope.field.testStr(scope.local.str)){
             element.removeClass('has-error');
             scope.field.value.value = scope.field.consStr(scope.local.str);
-            $rootScope.$broadcast('dirtyCache');
+            scope.setDirty()();
           } else {
             element.addClass('has-error');          
           }

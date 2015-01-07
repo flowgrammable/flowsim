@@ -21,15 +21,25 @@
       </accordion-heading>
   
       <!-- Print a label and input box for each field -->
-      <fg-label-input ng-repeat="elem in node.attrs" item="elem">
-      </fg-label-input>
+     <!-- <div ng-repeat="elem in node.fields">
+       <fg-label-input item="elem"/>
+     </div> -->
+    <div ng-repeat="elem in node.fields" class="input-group input-group-sm">
+          <span class="input-group-addon" style="width:100px" >
+            {{elem.name}}
+          </span>
+        <fg-noproto-field field="elem"/>
+      </div>
 
     </accordion-group>
   </accordion>
 
   <div class="input-group">
-    <select class="form-control" ng-model="nodeType">
+    <!-- <select class="form-control" ng-model="nodeType">
       <option ng-repeat="name in options">{{name}}</option>
+    </select> -->
+    <select class="form-control" ng-model="nodeType" 
+      ng-options="key as value for (key, value) in options">
     </select>
     <span class="input-group-btn">
       <button class="btn btn-default" type="button" ng-click="addNode()">

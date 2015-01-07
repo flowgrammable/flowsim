@@ -21,15 +21,13 @@ angular.module('flowsimUiApp')
           $scope.packet.pushPayload($scope.nodeType);
           $scope.nodeType = '';
           $scope.setOptions();
-          $scope.packet.dirty = true;
-          $rootScope.$broadcast('dirtyCache');
+          $scope.setDirty();
        }
 
        $scope.popProtocol = function() {
           $scope.packet.popPayload();
           $scope.setOptions();
-          $scope.packet.dirty = true;
-          $rootScope.$broadcast('dirtyCache');
+          $scope.setDirty();
        }
 
        $scope.setOptions = function() {
