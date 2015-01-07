@@ -20,14 +20,15 @@ function createProtocol(proto){
     noProto = noProto.clone();
     return new Protocol(null, noProto.name, noProto.bytes, noProto.fields);
   } else {
-    noProto = _(Protocols.Protocols).find(function(protocol){
+    return new Protocol(proto);
+    /*noProto = _(Protocols.Protocols).find(function(protocol){
       return protocol.name === proto.name;
     });
     noProto = noProto.clone();
     _(noProto.fields).each(function(field){
       field.value = proto.fields.shift().value;
     });
-    return new Protocol(noProto);
+    return new Protocol(noProto);*/
   }
 }
 
@@ -35,27 +36,68 @@ function Protocol(proto, name, bytes, fields){
   if(_.isObject(proto)){
     _.extend(this, proto);
     this.fields = _(proto.fields).map(function(f){
-      return new Field(f);
+      var field = new Field(f);
+      field.getFieldUtils(this.name);
+      return field;
     },this);
   } else {
     this.name = name;
     this.bytes = bytes;
     this.fields = _(fields).map(function(f){
-      return new Field(null, f.name, f.bitwidth, f.payloadField);
+      var field = new Field(null, f.name);
+      field.getFieldUtils(this.name);
+      field.mkDefaultValue();
+      return field;
     }, this);
   }
 }
 
-function Field(fld, name, bitwidth, payloadField){
+Protocol.prototype.getFieldUtils = function(){
+  _(this.fields).every(function(field){
+    //var noProtoField = Protocols.getNoProtoField(this.name, field.name);
+    field.getFieldUtils(this.name);
+  }, this);
+}
+
+Protocol.prototype.toBase = function(){
+  return {
+    name: this.name,
+    bytes: this.bytes,
+    fields: _(this.fields).map(function(field){
+      return field.toBase();
+    })
+  };
+}
+
+function Field(fld, name){
   if(_.isObject(fld)){
     _.extend(this, fld);
     this.value = new UInt.UInt(fld.value);
   } else {
     this.name = name;
-    this.bitwidth = bitwidth;
-    this.payloadField = payloadField;
-    this.value = new UInt.UInt(null, 0, Math.ceil(bitwidth/8));
+    this.value = '';
   }
+}
+
+Field.prototype.getFieldUtils = function(protoName){
+  var noProtoField = Protocols.getField(protoName, this.name);
+  this.bitwidth = noProtoField.bitwidth;
+  this.dispStr = noProtoField.dispStr;
+  this.consStr = noProtoField.consStr;
+  this.testStr = noProtoField.testStr;
+  this.tip = noProtoField.tip;
+  this.payloadField = noProtoField.payloadField;
+}
+
+Field.prototype.mkDefaultValue = function(){
+  this.value = new UInt.UInt(null, 0, Math.ceil(this.bitwidth/8));
+}
+
+Field.prototype.toBase = function(){
+  return {
+    name: this.name,
+    value: this.value
+  };
 }
 
 function Packet(pkt) {
@@ -113,6 +155,7 @@ Packet.prototype.pushPayload = function(protoValue) {
   // Find new protocol
   var newProtoname = _.values(Protocols.Payloads[lastProtocol.name])[0][protoValue];
   var newProto = createProtocol(newProtoname);
+  newProto.getFieldUtils();
   this.protocols.push(newProto);
   this.bytes += newProto.bytes;
 };
@@ -122,7 +165,13 @@ Packet.prototype.clone = function(){
 };
 
 Packet.prototype.toBase = function(){
-  return this;
+  return {
+    name: this.name,
+    bytes: this.bytes,
+    protocols: _(this.protocols).map(function(proto){
+      return proto.toBase();
+    }, this)
+  };
 };
 
 Packet.prototype.toView = function(){
