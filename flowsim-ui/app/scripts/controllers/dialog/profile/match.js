@@ -14,11 +14,6 @@ angular.module('flowsimUiApp')
     $scope.tableName = tableName;
     $scope.tableId   = tableId;
 
-
-    $scope.tip = function(protocol, tip, type){
-      return Noproto.MatchTips(protocol, tip, type);
-    };
-
     $scope.ok = function() {
       $modalInstance.close($scope.match);
     };

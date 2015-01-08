@@ -10,56 +10,19 @@ angular.module('flowsimUiApp')
 function Profile(profile) {
   if(_(profile).isObject()) {
     // Copy the simple properties
-    this.meter    = _.clone(profile.meter);
-    this.apply    = _.clone(profile.apply);
-    this.clear    = _.clone(profile.clear);
-    this.write    = _.clone(profile.write);
-    this.metadata = _.clone(profile.metadata);
-    this.goto_    = _.clone(profile.goto_);
-    // Copy construct the more detailed properties
-    this.apply.profiles = new Protocols.ActionProfiles(profile.apply.profiles);
-    this.write.profiles = new Protocols.ActionProfiles(profile.write.profiles);
-    this.goto_.targets  = _(profile.goto_.targets).map(function(target) {
-      return [target[0], target[1]];
-    });
+    this.meter    = new MeterProfile(profile.meter);
+    this.apply    = new ApplyProfile(profile.apply);
+    this.clear    = new ClearProfile(profile.clear);
+    this.write    = new WriteProfile(profile.write);
+    this.metadata = new MetadataProfile(profile.metadata);
+    this.goto_    = new GotoProfile(profile.goto_);
   } else {
-    this.meter = {
-      name: 'Meter',
-      enabled: true,
-      tip: 'Used to meter flow rates',
-      valueTip: 'Id of an existing Meter'
-    };
-    this.apply = {
-      name: 'Apply',
-      enabled: true,
-      tip: 'Immediately executes action list',
-      profiles: new Protocols.ActionProfiles()
-    };
-    this.clear = {
-      name: 'Clear',
-      enabled: true,
-      tip: 'Clears packet contexts action set'
-    };
-    this.write = {
-      name: 'Write',
-      enabled: true,
-      tip: 'Merges action set with packet contexts action set',
-      profiles: new Protocols.ActionProfiles()
-    };
-    this.metadata = {
-      name: 'Metadata',
-      enabled: true,
-      tip: 'Updates the masked bits of the metadata property in the packet key',
-      maskableBits: '0xffffffffffffffff',
-      maskableBitsTip: 'Indicates which bits are writable in this table'
-    };
-    this.goto_ = {
-      name: 'Goto',
-      enabled: true,
-      tip: 'Advances processing to an indicated table',
-      targets: [[1, 254]],
-      targetTip: 'Inidcates which tables can be goto targets'
-    };
+    this.meter = new MeterProfile();
+    this.apply = new ApplyProfile();
+    this.clear = new ClearProfile();
+    this.write = new WriteProfile();
+    this.metadata = new MetadataProfile();
+    this.goto_ = new GotoProfile();
   }
   // Attach test functions in a uniform way regardless of data source
   this.meter.valueTest           = UInt.is(32);
@@ -69,6 +32,141 @@ function Profile(profile) {
 
 Profile.prototype.clone = function() {
   return new Profile(this);
+};
+
+Profile.prototype.toBase = function() {
+  return {
+    meter: this.meter.toBase(),
+    apply: this.apply.toBase(),
+    clear: this.clear.toBase(),
+    write: this.write.toBase(),
+    metadata: this.metadata.toBase(),
+    goto_: this.goto_.toBase()
+  };
+}
+
+function GotoProfile(goto_){
+  if(_.isObject(goto_)){
+    _.extend(this, goto_);
+    this.tagets = _(goto_.targets).map(function(target){
+      return [target[0], target[1]];
+    });
+  } else {
+    this.enabled = true;
+    this.targets = [[1, 254]];
+  }
+
+  this.name = 'Goto';
+  this.tip = 'Advances processing to an indicated table';
+  this.targetTip = 'Indicates which tables can be goto targets';
+  this.targetTest = gotoTest;
+}
+
+GotoProfile.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    targets: this.targets
+  };
+};
+
+function MetadataProfile(metadata){
+  if(_.isObject(metadata)){
+    _.extend(this, metadata);
+  } else {
+    this.enabled = true;
+  }
+
+  this.name = 'Metadata';
+  this.tip = 'Updates the masked bits of the metadata property in the packet key';
+  this.maskableBits = '0xffffffffffffffff';
+  this.maskableBitsTip = 'Indicates which bits are writable in this table';
+  this.maskableBitsTest = UInt.is(64);
+}
+
+MetadataProfile.prototype.toBase = function(){
+  return {
+    enabled: this.enabled
+  };
+};
+
+function WriteProfile(write){
+  if(_.isObject(write)){
+    _.extend(this, write);
+    this.profiles = new Protocols.ActionProfiles(write.profiles);
+  } else {
+    this.enabled = true;
+    this.profiles = new Protocols.ActionProfiles();
+  }
+
+  this.name = 'Write';
+  this.tip = 'Merges action set with packet contexts action set';
+}
+
+WriteProfile.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    profiles: _(this.profiles).map(function(actionProfile){
+      return actionProfile.toBase();
+    }, this)
+  };
+}
+
+function ClearProfile(clear){
+  if(_.isObject(clear)){
+    _.extend(this, clear);
+  } else {
+    this.enabled = true;
+  }
+
+  this.name = 'Clear';
+  this.tip = 'Clears packet contexts action set';
+}
+
+ClearProfile.prototype.toBase = function(){
+  return {
+    enabled: this.enabled
+  };
+};
+
+function ApplyProfile(apply){
+  if(_.isObject(apply)){
+    _.extend(this, apply);
+    this.profiles = new Protocols.ActionProfiles(apply.profiles);
+  } else {
+    this.enabled = true;
+    this.profiles = new Protocols.ActionProfiles();
+  }
+
+  this.name = 'Apply';
+  this.tip = 'Immediately executes action list';
+}
+
+ApplyProfile.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    profiles: _(this.profiles).map(function(actionProfile){
+      return actionProfile.toBase();
+    }, this)
+  };
+}
+
+function MeterProfile(meter){
+  if(_.isObject(meter)){
+    _.extend(this, meter);
+  } else {
+    this.enabled = true;
+  }
+
+  this.name = 'Meter';
+  this.tip = 'Used to meter flow rates';
+  this.valueTip = 'Id of an existing Meter';
+  this.valueTest = UInt.is(32);
+}
+
+MeterProfile.prototype.toBase = function(){
+  return {
+    enabled: this.enabled
+  };
 };
 
 function Set(set, profile) {

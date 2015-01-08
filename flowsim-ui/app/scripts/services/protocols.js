@@ -52,11 +52,21 @@ function MatchProfiles(mp) {
       return protocol.getMatchProfiles();
     })).flatten();
   }
+  console.log('match profiles:', this.profiles);
+
 }
 
 MatchProfiles.prototype.clone = function() {
   return new MatchProfiles(this);
 };
+
+MatchProfiles.prototype.toBase = function() {
+  return {
+    profiles: _(this.profiles).map(function(matchProfile){
+      return matchProfile.toBase();
+    })
+  };
+}
 
 function ActionProfiles(ap) {
   if(_(ap).isObject()) {

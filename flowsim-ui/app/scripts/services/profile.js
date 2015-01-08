@@ -68,6 +68,17 @@ Profile.prototype.ofp_1_4 = function() {
 /* ... this is super ugly .... */
 var ProfileUI = Profile;
 ProfileUI.prototype.toBase = Profile.prototype.clone;
+
+ProfileUI.prototype.toBase = function(){
+  return {
+    name: this.name,
+    datapath: this.datapath,
+    ports: this.ports,
+    tables: this.tables.toBase(),
+    groups: this.groups,
+    meters: this.meters
+  };
+}
 /* ... .end of super ugly .... */
 
 var TIPS = {

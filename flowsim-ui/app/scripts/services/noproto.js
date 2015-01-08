@@ -131,7 +131,7 @@ Extractor.prototype.extract = function(key, packet) {
 
 // Removed tips from being saved to backend
 // MatchTips called from controllers/dialog/profile/match.js
-function MatchTips(protocol, tip, type){
+/*function MatchTips(protocol, tip, type){
   // Protocol and tip are not always defined
   var check = (protocol && tip) ? protocol+' '+tip : 'Value';
   var tips = {
@@ -143,7 +143,7 @@ function MatchTips(protocol, tip, type){
     mask:          'Bitmask to use in match'
   };
   return tips[type];
-}
+}*/
 
 function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled, 
                       wildcardable, maskable) {
@@ -161,13 +161,23 @@ function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled,
     this.wildcardable = wildcardable;
     this.maskable     = maskable;
     this.maskableBits = '';
-  
   }
+
   // Match Constructor
   this.mkType = function(value, mask) {
     return new Match(null, this.protocol, this.summary, this.field, 
                      this.bitwidth, this.tip, value, mask);
   };
+
+  // Attach the necessary tool tips -- profile
+  this.enabledTip      = 'Enable/Disable '+this.protocol+' '+this.tip+' matching';
+  this.wildcardableTip = 'Enable/Disable '+this.protocol+' '+this.tip+' wildcard matching';
+  this.maskableTip     = 'Enable/Disable '+this.protocol+' '+this.tip+' bitmask matching';
+  this.maskableBitsTip = 'Indicate which bits are maskable';
+
+  // Attach the necessary tool tips -- object cons
+  this.valueTip = this.protocol+' '+this.tip + ' to match against';
+  this.maskTip  = 'Bitmask to use in match';
 
   // Attach the necessary input test function -- profile
   this.maskableBitsTest = getTestFunction(this.protocol, this.field);
@@ -180,6 +190,20 @@ function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled,
 MatchProfile.prototype.clone = function() {
   return new MatchProfile(this);
 };
+
+MatchProfile.prototype.toBase = function() {
+  return {
+    protocol: this.protocol,
+    summary: this.summary,
+    field: this.field,
+    bitwidth: this.bitwidth,
+    tip: this.tip,
+    enabled: this.enabled,
+    wildcardable: this.wildcardable,
+    maskable: this.maskable,
+    maskableBits: this.maskableBits
+  };
+}
 
 // Array wrapper with some extra match-y operations
 function MatchSet(ms) {
@@ -319,16 +343,17 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
     this.op       = op;
     // UI Editable properties
     this.enabled = enabled;
-    // Attach the tool tip -- profile
-    this.enabledTip = this.protocol+' '+this.tip+' modification';
-    // Attach the tool tip -- object cons
-    this.valueTip = 'Value to set the '+this.protocol+' '+this.tip;
   }
   // Action Constructor
   this.mkType = function(value) {
     return new Action(null, this.protocol, this.field, this.bitwidth, this.op, 
                       value);
   };
+
+  // Attach the tool tip -- profile
+  this.enabledTip = this.protocol+' '+this.tip+' modification';
+  // Attach the tool tip -- object cons
+  this.valueTip = 'Value to set the '+this.protocol+' '+this.tip;
 
   // Attach the input test function -- object cons
   if(this.field === 'tag') {
@@ -341,6 +366,17 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
 
 ActionProfile.prototype.clone = function() {
   return new ActionProfile(this);
+};
+
+ActionProfile.prototype.toBase = function() {
+  return {
+    protocol: this.protocol,
+    field: this.field,
+    bitwidth: this.bitwidth,
+    tip: this.tip,
+    op: this.op,
+    enabled: this.enabled
+  };
 };
 
 
@@ -535,8 +571,7 @@ return {
   MatchSet: MatchSet,
   Action: Action,
   ActionProfile: ActionProfile,
-  Protocol: Protocol,
-  MatchTips: MatchTips
+  Protocol: Protocol
 };
 
 });

@@ -184,6 +184,14 @@ TableProfile.prototype.clone = function() {
   return new TableProfile(this);
 };
 
+TableProfile.prototype.toBase = function() {
+  return {
+    match: this.match.toBase(),
+    instruction: this.instruction.toBase(),
+    miss: this.miss.toBase()
+  };
+}
+
 function Tables(tables, profile) {
   if(_.isObject(tables)) {
     _.extend(this, tables);
@@ -240,6 +248,17 @@ Profile.prototype.rebuild = function() {
       this.tables.push(new TableProfile(null, prevLen + id));
     }, this);
   }
+};
+
+Profile.prototype.toBase = function() {
+  return {
+    n_tables: this.n_tables,
+    table_stats: this.table_stats,
+    flow_stats: this.flow_stats,
+    tables: _(this.tables).map(function(tableProfile){
+      return tableProfile.toBase();
+    })
+  };
 };
 
 
