@@ -9,7 +9,7 @@
 angular.module('flowsimUiApp')
   .directive('fgNoprotoField', function ($rootScope) {
     return {
-      templateUrl: 'views/fgfieldform2.html',
+      templateUrl: 'views/fgnoprotofield.html',
       restrict: 'E',
       replace: false,
       scope: {
