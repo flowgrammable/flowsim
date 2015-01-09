@@ -37,11 +37,7 @@
         </select>
       </td>
       <td>
-        <div ng-class="{'has-error': active.value.length > 0 && 
-                                     !active.type.valueTest(active.value)}">
-          <input type="text" class="form-control" ng-model="active.value" 
-                 tooltip="{{active.type.valueTip}}">
-        </div>
+        <fg-noproto-match-field active-match="active"/>
       </td>
       <td>
        <div ng-class="{'has-error': active.mask.length > 0 &&

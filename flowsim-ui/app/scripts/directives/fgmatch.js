@@ -147,7 +147,7 @@ angular.module('flowsimUiApp')
             });
 
           // Clear the dependent properties
-          $scope.active.value = ' ';
+          $scope.active.value = '';
           $scope.active.mask  = '';
         };
 

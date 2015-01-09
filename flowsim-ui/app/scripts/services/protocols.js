@@ -52,8 +52,6 @@ function MatchProfiles(mp) {
       return protocol.getMatchProfiles();
     })).flatten();
   }
-  console.log('match profiles:', this.profiles);
-
 }
 
 MatchProfiles.prototype.clone = function() {
