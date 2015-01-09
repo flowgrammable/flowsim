@@ -57,14 +57,24 @@ angular.module('flowsimUiApp')
             function(profile) {
               return profile.protocol;
             })).unique();
-          };
+        };
         $scope.updateProtocols();
         
+
+        $scope.updateActiveActions = function(){
+          $scope.actions = _($scope.actions).filter(function(action){
+            return _($scope.active.protocols).some(function(proto){
+              return proto === action.protocol;
+            });
+          });
+        };
+
         // Re-run on changes to the underlying match set ... new protocols may
         // be available upon more matches
         $scope.$watch('match', function() { 
           $scope.updateProfiles(); 
           $scope.updateProtocols();
+          $scope.updateActiveActions();
         }, true);
 
         // Update the depdendent drop boxes
