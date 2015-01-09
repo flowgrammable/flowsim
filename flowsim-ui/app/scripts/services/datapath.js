@@ -130,6 +130,15 @@ function Datapath(datapath, profile) {
   }
 }
 
+Datapath.prototype.toBase = function(){
+  return {
+    capabilities: this.capabilities,
+    bufAllocator: this.buffAllocator,
+    miss_send_len: this.miss_send_len,
+    fragHandling: this.fragHandling
+  };
+};
+
 Datapath.prototype.ingress = function(packet) {
   var storeOrDrop;
   if(packet.fragment) {

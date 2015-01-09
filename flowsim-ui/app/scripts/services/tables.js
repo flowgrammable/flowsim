@@ -99,6 +99,21 @@ function Table(table, tableProfile) {
   }
 }
 
+Table.prototype.toBase = function() {
+  return {
+    id: this.id,
+    name: this.name,
+    max_entries: this.max_entries,
+    miss: this.miss,
+    capabilities: this.capabilities.toBase(),
+    priorities: _(this.priorities).map(function(priority){
+      return priority;
+    }),
+    prioritiesPresent: this.prioritiesPresent,
+    stats: this.stats
+  };
+};
+
 Table.prototype.clone = function() {
   return new Table(this);
 };
@@ -188,9 +203,12 @@ TableProfile.prototype.toBase = function() {
   return {
     match: this.match.toBase(),
     instruction: this.instruction.toBase(),
-    miss: this.miss.toBase()
+    miss: this.miss.toBase(),
+    id: this.id,
+    name: this.name,
+    max_entries: this.max_entries
   };
-}
+};
 
 function Tables(tables, profile) {
   if(_.isObject(tables)) {
@@ -198,12 +216,16 @@ function Tables(tables, profile) {
     this.tables = _(tables.tables).map(function(table){
       return new Table(table);
     });
-    this.capabilities = new Profile(tables.capabilities);
+    this.capabilities = _.clone(tables.capabilities);
   } else {
     this.tables = _.map(profile.tables, function(_profile){
       return new Table(null, _profile);
     });
-    this.capabilities = profile.clone();
+    this.capabilities = {
+      n_tables: profile.n_tables,
+      table_stats: profile.table_stats,
+      flow_stats: profile.flow_stats
+    };
   }
 }
 
@@ -215,6 +237,15 @@ Tables.prototype.get = function(id) {
   if(id < this.tables.length) {
     return this.tables[id];
   }
+};
+
+Tables.prototype.toBase = function() {
+  return {
+    tables: _(this.tables).map(function(table){
+      return table.toBase();
+    }),
+    capabilities: this.capabilities
+  };
 };
 
 function Profile(profile){

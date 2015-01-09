@@ -154,6 +154,10 @@ function Port(port, portProfile) {
   }
 }
 
+Port.prototype.toBase = function(){
+  return this;
+};
+
 Port.prototype.ingress = function(packet) {
   var keep = this.config.no_recv ? false : true;
 
@@ -177,13 +181,18 @@ Port.prototype.clone = function() {
 
 function Ports(ports, profile) {
   if(_.isObject(ports)) {
-    this.capabilities = new Profile(ports.capabilities);
+    this.capabilities = _.clone(ports.capabilities);
     this.ports = _(ports.ports).map(function(port) {
       return new Port(port);
     });
   } else {
-    this.capabilities = new Profile(profile);
-    this.ports = _(this.capabilities.ports).map(function(portProfile) {
+    this.capabilities = {
+      macPrefix: profile.macPrefix,
+      n_ports: profile.n_ports,
+      port_blocked: profile.port_blocked,
+      port_stats: profile.port_stats
+    };
+    this.ports = _(profile.ports).map(function(portProfile) {
       return new Port(null, portProfile);
     });
   }
@@ -199,6 +208,15 @@ Ports.prototype.ingress = function(packet, in_port) {
 
 Ports.prototype.egress = function(packet, out_port) {
   this.ports[out_port].egress(packet);
+};
+
+Ports.prototype.toBase = function(){
+  return {
+    capabilities: _.clone(this.capabilities),
+    ports: _(this.ports).map(function(port){
+      return port.toBase();
+    })
+  };
 };
 
 function PortProfile(portProfile, id, mac) {

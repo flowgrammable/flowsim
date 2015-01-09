@@ -64,7 +64,7 @@ MatchProfiles.prototype.toBase = function() {
       return matchProfile.toBase();
     })
   };
-}
+};
 
 function ActionProfiles(ap) {
   if(_(ap).isObject()) {
@@ -80,6 +80,14 @@ function ActionProfiles(ap) {
 
 ActionProfiles.prototype.clone = function() {
   return new ActionProfiles(this);
+};
+
+ActionProfiles.prototype.toBase = function() {
+  return {
+    profiles: _(this.profiles).map(function(actionProfile){
+      return actionProfile.toBase();
+    })
+  };
 };
 
 // Dependency graph

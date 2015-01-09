@@ -43,7 +43,7 @@ Profile.prototype.toBase = function() {
     metadata: this.metadata.toBase(),
     goto_: this.goto_.toBase()
   };
-}
+};
 
 function GotoProfile(goto_){
   if(_.isObject(goto_)){
@@ -105,11 +105,9 @@ function WriteProfile(write){
 WriteProfile.prototype.toBase = function(){
   return {
     enabled: this.enabled,
-    profiles: _(this.profiles).map(function(actionProfile){
-      return actionProfile.toBase();
-    }, this)
+    profiles: this.profiles.toBase()
   };
-}
+};
 
 function ClearProfile(clear){
   if(_.isObject(clear)){
@@ -144,11 +142,9 @@ function ApplyProfile(apply){
 ApplyProfile.prototype.toBase = function(){
   return {
     enabled: this.enabled,
-    profiles: _(this.profiles).map(function(actionProfile){
-      return actionProfile.toBase();
-    }, this)
+    profiles: this.profiles.toBase()
   };
-}
+};
 
 function MeterProfile(meter){
   if(_.isObject(meter)){

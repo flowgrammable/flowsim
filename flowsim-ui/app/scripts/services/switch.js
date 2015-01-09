@@ -35,7 +35,15 @@ Switch.prototype.clone = function() {
 };
 
 var SwitchUI = Switch;
-SwitchUI.prototype.toBase = Switch.prototype.clone;
+SwitchUI.prototype.toBase = function(){
+  return {
+    name: this.name,
+    datapath: this.datapath.toBase(),
+    ports: this.ports.toBase(),
+    tables: this.tables.toBase(),
+    groups: this.groups
+  };
+};
 
 function create(name, initialValue) {
     return new Switch(name, initialValue);

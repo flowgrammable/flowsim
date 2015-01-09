@@ -129,22 +129,6 @@ Extractor.prototype.extract = function(key, packet) {
   key[this.protocol][this.field] = packet[this.protocol][this.field];
 };
 
-// Removed tips from being saved to backend
-// MatchTips called from controllers/dialog/profile/match.js
-/*function MatchTips(protocol, tip, type){
-  // Protocol and tip are not always defined
-  var check = (protocol && tip) ? protocol+' '+tip : 'Value';
-  var tips = {
-    enabled:       'Enable/Disable '+protocol+' '+tip+' matching',
-    wildcardable:  'Enable/Disable '+protocol+' '+tip+' wildcard matching',
-    maskable:      'Enable/Disable '+protocol+' '+tip+' bitmask matching',
-    maskableBits:  'Indicate which bits are maskable',
-    value:          check + ' to match against',
-    mask:          'Bitmask to use in match'
-  };
-  return tips[type];
-}*/
-
 function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled, 
                       wildcardable, maskable) {
   if(_(mp).isObject()) {
@@ -203,7 +187,7 @@ MatchProfile.prototype.toBase = function() {
     maskable: this.maskable,
     maskableBits: this.maskableBits
   };
-}
+};
 
 // Array wrapper with some extra match-y operations
 function MatchSet(ms) {
