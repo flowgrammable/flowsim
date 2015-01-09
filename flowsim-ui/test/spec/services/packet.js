@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: Packet', function () {
+ddescribe('Service: Packet', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -11,44 +11,47 @@ describe('Service: Packet', function () {
     Packet = _Packet_;
   }));
 
-  it('Construct packet', function () {
-    expect(!!Packet).toBe(true);
-
-    var pack = Packet.createUI('testpack');
-    expect(pack.protocols.length).toBe(1);
-    expect(pack.protocols[0].name).toBe('Ethernet');
-
-    var j = JSON.stringify(pack);
-    var j_ = Packet.createUI(JSON.parse(j));
-
-    expect(j_.name).toBe('testpack');
-    expect(j_.protocols.length).toBe(1);
-
+  it('Packet construction pass', function () {
+    var packet = new Packet.Packet('testpacket');
+    expect(packet.protocols.length).toBe(1);
+    expect(packet.bytes).toBe(18);
+    expect(packet.protocols[0].name).toBe('Ethernet');
   });
 
-  it('Push and pop payload', function() {
-    var pack = Packet.createUI('testpack');
-    pack.pushPayload('0x0800');
-    expect(pack.protocols[1].name).toBe('IPv4');
-    pack.pushPayload('0x06');
-    expect(pack.protocols[2].name).toBe('TCP');
-
-    // pop payload
-
-    pack.popPayload();
-    expect(pack.protocols.length).toBe(2);
-    pack.popPayload();
-    expect(pack.protocols.length).toBe(1);
-    pack.popPayload();
-    expect(pack.protocols.length).toBe(1);
+  it('Packet toBase pass', function(){
+    var packet = new Packet.Packet('testpacket');
+    var json = packet.toBase();
+    var packet2 = new Packet.Packet(json);
+    expect(packet2.protocols.length).toBe(1);
+    expect(packet2.protocols[0].name).toBe('Ethernet');
   });
 
-  it('Packet clone', function(){
-    var pack = Packet.createUI('testpack');
-    var packb = pack.clone();
-    expect(packb.protocols[0].fields[0].value.bytes).toBe(6);
-    var packc = packb.clone();
-    expect(packc.protocols[0].fields[0].value.bytes).toBe(6);
+  it('Packet pushProtocol pass', function(){
+    var packet = new Packet.Packet('testpack');
+    packet.pushProtocol('0x0800');
+    expect(packet.protocols.length).toBe(2);
+    expect(packet.protocols[1].name).toBe('IPv4');
   });
+
+  it('Packet pushPayload fail', function(){
+    var packet = new Packet.Packet('testp');
+    expect(function(){
+    packet.pushProtocol('0x1111');
+    }).toThrow();
+  });
+
+  it('Packet popPayload pass', function(){
+    var packet = new Packet.Packet('testp');
+    packet.pushProtocol('0x0800');
+    packet.pushProtocol('0x06');
+    expect(packet.protocols[2].name).toBe('TCP');
+
+    packet.popProtocol();
+    expect(packet.protocols.length).toBe(2);
+    packet.popProtocol();
+    expect(packet.protocols.length).toBe(1);
+    packet.popProtocol();
+    expect(packet.protocols.length).toBe(1);
+  })
 
 });

@@ -1,41 +1,29 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('PAYLOAD', function(fgUI, fgConstraints){
+  .factory('Payload', function(){
 
-var NAME = 'Payload';
+var Payload = {
+  name: 'Payload',
+  bytes: 0,
+  fields: [{
+    name: 'Size',
+    bitwidth: 16,
+    matchable: false,
+    setable: false,
+    tip: 'Size of payload'
+  }]
+};
 
-function Payload() {
-  this.name = NAME;
-  this.fields = {
-    bytes: 0
-  };
-  this.bytes = this.fields.bytes;
-}
-
-function Payload_UI(payload){
-  payload = payload === undefined ? new Payload() : payload;
-  this.name = NAME;
-  this.attrs = [{
-      name: 'bytes',
-      value: payload.fields.bytes,
-      test: function(){return fgConstraints.isUInt(0, 0xffff); },
-      tip: 'Payload bytes'}];
-  this.bytes = this.attrs[0].value;
-}
-
-Payload_UI.prototype.toBase = function() {
-  var result = new Payload();
-  result.name = this.name;
-  result.fields = fgUI.stripLabelInputs(this.attrs);
-  result.bytes = parseInt(this.attrs[0].value);
-  return result;
+var Payloads = {
+  Type: {
+    '':''
+  }
 };
 
 return {
-  name: NAME,
-  create: function() { return new Payload(); },
-  createUI: function(payload) { return new Payload_UI(payload); }
+  Payload: Payload,
+  Payloads: Payloads
 };
 
 });

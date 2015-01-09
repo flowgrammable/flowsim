@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .factory('Protocols', function(Noproto, Internal, Ethernet, 
-        VLAN, ARP, IPv4, MPLS, ICMPv4, IPv6, ICMPv6, TCP, SCTP, UDP) {
+        VLAN, ARP, IPv4, MPLS, ICMPv4, IPv6, ICMPv6, TCP, SCTP, UDP, Payload) {
 
 // Inser new protocols below ...
  
@@ -25,7 +25,8 @@ var Protocols = [
   ICMPv6.ICMPv6,
   TCP.TCP,
   SCTP.SCTP,
-  UDP.UDP
+  UDP.UDP,
+  Payload.Payload
 ];
 
 function getField(protoName, fieldName){

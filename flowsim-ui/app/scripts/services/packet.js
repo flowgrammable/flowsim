@@ -21,14 +21,6 @@ function createProtocol(proto){
     return new Protocol(null, noProto.name, noProto.bytes, noProto.fields);
   } else {
     return new Protocol(proto);
-    /*noProto = _(Protocols.Protocols).find(function(protocol){
-      return protocol.name === proto.name;
-    });
-    noProto = noProto.clone();
-    _(noProto.fields).each(function(field){
-      field.value = proto.fields.shift().value;
-    });
-    return new Protocol(noProto);*/
   }
 }
 
@@ -54,7 +46,6 @@ function Protocol(proto, name, bytes, fields){
 
 Protocol.prototype.getFieldUtils = function(){
   _(this.fields).every(function(field){
-    //var noProtoField = Protocols.getNoProtoField(this.name, field.name);
     field.getFieldUtils(this.name);
   }, this);
 }
@@ -112,11 +103,11 @@ function Packet(pkt) {
     this.protocols = [
      createProtocol(Ethernet.Ethernet.name)
     ];
-    this.bytes = Ethernet.bytes;
+    this.bytes = this.protocols[0].bytes;
   }
 }
 
-Packet.prototype.popPayload = function() {
+Packet.prototype.popProtocol = function() {
   if(this.protocols.length === 1){
     return;
   }
@@ -138,7 +129,7 @@ Packet.prototype.popPayload = function() {
 // 1. Sets payload type of last protocol in packet
 // 2. adds new protocol to packet
 // TODO: break this up
-Packet.prototype.pushPayload = function(protoValue) {
+Packet.prototype.pushProtocol = function(protoValue) {
   if(!protoValue){
     return;
   }
@@ -154,6 +145,9 @@ Packet.prototype.pushPayload = function(protoValue) {
   }
   // Find new protocol
   var newProtoname = _.values(Protocols.Payloads[lastProtocol.name])[0][protoValue];
+  if(!newProtoname){
+    throw 'Invalid protocol value: ' + protoValue;
+  }
   var newProto = createProtocol(newProtoname);
   newProto.getFieldUtils();
   this.protocols.push(newProto);

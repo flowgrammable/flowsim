@@ -18,14 +18,14 @@ angular.module('flowsimUiApp')
         $scope.options  = {};  // input select options
 
        $scope.addProtocol = function() {
-          $scope.packet.pushPayload($scope.nodeType);
+          $scope.packet.pushProtocol($scope.nodeType);
           $scope.nodeType = '';
           $scope.setOptions();
           $scope.setDirty();
        }
 
        $scope.popProtocol = function() {
-          $scope.packet.popPayload();
+          $scope.packet.popProtocol();
           $scope.setOptions();
           $scope.setDirty();
        }
@@ -36,13 +36,14 @@ angular.module('flowsimUiApp')
 
       //FIXME ... this belongs else where
       $scope.calcPayloadBytes = function() {
-        if($scope.stack && $scope.stack.slice(-1)[0].name === 'Payload'){
-          val = parseInt($scope.stack.slice(-1)[0].attrs[0].value);
-          if(isNaN(val)){
-            $scope.stack.slice(-1)[0].bytes = 0;
-          } else {
-            $scope.stack.slice(-1)[0].bytes = val;
-          }
+        if(_.last($scope.packet.protocols).name === 'Payload'){
+          var payload = _.last($scope.packet.protocols);
+          var payloadSize = payload.fields[0].value.value;
+          _.last($scope.packet.protocols).bytes = parseInt( payload.fields[0].dispStr(payloadSize, 10), 16 );
+            $scope.packet.bytes = 0;
+          _($scope.packet.protocols).each(function(proto){
+            $scope.packet.bytes += proto.bytes;
+          })
         }
       };
 
@@ -55,7 +56,7 @@ angular.module('flowsimUiApp')
         }
         if($scope.packet){
           $scope.loaded = true;
-          $scope.setOptions(); 
+          $scope.setOptions();
         }
       }, true);
 

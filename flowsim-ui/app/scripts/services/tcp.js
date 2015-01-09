@@ -22,7 +22,9 @@ var TCP = {
 };
 
 var Payloads = {
-
+  Type: {
+    'payload' : 'Payload'
+  }
 };
 
 return {

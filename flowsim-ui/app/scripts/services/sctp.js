@@ -22,7 +22,9 @@ var SCTP = {
 };
 
 var Payloads = {
-
+  Type: {
+    'payload':'Payload'
+  }
 };
 
 return {

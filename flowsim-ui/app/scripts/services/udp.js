@@ -22,7 +22,9 @@ var UDP = {
 };
 
 var Payloads = {
-
+  Type: {
+    'payload':'Payload'
+  }
 };
 
 return {
