@@ -11,12 +11,13 @@ angular.module('flowsimUiApp')
     return {
       templateUrl: 'views/fgnoprotofield.html',
       restrict: 'E',
+      transclude: false,
       replace: false,
       scope: {
         field: '=',
         setDirty: '&'
       },
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope, element, attrs, transclude) {
         scope.local = {};
 
         scope.validateField = function(){

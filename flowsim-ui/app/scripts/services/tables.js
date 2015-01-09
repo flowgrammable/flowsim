@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
                               Protocols, Instruction) {
 
 /* Default Construction Constants */
-var defTables = 8;
+var defTables = 4;
 
 var defName = 'table';
 

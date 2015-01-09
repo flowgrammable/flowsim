@@ -20,10 +20,7 @@
       </accordion-heading>
   
       <!-- Print a label and input box for each field -->
-        <div ng-repeat="field in protocol.fields" class="input-group input-group-sm">
-          <span class="input-group-addon" style="width:100px" >
-            {{field.name}}
-          </span>
+      <div ng-repeat="field in protocol.fields">
         <fg-noproto-field set-dirty="setDirty()" field="field"/>
       </div>
 
