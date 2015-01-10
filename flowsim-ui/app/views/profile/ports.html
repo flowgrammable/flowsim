@@ -10,7 +10,8 @@
     <div class="input-group-addon">Port Count</div>
       <input class="form-control" type="text" style="max-width:100px"
              ng-model="profile.ports.n_ports">
-      <button class="btn btn-primary" ng-click="profile.ports.rebuild()">
+      <button class="btn btn-primary" ng-click="profile.ports.rebuild()"
+        ng-disabled="!profile.ports.nPortsTest(profile.ports.n_ports)">
         Update
       </button>
     </div>
