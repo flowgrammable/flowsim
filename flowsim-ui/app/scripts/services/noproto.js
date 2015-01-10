@@ -228,15 +228,18 @@ MatchSet.prototype.peekTop = function() {
   return this.set[this.set.length-1];
 };
 
-MatchSet.prototype.equal = function(set) {
+MatchSet.prototype.equal = function(matchSet) {
   var idx;
+  var tmp;
   // Unequal lengths can't be equal
-  if(this.set.length !== set.length) { return false; }
+  if(this.set.length !== matchSet.set.length) { return false; }
   // Equal lengths and empty are equal
   if(this.set.length === 0) { return true; }
   // Look for strict equality
   for(idx=0; idx < this.set.length; ++idx) {
-    if(!this.set[idx].equal(set.matches[idx])) {
+    tmp = _.findWhere(matchSet.set, {protocol: this.set[idx].protocol,
+      field: this.set[idx].field});
+    if(!this.set[idx].equal(tmp)){
       return false;
     }
   }
