@@ -64,7 +64,7 @@ angular.module('flowsimUiApp').
                         data = portsView(data.ports, 24);//parse ports and convert to matrix [row][port]
 
                         //dimensions of the SVG container
-                        var height = data.length * portHeight + 3 * margin,
+                        var height = data.length * (portHeight + margin),
                             width = data[0].length * (portWidth + portPadding) + margin;
                         svg.attr('height', height)
                             .attr('width', width);
