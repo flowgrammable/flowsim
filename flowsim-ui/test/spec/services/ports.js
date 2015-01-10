@@ -48,17 +48,25 @@ describe('Service: ports', function () {
     var portsProfile = Ports.mkPortsProfile();
     expect(portsProfile.ports.length).toBe(24);
 
-    portsProfile.n_ports = 1;
-    portsProfile.rebuild();
-    expect(portsProfile.ports.length).toBe(1);
-    expect(portsProfile.ports[0].id).toBe(1);
-    expect(portsProfile.ports[0].name).toBe('eth1');
+
 
     portsProfile.n_ports = 5;
     portsProfile.rebuild();
     expect(portsProfile.ports.length).toBe(5);
     expect(portsProfile.ports[1].id).toBe(2);
     expect(portsProfile.ports[1].name).toBe('eth2');
+
+    portsProfile.n_ports = 25;
+    portsProfile.rebuild();
+    expect(portsProfile.ports.length).toBe(25);
+  });
+
+  it('Ports minimum ports count pass', function(){
+    var portsProfile = Ports.mkPortsProfile();
+    expect(function(){
+      portsProfile.n_ports = 1;
+      portsProfile.rebuild();
+    }).toThrow();
   });
 
   it('Port profile construction Pass', function() {

@@ -67,7 +67,6 @@ Profile.prototype.ofp_1_4 = function() {
 
 /* ... this is super ugly .... */
 var ProfileUI = Profile;
-ProfileUI.prototype.toBase = Profile.prototype.clone;
 
 ProfileUI.prototype.toBase = function(){
   return {
@@ -126,7 +125,8 @@ return {
   createUI: createUI,
   TIPS: TIPS,
   TESTS: TESTS,
-  RANGES: RANGES
+  RANGES: RANGES,
+  Profile: Profile
 };
 
 });

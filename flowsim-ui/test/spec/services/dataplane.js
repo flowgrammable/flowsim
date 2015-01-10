@@ -35,6 +35,11 @@ describe('Service: dataplane', function() {
     Tables = _Tables_;
   }));
 
+  var Packet;
+  beforeEach(inject(function (_Packet_) {
+    Packet = _Packet_;
+  }))
+
   var Profile;
   beforeEach(inject(function (_Profile_) {
     Profile = _Profile_;
@@ -46,9 +51,8 @@ describe('Service: dataplane', function() {
   }));
 
   it('Device construction Pass', function(){
-      var prof = Profile.create('test profile name');
+      var prof = new Profile.Profile('test profile name');
       var swi = Switch_.create(null, prof);
-
       var dp = new Dataplane.Dataplane(swi);
   });
 
@@ -63,11 +67,14 @@ describe('Service: dataplane', function() {
   });
 
 
-  it('Device construction Pass', function(){
-      var prof = Profile.create('test profile name');
+  it('Device Arrival Pass', function(){
+      var prof = new Profile.Profile('test profile name');
       var swi = Switch_.create(null, prof);
-
       var dp = new Dataplane.Dataplane(swi);
+      var pack = new Packet.Packet('testpacket');
+      pack.pushPayload('0x0800');
+      pack.pushPayload('0x06');
+
   });
 
 });

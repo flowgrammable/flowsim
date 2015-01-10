@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('Service: Packet', function () {
+describe('Service: Packet', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));

@@ -294,6 +294,10 @@ PortProfile.prototype.toString = function(){
          'optical: {}';
 };
 
+function numPortsTest(ports){
+  return (_.isNumber(parseInt(ports)) && (parseInt(ports) >= 2) && (parseInt(ports) <= 512));
+}
+
 function Profile(profile, macPrefix) {
   if(_.isObject(profile)) {
     _.extend(this, profile);
@@ -313,7 +317,10 @@ function Profile(profile, macPrefix) {
   } else {
     throw 'PortsProfile expected macPrefix';
   }
+
+  this.nPortsTest = numPortsTest;
 }
+
 
 function mkPortsProfile(macPrefix){
   macPrefix = macPrefix ? macPrefix : (_(4).times(function() {
@@ -328,6 +335,9 @@ Profile.prototype.clone = function() {
 
 Profile.prototype.rebuild = function() {
   var base;
+  if(this.n_ports < 2){
+    throw 'Switch must have atleast 2 ports';
+  }
   if(this.n_ports === this.ports.length) {
     return;
   } else if(this.n_ports < this.ports.length) {
@@ -336,7 +346,7 @@ Profile.prototype.rebuild = function() {
     base = this.ports.length;
     _(this.n_ports-this.ports.length).times(function(i) {
       var idx = base + i;
-      this.ports.push(new PortProfile(null, idx + 1, mkMAC(this.macPrefix, idx)));
+      this.ports.push(new PortProfile(null, idx + 1 , mkMAC(this.macPrefix, idx)));
     }, this);
   }
 };

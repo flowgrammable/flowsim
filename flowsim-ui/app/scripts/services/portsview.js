@@ -16,7 +16,6 @@ angular.module('flowsimUiApp')
             result = _.map(_.range(rowCount), function() {
                 return [];
             });
-
             if (sw && sw.length <= rowWidth) {
                 return [sw];
             } else if (sw) {
@@ -25,7 +24,7 @@ angular.module('flowsimUiApp')
                 _.each(sw, function(port) {
                     result[(2 * slot) + row].push(port);
                     row = (row + 1) % 2;
-                    slot = Math.floor((port.id + 1) / (2 * rowWidth));
+                    slot = Math.floor((port.id) / (2 * rowWidth));
                 });
             }
             return result;

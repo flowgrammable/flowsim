@@ -6,7 +6,7 @@
 <div class="row">
   <div class="col-md-offset-3">
 <div class="form-group">
-  <div class="input-group">
+  <div class="input-group" ng-class="{'has-error': !profile.ports.nPortsTest(profile.ports.n_ports)}">
     <div class="input-group-addon">Port Count</div>
       <input class="form-control" type="text" style="max-width:100px"
              ng-model="profile.ports.n_ports">
@@ -18,7 +18,7 @@
 </div>
 </div>
 </div>
-   
+
 <div class="row">
 
   <div class="col-md-5">
@@ -129,13 +129,13 @@
     </td>
     <td>
       <select class="form-control" tooltip="{{tips.Ports.Port.speed}}" i
-              ng-model="port.ethernet.speed" 
-              ng-options="value as value for (key, value) 
+              ng-model="port.ethernet.speed"
+              ng-options="value as value for (key, value)
               in metadata.ranges.Ports.speeds">
       </select>
     </td>
     <td>
-      <select class="form-control" tooltip="{{tips.Ports.Port.medium}}" 
+      <select class="form-control" tooltip="{{tips.Ports.Port.medium}}"
               ng-model="port.ethernet.medium"
               ng-options="value as value for (key, value) in
               metadata.ranges.Ports.mediums">

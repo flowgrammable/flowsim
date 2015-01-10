@@ -61,7 +61,6 @@ angular.module('flowsimUiApp').
                         if (_.isUndefined(data) || !data || data.length === 0) {
                           return; //don't render if there is no data
                         }
-
                         data = portsView(data.ports, 24);//parse ports and convert to matrix [row][port]
 
                         //dimensions of the SVG container
