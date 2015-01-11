@@ -16,7 +16,10 @@ angular
     'ngSanitize',
     'ui.bootstrap'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $tooltipProvider) {
+    $tooltipProvider.options({
+      popupDelay: 800
+    });
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',

@@ -13,17 +13,6 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.device = null;
 
-    $scope.metadata = {
-      tips: Switch.TIPS,
-      tests: Switch.TESTS,
-      ranges: Switch.RANGES
-    };
-
-    $scope.togglePort = function(id) {
-      var port = $scope.device.ports.ports[id-1];
-      port.config.port_down = !port.config.port_down;
-      port.state.link_down = port.config.port_down;
-    };
 
     $scope.getSwitches = function(callback) {
       fgCache.getNames('switch', callback);
@@ -85,28 +74,21 @@ angular.module('flowsimUiApp')
             console.log(err.details);
           } else {
             $scope.device = result;
+            $scope.$broadcast('setSwitch');
           }
         });
       }
     };
 
     $scope.setDirty = function() {
+      if($scope.device){
+        $scope.device.dirty = true;
+      }
       $rootScope.$broadcast('dirtyCache');
     };
 
     $scope.setClean = function() {
       $rootScope.$broadcast('cleanCache');
     };
-
-    $scope.$watch('device', function(newValue, oldValue){
-
-      if($scope.device){ // watch for change if profile is loaded
-        if($scope.device.dirty){
-          $scope.setDirty();
-        } else if(oldValue && !oldValue.dirty) { // if old value was clean, then set dirty
-          $scope.device.dirty = true;
-        }
-      }
-    },true);
 
   });

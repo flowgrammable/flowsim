@@ -20,7 +20,7 @@
            Miss Send Length
          </div>
          <input class="form-control" type="text" style="width:200px"
-         ng-model="device.datapath.miss_send_len">
+         ng-model="device.datapath.miss_send_len" ng-change="setDirty()">
        </div>
      </div>
 
@@ -36,7 +36,8 @@
             <input type="radio" name="fragHandling"
                    ng-model="device.datapath.fragHandling"
                    ng-value="'Normal'"
-                   ng-disabled="!device.datapath.capabilities.ip_reassembly">
+                   ng-disabled="!device.datapath.capabilities.ip_reassembly"
+                   ng-change="setDirty()">
             Normal
           </label>
         </div>
@@ -45,7 +46,8 @@
             <input type="radio" name="fragHandling"
                    ng-model="device.datapath.fragHandling"
                    ng-value="'Drop'"
-                   ng-disabled="!device.datapath.capabilities.ip_reassembly">
+                   ng-disabled="!device.datapath.capabilities.ip_reassembly"
+                   ng-change="setDirty()">
             Drop
           </label>
         </div>
@@ -54,7 +56,8 @@
             <input type="radio" name="fragHandling"
                    ng-model="device.datapath.fragHandling"
                    ng-value="'Reassemble'"
-                   ng-disabled="!device.datapath.capabilities.ip_reassembly">
+                   ng-disabled="!device.datapath.capabilities.ip_reassembly"
+                   ng-change="setDirty()">
             Reassemble
           </label>
         </div>

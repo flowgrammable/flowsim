@@ -18,14 +18,18 @@ angular.module('flowsimUiApp')
   $scope.tableId = 0;
   $scope.setTable = function(idx) {
     $scope.tableId = idx;
-    $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
+    if($scope.device){
+      $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
+    } else {
+      $scope.table = [];
+    }
   };
 
   $scope.delFlow = function(idx) {
     var flow = $scope.table[idx];
     $scope.device.tables.tables[$scope.tableId].del(flow.priority, flow);
     $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
-  }
+  };
 
   $scope.newFlow = function(priority) {
     var caps =  $scope.device.tables.tables[$scope.tableId].capabilities;
@@ -45,6 +49,7 @@ angular.module('flowsimUiApp')
     }).result.then(function (flow) {
       $scope.device.tables.tables[$scope.tableId].add(flow.priority, flow);
       $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
+      $scope.setDirty();
     });
   };
 
@@ -66,15 +71,15 @@ angular.module('flowsimUiApp')
         } 
       }).result.then(function (nflow) {
         flow.assign(nflow);
+        $scope.setDirty();
         $scope.table = $scope.device.tables.tables[$scope.tableId].flatten();
       });
     }
   };
 
-  $scope.$watch('device.tables.tables.length',function(){
-    if($scope.device && $scope.device.tables.tables.length > 0){
-      $scope.setTable(0);
-    }
+  $scope.$on('initDevice', function(){
+    $scope.table = [];
+    $scope.setTable(0);
   });
 
 });

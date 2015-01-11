@@ -1,0 +1,19 @@
+<div ng-show="device">
+  <tabset>
+    <tab heading="Datapath">
+      <ng-include src="'views/switch/datapath.html'"></ng-include>
+    </tab>
+    <tab heading="Ports">
+      <fg-switch-ports/>
+    </tab>
+    <tab heading="Tables">
+      <fg-switch-tables/>
+    </tab>
+    <tab heading="Groups">
+      <ng-include src="'views/switch/groups.html'"></ng-include>
+    </tab>
+    <tab heading="Meters">
+      <ng-include src="'views/switch/meters.html'"></ng-include>
+    </tab>
+  </tabset>
+</div>

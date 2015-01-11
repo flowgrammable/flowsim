@@ -12,28 +12,7 @@
   </div>
 
   <div class="col-md-10">
-
-    <div ng-show="device">
-      <tabset>
-        <tab heading="Datapath">
-          <ng-include src="'views/switch/datapath.html'"></ng-include>
-        </tab>
-        <tab heading="Ports">
-          <ng-include src="'views/switch/ports.html'"></ng-include>
-        </tab>
-        <tab heading="Tables">
-          <ng-include src="'views/switch/tables.html'"
-                      ng-controller="SwitchTableCtrl"></ng-include>
-        </tab>
-        <tab heading="Groups">
-          <ng-include src="'views/switch/groups.html'"></ng-include>
-        </tab>
-        <tab heading="Meters">
-          <ng-include src="'views/switch/meters.html'"></ng-include>
-        </tab>
-      </tabset>
-    </div>
-
+    <fg-switch device="device" set-dirty="setDirty()"/>
   </div>
 
 </div>

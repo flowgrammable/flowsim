@@ -16,27 +16,27 @@
     <div class="col-md-2">
       <ul class="list-group">
         <li class="list-group-item" tooltip="{{set.meter.tip}}" ng-class="{'active': active.index === 0}"
-          ng-show="set.meter.enabled" ng-click="active.index = 0">
+          ng-show="set.meter.enabled"  ng-click="active.index = 0">
           {{set.meter.name}}
         </li>
         <li class="list-group-item" tooltip="{{set.apply.tip}}" ng-class="{'active': active.index === 1}"
-          ng-show="set.apply.enabled" ng-click="active.index = 1">
+          ng-show="set.apply.enabled"  ng-click="active.index = 1">
           {{set.apply.name}}
         </li>
         <li class="list-group-item" tooltip="{{set.clear.tip}}" ng-class="{'active': active.index === 2}"
-          ng-show="set.clear.enabled" ng-click="active.index = 2">
+          ng-show="set.clear.enabled"  ng-click="active.index = 2">
           {{set.clear.name}}
         </li>
         <li class="list-group-item" tooltip="{{set.write.tip}}" ng-class="{'active': active.index === 3}"
-          ng-show="set.write.enabled" ng-click="active.index = 3">
+          ng-show="set.write.enabled"  ng-click="active.index = 3">
           {{set.write.name}}
         </li>
         <li class="list-group-item" tooltip="{{set.metadata.tip}}" ng-class="{'active': active.index === 4}"
-          ng-show="set.metadata.enabled" ng-click="active.index = 4">
+          ng-show="set.metadata.enabled"  ng-click="active.index = 4">
           {{set.metadata.name}}
         </li>
         <li class="list-group-item" tooltip="{{set.goto_.tip}}" ng-class="{'active': active.index === 5}"
-          ng-show="set.goto_.enabled" ng-click="active.index = 5">
+          ng-show="set.goto_.enabled"  ng-click="active.index = 5">
           {{set.goto_.name}}
         </li>
       </ul>
@@ -53,7 +53,7 @@
                  ng-class="{'has-error': set.meter.id.length > 0 &&
                              !set.meter.idTest(set.meter.id)}">
               <input type="text" class="form-control"
-                     tooltip="{{set.meter.idTip}}" ng-model="set.meter.id">
+                     tooltip="{{set.meter.idTip}}"  ng-model="set.meter.id">
             </div>
           </div>
         </form>
@@ -84,7 +84,7 @@
               set.metadata.value.length > 0 &&
               !set.metadata.valueTest(set.metadata.value)}">
               <input type="text" class="form-control"
-                     tooltip="{{set.metadata.valueTip}}"
+                     tooltip="{{set.metadata.valueTip}}" 
                      ng-model="set.metadata.value">
             </div>
           </div>
@@ -96,7 +96,7 @@
               set.metadata.mask.length > 0 &&
               !set.metadata.maskTest(set.metadata.mask)}">
               <input type="text" class="form-control"
-                     tooltip="{{set.metadata.maskTip}}"
+                     tooltip="{{set.metadata.maskTip}}" 
                      ng-model="set.metadata.mask">
             </div>
           </div>
@@ -113,7 +113,7 @@
               set.goto_.target.length > 0 &&
               !set.goto_.targetTest(set.goto_.target)}">
               <input type="text" class="form-control"
-                     tooltip="{{set.goto_.targetTip}}"
+                     tooltip="{{set.goto_.targetTip}}" 
                      ng-model="set.goto_.target">
             </div>
           </div>
