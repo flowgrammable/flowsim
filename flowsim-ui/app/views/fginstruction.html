@@ -2,14 +2,12 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h4>Instruction Set</h4>
-    <span ng-repeat="ins in instructions">
+    <span ng-repeat="ins in instructionProfile">
       <button type="button" class="btn btn-xs btn-default"
               tooltip="{{'Add/Remove '+ins.name}}"
-              ng-show="set.profile[ins.name.toLowerCase()].enabled ||
-                       set.profile[ins.name.toLowerCase()+'_'].enabled"
-              ng-click="ins.enabled = !ins.enabled;
-                        active.index = active.index === $index ? -1 : active.index" 
-              ng-class="{'btn-primary': ins.enabled}">
+              ng-show="ins.enabled"
+              ng-click="active.index = active.index === $index ? -1 : active.index; setEnabled(ins.name)" 
+              ng-class="{'btn-primary': isEnabled(ins.name) }">
         {{ins.name}}
       </button>
     </span>
@@ -17,11 +15,29 @@
   <div class="row">
     <div class="col-md-2">
       <ul class="list-group">
-        <li ng-repeat="ins in instructions" class="list-group-item"
-            tooltip="{{ins.tip}}"
-            ng-class="{'active': active.index === $index}"
-            ng-show="ins.enabled" ng-click="active.index = $index">
-          {{ins.name}}
+        <li class="list-group-item" tooltip="{{set.meter.tip}}" ng-class="{'active': active.index === 0}"
+          ng-show="set.meter.enabled" ng-click="active.index = 0">
+          {{set.meter.name}}
+        </li>
+        <li class="list-group-item" tooltip="{{set.apply.tip}}" ng-class="{'active': active.index === 1}"
+          ng-show="set.apply.enabled" ng-click="active.index = 1">
+          {{set.apply.name}}
+        </li>
+        <li class="list-group-item" tooltip="{{set.clear.tip}}" ng-class="{'active': active.index === 2}"
+          ng-show="set.clear.enabled" ng-click="active.index = 2">
+          {{set.clear.name}}
+        </li>
+        <li class="list-group-item" tooltip="{{set.write.tip}}" ng-class="{'active': active.index === 3}"
+          ng-show="set.write.enabled" ng-click="active.index = 3">
+          {{set.write.name}}
+        </li>
+        <li class="list-group-item" tooltip="{{set.metadata.tip}}" ng-class="{'active': active.index === 4}"
+          ng-show="set.metadata.enabled" ng-click="active.index = 4">
+          {{set.metadata.name}}
+        </li>
+        <li class="list-group-item" tooltip="{{set.goto_.tip}}" ng-class="{'active': active.index === 5}"
+          ng-show="set.goto_.enabled" ng-click="active.index = 5">
+          {{set.goto_.name}}
         </li>
       </ul>
     </div>
@@ -43,7 +59,7 @@
         </form>
       </div>
       <div ng-show="active.index === 1">
-        <fg-apply-actions toplevel="set.profile.apply.profiles.profiles" 
+        <fg-apply-actions toplevel="instructionProfile[1].profiles.profiles" 
                           match="match.set"
                           actions="set.apply.actions">
         </fg-apply-actions>
@@ -52,7 +68,7 @@
         <h3>Clear the Action Set</h3>
       </div>
       <div ng-show="active.index === 3">
-        <fg-write-actions toplevel="set.profile.write.profiles.profiles" 
+        <fg-write-actions toplevel="instructionProfile[3].profiles.profiles" 
                           match="match.set"
                           actions="set.write.actions">
         </fg-write-actions>

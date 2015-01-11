@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow){
+  .controller('SwitchFlowCtrl', function ($scope, $modalInstance, flow, caps){
 
   // Attach the match/instruciton/miss properties
   $scope.priority     = flow.priority;
@@ -16,9 +16,10 @@ angular.module('flowsimUiApp')
   $scope.instruction  = flow.ins;
 
   // Set the flow match/action profile/capabilities
-  $scope.matchProfiles = flow.capabilities.match;
-  $scope.applyProfiles = flow.capabilities.instruction.apply;
-  $scope.writeProfiles = flow.capabilities.instruction.write;
+  $scope.caps = caps;
+  $scope.matchProfiles = caps.match;
+  $scope.applyProfiles = caps.instruction.apply;
+  $scope.writeProfiles = caps.instruction.write;
 
 $scope.ok = function () {
   $modalInstance.close(flow);

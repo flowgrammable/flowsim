@@ -7,20 +7,29 @@ angular.module('flowsimUiApp')
       restrict: 'E',
       scope: {
         match: '=',
-        set: '='
+        set: '=',
+        caps: '='
       },
       controller: function($scope) {
         $scope.active = {
           index: -1,
         };
 
-        $scope.instructions = [
-          $scope.set.meter,
-          $scope.set.apply,
-          $scope.set.clear,
-          $scope.set.write,
-          $scope.set.metadata,
-          $scope.set.goto_
+        $scope.setEnabled = function(name){
+          var instruction = _($scope.set).findWhere({name: name});
+          instruction.enabled = !instruction.enabled;
+        }
+
+        $scope.isEnabled = function(name){
+          return _($scope.set).findWhere({name: name, enabled: true});
+        }
+        $scope.instructionProfile = [
+          $scope.caps.instruction.meter,
+          $scope.caps.instruction.apply,
+          $scope.caps.instruction.clear,
+          $scope.caps.instruction.write,
+          $scope.caps.instruction.metadata,
+          $scope.caps.instruction.goto_
         ];
 
         $scope.addApplyAction = function() {

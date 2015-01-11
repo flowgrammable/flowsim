@@ -36,6 +36,15 @@ function Priority(priority, priValue) {
   }
 }
 
+Priority.prototype.toBase = function(){
+  return {
+    flows: _(this.flows).map(function(flow){
+      return flow.toBase();
+    }),
+    priority: this.priority
+  };
+};
+
 Priority.prototype.clone = function() {
   return new Priority(this);
 };
@@ -107,7 +116,7 @@ Table.prototype.toBase = function() {
     miss: this.miss,
     capabilities: this.capabilities.toBase(),
     priorities: _(this.priorities).map(function(priority){
-      return priority;
+      return priority.toBase();
     }),
     prioritiesPresent: this.prioritiesPresent,
     stats: this.stats

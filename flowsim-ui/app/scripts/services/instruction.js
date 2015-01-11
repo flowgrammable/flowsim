@@ -165,74 +165,158 @@ MeterProfile.prototype.toBase = function(){
   };
 };
 
-function Set(set, profile) {
-  if(_(set).isObject()) {
-    // Copy the set native capabilities
-    this.profile  = new Profile(set.profile);
-    // Copy the simple properties
-    this.meter    = _.clone(set.meter);
-    this.apply    = _.clone(set.apply);
-    this.clear    = _.clone(set.clear);
-    this.write    = _.clone(set.write);
-    this.metadata = _.clone(set.metadata);
-    this.goto_    = _.clone(set.goto_);
-    // Copy construct the more detailed properties
-    this.apply.actions = _(set.apply.actions).map(function(action) {
-      return new Noproto.Action(action);
-    });
-    this.write.actions = _(set.write.actions).map(function(action) {
+function Meter(meter){
+  if(_.isObject(meter)){
+    _.extend(this, meter);
+  } else {
+    this.enabled = false;
+    this.id = '';
+  }
+  this.name   = 'Meter';
+  this.tip    = 'Used to meter flow rates';
+  this.idTip  = 'Id of an existing Meter';
+  this.idTest = UInt.is(32);
+}
+
+Meter.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    id: this.id
+  };
+};
+
+function Apply(apply){
+  if(_.isObject(apply)){
+    _.extend(this, apply);
+    this.actions = _(apply.actions).map(function(action) {
       return new Noproto.Action(action);
     });
   } else {
-    // Create a local copy of the set capabilities
-    this.profile = profile.clone();
-    this.meter = {
-      name: 'Meter',
-      enabled: false,
-      tip: 'Used to meter flow rates',
-      id: '',
-      idTip: 'Id of an existing Meter'
-    };
-    this.apply = {
-      name: 'Apply',
-      enabled: false,
-      tip: 'Immediately executes action list',
-      actions: []
-    };
-    this.clear = {
-      name: 'Clear',
-      enabled: false,
-      tip: 'Clears packet contexts action set'
-    };
-    this.write = {
-      name: 'Write',
-      enabled: false,
-      tip: 'Merges action set with packet contexts action set',
-      actions: []
-    };
-    this.metadata = {
-      name: 'Metadata',
-      enabled: false,
-      tip: 'Updates the masked bits of the metadata property in the packet key',
-      value: '',
-      mask: '',
-      valueTip: 'Value to write into the metadata register in the packet key',
-      maskTip: 'Mask to screen bits during write operation'
-    };
-    this.goto_ = {
-      name: 'Goto',
-      enabled: false,
-      tip: 'Advances processing to an indicated table',
-      target: '',
-      targetTip: 'Table Id to target'
-    };
+    this.enabled = false;
+    this.actions = [];
   }
-  // Attach test functions in a uniform matter, regardless of source
-  this.meter.idTest       = UInt.is(32);
-  this.metadata.valueTest = UInt.is(64);
-  this.metadata.maskTest  = UInt.is(64);
-  this.goto_.targetTest   = UInt.is(8);
+  this.name = 'Apply';
+  this.tip  = 'Immediately executes action list';
 }
+
+Apply.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    actions: this.actions
+  };
+};
+
+function Clear(clear){
+  if(_.isObject(clear)){
+    _.extend(this, clear);
+  } else {
+    this.enabled = false;
+  }
+  this.name = 'Clear';
+  this.tip  = 'Clears the packet contexts action set';
+}
+
+Clear.prototype.toBase = function(){
+  return {
+    enabled: this.enabled
+  };
+};
+
+function Write(write){
+  if(_.isObject(write)){
+    _.extend(this, write);
+    this.actions = _(write.actions).map(function(action){
+      return new Noproto.Action(action);
+    });
+  } else {
+    this.enabled = false;
+    this.actions = [];
+  }
+  this.name = 'Write';
+  this.tip  = 'Merges action set with packet contexts action set';
+}
+
+Write.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    actions: this.actions
+  };
+};
+
+function Metadata(meta){
+  if(_.isObject(meta)){
+    _.extend(this, meta);
+  } else {
+    this.enabled = false;
+    this.value = '';
+    this.mask = '';
+  }
+  this.name      = 'Metadata';
+  this.tip       = 'Updates the masked bits of the metadata property in the packet key';
+  this.valueTip  = 'Value to write into the metadata register in the packet key';
+  this.maskTip   = 'Mask to screen bits during write operation';  
+  this.valueTest = UInt.is(64);
+  this.maskTest  = UInt.is(64);
+}
+
+Metadata.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    value: this.value,
+    mask: this.mask
+  };
+};
+
+function Goto(goto_){
+  if(_.isObject(goto_)){
+    _.extend(this, goto_);
+  } else {
+    this.enabled = false;
+    this.target = '';
+  }
+  this.name       = 'Goto';
+  this.tip        = 'Advances processing to an indicated table';
+  this.targetTip  = 'Table Id to target';
+  this.targetTest = UInt.is(8);
+}
+
+Goto.prototype.toBase = function(){
+  return {
+    enabled: this.enabled,
+    target: this.target
+  };
+};
+
+function Set(set, profile) {
+  if(_(set).isObject()) {
+    // Copy the simple properties
+    this.meter    = new Meter(set.meter);
+    this.apply    = new Apply(set.apply);
+    this.clear    = new Clear(set.clear);
+    this.write    = new Write(set.write);
+    this.metadata = new Metadata(set.metadata);
+    this.goto_     = new Goto(set.goto_);
+  } else {
+    // Create a local copy of the set capabilities
+    this.meter = new Meter();
+    this.apply = new Apply();
+    this.clear = new Clear();
+    this.write = new Write();
+    this.metadata = new Metadata();
+    this.goto_ = new Goto();
+  }
+}
+
+Set.prototype.toBase = function(){
+  return {
+    meter: this.meter.toBase(),
+    apply: this.apply.toBase(),
+    clear: this.clear.toBase(),
+    write: this.write.toBase(),
+    metadata: this.metadata.toBase(),
+    goto_: this.goto_.toBase()
+  };
+};
 
 Set.prototype.clone = function() {
   return new Set(this);
