@@ -22,8 +22,8 @@ function Key(key, in_port, in_phy_port, tunnel_id) {
       this.tunnel_id = new UInt.UInt(key.tunnel_id);
     }
     this.metadata = new UInt.UInt(key.metadata);
-    this.vlan     = _.map(key.vlan, function(tag) { return tag.clone(); });
-    this.mpls     = _.map(key.mpls, function(tag) { return tag.clone(); });
+    this.VLAN     = _.map(key.VLAN, function(tag) { return tag.clone(); });
+    this.MPLS     = _.map(key.MPLS, function(tag) { return tag.clone(); });
   } else if(_.isFinite(in_port)) {
     // Initialize input information
     this.in_port     = new UInt.UInt(null, in_port, 4);
@@ -36,8 +36,8 @@ function Key(key, in_port, in_phy_port, tunnel_id) {
     this.metadata    = new UInt.UInt(null, null, 8);
 
     // Initialize array for stacks
-    this.vlan = [];
-    this.mpls = [];
+    this.VLAN = [];
+    this.MPLS = [];
   } else {
     throw 'Bad Key('+in_port+')';
   }

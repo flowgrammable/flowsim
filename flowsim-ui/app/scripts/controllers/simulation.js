@@ -66,7 +66,7 @@ angular.module('flowsimUiApp')
       if(err) {
         console.log(err.details);
       } else {
-        $scope.trace.push(result.toBase());
+        $scope.trace.push(result.clone());
         $scope.resources.packetName = '';
       }
     });
@@ -157,7 +157,7 @@ angular.module('flowsimUiApp')
     $scope.makeTransition = { 
       to: hideDetails($scope.simulation.stage) 
     };
-    $scope.ctx        = $scope.simulation.toView();
+    $scope.ctx = $scope.simulation.toView();
     console.log('post step');
     console.log($scope.ctx);
     $scope.packetName = $scope.ctx.packet.name;

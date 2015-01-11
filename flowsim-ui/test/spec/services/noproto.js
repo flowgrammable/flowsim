@@ -188,6 +188,14 @@ describe('Service: noproto', function () {
 
   });
 
+ it('Extractors test', function(){
+  var extractors = _(Protocols.Protocols).map(function(proto){
+    return proto.getExtractions();
+  });
+  expect(extractors.length).toBeGreaterThan(1);
+  expect(extractors[1].length).toBe(3);
+ });
+
 
 
 });

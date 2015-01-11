@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: dataplane', function() {
+ddescribe('Service: dataplane', function() {
   // load the service's module
   beforeEach(module('flowsimUiApp'));
 
@@ -38,7 +38,7 @@ describe('Service: dataplane', function() {
   var Packet;
   beforeEach(inject(function (_Packet_) {
     Packet = _Packet_;
-  }))
+  }));
 
   var Profile;
   beforeEach(inject(function (_Profile_) {
@@ -72,9 +72,72 @@ describe('Service: dataplane', function() {
       var swi = Switch_.create(null, prof);
       var dp = new Dataplane.Dataplane(swi);
       var pack = new Packet.Packet('testpacket');
-      pack.pushPayload('0x0800');
-      pack.pushPayload('0x06');
+      pack.pushProtocol('0x0800');
+      pack.pushProtocol('0x06');
 
+      expect(dp.state).toBe('Arrival');
+      dp.arrival(pack, 1, 1, 1);
+  });
+
+  it('Dataplane Arrival Pass', function(){
+    var prof = new Profile.Profile('test profile name');
+    var swi = Switch_.create(null, prof);
+    var dp = new Dataplane.Dataplane(swi);
+    var pack = new Packet.Packet('testpacket');
+    pack.pushProtocol('0x0800');
+    pack.pushProtocol('0x06');
+
+    expect(dp.state).toBe('Arrival');
+    dp.arrival(pack, 1, 1, 1);
+    expect(dp.ctx.toView().ctx[1].value).toBe(0);
+  });
+
+  it('Dataplane Extraction Pass', function(){
+    var prof = new Profile.Profile('test profile name');
+    var swi = Switch_.create(null, prof);
+    var dp = new Dataplane.Dataplane(swi);
+    var pack = new Packet.Packet('testpacket');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x0800');
+    pack.pushProtocol('0x06');
+
+    dp.arrival(pack, 1, 1, 1);
+    dp.extraction();
+    expect(dp.ctx.key.Ethernet.Src.value.length).toBe(6);
+    expect(dp.ctx.key.VLAN.length).toBe(2);
+  });
+
+  it('Dataplane Choice Pass', function(){
+    var prof = new Profile.Profile('test profile name');
+    var swi = Switch_.create(null, prof);
+    var dp = new Dataplane.Dataplane(swi);
+    var pack = new Packet.Packet('testpacket');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x0800');
+    pack.pushProtocol('0x06');
+
+    dp.arrival(pack, 1, 1, 1);
+    dp.extraction();
+    dp.choice();
+    expect(dp.table.id).toBe(0);
+  });
+
+  it('Dataplane Selection Pass', function(){
+    var prof = new Profile.Profile('test profile name');
+    var swi = Switch_.create(null, prof);
+    var dp = new Dataplane.Dataplane(swi);
+    var pack = new Packet.Packet('testpacket');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x0800');
+    pack.pushProtocol('0x06');
+
+    dp.arrival(pack, 1, 1, 1);
+    dp.extraction();
+    dp.choice();
+    expect(dp.table.id).toBe(0);
   });
 
 });

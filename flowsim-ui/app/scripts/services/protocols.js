@@ -43,6 +43,15 @@ var noprotoProtocols = _(Protocols).map(function(protocol) {
   return new Noproto.Protocol(protocol);
 });
 
+// Build extractors
+var extractors = {};
+_(noprotoProtocols).each(function(proto){
+  extractors[proto.name] = {};
+  _(proto.fields).each(function(field){
+    extractors[proto.name][field.name] = field.getExtractor();
+  }, this);
+}, this);
+
 function MatchProfiles(mp) {
   if(_(mp).isObject()) {
     this.profiles = _(mp.profiles).map(function(profile) {
@@ -121,7 +130,8 @@ return {
   ActionProfiles: ActionProfiles,
   Protocols: noprotoProtocols,
   Payloads: _Graph,
-  getField: getField
+  getField: getField,
+  Extractors: extractors
 };
 
 });

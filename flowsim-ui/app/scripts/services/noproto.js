@@ -125,8 +125,8 @@ Extractor.prototype.clone = function() {
   return new Extractor(this);
 };
 
-Extractor.prototype.extract = function(key, packet) {
-  key[this.protocol][this.field] = packet[this.protocol][this.field];
+Extractor.prototype.extract = function(key, fieldValue) {
+  key[this.protocol][this.field] = fieldValue;
 };
 
 function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled, 

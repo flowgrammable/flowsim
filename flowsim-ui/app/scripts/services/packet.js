@@ -169,7 +169,9 @@ Packet.prototype.toBase = function(){
 };
 
 Packet.prototype.toView = function(){
-
+  return {
+    name: this.name
+  };
 };
 
 function createUI(pkt){
