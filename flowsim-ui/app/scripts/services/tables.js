@@ -82,7 +82,7 @@ function Table(table, tableProfile) {
         return new Priority(priority); 
       });
     this.prioritiesPresent = _(table.priorities).each(function(priority) {
-      this.prioritiesPresent[priority.priority] = priority;
+      this.prioritiesPresent[priority.priority] = true;
     }, this);
 
     // FIXME ... need to add miss handler

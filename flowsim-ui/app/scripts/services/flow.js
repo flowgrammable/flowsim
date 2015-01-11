@@ -24,6 +24,7 @@ function Flow(flow, priority) {
 
 Flow.prototype.toBase = function() {
   return {
+    priority: this.priority,
     ins: this.ins.toBase(),
     match: this.match
   };
