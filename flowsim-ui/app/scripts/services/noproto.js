@@ -298,6 +298,7 @@ Action.prototype.step = function(dp, ctx) {
   switch(this.op) {
     case 'set':
       // copy the new field value
+      ctx.packet.setField(this.protocol, this.field, this._value);
       break;
     case 'push':
       // push an outer tag/label

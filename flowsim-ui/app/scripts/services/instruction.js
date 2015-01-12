@@ -328,6 +328,7 @@ Set.prototype.step = function (dp, ctx) {
     this.meter.enabled = false;
   } else if(this.apply.enabled) {
     //FIXME
+    
     if(this.apply.actions.length === 0) { 
       this.apply.enabled = false; 
     }

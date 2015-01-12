@@ -49,7 +49,7 @@
       </td>
       <td>
         <div class="form-group"
-             ng-class="{'has-error': active.type && active.value.length > 0 &&
+             ng-class="{'has-error': active.type.op === 'set' &&
                         !active.type.valueTest(active.value)}">
           <input type="text" class="form-control" ng-model="active.value"
                  ng-disabled="active.op !== 'set'"
@@ -58,8 +58,7 @@
       </td>
       <td>
         <button class="btn btn-default" ng-click="addAction()"
-                ng-disabled="active.value.length === 0 || 
-                             active.type === null ||
+                ng-disabled="active.type.op === 'set' &&
                             !active.type.valueTest(active.value)">
           Add
         </button>

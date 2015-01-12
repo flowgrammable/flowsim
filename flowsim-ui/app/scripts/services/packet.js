@@ -107,6 +107,19 @@ function Packet(pkt) {
   }
 }
 
+Packet.prototype.setField = function(protoName, fieldName, value){
+  //TODO rework
+  _(this.protocols).each(function(proto){
+    _(proto.fields).find(function(field){
+      if(field.name === fieldName){
+        field.value.value = value;
+        return true;
+      }
+    });
+  });
+}
+
+
 Packet.prototype.popProtocol = function() {
   if(this.protocols.length === 1){
     return;

@@ -7,8 +7,10 @@ describe('Service: Packet', function () {
 
   // instantiate service
   var Packet;
-  beforeEach(inject(function (_Packet_) {
+  var Protocols;
+  beforeEach(inject(function (_Packet_, _Protocols_) {
     Packet = _Packet_;
+    Protocols = _Protocols_;
   }));
 
   it('Packet construction pass', function () {
@@ -52,6 +54,13 @@ describe('Service: Packet', function () {
     expect(packet.protocols.length).toBe(1);
     packet.popProtocol();
     expect(packet.protocols.length).toBe(1);
-  })
+  });
+
+  it('Packet setField pass', function(){
+      var packet = new Packet.Packet('testp');
+      var npF = Protocols.getField('Ethernet','Src');
+      packet.setField('Ethernet', 'Src', npF.consStr('a:a:a:a:a:a'));
+      expect(npF.dispStr(packet.protocols[0].fields[0].value.value)).toBe('a:a:a:a:a:a');
+  });
 
 });

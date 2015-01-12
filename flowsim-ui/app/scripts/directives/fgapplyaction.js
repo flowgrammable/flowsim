@@ -140,8 +140,8 @@ angular.module('flowsimUiApp')
         // Add the action ... invoke the callback
         $scope.addAction = function() {
           var action;
-          if(!$scope.active.type || 
-             !$scope.active.type.valueTest($scope.active.value)) {
+          if($scope.active.op === 'set' && 
+            !scope.active.type.valueTest($scope.active.value)){
             throw 'Add apply action failed: '+$scope.active.value;
           }
 
