@@ -34,7 +34,7 @@ Flow.prototype.clone = function() {
   return new Flow(this);
 };
 
-Flow.prototype.match = function(key) {
+Flow.prototype.matches = function(key) {
   if(this.match.match(key)) {
     return true;
   } else {

@@ -14,7 +14,11 @@ describe('Service: flow', function () {
   var Tables;
   var tableProf;
   var Protocols;
-  beforeEach(inject(function (_Tables_, _Protocols_) {
+  var Packet;
+  var Noproto;
+  beforeEach(inject(function (_Tables_, _Protocols_, _Packet_, _Noproto_) {
+    Packet = _Packet_;
+    Noproto = _Noproto_;
     Tables = _Tables_;
     Protocols = _Protocols_;
     tableProf = new Tables.TableProfile(null, 0);
@@ -65,6 +69,47 @@ describe('Service: flow', function () {
     flow2.match.set.pop();
     expect(flow2.equal(flow1)).toBe(false);
     expect(flow1.equal(flow2)).toBe(false);
+  });
+
+  it('Flow match key pass', function(){
+    var flow1 = new Flow.Flow(null, 1);
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', 'aa:bb:cc:dd:ee:ff', '');
+    var match2 = Protocols.mkMatch('Ethernet', 'Dst', 'aa:aa:aa:aa:aa:aa', '');
+    flow1.match.push(match1);
+    flow1.match.push(match2);
+
+    var ethSrc = Protocols.mkFieldUInt('Ethernet', 'Src', 'aa:bb:cc:dd:ee:ff');
+    var ethDst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'aa:aa:aa:aa:aa:aa');
+
+    var key = {Ethernet:{
+      Src: ethSrc,
+      Dst: ethDst
+    }};
+
+    expect(flow1.matches(key)).toBe(true);
+  });
+
+  it('Flow match key fail', function(){
+    var flow1 = new Flow.Flow(null, 1);
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', 'aa:bb:aa:dd:ee:ff', '');
+    var match2 = Protocols.mkMatch('Ethernet', 'Dst', 'aa:aa:aa:aa:aa:aa', '');
+    var match3 = Protocols.mkMatch('Ethernet', 'Src', 'aa:bb:cc:dd:ee:fe', '');
+    var flow2 = new Flow.Flow(null, 1);
+    flow1.match.push(match1);
+    flow1.match.push(match2);
+
+    var ethSrc = Protocols.mkFieldUInt('Ethernet', 'Src', 'aa:bb:cc:dd:ee:ff');
+    var ethDst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'aa:aa:aa:aa:aa:aa');
+
+    var key = {Ethernet:{
+      Src: ethSrc,
+      Dst: ethDst
+    }};
+    expect(flow1.matches(key)).toBe(false);
+
+    flow2.match.push(match2);
+    flow2.match.push(match3);
+    expect(flow2.matches(key)).toBe(false);
   });
 
 });

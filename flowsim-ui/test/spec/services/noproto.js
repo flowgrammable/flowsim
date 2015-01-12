@@ -188,14 +188,166 @@ describe('Service: noproto', function () {
 
   });
 
- it('Extractors test', function(){
-  var extractors = _(Protocols.Protocols).map(function(proto){
-    return proto.getExtractions();
+   it('Extractors test', function(){
+    var extractors = _(Protocols.Protocols).map(function(proto){
+      return proto.getExtractions();
+    });
+    expect(extractors.length).toBeGreaterThan(1);
+    expect(extractors[1].length).toBe(3);
+   });
+
+   it('Match.matches exact pass', function(){
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', 'a:a:a:a:a:a', '');
+    var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:a');
+    expect(match1.matches(field1)).toBe(true);
+   });
+
+   it('Match.matches exact fail', function(){
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:a:a:a:a', '');
+    var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:a');
+    expect(match1.matches(field1)).toBe(false);
+   });
+
+   it('Match.matches wildcard match pass', function(){
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:0:0:0:0:0', '0:0:0:0:0:0');
+    var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:a'); 
+    expect(match1.matches(field1)).toBe(true); 
+   });
+
+   it('Match.matches masked pass', function(){
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:1:0:1:0:1', '0:1:0:1:0:1');
+    var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:1:b:1:c:1');
+    expect(match1.matches(field1)).toBe(true);
+   });
+
+   it('Match.matches masked fail', function(){
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:1:0:1:0:1', '0:1:0:1:0:1');
+    var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:2:b:2:c:2');
+    expect(match1.matches(field1)).toBe(false);
+   }); 
+
+   it('MatchSet key exact pass', function(){
+    var matchSet = new Noproto.MatchSet();
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', 'a:a:a:a:a:a', '');
+    var match2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    var src = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:a');
+    var dst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:b');
+
+    matchSet.push(match1);
+    matchSet.push(match2);
+    expect(matchSet.set[0].matches(src)).toBe(true);
+    expect(matchSet.set[1].matches(dst)).toBe(true);
+    expect(matchSet.set.length).toBe(2);
+
+    var key = {Ethernet:{
+      Dst: dst,
+      Src: src
+    }};
+
+    expect(matchSet.match(key)).toBe(true); 
+    });
+
+  it('MatchSet key exact fail', function(){
+    var matchSet = new Noproto.MatchSet();
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', 'a:a:a:a:a:a', '');
+    var match2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    var src = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:c');
+    var dst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:b');
+
+    matchSet.push(match1);
+    matchSet.push(match2);
+    expect(matchSet.set[0].matches(src)).toBe(false);
+    expect(matchSet.set[1].matches(dst)).toBe(true);
+    expect(matchSet.set.length).toBe(2);
+
+    var key = {Ethernet:{
+      Dst: dst,
+      Src: src
+    }};
+
+    expect(matchSet.match(key)).toBe(false); 
   });
-  expect(extractors.length).toBeGreaterThan(1);
-  expect(extractors[1].length).toBe(3);
- });
 
+  it('MatchSet key wildcard pass exact order', function(){
+    var matchSet = new Noproto.MatchSet();
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:0:0:0:0:0', '0:0:0:0:0:0');
+    var match2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    var src = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:c');
+    var dst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:b');
 
+    matchSet.push(match1);
+    matchSet.push(match2);
+    expect(matchSet.set[0].matches(src)).toBe(true);
+
+    var key = {Ethernet:{
+      Dst: dst,
+      Src: src
+    }};
+
+    expect(matchSet.match(key)).toBe(true); 
+  });
+
+  it('MatchSet key wildcard pass ', function(){
+    var matchSet = new Noproto.MatchSet();
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:0:0:0:0:0', '0:0:0:0:0:0');
+    var match2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    var match3 = Protocols.mkMatch('Ethernet', 'Type', '0x0800', '');
+    var src = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:c');
+    var dst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:b');
+    var type = Protocols.mkFieldUInt('Ethernet', 'Type', '0x0800');
+
+    matchSet.push(match3);
+    matchSet.push(match1);
+    matchSet.push(match2);
+    expect(matchSet.set[0].matches(type)).toBe(true);
+
+    var key = {Ethernet:{
+      Dst: dst,
+      Src: src,
+      Type: type
+    }};
+
+    expect(matchSet.match(key)).toBe(true); 
+  });
+
+  it('MatchSet key wildcard fail ', function(){
+    var matchSet = new Noproto.MatchSet();
+    var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:0:0:0:0:0', '0:0:0:0:0:0');
+    var match2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    var match3 = Protocols.mkMatch('Ethernet', 'Type', '0x0800', '');
+    var src = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:c');
+    var dst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:c');
+    var type = Protocols.mkFieldUInt('Ethernet', 'Type', '0x0800');
+
+    matchSet.push(match3);
+    matchSet.push(match1);
+    matchSet.push(match2);
+    expect(matchSet.set[0].matches(type)).toBe(true);
+    expect(matchSet.set[1].matches(src)).toBe(true);
+    expect(matchSet.set[2].matches(dst)).toBe(false);
+
+    var key = {Ethernet:{
+      Dst: dst,
+      Src: src,
+      Type: type
+    }};
+
+    expect(matchSet.match(key)).toBe(false); 
+  });
+
+  it('MatchSet empty pass ', function(){
+    var matchSet = new Noproto.MatchSet();
+    var src = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:c');
+    var dst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:c');
+    var type = Protocols.mkFieldUInt('Ethernet', 'Type', '0x0800');
+
+    var key = {Ethernet:{
+      Dst: dst,
+      Src: src,
+      Type: type
+    }};
+
+    expect(matchSet.match(key)).toBe(true); 
+  });
 
 });

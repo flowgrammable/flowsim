@@ -108,7 +108,7 @@ Match.prototype.equal = function(match) {
          this._match.equal(match._match);
 };
 
-Match.prototype.match = function(value) {
+Match.prototype.matches = function(value) {
   return this._match.match(value);
 };
 
@@ -248,6 +248,7 @@ MatchSet.prototype.equal = function(matchSet) {
 
 MatchSet.prototype.match = function(key) {
   // The empty set matches everything
+
   if(this.set.length === 0) { return true; }
   return _(this.set).every(function(match) {
     return _(key).has(match.protocol) &&
@@ -549,7 +550,6 @@ Protocol.prototype.getActionProfiles = function() {
 Protocol.prototype.clone = function(){
   return new Protocol(this);
 };
-
 
 // Extraction
 

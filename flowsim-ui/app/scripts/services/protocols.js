@@ -9,7 +9,8 @@
  */
 angular.module('flowsimUiApp')
   .factory('Protocols', function(Noproto, Internal, Ethernet, 
-        VLAN, ARP, IPv4, MPLS, ICMPv4, IPv6, ICMPv6, TCP, SCTP, UDP, Payload) {
+        VLAN, ARP, IPv4, MPLS, ICMPv4, IPv6, ICMPv6, TCP, SCTP, UDP, Payload, 
+        UInt) {
 
 // Inser new protocols below ...
  
@@ -38,10 +39,25 @@ function getField(protoName, fieldName){
   });
 }
 
+function mkFieldUInt(protoName, fieldName, fieldStr){
+  var noProtoField = getField(protoName, fieldName);
+  var fieldUInt = new UInt.UInt(null, noProtoField.consStr(fieldStr), 
+      Math.ceil(noProtoField.bitwidth/8));
+  return fieldUInt;
+}
+
 // Build a listing of all protocols supported
 var noprotoProtocols = _(Protocols).map(function(protocol) {
   return new Noproto.Protocol(protocol);
 });
+
+function mkMatch(protocolName, fieldName, value, mask){
+  var proto = _(noprotoProtocols)
+              .findWhere({name: protocolName})
+              .getMatchProfiles();
+  var matchProfile = _(proto).findWhere({field: fieldName});
+  return matchProfile.mkType(value, mask);
+}
 
 // Build extractors
 var extractors = {};
@@ -131,7 +147,9 @@ return {
   Protocols: noprotoProtocols,
   Payloads: _Graph,
   getField: getField,
-  Extractors: extractors
+  Extractors: extractors,
+  mkMatch: mkMatch,
+  mkFieldUInt: mkFieldUInt
 };
 
 });

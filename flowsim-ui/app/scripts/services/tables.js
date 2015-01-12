@@ -50,7 +50,16 @@ Priority.prototype.clone = function() {
 };
 
 Priority.prototype.add = function(flow) {
-  this.flows.push(flow);
+  // Replace flows with equal matchset
+  var duplicateFlow = _(this.flows).find(function(activeFlow){
+    return activeFlow.equal(flow);
+  });
+  if(duplicateFlow){
+    var flowIdx = _(this.flows).indexOf(flow);
+    this.flows[flowIdx] = flow;
+  } else {
+    this.flows.push(flow);
+  }
 };
 
 Priority.prototype.del = function(flow) {
@@ -65,7 +74,7 @@ Priority.prototype.del = function(flow) {
 
 Priority.prototype.select = function(key) {
   return _(this.flows).find(function(flow) {
-    return flow.match(key);
+    return flow.matches(key);
   });
 };
 

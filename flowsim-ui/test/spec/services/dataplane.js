@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('Service: dataplane', function() {
+describe('Service: dataplane', function() {
   // load the service's module
   beforeEach(module('flowsimUiApp'));
 
