@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache) {
-    $scope.authenticated = false;
+    $scope.authenticated = true;
     $scope.dirty = false;
     $scope.prev_host = '';
 
@@ -26,13 +26,13 @@ angular.module('flowsimUiApp')
       $scope.dirty = false;
     };
 
-    /*window.onbeforeunload = function() {
+    window.onbeforeunload = function() {
       if($scope.dirty) {
         return 'You have unsaved changes, are you sure you wish to leave without saving?';
       } else {
         return;
       }
-    }; */
+    };
 
     $rootScope.$on('dirtyCache', function() {
       $scope.dirty = true;
