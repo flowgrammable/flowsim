@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: instruction', function () {
+ddescribe('Service: instruction', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -11,31 +11,18 @@ describe('Service: instruction', function () {
     Instruction = _Instruction_;
   }));
 
-  var Action;
-  beforeEach(inject(function (_Action_) {
-    Action = _Action_;
-  }));
-
-  var IPV4;
-  beforeEach(inject(function (_IPV4_) {
-    IPV4 = _IPV4_;
-  }));
-
   var Packet;
-  beforeEach(inject(function (_Packet_) {
+  var Noproto;
+  beforeEach(inject(function (_Packet_, _Noproto_) {
     Packet = _Packet_;
-  }));
-
-  var VLAN;
-  beforeEach(inject(function (_VLAN_) {
-    VLAN = _VLAN_;
+    Noproto = _Noproto_;
   }));
 
   it('should do something', function () {
     expect(!!Instruction).toBe(true);
   });
 
-  it('Create Instruction set, execute apply:pushvlan', function() {
+  /*it('Create Instruction set, execute apply:pushvlan', function() {
     expect(!!Instruction).toBe(true);
     var set = new Instruction.Set();
 
@@ -119,6 +106,24 @@ describe('Service: instruction', function () {
 
     is._write.output(out);
     expect(is.summarize()[1]).toBe('write');
+
+  }); */
+
+  it('Apply actions step', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    var act = new Noproto.mkAction('Ethernet', 'Src', 'set', 48, 'aa:bb:cc:dd:ee:Ff');
+    var act2 = new Noproto.mkAction('Ethernet', 'Dst', 'set', 48, 'a:a:a:a:a:a');
+    is.apply.enabled = true;
+    is.apply.actions.push(act);
+    is.apply.actions.push(act2);
+    var packet = new Packet.Packet('testpa');
+    var ctx = {packet: packet};
+    is.step(null, ctx);
+    expect(ctx.packet.getField('Ethernet', 'Src').valueToString()).toBe('aa:bb:cc:dd:ee:ff');
+    is.step(null, ctx);
+    expect(ctx.packet.getField('Ethernet', 'Dst').valueToString()).toBe('a:a:a:a:a:a');
+    expect(is.apply.enabled).toBe(false);
 
   });
 

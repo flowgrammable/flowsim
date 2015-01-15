@@ -290,6 +290,36 @@ UInt.prototype.equal = function(uint){
   return this.bytes === uint.bytes && _.isEqual(this, uint);
 };
 
+UInt.prototype.subt = function(sub){
+  if(!this.greaterThan(sub)){
+    throw 'UInt must be greater than sub'
+  }
+  if(this.bytes < 5){
+    this.value -= sub.value;
+  } else {
+    var b = [0,0,0,0,0,0];
+   _(this.value).each(function(di, idx){
+      var idxn = this.value.length - 1 - idx;
+      this.value[idxn] -= b[idxn];
+      this.value[idxn] -= sub.value[idxn];
+      if(this.value[idxn] < 0){
+        b[idxn - 1] = this.value[idxn] * -1;
+        this.value[idxn] = 255 | -(this.value[idxn]);
+      }
+    }, this);
+  }
+  return this;
+};
+
+UInt.prototype.greaterThan = function(rhs){
+  if(this.bytes < 5){
+    return this.value - rhs.value;
+  } else {
+    return !!_(this.value).find(function(val, idx){
+        return val > rhs.value[idx];
+    });
+  }
+}
 function equal(lhs, rhs) {
   if(lhs.bytes !== rhs.bytes) {
     throw 'equal('+lhs.bytes+', '+rhs.bytes+')';

@@ -72,7 +72,7 @@ Key.prototype.toView = function() {
   if(this.metadata !== undefined && this.metadata !== null) {
     result[0].attrs.push({
       name: 'metadata',
-      value: this.metadata.toString(16)
+      value: this.metadata.toString(16)   
     });
   }
   return result;

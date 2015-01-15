@@ -30,6 +30,12 @@ var Protocols = [
   Payload.Payload
 ];
 
+function getProtocol(protoName){
+  return _(noprotoProtocols).find(function(proto){
+    return proto.name === protoName;
+  });
+}
+
 function getField(protoName, fieldName){
   var protocol = _(noprotoProtocols).find(function(proto){
     return proto.name === protoName;
@@ -147,6 +153,7 @@ return {
   Protocols: noprotoProtocols,
   Payloads: _Graph,
   getField: getField,
+  getProtocol: getProtocol,
   Extractors: extractors,
   mkMatch: mkMatch,
   mkFieldUInt: mkFieldUInt

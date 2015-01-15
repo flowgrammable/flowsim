@@ -285,40 +285,73 @@ function Action(action, protocol, field, bitwidth, op, value) {
     this.value  = value;
   }
 
+  if(this.op === 'set'){
   consFunc = getConsFunction(this.protocol, this.field);
   this._value = new UInt.UInt(null, consFunc(this.value), 
                               Math.ceil(this.bitwidth / 8));
+  }
 }
 
 Action.prototype.clone = function() {
   return new Action(this);
 };
 
+function handleInternal(action, dp, ctx){
+  switch(action.field){
+    case 'Output':
+      dp.output(ctx.packet.clone(), action._value);
+      break;
+    case 'Group':
+      dp.group(ctx.packet.clone(), action._value);
+      break;
+    case 'Queue':
+      ctx.queue = action._value;
+      break;
+    default:
+      break;
+  }
+}
+
 Action.prototype.step = function(dp, ctx) {
   switch(this.op) {
     case 'set':
-      // copy the new field value
-      ctx.packet.setField(this.protocol, this.field, this._value);
+      if(this.protocol === 'Internal'){
+        handleInternal(this, dp, ctx);
+      } else {
+        // copy the new field value
+        ctx.packet.setField(this.protocol, this.field, this._value);
+      }
       break;
     case 'push':
       // push an outer tag/label
+      ctx.packet.pushTag(this.protocol);
       break;
     case 'pop':
       // pop an outer tag/label
+      ctx.packet.popTag(this.protocol);
       break;
     case 'dec':
+      ctx.packet.decField(this.protocol, this.field);
       // decrement a field
       break;
     case 'copy-in':
+      ctx.packet.copyTTLIn(this.protocol);
       // copy an outer header ttl to an inner header
       break;
     case 'copy-out':
+      ctx.packet.copyTTLOut(this.protocol);
       // copy a next to outer header ttl to the outer header
       break;
     default:
       throw 'Bad Action op: '+this.op;
   }
 };
+
+function mkAction(protocol, field, op, bitwidth, value){
+  var profile = new ActionProfile(null, protocol, field, 
+        bitwidth, null, op);
+  return profile.mkType(value);
+}
 
 function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
   if(_(ap).isObject()) {
@@ -558,6 +591,7 @@ return {
   MatchProfile: MatchProfile,
   MatchSet: MatchSet,
   Action: Action,
+  mkAction: mkAction,
   ActionProfile: ActionProfile,
   Protocol: Protocol
 };

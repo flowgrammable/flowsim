@@ -67,6 +67,68 @@ describe('Service: Tables', function () {
 
   });
 
+  it('Table select flow highest priority pass', function(){
+    var table = new Tables.Table(null, tableProfile);
+    var pri = new Tables.Priority(null, 1);
+    var pri2 = new Tables.Priority(null, 2);
+    var flow = new Flow.Flow(null, 1);
+    var flow2 = new Flow.Flow(null, 2);
+    var ethmatch1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
+    var ethmatch2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    flow.match.push(ethmatch1);
+    flow.match.push(ethmatch2);
+    flow2.match.push(ethmatch1);
+    flow2.match.push(ethmatch2);
+    pri.add(flow);
+    pri2.add(flow2);
+
+
+    table.add(1, flow);
+    table.add(2, flow2);
+
+    var ethSrc = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:b:c:d:e:f');
+    var ethDst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:b');
+    var key ={
+      Ethernet: {
+        Src: ethSrc,
+        Dst: ethDst
+      }
+    };
+    var testflow = table.select(key);
+    expect(testflow.priority).toBe(2);
+
+  });
+
+
+  it('Table delete flow pass', function(){
+    var table = new Tables.Table(null, tableProfile);
+    var pri = new Tables.Priority(null, 1);
+    var pri2 = new Tables.Priority(null, 2);
+    var flow = new Flow.Flow(null, 1);
+    var flow2 = new Flow.Flow(null, 2);
+    var ethmatch1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
+    var ethmatch2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    flow.match.push(ethmatch1);
+    flow.match.push(ethmatch2);
+    flow2.match.push(ethmatch1);
+    flow2.match.push(ethmatch2);
+    pri.add(flow);
+    pri2.add(flow2);
+
+    table.add(2, flow2);
+    table.add(1, flow);
+
+    expect(table.priorities.length).toBe(2);
+    table.del(1, flow);
+    expect(table.prioritiesPresent[2]).toBe(true);
+    expect(table.priorities.length).toBe(1);
+    table.del(2, flow2);
+    expect(table.priorities.length).toBe(0);
+    expect(table.prioritiesPresent[2]).toBe(undefined);
+    expect(table.prioritiesPresent[1]).toBe(undefined);
+
+  });
+
   it('Priority add duplicate flow', function(){
     var pri = new Tables.Priority(null, 1);
     var flow = new Flow.Flow(null, 1);

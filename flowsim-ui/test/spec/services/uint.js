@@ -389,4 +389,37 @@ describe('Service: uint', function () {
     expect(str([0,0,0,0,1],16)).toBe('0x0000000001')
   });
 
+  it('UInt addition ', function(){
+    var a = new UInt.UInt(null, [255, 255, 255, 255, 255, 254], 6);
+    var b = new UInt.UInt(null, [0,0,0,0,0,1], 6);
+    expect(a.or(b).value[5]).toBe(255);
+
+  });
+
+  it('UInt greater than', function(){
+    var a = new UInt.UInt(null, [255, 255, 255, 255, 255, 255], 6);
+    var b = new UInt.UInt(null, [0,0,0,0,0,1], 6);
+    expect(a.greaterThan(b)).toBe(true);
+  })
+
+  it('UInt subtraction', function(){
+    var a = new UInt.UInt(null, [255, 255, 255, 255, 255, 0], 6);
+    var b = new UInt.UInt(null, [0,0,0,0,0,1], 6);
+    var ans = a.subt(b);
+    expect(ans.value[0]).toBe(255);
+    expect(ans.value[5]).toBe(255);
+
+    var c = new UInt.UInt(null, [255, 0, 0, 0, 0, 1], 6);
+    var d = new UInt.UInt(null, [255, 0, 0, 0, 0, 0], 6);
+    var ansb = c.subt(d);
+    expect(ansb.value[0]).toBe(0);
+    expect(ansb.value[5]).toBe(1);
+
+    var e = new UInt.UInt(null, [255, 0, 0, 0, 0, 0], 6);
+    var f = new UInt.UInt(null, [0, 0, 0, 0, 0, 1], 6);
+    var ansc = e.subt(f);
+    expect(ansc.value[0]).toBe(254);
+    expect(ansc.value[5]).toBe(255);
+  });
+
 });

@@ -159,7 +159,8 @@ Port.prototype.toBase = function(){
 };
 
 Port.prototype.ingress = function(packet) {
-  var keep = this.config.no_recv ? false : true;
+  var keep = this.config.no_recv || 
+             this.config.port_down ? false : true;
 
   // FIXME: stats goes here
 

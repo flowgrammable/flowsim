@@ -6,6 +6,8 @@ angular.module('flowsimUiApp')
 var MPLS = {
   name: 'MPLS',
   bytes: 4,
+  pushable: true,
+  popable: true,
   fields: [{
     name: 'Label',
     bitwidth: 20,
@@ -32,15 +34,12 @@ var MPLS = {
     decable: true,
     copyIn: true,
     copyOut: true
-  },{
-    name: 'tag',
-    bitwidth: 0,
-    strTest: function() { return true; }
   }]
 };
 
 var Payloads = {
   Type: {
+    '0x8847': 'MPLS',
     '0x0800': 'IPv4',
     '0x86dd': 'IPv6'
   }

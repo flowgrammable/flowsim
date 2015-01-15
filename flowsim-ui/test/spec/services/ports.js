@@ -7,8 +7,10 @@ describe('Service: ports', function () {
 
   // instantiate service
   var Ports;
-  beforeEach(inject(function (_Ports_) {
+  var Packet;
+  beforeEach(inject(function (_Ports_, _Packet_) {
     Ports = _Ports_;
+    Packet = _Packet_;
   }));
   var Datapath;
   beforeEach(inject(function (_Datapath_) {
@@ -93,6 +95,25 @@ describe('Service: ports', function () {
 
     expect(j_.id).toBe(0);
 
+  });
+
+  it('Port ingress pass', function(){
+    var portProf = new Ports.PortProfile(null, 1, 'aa:bb:Cc:dd:ee:Ff');
+    var port = new Ports.Port(null, portProf);
+    expect(port.config.port_down).toBe(false);
+    expect(port.config.no_recv).toBe(false);
+    expect(port.config.no_fwd).toBe(false);
+    expect(port.config.no_pkt_in).toBe(false);
+    var packet = new Packet.Packet('test pack');
+    expect(port.ingress(packet)).toBe(true);
+  });
+
+  it('Port ingress fail', function(){
+    var portProf = new Ports.PortProfile(null, 1, 'aa:bb:Cc:dd:ee:Ff');
+    var port = new Ports.Port(null, portProf);
+    port.config.port_down = true;
+    var packet = new Packet.Packet('test pack');
+    expect(port.ingress(packet)).toBe(false);
   });
 
 

@@ -199,6 +199,11 @@ function Apply(apply){
   this.tip  = 'Immediately executes action list';
 }
 
+Apply.prototype.step = function(dp, ctx){
+  var act = this.actions.shift();
+  act.step(dp, ctx);
+}
+
 Apply.prototype.toBase = function(){
   return {
     enabled: this.enabled,
@@ -287,7 +292,7 @@ Goto.prototype.toBase = function(){
   };
 };
 
-function Set(set, profile) {
+function Set(set) {
   if(_(set).isObject()) {
     // Copy the simple properties
     this.meter    = new Meter(set.meter);
@@ -328,7 +333,7 @@ Set.prototype.step = function (dp, ctx) {
     this.meter.enabled = false;
   } else if(this.apply.enabled) {
     //FIXME
-    
+    this.apply.step(dp, ctx);
     if(this.apply.actions.length === 0) { 
       this.apply.enabled = false; 
     }
