@@ -50,12 +50,14 @@ module.exports = function(config) {
     // - IE (only Windows)
     browsers: [
       'PhantomJS'
+      //'Chrome'
     ],
 
     // Which plugins to enable
     plugins: [
       'karma-phantomjs-launcher',
       'karma-jasmine'
+      //'karma-chrome-launcher'
     ],
 
     // Continuous Integration mode

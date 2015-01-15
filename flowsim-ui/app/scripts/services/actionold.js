@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Action', function(fgConstraints) {
+  .factory('Actionold', function(fgConstraints) {
 
 function getGeneric(name, store, category, field, action) {
   if(!_(store).has(category)) {

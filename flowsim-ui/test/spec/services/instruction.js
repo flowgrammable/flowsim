@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('Service: instruction', function () {
+describe('Service: instruction', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
