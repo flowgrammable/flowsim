@@ -11,8 +11,12 @@ angular.module('flowsimUiApp')
   .factory('Utils', function(Protocols, Noproto) {
 
 function mkAction(protoName, fieldName, op, value){
-	var npField = Protocols.getField(protoName, fieldName);
-	var actProf = new Noproto.ActionProfile(null, protoName, fieldName, npField.bitwidth,
+	var bitwidth = '';
+	if(fieldName != 'tag'){
+		var npField = Protocols.getField(protoName, fieldName);
+		bitwidth = npField.bitwidth;
+	}
+	var actProf = new Noproto.ActionProfile(null, protoName, fieldName, bitwidth,
 		null, op, null);
 	return actProf.mkType(value);
 }

@@ -30,6 +30,8 @@ var Protocols = [
   Payload.Payload
 ];
 
+
+
 function getProtocol(protoName){
   return _(noprotoProtocols).find(function(proto){
     return proto.name === protoName;
@@ -56,6 +58,16 @@ function mkFieldUInt(protoName, fieldName, fieldStr){
 var noprotoProtocols = _(Protocols).map(function(protocol) {
   return new Noproto.Protocol(protocol);
 });
+
+
+//Protocols with fields that support copyIn
+var copyIn = _.chain(noprotoProtocols)
+              .map('fields')
+              .flatten()
+              .where({copyIn: true})
+              .map('protocol')
+              .value();
+
 
 function mkMatch(protocolName, fieldName, value, mask){
   var proto = _(noprotoProtocols)
@@ -151,6 +163,7 @@ return {
   MatchProfiles: MatchProfiles,
   ActionProfiles: ActionProfiles,
   Protocols: noprotoProtocols,
+  copyIn: copyIn,
   Payloads: _Graph,
   getField: getField,
   getProtocol: getProtocol,

@@ -310,6 +310,9 @@ Packet.prototype.decField = function(protoName, fieldName){
 // TODO: rework to copyFieldIn
 Packet.prototype.copyTTLIn = function(protoName){
   var indx = this.indexOf(protoName);
+  if(indx === -1){
+    throw 'Packet does not contain: ' + protoName;
+  }
   if(indx+1 === this.protocols.length){
     throw 'Not enough fields to copy into'
   }
@@ -337,6 +340,9 @@ Packet.prototype.copyTTLIn = function(protoName){
 // TODO: rework to copyFieldOut
 Packet.prototype.copyTTLOut = function(protoName){
   var lstIndx = this.lastIndexOf(protoName);
+  if(lstIndx === -1){
+    throw 'Packet does not contain :' + protoName;
+  }
   var ttlValue = this.protocols[lstIndx].getField('TTL').value;
   var nextProto = this.protocols[lstIndx-1];
   switch(nextProto.name){

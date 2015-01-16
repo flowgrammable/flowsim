@@ -26,6 +26,11 @@ describe('Service: Protocols', function () {
     expect(typMatch._match.value.bytes).toBe(2);
     expect(typMatch._match.mask.value).toBe(0xffff);
 
+  });
+
+  it('Protocols fieldFilter', function(){
+    var protos = Protocols.fieldFilter('copyIn');
+    console.log('protos', protos);
   })
 
 });
