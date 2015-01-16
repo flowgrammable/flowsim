@@ -59,7 +59,6 @@ var noprotoProtocols = _(Protocols).map(function(protocol) {
   return new Noproto.Protocol(protocol);
 });
 
-
 //Protocols with fields that support copyIn
 var copyIn = _.chain(noprotoProtocols)
               .map('fields')
@@ -67,7 +66,6 @@ var copyIn = _.chain(noprotoProtocols)
               .where({copyIn: true})
               .map('protocol')
               .value();
-
 
 function mkMatch(protocolName, fieldName, value, mask){
   var proto = _(noprotoProtocols)

@@ -281,7 +281,7 @@ Set.prototype.step = function(dp, ctx) {
   return false;
 }
 
-Set.prototype.view = function(){
+Set.prototype.toView = function(){
   return {
     copyTTLIn: this.copyTTLIn.value
   }

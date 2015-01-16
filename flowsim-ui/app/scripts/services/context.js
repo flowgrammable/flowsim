@@ -127,8 +127,8 @@ Context.prototype.toView = function() {
       name: 'table',
       value: this.table()
     }],
-    actionSet: this.instructionSet.toView(),
-    instructionSet: this.actionSet.toView(),
+    actionSet: this.actionSet.toView(),
+    instructionSet: this.instructionSet.toView(),
     key: this.key.toView(),
     packet: this.packet.toView()
   };

@@ -398,6 +398,10 @@ Set.prototype.summarize = function() {
   return result;
 };
 
+Set.prototype.isEmpty = function(){
+  return true;
+}
+
 return {
   Profile: Profile,
   Set: Set

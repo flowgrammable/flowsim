@@ -83,7 +83,7 @@ Dataplane.prototype.choice = function() {
 Dataplane.prototype.selection = function() {
   var flow = this.table.select(this.ctx.key);
   if(flow) {
-    this.ctx.setInstructions(flow.instructions.clone());
+    this.ctx.setInstructions(flow.ins.clone());
   }
 };
 
@@ -162,7 +162,7 @@ Dataplane.prototype.step = function() {
       this.execution();
       if(this.groupQ.length > 0) {
         this.transition(GROUPS);
-      } else if(this.instructionSet.empty()) {
+      } else if(this.instructionSet.isEmpty()) {
         if(this.ctx.hasGoto()) {
           this.transition(CHOICE);
         } else {
@@ -176,7 +176,7 @@ Dataplane.prototype.step = function() {
       this.groups();
       if(this.groupQ.length > 0) {
         this.transition(GROUPS);
-      } else if(this.instructionSet.empty()) {
+      } else if(this.instructionSet.isEmpty()) {
         this.transition(EGRESS);
       } else {
         this.transition(EXECUTION);
@@ -186,7 +186,7 @@ Dataplane.prototype.step = function() {
       this.egress();
       if(this.groupQ.length > 0) {
         this.transition(GROUPS);
-      } else if(this.ctx.actionSet.empty()) {
+      } else if(this.ctx.actionSet.isEmpty()) {
         if(this.inputQ.length > 0) {
           this.transition(ARRIVAL);
         } else {
