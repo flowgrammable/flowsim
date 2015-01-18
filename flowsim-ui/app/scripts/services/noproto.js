@@ -299,9 +299,11 @@ Action.prototype.clone = function() {
 function handleInternal(action, dp, ctx){
   switch(action.field){
     case 'Output':
+      ctx.output = action._value;
       dp.output(ctx.packet.clone(), action._value);
       break;
     case 'Group':
+      ctx.group = action._value;
       dp.group(ctx.packet.clone(), action._value);
       break;
     case 'Queue':
@@ -572,10 +574,10 @@ Protocol.prototype.getActionProfiles = function() {
       result.push(field.getActionProfile('dec'));
     }
     if(field.copyIn) {
-      result.push(field.getActionProfile('copyIn'));
+      result.push(field.getActionProfile('copy-in'));
     }
     if(field.copyOut) {
-      result.push(field.getActionProfile('copyOut'));
+      result.push(field.getActionProfile('copy-out'));
     }
   });
   return result;
@@ -583,6 +585,15 @@ Protocol.prototype.getActionProfiles = function() {
 
 Protocol.prototype.clone = function(){
   return new Protocol(this);
+};
+
+var opPriority = {
+  'copy-in': 10,
+  'pop': 9,
+  'push': 8,
+  'copy-out': 7,
+  'dec': 6,
+  'set': 5,
 };
 
 // Extraction
@@ -593,7 +604,8 @@ return {
   Action: Action,
   mkAction: mkAction,
   ActionProfile: ActionProfile,
-  Protocol: Protocol
+  Protocol: Protocol,
+  opPriority: opPriority
 };
 
 });

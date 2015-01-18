@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: action', function () {
+ddescribe('Service: action', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -9,10 +9,12 @@ describe('Service: action', function () {
   var Action;
   var Utils;
   var Packet;
-  beforeEach(inject(function (_Action_, _Utils_, _Packet_) {
+  var Dataplane;
+  beforeEach(inject(function (_Dataplane_, _Action_, _Utils_, _Packet_) {
     Action = _Action_;
     Packet = _Packet_;
     Utils = _Utils_;
+    Dataplane = _Dataplane_;
   }));
 
   it('Action Set construction', function(){
@@ -30,26 +32,25 @@ describe('Service: action', function () {
     pack.pushProtocol('0x0800');
     pack.setField('MPLS', 'TTL', '0x77');
     as.add(act);
-    expect(as.actions.copyTTLIn['MPLS'].protocol).toBe('MPLS');
 
     // step through
     var context = {packet: pack};
 
-    as.step(null, context)
+    expect(as.step(null, context)).toBe(true);
     expect(as.step(null, context)).toBe(false);
     expect(as.isEmpty()).toBe(true);
     expect(pack.getField('IPv4', 'TTL').valueToString()).toBe('0x77');
 
     // MPLS -> IPv6
     var actMPLS = Utils.mkAction('MPLS', 'TTL', 'copy-in', '');
-    var act4 = Utils.mkAction('IPv6', 'TTL', 'copy-in', '');
+    var act6 = Utils.mkAction('IPv6', 'TTL', 'copy-in', '');
     pack.popProtocol();
     pack.popProtocol();
     pack.pushProtocol('0x8847');
     pack.setField('MPLS', 'TTL', '0x77');
     pack.pushProtocol('0x86dd');
     as.add(actMPLS);
-    as.add(act4);
+    as.add(act6);
     expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('0x00');
     // expect step should copy mpls ttl to ipv6 ttl
     as.step(null, context)
@@ -67,6 +68,7 @@ describe('Service: action', function () {
     pack.pushProtocol('0x8847');
     pack.setField('MPLS', 'TTL', '0x77');
     var mplsAct = Utils.mkAction('MPLS', 'TTL', 'copy-in', '');
+    var ipv6Act = Utils.mkAction('IPv6', 'TTL', 'copy-in', '');
     var context = {packet: pack};
 
     // mpls -> mpls
@@ -86,14 +88,18 @@ describe('Service: action', function () {
     expect(as.isEmpty()).toBe(true);
     expect(pack.protocols[2].getField('TTL').valueToString()).toBe('0x77');
 
-    // mpls -> ipv6
+    // mpls -> mpls -> ipv6
     pack.popProtocol();
+    pack.pushProtocol('0x8847');
     pack.pushProtocol('0x86dd');
     as.add(mplsAct);
+    as.add(ipv6Act);
     expect(as.step(null, context)).toBe(true);
-    expect(as.step(null, context)).toBe(false);
-    expect(as.isEmpty()).toBe(true);
+    expect(as.isEmpty()).toBe(false);
     expect(pack.protocols[2].getField('TTL').valueToString()).toBe('0x77');
+    expect(function(){
+      as.step(null, context)
+    }).toThrow();
 
   });
 
@@ -120,8 +126,8 @@ describe('Service: action', function () {
     pack.setField('IPv4', 'TTL', '0x77');
     var context = {packet: pack};
 
-    var mplsAct = Utils.mkAction('IPv4', 'TTL', 'copy-in', '');
-    as.add(mplsAct);
+    var ipv4Act = Utils.mkAction('IPv4', 'TTL', 'copy-in', '');
+    as.add(ipv4Act);
 
     // expect to fail because packet does not contain engouh protos
     expect(function(){
@@ -131,6 +137,7 @@ describe('Service: action', function () {
 
     //expect to fail because next proto does not contain ttl
     pack.pushProtocol('0x06');
+    as.add(ipv4Act);
     expect(function(){
       as.step(null, context);
     }).toThrow();
@@ -155,6 +162,7 @@ describe('Service: action', function () {
 
     //expect to fail because next proto does not contain ttl
     pack.pushProtocol('0x06');
+    as.add(mplsAct);
     expect(function(){
       as.step(null, context);
     }).toThrow();
@@ -171,13 +179,10 @@ describe('Service: action', function () {
     as.add(popVLAN)
     as.add(pushMPLS);
     as.add(pushVLAN);
-    expect(as.actions.popMPLS.length).toBe(1);
-    expect(as.actions.popVLAN.length).toBe(1);
-    expect(as.actions.pushMPLS.length).toBe(1);
-    expect(as.actions.pushVLAN.length).toBe(1);
+    expect(as.actions.length).toBe(4);
   });
 
-  it('Action Set step popTags pushTags', function(){
+  it('Action Set step popTags pushTags pass', function(){
     var as = new Action.Set();
     var popAct = Utils.mkAction('MPLS', 'tag', 'pop', '');
     var popVLAN = Utils.mkAction('VLAN', 'tag', 'pop', '');
@@ -192,25 +197,49 @@ describe('Service: action', function () {
     pack.pushProtocol('0x8847');
     var ctx = {packet: pack};
 
-    // pop mpls first
+    // pop vlan first
     expect(as.step(null, ctx)).toBe(true);
     expect(pack.protocols.length).toBe(2);
-    expect(pack.protocols[1].name).toBe('VLAN');
+    expect(pack.protocols[1].name).toBe('MPLS');
 
-    // pop vlan next
+    // pop mpls next
     expect(as.step(null, ctx)).toBe(true);
     expect(pack.protocols.length).toBe(1);
-
-    // push mpls
-    expect(as.step(null, ctx)).toBe(true);
-    expect(pack.protocols[1].name).toBe('MPLS');
-    expect(as.isEmpty()).toBe(false);
 
     // push vlan
     expect(as.step(null, ctx)).toBe(true);
     expect(pack.protocols[1].name).toBe('VLAN');
+    expect(as.isEmpty()).toBe(false);
+
+    // push mpls
+    expect(as.step(null, ctx)).toBe(true);
+    expect(pack.protocols[2].name).toBe('MPLS');
 
     expect(as.isEmpty()).toBe(true);
+  });
+
+  it('Action Set step popTags fail', function(){
+    var as = new Action.Set();
+    var popMPLS = Utils.mkAction('MPLS', 'tag', 'pop', '');
+    var popVLAN = Utils.mkAction('VLAN', 'tag', 'pop', '');
+    as.add(popMPLS);
+
+    var pack = new Packet.Packet('test');
+    pack.pushProtocol('0x0800');
+    var ctx = {packet: pack};
+
+    // missing mpls error
+    expect(function(){
+      as.step(null, ctx);
+    }).toThrow();
+
+    // missing vlan error 
+    as.clear();
+    as.add(popVLAN);
+    expect(function(){
+      as.step(null, ctx);
+    }).toThrow();
+
   });
 
   it('Action Set step copyTTLOut ipv4|ipv6|mpls -> mpls pass', function(){
@@ -322,6 +351,37 @@ describe('Service: action', function () {
 
   });
 
+  it('Action Set step copyTTLOut ipv4|ipv6|mpls missing proto', function(){
+    var as = new Action.Set();
+    var pack = new Packet.Packet('pack');
+    var context = {packet: pack};
+
+
+    var ipv4Act = Utils.mkAction('IPv4', 'TTL', 'copy-out', '');
+    as.add(ipv4Act);
+    // packet does not contain ipv4
+    expect(function(){
+      as.step(null, context);
+    }).toThrow();
+
+    // packet does not contain ipv6
+    var ipv6Act = Utils.mkAction('IPv6', 'TTL', 'copy-out', '');
+    as.clear();
+    as.add(ipv6Act);
+    expect(function(){
+      as.step(null, context);
+    }).toThrow();
+
+    // mpls, missing outer tag
+    as.clear();
+    var MPLSAct = Utils.mkAction('MPLS', 'TTL', 'copy-out', '');
+    as.add(MPLSAct);
+    expect(function(){
+      as.step(null, context);
+    }).toThrow();
+
+  });
+
   it('Action Set decTTL ipv4|ipv6|mpls pass', function(){
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
@@ -371,7 +431,7 @@ describe('Service: action', function () {
     expect(function(){
       as.step(null, context);
     }).toThrow();
-    expect(as.isEmpty()).toBe(false);
+    expect(as.isEmpty()).toBe(true);
 
     //ipv6 missing field
     var ipv6 = Utils.mkAction('IPv6', 'TTL', 'dec', '');
@@ -379,7 +439,7 @@ describe('Service: action', function () {
     expect(function(){
       as.step(null, context);
     }).toThrow();
-    expect(as.isEmpty()).toBe(false);
+    expect(as.isEmpty()).toBe(true);
 
     //mpls missing field
     var mp = Utils.mkAction('MPLS', 'TTL', 'dec', '');
@@ -390,6 +450,76 @@ describe('Service: action', function () {
     }).toThrow();
     expect(as.isEmpty()).toBe(false);
   });
+
+  it('Action setField pass', function(){
+    var as = new Action.Set();
+    var pack = new Packet.Packet('pack');
+    pack.pushProtocol('0x0800');
+    var context = {packet: pack};
+
+    var ethSrc = Utils.mkAction('Ethernet', 'Src', 'set', 'aa:bb:cc:dd:ee:ff');
+    var ip4Src = Utils.mkAction('IPv4', 'Src', 'set', '192.168.1.1');
+    as.add(ethSrc);
+    as.add(ip4Src);
+
+    expect(as.step(null, context)).toBe(true);
+    expect(as.isEmpty()).toBe(false);
+    expect(pack.protocols[0].getField('Src').valueToString()).toBe('aa:bb:cc:dd:ee:ff');
+    expect(as.step(null, context)).toBe(true);
+    expect(pack.protocols[1].getField('Src').valueToString()).toBe('192.168.1.1');
+    expect(as.isEmpty()).toBe(true);
+  });
+
+  it('Action setField fail', function(){
+    var as = new Action.Set();
+    var pack = new Packet.Packet('pack');
+    pack.pushProtocol('0x0800');
+    var context = {packet: pack};
+
+    // protocol does not exist
+    var ipv6 = Utils.mkAction('IPv6', 'TTL', 'set', '0x88');
+    as.add(ipv6);
+    expect(function(){
+      as.step(null, context)
+    }).toThrow();
+
+  });
+
+  it('Action Set add and step queue', function(){
+    var as = new Action.Set();
+    var pack = new Packet.Packet('pack');
+    var context = {packet: pack};
+
+    var qAct = Utils.mkAction('Internal', 'Queue', 'set', '1');
+    as.add(qAct);
+    expect(as.step(null, context)).toBe(true);
+    expect(as.isEmpty()).toBe(true);
+  });
+
+  it('Action Set add and step group', function(){
+    var dp = new Dataplane.Dataplane({group: 0})
+    var as = new Action.Set();
+    var pack = new Packet.Packet('pack');
+    var context = {packet: pack};
+
+    var gAct = Utils.mkAction('Internal', 'Group', 'set', '1');
+    as.add(gAct);
+    as.step(dp, context);
+    expect(as.isEmpty()).toBe(true);
+  });
+
+  it('Action Set add and step output', function(){
+    var dp = new Dataplane.Dataplane({ports: {egress: function egress(pkt, id){return true;}}})
+    var as = new Action.Set();
+    var pack = new Packet.Packet('pack');
+    var context = {packet: pack};
+
+    var gAct = Utils.mkAction('Internal', 'Output', 'set', '1');
+    as.add(gAct);
+    as.step(dp, context);
+    expect(as.isEmpty()).toBe(true);
+  });
+
 
 
 

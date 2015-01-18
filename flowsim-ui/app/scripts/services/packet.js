@@ -9,7 +9,7 @@
  */
 
 angular.module('flowsimUiApp')
-  .factory('Packet', function(Ethernet, Protocols, Noproto, UInt) {
+  .factory('Packet', function(Ethernet, Protocols, Noproto, UInt, Errors) {
 
 function createProtocol(proto){
   var noProto;
@@ -62,11 +62,11 @@ Protocol.prototype.setField = function(fieldName, value){
 
 Protocol.prototype.getField = function(fieldName){
   return _(this.fields).findWhere({name: fieldName});
-}
+};
 
 Protocol.prototype.clone = function(){
   return new Protocol(this);
-}
+};
 
 Protocol.prototype.toBase = function(){
   return {
@@ -76,7 +76,7 @@ Protocol.prototype.toBase = function(){
       return field.toBase();
     })
   };
-}
+};
 
 function Field(fld, name){
   if(_.isObject(fld)){
@@ -100,11 +100,11 @@ Field.prototype.getFieldUtils = function(protoName){
   this.testStr = noProtoField.testStr;
   this.tip = noProtoField.tip;
   this.payloadField = noProtoField.payloadField;
-}
+};
 
 Field.prototype.mkDefaultValue = function(){
   this.value = new UInt.UInt(null, 0, Math.ceil(this.bitwidth/8));
-}
+};
 
 Field.prototype.setValue = function(value){
   if(_.isString(value)){
@@ -115,14 +115,14 @@ Field.prototype.setValue = function(value){
   } else {
     throw 'Bad field value format ' + value;
   }
-}
+};
 
 Field.prototype.toBase = function(){
   return {
     name: this.name,
     value: this.value
   };
-}
+};
 
 function Packet(pkt) {
   if(_(pkt).isObject()){
@@ -147,7 +147,7 @@ Packet.prototype.setField = function(protoName, fieldName, value){
     value = Protocols.mkFieldUInt(protoName, fieldName, value);
   }
   field.value = value;
-}
+};
 
 Packet.prototype.getField = function(protoName, fieldName){
   var proto, field;
@@ -155,13 +155,13 @@ Packet.prototype.getField = function(protoName, fieldName){
     return protoName === proto.name;
   });
   if(!proto){
-    throw 'Packet does not contain: ' + proto;
+    throw Errors.missingProtocol(protoName);
   }
   field = _(proto.fields).find(function(field){
     return fieldName === field.name;
   });
   if(!field){
-    throw 'Protocol does not contain: ' + field;
+    throw Errors.missingField(protoName, fieldName);
   }
   return field;
 };
@@ -205,8 +205,6 @@ function pushMPLS(packet, actVTags, actMTags){
 
 Packet.prototype.pushTag = function(protoName){
   // FIXME  rework all of this...to pushField
-  // Create proto
-  var newTag = createProtocol(protoName);
   // Determine if tag already exists
   var activeVTags = this.getActiveProtos('VLAN');
   var activeMTags = this.getActiveProtos('MPLS');
@@ -220,12 +218,12 @@ Packet.prototype.pushTag = function(protoName){
     default:
       break;
   }
-}
+};
 
 Packet.prototype.popTag = function(protoName){
   var activeTags = this.getActiveProtos(protoName);
   if(!activeTags){
-    throw 'Packet does not contain tag: ' + protoName;
+    throw Errors.missingProtocol(protoName);
   }
   if(protoName === 'VLAN'){
     // set ethernet type field to vlan type field
@@ -241,11 +239,11 @@ Packet.prototype.popTag = function(protoName){
     if(activeTags === 1 && this.protocols.length > activeVTags + 1){
       var nextProtoName = this.protocols[activeVTags + 1].name;
       var pack = _.invert(Protocols.Payloads['Ethernet'].Type)[nextProtoName];
-      this.protocols[activeVTags].fields[2].value = Protocols.mkFieldUInt('Ethernet', 'Type', pack)
+      this.protocols[activeVTags].fields[2].value = Protocols.mkFieldUInt('Ethernet', 'Type', pack);
     }
     // a packet with multiple mpls fields do not need to update vlan/eth type field 
   }
-}
+};
 
 Packet.prototype.insertProtocol = function(proto, idx){
     this.protocols.splice(idx, 0, proto);
@@ -311,10 +309,10 @@ Packet.prototype.decField = function(protoName, fieldName){
 Packet.prototype.copyTTLIn = function(protoName){
   var indx = this.indexOf(protoName);
   if(indx === -1){
-    throw 'Packet does not contain: ' + protoName;
+    throw Errors.missingProtocol(protoName);
   }
   if(indx+1 === this.protocols.length){
-    throw 'Not enough fields to copy into'
+    throw 'Not enough fields to copy into';
   }
   var ttlValue = this.getField(protoName, 'TTL').value;
   var nextProto = this.protocols[indx+1];
@@ -331,7 +329,7 @@ Packet.prototype.copyTTLIn = function(protoName){
     default:
       throw 'Cannot copy TTL to :' + nextProto.name;
   }
-}
+};
 
 // Copies TTL innermost to next innermost
 // MPLS <- MPLS
@@ -341,7 +339,7 @@ Packet.prototype.copyTTLIn = function(protoName){
 Packet.prototype.copyTTLOut = function(protoName){
   var lstIndx = this.lastIndexOf(protoName);
   if(lstIndx === -1){
-    throw 'Packet does not contain :' + protoName;
+    throw Errors.missingProtocol(protoName);
   }
   var ttlValue = this.protocols[lstIndx].getField('TTL').value;
   var nextProto = this.protocols[lstIndx-1];
@@ -358,7 +356,7 @@ Packet.prototype.copyTTLOut = function(protoName){
     default:
       throw 'Cannot copy TTL to :' + nextProto.name;
   }
-}
+};
 
 // Finds index of first occurance of proto
 Packet.prototype.indexOf = function(protoName){

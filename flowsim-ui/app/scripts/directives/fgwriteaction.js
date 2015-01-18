@@ -14,7 +14,7 @@ angular.module('flowsimUiApp')
       scope: {
         toplevel: '=',
         match:    '=',
-        actions:  '='
+        actionset:  '='
       },
       controller: function($scope) {
 
@@ -165,14 +165,14 @@ angular.module('flowsimUiApp')
         };
 
         // Remove the last action
-        $scope.popAction = function() {
-          if($scope.actions.length > 0) {
-            var a = $scope.actions.splice(-1, 1);
+        $scope.popAction = function(index) {
+          if($scope.listView.length > 0) {
+            var a = $scope.listView.splice(index, 1);
             // Find the used profile that belongs to that match
             var profile = _($scope.usedProfiles).find(function(_profile) {
-              return _profile.protocol === a.protocol &&
-                     _profile.field === a.field &&
-                     _profile.op === a.op;
+              return _profile.protocol === a[0].protocol &&
+                     _profile.field === a[0].field &&
+                     _profile.op === a[0].op;
             });
             // Fail on the impossible .. throw indicates bug
             if(profile === undefined) {
@@ -181,7 +181,8 @@ angular.module('flowsimUiApp')
             // Run the used/available book keeping on the profile
             $scope.free(profile);
 
-            $scope.actions.splice(-1, 1);
+            // Remove action from set
+            $scope.actionset.removeAction(a[0].protocol, a[0].field, a[0].op);
          
             // Flush the inputs on modification
             $scope.active.type     = null;
@@ -197,14 +198,14 @@ angular.module('flowsimUiApp')
         // Add the action ... invoke the callback
         $scope.addAction = function() {
           var action;
-          if(!$scope.active.type || 
-             !$scope.active.type.valueTest($scope.active.value)) {
+          if($scope.active.op === 'set' && 
+            !$scope.active.type.valueTest($scope.active.value)) {
             throw 'Add apply action failed: '+$scope.active.value;
           }
 
           // Construct the aciton type and add to the list
           action = $scope.active.type.mkType($scope.active.value);
-          $scope.actions.push(action);
+          $scope.actionset.add(action);
 
           // Run the available/used profile book keeping
           $scope.use($scope.active.type);

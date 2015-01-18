@@ -191,7 +191,7 @@ describe('Service: Packet', function () {
     expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('0x01');
   });
 
-  it('Packet copyTTLIn', function(){
+  it('Packet copyTTLIn ipv4|ipv6|mpls pass', function(){
     var packet = new Packet.Packet('test');
 
     // MPLS -> IPv4
@@ -225,6 +225,51 @@ describe('Service: Packet', function () {
     packet.setField('MPLS', 'TTL', '0x22');
     packet.copyTTLIn('MPLS');
     expect(packet.protocols[2].getField('TTL').valueToString()).toBe('0x22');
+  });
+
+  it('Packet copyTTLIn missing proto ipv4|ipv6|mpls fail', function(){
+    var packet = new Packet.Packet('test');
+
+    // MPLS no inner ttl
+    expect(function(){
+      packet.copyTTLIn('MPLS', 'TTL');
+    }).toThrow();
+
+    expect(function(){
+      packet.copyTTLIn('IPv4', 'TTL');
+    }).toThrow();
+
+    expect(function(){
+      packet.copyTTLIn('IPv6', 'TTL');
+    }).toThrow();
+
+  });
+
+  it('Packet copyTTLIn missing ttl field ipv4|ipv6|mpls fail', function(){
+    var packet = new Packet.Packet('test');
+
+    // MPLS no inner ttl
+    packet.pushProtocol('0x8847');
+    expect(function(){
+      packet.copyTTLIn('MPLS', 'TTL');
+    }).toThrow();
+
+    // IPv4 no inner tll
+    packet.pushProtocol('0x0800');
+    packet.pushProtocol('0x06')
+    expect(function(){
+      packet.copyTTLIn('IPv4', 'TTL');
+    }).toThrow();
+
+    // IPv6 no inner ttl
+    packet.popProtocol();
+    packet.popProtocol();
+    packet.pushProtocol('0x86dd');
+    packet.pushProtocol('0x06');
+    expect(function(){
+      packet.copyTTLIn('IPv6', 'TTL');
+    }).toThrow();
+
   });
 
   it('Packet lastIndexOf', function(){

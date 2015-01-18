@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
 
 function mkAction(protoName, fieldName, op, value){
 	var bitwidth = '';
-	if(fieldName != 'tag'){
+	if(fieldName !== 'tag'){
 		var npField = Protocols.getField(protoName, fieldName);
 		bitwidth = npField.bitwidth;
 	}

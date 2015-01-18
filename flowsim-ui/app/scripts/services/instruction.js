@@ -5,7 +5,7 @@ var gotoPattern = /^([0-9]+)(\.\.([0-9]+))?$/;
 function gotoTest(v) { return gotoPattern.test(v); }
 
 angular.module('flowsimUiApp')
-  .factory('Instruction', function(UInt, Protocols, Noproto) {
+  .factory('Instruction', function(UInt, Protocols, Noproto, Action) {
 
 function Profile(profile) {
   if(_(profile).isObject()) {
@@ -202,7 +202,7 @@ function Apply(apply){
 Apply.prototype.step = function(dp, ctx){
   var act = this.actions.shift();
   act.step(dp, ctx);
-}
+};
 
 Apply.prototype.toBase = function(){
   return {
@@ -230,12 +230,10 @@ Clear.prototype.toBase = function(){
 function Write(write){
   if(_.isObject(write)){
     _.extend(this, write);
-    this.actions = _(write.actions).map(function(action){
-      return new Noproto.Action(action);
-    });
+    this.actions = new Action.Set(write.actions);
   } else {
     this.enabled = false;
-    this.actions = [];
+    this.actions = new Action.Set();
   }
   this.name = 'Write';
   this.tip  = 'Merges action set with packet contexts action set';
@@ -244,7 +242,7 @@ function Write(write){
 Write.prototype.toBase = function(){
   return {
     enabled: this.enabled,
-    actions: this.actions
+    actions: this.actions.toBase()
   };
 };
 
@@ -360,6 +358,7 @@ Set.prototype.toView = function() {
   }
   if(this.apply.enabled) {
   //FIXME
+
   }
   if(this.clear.enabled) {
   //FIXME
@@ -400,7 +399,7 @@ Set.prototype.summarize = function() {
 
 Set.prototype.isEmpty = function(){
   return true;
-}
+};
 
 return {
   Profile: Profile,

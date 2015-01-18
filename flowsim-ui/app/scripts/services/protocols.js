@@ -30,6 +30,27 @@ var Protocols = [
   Payload.Payload
 ];
 
+var protoPriority = {
+  'Internal': 0,
+  'Ethernet': 9,
+  'VLAN': 8,
+  'MPLS': 7,
+  'IPv4': 6,
+  'IPv6': 6,
+  'TCP': 5,
+  'UDP': 5,
+  'SCTP': 5
+};
+
+function protoSort(a, b){
+  if(protoPriority[a] > protoPriority[b]){
+    return -1;
+  }
+  if(protoPriority[a] < protoPriority[b]){
+    return 1;
+  }
+  return 0;
+}
 
 
 function getProtocol(protoName){
@@ -66,6 +87,18 @@ var copyIn = _.chain(noprotoProtocols)
               .where({copyIn: true})
               .map('protocol')
               .value();
+function fieldFilter(field){
+  var t = {};
+  t[field] = true;
+  console.log(t);
+  var tmp = _.chain(noprotoProtocols)
+              .map('fields')
+              .flatten()
+              .where(t)
+              .map('protocol')
+              .value();
+  return t;
+}
 
 function mkMatch(protocolName, fieldName, value, mask){
   var proto = _(noprotoProtocols)
@@ -167,7 +200,10 @@ return {
   getProtocol: getProtocol,
   Extractors: extractors,
   mkMatch: mkMatch,
-  mkFieldUInt: mkFieldUInt
+  mkFieldUInt: mkFieldUInt,
+  fieldFilter: fieldFilter,
+  protoPriority: protoPriority,
+  protoSort: protoSort
 };
 
 });
