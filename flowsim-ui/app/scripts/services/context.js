@@ -92,7 +92,7 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
     this.instructionSet = new Instruction.Set(ctx.instructionSet);
   } else if(packet && _.isNumber(buffer_id) && _.isNumber(in_port)) {
     // store a reference to the packet and buffer id
-    this.packet = packet;
+    this.packet = packet.clone();
     this.buffer = buffer_id;
     this.meter  = -1;
     this.group  = -1;
@@ -123,7 +123,8 @@ Context.prototype.toView = function() {
     table: this._lstTable,
     group: this.group,
     meter: this.meter,
-    queue: this.queue,
+    queue: this.queue.value,
+    buffer: this.buffer,
     actionSet: this.actionSet.toView(),
     instructionSet: this.instructionSet.toView(),
     key: this.key.toView(),

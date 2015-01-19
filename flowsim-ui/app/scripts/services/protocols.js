@@ -87,18 +87,6 @@ var copyIn = _.chain(noprotoProtocols)
               .where({copyIn: true})
               .map('protocol')
               .value();
-function fieldFilter(field){
-  var t = {};
-  t[field] = true;
-  console.log(t);
-  var tmp = _.chain(noprotoProtocols)
-              .map('fields')
-              .flatten()
-              .where(t)
-              .map('protocol')
-              .value();
-  return t;
-}
 
 function mkMatch(protocolName, fieldName, value, mask){
   var proto = _(noprotoProtocols)
@@ -182,6 +170,13 @@ var _Graph = {
 
 // Simple dependency search function
 function Graph(protocol, field, value) {
+  //sometimes value string not quite right
+  // ex: '0x800' !== '0x0800'
+  if(_.isString(value)){
+    //convert to uint
+    var tmp = getField(protocol, field).consStr(value);
+    value = getField(protocol, field).dispStr(tmp, 16);
+  }
   if(!_(_Graph).has(protocol)) { return ''; }
   if(!_(_Graph[protocol]).has(field)) { return ''; }
   if(!_(_Graph[protocol][field]).has(value)) { return ''; }
