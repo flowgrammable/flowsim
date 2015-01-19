@@ -188,8 +188,101 @@ describe('Service: instruction', function () {
 
   });
 
-  it('Goto instruction step', function(){
-    expect(false).toBe(true);
+  it('Goto instruction step pass', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    is.clear.enabled = false;
+    is.goto_.enabled = true;
+    is.metadata.enabled = false;
+    is.write.enabled = false;
+    is.apply.enabled = false;
+
+    is.goto_.target = 3;
+    var ctx = {_nxtTable: 0};
+    var dp = {table:{
+      id:0, 
+      capabilities:{instruction:{
+        goto_: {
+          targets: [[1, 254]]
+        }
+      }}
+    },
+    tables:{length:254}}
+    is.step(dp, ctx);
+    expect(ctx._nxtTable).toBe(3);
+
+    is.goto_.target = 30;
+    is.goto_.enabled = true;
+    var ctx = {_nxtTable: 0};
+    var dp = {table:{
+      id:29, 
+      capabilities:{instruction:{
+        goto_: {
+          targets: [[1, 10], [28,29], [30, 50]]
+        }
+      }}
+    },
+    tables: {length: 254}}
+    is.step(dp, ctx);
+    expect(ctx._nxtTable).toBe(30);
+  });
+
+
+  it('Goto instruction step fail', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    is.clear.enabled = false;
+    is.goto_.enabled = true;
+    is.metadata.enabled = false;
+    is.write.enabled = false;
+    is.apply.enabled = false;
+
+    // table transition cannot go backwards
+    is.goto_.target = 3;
+    var ctx = {_nxtTable: 0};
+    var dp = {table:{
+      id:4, 
+      capabilities:{instruction:{
+        goto_: {
+          targets: [[1, 254]]
+        }
+      }}
+    }}
+    expect(function(){
+      is.step(dp, ctx)
+    }).toThrow();
+
+    // table does not fall in range of acceptable tables
+    is.goto_.enable = true;
+    is.goto_.target = 30;
+    var ctx = {_nxtTable: 0};
+    var dp = {table:{
+      id:4, 
+      capabilities:{instruction:{
+        goto_: {
+          targets: [[1, 29],[31, 254]]
+        }
+      }}
+    }}
+    expect(function(){
+      is.step(dp, ctx)
+    }).toThrow();
+
+    // cannot go to same table
+    is.goto_.enable = true;
+    is.goto_.target = 31;
+    var ctx = {_nxtTable: 0};
+    var dp = {table:{
+      id:31, 
+      capabilities:{instruction:{
+        goto_: {
+          targets: [[1, 29],[31, 254]]
+        }
+      }}
+    }}
+    expect(function(){
+      is.step(dp, ctx)
+    }).toThrow();
   });
 
   it('Metadata instruction step', function(){

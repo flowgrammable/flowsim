@@ -196,7 +196,6 @@ return {
   Extractors: extractors,
   mkMatch: mkMatch,
   mkFieldUInt: mkFieldUInt,
-  fieldFilter: fieldFilter,
   protoPriority: protoPriority,
   protoSort: protoSort
 };

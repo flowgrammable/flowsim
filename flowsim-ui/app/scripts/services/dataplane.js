@@ -75,6 +75,7 @@ Dataplane.prototype.extraction = function() {
 
 Dataplane.prototype.choice = function() {
   this.table = this.tables.get(this.ctx.table());
+  this.ctx._lstTable = this.table.id;
   if(!_.isObject(this.table)) {
     throw 'Failed to load table: ' + this.ctx.table();
   }

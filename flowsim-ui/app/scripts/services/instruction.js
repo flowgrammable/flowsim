@@ -5,7 +5,7 @@ var gotoPattern = /^([0-9]+)(\.\.([0-9]+))?$/;
 function gotoTest(v) { return gotoPattern.test(v); }
 
 angular.module('flowsimUiApp')
-  .factory('Instruction', function(UInt, Protocols, Noproto, Action) {
+  .factory('Instruction', function(UInt, Protocols, Noproto, Action, Errors) {
 
 function Profile(profile) {
   if(_(profile).isObject()) {
@@ -326,6 +326,30 @@ function Goto(goto_){
   this.targetTest = UInt.is(8);
 }
 
+Goto.prototype.step = function(dp, ctx){
+  var targetTable = parseInt(this.target);
+  // Check tables allowed to transition to
+  var availTbls = dp.table.capabilities.instruction.goto_.targets;
+
+  if(targetTable > dp.tables.length){
+    throw Errors.goToNoTable(targetTable);
+  } else if(targetTable <= dp.table.id){
+    throw Errors.goToBackwards(dp.table.id, targetTable);
+  } else if(targetTable === dp.table.id){
+    throw Errors.goToRange(dp.table.id, targetTable);
+  } else {
+    var tblsInRange = _(availTbls).filter(function(range){
+      if(targetTable >= range[0] && targetTable <= range[1]){
+        return true;
+      }
+    });
+    if(!tblsInRange.length){
+      throw Errors.goToRange(dp.table.id, targetTable);
+    }
+  }
+  ctx._nxtTable = parseInt(this.target);
+};
+
 Goto.prototype.toBase = function(){
   return {
     enabled: this.enabled,
@@ -393,6 +417,7 @@ Set.prototype.step = function (dp, ctx) {
     this.metadata.enabled = false;
   } else if(this.goto_.enabled) {
     //FIXME
+    this.goto_.step(dp, ctx);
     this.goto_.enabled = false;
   }
 };
