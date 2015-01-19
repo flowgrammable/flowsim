@@ -5,8 +5,8 @@
 
         <div class="sim-ins-actionlist">
             <div style="height:10px"></div>
-            <div>Action List&nbsp;&nbsp;</div>
-            <div class="sim-ins-animate-container">
+            <div ng-show="applyActionList.length > 0">Action List&nbsp;&nbsp;</div>
+            <div ng-show="applyActionList.length > 0" class="sim-ins-animate-container">
 
                 <div class="sim-ins-animate-repeat"
                      ng-class="(applyActionList.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
@@ -18,8 +18,8 @@
         </div>
         <div class="sim-ins-actionset" ng-show="writeActionSet.length >= 0">
             <div style="height:10px"></div>
-            <div>Action Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
-            <div class="sim-ins-animate-container">
+            <div ng-show="writeActionSet.length > 0">Action Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div ng-show="writeActionSet.length > 0" class="sim-ins-animate-container">
                 <div class="sim-ins-animate-repeat"
                      ng-class="(writeActionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
                      ng-repeat="action in writeActionSet" tooltip="{{action.value1}}{{action.value2}}"
@@ -36,8 +36,8 @@
     </div>
     <div class="sim-ins-instructionset">
         <div style="height:128px"></div>
-        <div>Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <div class="sim-ins-animate-container">
+        <div ng-show="instructionList.length > 0">Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div ng-show="instructionList.length > 0" class="sim-ins-animate-container">
             <div class="sim-ins-animate-repeat"
                  ng-class="(instrucionList.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
                  ng-repeat="ins in instructionList"  tooltip="{{instructionsTooltip(ins)}}" tooltip-append-to-body="true">
