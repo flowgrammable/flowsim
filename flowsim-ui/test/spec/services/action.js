@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('Service: action', function () {
+describe('Service: action', function () {
 
   // load the service's module
   beforeEach(module('flowsimUiApp'));
@@ -19,6 +19,15 @@ ddescribe('Service: action', function () {
 
   it('Action Set construction', function(){
     var as = new Action.Set();
+  });
+
+  it('Action Set add', function(){
+    var as = new Action.Set();
+    var act = Utils.mkAction('Ethernet', 'Src', 'set', 'a:a:a:a:a:a');
+    var act2 = Utils.mkAction('Ethernet', 'Src', 'set', 'b:b:b:b:b:b');
+    as.actions.push(act2);
+    as.add(act);
+    expect(as.actions.length).toBe(1);
   });
 
   it('Action Set add CopyTTLIn', function(){

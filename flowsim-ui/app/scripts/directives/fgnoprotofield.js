@@ -31,7 +31,7 @@ angular.module('flowsimUiApp')
         }
 
         scope.$watch('field.value.value', function(){
-          scope.local.str = scope.field.dispStr(scope.field.value.value, 16);
+          scope.local.str = scope.field.valueToString();
         }, true);
       }
     };

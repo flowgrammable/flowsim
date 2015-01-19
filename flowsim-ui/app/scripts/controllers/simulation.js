@@ -146,6 +146,7 @@ angular.module('flowsimUiApp')
           //hideDetails($scope.simulation.stage) 
     };
     $scope.ctx = $scope.simulation.toView();
+    $scope.view = $scope.simulation.toView();
   };
 
   $scope.stop = function() {
@@ -158,9 +159,9 @@ angular.module('flowsimUiApp')
       to: hideDetails($scope.simulation.stage) 
     };
     $scope.ctx = $scope.simulation.toView();
-    console.log('post step');
-    console.log($scope.ctx);
-    $scope.packetName = $scope.ctx.packet.name;
+    $scope.view = $scope.simulation.toView();
+    console.log('post step', $scope.ctx);
+    $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
   };
 
 });

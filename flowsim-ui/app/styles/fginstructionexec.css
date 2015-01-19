@@ -51,7 +51,7 @@
     float: left;
     clear: none;
 
-    width: 50%;
+    width: 75%;
     height: 190px;
 }
 .sim-ins-actionset
@@ -207,6 +207,8 @@
 
     box-sizing: border-box;
     height: 25px;
+    font-size: 12px;
+    font-weight: normal ;
 }
 .sim-exec-right-animate-repeat
 {

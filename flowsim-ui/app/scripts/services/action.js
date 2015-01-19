@@ -62,7 +62,17 @@ function actSort(a, b){
 }
 
 Set.prototype.add = function(action){
-  this.actions.push(action);
+  var idx = _(this.actions).indexOf(
+              _(this.actions).findWhere({
+                protocol: action.protocol,
+                field: action.field,
+                op: action.op
+              }));
+  if(idx < 0 || action.op === 'push' || action.op === 'pop'){
+    this.actions.push(action);
+  } else {
+    this.actions[idx] = action;
+  }
   this.actions.sort(actSort);
 };
 
@@ -75,13 +85,9 @@ Set.prototype.step = function(dp, ctx) {
 };
 
 Set.prototype.toView = function(){
-  var view = {};
-  if(this.actions.copyTTLIn){
-
-  }
-  if(this.actions.setField){
-    this.actToView('setField', 'Ethernet', view);
-  }
+  var view = _(this.actions).map(function(act){
+    return act.toView();
+  });
   return view;
 };
 

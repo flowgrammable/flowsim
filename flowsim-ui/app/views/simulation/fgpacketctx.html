@@ -19,11 +19,11 @@
     clear: none;">Action Set</div>
         <div class="sim-exec-right-animate-container">
             <div class="sim-exec-right-animate-repeat" ng-class="(view.actionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')" ng-repeat="action in view.actionSet" tooltip="{{action.value1}}{{action.value2}}" tooltip-append-to-body="true">
-                {{action.name + '(' + action.value1 +')'}}
+                {{action.op +' ('+action.target+') '+action.value}}
             </div>
         </div>
     </div>
     <div class="sim-exec-bottomBanner">
-        <fg-packet-view packet="view.packet" width="100%"></fg-packet-view>
+        <fg-packet-view packet="packet" width="100%"></fg-packet-view>
     </div>
     </div>

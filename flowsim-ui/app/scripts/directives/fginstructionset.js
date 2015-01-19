@@ -23,14 +23,14 @@ angular.module('flowsimUiApp')
                  */
                 $scope.instructionsTooltip = function(ins) {
 
-                    var retVal = ins.name;
-                    if (!_.isUndefined(ins.value1) && !_.isNull(ins.value1)) {
+                    var retVal = ins.tip;
+                    /*if (!_.isUndefined(ins.) && !_.isNull(ins.value1)) {
                         retVal += '( ' + ins.value1;
                         if (!_.isUndefined(ins.value2) && !_.isNull(ins.value2)) {
                             retVal += ' , ' + ins.value2;
                         }
                         retVal += ' )';
-                    }
+                    } */
 
                     return retVal;
                 };
@@ -43,22 +43,27 @@ angular.module('flowsimUiApp')
                     if (!scope.view) {
                         return;
                     }
-                    scope.applyActionList = _.findWhere(scope.view.instructionSet, {
-                        name: 'Apply'
-                    }).set;
-                    scope.writeActionSet = _.findWhere(scope.view.instructionSet, {
-                        name: 'Write'
-                    }).set;
-                    scope.instrucionList = scope.view.instructionSet;
+                    if(scope.view.instructionSet){
+                        scope.applyActionList = _(scope.view.instructionSet).findWhere({name: 'Apply'});
+                        if(scope.applyActionList){
+                            scope.applyActionList = scope.applyActionList.actions;
+                        }
+                        scope.writeActionSet = _(scope.view.instructionSet).findWhere({name: 'Write'});
+                        if(scope.writeActionSet){
+                            scope.writeActionSet = scope.writeActionSet.actions;
+                        }
+                    }
+
+                    scope.instructionList = scope.view.instructionSet;
+                    scope.insListView = '';
                     scope.instructions = function() {
-                        var instructions = '';
+                        scope.insListView = '';
                         scope.view.instructionSet.forEach(function(value , index , arr) {
-                            instructions += value.name.substring(0, 1).toLowerCase();
+                            scope.insListView += value.name.substring(0, 1).toLowerCase();
                             if(index < arr.length -1 ){
-                                instructions += ' / ';
+                                scope.insListView += ' / ';
                             }
                         });
-                        return instructions;
                     };
                     
 

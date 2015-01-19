@@ -30,7 +30,6 @@ describe('Service: Protocols', function () {
 
   it('Protocols fieldFilter', function(){
     var protos = Protocols.fieldFilter('copyIn');
-    console.log('protos', protos);
   })
 
 });

@@ -46,8 +46,10 @@ describe('Service: dataplane', function() {
   }));
 
   var Switch_;
-  beforeEach(inject(function(_Switch_) {
+  var Utils;
+  beforeEach(inject(function(_Switch_, _Utils_) {
     Switch_ = _Switch_;
+    Utils = _Utils_;
   }));
 
   it('Device construction Pass', function(){
@@ -89,7 +91,7 @@ describe('Service: dataplane', function() {
 
     expect(dp.state).toBe('Arrival');
     dp.arrival(pack, 1, 1, 1);
-    expect(dp.ctx.toView().ctx[1].value).toBe(0);
+    expect(dp.toView().ctx[1].value).toBe(0);
   });
 
   it('Dataplane Extraction Pass', function(){
@@ -138,6 +140,40 @@ describe('Service: dataplane', function() {
     dp.extraction();
     dp.choice();
     expect(dp.table.id).toBe(0);
+  });
+
+  it('Dataplane execution step Pass', function(){
+    var prof = new Profile.Profile('test profile name');
+    var swi = Switch_.create(null, prof);
+    var dp = new Dataplane.Dataplane(swi);
+    var pack = new Packet.Packet('testpacket');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x0800');
+    pack.pushProtocol('0x06');
+
+    dp.arrival(pack, 1, 1, 1);
+    dp.extraction();
+    dp.choice();
+    dp.selection();
+    dp.state = 'Selection';
+    dp.transition('Execution');
+    expect(dp.state).toBe('Selection');
+    expect(dp.nextState).toBe('Execution');
+    dp.step();
+    expect(dp.state).toBe('Execution');
+    var act1 = Utils.mkAction('Ethernet', 'Src', 'set', 'a:a:a:a:a:a');
+    var act2 = Utils.mkAction('Ethernet', 'Src', 'set', 'b:a:a:a:a:a');
+    var act3 = Utils.mkAction('Ethernet', 'Src', 'set', 'c:a:a:a:a:a');
+    dp.ctx.instructionSet.apply.addAction(act1);
+    dp.ctx.instructionSet.apply.addAction(act2);
+    dp.ctx.instructionSet.apply.addAction(act3);
+    expect(dp.ctx.instructionSet.apply.actions.length).toBe(3);
+    dp.ctx.instructionSet.apply.enabled = true;
+    dp.step();
+    expect(dp.ctx.instructionSet.isEmpty()).toBe(false);
+    expect(dp.ctx.packet.getField('Ethernet', 'Src').valueToString()).toBe('a:a:a:a:a:a');
+    expect(dp.nextState).toBe('Execution');
   });
 
 });

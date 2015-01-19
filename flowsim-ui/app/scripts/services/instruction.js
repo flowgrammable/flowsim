@@ -199,15 +199,32 @@ function Apply(apply){
   this.tip  = 'Immediately executes action list';
 }
 
+Apply.prototype.addAction = function(action){
+  this.actions.push(action);
+};
+
 Apply.prototype.step = function(dp, ctx){
-  var act = this.actions.shift();
-  act.step(dp, ctx);
+  var act;
+  if(this.actions.length > 0){
+    act = this.actions.shift();
+    act.step(dp, ctx);
+  }
 };
 
 Apply.prototype.toBase = function(){
   return {
     enabled: this.enabled,
     actions: this.actions
+  };
+};
+
+
+Apply.prototype.toView = function(){
+  return {
+    name: this.name,
+    actions: _(this.actions).map(function(act){
+      return act.toView();
+    })
   };
 };
 
@@ -220,6 +237,10 @@ function Clear(clear){
   this.name = 'Clear';
   this.tip  = 'Clears the packet contexts action set';
 }
+
+Clear.prototype.step = function(dp, ctx){
+  ctx.actionSet.clear();
+};
 
 Clear.prototype.toBase = function(){
   return {
@@ -239,10 +260,32 @@ function Write(write){
   this.tip  = 'Merges action set with packet contexts action set';
 }
 
+Write.prototype.step = function(dp, ctx){
+  // write action to ctx actionSet
+  var act;
+  if(!this.actions.isEmpty()){
+    act = this.actions.actions.shift();
+    ctx.actionSet.add(act);
+  }
+};
+
+Write.prototype.addAction = function(action){
+  this.actions.add(action);
+};
+
 Write.prototype.toBase = function(){
   return {
     enabled: this.enabled,
     actions: this.actions.toBase()
+  };
+};
+
+Write.prototype.toView = function(){
+  return {
+    name: this.name,
+    actions: _(this.actions.actions).map(function(act){
+      return act.toView();
+    })
   };
 };
 
@@ -332,15 +375,17 @@ Set.prototype.step = function (dp, ctx) {
   } else if(this.apply.enabled) {
     //FIXME
     this.apply.step(dp, ctx);
-    if(this.apply.actions.length === 0) { 
-      this.apply.enabled = false; 
+    if(this.apply.actions.length === 0){
+      this.apply.enabled = false;
     }
   } else if(this.clear.enabled) {
     //FIXME
+    this.clear.step(dp, ctx);
     this.clear.enabled = false;
   } else if(this.write.enabled) {
     //FIXME
-    if(this.write.actions.length === 0) { 
+    this.write.step(dp, ctx);
+    if(this.write.actions.isEmpty()) { 
       this.write.enabled = false; 
     }
   } else if(this.metadata.enabled) {
@@ -353,25 +398,32 @@ Set.prototype.step = function (dp, ctx) {
 };
 
 Set.prototype.toView = function() {
+  var view = [];
   if(this.meter.enabled) {
   //FIXME
+  view.push(this.meter);
   }
   if(this.apply.enabled) {
   //FIXME
-
+  view.push(this.apply.toView());
   }
   if(this.clear.enabled) {
   //FIXME
+  view.push(this.clear);
   }
   if(this.write.enabled) {
   //FIXME
+  view.push(this.write.toView());
   }
   if(this.metadata.enabled) {
   //FIXME
+  view.push(this.write.toView());
   }
   if(this.goto_.enabled) {
   //FIXME
+  view.push(this.goto_);
   }
+  return view;
 };
 
 Set.prototype.summarize = function() {
@@ -398,7 +450,9 @@ Set.prototype.summarize = function() {
 };
 
 Set.prototype.isEmpty = function(){
-  return true;
+  return !this.meter.enabled && !this.apply.enabled && 
+  !this.clear.enabled && !this.write.enabled && 
+  !this.metadata.enabled && !this.goto_.enabled;
 };
 
 return {

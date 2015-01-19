@@ -13,9 +13,13 @@ describe('Service: instruction', function () {
 
   var Packet;
   var Noproto;
-  beforeEach(inject(function (_Packet_, _Noproto_) {
+  var Utils;
+  var Action;
+  beforeEach(inject(function (_Packet_, _Noproto_, _Utils_, _Action_) {
     Packet = _Packet_;
+    Action = _Action_;
     Noproto = _Noproto_;
+    Utils = _Utils_;
   }));
 
   it('should do something', function () {
@@ -125,6 +129,100 @@ describe('Service: instruction', function () {
     expect(ctx.packet.getField('Ethernet', 'Dst').valueToString()).toBe('a:a:a:a:a:a');
     expect(is.apply.enabled).toBe(false);
 
+  });
+
+  it('Write instruction step pass', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    is.apply.enabled = false;
+    is.clear.enabled = false;
+    is.goto_.enabled = false;
+    is.metadata.enabled = false;
+    is.write.enabled = true;
+
+    var act = Utils.mkAction('Ethernet', 'Src', 'set', 'a:b:C:d:e:f');
+    var act2 = Utils.mkAction('Ethernet', 'Dst', 'set', 'c:c:c:c:c:c');
+    is.write.addAction(act);
+    is.write.addAction(act2);
+    
+    expect(is.write.actions.actions.length).toBe(2);
+
+    var as = new Action.Set();
+    var ctx = {actionSet: as };
+    is.step(null, ctx);
+    expect(ctx.actionSet.actions.length).toBe(1);
+    is.step(null, ctx);
+    expect(ctx.actionSet.actions.length).toBe(2);
+    expect(is.isEmpty()).toBe(true);
+  });
+
+  it('Write instruction merge action set pass', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    is.apply.enabled = false;
+    is.clear.enabled = false;
+    is.goto_.enabled = false;
+    is.metadata.enabled = false;
+    is.write.enabled = true;
+
+    var act = Utils.mkAction('Ethernet', 'Src', 'set', 'a:b:C:d:e:f');
+    var act2 = Utils.mkAction('Ethernet', 'Src', 'set', 'c:c:c:c:c:c');
+    is.write.addAction(act);
+    
+    expect(is.write.actions.actions.length).toBe(1);
+
+    var as = new Action.Set();
+    var ctx = {actionSet: as };
+    is.step(null, ctx);
+    expect(ctx.actionSet.actions.length).toBe(1);
+    expect(ctx.actionSet.actions[0].value).toBe('a:b:C:d:e:f');
+    expect(is.isEmpty()).toBe(true);
+    expect(is.write.enabled).toBe(false);
+
+    is.write.enabled = true;
+    is.write.addAction(act2);
+    is.step(null, ctx);
+    expect(ctx.actionSet.actions.length).toBe(1);
+    expect(ctx.actionSet.actions[0].value).toBe('c:c:c:c:c:c');
+    expect(is.isEmpty()).toBe(true);
+
+  });
+
+  it('Goto instruction step', function(){
+    expect(false).toBe(true);
+  });
+
+  it('Metadata instruction step', function(){
+    expect(false).toBe(true);
+  });
+
+  it('Clear instruction step', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    is.clear.enabled = true;
+    is.goto_.enabled = false;
+    is.metadata.enabled = false;
+    is.write.enabled = false;
+    is.apply.enabled = false;
+
+    var act = Utils.mkAction('Ethernet', 'Src', 'set', 'a:b:C:d:e:f');
+    var act2 = Utils.mkAction('Ethernet', 'Dst', 'set', 'c:c:c:c:c:c');
+    
+
+    var as = new Action.Set();
+    as.add(act);
+    as.add(act2);
+    var ctx = {actionSet: as };
+    expect(ctx.actionSet.actions.length).toBe(2);
+    expect(is.isEmpty()).toBe(false);
+
+    is.step(null, ctx);
+    expect(ctx.actionSet.actions.length).toBe(0);
+    expect(is.isEmpty()).toBe(true);
+  });
+
+  it('Meter instruction step', function(){
+    expect(false).toBe(true);
   });
 
 });

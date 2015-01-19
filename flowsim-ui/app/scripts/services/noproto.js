@@ -349,6 +349,15 @@ Action.prototype.step = function(dp, ctx) {
   }
 };
 
+Action.prototype.toView = function(){
+  var targetSym = this.protocol + this.field;
+  return {
+    op: this.op,
+    target: targetSym,
+    value: this.value
+  };
+};
+
 function mkAction(protocol, field, op, bitwidth, value){
   var profile = new ActionProfile(null, protocol, field, 
         bitwidth, null, op);

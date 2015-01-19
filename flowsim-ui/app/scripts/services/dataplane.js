@@ -121,7 +121,6 @@ Dataplane.prototype.transition = function(state) {
 
 Dataplane.prototype.step = function() {
   var i;
-
   if(this.pause) {
     this.state = this.nextState;
     this.pause = false;
@@ -162,7 +161,7 @@ Dataplane.prototype.step = function() {
       this.execution();
       if(this.groupQ.length > 0) {
         this.transition(GROUPS);
-      } else if(this.instructionSet.isEmpty()) {
+      } else if(this.ctx.instructionSet.isEmpty()) {
         if(this.ctx.hasGoto()) {
           this.transition(CHOICE);
         } else {

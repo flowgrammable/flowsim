@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Context', function(Action, Instruction, UInt, Packet, Noproto) {
+  .factory('Context', function(Action, Instruction, UInt, Packet) {
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
@@ -120,13 +120,10 @@ Context.prototype.clone = function() {
 
 Context.prototype.toView = function() {
   var result = {
-    ctx: [{
-      name: 'buffer',
-      value: this.buffer
-    }, {
-      name: 'table',
-      value: this.table()
-    }],
+    table: this._lstTable,
+    group: this.group,
+    meter: this.meter,
+    queue: this.queue,
     actionSet: this.actionSet.toView(),
     instructionSet: this.instructionSet.toView(),
     key: this.key.toView(),
@@ -173,7 +170,7 @@ Context.prototype.clearActions = function() {
 };
 
 Context.prototype.writeActions = function(actions) {
-  this.actionSet.concat(actions);
+  this.actionSet.add(actions);
 };
 
 Context.prototype.hasGoto = function() {

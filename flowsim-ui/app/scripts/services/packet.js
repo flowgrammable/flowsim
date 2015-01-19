@@ -78,6 +78,16 @@ Protocol.prototype.toBase = function(){
   };
 };
 
+Protocol.prototype.toView = function(){
+  return {
+    name: this.name,
+    bytes: this.bytes,
+    fields: _(this.fields).map(function(field){
+      return field.toView();
+    })
+  };
+};
+
 function Field(fld, name){
   if(_.isObject(fld)){
     _.extend(this, fld);
@@ -123,6 +133,13 @@ Field.prototype.toBase = function(){
     value: this.value
   };
 };
+
+Field.prototype.toView = function(){
+  return {
+    name: this.name,
+    value: this.valueToString()
+  };
+}
 
 function Packet(pkt) {
   if(_(pkt).isObject()){
@@ -393,7 +410,11 @@ Packet.prototype.toBase = function(){
 
 Packet.prototype.toView = function(){
   return {
-    name: this.name
+    name: this.name,
+    bytes: this.bytes,
+    protocols: _(this.protocols).map(function(proto){
+      return proto.toView();
+    })
   };
 };
 

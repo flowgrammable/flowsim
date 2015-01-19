@@ -12,7 +12,8 @@ angular.module('flowsimUiApp')
        templateUrl: 'views/simulation/fgpacketctx.html',
             replace: true,
             scope: {
-                view: '='
+                view: '=',
+                packet: '='
             },
       restrict: 'E'
     };
