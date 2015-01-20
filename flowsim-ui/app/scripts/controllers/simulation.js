@@ -8,9 +8,9 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace, 
+  .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace,
                                           Switch, Packet, Dataplane, Regex, Simulation) {
-                                          
+
   $scope.names = {};
 
   $scope.simulation = null;
@@ -41,12 +41,12 @@ angular.module('flowsimUiApp')
       $scope.resources.packets = result;
     }
   });
- 
+
   // attach a method to - get all the existing trace names
   $scope.getTraces = function(callback) {
     fgCache.getNames('trace', callback);
   };
-  
+
   // update the switch device on selector change
   $scope.$watch('resources.deviceName', function() {
     fgCache.get('switch', $scope.resources.deviceName, Switch,
@@ -61,7 +61,7 @@ angular.module('flowsimUiApp')
 
   // add the selected packet to the trace
   $scope.addPacket = function() {
-    fgCache.get('packet', $scope.resources.packetName, Packet, 
+    fgCache.get('packet', $scope.resources.packetName, Packet,
                 function(err, result) {
       if(err) {
         console.log(err.details);
@@ -137,13 +137,13 @@ angular.module('flowsimUiApp')
   function hideDetails(state) {
     return (state === 5 || state === 6) ? 4 : state;
   }
-  
+
   $scope.makeTransition =  {to:-1};
   $scope.play = function() {
     $scope.simulation.play($scope.trace);
-    $scope.makeTransition = { 
+    $scope.makeTransition = {
       to: $scope.simulation.stage
-          //hideDetails($scope.simulation.stage) 
+          //hideDetails($scope.simulation.stage)
     };
     $scope.ctx = $scope.simulation.toView();
     $scope.view = $scope.simulation.toView();
@@ -155,14 +155,18 @@ angular.module('flowsimUiApp')
 
   $scope.step = function() {
     $scope.simulation.step();
-    $scope.makeTransition = { 
+    $scope.makeTransition = {
       to: $scope.simulation.stage
-          //hideDetails($scope.simulation.stage) 
+          //hideDetails($scope.simulation.stage)
     };
     $scope.ctx = $scope.simulation.toView();
     $scope.view = $scope.simulation.toView();
     console.log('post step', $scope.ctx);
-    $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
+    if($scope.simulation && $scope.simulation.dataplane.ctx){
+      $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
+    } else {
+      $scope.packetName = '';
+    }
   };
 
 });

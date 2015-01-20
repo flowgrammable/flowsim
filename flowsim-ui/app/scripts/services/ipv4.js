@@ -26,6 +26,7 @@ function dispAddress(val) {
 var IPv4 = {
   name: 'IPv4',
   bytes: 20,
+  shortName: 'ip4',
   fields: [{
     name: 'DSCP',
     bitwidth: 6,

@@ -13,13 +13,13 @@ var EGRESS     = 'Egress';
 var FINAL      = 'Final';
 
 var State = [
-  ARRIVAL, 
+  ARRIVAL,
   EXTRACTION,
-  CHOICE,  
+  CHOICE,
   SELECTION,
   EXECUTION,
   GROUPS,
-  EGRESS, 
+  EGRESS,
   FINAL,
 ];
 
@@ -63,7 +63,7 @@ Dataplane.prototype.arrival = function(packet, in_port, in_phy_port, tunnel) {
   // The dataplane could be: dropping fragments, or reassembling fragments
   if(this.ports.ingress(packet, in_port) && this.datapath.ingress(packet)) {
     var bufId = this.datapath.bufAllocator.request();
-    this.ctx  = new Context.Context(null, packet, bufId, in_port, in_phy_port, 
+    this.ctx  = new Context.Context(null, packet, bufId, in_port, in_phy_port,
                                     tunnel);
   } else {
     throw 'Dataplane arrival failure: '+packet+', '+in_port+', '+in_phy_port+', '+tunnel+')';
@@ -94,7 +94,7 @@ Dataplane.prototype.execution = function() {
 };
 
 Dataplane.prototype.output = function(pkt, id) {
-  this.ports.egress(pkt, id); 
+  this.ports.egress(pkt, id);
 };
 
 Dataplane.prototype.group = function(pkt, id) {
@@ -108,7 +108,7 @@ Dataplane.prototype.groups = function() {
   var g_ctx = this.groupQ.splice(0, 1);
   this.groupQ.splice(0, 1);
   if(g_ctx) {
-    // FIXME group processing goes here 
+    // FIXME group processing goes here
   }
 };
 
@@ -141,9 +141,9 @@ Dataplane.prototype.step = function() {
   switch(this.state) {
     case ARRIVAL:
       this.arrival(
-          this.currEvent.packet, 
-          this.currEvent.in_port, 
-          this.currEvent.in_phy_port, 
+          this.currEvent.packet,
+          this.currEvent.in_port,
+          this.currEvent.in_phy_port,
           this.currEvent.tunnel);
       this.transition(EXTRACTION);
       break;
@@ -151,8 +151,6 @@ Dataplane.prototype.step = function() {
       this.extraction();
       if(this.extractor.isDone()){
         this.transition(CHOICE);
-      } else {
-        this.transition(EXTRACTION);
       }
       break;
     case CHOICE:
@@ -173,8 +171,6 @@ Dataplane.prototype.step = function() {
         } else {
           this.transition(EGRESS);
         }
-      } else {
-        this.transition(EXECUTION);
       }
       break;
     case GROUPS:
@@ -197,8 +193,6 @@ Dataplane.prototype.step = function() {
         } else {
           this.transition(FINAL);
         }
-      } else {
-        this.transition(EGRESS);
       }
       break;
     case FINAL:
@@ -216,8 +210,8 @@ Dataplane.prototype.step = function() {
   throw 'Bad state: '+i;
 };
 
-var Stages = _(State).reject(function(state) { 
-  return state === FINAL; 
+var Stages = _(State).reject(function(state) {
+  return state === FINAL;
 });
 
 return {

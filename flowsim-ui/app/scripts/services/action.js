@@ -94,6 +94,10 @@ Set.prototype.add = function(action){
   this.actions.sort(actSort);
 };
 
+Set.prototype.remove = function(idx){
+  this.actions.splice(idx, 1);
+};
+
 Set.prototype.step = function(dp, ctx) {
   if(this.actions.length){
     this.actions.shift().step(dp, ctx);

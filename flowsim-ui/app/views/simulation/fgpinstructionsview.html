@@ -36,8 +36,8 @@
     </div>
     <div class="sim-ins-instructionset">
         <div style="height:190px"></div>
-        <div ng-show="view.instructionSet.length > 0">Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <div ng-show="view.instructionSet.length > 0" class="sim-ins-animate-container">
+        <div >Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="sim-ins-animate-container">
             <div class="sim-ins-animate-repeat"
                  ng-class="(view.instructionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
                  ng-repeat="ins in view.instructionSet"  tooltip="{{instructionsTooltip(ins)}}" tooltip-append-to-body="true">

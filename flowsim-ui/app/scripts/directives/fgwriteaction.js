@@ -42,7 +42,7 @@ angular.module('flowsimUiApp')
           })).filter(function(profile) {
             return _(Protocols.Root).indexOf(profile.protocol) !== -1;
           });
-        
+
         // Intialize the used profile to empty
         $scope.usedProfiles = [];
 
@@ -50,7 +50,7 @@ angular.module('flowsimUiApp')
         $scope.updateProfiles = function() {
           $scope.availableProfiles =_($scope.enabledProfiles).filter(
             function(profile) {
-              return ((profile.protocol === 'Internal' || 
+              return ((profile.protocol === 'Internal' ||
                        profile.protocol === 'Ethernet') &&
                      _($scope.usedProfiles).find(function(_profile) {
                       return profile.protocol === _profile.protocol &&
@@ -97,14 +97,14 @@ angular.module('flowsimUiApp')
           // Locate any new profiles
           $scope.updateProtocols();
         };
-       
+
         // Update our book keeping for freeing a profile
         $scope.free = function(profile) {
           // Remove from usedProfiles
           $scope.usedProfiles = _($scope.usedProfiles).reject(
             function(_profile) {
               return profile.protocol === _profile.protocol &&
-                     profile.field === _profile.field && 
+                     profile.field === _profile.field &&
                      profile.op === _profile.op;
               });
           // Add to availableProfiles
@@ -126,7 +126,7 @@ angular.module('flowsimUiApp')
             function(profile) {
               return profile.protocol === $scope.active.protocol;
             });
-            
+
           $scope.active.fields = _(_($scope.activeFields).map(
             function(profile) {
               return profile.field;
@@ -161,13 +161,13 @@ angular.module('flowsimUiApp')
             function(profile) {
               return profile.op === $scope.active.op;
             });
-          $scope.active.value = '';  
+          $scope.active.value = '';
         };
 
         // Remove the last action
         $scope.popAction = function(index) {
-          if($scope.listView.length > 0) {
-            var a = $scope.listView.splice(index, 1);
+          if(!$scope.actionset.isEmpty()) {
+            var a = $scope.actionset.actions.splice(index, 1);
             // Find the used profile that belongs to that match
             var profile = _($scope.usedProfiles).find(function(_profile) {
               return _profile.protocol === a[0].protocol &&
@@ -181,9 +181,6 @@ angular.module('flowsimUiApp')
             // Run the used/available book keeping on the profile
             $scope.free(profile);
 
-            // Remove action from set
-            $scope.actionset.removeAction(a[0].protocol, a[0].field, a[0].op);
-         
             // Flush the inputs on modification
             $scope.active.type     = null;
             $scope.active.value    = '';
@@ -198,7 +195,7 @@ angular.module('flowsimUiApp')
         // Add the action ... invoke the callback
         $scope.addAction = function() {
           var action;
-          if($scope.active.op === 'set' && 
+          if($scope.active.op === 'set' &&
             !$scope.active.type.valueTest($scope.active.value)) {
             throw 'Add apply action failed: '+$scope.active.value;
           }
@@ -209,7 +206,7 @@ angular.module('flowsimUiApp')
 
           // Run the available/used profile book keeping
           $scope.use($scope.active.type);
-        
+
           // Clearn the selectors and inputs
           $scope.active.type     = null;
           $scope.active.value    = '';

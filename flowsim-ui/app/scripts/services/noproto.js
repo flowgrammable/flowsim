@@ -89,7 +89,7 @@ function Match(match, protocol, summary, field, bitwidth, tip, value, mask) {
     );
   } else {
     // otherwise use the mask
-    this._match = new UInt.Match(null, 
+    this._match = new UInt.Match(null,
       new UInt.UInt(null, consFunc(this.value), Math.ceil(this.bitwidth / 8)),
       new UInt.UInt(null, consFunc(this.mask), Math.ceil(this.bitwidth / 8))
     );
@@ -129,7 +129,7 @@ Extractor.prototype.extract = function(key, fieldValue) {
   key[this.protocol][this.field] = fieldValue;
 };
 
-function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled, 
+function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled,
                       wildcardable, maskable) {
   if(_(mp).isObject()) {
     _.extend(this, mp);
@@ -149,7 +149,7 @@ function MatchProfile(mp, protocol, summary, field, bitwidth, tip, enabled,
 
   // Match Constructor
   this.mkType = function(value, mask) {
-    return new Match(null, this.protocol, this.summary, this.field, 
+    return new Match(null, this.protocol, this.summary, this.field,
                      this.bitwidth, this.tip, value, mask);
   };
 
@@ -288,7 +288,7 @@ function Action(action, protocol, field, bitwidth, op, value) {
 
   if(this.op === 'set'){
   consFunc = getConsFunction(this.protocol, this.field);
-  this._value = new UInt.UInt(null, consFunc(this.value), 
+  this._value = new UInt.UInt(null, consFunc(this.value),
                               Math.ceil(this.bitwidth / 8));
   }
 }
@@ -369,7 +369,7 @@ Action.prototype.toView = function(){
 };
 
 function mkAction(protocol, field, op, bitwidth, value){
-  var profile = new ActionProfile(null, protocol, field, 
+  var profile = new ActionProfile(null, protocol, field,
         bitwidth, null, op);
   return profile.mkType(value);
 }
@@ -389,7 +389,7 @@ function ActionProfile(ap, protocol, field, bitwidth, tip, op, enabled) {
   }
   // Action Constructor
   this.mkType = function(value) {
-    return new Action(null, this.protocol, this.field, this.bitwidth, this.op, 
+    return new Action(null, this.protocol, this.field, this.bitwidth, this.op,
                       value);
   };
 
@@ -439,7 +439,7 @@ function Field(params) {
   // Display string for this field
   this.name = params.name;
   // Display string that is small
-  this.summary = params.shortName || this.name.toLowerCase().slice(0, 4);
+  this.summary = params.summary || this.name.toLowerCase().slice(0, 4);
   // Bit precision of this field
   this.bitwidth = params.bitwidth;
   // Can this field be matched against
@@ -452,7 +452,7 @@ function Field(params) {
   this.copyIn = params.copyIn || false;
   // Can this field be copied out
   this.copyOut = params.copyOut || false;
-  // String input test function 
+  // String input test function
   this.testStr = params.testStr || null;
   // Display string conversion function
   this.dispStr = params.dispStr || null;
@@ -534,6 +534,7 @@ function Protocol(params) {
   // Construct the protocol fields
   this.fields = _(params.fields).map(function(field) {
     field.protocol   = this.name;
+    field.summary    = this.shortName;
     return new Field(field);
   }, this);
   // Attach a name/key for each field
