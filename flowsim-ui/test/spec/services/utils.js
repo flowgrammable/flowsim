@@ -11,8 +11,4 @@ describe('Service: utils', function () {
     utils = _Utils_;
   }));
 
-  it('should do something', function () {
-    expect(!!utils).toBe(true);
-  });
-
 });

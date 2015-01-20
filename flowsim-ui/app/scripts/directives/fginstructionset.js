@@ -22,17 +22,16 @@ angular.module('flowsimUiApp')
                  * @return {[String]}     [name:(value1, value2)]
                  */
                 $scope.instructionsTooltip = function(ins) {
+                    var tip = '';
+                    if(ins.tip){
+                        tip += ins.tip;
+                    }
+                    if(ins.value){
+                        tip += '\n Set to ';
+                        tip += ins.value;
+                    }
+                    return tip;
 
-                    var retVal = ins.tip;
-                    /*if (!_.isUndefined(ins.) && !_.isNull(ins.value1)) {
-                        retVal += '( ' + ins.value1;
-                        if (!_.isUndefined(ins.value2) && !_.isNull(ins.value2)) {
-                            retVal += ' , ' + ins.value2;
-                        }
-                        retVal += ' )';
-                    } */
-
-                    return retVal;
                 };
 
             },
@@ -54,16 +53,22 @@ angular.module('flowsimUiApp')
                         }
                     }
 
-                    scope.instructionList = scope.view.instructionSet;
+                    scope.instructionList = _(scope.view.instructionSet).map(function(ins){
+                        return ins.name;
+                    });
+
+                    scope.insSetListApplyIdx = _.indexOf(scope.instructionList, 'Apply');
+                    scope.insSetListWriteIdx = _.indexOf(scope.instructionList, 'Write');
                     scope.insListView = '';
                     scope.instructions = function() {
-                        scope.insListView = '';
-                        scope.view.instructionSet.forEach(function(value , index , arr) {
-                            scope.insListView += value.name.substring(0, 1).toLowerCase();
-                            if(index < arr.length -1 ){
-                                scope.insListView += ' / ';
+                        var insListView = '';
+                        _(scope.instructionSet).each(function(ins, idx){
+                            insListView += ins.name.substring(0, 2).toLowerCase();
+                            if(idx < scope.instructionList.length - 1){
+                                insListView += ' / ';
                             }
                         });
+                        return insListView;
                     };
                     
 

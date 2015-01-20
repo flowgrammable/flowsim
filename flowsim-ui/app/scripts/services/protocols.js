@@ -129,6 +129,7 @@ MatchProfiles.prototype.toBase = function() {
   };
 };
 
+
 function ActionProfiles(ap) {
   if(_(ap).isObject()) {
     this.profiles = _(ap.profiles).map(function(profile) {
@@ -152,6 +153,7 @@ ActionProfiles.prototype.toBase = function() {
     })
   };
 };
+
 
 // Dependency graph
 var _Graph = {

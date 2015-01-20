@@ -156,7 +156,8 @@ angular.module('flowsimUiApp')
   $scope.step = function() {
     $scope.simulation.step();
     $scope.makeTransition = { 
-      to: hideDetails($scope.simulation.stage) 
+      to: $scope.simulation.stage
+          //hideDetails($scope.simulation.stage) 
     };
     $scope.ctx = $scope.simulation.toView();
     $scope.view = $scope.simulation.toView();

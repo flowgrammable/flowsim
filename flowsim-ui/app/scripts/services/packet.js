@@ -9,7 +9,7 @@
  */
 
 angular.module('flowsimUiApp')
-  .factory('Packet', function(Ethernet, Protocols, Noproto, UInt, Errors) {
+  .factory('Packet', function(Ethernet, Protocols, UInt, Errors) {
 
 function createProtocol(proto){
   var noProto;

@@ -271,6 +271,7 @@ MatchSet.prototype.toView = function () {
   return [];
 };
 
+
 function Action(action, protocol, field, bitwidth, op, value) {
   var consFunc;
   if(_(action).isObject()) {
@@ -350,10 +351,19 @@ Action.prototype.step = function(dp, ctx) {
 };
 
 Action.prototype.toView = function(){
-  var targetSym = this.protocol + this.field;
+  var opSym = '';
+  switch(this.op){
+    case 'set':
+      opSym = '=';
+      break;
+    default:
+      opSym = this.op;
+      break;
+  }
   return {
-    op: this.op,
-    target: targetSym,
+    protocol: this.protocol,
+    field: this.field,
+    op: opSym,
     value: this.value
   };
 };
@@ -411,6 +421,7 @@ ActionProfile.prototype.toBase = function() {
     enabled: this.enabled
   };
 };
+
 
 
 function Field(params) {
@@ -523,7 +534,6 @@ function Protocol(params) {
   // Construct the protocol fields
   this.fields = _(params.fields).map(function(field) {
     field.protocol   = this.name;
-    field.shortName  = this.shortName;
     return new Field(field);
   }, this);
   // Attach a name/key for each field
@@ -596,14 +606,7 @@ Protocol.prototype.clone = function(){
   return new Protocol(this);
 };
 
-var opPriority = {
-  'copy-in': 10,
-  'pop': 9,
-  'push': 8,
-  'copy-out': 7,
-  'dec': 6,
-  'set': 5,
-};
+
 
 // Extraction
 
@@ -613,8 +616,7 @@ return {
   Action: Action,
   mkAction: mkAction,
   ActionProfile: ActionProfile,
-  Protocol: Protocol,
-  opPriority: opPriority
+  Protocol: Protocol
 };
 
 });

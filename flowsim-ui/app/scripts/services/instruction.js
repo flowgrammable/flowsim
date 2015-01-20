@@ -178,6 +178,13 @@ function Meter(meter){
   this.idTest = UInt.is(32);
 }
 
+Meter.prototype.toView = function(){
+  return {
+    name: this.name,
+    tip: this.tip
+  };
+};
+
 Meter.prototype.toBase = function(){
   return {
     enabled: this.enabled,
@@ -222,6 +229,7 @@ Apply.prototype.toBase = function(){
 Apply.prototype.toView = function(){
   return {
     name: this.name,
+    tip: this.tip,
     actions: _(this.actions).map(function(act){
       return act.toView();
     })
@@ -240,6 +248,13 @@ function Clear(clear){
 
 Clear.prototype.step = function(dp, ctx){
   ctx.actionSet.clear();
+};
+
+Clear.prototype.toView = function(){
+  return {
+    name: this.name,
+    tip: this.tip
+  };
 };
 
 Clear.prototype.toBase = function(){
@@ -283,6 +298,7 @@ Write.prototype.toBase = function(){
 Write.prototype.toView = function(){
   return {
     name: this.name,
+    tip: this.tip,
     actions: _(this.actions.actions).map(function(act){
       return act.toView();
     })
@@ -304,6 +320,14 @@ function Metadata(meta){
   this.valueTest = UInt.is(64);
   this.maskTest  = UInt.is(64);
 }
+
+Metadata.prototype.toView = function(){
+  return {
+    name: this.name,
+    tip: this.tip,
+    value: this.value
+  };
+};
 
 Metadata.prototype.toBase = function(){
   return {
@@ -354,6 +378,14 @@ Goto.prototype.toBase = function(){
   return {
     enabled: this.enabled,
     target: this.target
+  };
+};
+
+Goto.prototype.toView = function(){
+  return {
+    name: this.name,
+    tip: this.tip,
+    value: this.target
   };
 };
 
@@ -426,7 +458,7 @@ Set.prototype.toView = function() {
   var view = [];
   if(this.meter.enabled) {
   //FIXME
-  view.push(this.meter);
+  view.push(this.meter.toView());
   }
   if(this.apply.enabled) {
   //FIXME
@@ -434,7 +466,7 @@ Set.prototype.toView = function() {
   }
   if(this.clear.enabled) {
   //FIXME
-  view.push(this.clear);
+  view.push(this.clear.toView());
   }
   if(this.write.enabled) {
   //FIXME
@@ -442,11 +474,11 @@ Set.prototype.toView = function() {
   }
   if(this.metadata.enabled) {
   //FIXME
-  view.push(this.write.toView());
+  view.push(this.metadata.toView());
   }
   if(this.goto_.enabled) {
   //FIXME
-  view.push(this.goto_);
+  view.push(this.goto_.toView());
   }
   return view;
 };

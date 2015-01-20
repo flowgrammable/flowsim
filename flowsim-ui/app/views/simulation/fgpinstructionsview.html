@@ -1,6 +1,6 @@
 <div>
-    <div ng-show="instructionList.length > 0" class="sim-ins-actionGroup">Instructions</div>
-    <div ng-show="instructionList.length > 0" class="sim-ins-instructions">{{insListView}}</div>
+    <div ng-show="view.instructionSet.length > 0" class="sim-ins-actionGroup">Instructions</div>
+    <div ng-show="view.instructionSet.length > 0" class="sim-ins-instructions">{{instructions()}}</div>
     <div class="sim-ins-actionGroup">
 
         <div class="sim-ins-actionlist">
@@ -10,9 +10,9 @@
 
                 <div class="sim-ins-animate-repeat"
                      ng-class="(applyActionList.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
-                     ng-repeat="action in applyActionList" tooltip="{{action.value1}}{{action.value2}}"
+                     ng-repeat="action in applyActionList" tooltip="{{action.value}}"
                      tooltip-append-to-body="true">
-                    {{action.op +' ('+action.target+') '+action.value}}
+                    {{action.protocol +'('+action.field+action.op+')'}}
                 </div>
             </div>
         </div>
@@ -22,25 +22,25 @@
             <div ng-show="writeActionSet.length > 0" class="sim-ins-animate-container">
                 <div class="sim-ins-animate-repeat"
                      ng-class="(writeActionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
-                     ng-repeat="action in writeActionSet" tooltip="{{action.value1}}{{action.value2}}"
+                     ng-repeat="action in writeActionSet" tooltip="{{action.value}}"
                      tooltip-append-to-body="true">
-                    {{action.op +' ('+action.target+') '+action.value}}
+                    {{action.protocol +'('+action.field+action.op+')'}}
                 </div>
             </div>
         </div>
-        <div ng-style="{'height':  80  + (6 - instrucionList.length )* 25  , 'border-width' : instrucionList.length > 4 && applyActionList.length > 0 ? '0 0 2 2':'0'}"
+        <div ng-style="{'height': 17 + (6 - insSetListApplyIdx )* 25  , 'border-width' : view.instructionSet.length > 0 && applyActionList.length > 0 ? '0 0 2 2':'0'}"
              class="sim-exec-connection">
-            <div ng-style="{'height':  30  + (6 - instrucionList.length )* 25,'width':'35%','border-width' : instrucionList.length > 2 && writeActionSet.length > 0 ? '0 0 2 2':'0'}"
+            <div ng-style="{'height': 17 + (6 - insSetListWriteIdx )* 25,'width':'35%','border-width' : view.instructionSet.length > 0 && writeActionSet.length > 0 ? '0 0 2 2':'0'}"
                  class="sim-exec-connection"></div>
         </div>
     </div>
     <div class="sim-ins-instructionset">
-        <div style="height:128px"></div>
-        <div ng-show="instructionList.length > 0">Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <div ng-show="instructionList.length > 0" class="sim-ins-animate-container">
+        <div style="height:190px"></div>
+        <div ng-show="view.instructionSet.length > 0">Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div ng-show="view.instructionSet.length > 0" class="sim-ins-animate-container">
             <div class="sim-ins-animate-repeat"
-                 ng-class="(instrucionList.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
-                 ng-repeat="ins in instructionList"  tooltip="{{instructionsTooltip(ins)}}" tooltip-append-to-body="true">
+                 ng-class="(view.instructionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
+                 ng-repeat="ins in view.instructionSet"  tooltip="{{instructionsTooltip(ins)}}" tooltip-append-to-body="true">
                 {{ins.name}}
             </div>
         </div>

@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Utils', function(Protocols, Noproto) {
+  .factory('Utils', function(Noproto, Protocols) {
 
 function mkAction(protoName, fieldName, op, value){
 	var bitwidth = '';
@@ -20,6 +20,7 @@ function mkAction(protoName, fieldName, op, value){
 		null, op, null);
 	return actProf.mkType(value);
 }
+
 
 return {
 	mkAction: mkAction

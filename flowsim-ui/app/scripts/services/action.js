@@ -8,8 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Action', function(Protocols, Ethernet, VLAN, MPLS, ARP, IPv4, 
-        IPv6, TCP, UDP, SCTP, ICMPv4, ICMPv6, Noproto, Utils) {
+  .factory('Action', function(Utils, UInt, Protocols) {
 
 function Set(set){
   if(_.isObject(set)){
@@ -35,6 +34,15 @@ Set.prototype.clear = function(){
   this.actions = [];
 };
 
+var opPriority = {
+  'copy-in': 10,
+  'pop': 9,
+  'push': 8,
+  'copy-out': 7,
+  'dec': 6,
+  'set': 5,
+};
+
 function internalSort(a, b){
   var intPriority = {'Queue': 3, 'Group': 2, 'Output': 1};
   if(intPriority[a] > intPriority[b]){
@@ -47,18 +55,28 @@ function internalSort(a, b){
 }
 
 function actSort(a, b){
-  if(Noproto.opPriority[a.op] > Noproto.opPriority[b.op]){
+  if(opPriority[a.op] > opPriority[b.op]){
     return -1;
   }
-  if(Noproto.opPriority[a.op] < Noproto.opPriority[b.op]){
+  if(opPriority[a.op] < opPriority[b.op]){
     return 1;
   }
-  if(Noproto.opPriority[a.op] === Noproto.opPriority[b.op]){
+  if(opPriority[a.op] === opPriority[b.op]){
     if(a.field === 'Group' || a.field === 'Queue' || a.field === 'Output'){
       return internalSort(a.field, b.field);
     }
-    return Protocols.protoSort(a.protocol, b.protocol);
+    return protoSort(a.protocol, b.protocol);
   }
+}
+
+function protoSort(a, b){
+  if(Protocols.protoPriority[a] > Protocols.protoPriority[b]){
+    return -1;
+  }
+  if(Protocols.protoPriority[a] < Protocols.protoPriority[b]){
+    return 1;
+  }
+  return 0;
 }
 
 Set.prototype.add = function(action){
@@ -94,6 +112,7 @@ Set.prototype.toView = function(){
 Set.prototype.isEmpty = function(){
   return this.actions.length === 0;
 };
+
 
 return {
   Set: Set
