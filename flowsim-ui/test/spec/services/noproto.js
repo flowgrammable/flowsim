@@ -139,6 +139,25 @@ describe('Service: noproto', function () {
     expect(set.set.length).toBe(0);
   });
 
+  it('MatchSet single equality pass', function(){
+    var set = new Noproto.MatchSet();
+    var set2 = new Noproto.MatchSet();
+    var proto = Protocols.Protocols[1].clone();
+    var matchProfiles = proto.getMatchProfiles();
+    var ethsrcMatch = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
+    var ethdstMatch = Protocols.mkMatch('Ethernet', 'Dst', 'a:b:c:d:e:f', '');
+
+    // Test same order
+    set.push(ethsrcMatch);
+    expect(set.set.length).toBe(1);
+    set2.push(ethdstMatch);
+    expect(set.set.length).toBe(1);
+    expect(set2.equal(set)).toBe(false);
+
+
+
+  });
+
   it('MatchSet equality pass', function(){
     var set = new Noproto.MatchSet();
     var set2 = new Noproto.MatchSet();

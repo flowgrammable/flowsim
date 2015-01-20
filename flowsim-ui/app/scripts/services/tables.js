@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Tables', function(Regex, fgConstraints, Match, Flow, 
+  .factory('Tables', function(Regex, fgConstraints, Match, Flow,
                               Protocols, Instruction) {
 
 /* Default Construction Constants */
@@ -88,7 +88,7 @@ function Table(table, tableProfile) {
     this.capabilities = new TableProfile(table.capabilities);
     this.priorities   = _(table.priorities).map(
       function(priority) {
-        return new Priority(priority); 
+        return new Priority(priority);
       });
     this.prioritiesPresent = _(table.priorities).each(function(priority) {
       this.prioritiesPresent[priority.priority] = true;
@@ -159,7 +159,7 @@ Table.prototype.select = function(key) {
 Table.prototype.add = function(priority, flow) {
   var priTable;
   // Add the priority sub-table if not present
-  if(!_(this.prioritiesPresent).has(priority.toString())) {
+  if(!_(this.prioritiesPresent).has(priority)) {
     this.prioritiesPresent[priority.toString()] = true;
     priTable = new Priority(null, priority);
     this.priorities.push(priTable);

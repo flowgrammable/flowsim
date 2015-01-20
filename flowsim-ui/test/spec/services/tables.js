@@ -129,6 +129,23 @@ describe('Service: Tables', function () {
 
   });
 
+  it('Table add same priority flow pass', function(){
+    var table = new Tables.Table(null, tableProfile);
+    var flow = new Flow.Flow(null, 1);
+    var flow2 = new Flow.Flow(null, 1);
+    var ethmatch1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
+    var ethmatch2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    flow.match.push(ethmatch1);
+    flow2.match.push(ethmatch2);
+
+    table.add(1, flow);
+    expect(table.priorities.length).toBe(1);
+    expect(table.prioritiesPresent[1]).toBe(true);
+    table.add(1, flow2);
+    expect(table.priorities.length).toBe(1);
+
+  });
+
   it('Priority add duplicate flow', function(){
     var pri = new Tables.Priority(null, 1);
     var flow = new Flow.Flow(null, 1);
@@ -143,6 +160,21 @@ describe('Service: Tables', function () {
     expect(pri.flows.length).toBe(1);
     pri.add(flow2);
     expect(pri.flows.length).toBe(1);
+
+  });
+
+   it('Priority add additional flow', function(){
+    var pri = new Tables.Priority(null, 1);
+    var flow = new Flow.Flow(null, 1);
+    var flow2 = new Flow.Flow(null, 1);
+    var ethmatch1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
+    var ethmatch2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    flow.match.push(ethmatch1);
+    flow2.match.push(ethmatch2);
+    pri.add(flow);
+    expect(pri.flows.length).toBe(1);
+    pri.add(flow2);
+    expect(pri.flows.length).toBe(2);
 
   });
 

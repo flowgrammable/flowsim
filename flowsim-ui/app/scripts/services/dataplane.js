@@ -86,6 +86,9 @@ Dataplane.prototype.selection = function() {
   var flow = this.table.select(this.ctx.key);
   if(flow) {
     this.ctx.setInstructions(flow.ins.clone());
+  } else {
+    // could not find flow
+    // TODO: alert user
   }
 };
 

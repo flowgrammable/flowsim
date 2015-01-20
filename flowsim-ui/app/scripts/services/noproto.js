@@ -239,6 +239,9 @@ MatchSet.prototype.equal = function(matchSet) {
   for(idx=0; idx < this.set.length; ++idx) {
     tmp = _.findWhere(matchSet.set, {protocol: this.set[idx].protocol,
       field: this.set[idx].field});
+    if(!tmp){
+      return false;
+    }
     if(!this.set[idx].equal(tmp)){
       return false;
     }
