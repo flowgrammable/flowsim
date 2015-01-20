@@ -12,28 +12,31 @@ angular.module('flowsimUiApp')
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
-    if(key.in_port) {
-      this.in_port = new UInt.UInt(key.in_port);
+    if(key.Internal.In_Port) {
+      this.Internal.In_Port = new UInt.UInt(key.Internal.In_Port);
     }
-    if(key.in_phy_port) {
-      this.in_phy_port = new UInt.UInt(key.in_phy_port);
+    if(key.Internal.In_Phy_Port) {
+      this.Internal.In_Phy_Port = new UInt.UInt(key.Internal.In_Phy_Port);
     }
-    if(key.tunnel_id) {
-      this.tunnel_id = new UInt.UInt(key.tunnel_id);
+    if(key.Internal.Tunnel_Id) {
+      this.Internal.Tunnel_Id = new UInt.UInt(key.Internal.Tunnel_Id);
     }
-    this.metadata = new UInt.UInt(key.metadata);
+    this.Internal.Metadata = new UInt.UInt(key.Internal.Metadata);
     this.VLAN     = _.map(key.VLAN, function(tag) { return tag.clone(); });
     this.MPLS     = _.map(key.MPLS, function(tag) { return tag.clone(); });
+
   } else if(_.isFinite(in_port)) {
     // Initialize input information
-    this.in_port     = new UInt.UInt(null, in_port, 4);
+    this.Internal = {};
+    this.Internal.In_Port = new UInt.UInt(null, in_port, 4);
+
     if(in_phy_port !== undefined && in_phy_port !== null) {
-      this.in_phy_port = new UInt.UInt(null, in_phy_port, 4);
+      this.Internal.In_Phy_Port = new UInt.UInt(null, in_phy_port, 4);
     }
     if(tunnel_id !== undefined && tunnel_id !== null) {
-      this.tunnel_id   = new UInt.UInt(null, tunnel_id, 4);
+      this.Internal.Tunnel_Id   = new UInt.UInt(null, tunnel_id, 4);
     }
-    this.metadata    = new UInt.UInt(null, null, 8);
+    this.Internal.Metadata    = new UInt.UInt(null, null, 8);
 
     // Initialize array for stacks
   } else {
@@ -46,35 +49,36 @@ Key.prototype.clone = function() {
 };
 
 Key.prototype.toView = function() {
+
   var result = [{
     name: 'Internal',
     attrs: [{
       name: 'in_port',
-      value: this.in_port.toString()
+      value: this.Internal.In_Port.toString()
     }]
   }];
-  
-  if(this.in_phy_port !== undefined && this.in_phy_port !== null) {
+
+  if(this.Internal.In_Phy_Port !== undefined && this.Internal.In_Phy_Port !== null) {
     result[0].attrs.push({
       name: 'in_phy_port',
-      value: this.in_phy_port.toString()
+      value: this.Internal.In_Phy_Port.toString()
     });
   }
 
-  if(this.tunnel_id !== undefined && this.tunnel_id !== null) {
+  if(this.Internal.Tunnel_Id !== undefined && this.Internal.Tunnel_Id !== null) {
     result[0].attrs.push({
       name: 'tunnel_id',
-      value: this.tunnel_id.toString()
+      value: this.Internal.Tunnel_Id.toString()
     });
   }
-  if(this.metadata !== undefined && this.metadata !== null) {
+  if(this.Internal.Metadata !== undefined && this.Internal.Metadata !== null) {
     result[0].attrs.push({
       name: 'metadata',
-      value: this.metadata.toString(16)   
+      value: this.Internal.Metadata.toString(16)
     });
   }
   _(Protocols.Protocols).each(function(proto){
-    if(_(this).has(proto.name)){
+    if(_(this).has(proto.name) && proto.name !== 'Internal'){
       result.push({
         name: proto.name,
         attrs: _(proto.fields).map(function(field){

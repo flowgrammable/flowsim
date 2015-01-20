@@ -67,7 +67,7 @@ describe('Service: noproto', function () {
         bitwidth: 16,
         matchable: true,
         testStr: UInt.is(16),
-        dispStr: function(val) { 
+        dispStr: function(val) {
           return '0x' + UInt.padZeros(val.toString(16), 4);
         },
         tip: 'Ethernet Payload Type/Length'
@@ -146,7 +146,7 @@ describe('Service: noproto', function () {
     var matchProfiles = proto.getMatchProfiles();
     var ethsrcMatch = matchProfiles[0].mkType('aa:bb:Cc:dd:Ee:Ff', '');
     var ethdstMatch = matchProfiles[1].mkType('bb:bb:bb:bb:bb:bb', '');
-    
+
     // Test same order
     set.push(ethsrcMatch);
     set.push(ethdstMatch);
@@ -171,7 +171,7 @@ describe('Service: noproto', function () {
     var ethsrcMatch = matchProfiles[0].mkType('aa:bb:Cc:dd:Ee:Ff', '');
     var ethdstMatch = matchProfiles[1].mkType('bb:bb:bb:bb:bb:bb', '');
     var ethdstMatch2 = matchProfiles[1].mkType('cb:bb:bb:bb:bb:bb', '');
-    
+
     // Test same order
     set.push(ethsrcMatch);
     set.push(ethdstMatch);
@@ -210,8 +210,8 @@ describe('Service: noproto', function () {
 
    it('Match.matches wildcard match pass', function(){
     var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:0:0:0:0:0', '0:0:0:0:0:0');
-    var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:a'); 
-    expect(match1.matches(field1)).toBe(true); 
+    var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:a:a:a:a:a');
+    expect(match1.matches(field1)).toBe(true);
    });
 
    it('Match.matches masked pass', function(){
@@ -224,7 +224,7 @@ describe('Service: noproto', function () {
     var match1 = Protocols.mkMatch('Ethernet', 'Src', '0:1:0:1:0:1', '0:1:0:1:0:1');
     var field1 = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:2:b:2:c:2');
     expect(match1.matches(field1)).toBe(false);
-   }); 
+   });
 
    it('MatchSet key exact pass', function(){
     var matchSet = new Noproto.MatchSet();
@@ -244,7 +244,7 @@ describe('Service: noproto', function () {
       Src: src
     }};
 
-    expect(matchSet.match(key)).toBe(true); 
+    expect(matchSet.match(key)).toBe(true);
     });
 
   it('MatchSet key exact fail', function(){
@@ -265,7 +265,7 @@ describe('Service: noproto', function () {
       Src: src
     }};
 
-    expect(matchSet.match(key)).toBe(false); 
+    expect(matchSet.match(key)).toBe(false);
   });
 
   it('MatchSet key wildcard pass exact order', function(){
@@ -284,7 +284,7 @@ describe('Service: noproto', function () {
       Src: src
     }};
 
-    expect(matchSet.match(key)).toBe(true); 
+    expect(matchSet.match(key)).toBe(true);
   });
 
   it('MatchSet key wildcard pass ', function(){
@@ -307,7 +307,7 @@ describe('Service: noproto', function () {
       Type: type
     }};
 
-    expect(matchSet.match(key)).toBe(true); 
+    expect(matchSet.match(key)).toBe(true);
   });
 
   it('MatchSet key wildcard fail ', function(){
@@ -332,7 +332,7 @@ describe('Service: noproto', function () {
       Type: type
     }};
 
-    expect(matchSet.match(key)).toBe(false); 
+    expect(matchSet.match(key)).toBe(false);
   });
 
   it('MatchSet empty pass ', function(){
@@ -347,7 +347,21 @@ describe('Service: noproto', function () {
       Type: type
     }};
 
-    expect(matchSet.match(key)).toBe(true); 
+    expect(matchSet.match(key)).toBe(true);
+  });
+
+  it('MatchSet key internal wildcard pass exact order', function(){
+    var matchSet = new Noproto.MatchSet();
+    var match1 = Protocols.mkMatch('Internal', 'In_Port', '1', '0');
+
+    var int1 = Protocols.mkFieldUInt('Internal', 'In_Port', '1');
+
+    matchSet.push(match1);
+    expect(matchSet.set[0].matches(int1)).toBe(true);
+
+    var key = {Internal: {In_Port: int1}};
+
+    expect(matchSet.match(key)).toBe(true);
   });
 
   it('Action SetField', function(){
