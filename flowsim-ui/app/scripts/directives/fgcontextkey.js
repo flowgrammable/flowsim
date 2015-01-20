@@ -14,6 +14,13 @@ angular.module('flowsimUiApp')
             restrict: 'E',
             scope: {
                 ctx: '='
+            },
+            link: function(scope){
+                scope.$watch('ctx.key', function(){
+                    if(!scope.ctx || !scope.ctx.key){
+                        return;
+                    }
+                }, true);
             }
         };
     });

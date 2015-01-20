@@ -1,24 +1,10 @@
 
 <div class="row">
-  <div class="col-md-4">
-    <table class="table table-striped">
-      <thead>
-        <th>#</th>
-        <th>Packet</th>
-        <th>In Port</th>
-      </thead>
-      <tbody>
-        <tr ng-repeat="packet in trace.packets">
-          <td>{{$index+1}}</td>
-          <td>{{packet.name}}</td>
-          <td>{{packet.in_port}}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="col-md-6">
+    <fg-packet-view packet="simulation.dataplane.ctx.packet" width="100%"></fg-packet-view>
+
   </div>
-  <div class="col-md-8">
-    <div style="text-align:center">
-      <img src="images/design/extraction.png">
-    </div>
+  <div class="col-md-6">
+    <fg-context-key ctx="view"></fg-context-key>
   </div>
 </div>

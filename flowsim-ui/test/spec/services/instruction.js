@@ -315,7 +315,20 @@ describe('Service: instruction', function () {
   });
 
   it('Meter instruction step', function(){
-    expect(false).toBe(true);
+    var is = new Instruction.Set();
+    is.meter.enabled = true;
+    is.clear.enabled = false;
+    is.goto_.enabled = false;
+    is.metadata.enabled = false;
+    is.write.enabled = false;
+    is.apply.enabled = false;
+
+    var ctx = {meter: -1 };
+    is.meter.id = 10;
+    is.step(null, ctx);
+    expect(is.isEmpty()).toBe(true);
+    expect(is.meter.enabled).toBe(false);
+
   });
 
 });

@@ -178,10 +178,17 @@ function Meter(meter){
   this.idTest = UInt.is(32);
 }
 
+Meter.prototype.step = function(dp, ctx){
+  var tarMtr = parseInt(this.id);
+  //check for meter
+  ctx.meter = tarMtr;
+};
+
 Meter.prototype.toView = function(){
   return {
     name: this.name,
-    tip: this.tip
+    tip: this.tip,
+    value: this.id
   };
 };
 

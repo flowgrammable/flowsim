@@ -25,8 +25,10 @@ function extractProtocol(ctx, proto){
     _(proto.fields).each(function(field){
       extractField(ctx, proto, field);
     });
+    return true;
   } else {
     extractTag(ctx, proto);
+    return true;
   }
 }
 
@@ -35,17 +37,38 @@ function extractTag(ctx, proto){
   _(proto.fields).each(function(field){
     tag[field.name] = field.value;
   });
+  if(!ctx.key[proto.name]){
+    ctx.key[proto.name] = [];
+  }
   ctx.key[proto.name].push(tag);
 }
 
 function extract(ctx) {
-  _(ctx.packet.protocols).each(function(proto){
-    extractProtocol(ctx, proto);
-  }, this);
+  return extractProtocol(ctx, proto);
+}
+
+function Extractor(ctx){
+
+}
+
+Extractor.prototype.extract = function(ctx){
+  if(!this.clonedPacket){
+    this.clonedPacket = ctx.packet.clone();
+  }
+  if(this.clonedPacket.protocols.length > 0){
+    return extractProtocol(ctx, this.clonedPacket.protocols.shift());
+  } else {
+    return false;
+  }
+}
+
+Extractor.prototype.isDone = function(){
+  return !this.clonedPacket.protocols.length;
 }
 
 return {
   extract: extract,
+  Extractor: Extractor
 };
 
 });

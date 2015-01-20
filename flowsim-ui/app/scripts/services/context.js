@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Context', function(Action, Instruction, UInt, Packet) {
+  .factory('Context', function(Action, Instruction, UInt, Packet, Protocols) {
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
@@ -36,8 +36,6 @@ function Key(key, in_port, in_phy_port, tunnel_id) {
     this.metadata    = new UInt.UInt(null, null, 8);
 
     // Initialize array for stacks
-    this.VLAN = [];
-    this.MPLS = [];
   } else {
     throw 'Bad Key('+in_port+')';
   }
@@ -75,6 +73,20 @@ Key.prototype.toView = function() {
       value: this.metadata.toString(16)   
     });
   }
+  _(Protocols.Protocols).each(function(proto){
+    if(_(this).has(proto.name)){
+      result.push({
+        name: proto.name,
+        attrs: _(proto.fields).map(function(field){
+          return {
+            name: field.name,
+            // TODO rework
+            value: Protocols.getField(proto.name, field.name).dispStr(this[proto.name][field.name].value)
+          };
+        }, this)
+      });
+    }
+  }, this);
   return result;
 };
 
