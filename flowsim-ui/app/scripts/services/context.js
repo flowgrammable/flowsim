@@ -12,6 +12,7 @@ angular.module('flowsimUiApp')
 
 function Key(key, in_port, in_phy_port, tunnel_id) {
   if(_.isObject(key)) {
+    _.extend(this, key);
     if(key.Internal.In_Port) {
       this.Internal.In_Port = new UInt.UInt(key.Internal.In_Port);
     }
@@ -27,7 +28,12 @@ function Key(key, in_port, in_phy_port, tunnel_id) {
 
   } else if(_.isFinite(in_port)) {
     // Initialize input information
-    this.Internal = {};
+    this.Internal = {
+      In_Port: 0,
+      In_Phy_Port: 0,
+      Tunnel_Id: 0,
+      Metadata: 0
+    };
     this.Internal.In_Port = new UInt.UInt(null, in_port, 4);
 
     if(in_phy_port !== undefined && in_phy_port !== null) {
@@ -125,6 +131,9 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
     // initialize an empty packet set
     this.actionSet      = new Action.Set();
     this.instructionSet = new Instruction.Set();
+
+    // Metadata
+
   } else {
     throw 'Bad Context('+packet+', '+buffer_id+', '+in_port+')';
   }

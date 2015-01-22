@@ -24,8 +24,7 @@ describe('Service: context', function () {
 
   it('Context Construction pass', function(){
     var pkt = new Packet.Packet('testpacket');
-    var ctx = new Context.Context(null, pkt, 1, 1, 1, null);
-
+    var ctx = new Context.Context(null, pkt, 1, 1, 1, 1);
     var j = JSON.stringify(ctx);
     var j_ = new Context.Context(JSON.parse(j));
     expect(j_.packet.protocols[0].fields[0].tip).toBe('Src MAC Address');

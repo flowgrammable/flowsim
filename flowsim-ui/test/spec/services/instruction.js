@@ -7,8 +7,10 @@ describe('Service: instruction', function () {
 
   // instantiate service
   var Instruction;
-  beforeEach(inject(function (_Instruction_) {
+  var Protocols;
+  beforeEach(inject(function (_Instruction_, _Protocols_) {
     Instruction = _Instruction_;
+    Protocols = _Protocols_;
   }));
 
   var Packet;
@@ -285,8 +287,54 @@ describe('Service: instruction', function () {
     }).toThrow();
   });
 
-  it('Metadata instruction step', function(){
-    expect(false).toBe(true);
+  it('Metadata instruction step pass', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    is.meter.enabled = false;
+    is.clear.enabled = false;
+    is.goto_.enabled = false;
+    is.write.enabled = false;
+    is.apply.enabled = false;
+
+    is.metadata.enabled = true;
+    is.metadata.value = '0x1111111111111111';
+    is.metadata.mask = '0xffffffffffffffff';
+    var ctx =  {key: { Internal: { Metadata: 0 }}};
+    var dp = {context: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
+    
+    is.step(dp, ctx);
+    expect(ctx.key.Internal.Metadata.toString(16)).toBe('0x1111111111111111');
+
+    is.metadata.enabled = true;
+    is.metadata.value = '0x1111111111111111';
+    is.metadata.mask =  '0xf0ffffffffffff0f';
+    var ctx =  {key: { Internal: { Metadata: 0 }}};
+    var dp = {context: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xf0ffffffffffff0f'}}}}};
+    
+    is.step(dp, ctx);
+    expect(ctx.key.Internal.Metadata.toString(16)).toBe('0x1011111111111101');
+
+  });
+
+  it('Metadata instruction step fail', function(){
+    var is = new Instruction.Set();
+    is.meter.enabled = false;
+    is.meter.enabled = false;
+    is.clear.enabled = false;
+    is.goto_.enabled = false;
+    is.write.enabled = false;
+    is.apply.enabled = false;
+
+    is.metadata.enabled = true;
+    is.metadata.value = '0x1111111111111111';
+    is.metadata.mask = '0xf0ffffffffffffff';
+    var ctx =  {key: { Internal: { Metadata: 0 }}};
+    var dp = {context: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
+    
+    expect(function(){
+      is.step(dp, ctx);
+    }).toThrow();
+
   });
 
   it('Clear instruction step', function(){

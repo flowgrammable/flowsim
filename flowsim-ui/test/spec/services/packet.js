@@ -168,7 +168,7 @@ describe('Service: Packet', function () {
     expect(tags).toBe(2);
   });
 
-  it('Packet decField', function(){
+  it('Packet decField pass', function(){
     var packet = new Packet.Packet('test');
     // test IPv4
     packet.pushProtocol('0x0800');
@@ -189,6 +189,17 @@ describe('Service: Packet', function () {
     packet.setField('IPv6', 'TTL', '0x02');
     packet.decField('IPv6', 'TTL');
     expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('0x01');
+  });
+
+  it('Packet decField fail', function(){
+    var packet = new Packet.Packet('test');
+    // test IPv4
+    packet.pushProtocol('0x0800');
+    packet.setField('IPv4', 'TTL', '0x00');
+    expect(function(){
+      packet.decField('IPv4', 'TTL');
+    }).toThrow();
+
   });
 
   it('Packet copyTTLIn ipv4|ipv6|mpls pass', function(){

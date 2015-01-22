@@ -36,6 +36,12 @@ var Internal = {
     bitwidth: 32,
     setable: true,
     tip: 'Egress Queue ID'
+  }, {
+    name: 'Metadata',
+    bitwidth: 64,
+    setable: true,
+    matchable: true,
+    tip: 'Dataplane Metadata'
   }]
 };
 

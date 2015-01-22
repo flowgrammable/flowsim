@@ -74,11 +74,11 @@ function MetadataProfile(metadata){
     _.extend(this, metadata);
   } else {
     this.enabled = true;
+    this.maskableBits = '0xffffffffffffffff';
   }
 
   this.name = 'Metadata';
   this.tip = 'Updates the masked bits of the metadata property in the packet key';
-  this.maskableBits = '0xffffffffffffffff';
   this.maskableBitsTip = 'Indicates which bits are writable in this table';
   this.maskableBitsTest = UInt.is(64);
 }
@@ -328,6 +328,22 @@ function Metadata(meta){
   this.maskTest  = UInt.is(64);
 }
 
+Metadata.prototype.step = function(dp, ctx){
+  var profileMask, insMask, insValue;
+  // get metadata maskable bits from table capability
+  var metaField = Protocols.getField('Internal', 'Metadata');
+  profileMask = dp.table.capabilities.instruction.metadata.maskableBits;
+  profileMask = metaField.consStr(profileMask);
+  profileMask = new UInt.UInt(null, profileMask, 8);
+
+  insMask = new UInt.UInt(null, metaField.consStr(this.mask), 8);
+  if(!insMask.equal(profileMask)){
+    throw 'Metadata: Unable to mask on bits ' + this.mask;
+  }
+  insValue = new UInt.UInt(null, metaField.consStr(this.value), 8);
+  dp.context.key.Internal.Metadata = insValue.and(insMask);
+}
+
 Metadata.prototype.toView = function(){
   return {
     name: this.name,
@@ -453,6 +469,7 @@ Set.prototype.step = function (dp, ctx) {
     }
   } else if(this.metadata.enabled) {
     //FIXME
+    this.metadata.step(dp, ctx);
     this.metadata.enabled = false;
   } else if(this.goto_.enabled) {
     //FIXME

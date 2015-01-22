@@ -95,19 +95,7 @@ describe('Service: dataplane', function() {
   });
 
   it('Dataplane Extraction Pass', function(){
-    var prof = new Profile.Profile('test profile name');
-    var swi = Switch_.create(null, prof);
-    var dp = new Dataplane.Dataplane(swi);
-    var pack = new Packet.Packet('testpacket');
-    pack.pushProtocol('0x8100');
-    pack.pushProtocol('0x8100');
-    pack.pushProtocol('0x0800');
-    pack.pushProtocol('0x06');
-
-    dp.arrival(pack, 1, 1, 1);
-    dp.extraction();
-    expect(dp.ctx.key.Ethernet.Src.value.length).toBe(6);
-    expect(dp.ctx.key.VLAN.length).toBe(2);
+    expect(false).toBe(true);
   });
 
   it('Dataplane Choice Pass', function(){

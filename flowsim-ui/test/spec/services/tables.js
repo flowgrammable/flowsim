@@ -71,18 +71,23 @@ describe('Service: Tables', function () {
     var table = new Tables.Table(null, tableProfile);
     var pri = new Tables.Priority(null, 1);
     var pri2 = new Tables.Priority(null, 2);
+    var pri100 = new Tables.Priority(null, 100);
     var flow = new Flow.Flow(null, 1);
     var flow2 = new Flow.Flow(null, 2);
+    var flow100 = new Flow.Flow(null, 100);
     var ethmatch1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
     var ethmatch2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
     flow.match.push(ethmatch1);
     flow.match.push(ethmatch2);
+    flow100.match.push(ethmatch1);
+    flow100.match.push(ethmatch2);
     flow2.match.push(ethmatch1);
     flow2.match.push(ethmatch2);
     pri.add(flow);
     pri2.add(flow2);
+    pri100.add(flow100);
 
-
+    table.add(100, flow100);
     table.add(1, flow);
     table.add(2, flow2);
 
@@ -95,10 +100,39 @@ describe('Service: Tables', function () {
       }
     };
     var testflow = table.select(key);
-    expect(testflow.priority).toBe(2);
+    expect(testflow.priority).toBe(100);
 
   });
 
+  it('Table select exact over wild card', function(){
+    var table = new Tables.Table(null, tableProfile);
+    var pri = new Tables.Priority(null, 1);
+    var flow = new Flow.Flow(null, 1);
+    var flow2 = new Flow.Flow(null, 1);
+    var ethmatch1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
+    var ethmatch2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    flow.match.push(ethmatch1);
+    flow.match.push(ethmatch2);
+    flow.ins.apply.enabled = true;
+
+
+    table.add(2, flow2);
+    table.add(2, flow);
+    expect(table.priorities[0].flows.length).toBe(2);
+    
+
+    var ethSrc = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:b:c:d:e:f');
+    var ethDst = Protocols.mkFieldUInt('Ethernet', 'Dst', 'b:b:b:b:b:b');
+    var key ={
+      Ethernet: {
+        Src: ethSrc,
+        Dst: ethDst
+      }
+    };
+    var testflow = table.select(key);
+    expect(testflow.ins.apply.enabled).toBe(true);
+
+  });
 
   it('Table delete flow pass', function(){
     var table = new Tables.Table(null, tableProfile);

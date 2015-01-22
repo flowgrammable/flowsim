@@ -315,6 +315,9 @@ Packet.prototype.pushProtocol = function(protoValue) {
 
 Packet.prototype.decField = function(protoName, fieldName){
   var field = this.getField(protoName, fieldName);
+  if(field.value.value === 0){
+    throw 'Cannot Dec Field value 0';
+  }
   field.value.subt(new UInt.UInt(null, 1, Math.ceil(field.bitwidth/8)));
 };
 

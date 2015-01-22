@@ -103,6 +103,7 @@ function consStr(bits) {
       }
       // Work from the back of the input
       tmp.reverse();
+
       for(i=0; i<bytes; ++i) {
         // We are out of input just return a 0
         if(tmp.length === 0) {
@@ -114,7 +115,7 @@ function consStr(bits) {
         // Otherwise we have a full octet of input
         } else {
           // parse a full octect and remove
-          array.push(parseInt(tmp.splice(0, 2).join(''), 16));
+          array.push(parseInt(tmp.splice(0, 2).reverse().join(''), 16));
         }
       }
       // Fix the array orientation and return

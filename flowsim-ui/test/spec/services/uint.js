@@ -422,4 +422,11 @@ describe('Service: uint', function () {
     expect(ansc.value[5]).toBe(255);
   });
 
+  it('UInt bytes > 4 cons', function(){
+    var b = new UInt.UInt(null, 240, 1);
+    expect(b.toString(16)).toBe('0xf0');
+    var a = new UInt.UInt(null, [255, 240, 255, 255, 255, 255, 255, 255], 8);
+    expect(a.toString(16)).toBe('0xfff0ffffffffffff')
+  })
+
 });
