@@ -116,10 +116,10 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
     // store a reference to the packet and buffer id
     this.packet = packet.clone();
     this.buffer = buffer_id;
-    this.meter  = -1;
-    this.group  = -1;
-    this.output = -1;
-    this.queue  = -1;
+    this.meter  = '';
+    this.group  = '';
+    this.output = '';
+    this.queue  = '';
 
     // initialize the first table target
     this._nxtTable = 0;
@@ -145,7 +145,7 @@ Context.prototype.clone = function() {
 
 Context.prototype.toView = function() {
   var result = {
-    table: this._lstTable,
+    table: this._nxtTable,
     group: this.group,
     meter: this.meter,
     queue: this.queue.value,

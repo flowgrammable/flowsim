@@ -26,10 +26,6 @@ angular.module('flowsimUiApp')
                     if(ins.tip){
                         tip += ins.tip;
                     }
-                    if(ins.value){
-                        tip += '\n Set to ';
-                        tip += ins.value;
-                    }
                     return tip;
 
                 };

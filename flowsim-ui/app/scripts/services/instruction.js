@@ -187,7 +187,7 @@ Meter.prototype.step = function(dp, ctx){
 Meter.prototype.toView = function(){
   return {
     name: this.name,
-    tip: this.tip,
+    tip: 'meter('+this.id+')',
     value: this.id
   };
 };
@@ -236,7 +236,6 @@ Apply.prototype.toBase = function(){
 Apply.prototype.toView = function(){
   return {
     name: this.name,
-    tip: this.tip,
     actions: _(this.actions).map(function(act){
       return act.toView();
     })
@@ -259,8 +258,7 @@ Clear.prototype.step = function(dp, ctx){
 
 Clear.prototype.toView = function(){
   return {
-    name: this.name,
-    tip: this.tip
+    name: this.name
   };
 };
 
@@ -305,7 +303,6 @@ Write.prototype.toBase = function(){
 Write.prototype.toView = function(){
   return {
     name: this.name,
-    tip: this.tip,
     actions: _(this.actions.actions).map(function(act){
       return act.toView();
     })
@@ -347,8 +344,7 @@ Metadata.prototype.step = function(dp, ctx){
 Metadata.prototype.toView = function(){
   return {
     name: this.name,
-    tip: this.tip,
-    value: this.value
+    tip: 'metadata(value='+this.value+',mask='+this.mask+')'
   };
 };
 
@@ -407,8 +403,7 @@ Goto.prototype.toBase = function(){
 Goto.prototype.toView = function(){
   return {
     name: this.name,
-    tip: this.tip,
-    value: this.target
+    tip: 'goto('+this.target+')'
   };
 };
 
