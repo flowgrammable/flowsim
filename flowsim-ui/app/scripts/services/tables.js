@@ -190,7 +190,7 @@ Table.prototype.del = function(priority, flow) {
   var i;
   if(_(this.prioritiesPresent).has(priority.toString())) {
     priTable = _(this.priorities).find(function(priTbl) {
-      return priority === flow.priority;
+      return priTbl.priority === flow.priority;
     }, this);
     priTable.del(flow);
     this.stats.active -= 1;

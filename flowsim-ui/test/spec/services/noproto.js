@@ -182,6 +182,15 @@ describe('Service: noproto', function () {
 
   });
 
+  it('Empty MatchSet equality pass', function(){
+    var set = new Noproto.MatchSet();
+    var set2 = new Noproto.MatchSet();
+    var proto = Protocols.Protocols[1].clone();
+
+    expect(set2.equal(set)).toBe(true);
+
+  });
+
  it('MatchSet equality fail', function(){
     var set = new Noproto.MatchSet();
     var set2 = new Noproto.MatchSet();

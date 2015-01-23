@@ -41,6 +41,16 @@ describe('Service: Tables', function () {
     expect(pri.flows.length).toBe(0);
   });
 
+  it('Priority delete flow with priority 0 test', function(){
+    var pri = new Tables.Priority(null, 0);
+    var flow = new Flow.Flow(null, 0);
+
+    pri.add(flow);
+    expect(pri.flows.length).toBe(1);
+    pri.del(flow);
+    expect(pri.flows.length).toBe(0);
+  });
+
   it('Priority select flow pass', function(){
     var pri = new Tables.Priority(null, 1);
     var flow = new Flow.Flow(null, 1);
