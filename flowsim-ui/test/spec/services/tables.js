@@ -116,9 +116,10 @@ describe('Service: Tables', function () {
     flow.ins.apply.enabled = true;
 
 
-    table.add(2, flow2);
-    table.add(2, flow);
+    table.add(2, flow2); // any match
+    table.add(2, flow); // exact match
     expect(table.priorities[0].flows.length).toBe(2);
+    expect(table.priorities[0].flows[0].match.set.length).toBe(2);
     
 
     var ethSrc = Protocols.mkFieldUInt('Ethernet', 'Src', 'a:b:c:d:e:f');
@@ -132,6 +133,36 @@ describe('Service: Tables', function () {
     var testflow = table.select(key);
     expect(testflow.ins.apply.enabled).toBe(true);
 
+  });
+
+  it('Priority flow sort by length of matchset', function(){
+    var pri = new Tables.Priority(null, 1);
+    var flow = new Flow.Flow(null, 1);
+    var flow2 = new Flow.Flow(null, 1);
+    var flow3 = new Flow.Flow(null, 1);
+    var ethmatch1 = Protocols.mkMatch('Ethernet', 'Src', 'a:b:c:d:e:f', '');
+    var ethmatch2 = Protocols.mkMatch('Ethernet', 'Dst', 'b:b:b:b:b:b', '');
+    var ip4 = Protocols.mkMatch('IPv4', 'Src', '1.1.1.1', '');
+    flow.match.push(ethmatch1);
+    flow2.match.push(ethmatch2);
+    flow2.match.push(ethmatch1);
+    flow3.match.push(ethmatch2);
+    flow3.match.push(ethmatch1);
+    flow3.match.push(ip4);
+
+    pri.add(flow);
+    pri.add(flow2);
+    pri.add(flow3);
+
+    expect(pri.flows[0].match.set.length).toBe(3);
+    expect()
+
+    var flow4 = new Flow.Flow(null, 1);
+    flow4.match.push(ethmatch1);
+    flow4.match.push(ethmatch2);
+    flow4.match.push(ip4);
+
+    expect(flow4.equal(flow3)).toBe(true);
   });
 
   it('Table delete flow pass', function(){

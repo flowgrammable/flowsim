@@ -300,7 +300,7 @@ describe('Service: instruction', function () {
     is.metadata.value = '0x1111111111111111';
     is.metadata.mask = '0xffffffffffffffff';
     var ctx =  {key: { Internal: { Metadata: 0 }}};
-    var dp = {context: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
+    var dp = {ctx: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
     
     is.step(dp, ctx);
     expect(ctx.key.Internal.Metadata.toString(16)).toBe('0x1111111111111111');
@@ -309,7 +309,7 @@ describe('Service: instruction', function () {
     is.metadata.value = '0x1111111111111111';
     is.metadata.mask =  '0xf0ffffffffffff0f';
     var ctx =  {key: { Internal: { Metadata: 0 }}};
-    var dp = {context: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xf0ffffffffffff0f'}}}}};
+    var dp = {ctx: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xf0ffffffffffff0f'}}}}};
     
     is.step(dp, ctx);
     expect(ctx.key.Internal.Metadata.toString(16)).toBe('0x1011111111111101');
@@ -329,7 +329,7 @@ describe('Service: instruction', function () {
     is.metadata.value = '0x1111111111111111';
     is.metadata.mask = '0xf0ffffffffffffff';
     var ctx =  {key: { Internal: { Metadata: 0 }}};
-    var dp = {context: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
+    var dp = {ctx: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
     
     expect(function(){
       is.step(dp, ctx);

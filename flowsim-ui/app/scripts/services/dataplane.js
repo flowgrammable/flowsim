@@ -35,7 +35,6 @@ function Dataplane(device) {
     this.groupQ   = [];
     this.instructionSet = new Instruction.Set();
     //this.meters   = device.meters;
-    this.extractor = new Extraction.Extractor();
 
     this.ctx   = null;
     this.state = ARRIVAL;
@@ -71,7 +70,7 @@ Dataplane.prototype.arrival = function(packet, in_port, in_phy_port, tunnel) {
 };
 
 Dataplane.prototype.extraction = function() {
-  return this.extractor.extract(this.ctx);
+  Extraction.extract(this.ctx);
 };
 
 Dataplane.prototype.choice = function() {
@@ -152,9 +151,7 @@ Dataplane.prototype.step = function() {
       break;
     case EXTRACTION:
       this.extraction();
-      if(this.extractor.isDone()){
-        this.transition(CHOICE);
-      }
+      this.transition(CHOICE);
       break;
     case CHOICE:
       this.choice();

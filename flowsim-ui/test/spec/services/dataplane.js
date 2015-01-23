@@ -91,11 +91,25 @@ describe('Service: dataplane', function() {
 
     expect(dp.state).toBe('Arrival');
     dp.arrival(pack, 1, 1, 1);
-    expect(dp.toView().ctx[1].value).toBe(0);
+    expect(dp.toView().buffer).toBe(0);
   });
 
   it('Dataplane Extraction Pass', function(){
-    expect(false).toBe(true);
+    var prof = new Profile.Profile('test');
+    var sw = Switch_.create(null, prof);
+    var dp = new Dataplane.Dataplane(sw);
+    var pack = new Packet.Packet('testpacket');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x8100');
+    pack.pushProtocol('0x0800');
+    pack.pushProtocol('0x06');
+    dp.arrival(pack, 1, 1, 1);
+    dp.extraction();
+    expect(dp.ctx.key.Ethernet.Src.bytes).toBe(6)
+    expect(dp.ctx.key.VLAN.length).toBe(2);
+    expect(dp.ctx.key.IPv4.Src.bytes).toBe(4);
+    expect(dp.ctx.key.TCP.Src.bytes).toBe(2);
+
   });
 
   it('Dataplane Choice Pass', function(){

@@ -59,6 +59,16 @@ Priority.prototype.add = function(flow) {
     this.flows[flowIdx] = flow;
   } else {
     this.flows.push(flow);
+    // sort by match set length
+    this.flows.sort(function(a, b){
+      if(a.match.set.length < b.match.set.length){
+        return 1;
+      }
+      if(a.match.set.length > b.match.set.length){
+        return -1;
+      }
+      return 0;
+    });
   }
 };
 

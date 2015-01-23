@@ -10,7 +10,10 @@ describe('Service: action', function () {
   var Utils;
   var Packet;
   var Dataplane;
-  beforeEach(inject(function (_Dataplane_, _Action_, _Utils_, _Packet_) {
+  var Context;
+  beforeEach(inject(function (_Dataplane_, _Action_, _Utils_, _Packet_, 
+    _Context_) {
+    Context = _Context_;
     Action = _Action_;
     Packet = _Packet_;
     Utils = _Utils_;
@@ -464,8 +467,7 @@ describe('Service: action', function () {
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
     pack.pushProtocol('0x0800');
-    var context = {packet: pack};
-
+    var context = new Context.Context(null, pack, 1, 1, 1, 1);
     var ethSrc = Utils.mkAction('Ethernet', 'Src', 'set', 'aa:bb:cc:dd:ee:ff');
     var ip4Src = Utils.mkAction('IPv4', 'Src', 'set', '192.168.1.1');
     as.add(ethSrc);

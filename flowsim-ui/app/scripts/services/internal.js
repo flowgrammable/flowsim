@@ -39,7 +39,7 @@ var Internal = {
   }, {
     name: 'Metadata',
     bitwidth: 64,
-    setable: true,
+    setable: false,
     matchable: true,
     tip: 'Dataplane Metadata'
   }]

@@ -326,6 +326,8 @@ Action.prototype.step = function(dp, ctx) {
       } else {
         // copy the new field value
         ctx.packet.setField(this.protocol, this.field, this._value);
+        // update key
+        dp.extraction();
       }
       break;
     case 'push':

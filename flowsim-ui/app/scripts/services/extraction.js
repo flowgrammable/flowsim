@@ -44,31 +44,14 @@ function extractTag(ctx, proto){
 }
 
 function extract(ctx) {
-  return extractProtocol(ctx, proto);
-}
-
-function Extractor(ctx){
-
-}
-
-Extractor.prototype.extract = function(ctx){
-  if(!this.clonedPacket){
-    this.clonedPacket = ctx.packet.clone();
+  var clonedPacket = ctx.packet.clone();
+  while(clonedPacket.protocols.length > 0){
+    extractProtocol(ctx, clonedPacket.protocols.shift());
   }
-  if(this.clonedPacket.protocols.length > 0){
-    return extractProtocol(ctx, this.clonedPacket.protocols.shift());
-  } else {
-    return false;
-  }
-}
-
-Extractor.prototype.isDone = function(){
-  return !this.clonedPacket.protocols.length;
 }
 
 return {
-  extract: extract,
-  Extractor: Extractor
+  extract: extract
 };
 
 });
