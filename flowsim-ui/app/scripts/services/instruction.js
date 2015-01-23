@@ -314,8 +314,8 @@ function Metadata(meta){
     _.extend(this, meta);
   } else {
     this.enabled = false;
-    this.value = '';
-    this.mask = '';
+    this.value = 0;
+    this.mask = 0;
   }
   this.name      = 'Metadata';
   this.tip       = 'Updates the masked bits of the metadata property in the packet key';
@@ -445,6 +445,7 @@ Set.prototype.clone = function() {
 Set.prototype.step = function (dp, ctx) {
   if(this.meter.enabled) {
     //FIXME
+    this.meter.step(dp, ctx);
     this.meter.enabled = false;
   } else if(this.apply.enabled) {
     //FIXME
@@ -507,13 +508,13 @@ Set.prototype.summarize = function() {
   if(this.meter.enabled) {
     result.push(this.meter.name.toLowerCase());
   }
-  if(this.apply.enabled && this.apply.actions.length > 0) {
+  if(this.apply.enabled) {
     result.push(this.apply.name.toLowerCase());
   }
   if(this.clear.enabled) {
     result.push(this.clear.name.toLowerCase());
   }
-  if(this.write.enabled && this.write.actions.length > 0) {
+  if(this.write.enabled) {
     result.push(this.write.name.toLowerCase());
   }
   if(this.metadata.enabled) {
