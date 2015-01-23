@@ -1,7 +1,10 @@
 <div>
     <div>
         <div class="ctx-key-context">Context</div>
-        <div class="ctx-key-table" ng-repeat="row in ctx.ctx" ng-class-odd="'ctx-key-color-prim'" ng-class-even="'ctx-key-color-sec'">{{row.name + ' : ' + row.value}}</div>
+        <div class="ctx-key-table ctx-key-color-prim" > buffer: {{ctx.buffer}}</div>
+        <div class="ctx-key-table ctx-key-color-sec" > table: {{ctx.table}}</div>
+        <div class="ctx-key-table ctx-key-color-prim" > queue: {{ctx.queue}}</div>
+        <div class="ctx-key-table ctx-key-color-sec" > meter: {{ctx.meter}}</div>    
         <div class="ctx-key-header">
             <div style="padding-left:10px">Key</div>
             <div class="ctx-key-keys" ng-repeat="key in ctx.key" ng-class-odd="'ctx-key-color-prim'" ng-class-even="'ctx-key-color-sec'">
