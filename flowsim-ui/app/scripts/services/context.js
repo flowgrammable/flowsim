@@ -84,7 +84,8 @@ Key.prototype.toView = function() {
     });
   }
   _(Protocols.Protocols).each(function(proto){
-    if(_(this).has(proto.name) && proto.name !== 'Internal'){
+    if(_(this).has(proto.name) && proto.name !== 'Internal' &&
+      !proto.pushable && !proto.popable){
       result.push({
         name: proto.name,
         attrs: _(proto.fields).map(function(field){
@@ -95,6 +96,21 @@ Key.prototype.toView = function() {
           };
         }, this)
       });
+    } else {
+      // handle tags
+      if(_(this).has(proto.name) && proto.name !== 'Internal'){
+        _(this[proto.name]).each(function(tag){
+          result.push({
+            name: proto.name,
+            attrs: _(proto.fields).map(function(field){
+              return {
+                name: field.name,
+                value: Protocols.getField(proto.name, field.name).dispStr(tag[field.name].value)
+              };
+            }, this)
+          });
+        }, this);
+      }
     }
   }, this);
   return result;
