@@ -38,6 +38,7 @@ function Dataplane(device) {
 
     this.ctx   = null;
     this.state = ARRIVAL;
+    this.branchStage = 0;
   } else {
     throw 'Bad Dataplane('+device+')';
   }

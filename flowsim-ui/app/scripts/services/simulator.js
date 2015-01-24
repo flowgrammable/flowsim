@@ -19,10 +19,23 @@ function Simulation() {
 Simulation.prototype.stages = Dataplane.Stages;
 
 Simulation.prototype.step = function() {
+
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
+
   if(this.dataplane.idle()) {
     this.stop();
+  }
+
+  if(this.dataplane){
+  if(this.dataplane.branchStage === 7){
+    this.clonePacket = true;
+    this.cloneTo = 7;
+    this.dataplane.branchStage = 0;
+  } else {
+    this.clonePacket = false;
+    this.cloneTo = false;
+  }
   }
 };
 

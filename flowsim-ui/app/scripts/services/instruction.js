@@ -222,6 +222,11 @@ Apply.prototype.step = function(dp, ctx){
   if(this.actions.length > 0){
     act = this.actions.shift();
     act.step(dp, ctx);
+    if(act.field === 'Output'){
+      dp.branchStage = 7;
+    } else {
+      dp.branchStage = 0;
+    }
   }
 };
 

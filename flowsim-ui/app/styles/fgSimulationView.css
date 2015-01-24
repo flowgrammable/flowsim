@@ -18,9 +18,9 @@
 .sim-packet-copy
 {
     fill: lightgray;
- /*   stroke:#5CB85C;
+    stroke:#5CB85C;
     stroke-width:5;
-*/    opacity:0.5;
+    opacity:0.5;
 }
 
 .sim-stage-sec
