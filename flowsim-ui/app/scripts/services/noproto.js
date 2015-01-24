@@ -405,11 +405,11 @@ Action.prototype.toView = function(){
     tip  = '';
   } else if(this.op === 'copy-in' || this.op === 'copy-out'){
     val1 = this.op;
-    val2 = this.protoShort + '-TTL';
+    val2 = 'TTL';
     tip  = '';
   } else if(this.op === 'dec'){
     val1 = this.protoShort;
-    val2 = this.op+'-TTL';
+    val2 = this.op+'TTL';
     tip  = '';
   }
 
