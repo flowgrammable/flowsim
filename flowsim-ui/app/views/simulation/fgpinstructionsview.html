@@ -10,9 +10,9 @@
 
                 <div class="sim-ins-animate-repeat"
                      ng-class="(applyActionList.action.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
-                     ng-repeat="action in applyActionList.actions" tooltip="{{action.value}}"
+                     ng-repeat="action in applyActionList.actions" tooltip="{{action.tip}}"
                      tooltip-append-to-body="true">
-                    {{action.protocol +'('+action.field+action.op+')'}}
+                    {{action.value1 +'('+action.value2+')'}}
                 </div>
             </div>
         </div>
@@ -22,9 +22,9 @@
             <div ng-show="writeActionSet" class="sim-ins-animate-container">
                 <div class="sim-ins-animate-repeat"
                      ng-class="(writeActionSet.actions.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
-                     ng-repeat="action in writeActionSet.actions" tooltip="{{action.value}}"
+                     ng-repeat="action in writeActionSet.actions" tooltip="{{action.tip}}"
                      tooltip-append-to-body="true">
-                    {{action.protocol +'('+action.field+action.op+')'}}
+                    {{action.value1 +'('+action.value2+')'}}
                 </div>
             </div>
         </div>

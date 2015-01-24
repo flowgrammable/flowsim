@@ -21,6 +21,34 @@ var testFuncs = {};
 // store of pretty printer functions
 var toStringFuncs = {};
 
+// store of short names
+var shortNames = {};
+
+// short name store setter
+function setShortName(protocol, field, shortname){
+  var key;
+  if(!field){
+    key = protocol;
+  } else {
+    key = protocol + '-' + field;
+  }
+  shortNames[key] = shortname;
+}
+
+// short name store getter
+function getShortName(protocol, field){
+  var key;
+  if(!field || field === 'tag'){
+    key = protocol;
+  } else {
+    key = protocol + '-' + field;
+  }
+  if(!_(shortNames).has(key)) {
+    throw 'Bad shortname key: ' + key;
+  }
+  return shortNames[key];
+}
+
 // test function store setter
 function setTestFunction(protocol, field, func) {
   var key = protocol + '-' + field;
@@ -294,6 +322,9 @@ function Action(action, protocol, field, bitwidth, op, value) {
   this._value = new UInt.UInt(null, consFunc(this.value),
                               Math.ceil(this.bitwidth / 8));
   }
+
+  this.protoShort = getShortName(this.protocol);
+  this.fieldShort = getShortName(this.protocol, this.field);
 }
 
 Action.prototype.clone = function() {
@@ -304,7 +335,6 @@ function handleInternal(action, dp, ctx){
   switch(action.field){
     case 'Output':
       ctx.output = action._value;
-      dp.output(ctx.packet.clone(), action._value);
       break;
     case 'Group':
       ctx.group = action._value;
@@ -356,20 +386,37 @@ Action.prototype.step = function(dp, ctx) {
 };
 
 Action.prototype.toView = function(){
-  var opSym = '';
-  switch(this.op){
-    case 'set':
-      opSym = '=';
-      break;
-    default:
-      opSym = this.op;
-      break;
+  var val1, val2, tip;
+  // internal
+    // set queue
+    // set output
+    // group
+  if(this.protocol === 'Internal'){
+    val1 = this.field;
+    val2 = this.value;
+    tip = '';
+  } else if(this.op === 'set') {
+    val1 = this.protoShort;
+    val2 = this.fieldShort + '=';
+    tip  = this.value;
+  } else if(this.op === 'push' || this.op === 'pop' ){
+    val1 = this.op;
+    val2 = this.protoShort;
+    tip  = '';
+  } else if(this.op === 'copy-in' || this.op === 'copy-out'){
+    val1 = this.op;
+    val2 = this.protoShort + '-TTL';
+    tip  = '';
+  } else if(this.op === 'dec'){
+    val1 = this.protoShort;
+    val2 = this.op+'-TTL';
+    tip  = '';
   }
+
   return {
-    protocol: this.protocol,
-    field: this.field,
-    op: opSym,
-    value: this.value
+    value1: val1,
+    value2: val2,
+    tip: tip
   };
 };
 
@@ -444,7 +491,7 @@ function Field(params) {
   // Display string for this field
   this.name = params.name;
   // Display string that is small
-  this.summary = params.summary || this.name.toLowerCase().slice(0, 4);
+  this.shortName = params.shortName || this.name.toLowerCase().slice(0, 4);
   // Bit precision of this field
   this.bitwidth = params.bitwidth;
   // Can this field be matched against
@@ -485,6 +532,9 @@ Field.prototype.attachDefaultFunctions = function() {
     this.dispStr = UInt.toString(this.bitwidth);
   }
   setToStringFunction(this.protocol, this.name, this.dispStr);
+
+  setShortName(this.protocol, this.name, this.shortName);
+
 };
 
 Field.prototype.getMatchProfile = function() {
@@ -539,7 +589,6 @@ function Protocol(params) {
   // Construct the protocol fields
   this.fields = _(params.fields).map(function(field) {
     field.protocol   = this.name;
-    field.summary    = this.shortName;
     return new Field(field);
   }, this);
   // Attach a name/key for each field
@@ -551,6 +600,8 @@ function Protocol(params) {
     // Attach default functions if none where provided
     field.attachDefaultFunctions();
   }, this);
+
+  setShortName(this.name, null,  this.shortName);
 }
 
 Protocol.prototype.getMatchProfiles = function() {

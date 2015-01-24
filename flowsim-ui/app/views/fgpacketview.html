@@ -5,7 +5,7 @@
     <span class="rnn-total-bytes-val">{{packet.bytes}}B</span>
   </div>
   <div class="rnn-stack">
-    <div class="rnn-item" ng-repeat="protocol in packet.protocols" 
+    <div class="rnn-item" ng-repeat="protocol in packet.protocols track by $index" 
          ng-style="{'width': protocol.width}">
       <div class="rnn-bytes">{{protocol.bytes}}B</div>
       <div class="rnn-title">{{protocol.name}}</div>

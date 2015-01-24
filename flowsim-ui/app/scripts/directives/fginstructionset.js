@@ -53,12 +53,14 @@ angular.module('flowsimUiApp')
                     scope.insListView = '';
                     scope.instructions = function() {
                         var insListView = '';
+                        if(scope.view.instructionSet){
                         _(scope.view.instructionSet).each(function(ins, idx){
                             insListView += ins.name.substring(0, 2).toLowerCase();
                             if(idx < scope.instructionList.length - 1){
                                 insListView += ' / ';
                             }
                         });
+                        }
                         return insListView;
                     };
                     
