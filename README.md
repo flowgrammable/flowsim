@@ -183,3 +183,4 @@ PEM pass phrase is 'flowsim'.
 -debug: .. i'm not surehow to do this yet
 -release: ./backend/src/index.js -c \`pwd\`/config.json -d \`pwd\`/flowsim-ui/dist
 
+###Test stuff
