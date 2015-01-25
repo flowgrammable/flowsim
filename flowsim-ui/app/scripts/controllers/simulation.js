@@ -151,6 +151,7 @@ angular.module('flowsimUiApp')
 
   $scope.stop = function() {
     $scope.simulation.stop();
+    $scope.makeTransition =  {to:-1};
   };
 
   $scope.step = function() {
