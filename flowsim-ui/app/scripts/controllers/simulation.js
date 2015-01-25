@@ -22,6 +22,12 @@ angular.module('flowsimUiApp')
     devices: []
   };
 
+  $scope.active = {
+    in_port: '',
+    in_phy_port: '',
+    tunnel: ''
+  };
+
   $scope.trace = null;
 
   // get a list of all the existing switch names
@@ -66,8 +72,12 @@ angular.module('flowsimUiApp')
       if(err) {
         console.log(err.details);
       } else {
-        $scope.trace.push(result.clone());
+        $scope.trace.push(result.clone(), $scope.active.in_port, 
+            $scope.active.in_phy_port, $scope.active.tunnel);
         $scope.resources.packetName = '';
+        $scope.active.in_port = '';
+        $scope.active.in_phy_port = '';
+        $scope.active.tunnel = '';
       }
     });
   };
