@@ -100,7 +100,8 @@ angular.module('flowsimUiApp')
                             .attr('stage', trans.cloneTo) //set the stage ID
                             .transition()
                             .duration(animationDuration)
-                            .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
+                            .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5)
+                            .remove();
                     } else
                     if (trans.to > -1) {
                         if (trans.to > currentStage) { //forward transition

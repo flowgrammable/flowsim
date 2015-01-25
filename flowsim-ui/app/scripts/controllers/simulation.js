@@ -164,7 +164,7 @@ angular.module('flowsimUiApp')
     $scope.ctx = $scope.simulation.toView();
     $scope.view = $scope.simulation.toView();
     console.log('post step', $scope.ctx);
-    if($scope.simulation && $scope.simulation.dataplane.ctx){
+    if($scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
       $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
     } else {
       $scope.packetName = '';
