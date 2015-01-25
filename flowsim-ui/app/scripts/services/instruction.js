@@ -187,6 +187,7 @@ Meter.prototype.step = function(dp, ctx){
 Meter.prototype.toView = function(){
   return {
     name: this.name,
+    shortName: 'm',
     tip: 'meter('+this.id+')',
     value: this.id
   };
@@ -241,6 +242,7 @@ Apply.prototype.toBase = function(){
 Apply.prototype.toView = function(){
   return {
     name: this.name,
+    shortName: 'a',
     actions: _(this.actions).map(function(act){
       return act.toView();
     })
@@ -263,7 +265,8 @@ Clear.prototype.step = function(dp, ctx){
 
 Clear.prototype.toView = function(){
   return {
-    name: this.name
+    name: this.name,
+    shortName: 'c'
   };
 };
 
@@ -308,6 +311,7 @@ Write.prototype.toBase = function(){
 Write.prototype.toView = function(){
   return {
     name: this.name,
+    shortName: 'w',
     actions: _(this.actions.actions).map(function(act){
       return act.toView();
     })
@@ -343,12 +347,13 @@ Metadata.prototype.step = function(dp, ctx){
     throw 'Metadata: Unable to mask on bits ' + this.mask;
   }
   insValue = new UInt.UInt(null, metaField.consStr(this.value), 8);
-  dp.ctx.key.Internal.Metadata = insValue.and(insMask);
-}
+  ctx.key.Internal.Metadata = insValue.and(insMask);
+};
 
 Metadata.prototype.toView = function(){
   return {
     name: this.name,
+    shortName: 'md',
     tip: 'metadata(value='+this.value+',mask='+this.mask+')'
   };
 };
@@ -408,6 +413,7 @@ Goto.prototype.toBase = function(){
 Goto.prototype.toView = function(){
   return {
     name: this.name,
+    shortName: 'g',
     tip: 'goto('+this.target+')'
   };
 };

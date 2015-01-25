@@ -293,7 +293,7 @@ UInt.prototype.equal = function(uint){
 
 UInt.prototype.subt = function(sub){
   if(!this.greaterThan(sub)){
-    throw 'UInt must be greater than sub'
+    throw 'UInt must be greater than sub';
   }
   if(this.bytes < 5){
     this.value -= sub.value;
@@ -320,7 +320,8 @@ UInt.prototype.greaterThan = function(rhs){
         return val > rhs.value[idx];
     });
   }
-}
+};
+
 function equal(lhs, rhs) {
   if(lhs.bytes !== rhs.bytes) {
     throw 'equal('+lhs.bytes+', '+rhs.bytes+')';

@@ -10,10 +10,6 @@
 angular.module('flowsimUiApp')
   .factory('Extraction', function(Protocols) {
 
-var extractors = {};
-
-// Get extractors
-
 
 function extractField(ctx, proto, field){
   Protocols.Extractors[proto.name][field.name].extract(ctx.key, field.value);
@@ -43,15 +39,27 @@ function extractTag(ctx, proto){
   ctx.key[proto.name].push(tag);
 }
 
-function extract(ctx) {
-  var clonedPacket = ctx.packet.clone();
-  while(clonedPacket.protocols.length > 0){
-    extractProtocol(ctx, clonedPacket.protocols.shift());
-  }
+function Extractor(){
+
 }
 
+Extractor.prototype.extract = function(ctx){
+  if(!this.clonedPacket){
+    this.clonedPacket = ctx.packet.clone();
+  }
+  if(this.clonedPacket.protocols.length > 0){
+    return extractProtocol(ctx, this.clonedPacket.protocols.shift());
+  } else {
+    return false;
+  }
+};
+
+Extractor.prototype.isDone = function(){
+  return !this.clonedPacket.protocols.length;
+};
+
 return {
-  extract: extract
+  Extractor: Extractor
 };
 
 });

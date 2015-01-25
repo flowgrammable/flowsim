@@ -11,7 +11,7 @@
         </button>
         <button type="button" class="btn btn-default" 
                 ng-click="play()"
-                ng-disabled="simulation.active">
+                ng-disabled="simulation.active || !trace.events.length">
           <span class="glyphicon glyphicon-play"></span>
         </button>
         <button type="button" class="btn btn-default" ng-click="step()"

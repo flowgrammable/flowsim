@@ -30,17 +30,6 @@
 
       <div class="col-md-8" ng-show="trace.device">
         <h4>Configure the trace</h4>
-        <div class="input-group">
-          <select class="form-control" ng-model="resources.packetName">
-            <option ng-repeat="name in resources.packets">{{name}}</option>
-          </select>
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" ng-click="addPacket()">
-              Add
-            </button>
-          </span>
-        </div>
-
         <table class="table table-striped">
           <thead>
             <th>#</th>
@@ -51,29 +40,18 @@
             <th></th>
           </thead>
           <tbody>
+          
             <tr ng-repeat="ev in trace.events">
               <td>{{$index+1}}</td>
               <td>{{ev.packet.name}}</td>
               <td>
-                <select class="form-control" ng-model="ev.in_port"
-                        ng-options="port.id as port.id for port in
-                                   trace.device.ports.ports">
-                </select>
+                {{ev.in_port}}
               </td>
               <td>
-                <select class="form-control" ng-model="ev.in_phy_port"
-                        ng-options="port.id as port.name for port in
-                                   trace.device.ports.ports">
-                  <option value=""></option>
-                </select>
+                {{ev.in_phy_port}}
               </td>
               <td>
-                <div class="input-group">
-                  <label>
-                    <input type="text" class="form-control"
-                           ng-model="ev.tunnel">
-                  </label>
-                </div>
+                {{ev.tunnel}}
               </td>
               <td>
                 <span class="glyphicon glyphicon-minus-sign"
@@ -81,6 +59,38 @@
                 </span>
               </td>
             </tr>
+            <tr class="table">
+          <td></td>
+          <td>
+            <select class="form-control" ng-model="resources.packetName">
+              <option ng-repeat="name in resources.packets">{{name}}</option>
+            </select>
+          </td>
+          <td>
+            <select class="form-control" ng-model="active.in_port"
+                    ng-options="port.id as port.id for port in
+                               trace.device.ports.ports">
+            </select>
+          </td>
+          <td>
+            <select class="form-control" ng-model="active.in_phy_port"
+                    ng-options="port.id as port.name for port in
+                               trace.device.ports.ports">
+              <option value=""></option>
+            </select>
+          </td>
+          <td>
+            <label>
+              <input class="form-control" type="text"
+                     ng-model="active.tunnel">
+            </label>
+          </td>
+          <td>
+            <button class="btn btn-default" type="button" ng-disabled="!active.in_port" ng-click="addPacket()">
+              Add
+            </button>
+          </td>
+          </tr>
           </tbody>
         </table>
       </div>

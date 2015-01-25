@@ -158,7 +158,7 @@ Port.prototype.toBase = function(){
   return this;
 };
 
-Port.prototype.ingress = function(packet) {
+Port.prototype.ingress = function() {
   var keep = this.config.no_recv || 
              this.config.port_down ? false : true;
 
@@ -167,7 +167,7 @@ Port.prototype.ingress = function(packet) {
   return keep;
 };
 
-Port.prototype.egress = function(packet) {
+Port.prototype.egress = function() {
   var drop = this.config.no_fwd ? true : false;
   drop = drop | (this.config.no_pkt_in && this.id === VPort.CONTROLLER);
 

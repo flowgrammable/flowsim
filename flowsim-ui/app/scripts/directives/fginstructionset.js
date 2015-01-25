@@ -55,7 +55,7 @@ angular.module('flowsimUiApp')
                         var insListView = '';
                         if(scope.view && scope.view.instructionSet){
                         _(scope.view.instructionSet).each(function(ins, idx){
-                            insListView += ins.name.substring(0, 2).toLowerCase();
+                            insListView += ins.shortName;
                             if(idx < scope.instructionList.length - 1){
                                 insListView += ' / ';
                             }
