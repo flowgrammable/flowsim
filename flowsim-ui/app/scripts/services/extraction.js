@@ -41,17 +41,35 @@ function extractTag(ctx, proto){
     ctx.key[proto.name] = [];
   }
   ctx.key[proto.name].push(tag);
+  console.log('ctxkey', ctx.key);
 }
 
 function extract(ctx) {
-  var clonedPacket = ctx.packet.clone();
-  while(clonedPacket.protocols.length > 0){
-    extractProtocol(ctx, clonedPacket.protocols.shift());
+  return extractProtocol(ctx, proto);
+}
+
+function Extractor(ctx){
+
+}
+
+Extractor.prototype.extract = function(ctx){
+  if(!this.clonedPacket){
+    this.clonedPacket = ctx.packet.clone();
+  }
+  if(this.clonedPacket.protocols.length > 0){
+    return extractProtocol(ctx, this.clonedPacket.protocols.shift());
+  } else {
+    return false;
   }
 }
 
+Extractor.prototype.isDone = function(){
+  return !this.clonedPacket.protocols.length;
+}
+
 return {
-  extract: extract
+  extract: extract,
+  Extractor: Extractor
 };
 
 });
