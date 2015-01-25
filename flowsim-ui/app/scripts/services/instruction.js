@@ -342,8 +342,8 @@ Metadata.prototype.step = function(dp, ctx){
     throw 'Metadata: Unable to mask on bits ' + this.mask;
   }
   insValue = new UInt.UInt(null, metaField.consStr(this.value), 8);
-  dp.ctx.key.Internal.Metadata = insValue.and(insMask);
-}
+  ctx.key.Internal.Metadata = insValue.and(insMask);
+};
 
 Metadata.prototype.toView = function(){
   return {

@@ -139,7 +139,7 @@ Field.prototype.toView = function(){
     name: this.name,
     value: this.valueToString()
   };
-}
+};
 
 function Packet(pkt) {
   if(_(pkt).isObject()){
@@ -255,7 +255,7 @@ Packet.prototype.popTag = function(protoName){
     // If only a single mpls tag, then set vlan/eth type field
     if(activeTags === 1 && this.protocols.length > activeVTags + 1){
       var nextProtoName = this.protocols[activeVTags + 1].name;
-      var pack = _.invert(Protocols.Payloads['Ethernet'].Type)[nextProtoName];
+      var pack = _.invert(Protocols.Payloads.Ethernet.Type)[nextProtoName];
       this.protocols[activeVTags].fields[2].value = Protocols.mkFieldUInt('Ethernet', 'Type', pack);
     }
     // a packet with multiple mpls fields do not need to update vlan/eth type field 

@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Tables', function(Regex, fgConstraints, Match, Flow,
+  .factory('Tables', function(Regex, fgConstraints, Flow,
                               Protocols, Instruction) {
 
 /* Default Construction Constants */
@@ -18,9 +18,6 @@ var defName = 'table';
 
 var defTableStats     = true;
 var defFlowStats      = true;
-var defMissController = false;
-var defMissContinue   = false;
-var defMissDrop       = false;
 var defMaxEntries     = 1024;
 
 function Priority(priority, priValue) {

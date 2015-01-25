@@ -77,7 +77,7 @@ ProfileUI.prototype.toBase = function(){
     groups: this.groups,
     meters: this.meters
   };
-}
+};
 /* ... .end of super ugly .... */
 
 var TIPS = {
