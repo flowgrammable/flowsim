@@ -20,6 +20,7 @@ angular.module('flowsimUiApp')
       link: function postLink(scope, element) {
         scope.local = {};
 
+        scope.local.str = scope.field.valueToString();
         scope.validateField = function(){
           if(scope.field.testStr(scope.local.str)){
             element.removeClass('has-error');
@@ -29,10 +30,6 @@ angular.module('flowsimUiApp')
             element.addClass('has-error');          
           }
         };
-
-        scope.$watch('field.value.value', function(){
-          scope.local.str = scope.field.valueToString();
-        }, true);
       }
     };
   });

@@ -39,7 +39,7 @@ describe('Service: action', function () {
 
     // MPLS -> IPv4
     var act = Utils.mkAction('MPLS', 'TTL', 'copy-in', '');
-    expect(act.op).toBe('copy-in')
+    expect(act.op).toBe('copy-in');
     pack.pushProtocol('0x8847');
     pack.pushProtocol('0x0800');
     pack.setField('MPLS', 'TTL', '0x77');
@@ -51,7 +51,7 @@ describe('Service: action', function () {
     expect(as.step(null, context)).toBe(true);
     expect(as.step(null, context)).toBe(false);
     expect(as.isEmpty()).toBe(true);
-    expect(pack.getField('IPv4', 'TTL').valueToString()).toBe('0x77');
+    expect(pack.getField('IPv4', 'TTL').valueToString()).toBe('119');
 
     // MPLS -> IPv6
     var actMPLS = Utils.mkAction('MPLS', 'TTL', 'copy-in', '');
@@ -63,11 +63,11 @@ describe('Service: action', function () {
     pack.pushProtocol('0x86dd');
     as.add(actMPLS);
     as.add(act6);
-    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('0x00');
+    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('0');
     // expect step should copy mpls ttl to ipv6 ttl
     as.step(null, context)
     expect(as.isEmpty()).toBe(false);
-    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('0x77');
+    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('119');
     // expect action copy ipv6 ttl -> inner to throw because inner doesnt exist
     expect(function(){
       as.step(null, context);
@@ -89,7 +89,7 @@ describe('Service: action', function () {
     expect(as.step(null, context)).toBe(true);
     expect(as.step(null, context)).toBe(false);
     expect(as.isEmpty()).toBe(true);
-    expect(pack.protocols[2].getField('TTL').valueToString()).toBe('0x77');
+    expect(pack.protocols[2].getField('TTL').valueToString()).toBe('119');
 
     // mpls -> ipv4
     pack.popProtocol();
@@ -98,7 +98,7 @@ describe('Service: action', function () {
     expect(as.step(null, context)).toBe(true);
     expect(as.step(null, context)).toBe(false);
     expect(as.isEmpty()).toBe(true);
-    expect(pack.protocols[2].getField('TTL').valueToString()).toBe('0x77');
+    expect(pack.protocols[2].getField('TTL').valueToString()).toBe('119');
 
     // mpls -> mpls -> ipv6
     pack.popProtocol();
@@ -108,7 +108,7 @@ describe('Service: action', function () {
     as.add(ipv6Act);
     expect(as.step(null, context)).toBe(true);
     expect(as.isEmpty()).toBe(false);
-    expect(pack.protocols[2].getField('TTL').valueToString()).toBe('0x77');
+    expect(pack.protocols[2].getField('TTL').valueToString()).toBe('119');
     expect(function(){
       as.step(null, context)
     }).toThrow();
@@ -265,9 +265,9 @@ describe('Service: action', function () {
     pack.setField('IPv4', 'TTL', '0x77');
     var ipv4Act = Utils.mkAction('IPv4', 'TTL', 'copy-out', '');
     as.add(ipv4Act);
-    as.step(null, context)
+    as.step(null, context);
     expect(as.isEmpty()).toBe(true);
-    expect(pack.protocols[1].getField('TTL').valueToString()).toBe('0x77');
+    expect(pack.protocols[1].getField('TTL').valueToString()).toBe('119');
 
     // ipv4 -> mpls
     pack.popProtocol();
@@ -275,9 +275,9 @@ describe('Service: action', function () {
     pack.setField('IPv6', 'TTL', '0x10');
     var ipv6Act = Utils.mkAction('IPv6', 'TTL', 'copy-out', '');
     as.add(ipv6Act);
-    as.step(null, context)
+    as.step(null, context);
     expect(as.isEmpty()).toBe(true);
-    expect(pack.protocols[1].getField('TTL').valueToString()).toBe('0x10');
+    expect(pack.protocols[1].getField('TTL').valueToString()).toBe('16');
 
     // mpls -> mpls
     pack.popProtocol();
@@ -285,9 +285,9 @@ describe('Service: action', function () {
     pack.protocols[2].setField('TTL', '0x11');
     var MPLSAct = Utils.mkAction('MPLS', 'TTL', 'copy-out', '');
     as.add(MPLSAct);
-    as.step(null, context)
+    as.step(null, context);
     expect(as.isEmpty()).toBe(true);
-    expect(pack.protocols[1].getField('TTL').valueToString()).toBe('0x11');
+    expect(pack.protocols[1].getField('TTL').valueToString()).toBe('17');
   });
 
   it('Action Set step copyTTLOut ipv4|ipv6|mpls missing outer tag fail', function(){
@@ -405,7 +405,7 @@ describe('Service: action', function () {
     var ip4 = Utils.mkAction('IPv4', 'TTL', 'dec', '');
     as.add(ip4);
     as.step(null, context);
-    expect(pack.getField('IPv4', 'TTL').valueToString()).toBe('0xfe');
+    expect(pack.getField('IPv4', 'TTL').valueToString()).toBe('254');
     expect(as.isEmpty()).toBe(true);
 
     //ipv6 dec
@@ -415,7 +415,7 @@ describe('Service: action', function () {
     var ipv6 = Utils.mkAction('IPv6', 'TTL', 'dec', '');
     as.add(ipv6);
     as.step(null, context);
-    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('0x76');
+    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('118');
     expect(as.isEmpty()).toBe(true);
 
     //mpls dec
@@ -426,9 +426,9 @@ describe('Service: action', function () {
     as.add(mp);
     as.add(ipv6);
     as.step(null, context);
-    expect(pack.getField('MPLS', 'TTL').valueToString()).toBe('0xfe');
+    expect(pack.getField('MPLS', 'TTL').valueToString()).toBe('254');
     as.step(null, context);
-    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('0xfe');
+    expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('254');
     expect(as.isEmpty()).toBe(true);
   });
 
@@ -491,7 +491,7 @@ describe('Service: action', function () {
     var ipv6 = Utils.mkAction('IPv6', 'TTL', 'set', '0x88');
     as.add(ipv6);
     expect(function(){
-      as.step(null, context)
+      as.step(null, context);
     }).toThrow();
 
   });
@@ -508,7 +508,7 @@ describe('Service: action', function () {
   });
 
   it('Action Set add and step group', function(){
-    var dp = new Dataplane.Dataplane({group: 0})
+    var dp = new Dataplane.Dataplane({group: 0});
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
     var context = {packet: pack};
@@ -520,7 +520,7 @@ describe('Service: action', function () {
   });
 
   it('Action Set add and step output', function(){
-    var dp = new Dataplane.Dataplane({ports: {egress: function egress(pkt, id){return true;}}})
+    var dp = new Dataplane.Dataplane({ports: {egress: function egress(pkt, id){return true;}}});
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
     var context = {packet: pack};

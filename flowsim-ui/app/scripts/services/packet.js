@@ -99,7 +99,7 @@ function Field(fld, name){
 }
 
 Field.prototype.valueToString = function(){
-    return this.dispStr(this.value.value, 16);
+    return this.dispStr(this.value.value);
 };
 
 Field.prototype.getFieldUtils = function(protoName){
