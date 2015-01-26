@@ -10,9 +10,6 @@
 
 function orderProfiles(profiles) {
   var rows = [];
-  var row = [];
-  var cel;
-  var count = 0;
   var i;
 
   var protocols = [];
