@@ -159,6 +159,11 @@ angular.module('flowsimUiApp')
       to: $scope.simulation.stage
           //hideDetails($scope.simulation.stage)
     };
+    if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
+      $scope.extractView = $scope.simulation.toView();
+    }else{
+      $scope.extractView = null;
+    }
     $scope.ctx = $scope.simulation.toView();
     $scope.view = $scope.simulation.toView();
     console.log('post step', $scope.ctx);
