@@ -109,12 +109,14 @@ angular.module('flowsimUiApp')
                             console.log('trans to:', trans.to);
                             if(trans.to === 7){
                                 svg.selectAll('.sim-packet')
+                                    .style('opacity', '.5')
                                     .transition()
                                     .style('display', 'block')
                                     .duration(animationDuration)
                                     .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5);
                             } else {
                                 svg.selectAll('.sim-packet')
+                                    .style('opacity', '.5')
                                     .transition()
                                     .style('display', 'block')
                                     .duration(animationDuration)
@@ -127,6 +129,7 @@ angular.module('flowsimUiApp')
                                 });
 
                             d3.select(currPackets[0].pop()).transition()
+                                .style('opacity', '.5')
                                 .style('display', 'block')
                                 .duration(animationDuration)
                                 .attr('stage', trans.cloneTo)
@@ -136,6 +139,7 @@ angular.module('flowsimUiApp')
 
                         } else { //bacward transition
                             svg.selectAll('.sim-packet')
+                                .style('opacity', '.5')
                                 .transition()
                                 .duration(animationDuration / 3)
                                 .style('display', 'block')

@@ -106,8 +106,13 @@ Set.prototype.step = function(dp, ctx) {
       this.output = true;
     }
     act.step(dp, ctx);
-  } else if(this.isEmpty() && !this.output){
-    ctx.dropPacket = true;
+    dp.transition('Final');
+  } 
+ if(this.isEmpty()){
+    if(!this.output){
+      ctx.dropPacket = true;
+    }
+    dp.transition('Final');
   }
 };
 

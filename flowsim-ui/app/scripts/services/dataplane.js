@@ -196,11 +196,11 @@ Dataplane.prototype.step = function() {
           this.transition(ARRIVAL);
         } else {
           this.transition(FINAL);
-          this.state = FINAL;
         }
       }
       break;
     case FINAL:
+      // drop or forward
       break;
     default:
       throw 'Bad Dataplane state: ' + this.state;

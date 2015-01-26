@@ -14,6 +14,9 @@ function Simulation() {
   this.stage = 0;
   this.active = false;
   this.dataplane = null;
+  this.clonePacket = false;
+  this.cloneTo = 0;
+  this.fade = false;
 }
 
 Simulation.prototype.stages = Dataplane.Stages;
@@ -33,7 +36,7 @@ Simulation.prototype.step = function() {
     this.cloneTo = 7;
     this.dataplane.branchStage = 0;
     this.fade = false;
-  } else if(this.dataplane.ctx.dropPacket && this.stage === 6){
+  } else if(this.dataplane.ctx.dropPacket && this.dataplane.state === 'Egress'){
     this.clonePacket = true;
     this.cloneTo = 6;
     this.fade = true;
