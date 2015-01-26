@@ -3,7 +3,6 @@
 angular.module('flowsimUiApp')
   .factory('VLAN', function() {
 
-var pushPos = 1;
 
 var VLAN = {
   name: 'VLAN',
