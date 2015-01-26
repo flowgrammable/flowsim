@@ -196,6 +196,7 @@ Dataplane.prototype.step = function() {
           this.transition(ARRIVAL);
         } else {
           this.transition(FINAL);
+          this.state = FINAL;
         }
       }
       break;
