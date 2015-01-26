@@ -22,7 +22,7 @@ angular.module('flowsimUiApp')
             $scope.item.value.value = $scope.field.consStr($scope.str);
             $rootScope.$broadcast('dirtyCache');
           }
-        }
+        };
         $scope.$watch('item.value.value', function(){
           $scope.str = $scope.field.dispStr($scope.item.value.value, 16);
         }, true);

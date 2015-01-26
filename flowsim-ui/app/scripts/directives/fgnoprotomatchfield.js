@@ -14,7 +14,7 @@ angular.module('flowsimUiApp')
       scope: {
         activeMatch: '='
       },
-      link: function postLink(scope, element, attrs) {
+      link: function postLink(scope, element) {
         var noProtoField;
         scope.uint = {};
         scope.disabled = true;
@@ -27,7 +27,7 @@ angular.module('flowsimUiApp')
           } else {
             element.addClass('has-error');
           }
-        }
+        };
         scope.local = {};
         scope.$watch('activeMatch.protocol + activeMatch.field', function(){
             if(scope.activeMatch.protocol && scope.activeMatch.field){

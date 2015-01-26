@@ -15,7 +15,7 @@ angular.module('flowsimUiApp')
         //.rnn-field { font-size: 12px; }
         scope.dispStr = function(protoname, fieldname){
           return Protocols.getField(protoname, fieldname).dispStr;
-        }
+        };
         var i, fieldLineHeight;
 
         fieldLineHeight = 12; //px

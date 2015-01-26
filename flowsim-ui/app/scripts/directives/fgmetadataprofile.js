@@ -16,7 +16,7 @@ angular.module('flowsimUiApp')
         // Provide a set function that is only called on good input
         $scope.set = function() {
           $scope.metadata.maskableBits = $scope.active.value;
-        }
+        };
       }
     };
   });

@@ -10,23 +10,13 @@
 angular.module('flowsimUiApp')
     .controller('TestCtrl', function($scope) {
 
-        $scope.view = JSON.parse('{"meter":-1,"buffer":0,"packet":{"name":"sa","bytes":14,"protocols":[{"name":"Ethernet","bytes":14,"attrs":[{"name":"Src","value":"00:00:00:00:00:00","tip":"Ethernet source address","$$hashKey":"0PY"},{"name":"Dst","value":"00:00:00:00:00:00","tip":"Ethernet destination address","$$hashKey":"0PZ"},{"name":"Type/Length","value":"0x0000","tip":"Ethernet payload type or length","$$hashKey":"0Q0"}],"$$hashKey":"0PW","fieldBlockHeight":36,"fieldBlockYOffset":54}]},"actionSet":[{"name":"eth","value1":"src=","value2":"00:00:00:00:00:00"},{"name":"eth","value1":"dst=","value2":"00:00:00:00:00:00"},{"name":"queue","value1":5},{"name":"Output","value1":2}],"instructionSet":[{"name":"Meter","value1":1234,"$$hashKey":"0QG"},{"name":"Apply","set":[{"name":"eth","value1":"src=","value2":"01:00:00:00:00:00","$$hashKey":"0Q4"},{"name":"vlan","value1":"vid=","value2":"2","$$hashKey":"0Q5"},{"name":"Output","value1":1,"$$hashKey":"0Q6"}],"$$hashKey":"0QH"},{"name":"Clear","$$hashKey":"0QI"},{"name":"Write","set":[{"name":"group","value1":2,"$$hashKey":"022"},{"name":"group","value1":2,"$$hashKey":"033"},{"name":"group","value1":2,"$$hashKey":"2121"},{"name":"group","value1":2,"$$hashKey":"02121212"},{"name":"group","value1":2,"$$hashKey":"40"},{"name":"group","value1":2,"$$hashKey":"30"},{"name":"group","value1":2,"$$hashKey":"20"},{"name":"group","value1":2,"$$hashKey":"50"},{"name":"group","value1":2,"$$hashKey":"011"},{"name":"eth","value1":2,"$$hashKey":"01"}],"$$hashKey":"0QJ"},{"name":"Metadata","value1":"00:11:22:44:55:66:77,","value2":"00:ff:ff:00:00:ff:ff","$$hashKey":"0QK"},{"name":"Goto","value1":5,"$$hashKey":"0QL"}]}');
-
+        $scope.view = JSON.parse('{"table":0,"group":"","meter":"","buffer":0,"actionSet":[],"instructionSet":[],"key":[{"name":"Internal","attrs":[{"name":"in_port","value":"1"},{"name":"in_phy_port","value":"1"},{"name":"tunnel_id","value":"1"},{"name":"metadata","value":"0x0000000000000000"}]}],"packet":{"name":"aaa","bytes":86,"protocols":[{"name":"Ethernet","bytes":18,"fields":[{"name":"Src","value":"0:0:0:0:0:0"},{"name":"Dst","value":"0:0:0:0:0:0"},{"name":"Type","value":"0x8100"}]},{"name":"VLAN","bytes":4,"fields":[{"name":"PCP","value":"0x0"},{"name":"VID","value":"0x000"},{"name":"Type","value":"0x8100"}]},{"name":"VLAN","bytes":4,"fields":[{"name":"PCP","value":"0x0"},{"name":"VID","value":"0x000"},{"name":"Type","value":"0x86dd"}]},{"name":"IPv6","bytes":40,"fields":[{"name":"Flabel","value":"0x00000"},{"name":"Src","value":"0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0"},{"name":"Dst","value":"0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0"},{"name":"TTL","value":"0x00"}]},{"name":"TCP","bytes":20,"fields":[{"name":"Src","value":"0x0000"},{"name":"Dst","value":"0x0000"}]},{"name":"Payload","bytes":0,"fields":[{"name":"Size","value":"0x0000"}]}]}}');
+$scope.keys = JSON.parse('{"key":[{"name":"Internal","attrs":[{"name":"in_port","value":"1"},{"name":"in_phy_port","value":"1"},{"name":"tunnel_id","value":"1"},{"name":"metadata","value":"0x0000000000000000"}]},{"name":"Ethernet","attrs":[{"name":"Src","value":"0:0:0:0:0:0"},{"name":"Dst","value":"0:0:0:0:0:0"},{"name":"Type","value":"33024"}]},{"name":"VLAN","attrs":[{"name":"PCP","value":"0"},{"name":"VID","value":"0"},{"name":"Type","value":"33024"}]},{"name":"VLAN","attrs":[{"name":"PCP","value":"0"},{"name":"VID","value":"0"},{"name":"Type","value":"34525"}]},{"name":"IPv6","attrs":[{"name":"Flabel","value":"0"},{"name":"Src","value":"0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0"},{"name":"Dst","value":"0:0:0:0:0:0:0:0:0:0:0:0:0:0:0:0"},{"name":"TTL","value":"0"}]},{"name":"TCP","attrs":[{"name":"Src","value":"0"},{"name":"Dst","value":"0"}]},{"name":"Payload","attrs":[{"name":"Size","value":"0"}]}]}');
+$scope.idx = 1;
         $scope.step =function() {
-                if ($scope.view.instructionSet[0].name === "Apply" && _.size($scope.view.instructionSet[0].set) > 0) {
-                    $scope.view.instructionSet[0].set.shift();
-                    if ($scope.view.instructionSet[0].set.length === 0) {
-                        $scope.view.instructionSet.shift();
-                    }
-                } else if ($scope.view.instructionSet[0].name === "Write" && _.size($scope.view.instructionSet[0].set) > 0) {
-                    $scope.view.actionSet.push($scope.view.instructionSet[0].set.shift());
-                    if ($scope.$scope.view.instructionSet[0].set.length === 0) {
-                        $scope.view.instructionSet.shift();
-                    }
-                } else {
-                    $scope.view.instructionSet.shift();
-                }
+            $scope.view.key.push($scope.keys.key[$scope.idx++]);
+            
 
-            }
+        };
 
     });

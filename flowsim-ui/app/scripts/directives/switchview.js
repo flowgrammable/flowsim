@@ -46,8 +46,7 @@ angular.module('flowsimUiApp').
                         scope.render(scope.data);
                     });
 
-                    scope.$watch('data', function (newData) {
-                        //scope.ports = portsView(newData.ports, 24);
+                    scope.$watch('data', function () {
                         scope.render(scope.data);
                     }, true);
 

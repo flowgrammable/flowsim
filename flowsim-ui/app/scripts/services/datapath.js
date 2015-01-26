@@ -29,11 +29,6 @@ var _drop       = 'Drop';
 var _reassemble = 'Reassemble';
 
 var defFrag = _normal;
-var _fragOptions = [
-  _normal,
-  _drop,
-  _reassemble
-];
 
 function Profile(datapath, dp_id) {
   if(_.isObject(datapath)) {
