@@ -335,6 +335,7 @@ function handleInternal(action, dp, ctx){
   switch(action.field){
     case 'Output':
       ctx.output = action._value;
+      dp.output(ctx.packet.clone(), action._value);
       break;
     case 'Group':
       ctx.group = action._value;

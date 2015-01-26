@@ -136,6 +136,7 @@ function Context(ctx, packet, buffer_id, in_port, in_phy_port, tunnel_id) {
     this.group  = '';
     this.output = '';
     this.queue  = '';
+    this.dropPacket = false;
 
     // initialize the first table target
     this._nxtTable = 0;

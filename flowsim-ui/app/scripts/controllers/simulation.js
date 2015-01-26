@@ -169,7 +169,8 @@ angular.module('flowsimUiApp')
     $scope.makeTransition = {
       to: $scope.simulation.stage,
       clonePacket: $scope.simulation.clonePacket,
-      cloneTo: $scope.simulation.cloneTo
+      cloneTo: $scope.simulation.cloneTo,
+      fade: $scope.simulation.fade
           //hideDetails($scope.simulation.stage)
     };
     $scope.ctx = $scope.simulation.toView();

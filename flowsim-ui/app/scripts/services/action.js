@@ -17,6 +17,7 @@ function Set(set){
     });
   } else {
     this.actions = [];
+    this.output = false;
   }
 }
 
@@ -100,10 +101,14 @@ Set.prototype.remove = function(idx){
 
 Set.prototype.step = function(dp, ctx) {
   if(this.actions.length){
-    this.actions.shift().step(dp, ctx);
-    return true;
+    var act = this.actions.shift();
+    if(act.field === 'Output'){
+      this.output = true;
+    }
+    act.step(dp, ctx);
+  } else if(this.isEmpty() && !this.output){
+    ctx.dropPacket = true;
   }
-  return false;
 };
 
 Set.prototype.toView = function(){

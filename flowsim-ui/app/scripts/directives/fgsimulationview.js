@@ -85,8 +85,8 @@ angular.module('flowsimUiApp')
                     if (trans.fade) { //dropping the packet
                         svg.selectAll('.sim-packet')
                             .transition()
-                            .style('display', 'none')
-                            .duration(animationDuration);
+                            .duration(animationDuration)
+                            .style('opacity', '0');
                     } else
                     if (trans.clonePacket) {
                         svg.select('#packets')
@@ -105,11 +105,21 @@ angular.module('flowsimUiApp')
                     } else
                     if (trans.to > -1) {
                         if (trans.to > currentStage) { //forward transition
-                            svg.selectAll('.sim-packet')
-                                .transition()
-                                .style('display', 'block')
-                                .duration(animationDuration)
-                                .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
+                            console.log('curr stage:', currentStage);
+                            console.log('trans to:', trans.to);
+                            if(trans.to === 7){
+                                svg.selectAll('.sim-packet')
+                                    .transition()
+                                    .style('display', 'block')
+                                    .duration(animationDuration)
+                                    .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5);
+                            } else {
+                                svg.selectAll('.sim-packet')
+                                    .transition()
+                                    .style('display', 'block')
+                                    .duration(animationDuration)
+                                    .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
+                            }
                         } else if (trans.to === currentStage) { //stay and try to transition first cloned packet from array
                             var currPackets = svg.selectAll('.sim-packet-copy')
                                 .filter(function() {

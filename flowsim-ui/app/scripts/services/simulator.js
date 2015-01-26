@@ -32,9 +32,16 @@ Simulation.prototype.step = function() {
     this.clonePacket = true;
     this.cloneTo = 7;
     this.dataplane.branchStage = 0;
+    this.fade = false;
+  } else if(this.dataplane.ctx.dropPacket && this.stage === 6){
+    this.clonePacket = true;
+    this.cloneTo = 6;
+    this.fade = true;
+    this.dataplane.ctx.dropPacket = false;
   } else {
     this.clonePacket = false;
     this.cloneTo = false;
+    this.fade = false;
   }
   }
 };
