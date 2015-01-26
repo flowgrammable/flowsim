@@ -18,11 +18,11 @@ angular.module('flowsimUiApp')
         $scope.setEnabled = function(name){
           var instruction = _($scope.set).findWhere({name: name});
           instruction.enabled = !instruction.enabled;
-        }
+        };
 
         $scope.isEnabled = function(name){
           return _($scope.set).findWhere({name: name, enabled: true});
-        }
+        };
         $scope.instructionProfile = [
           $scope.caps.instruction.meter,
           $scope.caps.instruction.apply,

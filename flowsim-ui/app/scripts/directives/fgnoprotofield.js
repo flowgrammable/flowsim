@@ -7,7 +7,7 @@
  * # fgfieldform2
  */
 angular.module('flowsimUiApp')
-  .directive('fgNoprotoField', function ($rootScope) {
+  .directive('fgNoprotoField', function () {
     return {
       templateUrl: 'views/fgnoprotofield.html',
       restrict: 'E',
@@ -17,7 +17,7 @@ angular.module('flowsimUiApp')
         field: '=',
         setDirty: '&'
       },
-      link: function postLink(scope, element, attrs, transclude) {
+      link: function postLink(scope, element) {
         scope.local = {};
 
         scope.validateField = function(){
@@ -28,7 +28,7 @@ angular.module('flowsimUiApp')
           } else {
             element.addClass('has-error');          
           }
-        }
+        };
 
         scope.$watch('field.value.value', function(){
           scope.local.str = scope.field.valueToString();

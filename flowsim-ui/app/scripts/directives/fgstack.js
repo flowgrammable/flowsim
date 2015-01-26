@@ -44,7 +44,6 @@ angular.module('flowsimUiApp')
 
         // Add a new Node type to the back of the stack
        $scope.addNode = function() {
-         var node, name;
          if($scope.nodeType.length) {
            $scope.createNode()($scope.nodeType);
            $scope.nodeType = '';

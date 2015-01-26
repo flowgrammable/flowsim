@@ -46,7 +46,7 @@ angular.module('flowsimUiApp')
                         .data(scope.ctx.packet.protocols)
                         .enter()
                         .append('div')
-                        .attr('class', 'rnn-item ext-pack-header')
+                        .attr('class', 'rnn-item ext-pack-header');
 
 
                     scope.protocols.append('div')
@@ -63,7 +63,7 @@ angular.module('flowsimUiApp')
                     ctxHeader.append('div').attr('style', 'padding-left:10px').text('Key');
                     scope.keyWrapper = ctxHeader.append('div');
                     scope.addKey();
-                }
+                };
                 scope.addKey = function() {
 
 

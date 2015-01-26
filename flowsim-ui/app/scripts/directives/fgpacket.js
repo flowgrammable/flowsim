@@ -12,7 +12,7 @@ angular.module('flowsimUiApp')
         packet: '=',
         setDirty: '&'      // callback for persisting changes
       },
-      controller: function($scope, $rootScope) {
+      controller: function($scope) {
         $scope.loaded = false;
         $scope.nodeType = '';  // input type to create node
         $scope.options  = {};  // input select options
@@ -22,17 +22,17 @@ angular.module('flowsimUiApp')
           $scope.nodeType = '';
           $scope.setOptions();
           $scope.setDirty();
-       }
+       };
 
        $scope.popProtocol = function() {
           $scope.packet.popProtocol();
           $scope.setOptions();
           $scope.setDirty();
-       }
+       };
 
        $scope.setOptions = function() {
         $scope.options = _.values(Protocols.Payloads[$scope.packet.protocols[$scope.packet.protocols.length - 1].name])[0];
-       }
+       };
 
       //FIXME ... this belongs else where
       $scope.calcPayloadBytes = function() {
@@ -43,7 +43,7 @@ angular.module('flowsimUiApp')
             $scope.packet.bytes = 0;
           _($scope.packet.protocols).each(function(proto){
             $scope.packet.bytes += proto.bytes;
-          })
+          });
         }
       };
 

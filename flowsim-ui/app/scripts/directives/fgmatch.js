@@ -22,7 +22,7 @@ angular.module('flowsimUiApp')
        
         $scope.tip = function( type){
           return Noproto.MatchTips($scope.active.protocol, $scope.active.field, type);
-        }
+        };
         // Initialize our control variables
         $scope.active = {
           protocols: [],
