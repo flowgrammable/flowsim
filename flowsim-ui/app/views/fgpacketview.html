@@ -16,7 +16,7 @@
            ng-style="{'top': -protocol.fieldBlockHeight/2}" 
            ng-show="protocol.fields && protocol.fields.length">
         <div class="rnn-field" ng-repeat="field in protocol.fields">
-          {{field.name}}: {{field.dispStr(field.value.value, 16)}}
+          {{field.name}}: {{field.valueToString()}}
         </div>
       </div>
     </div>

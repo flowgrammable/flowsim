@@ -65,7 +65,7 @@ describe('Service: Packet', function () {
 
       var field2 = Protocols.mkFieldUInt('Ethernet', 'Type', '0x0800');
       packet.setField('Ethernet', 'Type', field2);
-      expect(packet.protocols[0].fields[2].valueToString()).toBe('0x0800');
+      expect(packet.protocols[0].fields[2].valueToString()).toBe('2048');
   });
 
   it('Packet setField fail', function(){
@@ -85,7 +85,7 @@ describe('Service: Packet', function () {
       packet.pushProtocol('0x8100');
       expect(packet.protocols.length).toBe(3);
       packet.pushTag('MPLS');
-      expect(packet.protocols[2].fields[2].valueToString()).toBe('0x8847');
+      expect(packet.protocols[2].fields[2].valueToString()).toBe('34887');
       expect(packet.protocols.length).toBe(4);
 
       packet.popProtocol();
@@ -94,7 +94,7 @@ describe('Service: Packet', function () {
       packet.pushTag('VLAN');
       expect(packet.protocols.length).toBe(2);
       packet.pushTag('MPLS');
-      expect(packet.protocols[1].fields[2].valueToString()).toBe('0x8847')
+      expect(packet.protocols[1].fields[2].valueToString()).toBe('34887')
       expect(packet.protocols.length).toBe(3);
       expect(packet.protocols[2].name).toBe('MPLS');
 
@@ -102,7 +102,7 @@ describe('Service: Packet', function () {
       packet.popProtocol();
       packet.pushProtocol('0x0800');
       packet.pushTag('MPLS');
-      expect(packet.protocols[0].fields[2].valueToString()).toBe('0x8847');
+      expect(packet.protocols[0].fields[2].valueToString()).toBe('34887');
       
   });
 
@@ -116,7 +116,7 @@ describe('Service: Packet', function () {
     packet.pushProtocol('0x06');
     packet.popTag('VLAN');
     expect(packet.protocols.length).toBe(3);
-    expect(packet.protocols[0].fields[2].valueToString()).toBe('0x0800');
+    expect(packet.protocols[0].fields[2].valueToString()).toBe('2048');
 
   });
 
@@ -131,7 +131,7 @@ describe('Service: Packet', function () {
     packet.pushProtocol('0x06');
     packet.popTag('MPLS');
     expect(packet.protocols.length).toBe(3);
-    expect(packet.protocols[0].fields[2].valueToString()).toBe('0x0800');
+    expect(packet.protocols[0].fields[2].valueToString()).toBe('2048');
 
   });
 
@@ -142,17 +142,17 @@ describe('Service: Packet', function () {
     packet.pushProtocol('0x0800');
     expect(packet.protocols[1].name).toBe('VLAN');
     expect(packet.protocols[2].name).toBe('MPLS');
-    expect(packet.protocols[0].fields[2].valueToString()).toBe('0x8100');
+    expect(packet.protocols[0].fields[2].valueToString()).toBe('33024');
     packet.popTag('MPLS');
     expect(packet.protocols[2].name).toBe('IPv4');
-    expect(packet.protocols[1].fields[2].valueToString()).toBe('0x0800');
+    expect(packet.protocols[1].fields[2].valueToString()).toBe('2048');
 
   })
 
   it('Packet insert protocol', function(){
       var packet = new Packet.Packet('testp');
       var proto = Packet.createProtocol('VLAN');
-      expect(packet.protocols[0].fields[2].valueToString()).toBe('0x0000');
+      expect(packet.protocols[0].fields[2].valueToString()).toBe('0');
       packet.insertProtocol(proto, 1);
       expect(packet.protocols.length).toBe(2);
       
@@ -174,13 +174,13 @@ describe('Service: Packet', function () {
     packet.pushProtocol('0x0800');
     packet.setField('IPv4', 'TTL', '0x77');
     packet.decField('IPv4', 'TTL');
-    expect(packet.protocols[1].fields[2].valueToString()).toBe('0x76');
+    expect(packet.protocols[1].fields[2].valueToString()).toBe('118');
 
     // test MPLS
     packet.pushTag('MPLS');
     packet.setField('MPLS', 'TTL', '0xff');
     packet.decField('MPLS', 'TTL');
-    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('0xfe');
+    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('254');
 
     // test IPv6
     packet.popProtocol();
@@ -188,7 +188,7 @@ describe('Service: Packet', function () {
     packet.pushProtocol('0x86dd');
     packet.setField('IPv6', 'TTL', '0x02');
     packet.decField('IPv6', 'TTL');
-    expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('0x01');
+    expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('1');
   });
 
   it('Packet decField fail', function(){
@@ -210,9 +210,9 @@ describe('Service: Packet', function () {
     packet.setField('MPLS', 'TTL', '0x77');
     packet.pushProtocol('0x0800');
     packet.copyTTLIn('MPLS', 'TTL');
-    expect(packet.getField('IPv4', 'TTL').valueToString()).toBe('0x77');
+    expect(packet.getField('IPv4', 'TTL').valueToString()).toBe('119');
     packet.pushTag('MPLS');
-    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('0x77');
+    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('119');
 
     // MPLS -> IPv6
     packet.popProtocol();
@@ -221,9 +221,9 @@ describe('Service: Packet', function () {
     packet.pushTag('MPLS');
     packet.setField('MPLS', 'TTL', '0xff');
     packet.pushProtocol('0x86dd');
-    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('0xff');
+    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('255');
     packet.copyTTLIn('MPLS');
-    expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('0xff');
+    expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('255');
 
     // MPLS -> MPLS
     packet.popProtocol();
@@ -231,11 +231,11 @@ describe('Service: Packet', function () {
     packet.pushTag('MPLS');
     packet.setField('MPLS', 'TTL', '0x11');
     packet.pushTag('MPLS');
-    expect(packet.protocols[1].getField('TTL').valueToString()).toBe('0x11');
-    expect(packet.protocols[2].getField('TTL').valueToString()).toBe('0x11');
+    expect(packet.protocols[1].getField('TTL').valueToString()).toBe('17');
+    expect(packet.protocols[2].getField('TTL').valueToString()).toBe('17');
     packet.setField('MPLS', 'TTL', '0x22');
     packet.copyTTLIn('MPLS');
-    expect(packet.protocols[2].getField('TTL').valueToString()).toBe('0x22');
+    expect(packet.protocols[2].getField('TTL').valueToString()).toBe('34');
   });
 
   it('Packet copyTTLIn missing proto ipv4|ipv6|mpls fail', function(){
@@ -297,14 +297,14 @@ describe('Service: Packet', function () {
     packet.pushProtocol('0x0800');
     packet.setField('IPv4', 'TTL', '0x77');
     packet.copyTTLOut('IPv4');
-    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('0x77');
+    expect(packet.getField('MPLS', 'TTL').valueToString()).toBe('119');
 
     // IPv6 -> MPLS
     packet.popProtocol();
     packet.pushProtocol('0x86dd');
     packet.setField('IPv6', 'TTL', '0xee');
     packet.copyTTLOut('IPv6');
-    expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('0xee');
+    expect(packet.getField('IPv6', 'TTL').valueToString()).toBe('238');
 
     // MPLS -> MPLS
     packet.popProtocol();
@@ -314,7 +314,7 @@ describe('Service: Packet', function () {
     expect(packet.protocols.length).toBe(3);
     packet.protocols[2].setField('TTL', '0x02');
     packet.copyTTLOut('MPLS');
-    expect(packet.protocols[1].getField('TTL').valueToString()).toBe('0x02');
+    expect(packet.protocols[1].getField('TTL').valueToString()).toBe('2');
   });
 
 });

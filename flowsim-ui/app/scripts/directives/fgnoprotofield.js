@@ -20,9 +20,19 @@ angular.module('flowsimUiApp')
       link: function postLink(scope, element) {
         scope.local = {};
 
+        scope.isHexStr = function(input){
+          return /0[xX][0-9a-fA-F]+/.test(input);
+        }
+
+        if(scope.field.defDisplay === 'hex'){
+          scope.field.value.isHex = true;
+        }
+        scope.local.str = scope.field.valueToString();
         scope.validateField = function(){
           if(scope.field.testStr(scope.local.str)){
             element.removeClass('has-error');
+            // Determine user display preference, hex vs dec
+            scope.field.value.isHex = scope.isHexStr(scope.local.str);
             scope.field.value.value = scope.field.consStr(scope.local.str);
             scope.setDirty()();
           } else {
@@ -32,7 +42,7 @@ angular.module('flowsimUiApp')
 
         scope.$watch('field.value.value', function(){
           scope.local.str = scope.field.valueToString();
-        }, true);
+        });
       }
     };
   });

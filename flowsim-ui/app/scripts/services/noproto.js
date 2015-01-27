@@ -514,6 +514,8 @@ function Field(params) {
   this.tip = params.tip || this.name;
   // Does this field indicate payload?
   this.payloadField = params.payloadField || false;
+  // defined defDisplay format
+  this.defDisplay = params.defDisplay || null;
 }
 
 Field.prototype.attachDefaultFunctions = function() {

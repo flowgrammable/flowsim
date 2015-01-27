@@ -5,6 +5,10 @@ angular.module('flowsimUiApp')
 
 var Pattern = /^(0x)?[0-9a-fA-F]+$/;
 
+function isHexStr(input){
+  return /^\\x/.test(input);
+}
+
 function padZeros(input, len) {
   len -= input.length;
   if(len < 1) { return input; }
@@ -134,16 +138,16 @@ function consStr(bits) {
 // toString :: Nat | [Nat] -> String
 //
 function toString(bits) {
-  return function(value, base) {
+  return function(value, isHex) {
     if(_(value).isArray()) {
       return '0x'+_(value).map(function(octet) {
         return padZeros(octet.toString(16), 2);
       }).join('');
     } else if(_(value).isFinite()) {
-      if(base === 16) {
+      if(isHex) {
         return '0x'+padZeros(value.toString(16), 2*(bits/8));
       } else {
-        return value.toString(base);
+        return value.toString(10);
       }
     } else {
       throw 'toString on bad value: '+value;
@@ -159,7 +163,11 @@ function UInt(uint, value, bytes) {
       this.value = uint.value;
     }
     this.bytes = uint.bytes;
+    this.isHex = uint.isHex;
   } else if(_.isString(value) && Pattern.test(value) && bytes) {
+    if(isHexStr(value)){
+      this.isHex = true;
+    }
     if(bytes < 5) {
       this.value = parseInt(value);
     } else {
@@ -170,16 +178,20 @@ function UInt(uint, value, bytes) {
   } else if(_.isArray(value)) {
     this.value = value;
     this.bytes = bytes ? _.max([bytes, value.length]) : value.length;
+    this.isHex = true;
   } else if(_.isFinite(value) && (value % 1 === 0) && (bytes < 5)) {
     this.value = value;
     this.bytes = bytes ? bytes : 4;
+    this.isHex = false;
   } else if((_.isUndefined(value) || _.isNull(value) || value === 0) && bytes >= 0) {
     if(bytes < 5) {
       this.value = 0;
       this.bytes = bytes;
+      this.isHex = false;
     } else {
       this.value = _(bytes).times(function() { return 0; });
       this.bytes = bytes;
+      this.isHex = true;
     }
   } else {
     throw 'UInt('+uint+', '+value+', '+bytes+')';
