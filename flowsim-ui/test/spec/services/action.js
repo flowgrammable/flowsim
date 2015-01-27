@@ -65,7 +65,7 @@ describe('Service: action', function () {
     as.add(act6);
     expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('0');
     // expect step should copy mpls ttl to ipv6 ttl
-    as.step(null, context)
+    as.step(null, context);
     expect(as.isEmpty()).toBe(false);
     expect(pack.getField('IPv6', 'TTL').valueToString()).toBe('119');
     // expect action copy ipv6 ttl -> inner to throw because inner doesnt exist
@@ -110,7 +110,7 @@ describe('Service: action', function () {
     expect(as.isEmpty()).toBe(false);
     expect(pack.protocols[2].getField('TTL').valueToString()).toBe('119');
     expect(function(){
-      as.step(null, context)
+      as.step(null, context);
     }).toThrow();
 
   });
@@ -188,7 +188,7 @@ describe('Service: action', function () {
     var pushMPLS = Utils.mkAction('MPLS', 'tag', 'push', '');
     var pushVLAN = Utils.mkAction('VLAN', 'tag', 'push', '');
     as.add(popAct);
-    as.add(popVLAN)
+    as.add(popVLAN);
     as.add(pushMPLS);
     as.add(pushVLAN);
     expect(as.actions.length).toBe(4);
@@ -531,7 +531,18 @@ describe('Service: action', function () {
     expect(as.isEmpty()).toBe(true);
   });
 
-
-
+  iit('Action Set sort pass', function(){
+    var as = new Action.Set();
+    var act1 = Utils.mkAction('Internal', 'Queue', 'set', '1');
+    var act2 = Utils.mkAction('Internal', 'Output', 'set', '1');
+    var act3 = Utils.mkAction('Ethernet', 'Src', 'set', 'a:b:c:D:e:f');
+    var act4 = Utils.mkAction('IPv4', 'TTL', 'dec', '');
+    as.add(act2);
+    as.add(act1);
+    as.add(act3);
+    as.add(act4);
+    expect(as.actions[0].field).toBe('Queue');
+    expect(as.actions[3].field).toBe('Output');
+  });
 
 });
