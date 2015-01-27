@@ -24,6 +24,9 @@ angular.module('flowsimUiApp')
           return /0[xX][0-9a-fA-F]+/.test(input);
         }
 
+        if(scope.field.defDisplay === 'hex'){
+          scope.field.value.isHex = true;
+        }
         scope.local.str = scope.field.valueToString();
         scope.validateField = function(){
           if(scope.field.testStr(scope.local.str)){

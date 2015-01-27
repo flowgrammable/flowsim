@@ -110,6 +110,7 @@ Field.prototype.getFieldUtils = function(protoName){
   this.testStr = noProtoField.testStr;
   this.tip = noProtoField.tip;
   this.payloadField = noProtoField.payloadField;
+  this.defDisplay = noProtoField.defDisplay;
 };
 
 Field.prototype.mkDefaultValue = function(){
