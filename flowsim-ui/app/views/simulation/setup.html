@@ -14,25 +14,32 @@
   </div>
 
   <div class="col-md-10" ng-show="trace">
-    
-    <switch-view data="trace.device.ports"></switch-view>
 
     <div class="row">
-      <div class="col-md-4">
-        <h4>Switch</h4>
+      <div class="col-sm-3">
         <div class="input-group">
+          <span class="input-group-addon">Switch</span>
           <select class="form-control" ng-model="resources.deviceName"
-                  ng-changed="selectSwitch()">
+            ng-changed="selectSwitch()">
             <option ng-repeat="name in resources.devices">{{name}}</option>
           </select>
         </div>
       </div>
-
-      <!-- Control for editing the input packet trace -->
-      <input-trace pkt-events="trace.events" resources="resources"
-                   log-ports="trace.device.ports.ports"
-                   phy-ports="trace.device.ports.ports" add-packet="">
-      </input-trace>
+      <div class="col-sm-7">
+        <switch-view data="trace.device.ports"></switch-view>
+      </div>
+    </div>
+    <hr>
+    <h3>Trace Builder</h3>
+    <div class="row">
+      <div class="col-sm-offset-1 col-sm-8">
+        <!-- Control for editing the input packet trace -->
+        <input-trace pkt-events="trace.events" resources="resources"
+                 log-ports="trace.device.ports.ports"
+                 phy-ports="trace.device.ports.ports" add-packet="addPacket">
+        </input-trace>
+      </div>
     </div>
   </div>
+
 </div>

@@ -1,29 +1,3 @@
-<div>
-<!--
-<form class="form-inline">
-  <div class="form-group">
-    <select class="form-control" ng-model="resources.packetName">
-      <option ng-repeat="name in resources.packets">{{name}}</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <select class="form-control" ng-model="active.in_port"
-            ng-options="port.id as port.id for port in logPorts">
-    </select>
-  </div>
-  <div class="form-group">
-    <select class="form-control" ng-model="active.in_phy_port"
-            ng-options="port.id as port.id for port in phyPorts">
-      <option value=""></option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>
-      <input class="form-control" type="text" ng-model="active.tunnel">
-    </label>
-  </div>
-</form>
--->
 
 <table class="table">
   <thead>
@@ -60,7 +34,7 @@
       </td>
       <td>
         <button class="btn btn-default" type="button" 
-                ng-disabled="!resources.packetName || !active.in_port" 
+                ng-disabled="!active.packetName || !active.in_port" 
                 ng-click="addEvent()">
           Add
         </button>
@@ -68,6 +42,12 @@
     </tr>
   </tbody>
 </table>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Packet Events</h3>
+  </div>
+  <div class="panel-body">
 
 <table class="table table-striped">
   <thead>
@@ -95,3 +75,5 @@
 </table>
 
 </div>
+</div>
+

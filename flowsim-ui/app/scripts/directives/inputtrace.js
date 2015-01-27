@@ -22,7 +22,7 @@ angular.module('flowsimUiApp')
         $scope.active = {};
 
         $scope.addEvent = function() {
-          $scope.pktEvents.push($scope.addPacket()($scope.active));
+          $scope.addPacket()($scope.active);
           $scope.active = {};
         };
 
