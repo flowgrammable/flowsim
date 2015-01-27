@@ -162,30 +162,48 @@ angular.module('flowsimUiApp')
   $scope.stop = function() {
     $scope.simulation.stop();
     $scope.makeTransition =  {to:-1};
+    $scope.simulation.isDone = false;
   };
 
   $scope.step = function() {
-    $scope.simulation.step();
-    $scope.makeTransition = {
-      to: $scope.simulation.stage,
-      clonePacket: $scope.simulation.clonePacket,
-      cloneTo: $scope.simulation.cloneTo,
-      fade: $scope.simulation.fade
-          //hideDetails($scope.simulation.stage)
-    };
-    if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
-      $scope.extractView = $scope.simulation.toView();
-    }else{
-      $scope.extractView = null;
-    }
-    $scope.ctx = $scope.simulation.toView();
-    $scope.view = $scope.simulation.toView();
-    console.log('post step', $scope.ctx);
-    if($scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
-      $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
+
+
+
+    // step through each packet
+    if($scope.simulation.isDone){
+      // done with step
+      $scope.simulation.stop();
+      $scope.makeTransition = {to: -1};
     } else {
-      $scope.packetName = '';
+      $scope.simulation.step();
+      $scope.makeTransition = {
+        to: $scope.simulation.stage,
+        clonePacket: $scope.simulation.clonePacket,
+        cloneTo: $scope.simulation.cloneTo,
+        fade: $scope.simulation.fade,
+        output: $scope.simulation.isDone
+            //hideDetails($scope.simulation.stage)
+      };
+      $scope.ctx = $scope.simulation.toView();
+      $scope.view = $scope.simulation.toView();
+
+      console.log('post step', $scope.ctx);
+      if($scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
+        $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
+      } else {
+        $scope.packetName = '';
+      }
+
+      if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
+        $scope.extractView = $scope.simulation.toView();
+      }else{
+        $scope.extractView = null;
+      }
     }
+
+
+
+
   };
 
 });

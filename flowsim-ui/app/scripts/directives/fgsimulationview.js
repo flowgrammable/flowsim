@@ -86,7 +86,18 @@ angular.module('flowsimUiApp')
                         svg.selectAll('.sim-packet')
                             .transition()
                             .duration(animationDuration)
-                            .style('opacity', '0');
+                            .style('opacity', '0')
+                            .transition();
+                    } else
+                    if (trans.output){
+                        svg.selectAll('.sim-packet')
+                            .style('opacity', '.5')
+                            .transition()
+                            .style('display', 'block')
+                            .duration(animationDuration)
+                            .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5)
+                            .transition()
+                            .style('display', 'none');
                     } else
                     if (trans.clonePacket) {
                         svg.select('#packets')
@@ -107,13 +118,15 @@ angular.module('flowsimUiApp')
                         if (trans.to > currentStage) { //forward transition
                             console.log('curr stage:', currentStage);
                             console.log('trans to:', trans.to);
-                            if(trans.to === 7){
+                            if(trans.output === true){
                                 svg.selectAll('.sim-packet')
                                     .style('opacity', '.5')
                                     .transition()
                                     .style('display', 'block')
                                     .duration(animationDuration)
-                                    .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5);
+                                    .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5)
+                                    .transition()
+                                    .style('display', 'none');
                             } else {
                                 svg.selectAll('.sim-packet')
                                     .style('opacity', '.5')
@@ -134,10 +147,7 @@ angular.module('flowsimUiApp')
                                 .duration(animationDuration)
                                 .attr('stage', trans.cloneTo)
                                 .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
-
-
-
-                        } else { //bacward transition
+                        } else { //bacward transitio
                             svg.selectAll('.sim-packet')
                                 .style('opacity', '.5')
                                 .transition()

@@ -200,7 +200,7 @@ Dataplane.prototype.step = function() {
       }
       break;
     case FINAL:
-      // drop or forward
+      return -1;
       break;
     default:
       throw 'Bad Dataplane state: ' + this.state;
