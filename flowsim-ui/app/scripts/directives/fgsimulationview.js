@@ -87,6 +87,8 @@ angular.module('flowsimUiApp')
                             .transition()
                             .duration(animationDuration)
                             .style('opacity', '0')
+                            .transition()
+                            .attr('x', (-1) * (stageWidth + stagePadding) + margin - 5)
                             .transition();
                     } else
                     if (trans.output){
@@ -147,6 +149,8 @@ angular.module('flowsimUiApp')
                                 .duration(animationDuration)
                                 .attr('stage', trans.cloneTo)
                                 .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
+                        } else if(/* trans to beginning*/ ) {
+
                         } else { //bacward transitio
                             svg.selectAll('.sim-packet')
                                 .style('opacity', '.5')

@@ -168,8 +168,6 @@ angular.module('flowsimUiApp')
 
   $scope.step = function() {
 
-
-
     // step through each packet
     if($scope.simulation.isDone){
       // done with step

@@ -30,7 +30,7 @@ Simulation.prototype.step = function() {
 
 
   if(this.dataplane.idle() && this.isDone) {
-    this.stop();
+      this.stop();
   }
 
   if(this.dataplane){
@@ -39,14 +39,27 @@ Simulation.prototype.step = function() {
     this.cloneTo = 7;
     this.dataplane.branchStage = 0;
     this.fade = false;
-  } else if(this.dataplane.ctx.actionSet.output && this.dataplane.state === 'Egress'){
-    this.isDone = true;
-  } else if(this.dataplane.ctx.dropPacket && this.dataplane.state === 'Egress'){
+  } else if(this.dataplane.ctx.actionSet.output && this.dataplane.state === 'Final'){
+    if(this.dataplane.inputQ.length > 0){
+      this.dataplane.currEvent = 0;
+      this.dataplane.state = 'Arrival';
+      this.dataplane.pause = false;
+    } else {
+      this.isDone = true;
+    }
+  } else if(this.dataplane.ctx.dropPacket && this.dataplane.state === 'Final'){
     this.clonePacket = true;
     this.cloneTo = 6;
     this.fade = true;
     this.dataplane.ctx.dropPacket = false;
-    this.isDone = true;
+    // set state for next packet
+    if(this.dataplane.inputQ.length > 0){
+      this.dataplane.currEvent = 0;
+      this.dataplane.state = 'Arrival';
+      this.dataplane.pause = false;
+    } else {
+      this.isDone = true;
+    }
   } else {
     this.clonePacket = false;
     this.cloneTo = false;

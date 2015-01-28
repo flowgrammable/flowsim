@@ -130,6 +130,9 @@ Dataplane.prototype.step = function() {
   if(this.pause) {
     this.state = this.nextState;
     this.pause = false;
+    if(this.nextState === 'Final'){
+      this.currEvent = null;
+    }
     for(i=0; i<State.length; i++) {
       if(State[i].toLowerCase() === this.state.toLowerCase()) {
         return i;
@@ -137,8 +140,9 @@ Dataplane.prototype.step = function() {
     }
   }
 
-  if(this.currEvent === null) {
+  if(!this.currEvent) {
     this.currEvent = this.inputQ[0];
+    console.log('currevent', this.currEvent);
     this.inputQ.splice(0, 1);
   }
 
