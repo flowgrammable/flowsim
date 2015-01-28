@@ -205,7 +205,6 @@ Dataplane.prototype.step = function() {
       break;
     case FINAL:
       return -1;
-      break;
     default:
       throw 'Bad Dataplane state: ' + this.state;
   }

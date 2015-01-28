@@ -63,7 +63,7 @@ function actSort(a, b){
     return 1;
   }
   if(opPriority[a.op] === opPriority[b.op]){
-    if(a.field === 'Group' || a.field === 'Queue' || a.field === 'Output'){
+    if(a.protocol === 'Internal' && b.protocol === 'Internal'){
       return internalSort(a.field, b.field);
     }
     return protoSort(a.protocol, b.protocol);

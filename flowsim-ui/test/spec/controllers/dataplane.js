@@ -54,9 +54,6 @@ describe('Service: dataplane', function() {
 
 
   it('Device construction Fail', function(){
-      var prof = Profile.create('test profile name');
-      var swi = Switch_.create(null, prof);
-
       expect(function() {
       var dp = new Dataplane.Dataplane();
       }).toThrow();

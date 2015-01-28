@@ -517,6 +517,8 @@ function Field(params) {
   this.payloadField = params.payloadField || false;
   // defined defDisplay format
   this.defDisplay = params.defDisplay || null;
+  // define summary
+  this.summary = params.summary || null;
 }
 
 Field.prototype.attachDefaultFunctions = function() {
@@ -592,6 +594,7 @@ function Protocol(params) {
   // Construct the protocol fields
   this.fields = _(params.fields).map(function(field) {
     field.protocol   = this.name;
+    field.summary    = this.shortName;
     return new Field(field);
   }, this);
   // Attach a name/key for each field
