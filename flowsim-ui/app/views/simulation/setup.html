@@ -14,86 +14,32 @@
   </div>
 
   <div class="col-md-10" ng-show="trace">
-    
-    <switch-view data="trace.device.ports"></switch-view>
-
+    <h3>Select Switch</h3>
     <div class="row">
-      <div class="col-md-4">
-        <h4>Switch</h4>
+      <div class="col-sm-3">
         <div class="input-group">
+          <span class="input-group-addon">Switch</span>
           <select class="form-control" ng-model="resources.deviceName"
-                  ng-changed="selectSwitch()">
+            ng-changed="selectSwitch()">
             <option ng-repeat="name in resources.devices">{{name}}</option>
           </select>
         </div>
       </div>
-
-      <div class="col-md-8" ng-show="trace.device">
-        <h4>Configure the trace</h4>
-        <table class="table table-striped">
-          <thead>
-            <th>#</th>
-            <th>Packet</th>
-            <th>In Port</th>
-            <th>In Phy Port</th>
-            <th>Tunnel ID</th>
-            <th></th>
-          </thead>
-          <tbody>
-            <tr class="table">
-            <td></td>
-            <td>
-              <select class="form-control" ng-model="resources.packetName">
-                <option ng-repeat="name in resources.packets">{{name}}</option>
-              </select>
-            </td>
-            <td>
-              <select class="form-control" ng-model="active.in_port"
-                      ng-options="port.id as port.id for port in
-                                 trace.device.ports.ports">
-              </select>
-            </td>
-            <td>
-              <select class="form-control" ng-model="active.in_phy_port"
-                      ng-options="port.id as port.name for port in
-                                 trace.device.ports.ports">
-                <option value=""></option>
-              </select>
-            </td>
-            <td>
-              <label>
-                <input class="form-control" type="text"
-                       ng-model="active.tunnel">
-              </label>
-            </td>
-            <td>
-              <button class="btn btn-default" type="button" ng-disabled="!active.in_port" ng-click="addPacket()">
-                Add
-              </button>
-            </td>
-          </tr>
-            <tr ng-repeat="ev in trace.events">
-              <td>{{$index+1}}</td>
-              <td>{{ev.packet.name}}</td>
-              <td>
-                {{ev.in_port}}
-              </td>
-              <td>
-                {{ev.in_phy_port}}
-              </td>
-              <td>
-                {{ev.tunnel}}
-              </td>
-              <td>
-                <span class="glyphicon glyphicon-minus-sign"
-                      ng-click="delPacket($index)">
-                </span>
-              </td>
-            </tr>
-
-          </tbody>
-        </table>
+      <div class="col-sm-7">
+        <switch-view data="trace.device.ports"></switch-view>
+      </div>
+    </div>
+    <hr>
+    <h3>Build Trace</h3>
+    <div class="row">
+      <div class="col-sm-offset-1 col-sm-8">
+        <!-- Control for editing the input packet trace -->
+        <input-trace pkt-events="trace.events" resources="resources"
+                 log-ports="trace.device.ports.ports"
+                 phy-ports="trace.device.ports.ports" add-packet="addPacket">
+        </input-trace>
       </div>
     </div>
   </div>
+
 </div>

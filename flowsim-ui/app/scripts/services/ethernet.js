@@ -52,7 +52,8 @@ var Ethernet = {
     bitwidth: 16,
     matchable: true,
     tip: 'Payload Type/Length',
-    payloadField: true
+    payloadField: true,
+    defDisplay: 'hex'
   }]
 };
 

@@ -99,7 +99,7 @@ function Field(fld, name){
 }
 
 Field.prototype.valueToString = function(){
-    return this.dispStr(this.value.value, 16);
+    return this.dispStr(this.value.value, this.value.isHex);
 };
 
 Field.prototype.getFieldUtils = function(protoName){
@@ -110,6 +110,7 @@ Field.prototype.getFieldUtils = function(protoName){
   this.testStr = noProtoField.testStr;
   this.tip = noProtoField.tip;
   this.payloadField = noProtoField.payloadField;
+  this.defDisplay = noProtoField.defDisplay;
 };
 
 Field.prototype.mkDefaultValue = function(){
@@ -273,16 +274,6 @@ Packet.prototype.popProtocol = function() {
   this.bytes -= this.protocols[this.protocols.length-1].bytes;
   this.protocols.splice(this.protocols.length-1);
 
-  // Find payload field of last protocol
-  var lastProtocol = _(this.protocols).last();
-  // find payload field if any
-  var payloadField = _(lastProtocol.fields).find(function(field){
-    return field.payloadField;
-  });
-  // if last protocol has a payload field, zero it out
-  if(payloadField){
-    payloadField.value = new UInt.UInt(null, 0, Math.ceil(payloadField.bitwidth/8));
-  }
 };
 
 // 1. Sets payload type of last protocol in packet
@@ -300,7 +291,7 @@ Packet.prototype.pushProtocol = function(protoValue) {
   });
   // if field is found then set payload
   if(payloadField){
-    payloadField.value = new UInt.UInt(null, protoValue, Math.ceil(payloadField.bitwidth/8));
+    payloadField.value.value = parseInt(protoValue);
   }
   // Find new protocol
   var newProtoname = _.values(Protocols.Payloads[lastProtocol.name])[0][protoValue];

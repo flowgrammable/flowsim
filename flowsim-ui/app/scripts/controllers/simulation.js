@@ -66,18 +66,19 @@ angular.module('flowsimUiApp')
   });
 
   // add the selected packet to the trace
-  $scope.addPacket = function() {
-    fgCache.get('packet', $scope.resources.packetName, Packet,
+  $scope.addPacket = function(pkt) {
+    fgCache.get('packet', pkt.packetName, Packet,
                 function(err, result) {
       if(err) {
         console.log(err.details);
       } else {
-        $scope.trace.push(result.clone(), $scope.active.in_port, 
-            $scope.active.in_phy_port, $scope.active.tunnel);
-        $scope.resources.packetName = '';
+        $scope.trace.push(result.clone(), pkt.in_port, 
+            pkt.in_phy_port, pkt.tunnel);
+        /*$scope.resources.packetName = '';
         $scope.active.in_port = '';
         $scope.active.in_phy_port = '';
         $scope.active.tunnel = '';
+        */
       }
     });
   };
