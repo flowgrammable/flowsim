@@ -180,13 +180,14 @@ angular.module('flowsimUiApp')
         clonePacket: $scope.simulation.clonePacket,
         cloneTo: $scope.simulation.cloneTo,
         fade: $scope.simulation.fade,
-        output: $scope.simulation.isDone
+        output: $scope.simulation.forwardPacket
             //hideDetails($scope.simulation.stage)
       };
       $scope.ctx = $scope.simulation.toView();
       $scope.view = $scope.simulation.toView();
 
       console.log('post step', $scope.ctx);
+      console.log('dp state:', $scope.simulation.dataplane.state);
       if($scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
         $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
       } else {

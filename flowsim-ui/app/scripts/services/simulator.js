@@ -34,37 +34,40 @@ Simulation.prototype.step = function() {
   }
 
   if(this.dataplane){
-  if(this.dataplane.branchStage === 7){
-    this.clonePacket = true;
-    this.cloneTo = 7;
-    this.dataplane.branchStage = 0;
-    this.fade = false;
-  } else if(this.dataplane.ctx.actionSet.output && this.dataplane.state === 'Final'){
-    if(this.dataplane.inputQ.length > 0){
-      this.dataplane.currEvent = 0;
-      this.dataplane.state = 'Arrival';
-      this.dataplane.pause = false;
+    if(this.dataplane.branchStage === 7){
+      this.clonePacket = true;
+      this.cloneTo = 7;
+      this.dataplane.branchStage = 0;
+      this.fade = false;
+    } else if(this.dataplane.ctx.actionSet.output && this.dataplane.state === 'Egress'){
+      if(this.dataplane.inputQ.length > 0){
+        this.dataplane.currEvent = 0;
+        this.dataplane.state = 'Arrival';
+        this.dataplane.pause = true;
+        this.forwardPacket = true;
+      } else {
+        this.forwardPacket = true;
+        this.isDone = true;
+      }
+    } else if(this.dataplane.ctx.dropPacket && this.dataplane.state === 'Egress'){
+      this.clonePacket = true;
+      this.cloneTo = 6;
+      this.fade = true;
+      this.dataplane.ctx.dropPacket = false;
+      // set state for next packet
+      if(this.dataplane.inputQ.length > 0){
+        this.dataplane.currEvent = 0;
+        this.dataplane.state = 'Arrival';
+        this.dataplane.pause = true;
+      } else {
+        this.isDone = true;
+      }
     } else {
-      this.isDone = true;
+      this.clonePacket = false;
+      this.cloneTo = false;
+      this.fade = false;
+      this.forwardPacket = false;
     }
-  } else if(this.dataplane.ctx.dropPacket && this.dataplane.state === 'Final'){
-    this.clonePacket = true;
-    this.cloneTo = 6;
-    this.fade = true;
-    this.dataplane.ctx.dropPacket = false;
-    // set state for next packet
-    if(this.dataplane.inputQ.length > 0){
-      this.dataplane.currEvent = 0;
-      this.dataplane.state = 'Arrival';
-      this.dataplane.pause = false;
-    } else {
-      this.isDone = true;
-    }
-  } else {
-    this.clonePacket = false;
-    this.cloneTo = false;
-    this.fade = false;
-  }
   }
 
 };

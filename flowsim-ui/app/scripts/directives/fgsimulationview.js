@@ -89,7 +89,8 @@ angular.module('flowsimUiApp')
                             .style('opacity', '0')
                             .transition()
                             .attr('x', (-1) * (stageWidth + stagePadding) + margin - 5)
-                            .transition();
+                            .transition()
+                            .remove();
                     } else
                     if (trans.output){
                         svg.selectAll('.sim-packet')
@@ -99,7 +100,8 @@ angular.module('flowsimUiApp')
                             .duration(animationDuration)
                             .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5)
                             .transition()
-                            .style('display', 'none');
+                            .style('display', 'none')
+                            .remove();
                     } else
                     if (trans.clonePacket) {
                         svg.select('#packets')
@@ -149,8 +151,19 @@ angular.module('flowsimUiApp')
                                 .duration(animationDuration)
                                 .attr('stage', trans.cloneTo)
                                 .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
-                        } else if(/* trans to beginning*/ ) {
-
+                        } else if(trans.to === 0 && currentStage === 6){
+                             svg.select('#packets')
+                                    .append('rect')
+                                    .attr('class', 'sim-packet')
+                                    .attr('height', stageHeight + 10)
+                                    .attr('width', stageWidth + 10)
+                                    .attr('x', -1.5 * (stageWidth + stagePadding) + margin - 5)
+                                    .attr('y', margin / 2 - 5)
+                                    .attr('ry', 10)
+                                    .attr('stage', -1.5) //set the stage ID
+                                    .transition()
+                                    .duration(animationDuration)
+                                    .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
                         } else { //bacward transitio
                             svg.selectAll('.sim-packet')
                                 .style('opacity', '.5')
