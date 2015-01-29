@@ -184,6 +184,10 @@ Meter.prototype.step = function(dp, ctx){
   ctx.meter = tarMtr;
 };
 
+Meter.prototype.isValid = function(){
+  return this.idTest(this.id);
+};
+
 Meter.prototype.toView = function(){
   return {
     name: this.name,
@@ -418,6 +422,39 @@ Goto.prototype.toView = function(){
   };
 };
 
+Goto.prototype.tableTest = function(tarVal, caps){
+  if(!this.targetTest(tarVal)){
+    return false;
+  }
+  var tarTbl = parseInt(tarVal);
+
+  var availTbls = caps.instruction.goto_.targets;
+  // TODO: get list of switch tables 
+  // and test(tarTbl > numTables === true)
+  if(tarTbl <= caps.id ){
+    console.log('cannot target table with id less than current table');
+    return false;
+  } else if(tarTbl === caps.id){
+    console.log('cannot target table with same id');
+    return false;
+  } else {
+    var tblsInRange = _(availTbls).filter(function(range){
+      if(tarTbl >= range[0] && tarTbl <= range[1]){
+        return true;
+      }
+    });
+    if(!tblsInRange.length){
+      console.log('cannot target table out of goto profile range');
+      return false;
+    }
+  }
+  return true;
+};
+
+Goto.prototype.isValid = function(){
+  return this.target.length > 0;
+};
+
 function Set(set) {
   if(_(set).isObject()) {
     // Copy the simple properties
@@ -541,6 +578,16 @@ Set.prototype.isEmpty = function(){
   return !this.meter.enabled && !this.apply.enabled && 
   !this.clear.enabled && !this.write.enabled && 
   !this.metadata.enabled && !this.goto_.enabled;
+};
+
+Set.prototype.isValid = function(){
+  if(this.meter.enabled && !this.meter.isValid()){
+    return false;
+  }
+  if(this.goto_.enabled && !this.goto_.isValid()){
+    return false;
+  }
+  return true;
 };
 
 return {

@@ -44,19 +44,7 @@
     <div class="col-md-10">
       <div ng-show="active.index === 0">
         <br>
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-sm-2 control-label">
-              Meter Id
-            </label>
-            <div class="col-sm-5"
-                 ng-class="{'has-error': set.meter.id.length > 0 &&
-                             !set.meter.idTest(set.meter.id)}">
-              <input type="text" class="form-control"
-                     tooltip="{{set.meter.idTip}}"  ng-model="set.meter.id">
-            </div>
-          </div>
-        </form>
+        <fg-meter-config meter="set.meter"/>
       </div>
       <div ng-show="active.index === 1">
         <fg-apply-actions toplevel="instructionProfile[1].profiles.profiles" 
@@ -104,20 +92,7 @@
       </div>
       <div ng-show="active.index === 5">
         <br>
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-sm-2 control-label">
-              Table Id
-            </label>
-            <div class="col-sm-5" ng-class="{'has-error':
-              set.goto_.target.length > 0 &&
-              !set.goto_.targetTest(set.goto_.target)}">
-              <input type="text" class="form-control"
-                     tooltip="{{set.goto_.targetTip}}" 
-                     ng-model="set.goto_.target">
-            </div>
-          </div>
-        </form>
+        <fg-goto-config goto="set.goto_" caps="caps"/>
       </div>
     </div>
   </div>

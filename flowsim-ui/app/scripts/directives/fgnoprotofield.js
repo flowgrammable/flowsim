@@ -22,7 +22,7 @@ angular.module('flowsimUiApp')
 
         scope.isHexStr = function(input){
           return /0[xX][0-9a-fA-F]+/.test(input);
-        }
+        };
 
         if(scope.field.defDisplay === 'hex'){
           scope.field.value.isHex = true;
