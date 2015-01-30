@@ -22,6 +22,7 @@ angular.module('flowsimUiApp')
 
       	$scope.set = function() {
       		$scope.goto_.target = $scope.active.value;
+          $scope.active.value = '';
       	};
       }
     };

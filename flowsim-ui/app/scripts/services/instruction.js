@@ -325,10 +325,12 @@ Write.prototype.toView = function(){
 function Metadata(meta){
   if(_.isObject(meta)){
     _.extend(this, meta);
+    this.value = new UInt.UInt(meta.value);
+    this.mask = new UInt.UInt(meta.mask);
   } else {
     this.enabled = false;
-    this.value = 0;
-    this.mask = 0;
+    this.value = new UInt.UInt(null, 0, 8);
+    this.mask = new UInt.UInt(null, 0, 8);
   }
   this.name      = 'Metadata';
   this.tip       = 'Updates the masked bits of the metadata property in the packet key';
@@ -339,26 +341,34 @@ function Metadata(meta){
   this.consStr   = Protocols.getField('Internal', 'Metadata').consStr;
   this.profileTest = function(maskCaps){
     // check that meter.mask is equal to mask defined in meter profile
-    var mask = new UInt.UInt(null, this.consStr(this.mask), 8);
-    if(!mask.equal(new UInt.UInt(null, this.consStr(maskCaps), 8))){
+    if(!this.mask.equal(new UInt.UInt(null, this.consStr(maskCaps), 8))){
       return false;
     }
-    return true;;
+    return true;
   };
 }
 
-Metadata.prototype.maskedValue = function (){
-  var insValue = new UInt.UInt(null, this.consStr(this.value), 8);
-  var insMask = new UInt.UInt(null, this.consStr(this.mask), 8);
-  return insValue.and(insMask);
+Metadata.prototype.mkMaskedValue = function(value, mask){
+  this.mkValue(value);
+  this.mkMask(mask);
+  this.value = this.value.and(this.mask); 
+};
+
+//Make value from string
+Metadata.prototype.mkValue = function(str){
+  this.value.value = this.consStr(str);
+};
+
+Metadata.prototype.mkMask = function(str){
+  this.mask.value = this.consStr(str);
 };
 
 Metadata.prototype.step = function(dp, ctx){
   var maskableBits = dp.table.capabilities.instruction.metadata.maskableBits;
   if(this.profileTest(maskableBits)){
-    ctx.key.Internal.Metadata = this.maskedValue(maskableBits);
+    ctx.key.Internal.Metadata = this.value;
   } else {
-    console.log('Metadata: unable to mask on bits ', maskCaps);
+    console.log('Metadata: unable to mask on bits ', maskableBits);
   }
 };
 

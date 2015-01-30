@@ -5,14 +5,14 @@
     <dd>{{goto_.target}}</dd>
   </dl>
     <div class="input-group col-sm-5" 
-         ng-class="{'has-error': goto_.target.length >= 0 &&
-                    !goto_.tableTest(active.value, caps)}">
+         ng-class="{'has-error': active.value.length > 0 &&
+                    !goto_.targetTest(active.value)}">
       <input type="text" class="form-control" ng-model="active.value"
              tooltip="{{goto_.targetTip}}">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" ng-click="set()"
                 ng-disabled="active.value.length === 0 ||
-                !goto_.tableTest(active.value, caps)">
+                !goto_.targetTest(active.value)">
           Set
         </button>
       </span>

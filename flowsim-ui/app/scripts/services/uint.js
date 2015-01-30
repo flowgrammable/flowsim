@@ -95,12 +95,20 @@ function consStr(bits) {
         return 0;
       });
     } 
-    // Otherwise must be hex
-    if(/^0x/.test(val)) {
-
+    // Otherwise must be hex 
+    // OR val is less than maxFromBits(32)
+    if(Pattern.test(val)) {
+      if(!/^0x/.test(val)){
+        console.log('val', val);
+        val = parseInt(val).toString(16);
+        console.log('after', val);
+      }
       tmp = val.split('');
+
+      if(/^0x/.test(val)){
       // Chop the '0x' prefix for easier handling
       tmp.splice(0, 2);
+      }
       // Input is larger than allowable
       if(tmp.length > hbytes) {
         throw 'Bad consStr('+bits+')('+tmp+')';

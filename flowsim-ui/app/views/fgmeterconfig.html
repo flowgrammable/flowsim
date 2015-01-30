@@ -1,11 +1,11 @@
 <form class="form-horizontal" role="form">
   <div class="form-group">
-    <dl class="dl-horizontal">
+  <dl class="dl-horizontal">
     <dt>Meter:</dt>
     <dd>{{meter.id}}</dd>
   </dl>
     <div class="input-group col-sm-5" 
-         ng-class="{'has-error': meter.id.length > 0 &&
+         ng-class="{'has-error': active.value.length > 0 &&
                     !meter.idTest(active.value)}">
       <input type="text" class="form-control" ng-model="active.value"
              tooltip="{{meter.idTip}}">

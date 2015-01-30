@@ -23,9 +23,10 @@ angular.module('flowsimUiApp')
       	};
 
       	$scope.set = function() {
-          $scope.metadata.value = $scope.active.value;
-          $scope.metadata.mask = $scope.active.mask;
-          $scope.active.maskedValue = $scope.metadata.maskedValue();
+          $scope.metadata.mkMaskedValue($scope.active.value, $scope.active.mask);
+          $scope.active.maskedValue = $scope.metadata.value;
+          $scope.active.value = '';
+          $scope.active.mask = '';
       	};
       }
     };
