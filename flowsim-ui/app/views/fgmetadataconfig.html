@@ -1,0 +1,28 @@
+<div>
+  <dl class="dl-horizontal">
+    <dt>Write Metadata:</dt>
+    <dd>{{active.maskedValue.toString(16)}}</dd>
+  </dl>
+  <!-- value -->
+    <div class="input-group col-sm-5" 
+         ng-class="{'has-error': metadata.value.length > 0 &&
+                    !metadata.valueTest(active.value)}">
+      <label for="metavalue">Value</label>
+      <input type="text" class="form-control" ng-model="active.value"
+             tooltip="{{metadata.valueTip}}" id="metavalue">
+    </div>
+    <div class="input-group col-sm-5"
+          ng-class="{'has-error': metadata.mask.length > 0 &&
+                    !metadata.maskTest(active.mask)}">
+      <label for="metamask">Mask</label>
+      <input type="text" class="form-control" ng-model="active.mask"
+             tooltip="{{metadata.maskTip}}" id="metamask">
+    </div>
+        <button class="btn btn-default" type="button" ng-click="set()"
+                ng-disabled="!metadata.valueTest(active.value) ||
+                  !metadata.maskTest(active.mask)">
+          Set
+        </button>
+    </div>
+</div>
+

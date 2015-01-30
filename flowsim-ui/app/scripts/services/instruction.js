@@ -336,22 +336,30 @@ function Metadata(meta){
   this.maskTip   = 'Mask to screen bits during write operation';  
   this.valueTest = UInt.is(64);
   this.maskTest  = UInt.is(64);
+  this.consStr   = Protocols.getField('Internal', 'Metadata').consStr;
+  this.profileTest = function(maskCaps){
+    // check that meter.mask is equal to mask defined in meter profile
+    var mask = new UInt.UInt(null, this.consStr(this.mask), 8);
+    if(!mask.equal(new UInt.UInt(null, this.consStr(maskCaps), 8))){
+      return false;
+    }
+    return true;;
+  };
 }
 
-Metadata.prototype.step = function(dp, ctx){
-  var profileMask, insMask, insValue;
-  // get metadata maskable bits from table capability
-  var metaField = Protocols.getField('Internal', 'Metadata');
-  profileMask = dp.table.capabilities.instruction.metadata.maskableBits;
-  profileMask = metaField.consStr(profileMask);
-  profileMask = new UInt.UInt(null, profileMask, 8);
+Metadata.prototype.maskedValue = function (){
+  var insValue = new UInt.UInt(null, this.consStr(this.value), 8);
+  var insMask = new UInt.UInt(null, this.consStr(this.mask), 8);
+  return insValue.and(insMask);
+};
 
-  insMask = new UInt.UInt(null, metaField.consStr(this.mask), 8);
-  if(!insMask.equal(profileMask)){
-    throw 'Metadata: Unable to mask on bits ' + this.mask;
+Metadata.prototype.step = function(dp, ctx){
+  var maskableBits = dp.table.capabilities.instruction.metadata.maskableBits;
+  if(this.profileTest(maskableBits)){
+    ctx.key.Internal.Metadata = this.maskedValue(maskableBits);
+  } else {
+    console.log('Metadata: unable to mask on bits ', maskCaps);
   }
-  insValue = new UInt.UInt(null, metaField.consStr(this.value), 8);
-  ctx.key.Internal.Metadata = insValue.and(insMask);
 };
 
 Metadata.prototype.toView = function(){
