@@ -19,12 +19,13 @@ angular.module('flowsimUiApp')
       	$scope.active = {
       		value: '',
           mask: '',
-          maskedValue: ''
+          dispValue: '',
+          dispMask: ''
       	};
 
       	$scope.set = function() {
-          $scope.metadata.mkMaskedValue($scope.active.value, $scope.active.mask);
-          $scope.active.maskedValue = $scope.metadata.value;
+          $scope.metadata.mkValue($scope.active.value);
+          $scope.metadata.mkMask($scope.active.mask);
           $scope.active.value = '';
           $scope.active.mask = '';
       	};

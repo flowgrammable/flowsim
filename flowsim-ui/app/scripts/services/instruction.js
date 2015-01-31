@@ -324,13 +324,21 @@ Write.prototype.toView = function(){
 
 function Metadata(meta){
   if(_.isObject(meta)){
-    _.extend(this, meta);
-    this.value = new UInt.UInt(meta.value);
-    this.mask = new UInt.UInt(meta.mask);
+    this.enabled = meta.enabled;
+    if(_.isObject(meta.value)){
+      this.value = new UInt.UInt(meta.value);
+    } else {
+      this.value = '';
+    }
+    if(_.isObject(meta.mask)){
+      this.mask = new UInt.UInt(meta.mask);
+    } else {
+      this.mask = '';
+    }
   } else {
     this.enabled = false;
-    this.value = new UInt.UInt(null, 0, 8);
-    this.mask = new UInt.UInt(null, 0, 8);
+    this.value = '';
+    this.mask = '';
   }
   this.name      = 'Metadata';
   this.tip       = 'Updates the masked bits of the metadata property in the packet key';
@@ -356,11 +364,11 @@ Metadata.prototype.mkMaskedValue = function(value, mask){
 
 //Make value from string
 Metadata.prototype.mkValue = function(str){
-  this.value.value = this.consStr(str);
+  this.value = new UInt.UInt(null, this.consStr(str), 8);
 };
 
 Metadata.prototype.mkMask = function(str){
-  this.mask.value = this.consStr(str);
+  this.mask = new UInt.UInt(null, this.consStr(str), 8);
 };
 
 Metadata.prototype.step = function(dp, ctx){
@@ -386,6 +394,10 @@ Metadata.prototype.toBase = function(){
     value: this.value,
     mask: this.mask
   };
+};
+
+Metadata.prototype.isValid = function(){
+  return this.enabled;
 };
 
 function Goto(goto_){
@@ -447,14 +459,14 @@ Goto.prototype.tableTest = function(tarVal, caps){
   var tarTbl = parseInt(tarVal);
 
   var availTbls = caps.instruction.goto_.targets;
-  // TODO: get list of switch tables 
-  // and test(tarTbl > numTables === true)
-  if(tarTbl <= caps.id ){
-    console.log('cannot target table with id less than current table');
-    return false;
+  if(tarTbl >= caps.n_tables){
+    return Errors.goToNoTable(tarTbl);
   } else if(tarTbl === caps.id){
     console.log('cannot target table with same id');
-    return false;
+    return 'Cannot target current table';
+  } else if(tarTbl <= caps.id ){
+    console.log('cannot target table with id less than current table');
+    return Errors.goToBackwards(caps.id, tarTbl);
   } else {
     var tblsInRange = _(availTbls).filter(function(range){
       if(tarTbl >= range[0] && tarTbl <= range[1]){
@@ -463,7 +475,7 @@ Goto.prototype.tableTest = function(tarVal, caps){
     });
     if(!tblsInRange.length){
       console.log('cannot target table out of goto profile range');
-      return false;
+      return Errors.goToRange(caps.id, tarTbl);
     }
   }
   return true;

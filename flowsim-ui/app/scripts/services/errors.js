@@ -18,8 +18,8 @@ function missingField(protoName, fieldName){
 }
 
 function goToBackwards(currTbl, tgtTbl){
-	return 'Cannot transition backwards from table' +
-		currTbl + ' to ' + tgtTbl;
+	return 'Cannot target previous table '+tgtTbl+
+		' from table '+currTbl;
 }
 
 function goToRange(currTbl, tgtTbl){
@@ -28,7 +28,7 @@ function goToRange(currTbl, tgtTbl){
 }
 
 function goToNoTable(tgtTbl){
-	return 'Table with ID: '+tgtTbl+' does not exist';
+	return 'Table '+tgtTbl+' does not exist';
 }
 
 return {

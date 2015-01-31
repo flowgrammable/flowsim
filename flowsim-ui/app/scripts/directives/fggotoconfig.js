@@ -17,12 +17,19 @@ angular.module('flowsimUiApp')
       },
       controller: function($scope) {
       	$scope.active = {
-      		value: ''
+      		value: '',
+          error: ''
       	};
 
       	$scope.set = function() {
-      		$scope.goto_.target = $scope.active.value;
-          $scope.active.value = '';
+          var error = $scope.goto_.tableTest($scope.active.value, $scope.caps);
+          if(error.length > 0){
+            $scope.active.error = error;
+          } else {
+            $scope.goto_.target = $scope.active.value;
+            $scope.active.value = '';
+            $scope.active.error = '';
+          }
       	};
       }
     };

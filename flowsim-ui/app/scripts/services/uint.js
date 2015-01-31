@@ -99,9 +99,7 @@ function consStr(bits) {
     // OR val is less than maxFromBits(32)
     if(Pattern.test(val)) {
       if(!/^0x/.test(val)){
-        console.log('val', val);
         val = parseInt(val).toString(16);
-        console.log('after', val);
       }
       tmp = val.split('');
 

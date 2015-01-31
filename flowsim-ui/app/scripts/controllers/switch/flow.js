@@ -22,6 +22,15 @@ angular.module('flowsimUiApp')
   $scope.writeProfiles = caps.instruction.write;
 
 $scope.ok = function () {
+  if(!$scope.instruction.meter.isValid()){
+    flow.ins.meter.enabled = false;
+  }
+  if(!$scope.instruction.goto_.isValid()){
+    flow.ins.goto_.enabled = false;
+  }
+  if(!$scope.instruction.metadata.isValid()){
+    flow.ins.metadata.enabled = false;
+  }
   $modalInstance.close(flow);
 };
 

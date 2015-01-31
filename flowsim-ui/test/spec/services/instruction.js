@@ -291,4 +291,19 @@ describe('Service: instruction', function () {
 
   });
 
+  it('Meter invalid instruction pass', function(){
+    var is = new Instruction.Set();
+    expect(is.meter.isValid()).toBe(false);
+
+    is.meter.enabled = true;
+    is.meter.id = '1';
+    expect(is.meter.isValid()).toBe(true);
+  })
+
+  it('Goto invalid instruction pass', function(){
+    var is = new Instruction.Set();
+    expect(is.goto_.isValid()).toBe(false);
+
+  })
+
 });
