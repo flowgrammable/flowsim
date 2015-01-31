@@ -372,12 +372,7 @@ Metadata.prototype.mkMask = function(str){
 };
 
 Metadata.prototype.step = function(dp, ctx){
-  var maskableBits = dp.table.capabilities.instruction.metadata.maskableBits;
-  if(this.profileTest(maskableBits)){
-    ctx.key.Internal.Metadata = this.value;
-  } else {
-    console.log('Metadata: unable to mask on bits ', maskableBits);
-  }
+  ctx.key.Internal.Metadata = this.value;
 };
 
 Metadata.prototype.toView = function(){
