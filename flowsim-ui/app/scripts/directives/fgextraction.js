@@ -15,12 +15,10 @@ angular.module('flowsimUiApp')
                 ctx: '='
             },
             link: function postLink(scope, element, attrs) {
-            	var width = parseInt(attrs.width) || 370,
-                        height = parseInt(attrs.height) || 70,
-                        animationDuration = parseInt(attrs.animationDuration) || 500;
+            	var animationDuration = parseInt(attrs.animationDuration) || 500;
 
-            	scope.protocols;
-            	scope.keys;
+            	scope.protocols = null;
+            	scope.keys = null;
                 scope.init = function() {
                     
                     var container = d3.select(element[0])
@@ -104,7 +102,7 @@ angular.module('flowsimUiApp')
                     var keys = scope.keyWrapper.selectAll('#ext-ctx-key-keys');
                     var le = keys[0].length - 1;
                     var data = [];
-                    var protLength = scope.protocols[0].length;
+
                     for (var i = 0, len = le; i < len; i++) {
                     	var kdiv = keys[0][le - i - 1];
                     	var height = kdiv.offsetTop - kdiv.parentNode.parentNode.parentNode.offsetTop + 22;
@@ -127,7 +125,7 @@ angular.module('flowsimUiApp')
                             var style = 'width:' + d.w + 'px ; height:' + d.h + 'px';
                             return style;
                         });
-                }
+                };
 
                 //end connect
                 scope.$watch('ctx', function(newData) {
@@ -137,7 +135,7 @@ angular.module('flowsimUiApp')
                             scope.init();
                         } else if (newData.key.length > 1) {
                             scope.protocols.filter(function(d, i) {
-                                    return i == newData.key.length - 2; //select only prot by index (-2 due to initial size of array is 1)
+                                    return i === newData.key.length - 2; //select only prot by index (-2 due to initial size of array is 1)
                                 })
                                 .transition().delay(animationDuration)
                                 .duration(animationDuration)
