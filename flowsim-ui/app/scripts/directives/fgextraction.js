@@ -141,7 +141,7 @@ angular.module('flowsimUiApp')
                                 })
                                 .transition().delay(animationDuration)
                                 .duration(animationDuration)
-                                .attr('class', 'rnn-item ext-pack-header-vis');
+                                .attr('style', 'background-position:left bottom');
                             scope.addKey();
                             scope.addConnect();
                         }

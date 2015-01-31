@@ -3,15 +3,14 @@
     font-weight: bold;
     font-style: italic;
     padding-top: 10px;
-    padding-bottom: 10px
+    padding-bottom: 10px;
+    background: linear-gradient(to left, white 50%, lightgray 50%);
+    background-size: 200% 100%;
+    background-position:right bottom;
+    transition:all 2s ease;
 }
 .ext-pack-header-vis {
-    font-size: 14px;
-    font-weight: bold;
-    font-style: italic;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: lightgray;
+    background-position:left bottom;
 }
 .ext-container {
     display: table;
