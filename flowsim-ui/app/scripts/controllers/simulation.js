@@ -145,10 +145,6 @@ angular.module('flowsimUiApp')
   $scope.stages = Simulation.Stages;
   $scope.transitions = Simulation.Transitions;
 
-  function hideDetails(state) {
-    return (state === 5 || state === 6) ? 4 : state;
-  }
-
   $scope.makeTransition =  {to:-1};
   $scope.play = function() {
     $scope.simulation.play($scope.trace);
@@ -174,6 +170,7 @@ angular.module('flowsimUiApp')
       $scope.simulation.stop();
       $scope.makeTransition = {to: -1};
     } else {
+      $scope.fromStage = $scope.simulation.stage;
       $scope.simulation.step();
       $scope.makeTransition = {
         to: $scope.simulation.stage,
@@ -181,7 +178,7 @@ angular.module('flowsimUiApp')
         cloneTo: $scope.simulation.cloneTo,
         fade: $scope.simulation.fade,
         output: $scope.simulation.forwardPacket
-            //hideDetails($scope.simulation.stage)
+
       };
       $scope.ctx = $scope.simulation.toView();
       $scope.view = $scope.simulation.toView();
@@ -192,9 +189,13 @@ angular.module('flowsimUiApp')
         $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
       } else {
         $scope.packetName = '';
-        $scope.view = null;
+       // $scope.view = null;
       }
-
+      if($scope.simulation.stage ===2 && $scope.simulation.stage === $scope.fromStage){//Drive choice transition
+          $scope.choice = $scope.ctx.table;
+      }else{
+          $scope.choice = null;
+      }
       if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
         $scope.extractView = $scope.simulation.toView();
       }else{
