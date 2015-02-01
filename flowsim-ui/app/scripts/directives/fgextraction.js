@@ -33,6 +33,7 @@ angular.module('flowsimUiApp')
                     var packetWrapper = packetHolderCell
                         .append('div')
                         .attr('id', 'packetIndicator')
+                        .attr('style', 'width:450px;')
 
                     .attr('class', 'rnn-holder ctx-key-context')
                         .text('Decoder');
@@ -47,6 +48,9 @@ angular.module('flowsimUiApp')
                         .data(scope.ctx.packet.protocols)
                         .enter()
                         .append('div')
+                        .attr('style',function (d){
+                            return 'width:' + d.bytes*100.0/scope.ctx.packet.bytes + '%';
+                        })
                         .attr('id','rnn-item')
                         .attr('class', 'rnn-item ext-pack-header');
 
@@ -56,6 +60,7 @@ angular.module('flowsimUiApp')
                         .text('\u00A0\u00A0\u00A0');
                     scope.protocols.append('div')
                         .attr('class', 'rnn-item rnn-title')
+                        .attr('style','width:450px')
                         .text(function(d) {
                             return d.name;
                         });
@@ -144,7 +149,9 @@ angular.module('flowsimUiApp')
                             if(newData.key.length === 2){
                                 scope.pack.select('#left-box')
                                     .transition()
-                                    .attr('style', 'background-position:left bottom');
+                                    .attr('style', function(){
+                                        return 'width:'+this.style.width + '%;background-position:left bottom;';
+                                    });
                             }
 
                             scope.protocols.filter(function(d, i) {
@@ -152,12 +159,16 @@ angular.module('flowsimUiApp')
                                 })
                                 .transition().delay(animationDuration)
                                 .duration(animationDuration)
-                                .attr('style', 'background-position:left bottom');
+                                .attr('style', function(){
+                                    return 'width:'+this.style.width + '%;background-position:left bottom;';
+                                });
                             if(newData.key.length === scope.protocols[0].length +1 ){
                                 scope.pack.select('#right-box')
                                     .transition().delay(animationDuration * 2)
                                     .duration(animationDuration )
-                                    .attr('style', 'background-position:left bottom');
+                                    .attr('style', function(){
+                                        return 'width:'+this.style.width + '%;background-position:left bottom;';
+                                    });
                             }
                             scope.addKey();
                             scope.addConnect();
