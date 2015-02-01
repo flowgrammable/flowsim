@@ -37,18 +37,25 @@ angular.module('flowsimUiApp')
                     .attr('class', 'rnn-holder ctx-key-context')
                         .text('Decoder');
 
-                    var pack = packetWrapper.append('div')
+                    scope.pack = packetWrapper.append('div')
                         .attr('class', 'rnn-stack');
-
-                    scope.protocols = pack.selectAll('.rnn-item')
+                    scope.pack.append('div')
+                        .attr('id', 'left-box')
+                        .attr('class', 'rnn-item ext-pack-header ext-pack-left')
+                        .text('\u00A0\u00A0\u00A0');
+                    scope.protocols = scope.pack.selectAll('#rnn-item')
                         .data(scope.ctx.packet.protocols)
                         .enter()
                         .append('div')
+                        .attr('id','rnn-item')
                         .attr('class', 'rnn-item ext-pack-header');
 
-
+                    scope.pack.append('div')
+                        .attr('class', 'rnn-item ext-pack-header ext-pack-right')
+                        .attr('id', 'right-box')
+                        .text('\u00A0\u00A0\u00A0');
                     scope.protocols.append('div')
-                        .attr('class', 'rnn-title')
+                        .attr('class', 'rnn-item rnn-title')
                         .text(function(d) {
                             return d.name;
                         });
@@ -134,12 +141,24 @@ angular.module('flowsimUiApp')
                         if (newData.key.length === 1) {
                             scope.init();
                         } else if (newData.key.length > 1) {
+                            if(newData.key.length === 2){
+                                scope.pack.select('#left-box')
+                                    .transition()
+                                    .attr('style', 'background-position:left bottom');
+                            }
+
                             scope.protocols.filter(function(d, i) {
                                     return i === newData.key.length - 2; //select only prot by index (-2 due to initial size of array is 1)
                                 })
                                 .transition().delay(animationDuration)
                                 .duration(animationDuration)
                                 .attr('style', 'background-position:left bottom');
+                            if(newData.key.length === scope.protocols[0].length +1 ){
+                                scope.pack.select('#right-box')
+                                    .transition().delay(animationDuration * 2)
+                                    .duration(animationDuration )
+                                    .attr('style', 'background-position:left bottom');
+                            }
                             scope.addKey();
                             scope.addConnect();
                         }
