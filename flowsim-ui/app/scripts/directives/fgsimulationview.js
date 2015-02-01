@@ -176,6 +176,18 @@ angular.module('flowsimUiApp')
                                 .transition()
                                 .attr('y', margin / 2 - 5);
                         }
+                    } else if(trans.to === -1 && currentStage === 6){
+                        svg.select('#packets')
+                            .append('rect')
+                            .attr('class', 'sim-packet')
+                            .attr('height', stageHeight + 10)
+                            .attr('width', stageWidth + 10)
+                            .attr('x', -1.5 * (stageWidth + stagePadding) + margin - 5)
+                            .attr('y', margin / 2 - 5)
+                            .attr('ry', 10)
+                            .attr('stage', -1.5) //set the stage ID
+                            .transition()
+                            .duration(animationDuration);
                     } else {
                         svg.selectAll('.sim-packet')
                             .style('display', 'none')
