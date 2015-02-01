@@ -189,12 +189,12 @@ angular.module('flowsimUiApp')
         $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
       } else {
         $scope.packetName = '';
-        $scope.view = null;
+       // $scope.view = null;
       }
       if($scope.simulation.stage ===2 && $scope.simulation.stage === $scope.fromStage){//Drive choice transition
-          $scope.choice = 'Table 0';
+          $scope.choice = $scope.ctx.table;
       }else{
-          $scope.choice = '';
+          $scope.choice = null;
       }
       if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
         $scope.extractView = $scope.simulation.toView();

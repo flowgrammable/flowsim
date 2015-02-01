@@ -123,16 +123,27 @@
     vertical-align: middle;
     text-align: center;
 }
-.choice-tbl{
+.choice-tbl {
     display: table;
     width: 150px;
     height: 100px;
-    transition:all 2s ease;
-
-
-
-
+    transition: all 1s ease;
 }
+.choice-arrow{
+    position:absolute;
+    z-index:2;
+    left:-15px;
+    top:80px;
+
+    height:2px;
+    width:145px;
+    background-color:#c0224e ;
+    transition: all 1s ease;
+}
+
+
+
+
 #tbl1 {
     position:absolute;
     z-index:auto;

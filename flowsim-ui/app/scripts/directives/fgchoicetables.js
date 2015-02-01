@@ -16,19 +16,28 @@ angular.module('flowsimUiApp')
         },
       link: function postLink(scope, element, attrs) {
           var animationDuration = parseInt(attrs.animationDuration) || 500;
+          scope.firstTable = 0;
           scope.$watch('data', function(){
-              if(scope.data && scope.data.length > 0){
-                  scope.transition ();
+
+              if(!_.isUndefined(scope.data) && !_.isNull(scope.data) && scope.data >= 0){
+                  scope.firstTable = scope.data===0?1:0;
+                  scope.transition();
+
               }else{
-                  scope.reset();
+                  scope.firstTable = 0;
+                  scope.reset ();
               }
           }, true);
 
           scope.transition = function() {
-              var table = d3.select('#tbl3')
+               d3.select('#tbl3')
                   .transition().delay(animationDuration)
                   .duration(animationDuration)
                   .attr('style', 'left:500px');
+              d3.select('.choice-arrow')
+                  .transition().delay(animationDuration)
+                  .duration(animationDuration)
+                  .attr('style', 'width:515px');
               d3.selectAll('.choice-tbl-fade')
                   .transition().delay(animationDuration)
                   .duration(animationDuration)
@@ -36,7 +45,9 @@ angular.module('flowsimUiApp')
 
           };
           scope.reset = function() {
-              var table = d3.selectAll('.choice-tbl')
+               d3.selectAll('.choice-tbl')
+                  .attr('style', '');
+              d3.select('.choice-arrow')
                   .attr('style', '');
           };
       }
