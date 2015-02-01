@@ -91,6 +91,7 @@
     -webkit-flex: 3 100%;
         -ms-flex: 3 100%;
             flex: 3 100%;
+    white-space: nowrap;
 }
 .ctx-key-name
 {

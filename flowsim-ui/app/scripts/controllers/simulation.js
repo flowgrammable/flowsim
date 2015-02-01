@@ -188,10 +188,11 @@ angular.module('flowsimUiApp')
 
       console.log('post step', $scope.ctx);
       console.log('dp state:', $scope.simulation.dataplane.state);
-      if($scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
+      if($scope.simulation.stage === 0 && $scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
         $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
       } else {
         $scope.packetName = '';
+        $scope.view = null;
       }
 
       if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.

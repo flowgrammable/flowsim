@@ -27,9 +27,18 @@ angular.module('flowsimUiApp')
                     .attr('height', height)
                     .attr('width', width)
                     .attr('class', 'ctx-key-header');
-                scope.addPacket = function(x, y, fill, name) {
+                /**
+                 * Populates buffer array with packets and makes transition
+                 * @param {int}  x        x-coordinate to position packet
+                 * @param {int}  y        y-coordinate to position packet
+                 * @param {string}  fill     color to fill packet
+                 * @param {string}  name     packet name
+                 * @param {Boolean} isStatic flag to distinguish prepopulated packet from dynamic one
+                 */
+                scope.addPacket = function(x, y, fill, name, isStatic) {
+                    var bufferId = isStatic?'buffer-static':'buffer' ;
                     var buffer = svg.append('g')
-                        .attr('id', 'buffer')
+                        .attr('id', bufferId)
                         .attr('transform', 'translate(' + x + ',' + y + ')');
 
                     buffer.append('rect')
@@ -47,12 +56,21 @@ angular.module('flowsimUiApp')
                     var x = (i * 35 + 200);
                     var y = 0;
                     var fill = i % 2 ? '#c0224e' : '#42a0ba';
-                    scope.addPacket(x, y, fill, 'packet');
+                    scope.addPacket(x, y, fill, 'packet', true);
 
                 }
                 scope.$watch('name', function(newData) {
+                    if(newData === ''){//cleanup
+                        d3.selectAll('#buffer')
+                            .remove();
+                        d3.selectAll('.ctx-key-vis')
+                            .transition().delay(animationDuration)
+                            .duration(animationDuration)
+                            .style('opacity', '0');
+
+                    }
                     if (!_.isUndefined(newData) && newData !== null && newData.length > 0) {
-                        scope.addPacket(0, 0, '#c0224e', scope.name)
+                        scope.addPacket(0, 0, '#c0224e', scope.name, false)
                             .transition()
                             .duration(animationDuration)
                             .attr('transform', 'translate(165,0)');
