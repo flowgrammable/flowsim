@@ -136,7 +136,7 @@
     top:80px;
 
     height:2px;
-    width:145px;
+    width:0px;
     background-color:#c0224e ;
     transition: all 1s ease;
 }

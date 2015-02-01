@@ -20,28 +20,30 @@ angular.module('flowsimUiApp')
           scope.$watch('data', function(){
 
               if(!_.isUndefined(scope.data) && !_.isNull(scope.data) && scope.data >= 0){
-                  scope.firstTable = scope.data===0?1:0;
-                  scope.transition();
+                  scope.tableNo = scope.data===0?1:scope.data;
+                  scope.transition(scope.data);
 
               }else{
-                  scope.firstTable = 0;
+                  scope.tableNo = 0;
                   scope.reset ();
               }
           }, true);
 
-          scope.transition = function() {
-               d3.select('#tbl3')
+          scope.transition = function(tblNo) {
+              d3.selectAll('.choice-tbl')
+                  .transition().delay(animationDuration)
+                  .duration(animationDuration)
+                  .attr('style', 'opacity:0.5');
+              var selection = tblNo === 0? '#tbl4':'#tbl3';
+               d3.select(selection)
                   .transition().delay(animationDuration)
                   .duration(animationDuration)
                   .attr('style', 'left:500px');
               d3.select('.choice-arrow')
-                  .transition().delay(animationDuration)
+                  .transition().delay(animationDuration/2)
                   .duration(animationDuration)
                   .attr('style', 'width:515px');
-              d3.selectAll('.choice-tbl-fade')
-                  .transition().delay(animationDuration)
-                  .duration(animationDuration)
-                  .attr('style', 'opacity:0.5');
+
 
           };
           scope.reset = function() {
