@@ -59,15 +59,13 @@ angular.module('flowsimUiApp')
                     scope.addPacket(x, y, fill, 'packet', true);
 
                 }
+
                 scope.$watch('name', function(newData) {
                     if(newData === ''){//cleanup
                         d3.selectAll('#buffer')
                             .remove();
                         d3.selectAll('.ctx-key-vis')
-                            .transition().delay(animationDuration)
-                            .duration(animationDuration)
                             .style('opacity', '0');
-
                     }
                     if (!_.isUndefined(newData) && newData !== null && newData.length > 0) {
                         scope.addPacket(0, 0, '#c0224e', scope.name, false)
