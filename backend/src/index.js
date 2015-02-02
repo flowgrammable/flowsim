@@ -19,6 +19,8 @@ var swi = require('./switch');
 var tra = require('./trace');
 var log = require('./logger');
 
+
+
 // Process the command line
 prog
   .version(process.env.SERVER_VERSION)
@@ -85,6 +87,22 @@ var mods = [
 _.each(mods, function(mod) {
   restServer.addModule(mod);
 });
+
+
+process.on('uncaughtException', function(err){
+  restServer.logger.error('UncaughtException', err);
+  var crashCtx = {
+    date: new Date(),
+    error: err,
+    stack: err.stack
+  };
+  var templ = template.render('uncaughtError', crashCtx);
+  _.each(config.admins, function(admin){
+    mail.send(admin, 'Flowsim uncaught error', templ, function(err, result){
+
+    });
+  })
+})
 
 // Run the server
 restServer.run();
