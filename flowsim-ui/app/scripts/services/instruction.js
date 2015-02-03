@@ -184,6 +184,10 @@ Meter.prototype.step = function(dp, ctx){
   ctx.meter = tarMtr;
 };
 
+Meter.prototype.isValid = function(){
+  return this.idTest(this.id);
+};
+
 Meter.prototype.toView = function(){
   return {
     name: this.name,
@@ -223,6 +227,11 @@ Apply.prototype.step = function(dp, ctx){
   if(this.actions.length > 0){
     act = this.actions.shift();
     act.step(dp, ctx);
+    if(act.field === 'Output'){
+      dp.branchStage = 7;
+    } else {
+      dp.branchStage = 0;
+    }
   }
 };
 
@@ -315,11 +324,21 @@ Write.prototype.toView = function(){
 
 function Metadata(meta){
   if(_.isObject(meta)){
-    _.extend(this, meta);
+    this.enabled = meta.enabled;
+    if(_.isObject(meta.value)){
+      this.value = new UInt.UInt(meta.value);
+    } else {
+      this.value = '';
+    }
+    if(_.isObject(meta.mask)){
+      this.mask = new UInt.UInt(meta.mask);
+    } else {
+      this.mask = '';
+    }
   } else {
     this.enabled = false;
-    this.value = 0;
-    this.mask = 0;
+    this.value = '';
+    this.mask = '';
   }
   this.name      = 'Metadata';
   this.tip       = 'Updates the masked bits of the metadata property in the packet key';
@@ -327,22 +346,33 @@ function Metadata(meta){
   this.maskTip   = 'Mask to screen bits during write operation';  
   this.valueTest = UInt.is(64);
   this.maskTest  = UInt.is(64);
+  this.consStr   = Protocols.getField('Internal', 'Metadata').consStr;
+  this.profileTest = function(maskCaps){
+    // check that meter.mask is equal to mask defined in meter profile
+    if(!this.mask.equal(new UInt.UInt(null, this.consStr(maskCaps), 8))){
+      return false;
+    }
+    return true;
+  };
 }
 
-Metadata.prototype.step = function(dp, ctx){
-  var profileMask, insMask, insValue;
-  // get metadata maskable bits from table capability
-  var metaField = Protocols.getField('Internal', 'Metadata');
-  profileMask = dp.table.capabilities.instruction.metadata.maskableBits;
-  profileMask = metaField.consStr(profileMask);
-  profileMask = new UInt.UInt(null, profileMask, 8);
+Metadata.prototype.mkMaskedValue = function(value, mask){
+  this.mkValue(value);
+  this.mkMask(mask);
+  this.value = this.value.and(this.mask); 
+};
 
-  insMask = new UInt.UInt(null, metaField.consStr(this.mask), 8);
-  if(!insMask.equal(profileMask)){
-    throw 'Metadata: Unable to mask on bits ' + this.mask;
-  }
-  insValue = new UInt.UInt(null, metaField.consStr(this.value), 8);
-  ctx.key.Internal.Metadata = insValue.and(insMask);
+//Make value from string
+Metadata.prototype.mkValue = function(str){
+  this.value = new UInt.UInt(null, this.consStr(str), 8);
+};
+
+Metadata.prototype.mkMask = function(str){
+  this.mask = new UInt.UInt(null, this.consStr(str), 8);
+};
+
+Metadata.prototype.step = function(dp, ctx){
+  ctx.key.Internal.Metadata = this.value;
 };
 
 Metadata.prototype.toView = function(){
@@ -359,6 +389,10 @@ Metadata.prototype.toBase = function(){
     value: this.value,
     mask: this.mask
   };
+};
+
+Metadata.prototype.isValid = function(){
+  return this.enabled;
 };
 
 function Goto(goto_){
@@ -411,6 +445,39 @@ Goto.prototype.toView = function(){
     shortName: 'g',
     tip: 'goto('+this.target+')'
   };
+};
+
+Goto.prototype.tableTest = function(tarVal, caps){
+  if(!this.targetTest(tarVal)){
+    return false;
+  }
+  var tarTbl = parseInt(tarVal);
+
+  var availTbls = caps.instruction.goto_.targets;
+  if(tarTbl >= caps.n_tables){
+    return Errors.goToNoTable(tarTbl);
+  } else if(tarTbl === caps.id){
+    console.log('cannot target table with same id');
+    return 'Cannot target current table';
+  } else if(tarTbl <= caps.id ){
+    console.log('cannot target table with id less than current table');
+    return Errors.goToBackwards(caps.id, tarTbl);
+  } else {
+    var tblsInRange = _(availTbls).filter(function(range){
+      if(tarTbl >= range[0] && tarTbl <= range[1]){
+        return true;
+      }
+    });
+    if(!tblsInRange.length){
+      console.log('cannot target table out of goto profile range');
+      return Errors.goToRange(caps.id, tarTbl);
+    }
+  }
+  return true;
+};
+
+Goto.prototype.isValid = function(){
+  return this.target.length > 0;
 };
 
 function Set(set) {
@@ -536,6 +603,16 @@ Set.prototype.isEmpty = function(){
   return !this.meter.enabled && !this.apply.enabled && 
   !this.clear.enabled && !this.write.enabled && 
   !this.metadata.enabled && !this.goto_.enabled;
+};
+
+Set.prototype.isValid = function(){
+  if(this.meter.enabled && !this.meter.isValid()){
+    return false;
+  }
+  if(this.goto_.enabled && !this.goto_.isValid()){
+    return false;
+  }
+  return true;
 };
 
 return {

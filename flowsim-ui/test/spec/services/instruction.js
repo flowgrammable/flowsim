@@ -28,93 +28,7 @@ describe('Service: instruction', function () {
     expect(!!Instruction).toBe(true);
   });
 
-  /*it('Create Instruction set, execute apply:pushvlan', function() {
-    expect(!!Instruction).toBe(true);
-    var set = new Instruction.Set();
-
-    var pkt = new Packet.Packet('pack1');
-    pkt.push(new IPV4.mkIPv4());
-    pkt.protocols[0].type('0x0800');
-
-    set._apply.push(new Action.Push(null, new VLAN.VLAN()));
-    expect(pkt.protocols[0].type().toString(16)).toBe('0x0800');
-
-
-    set.step(null, {
-      packet: pkt
-    });
-
-    expect(pkt.protocols.length).toBe(3);
-
-    expect(pkt.protocols[0].type().toString(16)).toBe('0x8100');
-    expect(pkt.protocols[1].pcp().toString(16)).toBe('0x00');
-    expect(pkt.protocols[1].dei().toString(16)).toBe('0x00');
-    expect(pkt.protocols[1].vid().toString(16)).toBe('0x0000');
-    expect(pkt.protocols[1].type().toString(16)).toBe('0x0800');
-
-  });
-
-  it('Instruction profile construction: ', function(){
-    var prof = new Instruction.Profile();
-
-    expect(prof.apply[0].protocol).toBe('Internal');
-    expect(prof.apply[0].actions[0].field).toBe('Output');
-
-    var j = JSON.stringify(prof);
-    var j_ = new Instruction.Profile(JSON.parse(j));
-
-    expect(j_.apply.length).toBe(prof.apply.length);
-    expect(j_.apply[0].protocol).toBe('Internal');
-    expect(j_.apply[0].actions[0].field).toBe('Output');
-
-  });
-
-  it('Apply Instruction construction', function(){
-    var out = new Action.Output(null, 1);
-    var app = new Instruction.Apply();
-
-    expect(app.actions.length).toBe(0);
-    app.push(out);
-    expect(app.actions.length).toBe(1);
-
-    var j = JSON.stringify(app);
-
-    var j_ = new Instruction.Apply(JSON.parse(j));
-
-    expect(j_.actions[0].toValue()).toBe(1);
-
-  });
-
-  it('Instruction Set Construction', function(){
-    var out = new Action.Output(null, 1);
-    var app = new Instruction.Apply();
-    app.push(out);
-    expect(app.actions.length).toBe(1);
-
-    var set = new Instruction.Set();
-    set.apply(app);
-    expect(set.apply().actions.length).toBe(1);
-
-    var j = JSON.stringify(set);
-    var j_ = new Instruction.Set(JSON.parse(j));
-
-    expect(j_.apply().actions.length).toBe(1);
-    expect(j_.apply().actions[0].toValue()).toBe(1);
-  });
-
-  it('Instruction Set summaraize', function(){
-    var out = new Action.Output(null, 1);
-    var is = new Instruction.Set();
-
-    is.pushApply(out);
-
-    expect(is.summarize()[0]).toBe('apply');
-
-    is._write.output(out);
-    expect(is.summarize()[1]).toBe('write');
-
-  }); */
-
+  
   it('Apply actions step', function(){
     var is = new Instruction.Set();
     is.meter.enabled = false;
@@ -297,8 +211,7 @@ describe('Service: instruction', function () {
     is.apply.enabled = false;
 
     is.metadata.enabled = true;
-    is.metadata.value = '0x1111111111111111';
-    is.metadata.mask = '0xffffffffffffffff';
+    is.metadata.mkMaskedValue('0x1111111111111111', '0xffffffffffffffff');
     var ctx =  {key: { Internal: { Metadata: 0 }}};
     var dp = {ctx: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
     
@@ -306,8 +219,7 @@ describe('Service: instruction', function () {
     expect(ctx.key.Internal.Metadata.toString(16)).toBe('0x1111111111111111');
 
     is.metadata.enabled = true;
-    is.metadata.value = '0x1111111111111111';
-    is.metadata.mask =  '0xf0ffffffffffff0f';
+    is.metadata.mkMaskedValue('0x1111111111111111', '0xf0ffffffffffff0f');
     var ctx =  {key: { Internal: { Metadata: 0 }}};
     var dp = {ctx: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xf0ffffffffffff0f'}}}}};
     
@@ -326,8 +238,8 @@ describe('Service: instruction', function () {
     is.apply.enabled = false;
 
     is.metadata.enabled = true;
-    is.metadata.value = '0x1111111111111111';
-    is.metadata.mask = '0xf0ffffffffffffff';
+    is.metadata.mkValue('0x1111111111111111');
+    is.metadata.mkMask('0xf0ffffffffffffff');
     var ctx =  {key: { Internal: { Metadata: 0 }}};
     var dp = {ctx: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
     
@@ -378,5 +290,20 @@ describe('Service: instruction', function () {
     expect(is.meter.enabled).toBe(false);
 
   });
+
+  it('Meter invalid instruction pass', function(){
+    var is = new Instruction.Set();
+    expect(is.meter.isValid()).toBe(false);
+
+    is.meter.enabled = true;
+    is.meter.id = '1';
+    expect(is.meter.isValid()).toBe(true);
+  })
+
+  it('Goto invalid instruction pass', function(){
+    var is = new Instruction.Set();
+    expect(is.goto_.isValid()).toBe(false);
+
+  })
 
 });

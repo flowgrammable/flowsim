@@ -17,6 +17,7 @@ function Set(set){
     });
   } else {
     this.actions = [];
+    this.output = false;
   }
 }
 
@@ -62,7 +63,7 @@ function actSort(a, b){
     return 1;
   }
   if(opPriority[a.op] === opPriority[b.op]){
-    if(a.field === 'Group' || a.field === 'Queue' || a.field === 'Output'){
+    if(a.protocol === 'Internal' && b.protocol === 'Internal'){
       return internalSort(a.field, b.field);
     }
     return protoSort(a.protocol, b.protocol);
@@ -100,10 +101,17 @@ Set.prototype.remove = function(idx){
 
 Set.prototype.step = function(dp, ctx) {
   if(this.actions.length){
-    this.actions.shift().step(dp, ctx);
-    return true;
+    var act = this.actions.shift();
+    if(act.field === 'Output'){
+      this.output = true;
+    }
+    act.step(dp, ctx);
   }
-  return false;
+  if(this.isEmpty()){
+    if(!this.output){
+      ctx.dropPacket = true;
+    } 
+  }
 };
 
 Set.prototype.toView = function(){

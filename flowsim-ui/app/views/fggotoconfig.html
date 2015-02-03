@@ -1,0 +1,26 @@
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <dl class="dl-horizontal">
+    <dt>Target Table:</dt>
+    <dd>{{goto_.target}}</dd>
+  </dl>
+    <div class="input-group col-sm-5" 
+         ng-class="{'has-error': active.value.length > 0 &&
+                    !goto_.targetTest(active.value)}">
+      <input type="text" class="form-control" ng-model="active.value"
+             tooltip="{{goto_.targetTip}}">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="set()"
+                ng-disabled="active.value.length === 0 ||
+                !goto_.targetTest(active.value)">
+          Set
+        </button>
+      </span>
+    </div>
+      <div class="error" ng-show="active.error.length">
+        <h6>
+          <span>{{active.error}}</span>
+        </h6>
+      </div>
+  </div>
+</form>

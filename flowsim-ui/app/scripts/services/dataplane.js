@@ -39,6 +39,7 @@ function Dataplane(device) {
     this.extractor = new Extraction.Extractor();
     this.ctx   = null;
     this.state = ARRIVAL;
+    this.branchStage = 0;
   } else {
     throw 'Bad Dataplane('+device+')';
   }
@@ -129,6 +130,9 @@ Dataplane.prototype.step = function() {
   if(this.pause) {
     this.state = this.nextState;
     this.pause = false;
+    if(this.nextState === 'Final'){
+      this.currEvent = null;
+    }
     for(i=0; i<State.length; i++) {
       if(State[i].toLowerCase() === this.state.toLowerCase()) {
         return i;
@@ -136,8 +140,9 @@ Dataplane.prototype.step = function() {
     }
   }
 
-  if(this.currEvent === null) {
+  if(!this.currEvent) {
     this.currEvent = this.inputQ[0];
+    console.log('currevent', this.currEvent);
     this.inputQ.splice(0, 1);
   }
 
@@ -199,7 +204,7 @@ Dataplane.prototype.step = function() {
       }
       break;
     case FINAL:
-      break;
+      return -1;
     default:
       throw 'Bad Dataplane state: ' + this.state;
   }

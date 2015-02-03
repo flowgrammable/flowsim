@@ -58,12 +58,6 @@
                 <a href="#subscriber/update">Account</a>
               </li>
             </ul>
-            <form class="navbar-form navbar-right" role="form" 
-                  ng-hide="authenticated">
-              <a ng-click="signup()" class="btn btn-success">
-                Sign up
-              </a>
-            </form>
             <form class="navbar-form navbar-right" role="form"
                   ng-show="authenticated">
               <a href="" ng-disabled="!dirty" class="btn btn-success" 
@@ -72,6 +66,15 @@
               </a>
               <a href="#" class="btn btn-success" ng-click="logout()">
                 Logout
+              </a>
+            </form>
+            <form class="navbar-form navbar-right" role="form"
+                  ng-show="!authenticated">
+              <a href="#subscriber/login" class="btn btn-success">
+               Login 
+              </a>
+              <a href="#subscriber/register" class="btn btn-success">
+               Register 
               </a>
             </form>
           </div>
@@ -191,7 +194,6 @@
         <script src="scripts/services/portsview.js"></script>
         <script src="scripts/filters/capabilities.js"></script>
         <script src="scripts/services/trace.js"></script>
-        <script src="scripts/services/match.js"></script>
         <script src="scripts/services/dataplane.js"></script>
         <script src="scripts/services/context.js"></script>
         <script src="scripts/services/instruction.js"></script>
@@ -199,7 +201,6 @@
         <script src="scripts/services/extraction.js"></script>
         <script src="scripts/services/flow.js"></script>
         <script src="scripts/services/uint.js"></script>
-        <script src="scripts/services/port.js"></script>
         <script src="scripts/services/regex.js"></script>
         <script src="scripts/services/listmanager.js"></script>
         <script src="scripts/services/simulator.js"></script>
@@ -232,9 +233,11 @@
         <script src="scripts/services/errors.js"></script>
         <script src="scripts/directives/fgextraction.js"></script>
         <script src="scripts/controllers/test.js"></script>
-        <script src="scripts/directives/inputTrace.js"></script>
-        <script src="scripts/directives/commandTrace.js"></script>
-        <script src="scripts/directives/showtail.js"></script>
+        <script src="scripts/directives/fgmeterconfig.js"></script>
+        <script src="scripts/directives/fggotoconfig.js"></script>
+        <script src="scripts/directives/fgmetadataconfig.js"></script>
+        <script src="scripts/directives/inputtrace.js"></script>
+        <script src="scripts/directives/fgchoicetables.js"></script>
         <!-- endbuild -->
 </body>
 </html>

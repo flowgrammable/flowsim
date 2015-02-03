@@ -22,6 +22,7 @@ describe('Service: action', function () {
 
   it('Action Set construction', function(){
     var as = new Action.Set();
+    expect(as.actions.length).toBe(0);
   });
 
   it('Action Set add', function(){
@@ -48,8 +49,8 @@ describe('Service: action', function () {
     // step through
     var context = {packet: pack};
 
-    expect(as.step(null, context)).toBe(true);
-    expect(as.step(null, context)).toBe(false);
+    as.step(null, context);
+    as.step(null, context);
     expect(as.isEmpty()).toBe(true);
     expect(pack.getField('IPv4', 'TTL').valueToString()).toBe('119');
 
@@ -86,8 +87,8 @@ describe('Service: action', function () {
     // mpls -> mpls
     pack.pushProtocol('0x8847');
     as.add(mplsAct);
-    expect(as.step(null, context)).toBe(true);
-    expect(as.step(null, context)).toBe(false);
+    as.step(null, context);
+    as.step(null, context);
     expect(as.isEmpty()).toBe(true);
     expect(pack.protocols[2].getField('TTL').valueToString()).toBe('119');
 
@@ -95,8 +96,8 @@ describe('Service: action', function () {
     pack.popProtocol();
     pack.pushProtocol('0x0800');
     as.add(mplsAct);
-    expect(as.step(null, context)).toBe(true);
-    expect(as.step(null, context)).toBe(false);
+    as.step(null, context);
+    as.step(null, context);
     expect(as.isEmpty()).toBe(true);
     expect(pack.protocols[2].getField('TTL').valueToString()).toBe('119');
 
@@ -106,7 +107,7 @@ describe('Service: action', function () {
     pack.pushProtocol('0x86dd');
     as.add(mplsAct);
     as.add(ipv6Act);
-    expect(as.step(null, context)).toBe(true);
+    as.step(null, context);
     expect(as.isEmpty()).toBe(false);
     expect(pack.protocols[2].getField('TTL').valueToString()).toBe('119');
     expect(function(){
@@ -210,21 +211,21 @@ describe('Service: action', function () {
     var ctx = {packet: pack};
 
     // pop vlan first
-    expect(as.step(null, ctx)).toBe(true);
+    as.step(null, ctx);
     expect(pack.protocols.length).toBe(2);
     expect(pack.protocols[1].name).toBe('MPLS');
 
     // pop mpls next
-    expect(as.step(null, ctx)).toBe(true);
+    as.step(null, ctx);
     expect(pack.protocols.length).toBe(1);
 
     // push vlan
-    expect(as.step(null, ctx)).toBe(true);
+    as.step(null, ctx);
     expect(pack.protocols[1].name).toBe('VLAN');
     expect(as.isEmpty()).toBe(false);
 
     // push mpls
-    expect(as.step(null, ctx)).toBe(true);
+    as.step(null, ctx);
     expect(pack.protocols[2].name).toBe('MPLS');
 
     expect(as.isEmpty()).toBe(true);
@@ -503,7 +504,7 @@ describe('Service: action', function () {
 
     var qAct = Utils.mkAction('Internal', 'Queue', 'set', '1');
     as.add(qAct);
-    expect(as.step(null, context)).toBe(true);
+    as.step(null, context);
     expect(as.isEmpty()).toBe(true);
   });
 
@@ -520,7 +521,7 @@ describe('Service: action', function () {
   });
 
   it('Action Set add and step output', function(){
-    var dp = new Dataplane.Dataplane({ports: {egress: function egress(pkt, id){return true;}}});
+    var dp = new Dataplane.Dataplane({ports: {egress: function egress(){return true;}}});
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
     var context = {packet: pack};
@@ -531,7 +532,7 @@ describe('Service: action', function () {
     expect(as.isEmpty()).toBe(true);
   });
 
-  iit('Action Set sort pass', function(){
+  it('Action Set sort pass', function(){
     var as = new Action.Set();
     var act1 = Utils.mkAction('Internal', 'Queue', 'set', '1');
     var act2 = Utils.mkAction('Internal', 'Output', 'set', '1');
@@ -541,7 +542,6 @@ describe('Service: action', function () {
     as.add(act1);
     as.add(act3);
     as.add(act4);
-    expect(as.actions[0].field).toBe('Queue');
     expect(as.actions[3].field).toBe('Output');
   });
 

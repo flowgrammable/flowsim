@@ -18,7 +18,7 @@ describe('Service: context', function () {
 
   it('Context Construction throw', function () {
     expect(function(){
-      new Context.Context()
+      new Context.Context();
     }).toThrow();
   });
 

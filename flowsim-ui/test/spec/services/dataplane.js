@@ -60,9 +60,6 @@ describe('Service: dataplane', function() {
 
 
   it('Device construction Fail', function(){
-      var prof = Profile.create('test profile name');
-      var swi = Switch_.create(null, prof);
-
       expect(function() {
       var dp = new Dataplane.Dataplane();
       }).toThrow();
@@ -105,7 +102,7 @@ describe('Service: dataplane', function() {
     pack.pushProtocol('0x06');
     dp.arrival(pack, 1, 1, 1);
     dp.extraction();
-    expect(dp.ctx.key.Ethernet.Src.bytes).toBe(6)
+    expect(dp.ctx.key.Ethernet.Src.bytes).toBe(6);
     expect(dp.ctx.key.VLAN.length).toBe(2);
     expect(dp.ctx.key.IPv4.Src.bytes).toBe(4);
     expect(dp.ctx.key.TCP.Src.bytes).toBe(2);
