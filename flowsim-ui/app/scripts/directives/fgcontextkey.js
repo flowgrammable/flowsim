@@ -13,7 +13,8 @@ angular.module('flowsimUiApp')
             replace: true,
             restrict: 'E',
             scope: {
-                ctx: '='
+                ctx: '=',
+                header: '='
             },
             link: function(scope){
                 scope.$watch('ctx.key', function(){
