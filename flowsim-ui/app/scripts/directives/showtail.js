@@ -8,7 +8,7 @@
  */
 angular.module('flowsimUiApp')
   .directive('showTail', function () {
-    return function (scope, element, attrs) {
+    return function (scope, element) {
       scope.$watch(function() {
         return element[0].value;
       },

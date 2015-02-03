@@ -84,7 +84,9 @@ Profile.prototype.ofp_1_4 = function() {};
 function Buffer(buffer, limit) {
   if(_.isObject(buffer)) {
     _.extend(this, buffer);
-    this.alloc = _.clone(buffer.alloc);
+    this.alloc = {};
+    this.limit = buffer.limit;
+    console.log('buff,', this);
   } else {
     this.alloc = {};
     this.limit = limit;
@@ -110,6 +112,12 @@ Buffer.prototype.release = function(id) {
   delete this.alloc[id.toString()];
 };
 
+Buffer.prototype.toBase = function(){
+  return {
+    limit: this.limit
+  };
+};
+
 function Datapath(datapath, profile) {
   if(_.isObject(datapath)) {
     _.extend(this, datapath);
@@ -128,7 +136,7 @@ function Datapath(datapath, profile) {
 Datapath.prototype.toBase = function(){
   return {
     capabilities: this.capabilities,
-    bufAllocator: this.buffAllocator,
+    bufAllocator: this.bufAllocator.toBase(),
     miss_send_len: this.miss_send_len,
     fragHandling: this.fragHandling
   };

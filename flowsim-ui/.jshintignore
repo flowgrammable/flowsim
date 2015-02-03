@@ -1,0 +1,7 @@
+app/scripts/services/groups.js
+app/scripts/services/group.js
+test/
+bower_components/
+dist/
+node_modules/
+oldtests/

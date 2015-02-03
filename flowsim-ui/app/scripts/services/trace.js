@@ -27,6 +27,15 @@ Event.prototype.clone = function() {
   return new Event(this);
 };
 
+Event.prototype.toBase = function() {
+  return {
+    packet: this.packet.toBase(),
+    in_port: this.in_port,
+    in_phy_port: this.in_phy_port,
+    tunnel: this.tunnel
+  };
+};
+
 function Trace(trace) {
   if(_.isObject(trace)) {
     _.extend(this, trace);
@@ -52,8 +61,17 @@ Trace.prototype.del = function(idx) {
   this.events.splice(idx, 1);
 };
 
+Trace.prototype.toBase = function(){
+  return {
+    name: this.name,
+    device: {name: this.device.name},
+    events: _(this.events).map(function(ev){
+      return ev.toBase();
+    },this)
+  };
+};
+
 var TraceUI              = Trace;
-TraceUI.prototype.toBase = Trace.prototype.clone;
 
 function create(trace) {
   return new Trace(trace);
