@@ -52,6 +52,14 @@ Flow.prototype.equal = function(flow) {
   return this.match.equal(flow.match);
 };
 
+Flow.prototype.toView = function(){
+  return {
+    priority: this.priority.toString(),
+    match: this.match.summarize(),
+    ins: this.ins.summarize()
+  };
+};
+
 return {
   Flow: Flow
 };

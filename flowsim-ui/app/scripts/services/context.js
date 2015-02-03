@@ -170,7 +170,8 @@ Context.prototype.toView = function() {
     actionSet: this.actionSet.toView(),
     instructionSet: this.instructionSet.toView(),
     key: this.key.toView(),
-    packet: this.packet.toView()
+    packet: this.packet.toView(),
+    flow: this.flow ? this.flow.toView() : ''
   };
 
   return result;
