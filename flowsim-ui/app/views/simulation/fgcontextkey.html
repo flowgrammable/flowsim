@@ -1,7 +1,7 @@
 <div>
     <div>
         <div class="ctx-key-context">Context</div>
-        <div class="ctx-key-header">&nbsp;
+        <div ng-if="header" class="ctx-key-header">&nbsp;
             <div class="ctx-key-table ctx-key-color-prim"> buffer: {{ctx.buffer}}</div>
             <div class="ctx-key-table ctx-key-color-sec"> table: {{ctx.table}}</div>
             <div class="ctx-key-table ctx-key-color-prim"> queue: {{ctx.queue}}</div>
@@ -9,7 +9,7 @@
         </div>
         <div class="ctx-key-header">
             <div style="padding-left:10px">Key</div>
-            <div class="ctx-key-keys" ng-repeat="key in ctx.key" ng-class-odd="'ctx-key-color-prim'" ng-class-even="'ctx-key-color-sec'">
+            <div class="ctx-key-keys" ng-repeat="key in ctx.key.slice().reverse()" ng-class-odd="'ctx-key-color-prim'" ng-class-even="'ctx-key-color-sec'">
                 <div>
                     <div class="ctx-key-td" ng-repeat="attr in key.attrs">{{attr.name + ' : ' + attr.value}}</div>
                 </div>

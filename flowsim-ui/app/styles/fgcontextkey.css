@@ -131,18 +131,34 @@
 }
 .choice-arrow{
     position:absolute;
-    z-index:2;
+    z-index:-1;
     left:-15px;
     top:80px;
+    width:0;
+
+    transition: all 1.3s ease;
+}
+.choice-line{
 
     height:2px;
-    width:0px;
+    width:100%;
     background-color:#c0224e ;
-    transition: all 1s ease;
+
 }
+.choice-pointer {
+position:absolute;
+    right:-1px;
+    top : -3px;
+    z-index: 2;
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 15px solid #c0224e;
 
+    transition: all 1s ease;
 
-
+}
 
 #tbl1 {
     position:absolute;
@@ -166,4 +182,125 @@
     z-index:3;
     left:145px;
     top:45px;
+}
+
+#selection-content{
+    position:absolute;
+    left:100px;
+    top:60px;
+    width: 200px;
+
+}
+.selection-tbl-hdr{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+.selection-tbl{
+    color:white;
+    text-align: center;
+}
+.selection-header{
+
+    text-align: center;
+    background-color: #d3d3d3;
+}
+.selection-flow{
+    position:absolute;
+    left:250px;
+    top:250px;
+    width: 380px;
+    text-align: center;
+    opacity:0;
+    transition: all 0.5s ease;
+}
+.selection-f-hdr{
+    display: table;
+
+}
+
+.selection-f-th{
+    display:table-cell;
+    width:180px;
+
+}
+.sel-prio{
+    display:table-cell;
+    background-color: #42a0ba;
+    border: solid white;
+    border-width: 0 1px 0 0;
+    color:#ffffff;
+    width:30px;
+}
+.selection-tbl-cnt{
+    display: table;
+}
+
+.selection-tbl-td{
+    display:table-cell;
+    background-color: #42a0ba;
+    border: solid white;
+    border-width: 0 1px 0 0;
+    color:#ffffff;
+    width:170px;
+
+}
+#arrow1{
+    position:absolute;
+    z-index:2;
+    left:-15px;
+    top:35px;
+
+    height:2px;
+    width:0px;
+    background-color:#c0224e ;
+    transition: all 0.5s ease;
+
+}
+#arrow2{
+    position:absolute;
+    z-index:2;
+    left:45px;
+    top:35px;
+
+    height:0px;
+    width:2px;
+    background-color:#c0224e ;
+    transition: all 0.5s ease;
+}
+#arrow3{
+    position:absolute;
+    z-index:2;
+    left:45px;
+    top:130px;
+
+    height:2px;
+    width:0px;
+    background-color:#c0224e ;
+    transition: all 0.5s ease;
+}
+#arrow4{
+    position:absolute;
+    z-index:2;
+    left:395px;
+    top:130px;
+
+    height:0px;
+    width:2px;
+    background-color:#c0224e ;
+    transition: all 0.5s ease;
+}
+#point {
+    position:absolute;
+    z-index:2;
+    left:392px;
+    top:240px;
+    width: 0;
+    height: 0;
+    border-top: 13px solid #c0224e;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    opacity: 0;
+    transition: all 0.5s ease;
+    
 }
