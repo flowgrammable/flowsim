@@ -80,8 +80,8 @@ angular.module('flowsimUiApp')
                  * @return {[type]}
                  */
                 scope.transition = function(trans, currentStage) {
-                    console.log('Transition:' + JSON.stringify(trans));
-                    console.log('CurrentStage:' + currentStage);
+                   // console.log('Transition:' + JSON.stringify(trans));
+                   // console.log('CurrentStage:' + currentStage);
                     if (trans.fade) { //dropping the packet
                         svg.selectAll('.sim-packet')
                             .transition()
@@ -120,8 +120,8 @@ angular.module('flowsimUiApp')
                     } else
                     if (trans.to > -1) {
                         if (trans.to > currentStage) { //forward transition
-                            console.log('curr stage:', currentStage);
-                            console.log('trans to:', trans.to);
+                           // console.log('curr stage:', currentStage);
+                           // console.log('trans to:', trans.to);
                             if(trans.output === true){
                                 svg.selectAll('.sim-packet')
                                     .style('opacity', '.5')

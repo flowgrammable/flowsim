@@ -201,12 +201,18 @@ Dataplane.prototype.step = function() {
         if(this.inputQ.length > 0) {
           this.transition(ARRIVAL);
         } else {
+          if(this.ctx.output){
+            console.log('forward packet');
+          } else {
+            console.log('drop packet');
+          }
           this.transition(FINAL);
+          console.log('done with sim');
         }
       }
       break;
     case FINAL:
-      return -1;
+      break;
     default:
       throw 'Bad Dataplane state: ' + this.state;
   }

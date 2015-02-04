@@ -27,13 +27,13 @@ Simulation.prototype.step = function() {
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
 
-
-
-  if(this.dataplane.idle() && this.isDone) {
-      this.stop();
+  if(this.dataplane.nextState === 'Final'){
+    console.log('Sim service done with dp');
+    this.stop();
   }
 
-  if(this.dataplane){
+  
+  /*if(this.dataplane){
     if(this.dataplane.branchStage === 7){
       this.clonePacket = true;
       this.cloneTo = 7;
@@ -68,7 +68,7 @@ Simulation.prototype.step = function() {
       this.fade = false;
       this.forwardPacket = false;
     }
-  }
+  } */
 
 };
 
@@ -87,13 +87,12 @@ Simulation.prototype.play = function(trace) {
 };
 
 Simulation.prototype.stop = function() {
-  this.dataplane = null;
-  this.active    = false;
-  this.stage = -1;
+  this.dataplane   = null;
+  this.active      = false;
+  this.stage       = 0;
   this.clonePacket = false;
-  this.cloneTo = 0;
-  this.fade = false;
-  this.isDone = true;
+  this.cloneTo     = 0;
+  this.fade        = false;
 };
 
 var Stages = [{
