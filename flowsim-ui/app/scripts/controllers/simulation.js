@@ -220,6 +220,7 @@ angular.module('flowsimUiApp')
         $scope.makeTransition = {
           output: true
         };
+        $scope.dp.ctx.output = null;
       } else {
         $scope.makeTransition = {
           fade: true
@@ -231,6 +232,7 @@ angular.module('flowsimUiApp')
         $scope.makeTransition = {
           output: true
         };
+        $scope.dp.ctx.output = null;
       } else {
         $scope.makeTransition = {
           fade: true

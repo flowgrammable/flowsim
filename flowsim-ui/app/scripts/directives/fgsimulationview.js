@@ -100,7 +100,7 @@ angular.module('flowsimUiApp')
                     if (trans.fade) { //dropping the packet
                         svg.selectAll('.sim-packet')
                             .transition()
-                            .duration(animationDuration)
+                            .duration(350)
                             .style('opacity', '0')
                             .transition()
                             .remove();
