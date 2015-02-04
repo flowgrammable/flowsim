@@ -39,7 +39,7 @@ function Dataplane(device) {
     this.extractor = new Extraction.Extractor();
     this.ctx   = null;
     this.state = ARRIVAL;
-    this.branchStage = 0;
+    this.branchStage = null;
   } else {
     throw 'Bad Dataplane('+device+')';
   }
@@ -101,6 +101,9 @@ Dataplane.prototype.execution = function() {
 
 Dataplane.prototype.output = function(pkt, id) {
   this.ports.egress(pkt, id);
+  if(this.state === EXECUTION){
+    this.branchStage = FINAL;
+  }
 };
 
 Dataplane.prototype.group = function(pkt, id) {
@@ -200,6 +203,7 @@ Dataplane.prototype.step = function() {
       } else if(this.ctx.actionSet.isEmpty()) {
         if(this.inputQ.length > 0) {
           this.transition(ARRIVAL);
+          this.currEvent = 0;
         } else {
           if(this.ctx.output){
             console.log('forward packet');

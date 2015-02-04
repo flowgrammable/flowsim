@@ -14,61 +14,13 @@ function Simulation() {
   this.stage = 0;
   this.active = false;
   this.dataplane = null;
-  this.clonePacket = false;
-  this.cloneTo = 0;
-  this.fade = false;
-  this.isDone = false;
 }
 
 Simulation.prototype.stages = Dataplane.Stages;
 
 Simulation.prototype.step = function() {
-
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
-
-  if(this.dataplane.nextState === 'Final'){
-    console.log('Sim service done with dp');
-    this.stop();
-  }
-
-  
-  /*if(this.dataplane){
-    if(this.dataplane.branchStage === 7){
-      this.clonePacket = true;
-      this.cloneTo = 7;
-      this.dataplane.branchStage = 0;
-      this.fade = false;
-    } else if(this.dataplane.ctx.actionSet.output && this.dataplane.state === 'Egress'){
-      if(this.dataplane.inputQ.length > 0){
-        this.dataplane.currEvent = 0;
-        this.dataplane.state = 'Arrival';
-        this.dataplane.pause = true;
-        this.forwardPacket = true;
-      } else {
-        this.forwardPacket = true;
-        this.isDone = true;
-      }
-    } else if(this.dataplane.ctx.dropPacket && this.dataplane.state === 'Egress'){
-      this.clonePacket = true;
-      this.cloneTo = 6;
-      this.fade = true;
-      this.dataplane.ctx.dropPacket = false;
-      // set state for next packet
-      if(this.dataplane.inputQ.length > 0){
-        this.dataplane.currEvent = 0;
-        this.dataplane.state = 'Arrival';
-        this.dataplane.pause = true;
-      } else {
-        this.isDone = true;
-      }
-    } else {
-      this.clonePacket = false;
-      this.cloneTo = 0;
-      this.fade = false;
-      this.forwardPacket = false;
-    }
-  } */
 
 };
 
@@ -83,16 +35,16 @@ Simulation.prototype.play = function(trace) {
   }, this);
   this.active = true;
   this.stage = 0;
-  this.isDone = false;
+};
+
+Simulation.prototype.isDone = function(){
+  return this.dataplane.nextState === 'Final';
 };
 
 Simulation.prototype.stop = function() {
   this.dataplane   = null;
   this.active      = false;
   this.stage       = 0;
-  this.clonePacket = false;
-  this.cloneTo     = 0;
-  this.fade        = false;
 };
 
 var Stages = [{

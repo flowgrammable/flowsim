@@ -67,6 +67,9 @@ angular.module('flowsimUiApp')
                     .style('fill', 'black');
                 var currentStage = -1;
                 scope.$watch('makeTransition', function(newData) {
+                    if(_.isUndefined(newData)){
+                        return;
+                    }
                     scope.transition(newData, currentStage);
                     currentStage = (_.isUndefined(newData.to)) ? -1 : newData.to;
                 }, false);
@@ -80,15 +83,25 @@ angular.module('flowsimUiApp')
                  * @return {[type]}
                  */
                 scope.transition = function(trans, currentStage) {
-                   // console.log('Transition:' + JSON.stringify(trans));
-                   // console.log('CurrentStage:' + currentStage);
+                   console.log('Transition:' + JSON.stringify(trans));
+                   console.log('CurrentStage:' + currentStage);
+                   if(!trans){
+                    return;
+                   }
+                   if(trans.to === 0 && currentStage === -1){
+                    scope.attachPacket();
+                    svg.selectAll('.sim-packet')
+                        .style('opacity', '.5')
+                        .transition()
+                        .style('display', 'block')
+                        .duration(animationDuration)
+                        .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
+                   } else
                     if (trans.fade) { //dropping the packet
                         svg.selectAll('.sim-packet')
                             .transition()
                             .duration(animationDuration)
                             .style('opacity', '0')
-                            .transition()
-                            .attr('x', (-1) * (stageWidth + stagePadding) + margin - 5)
                             .transition()
                             .remove();
                     } else
@@ -98,7 +111,7 @@ angular.module('flowsimUiApp')
                             .transition()
                             .style('display', 'block')
                             .duration(animationDuration)
-                            .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5)
+                            .attr('x', 7 * (stageWidth + stagePadding) + margin - 5)
                             .transition()
                             .style('display', 'none')
                             .remove();
@@ -122,23 +135,12 @@ angular.module('flowsimUiApp')
                         if (trans.to > currentStage) { //forward transition
                            // console.log('curr stage:', currentStage);
                            // console.log('trans to:', trans.to);
-                            if(trans.output === true){
-                                svg.selectAll('.sim-packet')
-                                    .style('opacity', '.5')
-                                    .transition()
-                                    .style('display', 'block')
-                                    .duration(animationDuration)
-                                    .attr('x', (trans.to + 1) * (stageWidth + stagePadding) + margin - 5)
-                                    .transition()
-                                    .style('display', 'none');
-                            } else {
                                 svg.selectAll('.sim-packet')
                                     .style('opacity', '.5')
                                     .transition()
                                     .style('display', 'block')
                                     .duration(animationDuration)
                                     .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
-                            }
                         } else if (trans.to === currentStage) { //stay and try to transition first cloned packet from array
                             var currPackets = svg.selectAll('.sim-packet-copy')
                                 .filter(function() {
@@ -151,21 +153,7 @@ angular.module('flowsimUiApp')
                                 .duration(animationDuration)
                                 .attr('stage', trans.cloneTo)
                                 .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
-                        } else if(trans.to === 0 && currentStage === 6){
-                             svg.select('#packets')
-                                    .append('rect')
-                                    .attr('class', 'sim-packet')
-                                    .attr('height', stageHeight + 10)
-                                    .attr('width', stageWidth + 10)
-                                    .attr('x', -1.5 * (stageWidth + stagePadding) + margin - 5)
-                                    .attr('y', margin / 2 - 5)
-                                    .attr('ry', 10)
-                                    .attr('stage', -1.5) //set the stage ID
-                                    .transition()
-                                    .duration(animationDuration)
-                                    .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
-
-                        } else { //bacward transitio
+                        } else if(trans.to === 2 && currentStage === 4) { //bacward transitio
                             svg.selectAll('.sim-packet')
                                 .style('opacity', '.5')
                                 .transition()
@@ -177,26 +165,28 @@ angular.module('flowsimUiApp')
                                 .transition()
                                 .attr('y', margin / 2 - 5);
                         }
-                    } else if(trans.to === -1 && currentStage === 6){
-                        svg.select('#packets')
-                            .append('rect')
-                            .attr('class', 'sim-packet')
-                            .attr('height', stageHeight + 10)
-                            .attr('width', stageWidth + 10)
-                            .attr('x', -1 * (stageWidth + stagePadding) + margin - 5)
-                            .attr('y', margin / 2 - 5)
-                            .attr('ry', 10)
-                            .attr('stage', -1.5) //set the stage ID
-                            .transition()
-                            .duration(animationDuration);
                     } else {
                         svg.selectAll('.sim-packet')
                             .style('display', 'none')
-                            .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
+                            //.attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
+                            .remove();
                     }
 
 
                 };
+
+                scope.attachPacket = function(){
+                    svg.select('#packets')
+                        .append('rect')
+                        .attr('class', 'sim-packet')
+
+                    .attr('height', stageHeight + 10)
+                        .attr('width', stageWidth + 10)
+                        .attr('x', -125)
+                        .attr('y', margin / 2 - 5)
+                        .attr('ry', 10);
+                };
+
                 /**
                  * Main rendering function. Accept Stages object.
                  * @param stages - stages array
@@ -211,15 +201,7 @@ angular.module('flowsimUiApp')
                     //Place holder for Active
                     svg.append('g').attr('id', 'packets');
                     svg.append('g').attr('id', 'stages');
-                    svg.select('#packets')
-                        .append('rect')
-                        .attr('class', 'sim-packet')
-
-                    .attr('height', stageHeight + 10)
-                        .attr('width', stageWidth + 10)
-                        .attr('x', -100)
-                        .attr('y', margin / 2 - 5)
-                        .attr('ry', 10);
+                    //scope.attachPacket();
 
                     stages = svg.select('#stages').selectAll('g')
                         .data(stages)
