@@ -29,6 +29,7 @@ abstrations are:
 * add        - add stages to the pipeline
 * connect    - connect stages within the pipeline
 * step       - execute a single step of the next active stage
+* recv       - receive a packet in the pipeline (port id, packet, time)
 
 ## Data plane UI compents
 
