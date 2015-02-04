@@ -163,7 +163,8 @@ angular.module('flowsimUiApp')
                                     .attr('stage', -1.5) //set the stage ID
                                     .transition()
                                     .duration(animationDuration)
-                                    .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
+                                    .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
+
                         } else { //bacward transitio
                             svg.selectAll('.sim-packet')
                                 .style('opacity', '.5')
@@ -182,7 +183,7 @@ angular.module('flowsimUiApp')
                             .attr('class', 'sim-packet')
                             .attr('height', stageHeight + 10)
                             .attr('width', stageWidth + 10)
-                            .attr('x', -1.5 * (stageWidth + stagePadding) + margin - 5)
+                            .attr('x', -1 * (stageWidth + stagePadding) + margin - 5)
                             .attr('y', margin / 2 - 5)
                             .attr('ry', 10)
                             .attr('stage', -1.5) //set the stage ID

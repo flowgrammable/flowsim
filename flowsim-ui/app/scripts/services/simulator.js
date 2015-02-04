@@ -64,7 +64,7 @@ Simulation.prototype.step = function() {
       }
     } else {
       this.clonePacket = false;
-      this.cloneTo = false;
+      this.cloneTo = 0;
       this.fade = false;
       this.forwardPacket = false;
     }
@@ -91,7 +91,7 @@ Simulation.prototype.stop = function() {
   this.active    = false;
   this.stage = -1;
   this.clonePacket = false;
-  this.cloneTo = false;
+  this.cloneTo = 0;
   this.fade = false;
   this.isDone = true;
 };
