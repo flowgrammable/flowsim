@@ -83,11 +83,15 @@ angular.module('flowsimUiApp')
                         path.thirdTop = '170px';
                         path.fourthTop = '170px';
                         path.fourthHeight = '70px';
+                        d3.select('#arrow3')
+                            .attr('style', 'top:' + path.thirdTop);
+                        d3.select('#arrow4')
+                            .attr('style', 'top:' + path.fourthTop);
                     }
                     d3.select(selection)
-                        .transition().delay(animationDuration*3)
+                        .transition().delay(animationDuration*4)
                         .duration(animationDuration)
-                        .attr('style', 'opacity:0.5');
+                        .attr('style', 'opacity:0.3');
                     d3.select('.selection-flow')
                         .transition().delay(animationDuration * 5)
                         .duration(animationDuration)
@@ -110,7 +114,7 @@ angular.module('flowsimUiApp')
                         .duration(animationDuration)
                         .attr('style', 'height:' + path.fourthHeight + ';top:' + path.fourthTop);
                     d3.select('#point')
-                        .transition().delay(animationDuration * 4)
+                        .transition().delay(animationDuration * 5)
                         .duration(animationDuration)
                         .attr('style', 'opacity:1');
 
