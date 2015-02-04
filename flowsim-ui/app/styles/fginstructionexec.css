@@ -212,7 +212,7 @@
 }
 .sim-exec-right-animate-repeat
 {
-    display: inline-block;
+    display: block;
 
     box-sizing: border-box;
     width: 100%;
