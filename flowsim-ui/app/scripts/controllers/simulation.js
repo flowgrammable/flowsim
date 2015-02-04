@@ -157,10 +157,10 @@ angular.module('flowsimUiApp')
   };
 
   $scope.stop = function() {
+    $scope.makeTransition = {to: -1};
     $scope.simulation.stop();
     $scope.view = null;
     $scope.ctx = null;
-    $scope.makeTranslation = {to: -1};
   };
 
   // clean up view

@@ -132,7 +132,7 @@ angular.module('flowsimUiApp')
                             .remove();
                     } else
                     if (trans.to > -1) {
-                        if (trans.to > currentStage) { //forward transition
+                        if (trans.to > currentStage && trans.to !== 0) { //forward transition
                            // console.log('curr stage:', currentStage);
                            // console.log('trans to:', trans.to);
                                 svg.selectAll('.sim-packet')

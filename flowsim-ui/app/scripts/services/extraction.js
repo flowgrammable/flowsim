@@ -55,7 +55,12 @@ Extractor.prototype.extract = function(ctx){
 };
 
 Extractor.prototype.isDone = function(){
-  return !this.clonedPacket.protocols.length;
+  if(this.clonedPacket.protocols.length){
+    return false;
+  } else {
+    this.clonedPacket = null;
+    return true;
+  }
 };
 
 return {
