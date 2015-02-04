@@ -579,22 +579,22 @@ Set.prototype.toView = function() {
 Set.prototype.summarize = function() {
   var result = [];
   if(this.meter.enabled) {
-    result.push(this.meter.name.toLowerCase());
+    result.push(this.meter.toView().shortName);
   }
   if(this.apply.enabled) {
-    result.push(this.apply.name.toLowerCase());
+    result.push(this.apply.toView().shortName);
   }
   if(this.clear.enabled) {
-    result.push(this.clear.name.toLowerCase());
+    result.push(this.clear.toView().shortName);
   }
   if(this.write.enabled) {
-    result.push(this.write.name.toLowerCase());
+    result.push(this.write.toView().shortName);
   }
   if(this.metadata.enabled) {
-    result.push(this.metadata.name.toLowerCase());
+    result.push(this.metadata.toView().shortName);
   }
   if(this.goto_.enabled) {
-    result.push(this.goto_.name.toLowerCase());
+    result.push(this.goto_.toView().shortName);
   }
   return result;
 };

@@ -1,11 +1,10 @@
 <div>
-    <div class="sim-ins-actionGroup">Instructions</div>
-    <div class="sim-ins-instructions">{{instructions()}}</div>
     <div class="sim-ins-actionGroup">
-
+    <div style="margin-right: auto; margin-left: auto;">Instructions</div>
+    <div class="sim-ins-instructions">{{instructions()}}</div>
         <div class="sim-ins-actionlist">
             <div style="height:10px"></div>
-            <div ng-show="applyActionList">Action List&nbsp;&nbsp;</div>
+            <div ng-show="applyActionList" style="margin-right: auto; margin-left: auto;">Action List</div>
             <div ng-show="applyActionList" class="sim-ins-animate-container">
 
                 <div class="sim-ins-animate-repeat"
@@ -18,7 +17,7 @@
         </div>
         <div class="sim-ins-actionset">
             <div style="height:10px"></div>
-            <div ng-show="writeActionSet">Action Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div ng-show="writeActionSet" style="margin-right: auto; margin-left: auto;">Action Set</div>
             <div ng-show="writeActionSet" class="sim-ins-animate-container">
                 <div class="sim-ins-animate-repeat"
                      ng-class="(writeActionSet.actions.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
@@ -35,8 +34,8 @@
         </div>
     </div>
     <div class="sim-ins-instructionset">
-        <div style="height:190px"></div>
-        <div >Instruction Set&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="height:230px"></div>
+        <div style="margin-right: auto; margin-left: auto;">Instruction Set</div>
         <div class="sim-ins-animate-container">
             <div class="sim-ins-animate-repeat"
                  ng-class="(view.instructionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
