@@ -111,9 +111,12 @@ Dataplane.prototype.group = function(pkt, id) {
     id: id,
     packet: pkt
   });
+  if(this.state === EXECUTION){
+    this.branchStage = GROUPS;
+  }
 };
 
-Dataplane.prototype.groups = function() {
+Dataplane.prototype.execGroups = function() {
   var g_ctx = this.groupQ.splice(0, 1);
   this.groupQ.splice(0, 1);
   if(g_ctx) {
@@ -187,10 +190,10 @@ Dataplane.prototype.step = function() {
       }
       break;
     case GROUPS:
-      this.groups();
+      this.execGroups();
       if(this.groupQ.length > 0) {
         this.transition(GROUPS);
-      } else if(this.instructionSet.isEmpty()) {
+      } else if(this.ctx.instructionSet.isEmpty()) {
         this.transition(EGRESS);
       } else {
         this.transition(EXECUTION);

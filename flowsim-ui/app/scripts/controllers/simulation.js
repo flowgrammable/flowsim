@@ -179,6 +179,7 @@ angular.module('flowsimUiApp')
         break;
       case 3:
         $scope.selectionView = null;
+        $scope.selectionView = $scope.simulation.toView();
         break;
       default:
         break;
@@ -212,6 +213,13 @@ angular.module('flowsimUiApp')
         to: $scope.simulation.stage,
         clonePacket: true,
         cloneTo: 7
+      };
+      $scope.simulation.dataplane.branchStage = 0;
+    } else if($scope.simulation.dataplane.branchStage === 5){
+      $scope.makeTransition = {
+        to: $scope.simulation.stage,
+        clonePacket: true,
+        cloneTo: 5
       };
       $scope.simulation.dataplane.branchStage = 0;
     } else if($scope.dp.nextState === 'Final' && $scope.simulation.stage === 6) {
@@ -250,7 +258,6 @@ angular.module('flowsimUiApp')
   };
 
   $scope.step = function() {
-
     // step through each packet
     if($scope.simulation.isDone()){
       // done with step
@@ -260,9 +267,12 @@ angular.module('flowsimUiApp')
       $scope.simulation.step();
       $scope.handleTransition();
       $scope.stageToView();
-
     }
-
   };
 
+
+  $scope.$on('$destroy', function(){
+    $scope.trace = null;
+
+  });
 });

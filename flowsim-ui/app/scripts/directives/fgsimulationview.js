@@ -153,7 +153,18 @@ angular.module('flowsimUiApp')
                                 .duration(animationDuration)
                                 .attr('stage', trans.cloneTo)
                                 .attr('x', trans.cloneTo * (stageWidth + stagePadding) + margin - 5);
-                        } else if(trans.to === 2 && currentStage === 4) { //bacward transitio
+                        } else 
+                        if((trans.to === 4 && currentStage === 5) ||
+                            (trans.to === 5 && currentStage === 6)){
+                            svg.selectAll('.sim-packet')
+                                .style('opacity', '.5')
+                                .transition()
+                                .duration(animationDuration / 3)
+                                .style('display', 'block')
+                                .transition()
+                                .attr('x', trans.to * (stageWidth + stagePadding) + margin - 5);
+                        } else 
+                        if(trans.to === 2 && currentStage === 4) { //bacward transitio
                             svg.selectAll('.sim-packet')
                                 .style('opacity', '.5')
                                 .transition()
