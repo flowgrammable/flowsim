@@ -176,6 +176,9 @@ angular.module('flowsimUiApp')
     if($scope.simulation.stage ===2){
       $scope.choice = null;
     }
+    if($scope.simulation.stage === 3){
+      $scope.selectionView = null;
+    }
   };
 
   $scope.step = function() {
