@@ -1,0 +1,29 @@
+<div id="selection-container">
+    <div id="arrow1" class="arrow"></div>
+    <div id="arrow2" class="arrow"></div>
+    <div id="arrow3" class="arrow"></div>
+    <div id="arrow4" class="arrow"></div>
+    <div id="point" class="arrow"></div>
+    <div id="selection-content">
+        <div class="selection-tbl-hdr">Table {{table}}</div>
+        <div class="selection-header">key & mask = value</div>
+        <div id="sel-tbl1" class="selection-tbl ctx-key-color-prim">Priority&nbsp;&nbsp;&nbsp;Match&nbsp;&nbsp;&nbsp;Instructions</div>
+        <div id="sel-tbl2" class="selection-tbl ctx-key-color-sec">Priority&nbsp;&nbsp;&nbsp;Match&nbsp;&nbsp;&nbsp;Instructions</div>
+        <div id="sel-tbl3" class="selection-tbl ctx-key-color-prim">Priority&nbsp;&nbsp;&nbsp;Match&nbsp;&nbsp;&nbsp;Instructions</div>
+        <div id="sel-tbl4" class="selection-tbl ctx-key-color-sec">Priority&nbsp;&nbsp;&nbsp;Match&nbsp;&nbsp;&nbsp;Instructions</div>
+    </div>
+    <div class="selection-flow">
+        <div class="selection-f-hdr">
+            <div class="selection-f-th" style="width: 30px">Priority</div>
+            <div class="selection-f-th">Match</div>
+            <div class="selection-f-th">Instructions</div>
+        </div>
+        <div class="selection-tbl-cnt">
+            <div class="selection-f-th" style="width: 8px"></div>
+            <div class="sel-prio">{{data.flow.priority}}</div>
+            <div class="selection-tbl-td">{{matchString}}</div>
+            <div class="selection-tbl-td">{{instructionsString}}</div>
+        </div>
+    </div>
+</div>
+

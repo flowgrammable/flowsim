@@ -157,55 +157,132 @@ angular.module('flowsimUiApp')
   };
 
   $scope.stop = function() {
+    $scope.makeTransition = {to: -1};
     $scope.simulation.stop();
-    $scope.makeTransition =  {to:-1};
-    $scope.simulation.isDone = false;
+    $scope.view = null;
+    $scope.ctx = null;
+  };
+
+  // clean up view
+  $scope.stageInit = function(){
+    switch($scope.simulation.stage){
+      case 0:
+        $scope.packetName = '';
+        $scope.view = { key: null };
+        $scope.extractView = null;
+        break;
+      case 1:
+        $scope.extractView = $scope.simulation.toView();
+        break;
+      case 2:
+        $scope.choice = null;
+        break;
+      case 3:
+        $scope.selectionView = null;
+        break;
+      default:
+        break;
+    }
+};
+
+  $scope.stageToView = function(){
+    $scope.ctx = $scope.simulation.toView();
+    $scope.view = $scope.simulation.toView();
+
+    if($scope.simulation.stage === 0 && $scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
+      $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
+    } 
+    if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
+      $scope.extractView = $scope.simulation.toView();
+    }
+    if($scope.simulation.stage === 2 ){
+      $scope.choice = null;
+      if($scope.simulation.stage === $scope.fromStage){//Drive choice transition
+        $scope.choice = $scope.ctx.table;
+      }
+    }
+    if($scope.simulation.stage === 3 && $scope.fromStage === 3){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
+      $scope.selectionView = $scope.simulation.toView();
+    }
+    if($scope.simulation.stage === 4){
+      $scope.selectionView = null;
+      $scope.executionView = {
+        applyActions: _($scope.view.instructionSet).findWhere({name:'Apply'}),
+        writeActions: _($scope.view.instructionSet).findWhere({name:'Write'}),
+        insList: _($scope.view.instructionSet).map(function(ins){
+          return {
+            name: ins.name,
+            shortName: ins.shortName
+          };
+        })
+      };
+    }
+  };
+
+  $scope.handleTransition = function(){
+    $scope.dp = $scope.simulation.dataplane;
+    if($scope.simulation.dataplane.branchStage === 7){
+      // apply action - output
+      $scope.makeTransition = {
+        to: $scope.simulation.stage,
+        clonePacket: true,
+        cloneTo: 7
+      };
+      $scope.simulation.dataplane.branchStage = 0;
+    } else if($scope.simulation.dataplane.branchStage === 5){
+      $scope.makeTransition = { 
+        to: $scope.simulation.stage,
+        clonePacket: true,
+        cloneTo: 5
+      };
+      $scope.simulation.dataplane.branchStage = 0;
+    } else if($scope.dp.nextState === 'Final' && $scope.simulation.stage === 6) {
+      // action set drop packet
+      if($scope.dp.ctx.output){
+        $scope.makeTransition = {
+          output: true
+        };
+        $scope.dp.ctx.output = null;
+      } else {
+        $scope.makeTransition = {
+          fade: true
+        };
+      }
+
+    } else if($scope.dp.nextState === 'Arrival' && $scope.simulation.stage === 6) {
+      if($scope.dp.ctx.output){
+        $scope.makeTransition = {
+          output: true
+        };
+        $scope.dp.ctx.output = null;
+      } else {
+        $scope.makeTransition = {
+          fade: true
+        };
+      }
+    } else {  
+      $scope.makeTransition = {
+        to: $scope.simulation.stage,
+      };
+    }
   };
 
   $scope.step = function() {
-
     // step through each packet
-    if($scope.simulation.isDone){
+    if($scope.simulation.isDone()){
       // done with step
-      $scope.simulation.stop();
-      $scope.makeTransition = {to: -1};
+      $scope.stop();
     } else {
       $scope.fromStage = $scope.simulation.stage;
       $scope.simulation.step();
-      $scope.makeTransition = {
-        to: $scope.simulation.stage,
-        clonePacket: $scope.simulation.clonePacket,
-        cloneTo: $scope.simulation.cloneTo,
-        fade: $scope.simulation.fade,
-        output: $scope.simulation.forwardPacket
-
-      };
-      $scope.ctx = $scope.simulation.toView();
-      $scope.view = $scope.simulation.toView();
-
-      console.log('post step', $scope.ctx);
-      console.log('dp state:', $scope.simulation.dataplane.state);
-      if($scope.simulation.stage === 0 && $scope.simulation.dataplane && $scope.simulation.dataplane.ctx){
-        $scope.packetName = $scope.simulation.dataplane.ctx.packet.name;
-      } else {
-        $scope.packetName = '';
-       // $scope.view = null;
-      }
-      if($scope.simulation.stage ===2 && $scope.simulation.stage === $scope.fromStage){//Drive choice transition
-          $scope.choice = $scope.ctx.table;
-      }else{
-          $scope.choice = null;
-      }
-      if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
-        $scope.extractView = $scope.simulation.toView();
-      }else{
-        $scope.extractView = null;
-      }
+      $scope.handleTransition();
+      $scope.stageToView();
     }
-
-
-
-
   };
 
+
+  $scope.$on('$destroy', function(){
+    $scope.trace = null;
+
+  });
 });

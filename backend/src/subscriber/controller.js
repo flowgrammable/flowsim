@@ -174,7 +174,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
       delete err.detail.err;
       callback(err);
     } else {
-      subject = 'Flowsim Verify Email Address';
+      subject = 'Flowsim - Verify Email Address';
       body = that.template.render('verification', {
         baseUrl: that.server.baseUrl(),
         token: token
@@ -230,6 +230,7 @@ Controller.prototype.forgot = function(email, callback) {
       delete err.detail.err;
       callback(err);
     } else {
+      subject = 'Flowsim - Reset Password';
       body = that.template.render('reset', {
         baseUrl: that.server.baseUrl(),
         token: token

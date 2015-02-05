@@ -39,7 +39,7 @@ function Dataplane(device) {
     this.extractor = new Extraction.Extractor();
     this.ctx   = null;
     this.state = ARRIVAL;
-    this.branchStage = 0;
+    this.branchStage = null;
   } else {
     throw 'Bad Dataplane('+device+')';
   }
@@ -86,6 +86,8 @@ Dataplane.prototype.choice = function() {
 Dataplane.prototype.selection = function() {
   var flow = this.table.select(this.ctx.key);
   if(flow) {
+    // tmp stub
+    this.ctx.flow = flow;
     this.ctx.setInstructions(flow.ins.clone());
   } else {
     // could not find flow
@@ -99,6 +101,9 @@ Dataplane.prototype.execution = function() {
 
 Dataplane.prototype.output = function(pkt, id) {
   this.ports.egress(pkt, id);
+  if(this.state === EXECUTION){
+    this.branchStage = FINAL;
+  }
 };
 
 Dataplane.prototype.group = function(pkt, id) {
@@ -106,9 +111,12 @@ Dataplane.prototype.group = function(pkt, id) {
     id: id,
     packet: pkt
   });
+  if(this.state === EXECUTION){
+    this.branchStage = GROUPS;
+  }
 };
 
-Dataplane.prototype.groups = function() {
+Dataplane.prototype.execGroups = function() {
   var g_ctx = this.groupQ.splice(0, 1);
   this.groupQ.splice(0, 1);
   if(g_ctx) {
@@ -182,10 +190,10 @@ Dataplane.prototype.step = function() {
       }
       break;
     case GROUPS:
-      this.groups();
+      this.execGroups();
       if(this.groupQ.length > 0) {
         this.transition(GROUPS);
-      } else if(this.instructionSet.isEmpty()) {
+      } else if(this.ctx.instructionSet.isEmpty()) {
         this.transition(EGRESS);
       } else {
         this.transition(EXECUTION);
@@ -198,13 +206,20 @@ Dataplane.prototype.step = function() {
       } else if(this.ctx.actionSet.isEmpty()) {
         if(this.inputQ.length > 0) {
           this.transition(ARRIVAL);
+          this.currEvent = 0;
         } else {
+          if(this.ctx.output){
+            console.log('forward packet');
+          } else {
+            console.log('drop packet');
+          }
           this.transition(FINAL);
+          console.log('done with sim');
         }
       }
       break;
     case FINAL:
-      return -1;
+      break;
     default:
       throw 'Bad Dataplane state: ' + this.state;
   }

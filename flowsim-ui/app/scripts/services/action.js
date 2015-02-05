@@ -102,15 +102,7 @@ Set.prototype.remove = function(idx){
 Set.prototype.step = function(dp, ctx) {
   if(this.actions.length){
     var act = this.actions.shift();
-    if(act.field === 'Output'){
-      this.output = true;
-    }
     act.step(dp, ctx);
-  }
-  if(this.isEmpty()){
-    if(!this.output){
-      ctx.dropPacket = true;
-    } 
   }
 };
 

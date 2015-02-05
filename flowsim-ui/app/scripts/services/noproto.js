@@ -85,15 +85,6 @@ function getConsFunction(protocol, field) {
   return consFuncs[key];
 }
 
-// cons function store getter
-function getToStringFunction(protocol, field) {
-  var key = protocol + '-' + field;
-  if(!_(toStringFuncs).has(key)) {
-    throw 'Bad toStringFunc key: '+ key;
-  }
-  return toStringFuncs[key];
-}
-
 function Match(match, protocol, summary, field, bitwidth, tip, value, mask) {
   var consFunc;
   if(_(match).isObject()) {
