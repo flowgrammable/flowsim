@@ -15,7 +15,7 @@ angular.module('flowsimUiApp')
       },
       controller: function($scope) {
         $scope.title = 'Packet Trace';
-        $scope.text = "";
+        $scope.text = '';
         $scope.lineno = 1;
 
         $scope.write = function(output) {

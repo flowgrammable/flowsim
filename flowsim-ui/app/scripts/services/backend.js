@@ -20,7 +20,7 @@ angular.module('flowsimUiApp')
       }
     }
 
-    function request(that, method, path, data, callback) {
+    function request(method, path, data, callback) {
       $http[method](path, data, {
         headers: { 'x-access-token': xAccessToken }
           }).success(function(data) {
@@ -60,12 +60,12 @@ angular.module('flowsimUiApp')
 
     function post(path, data, callback) {
       //FIXME this looks like left-overs from a service
-      request(this, 'post', path, data, callback);
+      request('post', path, data, callback);
     }
 
     function update(path, data, callback) {
       //FIXME this looks like left-overs from a service
-      request(this, 'put', path, data, callback);
+      request('put', path, data, callback);
     }
 
     function _delete(path, data, callback) {

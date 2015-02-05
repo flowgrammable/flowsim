@@ -58,12 +58,6 @@
                 <a href="#subscriber/update">Account</a>
               </li>
             </ul>
-            <form class="navbar-form navbar-right" role="form" 
-                  ng-hide="authenticated">
-              <a ng-click="signup()" class="btn btn-success">
-                Sign up
-              </a>
-            </form>
             <form class="navbar-form navbar-right" role="form"
                   ng-show="authenticated">
               <a href="" ng-disabled="!dirty" class="btn btn-success" 
@@ -72,6 +66,15 @@
               </a>
               <a href="#" class="btn btn-success" ng-click="logout()">
                 Logout
+              </a>
+            </form>
+            <form class="navbar-form navbar-right" role="form"
+                  ng-show="!authenticated">
+              <a href="#subscriber/login" class="btn btn-success">
+               Login 
+              </a>
+              <a href="#subscriber/register" class="btn btn-success">
+               Register 
               </a>
             </form>
           </div>
