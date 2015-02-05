@@ -108,6 +108,10 @@
         -ms-flex: 1 30%;
             flex: 1 30%;
 }
+
+.ctx-key-container{
+    width: 260px;
+}
 #choice-container{
 
 }
