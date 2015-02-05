@@ -197,6 +197,7 @@ angular.module('flowsimUiApp')
     }
     if($scope.simulation.stage === 2 ){
       $scope.choice = null;
+      $scope.selectionView = null;
       if($scope.simulation.stage === $scope.fromStage){//Drive choice transition
         $scope.choice = $scope.ctx.table;
       }
@@ -205,7 +206,7 @@ angular.module('flowsimUiApp')
       $scope.selectionView = $scope.simulation.toView();
     }
     if($scope.simulation.stage === 4){
-      $scope.selectionView = null;
+
       $scope.executionView = {
         applyActions: _($scope.view.instructionSet).findWhere({name:'Apply'}),
         writeActions: _($scope.view.instructionSet).findWhere({name:'Write'}),
