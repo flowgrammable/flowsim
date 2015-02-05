@@ -12,7 +12,8 @@ angular.module('flowsimUiApp')
             templateUrl: 'views/fgselectiontables.html',
             restrict: 'E',
             scope: {
-                data: '='
+                data: '=',
+                table: '='
             },
             link: function postLink(scope, element, attrs) {
                 var animationDuration = parseInt(attrs.animationDuration) || 500;

@@ -29,44 +29,41 @@ angular.module('flowsimUiApp')
                     return tip;
 
                 };
-
             },
             link: function(scope) {
-
-                scope.$watch('view', function() {
-
-                    if (!scope.view) {
-                        return;
+                scope.$watch('view.applyActions', function(){
+                    if(scope.view){
+                        scope.applyActionList = scope.view.applyActions;
                     }
-                    if(scope.view.instructionSet){
-                        scope.applyActionList = _(scope.view.instructionSet).findWhere({name: 'Apply'});
-                        scope.writeActionSet = _(scope.view.instructionSet).findWhere({name: 'Write'});
-                   
+                }, true);
+
+                scope.$watch('view.writeActions', function(){
+                    if(scope.view){
+                        scope.writeActionSet = scope.view.writeActions;
                     }
+                }, true);
 
-                    scope.instructionList = _(scope.view.instructionSet).map(function(ins){
-                        return ins.name;
-                    });
+                scope.$watch('view.insList', function(){
+                    if(scope.view){
+                        scope.instructionList = _(scope.view.insList).map(function(ins){
+                            return ins.name;
+                        });
+                        scope.insListView = scope.instructions();
+                        scope.insSetListApplyIdx = _.indexOf(scope.instructionList, 'Apply');
+                        scope.insSetListWriteIdx = _.indexOf(scope.instructionList, 'Write');
+                    }
+                }, true);
 
-                    scope.insSetListApplyIdx = _.indexOf(scope.instructionList, 'Apply');
-                    scope.insSetListWriteIdx = _.indexOf(scope.instructionList, 'Write');
-                    scope.insListView = '';
-                    scope.instructions = function() {
+                scope.instructions = function() {
                         var insListView = '';
-                        if(scope.view && scope.view.instructionSet){
-                        _(scope.view.instructionSet).each(function(ins, idx){
+                        _(scope.view.insList).each(function(ins, idx){
                             insListView += ins.shortName;
                             if(idx < scope.instructionList.length - 1){
                                 insListView += ' / ';
                             }
                         });
-                        }
                         return insListView;
-                    };
-                    
-
-
-                }, true /*deep watch*/ );
+                };
             }
         };
     });

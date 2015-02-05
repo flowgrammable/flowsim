@@ -179,7 +179,6 @@ angular.module('flowsimUiApp')
         break;
       case 3:
         $scope.selectionView = null;
-        $scope.selectionView = $scope.simulation.toView();
         break;
       default:
         break;
@@ -196,13 +195,28 @@ angular.module('flowsimUiApp')
     if($scope.simulation.stage === 1){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
       $scope.extractView = $scope.simulation.toView();
     }
-    if($scope.simulation.stage === 2 && $scope.simulation.stage === $scope.fromStage){//Drive choice transition
-      $scope.choice = $scope.ctx.table;
+    if($scope.simulation.stage === 2 ){
+      $scope.choice = null;
+      if($scope.simulation.stage === $scope.fromStage){//Drive choice transition
+        $scope.choice = $scope.ctx.table;
+      }
     }
     if($scope.simulation.stage === 3 && $scope.fromStage === 3){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
       $scope.selectionView = $scope.simulation.toView();
     }
-
+    if($scope.simulation.stage === 4){
+      $scope.selectionView = null;
+      $scope.executionView = {
+        applyActions: _($scope.view.instructionSet).findWhere({name:'Apply'}),
+        writeActions: _($scope.view.instructionSet).findWhere({name:'Write'}),
+        insList: _($scope.view.instructionSet).map(function(ins){
+          return {
+            name: ins.name,
+            shortName: ins.shortName
+          };
+        })
+      };
+    }
   };
 
   $scope.handleTransition = function(){
@@ -216,7 +230,7 @@ angular.module('flowsimUiApp')
       };
       $scope.simulation.dataplane.branchStage = 0;
     } else if($scope.simulation.dataplane.branchStage === 5){
-      $scope.makeTransition = {
+      $scope.makeTransition = { 
         to: $scope.simulation.stage,
         clonePacket: true,
         cloneTo: 5
@@ -249,10 +263,6 @@ angular.module('flowsimUiApp')
     } else {  
       $scope.makeTransition = {
         to: $scope.simulation.stage,
-        clonePacket: $scope.simulation.dataplane.branchPacketOut,
-        cloneTo: $scope.simulation.cloneTo,
-        fade: $scope.simulation.fade,
-        output: $scope.simulation.forwardPacket
       };
     }
   };
