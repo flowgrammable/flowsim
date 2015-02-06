@@ -137,12 +137,8 @@ Controller.prototype.logout = function(sessionID, callback) {
 Controller.prototype.mailerSignup = function(email, srcIP, callback) {
   var current, token, that;
   current = new Date();
-  token = uuid.v4();
-  tmpPassword = ' ';
   that = this;
-  this.storage.createSubscriber(email, tmpPassword, current.toISOString(), srcIP,
-    token, function(err, sub) {
-
+  this.storage.addToMailer(email, current.toISOString(), function(err, sub){ 
     var subject, body;
     if(err) {
       that.logger.error(err);
