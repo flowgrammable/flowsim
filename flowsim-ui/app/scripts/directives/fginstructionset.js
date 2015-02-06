@@ -44,7 +44,7 @@ angular.module('flowsimUiApp')
                         if((_.isUndefined(scope.applyActionList) || _.isNull(scope.applyActionList)) && !(_.isUndefined(scope.view.applyActions))){
                             scope.applyActionList = _.clone(scope.view.applyActions);
                         }else {
-                            scope.applyActionList.actions.pop();
+                            scope.applyActionList.actions.shift();
                         }
                     }
                 }, true);
@@ -54,7 +54,7 @@ angular.module('flowsimUiApp')
                         if((_.isUndefined(scope.writeActionSet) || _.isNull(scope.writeActionSet)) && !(_.isUndefined(scope.view.writeActions))){
                             scope.writeActionSet = _.clone(scope.view.writeActions);
                         }else {
-                            scope.writeActionSet.actions.pop();
+                            scope.writeActionSet.actions.shift();
                         }
 
                     }
