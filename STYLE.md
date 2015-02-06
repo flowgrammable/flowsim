@@ -87,8 +87,8 @@
 
     return function(x) {
       return that.foo(x);
-    }
-  }   
+    };
+  };   
 
   // now we use an inner function that forgets about 'this'
   _.each(this.list, function(item) {
