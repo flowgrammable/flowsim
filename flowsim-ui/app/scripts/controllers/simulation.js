@@ -204,6 +204,7 @@ angular.module('flowsimUiApp')
     }
     if($scope.simulation.stage === 3 && $scope.fromStage === 3){//Since Simulation Views are all loaded during simulation we need to handle data in views via different variables. Ideally we should refactor Tab views to be lazy loaded and on demand only.
       $scope.selectionView = $scope.simulation.toView();
+      $scope.executionView = null;
     }
     if($scope.simulation.stage === 4){
 
@@ -263,7 +264,7 @@ angular.module('flowsimUiApp')
       }
     } else {  
       $scope.makeTransition = {
-        to: $scope.simulation.stage,
+        to: $scope.simulation.stage
       };
     }
   };

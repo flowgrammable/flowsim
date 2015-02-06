@@ -31,15 +31,32 @@ angular.module('flowsimUiApp')
                 };
             },
             link: function(scope) {
+
+                scope.$watch('view', function(){
+                    if(_.isNull(scope.view)){
+                      scope.applyActionList = null;
+                      scope.writeActionSet = null;
+
+                    }
+                }, true);
                 scope.$watch('view.applyActions', function(){
                     if(scope.view){
-                        scope.applyActionList = scope.view.applyActions;
+                        if((_.isUndefined(scope.applyActionList) || _.isNull(scope.applyActionList)) && !(_.isUndefined(scope.view.applyActions))){
+                            scope.applyActionList = _.clone(scope.view.applyActions);
+                        }else {
+                            scope.applyActionList.actions.pop();
+                        }
                     }
                 }, true);
 
                 scope.$watch('view.writeActions', function(){
                     if(scope.view){
-                        scope.writeActionSet = scope.view.writeActions;
+                        if((_.isUndefined(scope.writeActionSet) || _.isNull(scope.writeActionSet)) && !(_.isUndefined(scope.view.writeActions))){
+                            scope.writeActionSet = _.clone(scope.view.writeActions);
+                        }else {
+                            scope.writeActionSet.actions.pop();
+                        }
+
                     }
                 }, true);
 
