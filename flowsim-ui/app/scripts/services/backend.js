@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Backend', function backend($http) {
+  .factory('Backend', function backend($http, Session) {
 
     var xAccessToken = '';
 
@@ -21,8 +21,9 @@ angular.module('flowsimUiApp')
     }
 
     function request(method, path, data, callback) {
+      var authToken = Session.token();
       $http[method](path, data, {
-        headers: { 'x-access-token': xAccessToken }
+        headers: { 'x-access-token': authToken }
           }).success(function(data) {
               unwrap(data, callback);
             }).error(function(data, status) {
@@ -35,18 +36,22 @@ angular.module('flowsimUiApp')
 
       }
 
+    function isAuthorized(){
+      return Session.isActive();
+    }
 
     function authorize(token){
-      xAccessToken = token;
+      Session.storeToken(token);
     }
 
     function deauthorize() {
-      xAccessToken = '';
+      Session.destroy();
     }
 
     function get(path, data, callback){
+      var authToken = Session.token();
       $http.get(path,{
-        headers: { 'x-access-token': xAccessToken }
+        headers: { 'x-access-token': authToken }
           }).success(function(data) {
              unwrap(data, callback);
            }).error(function(data, status) {
@@ -69,8 +74,9 @@ angular.module('flowsimUiApp')
     }
 
     function _delete(path, data, callback) {
+      var authToken = Session.token();
       $http.delete(path, {
-        headers: { 'x-access-token': xAccessToken }
+        headers: { 'x-access-token': authToken }
           }).success(function(data) {
               unwrap(data, callback);
             }).error(function(data, status) {
@@ -85,6 +91,7 @@ angular.module('flowsimUiApp')
     return {
       authorize: authorize,
       deauthorize: deauthorize,
+      isAuthorized: isAuthorized,
       get: get,
       post: post,
       update: update,
