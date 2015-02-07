@@ -18,7 +18,7 @@
         <div style="width:100%; text-align: right;
     clear: none;">Action Set</div>
         <div class="sim-exec-right-animate-container">
-            <div class="sim-exec-right-animate-repeat" ng-class="(view.actionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')" ng-repeat="action in view.actionSet" tooltip="{{action.tip}}" tooltip-append-to-body="true">
+            <div class="sim-exec-right-animate-repeat" ng-class="(actionSet.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')" ng-repeat="action in actionSet" tooltip="{{action.tip}}" tooltip-append-to-body="true">
                 {{action.value1 +'('+action.value2+')'}}
             </div>
         </div>

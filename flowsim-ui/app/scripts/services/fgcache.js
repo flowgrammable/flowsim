@@ -72,14 +72,16 @@ angular.module('flowsimUiApp')
       if(!(type in post))    { post[type] = {}; }
       if(!(type in update))  { update[type] = {}; }
       if(!(type in _delete)) { _delete[type] = {}; }
-
       // was never saved
       if(post[type][name]) {
         delete post[type][name];
       } else if(update[type][name]) {
         _delete[type][name] = update[type][name];
         delete update[type][name];
+      } else {
+        _delete[type][name] = true;
       }
+
     }
 
     function isDirty() {
@@ -102,7 +104,6 @@ angular.module('flowsimUiApp')
       deleteDirty = _.some(_delete, function(type) {
         return Object.keys(type).length > 0;
       });
-
       // If anything is dirty the cache is dirty
       return postDirty || updateDirty || deleteDirty;
     }
