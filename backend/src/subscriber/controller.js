@@ -29,12 +29,13 @@ var defTimeout = 180;
  * @param {Object} context.logger   - logger engine
  */
 
-function Controller(s, m, t, h, l) {
+function Controller(s, m, t, h, l, sb) {
   this.storage  = s;
   this.mailer   = m;
   this.template = t;
   this.server   = h;
   this.logger   = l.child({component: 'controller'});
+  this.slackBot = sb;
 }
 exports.Controller = Controller;
 
@@ -161,7 +162,6 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   token = uuid.v4();
   hash = bcrypt.hashSync(pwd, 10);
   that = this;
-  // Create the subscriber entry and send the verification email
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp,
                                 token, function(err, sub) {
     var subject, body;
@@ -176,6 +176,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
         token: token
       });
       that.mailer.send(email, subject, body);
+      that.slackBot.postEvent('registration', {email: email});
       callback(null, msg.success());
     }
   });
