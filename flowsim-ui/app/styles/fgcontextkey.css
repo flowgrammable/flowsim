@@ -258,7 +258,7 @@ position:absolute;
     height:2px;
     width:0px;
     background-color:#c0224e ;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
 
 }
 #arrow2{
@@ -270,7 +270,7 @@ position:absolute;
     height:0px;
     width:2px;
     background-color:#c0224e ;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
 }
 #arrow3{
     position:absolute;
@@ -281,7 +281,7 @@ position:absolute;
     height:2px;
     width:0px;
     background-color:#c0224e ;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
 }
 #arrow4{
     position:absolute;
@@ -292,7 +292,7 @@ position:absolute;
     height:0px;
     width:2px;
     background-color:#c0224e ;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
 }
 #point {
     position:absolute;
