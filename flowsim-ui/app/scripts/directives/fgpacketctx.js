@@ -46,14 +46,22 @@ angular.module('flowsimUiApp')
                                 }
                             });
 
-                            _.each(scope.actionSet, function (el, idx) {
-                                if (_.isUndefined(el)) {
-                                    return;
-                                }
-                                if (!_.some(scope.view.actionSet, {value1: el.value1, value2: el.value2})) {
-                                    scope.actionSet.splice(idx, 1);
-                                }
-                            });
+                            if(scope.view.actionSet.length === 0){
+                                scope.actionSet = [];
+                            }else {
+                                var idxToRemove = [];
+                                var counter = 0;
+                                _.each(scope.actionSet, function (el, idx) {
+                                    if (!_.some(scope.view.actionSet, {value1: el.value1, value2: el.value2})) {
+                                        idxToRemove.push(idx);
+                                    }
+                                });
+                                _.each(idxToRemove, function(index){
+                                    scope.actionSet.splice(index - counter, 1);
+                                    counter++;
+                                });
+
+                            }
 
                         }
                     }
