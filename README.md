@@ -38,7 +38,7 @@ research, and education organization. The organization mentors undergraduate and
 graduate students in SDN research, conducts original research, and actively
 develops educational and training material.
 
-## Organiation
+## Organization
 
 Flowsim is organized as follows ...
 
