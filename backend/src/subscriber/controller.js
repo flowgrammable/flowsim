@@ -151,6 +151,7 @@ Controller.prototype.mailerSignup = function(email, srcIP, callback) {
         baseUrl: that.server.baseUrl()
       });
       that.mailer.send(email, subject, body);
+      that.slackBot.postEvent('mailinglistsignup', {email: email});
       callback(null, msg.success());
     }
   });
@@ -162,6 +163,11 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   token = uuid.v4();
   hash = bcrypt.hashSync(pwd, 10);
   that = this;
+  this.storage.addToMailer(email, current.toISOString(), function(err, sub){ 
+    if(err) {
+      that.logger.error(err);
+    }
+  });
   this.storage.createSubscriber(email, hash, current.toISOString(), srcIp,
                                 token, function(err, sub) {
     var subject, body;

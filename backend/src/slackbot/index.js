@@ -26,6 +26,11 @@ Slackbot.prototype.postEvent = function(type, args){
 			this.requestConfig.json.text = msg;
 			postToSlack(this.requestConfig, msg);
 			break;
+		case 'mailinglistsignup':
+			msg = mailerMsg(args);
+			this.requestConfig.json.text = msg;
+			postToSlack(this.requestConfig, msg);
+			break;
 		default:
 			break;
 	}
@@ -33,6 +38,10 @@ Slackbot.prototype.postEvent = function(type, args){
 
 function registrationMsg(args){
 	return 'User Registration - ' + args.email;
+}
+
+function mailerMsg(args){
+	return 'Mailer Signup - ' + args.email;
 }
 
 function postToSlack(config){
