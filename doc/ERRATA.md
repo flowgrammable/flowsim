@@ -1,15 +1,15 @@
 # Unsupported Features
 
-| Name               | Description                                                 |
-|====================|=============================================================|
-| Groups             | OpenFlow Group tables: all, indirect, select, fast-failover |
-| Meters             | OpenFlow Meters: remark, discard                            |
-| Profile preselects | Initializes a profile based on an OpenFlow version          |
-| Port stats         | View of active port statistics                              |
-| Flow properties    | cookie, hard_timer, idle_timer, flow_removed, etc.          |
-| Write safety       | Prevent unsafe write actions across tables                  |
-| PacketIn           | Visualize PacketIn exceptions                               |
-| PacketOut          | PacketOut injection                                         |
+|  Name                | Description                                                   |
+| -------------------- | ------------------------------------------------------------- |
+|  Groups              | OpenFlow Group tables: all, indirect, select, fast-failover   |
+|  Meters              | OpenFlow Meters: remark, discard                              |
+|  Profile preselects  | Initializes a profile based on an OpenFlow version            |
+|  Port stats          | View of active port statistics                                |
+|  Flow properties     | cookie, hard_timer, idle_timer, flow_removed, etc.            |
+|  Write safety        | Prevent unsafe write actions across tables                    |
+|  PacketIn            | Visualize PacketIn exceptions                                 |
+|  PacketOut           | PacketOut injection                                           |
 
 # Known Issues
 
