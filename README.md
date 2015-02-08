@@ -33,13 +33,10 @@ specification.
 Flowgrammable is a nonprofit organization comprised of students, researchers,
 and professional engineers, who are focused on network systems education and
 research. Originally founded to compete in the Open Networking Foundation's
-(ONF) OpenFlow driver competition, flowgrammable has moved on to:
-* kowledge base
-* online training
-* open source tool development
-* original research
-Flowgrammable is funded by private donations, corporate sponsorships, and
-participant donations of time.
+(ONF) OpenFlow driver competition, Flowgrammable has evolved into a mentoring,
+research, and education organization. The organization mentors undergraduate and
+graduate students in SDN research, conducts original research, and actively
+develops educational and training material.
 
 ## Organiation
 
@@ -66,5 +63,4 @@ RESTful API services. This is our persistence layer for flowsim.
 The bulk of the application runs in a modern javascript capable broswer and the
 code is located in the 'flowsim-ui' directory. The frontend relies on the
 angularjs UI framework and the bootstrap css styling library.
-
 
