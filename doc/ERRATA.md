@@ -23,4 +23,16 @@
 
   The metadata register in the packet context is not being visualized. A user
   can not see this value in the execution view.
+  
+3. Push Tag Action
+
+  Currently it is not possible to add the Push Tag Action to flows that do not 
+  match on the tag attempting to be pushed. This will be addressed in the next
+  release.
+  
+4. Match Sequence MPLS/L3/L4
+
+  There is an issue with match set construction that prevents the creation of 
+  the match sequence MPLS/L3/L4. This will be addressed in the next release
+  
 
