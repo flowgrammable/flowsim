@@ -98,4 +98,8 @@ angular.module('flowsimUiApp')
       }, callback);
     };
 
+    this.authenticated = function(){
+      return Backend.isAuthorized();
+    };
+
   });

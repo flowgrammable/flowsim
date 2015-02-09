@@ -8,8 +8,9 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('MenuCtrl', function ($scope, $rootScope, Subscriber, fgCache) {
-    $scope.authenticated = true;
+  .controller('MenuCtrl', function ($scope, $rootScope, $location, Subscriber, fgCache) {
+    //$scope.authenticated = true;
+    $scope.authenticated = Subscriber.authenticated();
     $scope.dirty = false;
     $scope.prev_host = '';
 
@@ -42,7 +43,8 @@ angular.module('flowsimUiApp')
       $scope.dirty = false;
     });
 
-    $scope.logout = function() {
+    $scope.destroySession = function() {
+      $location.url('/#');
       $scope.authenticated = false;
       fgCache.clear();
       Subscriber.logout(function(err) {
@@ -50,5 +52,15 @@ angular.module('flowsimUiApp')
           console.log(err.details);
         }
       });
+    };
+
+    $scope.logout = function() {
+      if($scope.dirty){
+        if(window.confirm('You have unsaved changes that will not be saved on logout.')){
+          $scope.destroySession();
+        }
+      } else {
+        $scope.destroySession();
+      } 
     };
   });

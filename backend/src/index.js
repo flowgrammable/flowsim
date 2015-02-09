@@ -18,6 +18,7 @@ var pro = require('./profile');
 var swi = require('./switch');
 var tra = require('./trace');
 var log = require('./logger');
+var slk = require('./slackbot');
 
 
 
@@ -46,6 +47,7 @@ var db         = new dbs.Database(config, logger);
 var mail       = new mlr.Mailer(config, logger);
 var template   = new tmp.Template(config, logger);
 var restServer = new srv.Server(config, logger);
+var slackBot   = new slk.Slackbot(config);
 
 // Initialize the modules
 var mods = [
@@ -55,7 +57,8 @@ var mods = [
     mailer: mail,
     template: template,
     server: restServer,
-    logger: logger
+    logger: logger,
+    slackbot: slackBot
   }),
   new pac.Packet({
     configuration: config,
@@ -101,8 +104,8 @@ process.on('uncaughtException', function(err){
     mail.send(admin, 'Flowsim uncaught error', templ, function(err, result){
 
     });
-  })
-})
+  });
+});
 
 // Run the server
 restServer.run();

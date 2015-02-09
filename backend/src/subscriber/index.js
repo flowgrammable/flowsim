@@ -20,7 +20,7 @@ function Subscriber(ctx) {
   this.logger = ctx.logger.addLog(name);
   this.storage    = new s.Storage(ctx.database, this.logger);
   this.controller = new c.Controller(this.storage, ctx.mailer, ctx.template,
-                                     ctx.server, this.logger);
+                                     ctx.server, this.logger, ctx.slackbot);
   this.view       = new v.View(this.controller, this.logger);
 
 }
