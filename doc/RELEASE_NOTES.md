@@ -3,13 +3,13 @@
 
 ## Packet Editor
   The packet editor is a visual framework for constructing packets. A user can 
-  create new packets, edit and delete existing packets. The user can save their 
-  new packets, or packet modificaitons, so that they will be available upon
+  create new packets, and edit or delete existing packets. They can also save their 
+  new packets or packet modifications so that they will be available upon
   subsequent logins. 
  
 ### Packet Names
-  Packet names currently follow following naming restrictions:
-  * name must already not be in use
+  Packet names currently follow these restrictions:
+  * name must not already be in use
   * name must match the regex ^[a-zA-Z_][a-zA-Z0-9_]*$
 
 ### Packet Editing
@@ -18,13 +18,13 @@
   user manipulation of the packet. Currently all packets are initialized with an
   Ethernet header. 
   
-  The user may stack new payloads, and delete existing payloads from the packet.
-  A payload is selected from the drop down selector on the editor control. The 
-  dropdown selector will display a list of available protocols for adding to the
-  packet. Adding protocols will change the selector list, following a specific 
+  The user may stack new payloads and delete existing payloads from the packet.
+  A payload is selected from the dropdown selector on the editor control. The 
+  dropdown selector will display a list of all available protocols for the
+  packet. Adding protocols will change the selector list and follow a specific 
   protocol dependency chain.
 
-  Protocol fields may be modified by the user in the editor control. Select a
+  Protocol fields may also be modified by the user in the editor control. Select a
   protocol in the stack and a panel will open, inside this panel are a series of
   protocol fields that may be changed. Invalid inputs are indicated with a red
   shadow, and hints are provided with tooltips. The packet display in the center
@@ -32,17 +32,17 @@
 
 ## Profile Editor
   The profile editor is a visual framework for managing OpenFlow switch 
-  profiles. A switch profile enumerates the cabpabilities of a type of switch,
+  profiles. A switch profile enumerates the capabilities of a type of switch,
   this is similar to an ONF defined Table Type Pattern (TTP). Users can create
-  new profiles, edit and delete existing profiles. The user can save their 
-  new profiles, or profile modificaitons, so that they will be available upon
+  new profiles, and edit or delete existing profiles. Users can also save their 
+  new profiles or profile modifications so that they will be available upon
   subsequent logins. 
 
-  A profile determines the capabilities of a type, or category, of a switch. The
+  A profile determines the capabilities of a type or category of a switch. The
   underying data model is almost identical to the switch configuration data
   with the exception of managing capabilities and not configuration state. 
   Some of the capabilities a user can decide are:
-  - the fragementation capabilities of the data path
+  - the fragmentation capabilities of the data path
   - the number of ports of the switch
   - the speed and medium of the switch ports
   - the number of tables supported on the switch
@@ -53,14 +53,14 @@
   - per table goto restriction sets
  
 ### Profile Names
-  Profile names currently follow following naming restrictions:
-  * name must already not be in use
+  Profile names currently follow these restrictions:
+  * name must not already be in use
   * name must match the regex ^[a-zA-Z_][a-zA-Z0-9_]*$
 
 ## Switch Editor
   The switch editor is a visual framework for managing the configuration state
-  of a switch. A user can create new switches, edit and delete existing 
-  switches. The user can save their new switch, or switch modificaitons, so that
+  of a switch. A user can create new switches, and edit or delete existing 
+  switches. The user can save their new switch or switch modifications so that
   they will be available upon subsequent logins. 
 
   The switch editor manipulates the configuration state of a switch. When the
@@ -69,48 +69,48 @@
   the selected profile. The configuration data model expands slightly on the the
   data model exposed in switch profile.
 
-  A user can manage data path behavior, such as determine the fragmentation
+  Users can manage data path behaviors including, for example, the fragmentation
   behavior of the datapath (drop fragments, reassemble fragments, or do nothing
-  special for fragments). Ports can be administratively placed into down|up
-  states, a visual indication is provided as to the curren administrative state
-  of the port. Ports can also be placed in semi-blocking states (no recieve, no
+  special for fragments). Ports can be administratively placed into down or up
+  states, a visual indication is provided as to the current administrative state
+  of the port. Ports can also be placed in semi-blocking states (no receive, no
   forward), as well as masking future packet-in exceptions.
 
-  Tables are arranged by name, and when selected show a flow table summary. A 
+  Tables are arranged by name and, when selected, show a flow table summary. A 
   flow summary is a compact representation of a flow's priority, match set, and 
   instruction set. Selecting an installed flow will open a dialog to configure
-  that flow. Deleting an installed flow is possible by clicking on a minus icon 
-  on the flow in the flow summary table. Finally, adding a new flow to the table
+  that flow. Deleting an installed flow is possible by clicking on the minus icon 
+  by the flow in the flow summary table. Finally, adding a new flow to the table
   is accomplished by setting a flow priority and clicking Add Flow. This action
   will open the flow editor dialog.
 
-  The flow editor lets a user manage the flow's match and insturction sets. The
+  The flow editor lets a user manage the flow's match and instruction sets. The
   match set is a canonical set of matches. Every packet has internal meta data 
   (ingress port information) as well as an Ethernet header fields that can be 
-  matched against. However, matching against higher layer protocol fields 
-  requires proving the higher layer protocol exists. This is accomplished by
+  matched against. However, matching against higher-layer protocol fields 
+  requires proving that the higher-layer protocol exists. This is accomplished by
   matching a payload discriminator for the value of the desired protocol. For
   instance, matching Ethernet.type = 0x0800 (IPv4), will make it possible to
   match on IPv4 protocol fields. Matches are deleted from the back of the match
   set.
 
-  Instructions can be added, and removed, from the instruction set by enabling
+  Instructions can be added and removed from the instruction set by enabling
   or disabling the relevant instruction button. A meter can be enabled and a
-  meter id can be set, which will send a matching packet to the targed meter. 
-  Actions can be added/remove to the Apply and Write instructions. Constant 
-  values can be passed to a subsequent table through the metadata register, and
-  finally flow control can jump to subsequent table by setting the goto target.
+  meter id can be set, which will send a matching packet to the targeted meter. 
+  Actions can be added or removed from the Apply and Write instructions. Constant 
+  values can be passed to a subsequent table through the metadata register. And
+  finally, flow control can jump to subsequent tables by setting the goto target.
 
-  Actions are simple functions that let a user affect the delivery of a packet, 
-  or modify a packet in some way. Actions set in Apply action list will 
+  Actions are simple functions that let a user affect the delivery of a packet 
+  or modify a packet in some way. Actions set in the Apply action list will 
   immediately be evaluated, while actions in the Write action set will 
   eventually be evaluated. When a packet matches a flow the Apply action list is
-  immidiately executed, which can modify the packet and deliver the packet to a
-  port or group. The action set of the Write is deffered by placing the actions
+  immediately executed, which can modify the packet and deliver the packet to a
+  port or group. The action set of the Write is deferred by placing the actions
   into a data structure that follows the packet through the packet processing 
   pipeline. This data structure is the packet's action set.
 
-  The Apply action list has few restrictions, actions can be repeated, and there
+  The Apply action list has few restrictions; actions can be repeated and there
   are no ordering requirements. However, the Write action set will enforce a
   uniqueness and ordering requirement. Actions are not allowed to repeat 
   themselves in the action set, and they must be evaluated in a specific order.
@@ -121,14 +121,14 @@
   similar to the protocol discriminator method described above in match sets. 
  
 ### Switch Names
-  Switch names currently follow following naming restrictions:
-  * name must already not be in use
+  Switch names currently follow these restrictions:
+  * name must not already be in use
   * name must match the regex ^[a-zA-Z_][a-zA-Z0-9_]*$
 
 ## Simulation Editor
   The simulation editor is a visual framework for constructing traces and 
-  managing a simulation. A user can create new traces, edit and delete existing
-  traces. The user can save their new traces, or trace modificaitons, so that 
+  managing a simulation. A user can create new traces, and edit or delete existing
+  traces. The user can save their new traces or trace modificaitons so that 
   they will be available upon subsequent logins. A trace is a named switch and a
   sequence of packets along with the ports those packets should be injected in 
   the target switch. A user can select any switch or packet which has been 
@@ -136,17 +136,17 @@
   user can specify the ingress logical port id, physical port id, and tunnel id
   to be seen by the data plane.
 
-  Once a switch has been selected and at least a signle packet has been inserted
+  Once a switch has been selected and at least a single packet has been inserted
   into the trace, the simulation can begin. The simulation can be started by
   pressing the play button on the top left portion of screen.
 
 ### Simulation Names
-  Simulation names currently follow following naming restrictions:
-  * name must already not be in use
+  Simulation names currently follow these restrictions:
+  * name must not already be in use
   * name must match the regex ^[a-zA-Z_][a-zA-Z0-9_]*$
 
 ## Simulation Visualization
-  Once a simulation has begun the user has two controls to run the simulation.
+  Once a simulation begins the user has two controls to run the simulation.
   There is a step button on the top left of the screen which will advance the
   simulation by a single step, and there is a stop button which will cause the 
   simulation to stop and return the user to the simulation editor. At the top
@@ -157,11 +157,11 @@
   the user of the underlying abstract machine processing the packet.
 
   The pipeline is broken into 7 stages: arrival, extraction, choice, selection,
-  execution, groups, and egress. Actual system pipelines may have differnet 
-  organizations than what is presented in flowsim; however, they must be 
-  equivilent in terms of external events. Put in other way, the same set of 
+  execution, groups, and egress. Actual system pipelines may have different 
+  organizations than what is presented in Flowsim; however, they must be 
+  equivalent in terms of external events. Put another way, the same set of 
   configuration and packet inputs should yield the same set of exception and 
-  packet outputs. This means flowsim provides an excellent vantage point to 
+  packet outputs. This means Flowsim provides an excellent vantage point to 
   learn about the pipeline abstractions and how they affect packets flowing
   through the system.
 
@@ -175,16 +175,16 @@
 
   The extraction stage is where a packet is decoded and the packet key is built
   up to contain a larger set of protocol fields. Each protocol header in the 
-  packet is decoded in a signle step and a subset of the protocol header is 
+  packet is decoded in a single step and a subset of the protocol header is 
   copied over to the packet key. In actual systems this stage can be broken up
   and deferred to later in the pipeline. The only absolute ordering is imposed
-  by attempted to match or set a protocol field. Flowsim performs a complete 
+  by attempting to match or set a protocol field. Flowsim performs a complete 
   packet decode at the front of the pipeline for clarity.
 
   The choice stage is quite simple and uses the table identifier from the packet
   context to select a single table from the collection of tables. Because the
-  pipeline allows for control flow between tables this stage is the meet point 
-  of going to another table.
+  pipeline allows for control flow between tables, this stage is the meet point 
+  for going to another table.
 
   The selection stage takes a packet key and a table index and selects the 
   highest priority flow that matches. This flow is added to the context for
@@ -192,17 +192,17 @@
   table.
 
   The execution stage is one of the most interesting stages in the pipeline. In 
-  this stage a user can single step the simulation and see exactly:
+  this stage a user can single-step the simulation and see exactly:
   - how instructions are executed
-  - how apply actions immediately delivery or modify the packet
+  - how apply actions immediately impact delivery or modify the packet
   - how clear will empty the context's action set
   - how write actions merge into the context's action set
   - how the table identifier is updated
   - how the context will complete table processing or proceed to another table
 
   The groups stage displays group processing of a packet (all, indirect, select,
-  and fast failover). Group processing is currently not supported in flowsim.
+  and fast failover). Group processing is currently not supported in Flowsim.
 
   The egress stage is the final stage of packet processing. In this stage the 
   packet context's action set is executed. A user can step each action in the 
-  set and see how they modify the packet and deliver the packet.
+  set and see how it modifies the packet before finally delivering the packet.
