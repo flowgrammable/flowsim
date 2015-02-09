@@ -1,7 +1,7 @@
 # Unsupported Features
 
 |  Name                | Description                                                   |
-| -------------------- | ------------------------------------------------------------- |
+|:---------------------|:--------------------------------------------------------------|
 |  Groups              | OpenFlow Group tables: all, indirect, select, fast-failover   |
 |  Meters              | OpenFlow Meters: remark, discard                              |
 |  Profile preselects  | Initializes a profile based on an OpenFlow version            |
