@@ -16,7 +16,7 @@
 1. Write Action Safety
 
   Currently, flowsim will not stop you from creating potential unsafe action 
-  sets in a write instruction. The unsafe action will generate an exceptuion
+  sets in a write instruction. The unsafe action will generate an exception
   during simulation. This will be addressed in a subsequent release.
 
 2. Metadata register
