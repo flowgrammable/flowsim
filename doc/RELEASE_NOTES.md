@@ -103,7 +103,7 @@
 
   Actions are simple functions that let a user affect the delivery of a packet, 
   or modify a packet in some way. Actions set in Apply action list will 
-  immediately be evaluated, while actions in the write action set will 
+  immediately be evaluated, while actions in the Write action set will 
   eventually be evaluated. When a packet matches a flow the Apply action list is
   immidiately executed, which can modify the packet and deliver the packet to a
   port or group. The action set of the Write is deffered by placing the actions
@@ -111,7 +111,7 @@
   pipeline. This data structure is the packet's action set.
 
   The Apply action list has few restrictions, actions can be repeated, and there
-  are no ordering requirements. However, the Write action list will enforce a
+  are no ordering requirements. However, the Write action set will enforce a
   uniqueness and ordering requirement. Actions are not allowed to repeat 
   themselves in the action set, and they must be evaluated in a specific order.
   The flow dialog will enforce all of these restrictions so the user does not

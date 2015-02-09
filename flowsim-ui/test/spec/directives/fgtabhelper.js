@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Directive: inputTrace', function () {
+describe('Directive: fgtabhelper', function () {
 
   // load the directive's module
   beforeEach(module('flowsimUiApp'));

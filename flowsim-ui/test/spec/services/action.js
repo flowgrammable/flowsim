@@ -474,10 +474,10 @@ describe('Service: action', function () {
     as.add(ethSrc);
     as.add(ip4Src);
 
-    expect(as.step(null, context)).toBe(true);
+    as.step(null, context);
     expect(as.isEmpty()).toBe(false);
     expect(pack.protocols[0].getField('Src').valueToString()).toBe('aa:bb:cc:dd:ee:ff');
-    expect(as.step(null, context)).toBe(true);
+    as.step(null, context);
     expect(pack.protocols[1].getField('Src').valueToString()).toBe('192.168.1.1');
     expect(as.isEmpty()).toBe(true);
   });

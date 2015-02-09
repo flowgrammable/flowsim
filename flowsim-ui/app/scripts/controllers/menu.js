@@ -9,8 +9,8 @@
  */
 angular.module('flowsimUiApp')
   .controller('MenuCtrl', function ($scope, $rootScope, $location, Subscriber, fgCache) {
-    $scope.authenticated = true;
-    //$scope.authenticated = Subscriber.authenticated();
+    //$scope.authenticated = true;
+    $scope.authenticated = Subscriber.authenticated();
     $scope.dirty = false;
     $scope.prev_host = '';
 
