@@ -200,7 +200,6 @@
   - how the table identifier is updated
   - how the context will complete table processing or proceed to another table
 
-
   The groups stage displays group processing of a packet (all, indirect, select,
   and fast failover). Group processing is currently not supported in flowsim.
 
