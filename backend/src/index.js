@@ -44,7 +44,7 @@ if(prog.dir) {
 // Initialze global objects
 var logger     = new log.Logger(config);
 var db         = new dbs.Database(config, logger);
-var mail       = new mlr.Mailer(config, logger);
+var mail       = new mlr.Mailer(config, logger, db);
 var template   = new tmp.Template(config, logger);
 var restServer = new srv.Server(config, logger);
 var slackBot   = new slk.Slackbot(config);

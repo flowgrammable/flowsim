@@ -8,7 +8,7 @@
 
 var mailgun  = require('mailgun-js');
 var fmt = require('../utils/formatter');
-
+var s   = require('./storage');
 var name = 'mailer';
 
 /**
@@ -37,6 +37,7 @@ function Mailer(config, logger) {
   }
 
   this.logger = logger.addLog(name);
+  this.storage = new s.Storage(db, this.logger);
 
   // construct the mailer
   this.mailer = mailgun({
@@ -96,10 +97,59 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
 
 };
 
+/**
+ * Take a first name, last name, email address, company (optional), and
+ * subscriber_id (optional) and subscribe them to mailing list;
+ *
+ * @param {String} fname - subscriber firstname
+ * @param {String} lname - subscriber lastname
+ * @param {String} email - subscriber email
+ * @param {String} company - optional
+ * @param {Integer} id - subscriber id
+ *
+ */
+Mailer.prototype.subscribe = function(fname, lname, email, company, id, 
+    callback) {
+  var that, subToken, logString;
+  that = this;
+  subToken = uuid.v4();
+  logString = 'Subscription Active: ' + email;
+  this.storage.insertMailerSubscriber(fname, lname, email, company,
+      subToken, function(err, result){
+        if(err){
+          e = MailerError('subscribe', err, that.config);
+          that.logger.error(e);
+        } else {
+          that.logger.info(logString);
+        }
+  });
+
+  // then add user to mailgun mailer list
+};
+
+/**
+ * Take a token and unsubscribe user
+ *
+ * @param {String} token - clickable 'Unsubscribe' token in email
+ *
+ */
+Mailer.prototype.unsubscribe = function(token, callback){
+  var that, logString;
+  that = this;
+  this.storage.setSubInactive(token, function(err, result){
+    if(err){
+      e = MailerError('unsubscribe', err, that.config);
+      that.logger.error(e);
+    } else {
+      that.logger.info(logString);
+    }
+  });
+
+  // then remove user from mailgun mailing list
+};
+
 Mailer.prototype.toFormatter = function(f) {
   f.begin('Mailer');
-  // should we actually out put our key? ... i've dont do this for https
-  f.addPair('apiKey', this.config.apiKey);
   f.addPair('domain', this.config.domain);
   f.addPair('User', this.config.user);
   f.end();
