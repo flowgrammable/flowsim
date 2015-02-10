@@ -11,14 +11,23 @@ describe('Service: action', function () {
   var Packet;
   var Dataplane;
   var Context;
+  var Switch;
+  var Profile;
   beforeEach(inject(function (_Dataplane_, _Action_, _Utils_, _Packet_, 
-    _Context_) {
+    _Context_, _Switch_, _Profile_) {
     Context = _Context_;
     Action = _Action_;
     Packet = _Packet_;
     Utils = _Utils_;
     Dataplane = _Dataplane_;
+    Switch = _Switch_;
+    Profile = _Profile_;
   }));
+  var sw;
+  beforeEach(function(){
+    var prof = new Profile.Profile('testprofile');
+    var sw = Switch.create('testsw', prof);
+  });
 
   it('Action Set construction', function(){
     var as = new Action.Set();
@@ -465,20 +474,26 @@ describe('Service: action', function () {
   });
 
   it('Action setField pass', function(){
+    var prof = new Profile.Profile('testprofile');
+    var sw = Switch.create('testsw', prof);
+    var dp = new Dataplane.Dataplane(sw);
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
     pack.pushProtocol('0x0800');
     var context = new Context.Context(null, pack, 1, 1, 1, 1);
     var ethSrc = Utils.mkAction('Ethernet', 'Src', 'set', 'aa:bb:cc:dd:ee:ff');
     var ip4Src = Utils.mkAction('IPv4', 'Src', 'set', '192.168.1.1');
+    dp.ctx = context;
     as.add(ethSrc);
     as.add(ip4Src);
-
-    as.step(null, context);
+    
+    as.step(dp, dp.ctx);
     expect(as.isEmpty()).toBe(false);
-    expect(pack.protocols[0].getField('Src').valueToString()).toBe('aa:bb:cc:dd:ee:ff');
-    as.step(null, context);
-    expect(pack.protocols[1].getField('Src').valueToString()).toBe('192.168.1.1');
+    expect(dp.ctx.packet.protocols[0].getField('Src').valueToString())
+      .toBe('aa:bb:cc:dd:ee:ff');
+    as.step(dp, dp.ctx);
+    expect(dp.ctx.packet.protocols[1].getField('Src').valueToString())
+      .toBe('192.168.1.1');
     expect(as.isEmpty()).toBe(true);
   });
 

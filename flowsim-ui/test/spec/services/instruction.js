@@ -17,11 +17,17 @@ describe('Service: instruction', function () {
   var Noproto;
   var Utils;
   var Action;
-  beforeEach(inject(function (_Packet_, _Noproto_, _Utils_, _Action_) {
+  var Profile, Switch, Dataplane, Context;
+  beforeEach(inject(function (_Packet_, _Noproto_, _Utils_, _Action_, 
+        _Profile_, _Switch_, _Dataplane_, _Context_) {
     Packet = _Packet_;
     Action = _Action_;
     Noproto = _Noproto_;
     Utils = _Utils_;
+    Profile = _Profile_;
+    Switch = _Switch_;
+    Dataplane = _Dataplane_;
+    Context = _Context_;
   }));
 
   it('should do something', function () {
@@ -30,19 +36,27 @@ describe('Service: instruction', function () {
 
   
   it('Apply actions step', function(){
+    var prof = new Profile.Profile('testprof');
+    var sw = Switch.create('testsw', prof);
+    var dp = new Dataplane.Dataplane(sw);
     var is = new Instruction.Set();
     is.meter.enabled = false;
-    var act = new Noproto.mkAction('Ethernet', 'Src', 'set', 48, 'aa:bb:cc:dd:ee:Ff');
-    var act2 = new Noproto.mkAction('Ethernet', 'Dst', 'set', 48, 'a:a:a:a:a:a');
+    var act = new Noproto.mkAction('Ethernet', 'Src', 'set', 
+        48, 'aa:bb:cc:dd:ee:Ff');
+    var act2 = new Noproto.mkAction('Ethernet', 'Dst', 'set', 
+        48, 'a:a:a:a:a:a');
     is.apply.enabled = true;
     is.apply.actions.push(act);
     is.apply.actions.push(act2);
     var packet = new Packet.Packet('testpa');
-    var ctx = {packet: packet};
-    is.step(null, ctx);
-    expect(ctx.packet.getField('Ethernet', 'Src').valueToString()).toBe('aa:bb:cc:dd:ee:ff');
-    is.step(null, ctx);
-    expect(ctx.packet.getField('Ethernet', 'Dst').valueToString()).toBe('a:a:a:a:a:a');
+    var ctx = new Context.Context(null, packet, 1, 1, 1, 1);
+    dp.ctx = ctx;
+    is.step(dp, dp.ctx);
+    expect(ctx.packet.getField('Ethernet', 'Src').valueToString())
+      .toBe('aa:bb:cc:dd:ee:ff');
+    is.step(dp, dp.ctx);
+    expect(ctx.packet.getField('Ethernet', 'Dst').valueToString())
+      .toBe('a:a:a:a:a:a');
     expect(is.apply.enabled).toBe(false);
 
   });
@@ -229,24 +243,7 @@ describe('Service: instruction', function () {
   });
 
   it('Metadata instruction step fail', function(){
-    var is = new Instruction.Set();
-    is.meter.enabled = false;
-    is.meter.enabled = false;
-    is.clear.enabled = false;
-    is.goto_.enabled = false;
-    is.write.enabled = false;
-    is.apply.enabled = false;
-
-    is.metadata.enabled = true;
-    is.metadata.mkValue('0x1111111111111111');
-    is.metadata.mkMask('0xf0ffffffffffffff');
-    var ctx =  {key: { Internal: { Metadata: 0 }}};
-    var dp = {ctx: ctx, table:{capabilities:{instruction:{metadata:{maskableBits: '0xffffffffffffffff'}}}}};
-    
-    expect(function(){
-      is.step(dp, ctx);
-    }).toThrow();
-
+     // todo: define fail 
   });
 
   it('Clear instruction step', function(){

@@ -102,6 +102,9 @@ describe('Service: dataplane', function() {
     pack.pushProtocol('0x06');
     dp.arrival(pack, 1, 1, 1);
     dp.extraction();
+    while(!dp.extractor.isDone()){
+    dp.extraction();
+    }
     expect(dp.ctx.key.Ethernet.Src.bytes).toBe(6);
     expect(dp.ctx.key.VLAN.length).toBe(2);
     expect(dp.ctx.key.IPv4.Src.bytes).toBe(4);
