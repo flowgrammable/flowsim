@@ -1,16 +1,20 @@
 <html>
-  <title>
-    Thank you for signing up for Flowsim
-  </title>
-  <body>
-    Thank you for signing up for Flowsim.
+<head>
+</head>
+<body style="background-color: #8080;">
+<table align="center" cellpadding="1" cellspacing="1" style="width: 500px; background-color: white; border-radius: 10px; border: 1px solid #1a1a1a;">
+  <tbody>
+      <tr><td><img src="https://flowsim.flowgrammable.org/logo.png"></td></tr>
+    <tr>
+      <td>Thanks for signing up for Flowsim. Before you can start experimenting with Flowsim, we need to verify your account.
     <br/>
-    Click the link below to confirm your account:
+    Please click the link below to verify your account.
     <br/><br/>
-    <a href="<%= baseUrl %>/#/subscriber/verify/<%= token %>">
-      Complete Verification
-    </a>
+    <a href="<%= baseUrl %>/#/subscriber/verify/<%= token %>"><%= baseUrl %>/#/subscriber/verify/<%= token %></a>
     <br/><br/>
-    <h1>The Flowsim Team!</h1>
-  </body>
+    <h3>The Flowsim Team!</h3></td>
+    </tr>
+  </tbody>
+</table>
+</body>
 </html>
