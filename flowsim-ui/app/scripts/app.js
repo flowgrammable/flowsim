@@ -79,6 +79,9 @@ angular
       }) .when('/test', {
         templateUrl: 'views/simulation/extraction.html',
         controller: 'TestCtrl'
+      }) .when('/documentation', {
+        templateUrl: 'views/documentation.html',
+        controller: 'DocumentationCtrl'
       })
       .otherwise({
         redirectTo: '/'
