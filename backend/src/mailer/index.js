@@ -19,7 +19,7 @@ var name = 'mailer';
  * @param {Object} logger        - a logger object
  *
  */
-function Mailer(config, logger) {
+function Mailer(config, logger, db) {
   // Grab a configuration if present ...
   // ... otherwise throw an error
   this.config = config[name];
@@ -40,7 +40,7 @@ function Mailer(config, logger) {
   }
 
   this.logger = logger.addLog(name);
-  this.storage = new s.Storage(db, this.logger);
+  this.storage = s.Storage(db, this.logger);
 
   // construct the mailer
   this.mailer = sendgrid(this.config.api_user, this.config.api_password);
@@ -90,7 +90,6 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
       callback(err);
     } else {
       that.logger.info(json);
-      console.log(json);
       callback(null, result);
     }
   });

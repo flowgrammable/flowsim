@@ -14,7 +14,8 @@ angular
     'ngRoute',
     'ngAnimate',
     'ngSanitize',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ui.router'
   ])
   .config(function ($tooltipProvider, $stateProvider) {
     $tooltipProvider.options({
@@ -41,34 +42,43 @@ angular
         templateUrl: 'views/simulation.html',
         controller: 'SimulationCtrl'
       })
+      .state('subscriber', {
+        url: '/subscriber',
+        templateUrl: 'views/subscriber.html'
+      })
+      .state('subscriber.login', {
+        url: '/login',
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .state('subscriber.register', {
+        url: '/register',
+        templateUrl: 'views/register.html',
+        controller: 'RegisterCtrl'
+      })
+      .state('subscriber.update', {
+        url: '/update',
+        templateUrl: 'views/update.html',
+        controller: 'UpdateCtrl'
+      })
+      .state('subscriber.verify', {
+        url: '/verify/:token',
+        templateUrl: 'views/verify.html',
+        controller: 'VerifyCtrl'
+      })
+      .state('subscriber.forgot', {
+        url: '/forgot',
+        templateUrl: 'views/forgot.html',
+        controller: 'ForgotCtrl'
+      })
+      .state('subscriber.reset', {
+        url: '/reset/:token',
+        templateUrl: 'views/reset.html',
+        controller: 'ResetCtrl'
+      })
       .state('Main' ,{
         url: '*path',
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       });
-
-/*      .state('SimulationSetup',{
-        templateUrl: 'views/simulation/setup.html'
-      })
-      .state('Arrival', {
-        templateUrl: 'views/simulation/arrival.html'
-      })
-      .state('Extraction', {
-        templateUrl: 'views/simulation/extraction.html'
-      })
-      .state('Choice', {
-        templateUrl: 'views/simulation/choice.html'
-      })
-      .state('Selection', {
-        templateUrl: 'views/simulation/selection.html'
-      })
-      .state('Execution', {
-        templateUrl: 'views/simulation/execution.html'
-      })
-      .state('Groups', {
-        templateUrl: 'views/simulation/groups.html'
-      })
-      .state('Egress', {
-        templateUrl: 'views/simulation/egress.html'
-      }) */
   });

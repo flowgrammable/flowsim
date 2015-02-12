@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('ResetCtrl', function ($scope, $routeParams, Subscriber) {
+  .controller('ResetCtrl', function ($scope, $stateParams, Subscriber) {
 
     function clearInputs() {
       $scope.password1 = '';
@@ -28,7 +28,7 @@ angular.module('flowsimUiApp')
       $scope.password1Msg = Subscriber.validatePassword($scope.password1);
       $scope.password2Msg = Subscriber.validatePassword($scope.password2);
       if(!$scope.password1Msg.length && !$scope.password2Msg.length) {
-        Subscriber.reset($routeParams.token, $scope.password1,
+        Subscriber.reset($stateParams.token, $scope.password1,
           function(err) {
             if(err) {
               if(err.detail.type === 'unknownVerificationToken'){
