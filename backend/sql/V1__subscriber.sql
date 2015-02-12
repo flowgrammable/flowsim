@@ -19,6 +19,22 @@ CREATE TABLE subscriber
   status SUBSCRIBERS_STATUS NOT NULL           -- current sub disposition
 );
 
+CREATE TYPE MAILER_STATUS AS ENUM (
+  'SUBSCRIBED',
+  'UNSUBSCRIBE'
+);
+
+CREATE TABLE flogmailer
+(
+  id SERIAL PRIMARY KEY , -- internal mailer id
+  firstname varchar(30) NOT NULL, 
+  lastname varchar(30) NOT NULL,
+  company varchar(60),
+  email varchar(128) NOT NULL,
+  subscribe_token CHAR(36) NOT NULL UNIQUE,
+  status MAILER_STATUS NOT NULL
+);
+  
 -- create a session table
 CREATE TABLE session
 (

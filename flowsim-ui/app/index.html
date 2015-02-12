@@ -29,13 +29,13 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-controller="MainCtrl">
+    <div class="container">
 
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation"
         ng-controller="MenuCtrl">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" sref="Main">
               <img style="Max-height: 25px;" src="images/logo.png" 
                    alt="Flowgrammable">
             </a>
@@ -81,7 +81,7 @@
         </div>
       </div>
       
-      <div ng-view=""></div>
+      <div ui-view></div>
 
       <hr>
       <footer>
