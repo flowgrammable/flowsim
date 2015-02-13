@@ -40,6 +40,8 @@
   new profiles or profile modifications so that they will be available upon
   subsequent logins. 
 
+![Image of ProfileEditor](http://flowgrammable.org/static/media/uploads/profile_editor.png )
+
   A profile determines the capabilities of a type or category of a switch. The
   underying data model is almost identical to the switch configuration data
   with the exception of managing capabilities and not configuration state. 
@@ -86,6 +88,8 @@
   is accomplished by setting a flow priority and clicking Add Flow. This action
   will open the flow editor dialog.
 
+![Image of FlowEditor](http://flowgrammable.org/static/media/uploads/switch_editor.png )
+
   The flow editor lets a user manage the flow's match and instruction sets. The
   match set is a canonical set of matches. Every packet has internal meta data 
   (ingress port information) as well as an Ethernet header fields that can be 
@@ -128,6 +132,9 @@
   * name must match the regex ^[a-zA-Z_][a-zA-Z0-9_]*$
 
 ## Simulation Editor
+
+![Image of SimulatorEditor](http://flowgrammable.org/static/media/uploads/simulation_editor.png )
+
   The simulation editor is a visual framework for constructing traces and 
   managing a simulation. A user can create new traces, and edit or delete existing
   traces. The user can save their new traces or trace modificaitons so that 
