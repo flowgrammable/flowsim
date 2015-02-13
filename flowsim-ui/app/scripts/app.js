@@ -40,7 +40,32 @@ angular
       .state('simulation', {
         url: '/simulation',
         templateUrl: 'views/simulation.html',
-        controller: 'SimulationCtrl'
+        controller: 'Simulation2Ctrl'
+      })
+      .state('simulation.setup', {
+        templateUrl: 'views/simulation/setup.html',
+        controller: 'SimSetupCtrl'
+      })
+      .state('simulation.arrival', {
+        templateUrl: 'views/simulation/arrival.html'
+      })
+      .state('simulation.extraction', {
+        templateUrl: 'views/simulation/extraction.html'
+      })
+      .state('simulation.choice', {
+        templateUrl: 'views/simulation/choice.html'
+      })
+      .state('simulation.selection', {
+        templateUrl: 'views/simulation/selection.html'
+      })
+      .state('simulation.execution', {
+        templateUrl: 'views/simulation/execution.html'
+      })
+      .state('simulation.groups', {
+        templateUrl: 'views/simulation/groups.html'
+      })
+      .state('simulation.egress', {
+        templateUrl: 'views/simulation/egress.html'
       })
       .state('subscriber', {
         url: '/subscriber',

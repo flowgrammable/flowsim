@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Simulation', function(Dataplane) {
+  .factory('Simulation', function(Dataplane, $state) {
 
 function Simulation() {
   this.stage = 0;
@@ -21,6 +21,8 @@ Simulation.prototype.stages = Dataplane.Stages;
 Simulation.prototype.step = function() {
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
+  $state.go('simulation.'+this.dataplane.state.toLowerCase());
+  console.log('state:', $state.$current.name);
 
 };
 
@@ -29,6 +31,8 @@ Simulation.prototype.toView = function() {
 };
 
 Simulation.prototype.play = function(trace) {
+  //TODO: rework dataplane, play should bring you to dpStage[0]
+  $state.go('simulation.'+Stages[0].name.toLowerCase());
   this.dataplane = new Dataplane.Dataplane(trace.device);
   _(trace.events).each(function(ev) {
     this.dataplane.input(ev.clone());

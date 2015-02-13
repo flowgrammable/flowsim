@@ -8,9 +8,8 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SimulationCtrl', function ($scope, $rootScope, fgCache, Trace,
+  .controller('SimulationCtrl', function ($scope, $rootScope, $state, fgCache, Trace,
                                           Switch, Packet, Dataplane, Regex, Simulation) {
-
   $scope.names = {};
 
   $scope.simulation = null;
@@ -21,7 +20,9 @@ angular.module('flowsimUiApp')
     packets: [],
     devices: []
   };
-
+  console.log('state sim:', $state.$current.name)
+  console.log('state sim:', $state.$current.name)
+  console.log('scope tests:', $scope.testState);
   $scope.active = {
     in_port: '',
     in_phy_port: '',
@@ -276,12 +277,14 @@ angular.module('flowsimUiApp')
       $scope.stop();
     } else {
       $scope.fromStage = $scope.simulation.stage;
+      $scope.go('simulation.'+$scope.simulation.dataplane.state);
       $scope.simulation.step();
       $scope.handleTransition();
       $scope.stageToView();
     }
   };
 
+  $state.go('simulation.setup');
 
   $scope.$on('$destroy', function(){
     $scope.trace = null;

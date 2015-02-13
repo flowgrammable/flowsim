@@ -13,7 +13,7 @@
     </fg-list>
   </div>
 
-  <div class="col-md-10" ng-show="trace">
+  <div class="col-md-10" ng-show="player.trace">
     <h3>Select Switch</h3>
     <div class="row">
       <div class="col-sm-3">
@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="col-sm-7">
-        <switch-view data="trace.device.ports"></switch-view>
+        <switch-view data="player.trace.device.ports"></switch-view>
       </div>
     </div>
     <hr>
@@ -34,9 +34,9 @@
     <div class="row">
       <div class="col-sm-offset-1 col-sm-8">
         <!-- Control for editing the input packet trace -->
-        <input-trace pkt-events="trace.events" resources="resources"
-                 log-ports="trace.device.ports.ports"
-                 phy-ports="trace.device.ports.ports" add-packet="addPacket">
+        <input-trace pkt-events="player.trace.events" resources="resources"
+                 log-ports="player.trace.device.ports.ports"
+                 phy-ports="player.trace.device.ports.ports" add-packet="addPacket">
         </input-trace>
       </div>
     </div>

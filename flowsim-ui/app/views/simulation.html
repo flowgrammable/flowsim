@@ -11,7 +11,7 @@
         </button>
         <button type="button" class="btn btn-default" 
                 ng-click="play()"
-                ng-disabled="simulation.active || !trace.events.length">
+                ng-disabled="simulation.active || !player.trace.events.length">
           <span class="glyphicon glyphicon-play"></span>
         </button>
         <button type="button" class="btn btn-default" ng-click="step()"
@@ -31,22 +31,17 @@
       </fg-simulation-view>
     </div>
   </div>
-
 </div>
-
-<!-- Setup and Dataplane Stage Views -->
+<div class="row">
 <tabset>
   <tab heading="Setup" disabled=true active="!simulation.active" fg-tab-helper>
-    <ng-include src="'views/simulation/setup.html'"></ng-include>
+     <!-- <ng-include src="views/simulation/setup.html"></ng-include> -->
   </tab>
   <tab ng-repeat="stage in simulation.stages" heading="{{stage}}" fg-tab-helper
        active="simulation.active && simulation.stage === $index" select="stageInit()">
-    <ng-include src="'views/simulation/'+stage.toLowerCase()+'.html'">
-    </ng-include>
+    <!-- <ng-include src="'views/simulation/'+stage.toLowerCase()+'.html'">
+    </ng-include> -->
   </tab>
 </tabset>
-<!--
-<hr>
-<command-trace>blah</command-trace>
--->
-
+<div ui-view></div>
+</div>
