@@ -24,6 +24,8 @@
   packet. Adding protocols will change the selector list and follow a specific 
   protocol dependency chain.
 
+![Image of PacketEditor](http://flowgrammable.org/static/media/uploads/packet_editor.png )
+
   Protocol fields may also be modified by the user in the editor control. Select a
   protocol in the stack and a panel will open, inside this panel are a series of
   protocol fields that may be changed. Invalid inputs are indicated with a red
