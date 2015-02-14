@@ -27,8 +27,8 @@ exports.config = {
 
   // If sauceUser and sauceKey are specified, seleniumServerJar will be ignored.
   // The tests will be run remotely using SauceLabs.
-  sauceUser: null,
-  sauceKey: null,
+  sauceUser: null, //'sashajo',
+  sauceKey: null,//'8cfd3bf6-1e7e-446a-a7a7-71ca44ec2408',
 
   // ----- What tests to run -----
   //
@@ -43,9 +43,20 @@ exports.config = {
   // https://code.google.com/p/selenium/wiki/DesiredCapabilities
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
-  capabilities: {
+ 
+multiCapabilities: [{
     'browserName': 'chrome'
-  },
+  }, {
+    'browserName': 'firefox'
+  }, {
+    'browserName': 'internet explorer',
+    'platform': 'WINDOWS'
+  }, {
+    'browserName': 'safari',
+    'platform': 'MAC'
+  }, {
+    'browserName': 'opera'
+  }],
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.

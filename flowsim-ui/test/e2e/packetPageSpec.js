@@ -29,5 +29,10 @@ describe('packet page', function () {
             expect(page.packetList.count()).toEqual(2);
             expect(page.packetAt(1)).toEqual('pa2');
         });
+        // it('should add another packet', function () {
+        //     page.deletePacket(1);
+        //     expect(page.packetList.count()).toEqual(1);
+        //     expect(page.packetAt(0)).toEqual('pa');
+        // });
     });
 });
