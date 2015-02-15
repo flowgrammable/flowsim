@@ -165,7 +165,7 @@ describe('Service: Tables', function () {
     pri.add(flow3);
 
     expect(pri.flows[0].match.set.length).toBe(3);
-    expect()
+    expect();
 
     var flow4 = new Flow.Flow(null, 1);
     flow4.match.push(ethmatch1);
