@@ -7,7 +7,7 @@
  * # fgsimulationview
  */
 angular.module('flowsimUiApp')
-    .directive('fgSimulationView', function() {
+    .directive('fgSimulationView', function($rootScope) {
 
         return {
             restrict: 'E',
@@ -19,6 +19,7 @@ angular.module('flowsimUiApp')
             },
             link: function postLink(scope, element, attrs) {
                 //directive attributes with defaults
+
                 var width = parseInt(attrs.width) || 870,
                     height = parseInt(attrs.height) || 100,
                     stageWidth = parseInt(attrs.stageWidth) || 90,
@@ -73,6 +74,16 @@ angular.module('flowsimUiApp')
                     scope.transition(newData, currentStage);
                     currentStage = (_.isUndefined(newData.to)) ? -1 : newData.to;
                 }, false);
+
+
+                $rootScope.$on('dropPacket', function(){
+                    svg.selectAll('.sim-packet')
+                        .transition()
+                        .duration(350)
+                        .style('opacity', '0')
+                        .transition()
+                        .remove();
+                })
                 /**
                  * Transition function allows to make transitions of the current packet by providing {to:<stage>}.
                  * If clonePacket: true is provided and to: value equals current position, another packet will be created and transitioned to stage indicated in cloneTo attribute

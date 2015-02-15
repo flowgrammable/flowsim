@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(Context, UInt, Extraction, Instruction) {
+  .factory('Dataplane', function(Context, UInt, Extraction, Instruction, $rootScope) {
 
 var ARRIVAL    = 'Arrival';
 var EXTRACTION = 'Extraction';
@@ -140,6 +140,13 @@ Dataplane.prototype.execGroups = function() {
 
 Dataplane.prototype.egress = function() {
   this.ctx.actionSet.step(this, this.ctx);
+  if(this.ctx.actionSet.isEmpty()){
+    if(!this.ctx.output){
+      $rootScope.$broadcast('dropPacket');
+    } else {
+      $rootScope.$broadcast('forwardPacket');
+    }
+  }
 };
 
 Dataplane.prototype.transition = function(state) {

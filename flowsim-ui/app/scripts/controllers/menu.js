@@ -50,6 +50,11 @@ angular.module('flowsimUiApp')
       $scope.dirty = false;
     });
 
+    $rootScope.$on('$viewContentLoading', 
+    function(event, viewConfig){ 
+        console.log('view load:', viewConfig);
+    });
+
     $scope.destroySession = function() {
       $location.url('/#');
       $scope.authenticated = false;

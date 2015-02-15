@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation, Simulation2) {
+  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation) {
     var SimCtrl = this;
     this.stages = Simulation.Stages;
     this.transitions = Simulation.Transitions;
@@ -26,25 +26,23 @@ angular.module('flowsimUiApp')
 
     this.play = function (){
       this.simulation.play(SimCtrl.trace);
-      this.makeTransition();
-      this.ctx = this.simulation.toView();
-      this.view = this.simulation.toView();
-    };
-
-    this.makeTransition = function(){
-      return {to: SimCtrl.simulation.stage };
+      this.view = this.simulation.view;
+      this.makeTransition = {to: SimCtrl.simulation.stage };
     };
 
     this.step = function(){
       this.simulation.step();
-      this.view = this.simulation.toView();
-      console.log('step view', this.view);
-      $state.go('simulation.stages.'+this.simulation.dataplane.state.toLowerCase());
-
+      this.view = this.simulation.view;
+      if(this.simulation.isDone()){
+        this.stop();
+      } else {
+        $state.go('simulation.stages.'+this.simulation.dataplane.state.toLowerCase());
+        this.makeTransition = {to: SimCtrl.simulation.stage };
+      }
     };
 
     this.stop = function(){
-      this.makeTransition();
+      this.makeTransition = {to: -1 };
       this.simulation.stop();
       $state.go('simulation.stages.setup');
     };

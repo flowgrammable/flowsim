@@ -37,6 +37,7 @@ Simulation.prototype.play = function(trace) {
   }, this);
   this.active = true;
   this.stage = 0;
+  this.view = this.dataplane.toView();
 };
 
 Simulation.prototype.isDone = function(){

@@ -40,15 +40,14 @@ angular
       .state('simulation', {
         views: {
           '': {
-            templateUrl: 'views/simulation.html'
+            templateUrl: 'views/simulation.html',
+            controller: 'Simulation2Ctrl as SimCtrl'
           },
           'controls@simulation': {
-            templateUrl: 'views/simulation/controls.html',
-            controller: 'Simulation2Ctrl as SimCtrl'
+            templateUrl: 'views/simulation/controls.html'
           },
           'stages@simulation': {
-            template: '<ui-view/>',
-            controller: 'Simulation2Ctrl as SimCtrl'
+            template: '<ui-view/>'
           }
         }
       })
@@ -81,6 +80,10 @@ angular
       })
       .state('simulation.stages.egress', {
         templateUrl: 'views/simulation/egress.html'
+      })
+      .state('simulation.stages.final', {
+        templateUrl: 'views/simulation/setup.html',
+        controller: 'SimSetupCtrl as SimSetupCtrl'
       })
       .state('subscriber', {
         url: '/subscriber',
