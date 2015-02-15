@@ -79,11 +79,12 @@ module.exports = function(grunt) {
                     '.tmp/styles/{,*/}*.css',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
-            },
-            protractor: {
-                files: ['app/scripts/**/*.js', 'test/e2e/**/*.js'],
-                tasks: ['protractor:auto']
             }
+          //,
+          //  protractor: {
+          //      files: ['app/scripts/**/*.js', 'test/e2e/**/*.js'],
+          //      tasks: ['protractor:auto']
+          //  }
         },
 
         // The actual grunt server settings
@@ -111,7 +112,7 @@ module.exports = function(grunt) {
             },
             test: {
                 options: {
-                    port: 9001,
+                  //  port: 9001,
                     middleware: function(connect) {
                         return [
                             connect.static('.tmp'),
@@ -422,7 +423,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test:e2e', ['connect:test', 'protractor:singlerun']);
 
-    grunt.registerTask('autotest:e2e', ['connect:test', 'shell:selenium', 'watch:protractor']);
+   // grunt.registerTask('autotest:e2e', ['connect:test', 'shell:selenium', 'watch:protractor']);
 
     grunt.registerTask('test', [
         'clean:server',
