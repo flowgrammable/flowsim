@@ -64,6 +64,7 @@ angular.module('flowsimUiApp')
 
       post[type][name] = service.createUI(name, initialValue);
       post[type][name].dirty = true;
+      $rootScope.$broadcast('assetUpdate');
       return post[type][name];
     }
 
@@ -81,6 +82,7 @@ angular.module('flowsimUiApp')
       } else {
         _delete[type][name] = true;
       }
+      $rootScope.$broadcast('assetUpdate');
 
     }
 

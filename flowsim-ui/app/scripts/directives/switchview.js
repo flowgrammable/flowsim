@@ -46,7 +46,7 @@ angular.module('flowsimUiApp').
                         scope.render(scope.data);
                     });
 
-                    scope.$watch('data', function () {
+                    scope.$watch('data', function (val) {
                         scope.render(scope.data);
                     }, true);
 
@@ -58,8 +58,10 @@ angular.module('flowsimUiApp').
                         svg.selectAll('*').remove();//cleanup
 
                         if (_.isUndefined(data) || !data || data.length === 0) {
+                          svg.attr('class', '');
                           return; //don't render if there is no data
                         }
+                        svg.attr('class', 'Switch');
                         data = portsView(data.ports, 24);//parse ports and convert to matrix [row][port]
 
                         //dimensions of the SVG container

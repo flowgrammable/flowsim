@@ -30,29 +30,31 @@
 
     <!-- Add your site or application content here -->
     <div class="container">
-
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation"
         ng-controller="MenuCtrl">
         <div class="container">
+
           <div class="navbar-header">
             <a class="navbar-brand" sref="Main">
               <img style="Max-height: 25px;" src="images/logo.png" 
                    alt="Flowgrammable">
             </a>
           </div>
+
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+            <li style="color:white;">fromState: {{fromState}} <br>toState: {{toState}}</li>
               <li ng-show="authenticated">
-                <a href="#packet">Packet</a>
+                <a ui-sref="packet">Packet</a>
               </li>
               <li ng-show="authenticated">
-                <a href="#profile">Profile</a>
+                <a ui-sref="profile">Profile</a>
               </li>
               <li ng-show="authenticated">
-                <a href="#switch">Switch</a>
+                <a ui-sref="switch">Switch</a>
               </li>
               <li ng-show="authenticated">
-                <a href="#simulation">Simulation</a>
+                <a ui-sref="simulation.stages.setup">Simulation</a>
               </li>
               <li ng-show="authenticated">
                 <a href="#subscriber/update">Account</a>
@@ -245,6 +247,7 @@
         <script src="scripts/directives/fgtabhelper.js"></script>
         <script src="scripts/controllers/simulation2.js"></script>
         <script src="scripts/controllers/simulation/simsetup.js"></script>
+        <script src="scripts/services/fgstore.js"></script>
         <!-- endbuild -->
 </body>
 </html>

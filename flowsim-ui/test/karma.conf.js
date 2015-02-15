@@ -28,10 +28,12 @@ module.exports = function(config) {
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
+      'bower_components/angular-ui-router/release/angular-ui-router.min.js',
       'bower_components/d3/d3.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      'test/spec/**/*.js',
+      'app/views/**/*.html'
     ],
 
     // list of files / patterns to exclude
@@ -56,9 +58,18 @@ module.exports = function(config) {
     // Which plugins to enable
     plugins: [
       'karma-phantomjs-launcher',
-      'karma-jasmine'
-      //'karma-chrome-launcher'
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
     ],
+
+    preprocessors: {
+      'app/views/**/*.html': ['ng-html2js']
+    },
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'app/',
+      moduleName: 'my.templates'
+    },
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit

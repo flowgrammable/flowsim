@@ -4,8 +4,8 @@
 <div class="row">
     
   <div class="col-md-2">
-    <fg-list on-add="addTrace" on-del="delTrace" on-set="setTrace"
-             on-init="getTraces">
+    <fg-list on-add="SimSetupCtrl.addTrace" on-del="SimSetupCtrl.delTrace" on-set="SimSetupCtrl.setTrace"
+             on-init="SimSetupCtrl.getTraces">
       Traces
       <div class="error" ng-show="errorMsg.length">
         {{errorMsg}}
@@ -13,20 +13,20 @@
     </fg-list>
   </div>
 
-  <div class="col-md-10" ng-show="player.trace">
+  <div class="col-md-10" ng-show="SimSetupCtrl.trace">
     <h3>Select Switch</h3>
     <div class="row">
       <div class="col-sm-3">
         <div class="input-group">
           <span class="input-group-addon">Switch</span>
-          <select class="form-control" ng-model="resources.deviceName"
-            ng-changed="selectSwitch()">
-            <option ng-repeat="name in resources.devices">{{name}}</option>
+          <select class="form-control" ng-model="SimSetupCtrl.resources.deviceName"
+            ng-change="SimSetupCtrl.selectSwitch()">
+            <option ng-repeat="name in SimSetupCtrl.resources.devices">{{name}}</option>
           </select>
         </div>
       </div>
       <div class="col-sm-7">
-        <switch-view data="player.trace.device.ports"></switch-view>
+        <switch-view data="SimSetupCtrl.trace.device.ports"></switch-view>
       </div>
     </div>
     <hr>
@@ -34,9 +34,9 @@
     <div class="row">
       <div class="col-sm-offset-1 col-sm-8">
         <!-- Control for editing the input packet trace -->
-        <input-trace pkt-events="player.trace.events" resources="resources"
-                 log-ports="player.trace.device.ports.ports"
-                 phy-ports="player.trace.device.ports.ports" add-packet="addPacket">
+        <input-trace pkt-events="SimSetupCtrl.trace.events" resources="SimSetupCtrl.resources"
+                 log-ports="SimSetupCtrl.trace.device.ports.ports"
+                 phy-ports="SimSetupCtrl.trace.device.ports.ports" add-packet="SimSetupCtrl.addPacket">
         </input-trace>
       </div>
     </div>

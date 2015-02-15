@@ -42,6 +42,27 @@ div.error { color: red; font-weight: bold; }
   margin-top: 28px;
 }
 
+.fg-dl-horizontal {
+  margin-bottom: 10px;
+}
+
+.fg-dl-horizontal dt {
+  float: left;
+  width: 50px;
+  margin-right: 5px;
+  text-align: right;
+  white-space: nowrap;
+  clear: left;
+}
+.fg-dl-horizontal dd {
+  float: left;
+  width: 100px;
+}
+
+.fg-debug {
+  background: white;
+}
+
 /*
  * Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {

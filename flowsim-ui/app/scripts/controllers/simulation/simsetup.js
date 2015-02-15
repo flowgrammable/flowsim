@@ -8,113 +8,120 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SimSetupCtrl', function ($scope, $rootScope, fgCache, Trace, Switch, Packet, Regex, Simulation) {
+  .controller('SimSetupCtrl', function ($scope, $rootScope, fgCache, fgStore, Trace, Switch, Packet, Regex) {
+  var SimSetupCtrl = this;
 
-  $scope.names = {};
+  this.initState = function(){
+    this.names = {};
+    this.resources = {
+      packetName: '',
+      deviceName: '',
+      packets: [],
+      devices: []
+    };
 
-  $scope.resources = {
-    packetName: '',     // input selector for adding a packet
-    deviceName: '',     // input selector for setting a switch
-    packets: [],
-    devices: []
+    this.active = {
+      in_port: '',
+      in_phy_port: '',
+      tunnel: ''
+    };
+
+    this.trace = '';
   };
+  this.initState();
 
-  $scope.active = {
-    in_port: '',
-    in_phy_port: '',
-    tunnel: ''
-  };
-  console.log('trace scopeer:', $scope.trace);
-  // get a list of all the existing switch names
-  fgCache.getNames('switch', function(err, result) {
-    if(err) {
-      console.log(err.details);
-    } else {
-      $scope.resources.devices = result;
-    }
+  fgStore.get('switch').then(function(names){
+    SimSetupCtrl.resources.devices = names;
   });
 
-  // get a list of all the existing packet names
-  fgCache.getNames('packet', function(err, result) {
-    if(err) {
-      console.log(err.details);
-    } else {
-      $scope.resources.packets = result;
-    }
+  fgStore.get('packet').then(function(names){
+    SimSetupCtrl.resources.packets = names;
   });
 
-  // update the switch device on selector change
-  $scope.$watch('resources.deviceName', function() {
-    fgCache.get('switch', $scope.resources.deviceName, Switch,
+  this.selectSwitch = function(){
+    fgCache.get('switch', SimSetupCtrl.resources.deviceName, Switch,
                 function(err, device) {
       if(err) {
         console.log(err.details);
       } else {
-        $scope.player.trace.device = device;
+        SimSetupCtrl.trace.device = device;
       }
     });
-  });
+  }
 
   // attach a method to - get all the existing trace names
-  $scope.getTraces = function(callback) {
+  this.getTraces = function(callback) {
     fgCache.getNames('trace', callback);
   };
 
     // add the selected packet to the trace
-  $scope.addPacket = function(pkt) {
+  this.addPacket = function(pkt) {
     fgCache.get('packet', pkt.packetName, Packet,
                 function(err, result) {
       if(err) {
         console.log(err.details);
       } else {
-        $scope.player.trace.push(result.clone(), pkt.in_port, 
+        SimSetupCtrl.trace.push(result.clone(), pkt.in_port, 
             pkt.in_phy_port, pkt.tunnel);
       }
     });
   };
 
     // create a new trace
-  $scope.addTrace = function(name, callback) {
+  this.addTrace = function(name, callback) {
     if(!Regex.Identifier.test(name)) {
       callback('Bad name');
-    } else if(name in $scope.names) {
+    } else if(name in SimSetupCtrl.names) {
       callback('Name exists');
     } else {
-      $scope.player.trace = fgCache.create('trace', name, Trace);
-      $scope.names[name] = true;
-      $scope.setDirty();
+      SimSetupCtrl.resources.deviceName = null;
+      SimSetupCtrl.resources.packetName = null;
+      SimSetupCtrl.trace = fgCache.create('trace', name, Trace);
+      SimSetupCtrl.names[name] = true;
+      SimSetupCtrl.setDirty();
       callback(null);
     }
-  };
+  }; 
 
   // set focus on a new trace
-  $scope.setTrace = function(name) {
+  this.setTrace = function(name) {
     if(name === undefined) {
-      $scope.trace = null;
+      SimSetupCtrl.trace = null;
     } else {
       fgCache.get('trace', name, Trace, function(err, result) {
         if(err) {
           console.log(err.details);
         } else {
-          $scope.player.trace = result;
-          if($scope.player.trace.device) {
-            $scope.resources.deviceName = $scope.player.trace.device.name;
+          SimSetupCtrl.trace = result;
+          if(SimSetupCtrl.trace.device) {
+            SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
           }
         }
       });
     }
   };
 
-  $scope.setDirty = function() {
+  this.delTrace = function(name){
+    fgCache.destroy('trace', name);
+    if(fgCache.isDirty()) {
+      SimSetupCtrl.setDirty();
+    } else {
+      SimSetupCtrl.setClean();
+    }
+    delete SimSetupCtrl.names[name];
+  };
+
+  this.setDirty = function() {
     $rootScope.$broadcast('dirtyCache');
   };
 
-  $scope.setClean = function() {
+  this.setClean = function() {
     $rootScope.$broadcast('cleanCache');
   };
 
-  $rootScope.$on('$stateChangeStart',function(event){
-  	console.log('leaving state');
+  $scope.$on('$stateChangeStart',function(event){
+  	console.log('leaving state setup');
+    SimSetupCtrl.initState();
   });
 
   });

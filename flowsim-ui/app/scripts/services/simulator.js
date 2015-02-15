@@ -21,8 +21,7 @@ Simulation.prototype.stages = Dataplane.Stages;
 Simulation.prototype.step = function() {
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
-  $state.go('simulation.'+this.dataplane.state.toLowerCase());
-  console.log('state:', $state.$current.name);
+  $state.go('simulation.stages.'+this.dataplane.state.toLowerCase());
 
 };
 
@@ -32,7 +31,7 @@ Simulation.prototype.toView = function() {
 
 Simulation.prototype.play = function(trace) {
   //TODO: rework dataplane, play should bring you to dpStage[0]
-  $state.go('simulation.'+Stages[0].name.toLowerCase());
+  $state.go('simulation.stages.'+Stages[0].name.toLowerCase());
   this.dataplane = new Dataplane.Dataplane(trace.device);
   _(trace.events).each(function(ev) {
     this.dataplane.input(ev.clone());

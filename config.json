@@ -3,8 +3,8 @@
     "apiKey": "fake key",
     "domain": "flowgrammable.org",
     "user": "admin@flowgrammable.org",
-    "api_user":"coltonchojnacki",
-    "api_password":"fl0gm4il3r"
+    "api_user":"fakeuser",
+    "api_password":"fakepassword"
   },
   "server": {
     "address": "127.0.0.1",
@@ -35,8 +35,8 @@
     "count": 4
   },
   "slackbot": {
-    "slackUrl": "https://hooks.slack.com/services/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",
-    "icon": ":flog:",
-    "username": "flowsim"
+    "slackUrl": "",
+    "icon": "",
+    "username": ""
   }
 }

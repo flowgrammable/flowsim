@@ -15,8 +15,7 @@
     "url": "https://github.com/flowgrammable/flowsim/issues"
   },
   "homepage": "https://github.com/flowgrammable/flowsim",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",
@@ -42,6 +41,7 @@
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.24",
     "karma-jasmine": "^0.1.5",
+    "karma-ng-html2js-preprocessor": "^0.1.2",
     "karma-phantomjs-launcher": "^0.1.4",
     "load-grunt-tasks": "^0.4.0",
     "time-grunt": "^0.3.1"

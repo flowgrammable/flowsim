@@ -7,7 +7,7 @@
  * # fgList
  */
 angular.module('flowsimUiApp')
-  .directive('fgList', function ($state) {
+  .directive('fgList', function () {
 
     return {
       restrict: 'E',                      // HTML Element

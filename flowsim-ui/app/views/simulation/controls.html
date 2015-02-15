@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-md-2">
+
+    <!-- Primary simulator controls -->
+    <div class="row input-group" style="margin-bottom: 10px;">
+      <span class="input-group-addon">Trace</span>
+      <select ng-click="getTraces()" class="form-control" ng-model="SimCtrl.traceName" ng-disabled="SimCtrl.simulation.active">
+        <option ng-selected="SimCtrl.traceName" ng-repeat="name in SimCtrl.traces">{{name}}</option>
+      </select>
+    </div>
+    <div class="row" style="text-align:center; margin-bottom: 10px;">
+      <div class="btn-group btn-group-justified">
+      	<div class="btn-group">
+        <button type="button" class="btn btn-default" ng-click="SimCtrl.stop()"
+                ng-disabled="!SimCtrl.simulation.active">
+          <span class="glyphicon glyphicon-stop"></span>
+        </button>
+        </div>
+        <div class="btn-group">
+        <button type="button" class="btn btn-default" 
+                ng-click="SimCtrl.play()"
+                ng-disabled="SimCtrl.simulation.active || !SimCtrl.trace.events.length">
+          <span class="glyphicon glyphicon-play"></span>
+        </button>
+        </div>
+        <div class="btn-group">
+        <button type="button" class="btn btn-default" ng-click="SimCtrl.step()"
+                ng-disabled="!SimCtrl.simulation.active">
+          <span class="glyphicon glyphicon-step-forward"></span>
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Dataplane Overivew Animation -->
+  <div class="col-md-8">
+    <div style="text-align: center">
+      <fg-simulation-view stages="SimCtrl.stages" transitions="SimCtrl.transitions" 
+                          make-transition="SimCtrl.makeTransition" 
+                          animation-duration="600">
+      </fg-simulation-view>
+    </div>
+  </div>
+</div>
+<div class="row">
+<tabset>
+  <tab heading="Setup" disabled=true active="!SimCtrl.simulation.active" fg-tab-helper>
+  </tab>
+  <tab ng-repeat="stage in SimCtrl.simulation.stages" heading="{{stage}}" fg-tab-helper
+       active="SimCtrl.simulation.active && SimCtrl.simulation.stage === $index" select="stageInit()">
+  </tab>
+</tabset>
+</div>

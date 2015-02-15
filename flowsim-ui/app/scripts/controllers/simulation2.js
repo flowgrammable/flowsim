@@ -8,37 +8,61 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('Simulation2Ctrl', function ($scope, $state, Dataplane, Trace, Simulation) {
-  	$scope.stages = Simulation.Stages;
-  	$scope.transitions = Simulation.Transitions;
-  	$scope.simulation = new Simulation.Simulation();
-  	$scope.player = {
-  		trace: '',
-  		view: ''
-  	};
+  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation) {
+    var SimCtrl = this;
+    this.stages = Simulation.Stages;
+    this.transitions = Simulation.Transitions;
+    this.simulation = new Simulation.Simulation();
+    this.traceName = '';
+    this.traces = '';
+    this.getTraces = function(){
+      fgStore.get('trace').then(function(names){
+        SimCtrl.traces = names;
+      });
+    }
+    this.getTraces();
 
-  	$state.go('simulation.setup');
-  	$scope.play = function(){
-  		$scope.simulation.play($scope.player.trace);
-	    $scope.makeTransition = {
-		  to: $scope.simulation.stage
-		};
-		$scope.ctx = $scope.simulation.toView();
-		$scope.view = $scope.simulation.toView();
-  	};
+    this.play = function (){
+      this.simulation.play(SimCtrl.trace);
+      this.makeTransition();
+      this.ctx = this.simulation.toView();
+      this.view = this.simulation.toView();
+    }
 
-  	$scope.step = function(){
-  		$scope.simulation.step();
-  		$scope.player.view = $scope.simulation.view;
-  	}
+    this.makeTransition = function(){
+      return {to: SimCtrl.simulation.stage };
+    }
 
-  	$scope.stop = function(){
-	    $scope.makeTransition = {to: -1};
-	    $scope.simulation.stop();
-	    $scope.player = {
-	    	trace: '',
-	    	view: ''
-	    };
-	    $state.go('simulation.setup');
-  	};
+    this.step = function(){
+      this.simulation.step();
+      this.view = this.simulation.view;
+    }
+
+    this.stop = function(){
+      this.makeTransition();
+      this.simulation.stop();
+      $state.go('simulation.stages.setup');
+    }
+
+    this.loadTrace = function() {
+    if(SimCtrl.traceName === undefined) {
+      SimCtrl.trace = null;
+    } else {
+      fgCache.get('trace', SimCtrl.traceName, Trace, function(err, result) {
+        if(err) {
+          console.log('trace error:', err.details);
+        } else {
+          SimCtrl.trace = result;
+        }
+      });
+    }
+  };
+
+  $scope.$watch('SimCtrl.traceName', function(){
+    SimCtrl.loadTrace();
+  });
+
+  $rootScope.$on('assetUpdate', function(){
+    SimCtrl.getTraces();
+  })
 });

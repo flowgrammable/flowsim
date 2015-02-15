@@ -39,32 +39,48 @@ angular
       })
       .state('simulation', {
         url: '/simulation',
-        templateUrl: 'views/simulation.html',
-        controller: 'Simulation2Ctrl'
+        views: {
+          '': {
+            templateUrl: 'views/simulation.html'
+          },
+          'controls@simulation': {
+            templateUrl: 'views/simulation/controls.html',
+            controller: 'Simulation2Ctrl as SimCtrl'
+          },
+          'stages@simulation': {
+            template: '<div ui-view></div>',
+            controller: 'Simulation2Ctrl as SimCtrl'
+          }
+        }
       })
-      .state('simulation.setup', {
+      .state('simulation.stages', {
+        abstract: true,
+        template: '<ui-view/>'
+      })
+      .state('simulation.stages.setup', {
         templateUrl: 'views/simulation/setup.html',
-        controller: 'SimSetupCtrl'
+        controller: 'SimSetupCtrl as SimSetupCtrl'
       })
-      .state('simulation.arrival', {
-        templateUrl: 'views/simulation/arrival.html'
+      .state('simulation.stages.arrival', {
+        templateUrl: 'views/simulation/arrival.html',
+        controller: 'Simulation2Ctrl as SimCtrl'
       })
-      .state('simulation.extraction', {
+      .state('simulation.stages.extraction', {
         templateUrl: 'views/simulation/extraction.html'
       })
-      .state('simulation.choice', {
+      .state('simulation.stages.choice', {
         templateUrl: 'views/simulation/choice.html'
       })
-      .state('simulation.selection', {
+      .state('simulation.stages.selection', {
         templateUrl: 'views/simulation/selection.html'
       })
-      .state('simulation.execution', {
+      .state('simulation.stages.execution', {
         templateUrl: 'views/simulation/execution.html'
       })
-      .state('simulation.groups', {
+      .state('simulation.stages.groups', {
         templateUrl: 'views/simulation/groups.html'
       })
-      .state('simulation.egress', {
+      .state('simulation.stages.egress', {
         templateUrl: 'views/simulation/egress.html'
       })
       .state('subscriber', {
