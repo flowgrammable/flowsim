@@ -139,6 +139,9 @@ module.exports = function(grunt) {
                 keepAlive: true,
                 configFile: './test/protractor.conf.js'
             },
+          saucelabs:{
+            configFile: './test/protractor.saucelabs.conf.js'
+          },
             singlerun: {},
             auto: {
                 keepAlive: true,
@@ -422,6 +425,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('test:e2e', ['connect:test', 'protractor:singlerun']);
+    grunt.registerTask('test:e2e-sl', ['connect:test', 'protractor:saucelabs']);
 
    // grunt.registerTask('autotest:e2e', ['connect:test', 'shell:selenium', 'watch:protractor']);
 

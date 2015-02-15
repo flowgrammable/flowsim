@@ -10,7 +10,8 @@
 
 describe('Navigation test', function () {
 
-  browser.get('http://localhost:9000/#/packet');
+  //browser.get('http://localhost:9000/#/packet');
+  browser.get('https://dev.flowsim.flowgrammable.org/#/');
   beforeEach(function () {
 
   });
@@ -18,7 +19,11 @@ describe('Navigation test', function () {
 
   describe('navigation test', function () {
     it('should start with empty list', function () {
+      element(by.linkText("Login")).click();
+      element(by.id("email")).sendKeys("sasha.jo@gmail.com");
 
+      element(by.id("password")).sendKeys("Passw0rd");
+      element(by.css("button.btn.btn-default")).click();
       element(by.linkText("Packet")).click();
       element(by.linkText("Profile")).click();
       element(by.linkText("Switch")).click();
