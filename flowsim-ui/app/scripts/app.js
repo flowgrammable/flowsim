@@ -47,7 +47,7 @@ angular
             controller: 'Simulation2Ctrl as SimCtrl'
           },
           'stages@simulation': {
-            template: '<div ui-view></div>',
+            template: '<ui-view/>',
             controller: 'Simulation2Ctrl as SimCtrl'
           }
         }
@@ -62,8 +62,7 @@ angular
         controller: 'SimSetupCtrl as SimSetupCtrl'
       })
       .state('simulation.stages.arrival', {
-        templateUrl: 'views/simulation/arrival.html',
-        controller: 'Simulation2Ctrl as SimCtrl'
+        templateUrl: 'views/simulation/arrival.html'
       })
       .state('simulation.stages.extraction', {
         templateUrl: 'views/simulation/extraction.html'

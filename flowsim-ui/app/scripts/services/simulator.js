@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Simulation', function(Dataplane, $state) {
+  .factory('Simulation', function(Dataplane, $state, $rootScope) {
 
 function Simulation() {
   this.stage = 0;
@@ -21,8 +21,7 @@ Simulation.prototype.stages = Dataplane.Stages;
 Simulation.prototype.step = function() {
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
-  $state.go('simulation.stages.'+this.dataplane.state.toLowerCase());
-
+  $rootScope.$broadcast('step');
 };
 
 Simulation.prototype.toView = function() {
@@ -121,7 +120,7 @@ var Transitions = [{
 }];
 
 return {
-  Simulation: Simulation,
+  Simulation: new Simulation(),
   Stages: Stages,
   Transitions: Transitions
 };

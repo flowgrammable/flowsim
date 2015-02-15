@@ -23,6 +23,20 @@ var State = [
   FINAL,
 ];
 
+function ArrivalStg(){
+
+}
+
+ArrivalStg.prototype.toView = function(){
+  return {
+
+  }
+};
+
+ArrivalStg.prototype.step = function(){
+
+};
+
 function Dataplane(device) {
   if(device) {
     this.currEvent = null;
@@ -47,7 +61,7 @@ function Dataplane(device) {
 }
 
 Dataplane.prototype.toView = function() {
-  return this.ctx ? this.ctx.toView() : null;
+  return this.ctx ? this.ctx.toView() : 'no ctx yet';
 };
 
 Dataplane.prototype.input = function(ev) {

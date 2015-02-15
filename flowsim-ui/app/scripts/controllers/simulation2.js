@@ -8,13 +8,15 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation) {
+  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation, Simulation2) {
     var SimCtrl = this;
     this.stages = Simulation.Stages;
     this.transitions = Simulation.Transitions;
-    this.simulation = new Simulation.Simulation();
+    this.simulation = Simulation.Simulation;
+    //this.simulation = Simulation2.Simulation;
     this.traceName = '';
     this.traces = '';
+    this.view = {};
     this.getTraces = function(){
       fgStore.get('trace').then(function(names){
         SimCtrl.traces = names;
@@ -35,7 +37,10 @@ angular.module('flowsimUiApp')
 
     this.step = function(){
       this.simulation.step();
-      this.view = this.simulation.view;
+      this.view = this.simulation.toView();
+      console.log('step view', this.view);
+      $state.go('simulation.stages.'+this.simulation.dataplane.state.toLowerCase());
+
     };
 
     this.stop = function(){
