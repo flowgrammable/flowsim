@@ -22,12 +22,12 @@ angular.module('flowsimUiApp')
       $scope.authenticated = false;
     });
 
-    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState){
       $scope.fromState = fromState.name;
       $scope.toState = toState.name;
     });
 
-    $rootScope.$broadcast('stateStatus')
+    $rootScope.$broadcast('stateStatus');
 
     $scope.save = function() {
       fgCache.save();

@@ -38,7 +38,6 @@ angular
         controller: 'SwitchCtrl'
       })
       .state('simulation', {
-        url: '/simulation',
         views: {
           '': {
             templateUrl: 'views/simulation.html'
@@ -58,6 +57,7 @@ angular
         template: '<ui-view/>'
       })
       .state('simulation.stages.setup', {
+        url: '/simulation',
         templateUrl: 'views/simulation/setup.html',
         controller: 'SimSetupCtrl as SimSetupCtrl'
       })

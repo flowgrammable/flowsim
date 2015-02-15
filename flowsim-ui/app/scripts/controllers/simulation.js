@@ -20,9 +20,7 @@ angular.module('flowsimUiApp')
     packets: [],
     devices: []
   };
-  console.log('state sim:', $state.$current.name)
-  console.log('state sim:', $state.$current.name)
-  console.log('scope tests:', $scope.testState);
+
   $scope.active = {
     in_port: '',
     in_phy_port: '',

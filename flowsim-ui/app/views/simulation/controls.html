@@ -19,7 +19,8 @@
         <div class="btn-group">
         <button type="button" class="btn btn-default" 
                 ng-click="SimCtrl.play()"
-                ng-disabled="SimCtrl.simulation.active || !SimCtrl.trace.events.length">
+                ng-disabled="SimCtrl.simulation.active || !SimCtrl.trace.events.length
+                  || !SimCtrl.trace.device">
           <span class="glyphicon glyphicon-play"></span>
         </button>
         </div>

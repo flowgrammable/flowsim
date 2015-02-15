@@ -19,10 +19,11 @@ angular.module('flowsimUiApp')
       console.log('has been set: '+name);
     };
 
-    $scope.mockDel = function(name){
+    $scope.mockDel = function(name, callback){
       if(!$scope.mockNames[name]){
         callback('name: '+name+' doesnt exist');
       } else {
+        callback(null);
         delete $scope.mockNames[name];
       }
     };

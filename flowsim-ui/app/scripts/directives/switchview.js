@@ -46,7 +46,7 @@ angular.module('flowsimUiApp').
                         scope.render(scope.data);
                     });
 
-                    scope.$watch('data', function (val) {
+                    scope.$watch('data', function () {
                         scope.render(scope.data);
                     }, true);
 

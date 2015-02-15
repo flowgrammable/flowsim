@@ -47,7 +47,7 @@ angular.module('flowsimUiApp')
         SimSetupCtrl.trace.device = device;
       }
     });
-  }
+  };
 
   // attach a method to - get all the existing trace names
   this.getTraces = function(callback) {
@@ -85,6 +85,7 @@ angular.module('flowsimUiApp')
 
   // set focus on a new trace
   this.setTrace = function(name) {
+    console.log('set trace called');
     if(name === undefined) {
       SimSetupCtrl.trace = null;
     } else {
@@ -94,8 +95,20 @@ angular.module('flowsimUiApp')
         } else {
           SimSetupCtrl.trace = result;
           if(SimSetupCtrl.trace.device) {
-            SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
+            // Check that device still exists
+            if(!_(SimSetupCtrl.resources.devices)
+                  .contains(SimSetupCtrl.trace.device.name)){
+              SimSetupCtrl.trace.device = null;
+              SimSetupCtrl.resources.deviceName = null;
+            } else {
+              SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
+            }
           }
+          _(SimSetupCtrl.trace.events).each(function(evt, idx){
+            if(!_(SimSetupCtrl.resources.packets).contains(evt.packet.name)){
+              SimSetupCtrl.trace.events.splice(idx, 1);
+            }
+          });
         }
       });
     }
@@ -119,8 +132,7 @@ angular.module('flowsimUiApp')
     $rootScope.$broadcast('cleanCache');
   };
 
-  $scope.$on('$stateChangeStart',function(event){
-  	console.log('leaving state setup');
+  $scope.$on('$stateChangeStart',function(){
     SimSetupCtrl.initState();
   });
 
