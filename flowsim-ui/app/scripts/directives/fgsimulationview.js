@@ -94,13 +94,13 @@ angular.module('flowsimUiApp')
                  * @return {[type]}
                  */
                 scope.transition = function(trans, currentStage) {
-                   console.log('Transition:' + JSON.stringify(trans));
-                   console.log('CurrentStage:' + currentStage);
                    if(!trans){
                     return;
                    }
-                   if(trans.to === 0 && currentStage === -1){
+                   if(svg.selectAll('.sim-packet')[0].length === 0){
                     scope.attachPacket();
+                   }
+                   if(trans.to === 0 && currentStage === -1 || currentStage === 0){
                     svg.selectAll('.sim-packet')
                         .style('opacity', '.5')
                         .transition()

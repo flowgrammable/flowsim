@@ -7,13 +7,17 @@
  * # fgChoiceTables
  */
 angular.module('flowsimUiApp')
-  .directive('fgChoiceTables', function () {
+  .directive('fgChoiceTables', function ($rootScope, Simulation) {
     return {
         templateUrl: 'views/fgchoicetables.html',
         restrict: 'E',
         scope: {
-            data: '='
         },
+      controller: function($scope){
+        $rootScope.$on('stageStep', function(){
+          $scope.data = Simulation.Simulation.toView().table;
+        });
+      },
       link: function postLink(scope, element, attrs) {
           var animationDuration = parseInt(attrs.animationDuration) || 500;
           scope.firstTable = 0;

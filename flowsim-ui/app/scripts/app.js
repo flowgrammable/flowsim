@@ -82,8 +82,7 @@ angular
         templateUrl: 'views/simulation/egress.html'
       })
       .state('simulation.stages.final', {
-        templateUrl: 'views/simulation/setup.html',
-        controller: 'SimSetupCtrl as SimSetupCtrl'
+        templateUrl: 'views/simulation/setup.html'
       })
       .state('subscriber', {
         url: '/subscriber',

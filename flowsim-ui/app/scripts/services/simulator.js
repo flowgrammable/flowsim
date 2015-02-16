@@ -21,7 +21,8 @@ Simulation.prototype.stages = Dataplane.Stages;
 Simulation.prototype.step = function() {
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
-  $rootScope.$broadcast('step');
+  $state.go('simulation.stages.'+this.dataplane.state.toLowerCase());
+  $rootScope.$broadcast('stageStep');
 };
 
 Simulation.prototype.toView = function() {
@@ -30,7 +31,6 @@ Simulation.prototype.toView = function() {
 
 Simulation.prototype.play = function(trace) {
   //TODO: rework dataplane, play should bring you to dpStage[0]
-  $state.go('simulation.stages.'+Stages[0].name.toLowerCase());
   this.dataplane = new Dataplane.Dataplane(trace.device);
   _(trace.events).each(function(ev) {
     this.dataplane.input(ev.clone());
@@ -38,6 +38,7 @@ Simulation.prototype.play = function(trace) {
   this.active = true;
   this.stage = 0;
   this.view = this.dataplane.toView();
+  $state.go('simulation.stages.'+Stages[0].name.toLowerCase());
 };
 
 Simulation.prototype.isDone = function(){
@@ -45,9 +46,11 @@ Simulation.prototype.isDone = function(){
 };
 
 Simulation.prototype.stop = function() {
+  $rootScope.$broadcast('dropPacket');
   this.dataplane   = null;
   this.active      = false;
   this.stage       = 0;
+  $state.go('simulation.stages.setup');
 };
 
 var Stages = [{

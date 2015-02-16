@@ -1,7 +1,7 @@
 <div>
     <div class="sim-ins-actionGroup">
-    <div ng-show="view.insList.length" style="margin-right: auto; margin-left: auto;">Instructions</div>
-    <div class="sim-ins-instructions">{{insListView}}</div>
+    <div ng-show="instructionList.length" style="margin-right: auto; margin-left: auto;">Instructions</div>
+    <div class="sim-ins-instructions">{{instructions()}}</div>
         <div class="sim-ins-actionlist">
             <div style="height:10px"></div>
             <div ng-show="applyActionList.actions.length" style="margin-right: auto; margin-left: auto;">Action List</div>
@@ -27,9 +27,9 @@
                 </div>
             </div>
         </div>
-        <div ng-style="{'height': 17 + (6 - insSetListApplyIdx )* 25  , 'border-width' : view.insList.length > 0 && (applyActionList && applyActionList.actions.length>0) ? '0 0 2 2':'0'}"
+        <div ng-style="{'height': 16 + (6 - insSetListApplyIdx )* 25  , 'border-width' :  (applyActionList && applyActionList.actions.length>0) ? '0 0 2 2':'0'}"
              class="sim-exec-connection">
-            <div ng-style="{'height': 17 + (6 - insSetListWriteIdx )* 25,'width':'35%','border-width' : view.insList.length > 0 && (writeActionSet && writeActionSet.actions.length>0 )? '0 0 2 2':'0'}"
+            <div ng-style="{'height': 16 + (6 - insSetListWriteIdx )* 25,'width':'35%','border-width' :  (writeActionSet && writeActionSet.actions.length>0 )? '0 0 2 2':'0'}"
                  class="sim-exec-connection"></div>
         </div>
     </div>
@@ -39,8 +39,8 @@
         <div class="sim-ins-animate-container">
             <div class="sim-ins-animate-repeat"
                  ng-class="(instructionList.length  % 2)?($even?'sim-ins-color-prim':'sim-ins-color-sec'):($odd?'sim-ins-color-prim':'sim-ins-color-sec')"
-                 ng-repeat="ins in instructionList"  tooltip="{{instructionsTooltip(ins)}}" tooltip-append-to-body="true">
-                {{ins}}
+                 ng-repeat="ins in instructionList"  tooltip="{{ins.tip}}" tooltip-append-to-body="true">
+                {{ins.name}}
             </div>
         </div>
     </div>

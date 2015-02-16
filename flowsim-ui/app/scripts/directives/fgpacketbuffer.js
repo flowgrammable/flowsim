@@ -7,18 +7,16 @@
  * # fgPacketBuffer
  */
 angular.module('flowsimUiApp')
-    .directive('fgPacketBuffer', function(Simulation, $rootScope) {
+    .directive('fgPacketBuffer', function() {
         return {
 
             replace: true,
             restrict: 'E',
             scope: {
-                
+                name: '='
             },
             controller: function($scope){
-                $rootScope.$on('step', function(){
-                    $scope.name = Simulation.Simulation.toView().packet.name;
-                })
+                $scope.name = '';
             },
             link: function postLink(scope, element, attrs) {
                 //directive attributes with defaults

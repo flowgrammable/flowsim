@@ -23,20 +23,6 @@ var State = [
   FINAL,
 ];
 
-function ArrivalStg(){
-
-}
-
-ArrivalStg.prototype.toView = function(){
-  return {
-
-  }
-};
-
-ArrivalStg.prototype.step = function(){
-
-};
-
 function Dataplane(device) {
   if(device) {
     this.currEvent = null;
@@ -61,7 +47,7 @@ function Dataplane(device) {
 }
 
 Dataplane.prototype.toView = function() {
-  return this.ctx ? this.ctx.toView() : 'no ctx yet';
+  return this.ctx ? this.ctx.toView() : null;
 };
 
 Dataplane.prototype.input = function(ev) {
@@ -104,6 +90,7 @@ Dataplane.prototype.selection = function() {
     this.ctx.flow = flow;
     this.ctx.setInstructions(flow.ins.clone());
   } else {
+    this.ctx.flow = null;
     // could not find flow
     // TODO: alert user
   }
@@ -171,7 +158,6 @@ Dataplane.prototype.step = function() {
 
   if(!this.currEvent) {
     this.currEvent = this.inputQ[0];
-    console.log('currevent', this.currEvent);
     this.inputQ.splice(0, 1);
   }
 

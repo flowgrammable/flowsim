@@ -8,15 +8,15 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation) {
+  .controller('Simulation2Ctrl', function ($scope, $state, $timeout, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation) {
     var SimCtrl = this;
     this.stages = Simulation.Stages;
     this.transitions = Simulation.Transitions;
     this.simulation = Simulation.Simulation;
-    //this.simulation = Simulation2.Simulation;
     this.traceName = '';
     this.traces = '';
     this.view = {};
+
     this.getTraces = function(){
       fgStore.get('trace').then(function(names){
         SimCtrl.traces = names;
@@ -25,9 +25,8 @@ angular.module('flowsimUiApp')
     this.getTraces();
 
     this.play = function (){
-      this.simulation.play(SimCtrl.trace);
-      this.view = this.simulation.view;
       this.makeTransition = {to: SimCtrl.simulation.stage };
+      this.simulation.play(SimCtrl.trace);
     };
 
     this.step = function(){
@@ -36,15 +35,12 @@ angular.module('flowsimUiApp')
       if(this.simulation.isDone()){
         this.stop();
       } else {
-        $state.go('simulation.stages.'+this.simulation.dataplane.state.toLowerCase());
         this.makeTransition = {to: SimCtrl.simulation.stage };
       }
     };
 
     this.stop = function(){
-      this.makeTransition = {to: -1 };
       this.simulation.stop();
-      $state.go('simulation.stages.setup');
     };
 
     this.loadTrace = function() {
@@ -68,4 +64,5 @@ angular.module('flowsimUiApp')
   $rootScope.$on('assetUpdate', function(){
     SimCtrl.getTraces();
   });
+
 });
