@@ -82,7 +82,7 @@ angular
         templateUrl: 'views/simulation/egress.html'
       })
       .state('simulation.stages.final', {
-        templateUrl: 'views/simulation/setup.html'
+        templateUrl: 'views/simulation/egress.html'
       })
       .state('subscriber', {
         url: '/subscriber',

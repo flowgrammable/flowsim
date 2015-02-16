@@ -36,11 +36,15 @@ angular.module('flowsimUiApp')
         this.stop();
       } else {
         this.makeTransition = {to: SimCtrl.simulation.stage };
+        $state.go('simulation.stages.'+this.simulation.dataplane.state.toLowerCase());
+        $rootScope.$broadcast('stageStep');
       }
+
     };
 
     this.stop = function(){
       this.simulation.stop();
+      $state.go('simulation.stages.setup');
     };
 
     this.loadTrace = function() {

@@ -21,8 +21,6 @@ Simulation.prototype.stages = Dataplane.Stages;
 Simulation.prototype.step = function() {
   this.stage = this.dataplane.step();
   this.view  = this.dataplane.toView();
-  $state.go('simulation.stages.'+this.dataplane.state.toLowerCase());
-  $rootScope.$broadcast('stageStep');
 };
 
 Simulation.prototype.toView = function() {
@@ -42,7 +40,7 @@ Simulation.prototype.play = function(trace) {
 };
 
 Simulation.prototype.isDone = function(){
-  return this.dataplane.nextState === 'Final';
+  return this.dataplane.state === 'Final';
 };
 
 Simulation.prototype.stop = function() {
@@ -50,7 +48,6 @@ Simulation.prototype.stop = function() {
   this.dataplane   = null;
   this.active      = false;
   this.stage       = 0;
-  $state.go('simulation.stages.setup');
 };
 
 var Stages = [{

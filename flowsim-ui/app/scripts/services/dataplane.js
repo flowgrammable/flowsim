@@ -98,6 +98,10 @@ Dataplane.prototype.selection = function() {
 
 Dataplane.prototype.execution = function() {
   this.ctx.instructionSet.step(this, this.ctx);
+  if(this.ctx.output){
+    $rootScope.$broadcast('forwardPacketClone');
+    this.ctx.output = '';
+  }
 };
 
 Dataplane.prototype.output = function(pkt, id) {

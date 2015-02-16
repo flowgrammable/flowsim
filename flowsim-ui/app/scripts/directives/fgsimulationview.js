@@ -7,7 +7,7 @@
  * # fgsimulationview
  */
 angular.module('flowsimUiApp')
-    .directive('fgSimulationView', function($rootScope) {
+    .directive('fgSimulationView', function($rootScope, Simulation) {
 
         return {
             restrict: 'E',
@@ -83,7 +83,35 @@ angular.module('flowsimUiApp')
                         .style('opacity', '0')
                         .transition()
                         .remove();
-                })
+                });
+
+                $rootScope.$on('forwardPacket', function(){
+                    svg.selectAll('.sim-packet')
+                        .style('opacity', '.5')
+                        .transition()
+                        .style('display', 'block')
+                        .duration(animationDuration)
+                        .attr('x', 7 * (stageWidth + stagePadding) + margin - 5)
+                        .remove();
+                });
+
+                $rootScope.$on('forwardPacketClone', function(){
+                        svg.select('#packets')
+                            .append('rect')
+                            .attr('class', 'sim-packet-copy')
+                            .attr('height', stageHeight + 10)
+                            .attr('width', stageWidth + 10)
+                            .attr('x', 4 * (stageWidth + stagePadding) + margin - 5)
+                            .attr('y', margin / 2 - 5)
+                            .attr('ry', 10)
+                            .attr('stage', 7) //set the stage ID
+                            .transition()
+                            .duration(animationDuration)
+                            .attr('x', 7 * (stageWidth + stagePadding) + margin - 5)
+                            .remove();
+                });
+
+
                 /**
                  * Transition function allows to make transitions of the current packet by providing {to:<stage>}.
                  * If clonePacket: true is provided and to: value equals current position, another packet will be created and transitioned to stage indicated in cloneTo attribute
