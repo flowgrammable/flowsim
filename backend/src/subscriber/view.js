@@ -3,12 +3,14 @@
 
 var validator = require('validator');
 
+var pass = require('../utils/password');
+
 var util      = require('../server/utils');
 var msg       = require('./msg');
 
 function isValidPassword(p) {
-  var pat = /[0-9a-zA-Z_\(\){\}\[\]\^\$\.\+\-\*\/\|\!\\:;?<>='"`~@#%&,]{8,}/;
-  return pat.test(p);
+  //var pat = /[0-9a-zA-Z_\(\){\}\[\]\^\$\.\+\-\*\/\|\!\\:;?<>='"`~@#%&,]{8,}/;
+  return pass.validate(p);
 }
 
 function authorize(view) {

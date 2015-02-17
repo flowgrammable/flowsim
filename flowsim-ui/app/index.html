@@ -36,7 +36,7 @@
         <div class="container">
           <div class="navbar-header">
             <a class="navbar-brand" href="#">
-              <img style="Max-height: 25px;" src="images/logo.png" 
+              <img style="Max-height: 25px;" src="images/logo.png"
                    alt="Flowgrammable">
             </a>
           </div>
@@ -60,7 +60,7 @@
             </ul>
             <form class="navbar-form navbar-right" role="form"
                   ng-show="authenticated">
-              <a href="" ng-disabled="!dirty" class="btn btn-success" 
+              <a href="" ng-disabled="!dirty" class="btn btn-success"
                          ng-click="save()">
                 Save
               </a>
@@ -71,16 +71,16 @@
             <form class="navbar-form navbar-right" role="form"
                   ng-show="!authenticated">
               <a href="#subscriber/login" class="btn btn-success">
-               Login 
+               Login
               </a>
               <a href="#subscriber/register" class="btn btn-success">
-               Register 
+               Register
               </a>
             </form>
           </div>
         </div>
       </div>
-      
+
       <div ng-view=""></div>
 
       <hr>
@@ -242,6 +242,8 @@
         <script src="scripts/services/session.js"></script>
         <script src="scripts/directives/fgfeaturenotice.js"></script>
         <script src="scripts/directives/fgtabhelper.js"></script>
+        <script src="scripts/directives/passwordstrengthbar.js"></script>
+        <script src="scripts/services/passwordstrength.js"></script>
         <!-- endbuild -->
 </body>
 </html>
