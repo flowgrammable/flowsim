@@ -33,5 +33,10 @@
     "logPath": "log.txt",
     "period" : "1w",
     "count": 4
+  },
+  "slackbot": {
+    "slackUrl":"",
+    "icon": "",
+    "username": "flowsim"
   }
 }
