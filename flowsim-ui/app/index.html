@@ -66,7 +66,8 @@
                          ng-click="save()">
                 Save
               </a>
-              <a class="btn btn-success" ng-click="logout()">
+              <a analytics-on="click" analytics-category="subscriber" analytics-event="logout"
+              class="btn btn-success" ng-click="logout()">
                 Logout
               </a>
             </form>
@@ -111,10 +112,7 @@
        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-       ga('create', 'UA-54747655-1');
-       ga('require', 'displayfeatures');
-       ga('require', 'linkid', 'linkid.js');
-       ga('send', 'pageview');
+       ga('create', 'UA-54747655-2', 'flowsim.flowgrammable.org');
     </script>
 
     <!-- build:js(.) scripts/oldieshim.js -->
@@ -137,6 +135,25 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/waypoints/waypoints.js"></script>
+    <script src="bower_components/SHA-1/sha1.js"></script>
+    <script src="bower_components/angulartics/src/angulartics.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-adobe.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-chartbeat.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-cnzz.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-flurry.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-ga-cordova.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-ga.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-gtm.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-kissmetrics.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-mixpanel.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-piwik.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-scroll.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-segmentio.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-splunk.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-woopra.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-marketo.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-intercom.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

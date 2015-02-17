@@ -8,7 +8,7 @@
   <input type="text" class="form-control" placeholder="name" 
          ng-model="itemName">
   <span class="input-group-btn">
-    <button class="btn btn-default" type="submit"
+    <button analytics-on="click" analytics-category="{{category}}" analytics-event="create" class="btn btn-default" type="submit"
             ng-disabled="{{init}}" ng-click="addItem()">
       Add
     </button>
@@ -29,7 +29,8 @@
   <tr ng-repeat="item in items" ng-class="{info: $index==focus}">
     <td ng-click="shiftFocus($index)">
       {{item}}
-      <span class="glyphicon glyphicon-minus-sign pull-right" 
+      <span analytics-on="click" analytics-category="{{category}}" analytics-event="delete"
+          class="glyphicon glyphicon-minus-sign pull-right" 
             ng-click="delItem($index)">
       </span>
     </td>

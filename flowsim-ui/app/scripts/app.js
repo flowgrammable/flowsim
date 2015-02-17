@@ -15,7 +15,9 @@ angular
     'ngAnimate',
     'ngSanitize',
     'ui.bootstrap',
-    'ui.router'
+    'ui.router',
+    'angulartics',
+    'angulartics.google.analytics'
   ])
   .config(function ($tooltipProvider, $stateProvider) {
     $tooltipProvider.options({

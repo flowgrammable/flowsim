@@ -15,7 +15,8 @@
     "url": "https://github.com/flowgrammable/flowsim/issues"
   },
   "homepage": "https://github.com/flowgrammable/flowsim",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",

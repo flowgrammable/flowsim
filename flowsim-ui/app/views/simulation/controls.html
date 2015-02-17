@@ -18,6 +18,7 @@
         </div>
         <div class="btn-group">
         <button type="button" class="btn btn-default" 
+        analytics-on="click" analytics-category="trace" analytics-event="play"
                 ng-click="SimCtrl.play()"
                 ng-disabled="SimCtrl.simulation.active || !SimCtrl.trace.events.length
                   || !SimCtrl.trace.device">

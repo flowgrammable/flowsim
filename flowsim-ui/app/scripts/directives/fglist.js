@@ -17,7 +17,8 @@ angular.module('flowsimUiApp')
         onInit: '&',                      // callback for initializing items
         onAdd: '&',                       // callback for adding item
         onDel: '&',                       // callback for deleting item
-        onSet: '&'                        // callback for changing item focus
+        onSet: '&',                        // callback for changing item focus
+        category: '@'
       },
       controller: function($scope) {
         $scope.itemName = '';             // input name to create item
