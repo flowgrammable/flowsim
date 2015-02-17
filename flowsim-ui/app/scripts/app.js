@@ -37,6 +37,22 @@ angular
         templateUrl: 'views/switch.html',
         controller: 'SwitchCtrl'
       })
+      .state('switch.tables', {
+        url: '/table',
+        template: '<fg-switch-tables/>'
+      })
+      .state('switch.ports', {
+        url: '/ports',
+        template: '<fg-switch-ports/>'
+      })
+      .state('switch.groups', {
+        url: '/groups',
+        templateUrl: 'views/switch/groups.html'
+      })
+      .state('switch.meters', {
+        url: '/meters',
+        templateUrl: 'views/switch/meters.html'
+      })
       .state('simulation', {
         views: {
           '': {

@@ -85,7 +85,6 @@ angular.module('flowsimUiApp')
 
   // set focus on a new trace
   this.setTrace = function(name) {
-    console.log('set trace called');
     if(name === undefined) {
       SimSetupCtrl.trace = null;
     } else {

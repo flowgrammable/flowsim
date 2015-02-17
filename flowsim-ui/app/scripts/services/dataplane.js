@@ -219,13 +219,7 @@ Dataplane.prototype.step = function() {
           this.transition(ARRIVAL);
           this.currEvent = 0;
         } else {
-          if(this.ctx.output){
-            console.log('forward packet');
-          } else {
-            console.log('drop packet');
-          }
           this.transition(FINAL);
-          console.log('done with sim');
         }
       }
       break;

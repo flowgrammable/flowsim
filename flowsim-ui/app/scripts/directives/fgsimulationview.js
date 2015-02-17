@@ -7,7 +7,7 @@
  * # fgsimulationview
  */
 angular.module('flowsimUiApp')
-    .directive('fgSimulationView', function($rootScope, Simulation) {
+    .directive('fgSimulationView', function($rootScope) {
 
         return {
             restrict: 'E',

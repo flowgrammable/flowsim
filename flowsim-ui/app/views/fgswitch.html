@@ -3,17 +3,10 @@
     <tab heading="Datapath">
       <ng-include src="'views/switch/datapath.html'"></ng-include>
     </tab>
-    <tab heading="Ports">
-      <fg-switch-ports/>
-    </tab>
-    <tab heading="Tables">
-      <fg-switch-tables/>
-    </tab>
-    <tab heading="Groups">
-      <ng-include src="'views/switch/groups.html'"></ng-include>
-    </tab>
-    <tab heading="Meters">
-      <ng-include src="'views/switch/meters.html'"></ng-include>
-    </tab>
+    <tab ui-sref="switch.ports" heading="Ports"></tab>
+    <tab ui-sref="switch.tables" heading="Tables"></tab>
+    <tab ui-sref="switch.groups" heading="Groups"></tab>
+    <tab ui-sref="switch.meters" heading="Meters"></tab>
   </tabset>
+  <ui-view/>
 </div>

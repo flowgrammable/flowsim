@@ -9,7 +9,6 @@
  */
 angular.module('flowsimUiApp')
   .controller('SwitchTableCtrl', function ($scope, $modal, Flow) {
-
   $scope.flow = {
     priority: null
   };
@@ -76,10 +75,8 @@ angular.module('flowsimUiApp')
       });
     }
   };
-
-  $scope.$on('initDevice', function(){
-    $scope.table = [];
-    $scope.setTable(0);
-  });
+  
+  //$scope.table = [];
+  $scope.setTable(0);
 
 });

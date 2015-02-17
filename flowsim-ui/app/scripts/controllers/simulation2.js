@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('Simulation2Ctrl', function ($scope, $state, $timeout, $rootScope, fgCache, fgStore, Dataplane, Trace, Simulation) {
+  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Trace, Simulation) {
     var SimCtrl = this;
     this.stages = Simulation.Stages;
     this.transitions = Simulation.Transitions;
