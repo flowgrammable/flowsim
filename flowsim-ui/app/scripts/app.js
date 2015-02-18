@@ -17,9 +17,10 @@ angular
     'ui.bootstrap',
     'ui.router',
     'angulartics',
-    'angulartics.google.analytics'
+    'angulartics.google.analytics',
+    'ct.ui.router.extras'
   ])
-  .config(function ($tooltipProvider, $stateProvider) {
+  .config(function ($tooltipProvider, $stateProvider, $stickyStateProvider) {
     $tooltipProvider.options({
       popupDelay: 800
     });
@@ -36,12 +37,26 @@ angular
       })
       .state('switch', {
         url: '/switch',
-        templateUrl: 'views/switch.html',
-        controller: 'SwitchCtrl'
+        deepStateRedirect: true,
+        sticky: true,
+        views: {
+          '': {
+            templateUrl: 'views/switch.html',
+            controller: 'SwitchCtrl'
+          },
+          'config@switch': {
+            templateUrl: 'views/fgswitch.html'
+          }
+        }
       })
       .state('switch.tables', {
         url: '/table',
         template: '<fg-switch-tables/>'
+      })
+      .state('switch.datapath', {
+        url: '/datapath',
+        templateUrl: 'views/switch/datapath.html',
+        controller: 'DpCtrl'
       })
       .state('switch.ports', {
         url: '/ports',

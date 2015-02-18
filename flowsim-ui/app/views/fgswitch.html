@@ -1,12 +1,10 @@
 <div ng-show="device">
   <tabset>
-    <tab heading="Datapath">
-      <ng-include src="'views/switch/datapath.html'"></ng-include>
-    </tab>
-    <tab ui-sref="switch.ports" heading="Ports"></tab>
-    <tab ui-sref="switch.tables" heading="Tables"></tab>
-    <tab ui-sref="switch.groups" heading="Groups"></tab>
-    <tab ui-sref="switch.meters" heading="Meters"></tab>
+    <tab ui-sref-active="active" class="active" ui-sref="switch.datapath" heading="Datapath"></tab>
+    <tab ui-sref-active="active" class="active" ui-sref="switch.ports" heading="Ports"></tab>
+    <tab ui-sref-active="active" class="active" ui-sref="switch.tables" heading="Tables"></tab>
+    <tab ui-sref-active="active" class="active" ui-sref="switch.groups" heading="Groups"></tab>
+    <tab ui-sref-active="active" class="active" ui-sref="switch.meters" heading="Meters"></tab>
   </tabset>
   <ui-view/>
 </div>

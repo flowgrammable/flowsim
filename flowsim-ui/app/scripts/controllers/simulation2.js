@@ -69,4 +69,8 @@ angular.module('flowsimUiApp')
     SimCtrl.getTraces();
   });
 
+  $scope.$on('$destroy', function(){
+    SimCtrl.simulation.stop();
+  });
+
 });

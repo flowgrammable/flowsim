@@ -8,7 +8,7 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchCtrl', function ($scope, fgCache, Profile, Switch,
+  .controller('SwitchCtrl', function ($scope, $state, fgCache, Profile, Switch,
                                       $rootScope, $modal, Regex) {
     $scope.names = {};
     $scope.device = null;
@@ -73,6 +73,7 @@ angular.module('flowsimUiApp')
           if(err) {
             console.log(err.details);
           } else {
+            $state.go('switch.datapath');
             $scope.device = result;
             $scope.$broadcast('setSwitch');
           }

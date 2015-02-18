@@ -27,22 +27,24 @@ angular.module('flowsimUiApp')
     };
 
     this.trace = '';
+
+    fgStore.get('switch').then(function(names){
+      SimSetupCtrl.resources.devices = names;
+    });
+
+    fgStore.get('packet').then(function(names){
+      SimSetupCtrl.resources.packets = names;
+    });
   };
   this.initState();
 
-  fgStore.get('switch').then(function(names){
-    SimSetupCtrl.resources.devices = names;
-  });
 
-  fgStore.get('packet').then(function(names){
-    SimSetupCtrl.resources.packets = names;
-  });
 
   this.selectSwitch = function(){
     fgCache.get('switch', SimSetupCtrl.resources.deviceName, Switch,
                 function(err, device) {
       if(err) {
-        console.log(err.details);
+        console.log('select switch error:', err);
       } else {
         SimSetupCtrl.trace.device = device;
       }
@@ -90,7 +92,7 @@ angular.module('flowsimUiApp')
     } else {
       fgCache.get('trace', name, Trace, function(err, result) {
         if(err) {
-          console.log(err.details);
+          console.log('set trace error:', err);
         } else {
           SimSetupCtrl.trace = result;
           if(SimSetupCtrl.trace.device) {
@@ -101,16 +103,24 @@ angular.module('flowsimUiApp')
               SimSetupCtrl.resources.deviceName = null;
             } else {
               SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
+              SimSetupCtrl.selectSwitch();
             }
           }
-          _(SimSetupCtrl.trace.events).each(function(evt, idx){
-            if(!_(SimSetupCtrl.resources.packets).contains(evt.packet.name)){
-              SimSetupCtrl.trace.events.splice(idx, 1);
-            }
+          fgStore.get('packet').then(function(names){
+            SimSetupCtrl.resources.packets = names;
+            SimSetupCtrl.removeResources();
           });
         }
       });
     }
+  };
+
+  this.removeResources = function(){
+    _(SimSetupCtrl.trace.events).each(function(evt, idx){
+      if(!_(SimSetupCtrl.resources.packets).contains(evt.packet.name)){
+        SimSetupCtrl.trace.events.splice(idx, 1);
+      }
+    });
   };
 
   this.delTrace = function(name){
