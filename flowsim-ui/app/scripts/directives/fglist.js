@@ -84,7 +84,7 @@ angular.module('flowsimUiApp')
           $scope.focus = -1;
           $scope.items = [];
           $scope.init = false;
-        })
+        });
 
       }
     };
