@@ -13,7 +13,6 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.device = null;
 
-
     $scope.getSwitches = function(callback) {
       fgCache.getNames('switch', callback);
     };

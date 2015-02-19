@@ -71,8 +71,11 @@ angular
         templateUrl: 'views/switch/meters.html'
       })
       .state('simulation', {
+        deepStateRedirect: true,
+        sticky: true,
         views: {
           '': {
+            url: '/simulation',
             templateUrl: 'views/simulation.html',
             controller: 'Simulation2Ctrl as SimCtrl'
           },

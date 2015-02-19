@@ -7,7 +7,6 @@
 (/** @lends module:mailer */function(){
 
 var fmt = require('../utils/formatter');
-var s   = require('./storage');
 var sendgrid = require('sendgrid');
 var name = 'mailer';
 
@@ -40,7 +39,6 @@ function Mailer(config, logger, db) {
   }
 
   this.logger = logger.addLog(name);
-  this.storage = s.Storage(db, this.logger);
 
   // construct the mailer
   this.mailer = sendgrid(this.config.api_user, this.config.api_password);

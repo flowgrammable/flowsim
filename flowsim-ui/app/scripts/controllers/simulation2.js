@@ -10,9 +10,9 @@
 angular.module('flowsimUiApp')
   .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Trace, Simulation) {
     var SimCtrl = this;
+    this.simulation = Simulation.Simulation;
     this.stages = Simulation.Stages;
     this.transitions = Simulation.Transitions;
-    this.simulation = Simulation.Simulation;
     this.traceName = '';
     this.traces = '';
     this.view = {};
@@ -73,4 +73,5 @@ angular.module('flowsimUiApp')
     SimCtrl.simulation.stop();
   });
 
+  $state.go('simulation.stages.setup');
 });

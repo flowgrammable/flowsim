@@ -141,8 +141,4 @@ angular.module('flowsimUiApp')
     $rootScope.$broadcast('cleanCache');
   };
 
-  $scope.$on('$stateChangeStart',function(){
-    SimSetupCtrl.initState();
-  });
-
   });

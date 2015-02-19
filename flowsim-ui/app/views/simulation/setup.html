@@ -16,7 +16,7 @@
   <div class="col-md-10" ng-show="SimSetupCtrl.trace">
     <h3>Select Switch</h3>
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-md-3">
         <div class="input-group">
           <span class="input-group-addon">Switch</span>
           <select class="form-control" ng-model="SimSetupCtrl.resources.deviceName"
@@ -25,14 +25,14 @@
           </select>
         </div>
       </div>
-      <div class="col-sm-7">
+      <div class="col-md-7">
         <switch-view data="SimSetupCtrl.trace.device.ports"></switch-view>
       </div>
     </div>
     <hr>
     <h3>Build Trace</h3>
     <div class="row">
-      <div class="col-sm-offset-1 col-sm-8">
+      <div class="col-md-8">
         <!-- Control for editing the input packet trace -->
         <input-trace pkt-events="SimSetupCtrl.trace.events" resources="SimSetupCtrl.resources"
                  log-ports="SimSetupCtrl.trace.device.ports.ports"
