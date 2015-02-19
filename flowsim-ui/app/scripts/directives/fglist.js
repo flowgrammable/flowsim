@@ -79,6 +79,13 @@ angular.module('flowsimUiApp')
           }
         });
 
+        $scope.$on('$destroy', function(){
+          $scope.itemName = '';
+          $scope.focus = -1;
+          $scope.items = [];
+          $scope.init = false;
+        })
+
       }
     };
   });

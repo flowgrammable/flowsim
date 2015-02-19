@@ -37,8 +37,13 @@ angular
       })
       .state('switch', {
         url: '/switch',
-        deepStateRedirect: true,
-        sticky: true,
+        resolve: {
+          switchList: function(fgStore){
+            return fgStore.get('switch').then(function(names){
+              return names;
+            })
+          }
+        },
         views: {
           '': {
             templateUrl: 'views/switch.html',
@@ -48,37 +53,6 @@ angular
             templateUrl: 'views/fgswitch.html'
           }
         }
-      })
-      .state('switch.tables', {
-        url: '/table',
-        template: '<fg-switch-tables/>',
-        deepStateRedirect: true,
-        sticky: true
-      })
-      .state('switch.datapath', {
-        url: '/datapath',
-        templateUrl: 'views/switch/datapath.html',
-        controller: 'DpCtrl',
-        deepStateRedirect: true,
-        sticky: true
-      })
-      .state('switch.ports', {
-        url: '/ports',
-        template: '<fg-switch-ports/>',
-        deepStateRedirect: true,
-        sticky: true
-      })
-      .state('switch.groups', {
-        url: '/groups',
-        templateUrl: 'views/switch/groups.html',
-        deepStateRedirect: true,
-        sticky: true
-      })
-      .state('switch.meters', {
-        url: '/meters',
-        templateUrl: 'views/switch/meters.html',
-        deepStateRedirect: true,
-        sticky: true
       })
       .state('simulation', {
         deepStateRedirect: true,

@@ -8,13 +8,14 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SwitchCtrl', function ($scope, $state, fgCache, Profile, Switch,
+  .controller('SwitchCtrl', function ($scope, $state, switchList, fgCache, Profile, Switch,
                                       $rootScope, $modal, Regex) {
     $scope.names = {};
     $scope.device = null;
-
     $scope.getSwitches = function(callback) {
-      fgCache.getNames('switch', callback);
+      console.log('switchlist:', switchList);
+      callback(null, switchList);
+      //fgCache.getNames('switch', callback);
     };
 
     $scope.addSwitch = function(name, callback) {
@@ -66,15 +67,15 @@ angular.module('flowsimUiApp')
     $scope.setSwitch = function(name) {
       if(name === undefined) {
         $scope.device = null;
-        $scope.$broadcast('setSwitch', null);
+        //$scope.$broadcast('setSwitch', null);
       } else {
         fgCache.get('switch', name, Switch, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {
-            $state.go('switch.datapath');
+            //$state.go('switch.datapath');
             $scope.device = result;
-            $scope.$broadcast('setSwitch');
+            //$scope.$broadcast('setSwitch');
           }
         });
       }
@@ -90,5 +91,10 @@ angular.module('flowsimUiApp')
     $scope.setClean = function() {
       $rootScope.$broadcast('cleanCache');
     };
+
+    $scope.$on('$destroy', function(){
+      $scope.names = {};
+      $scope.device = null;
+    });
 
   });

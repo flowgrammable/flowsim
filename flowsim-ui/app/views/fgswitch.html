@@ -1,10 +1,10 @@
 <div ng-show="device">
   <tabset>
-    <tab ui-sref-active="active" class="active" ui-sref="switch.datapath" heading="Datapath"></tab>
-    <tab ui-sref-active="active" class="active" ui-sref="switch.ports" heading="Ports"></tab>
-    <tab ui-sref-active="active" class="active" ui-sref="switch.tables" heading="Tables"></tab>
-    <tab ui-sref-active="active" class="active" ui-sref="switch.groups" heading="Groups"></tab>
-    <tab ui-sref-active="active" class="active" ui-sref="switch.meters" heading="Meters"></tab>
+    <tab heading="Datapath"><fg-switch-dp/></tab>
+    <tab heading="Ports"><fg-switch-ports/></tab>
+    <tab heading="Tables"><fg-switch-tables/></tab>
+    <tab heading="Groups"></tab>
+    <tab heading="Meters"></tab>
   </tabset>
   <ui-view/>
 </div>
