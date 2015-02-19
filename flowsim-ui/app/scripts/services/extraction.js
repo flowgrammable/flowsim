@@ -40,7 +40,7 @@ function extractTag(ctx, proto){
 }
 
 function Extractor(){
-
+  this.clonedPacket = null;
 }
 
 Extractor.prototype.extract = function(ctx){
@@ -50,6 +50,7 @@ Extractor.prototype.extract = function(ctx){
   if(this.clonedPacket.protocols.length > 0){
     return extractProtocol(ctx, this.clonedPacket.protocols.shift());
   } else {
+    this.clonedPacket = false;
     return false;
   }
 };
@@ -58,7 +59,6 @@ Extractor.prototype.isDone = function(){
   if(this.clonedPacket.protocols.length){
     return false;
   } else {
-    this.clonedPacket = null;
     return true;
   }
 };

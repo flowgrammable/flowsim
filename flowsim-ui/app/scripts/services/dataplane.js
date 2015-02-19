@@ -136,7 +136,9 @@ Dataplane.prototype.egress = function() {
       $rootScope.$broadcast('dropPacket');
     } else {
       $rootScope.$broadcast('forwardPacket');
+      this.ctx.output = '';
     }
+      this.ctx.packet = null;
   }
 };
 

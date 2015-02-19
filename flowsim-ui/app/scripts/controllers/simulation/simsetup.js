@@ -65,6 +65,7 @@ angular.module('flowsimUiApp')
       } else {
         SimSetupCtrl.trace.push(result.clone(), pkt.in_port, 
             pkt.in_phy_port, pkt.tunnel);
+        SimSetupCtrl.setDirty();
       }
     });
   };
