@@ -46,6 +46,18 @@ angular.module('flowsimUiApp')
       if(err) {
         console.log('select switch error:', err);
       } else {
+        SimSetupCtrl.setDirty();
+        SimSetupCtrl.trace.device = device;
+      }
+    });
+  };
+
+  this.getSwitch = function(){
+    fgCache.get('switch', SimSetupCtrl.resources.deviceName, Switch,
+                function(err, device) {
+      if(err) {
+        console.log('set switch error:', err);
+      } else {
         SimSetupCtrl.trace.device = device;
       }
     });
@@ -86,6 +98,25 @@ angular.module('flowsimUiApp')
     }
   }; 
 
+  this.setSwitch = function(){
+    // Check that device still exists
+    if(!_(SimSetupCtrl.resources.devices)
+          .contains(SimSetupCtrl.trace.device.name)){
+      SimSetupCtrl.trace.device = null;
+      SimSetupCtrl.resources.deviceName = null;
+    } else {
+      SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
+      SimSetupCtrl.getSwitch();
+    }   
+  };
+
+  this.setPackets = function(){
+    fgStore.get('packet').then(function(names){
+      SimSetupCtrl.resources.packets = names;
+      SimSetupCtrl.removeResources();
+    });
+  };
+
   // set focus on a new trace
   this.setTrace = function(name) {
     if(name === undefined) {
@@ -97,20 +128,11 @@ angular.module('flowsimUiApp')
         } else {
           SimSetupCtrl.trace = result;
           if(SimSetupCtrl.trace.device) {
-            // Check that device still exists
-            if(!_(SimSetupCtrl.resources.devices)
-                  .contains(SimSetupCtrl.trace.device.name)){
-              SimSetupCtrl.trace.device = null;
-              SimSetupCtrl.resources.deviceName = null;
-            } else {
-              SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
-              SimSetupCtrl.selectSwitch();
-            }
+            SimSetupCtrl.setSwitch();
+          } else {
+            SimSetupCtrl.resources.deviceName = null;
           }
-          fgStore.get('packet').then(function(names){
-            SimSetupCtrl.resources.packets = names;
-            SimSetupCtrl.removeResources();
-          });
+          SimSetupCtrl.setPackets();
         }
       });
     }
@@ -135,6 +157,7 @@ angular.module('flowsimUiApp')
   };
 
   this.setDirty = function() {
+    SimSetupCtrl.trace.dirty = true;
     $rootScope.$broadcast('dirtyCache');
   };
 

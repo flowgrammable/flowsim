@@ -64,7 +64,7 @@ Trace.prototype.del = function(idx) {
 Trace.prototype.toBase = function(){
   return {
     name: this.name,
-    device: {name: this.device.name},
+    device: this.device ? {name: this.device.name} : '',
     events: _(this.events).map(function(ev){
       return ev.toBase();
     },this)
