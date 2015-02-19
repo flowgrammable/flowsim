@@ -51,24 +51,34 @@ angular
       })
       .state('switch.tables', {
         url: '/table',
-        template: '<fg-switch-tables/>'
+        template: '<fg-switch-tables/>',
+        deepStateRedirect: true,
+        sticky: true
       })
       .state('switch.datapath', {
         url: '/datapath',
         templateUrl: 'views/switch/datapath.html',
-        controller: 'DpCtrl'
+        controller: 'DpCtrl',
+        deepStateRedirect: true,
+        sticky: true
       })
       .state('switch.ports', {
         url: '/ports',
-        template: '<fg-switch-ports/>'
+        template: '<fg-switch-ports/>',
+        deepStateRedirect: true,
+        sticky: true
       })
       .state('switch.groups', {
         url: '/groups',
-        templateUrl: 'views/switch/groups.html'
+        templateUrl: 'views/switch/groups.html',
+        deepStateRedirect: true,
+        sticky: true
       })
       .state('switch.meters', {
         url: '/meters',
-        templateUrl: 'views/switch/meters.html'
+        templateUrl: 'views/switch/meters.html',
+        deepStateRedirect: true,
+        sticky: true
       })
       .state('simulation', {
         deepStateRedirect: true,
