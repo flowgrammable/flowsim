@@ -76,7 +76,6 @@ angular.module('flowsimUiApp')
     }
   };
   
-  //$scope.table = [];
   $scope.setTable(0);
 
 });

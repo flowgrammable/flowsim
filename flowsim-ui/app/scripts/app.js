@@ -50,9 +50,22 @@ angular
             controller: 'SwitchCtrl'
           },
           'config@switch': {
-            templateUrl: 'views/fgswitch.html'
+            template: '<ui-view/>'
           }
         }
+      })
+      .state('switch.editor', {
+        abstract: true,
+        templateUrl: 'views/fgswitch.html'
+      })
+      .state('switch.editor.datapath', {
+        template: '<fg-switch-dp/>'
+      })
+      .state('switch.editor.ports', {
+        template: '<fg-switch-ports/>'
+      })
+      .state('switch.editor.tables', {
+        template: '<fg-switch-tables/>'
       })
       .state('simulation', {
         deepStateRedirect: true,
@@ -69,6 +82,9 @@ angular
           'stages@simulation': {
             template: '<ui-view/>'
           }
+        },
+        onExit: function(Simulation){
+          Simulation.Simulation.stop();
         }
       })
       .state('simulation.stages', {
@@ -77,32 +93,67 @@ angular
       })
       .state('simulation.stages.setup', {
         url: '/simulation',
+        sticky: true,
+        deepStateRedirect: true,
+        resolve: {
+          traceList: function(fgStore){
+            return fgStore.get('trace').then(function(names){
+              return names;
+            })
+          },
+          packetList: function(fgStore){
+            return fgStore.get('packet').then(function(names){
+              return names;
+            })
+          },
+          switchList: function(fgStore){
+            return fgStore.get('switch').then(function(names){
+              return names;
+            })
+          }
+        },
         templateUrl: 'views/simulation/setup.html',
         controller: 'SimSetupCtrl as SimSetupCtrl'
       })
       .state('simulation.stages.arrival', {
-        templateUrl: 'views/simulation/arrival.html'
+        templateUrl: 'views/simulation/arrival.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('simulation.stages.extraction', {
-        templateUrl: 'views/simulation/extraction.html'
+        templateUrl: 'views/simulation/extraction.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('simulation.stages.choice', {
-        templateUrl: 'views/simulation/choice.html'
+        templateUrl: 'views/simulation/choice.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('simulation.stages.selection', {
-        templateUrl: 'views/simulation/selection.html'
+        templateUrl: 'views/simulation/selection.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('simulation.stages.execution', {
-        templateUrl: 'views/simulation/execution.html'
+        templateUrl: 'views/simulation/execution.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('simulation.stages.groups', {
-        templateUrl: 'views/simulation/groups.html'
+        templateUrl: 'views/simulation/groups.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('simulation.stages.egress', {
-        templateUrl: 'views/simulation/egress.html'
+        templateUrl: 'views/simulation/egress.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('simulation.stages.final', {
-        templateUrl: 'views/simulation/egress.html'
+        templateUrl: 'views/simulation/egress.html',
+        sticky: true,
+        deepStateRedirect: true
       })
       .state('subscriber', {
         url: '/subscriber',

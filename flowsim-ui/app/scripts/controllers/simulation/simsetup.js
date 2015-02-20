@@ -8,7 +8,8 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('SimSetupCtrl', function ($scope, $rootScope, fgCache, fgStore, Trace, Switch, Packet, Regex) {
+  .controller('SimSetupCtrl', function ($scope, $rootScope, traceList, packetList, switchList, 
+  fgCache, fgStore, Trace, Switch, Packet, Regex) {
   var SimSetupCtrl = this;
 
   this.initState = function(){
@@ -16,8 +17,8 @@ angular.module('flowsimUiApp')
     this.resources = {
       packetName: '',
       deviceName: '',
-      packets: [],
-      devices: []
+      packets: packetList,
+      devices: switchList
     };
 
     this.active = {
@@ -27,19 +28,10 @@ angular.module('flowsimUiApp')
     };
 
     this.trace = '';
-
-    fgStore.get('switch').then(function(names){
-      SimSetupCtrl.resources.devices = names;
-    });
-
-    fgStore.get('packet').then(function(names){
-      SimSetupCtrl.resources.packets = names;
-    });
   };
   this.initState();
 
-
-
+  // Called when switch selected from drop down
   this.selectSwitch = function(){
     fgCache.get('switch', SimSetupCtrl.resources.deviceName, Switch,
                 function(err, device) {
@@ -52,20 +44,9 @@ angular.module('flowsimUiApp')
     });
   };
 
-  this.getSwitch = function(){
-    fgCache.get('switch', SimSetupCtrl.resources.deviceName, Switch,
-                function(err, device) {
-      if(err) {
-        console.log('set switch error:', err);
-      } else {
-        SimSetupCtrl.trace.device = device;
-      }
-    });
-  };
-
   // attach a method to - get all the existing trace names
   this.getTraces = function(callback) {
-    fgCache.getNames('trace', callback);
+    callback(null, traceList);
   };
 
     // add the selected packet to the trace
@@ -99,25 +80,52 @@ angular.module('flowsimUiApp')
   }; 
 
   this.setSwitch = function(){
-    // Check that device still exists
-    if(!_(SimSetupCtrl.resources.devices)
-          .contains(SimSetupCtrl.trace.device.name)){
-      SimSetupCtrl.trace.device = null;
-      SimSetupCtrl.resources.deviceName = null;
-    } else {
-      SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
-      SimSetupCtrl.getSwitch();
-    }   
+    fgCache.get('switch', SimSetupCtrl.resources.deviceName, Switch,
+                function(err, device) {
+      if(err) {
+        console.log('set switch error:', err);
+      } else {
+        SimSetupCtrl.trace.device = device;
+      }
+    });
   };
 
-  this.setPackets = function(){
+  // A trace may not have a switch attached to it yet. Check to see
+  // that a trace has a switch before setting it
+  this.checkSwitch = function(){
+    if(SimSetupCtrl.trace.device) {
+      // A switch that is attached to a trace may have been deleted
+      // Remove the switch from the trace if switch was deleted
+      if(!_(SimSetupCtrl.resources.devices)
+            .contains(SimSetupCtrl.trace.device.name)){
+        SimSetupCtrl.trace.device = null;
+        SimSetupCtrl.resources.deviceName = null;
+      } else {
+        SimSetupCtrl.resources.deviceName = SimSetupCtrl.trace.device.name;
+        SimSetupCtrl.setSwitch();
+      } 
+    } else {
+      SimSetupCtrl.resources.deviceName = null;
+    }
+    // Check that device still exists  
+  };
+
+  // Check that packets attached to a trace have not been deleted,
+  // if they have then remove them from trace
+  this.checkPackets = function(){
     fgStore.get('packet').then(function(names){
       SimSetupCtrl.resources.packets = names;
-      SimSetupCtrl.removeResources();
+      _(SimSetupCtrl.trace.events).each(function(evt, idx){
+        if(!_(SimSetupCtrl.resources.packets).contains(evt.packet.name)){
+          SimSetupCtrl.trace.events.splice(idx, 1);
+        }
+      });
     });
   };
 
   // set focus on a new trace
+  // Setting trace involves setting the switch and packets
+  // Only set a switch 
   this.setTrace = function(name) {
     if(name === undefined) {
       SimSetupCtrl.trace = null;
@@ -127,23 +135,11 @@ angular.module('flowsimUiApp')
           console.log('set trace error:', err);
         } else {
           SimSetupCtrl.trace = result;
-          if(SimSetupCtrl.trace.device) {
-            SimSetupCtrl.setSwitch();
-          } else {
-            SimSetupCtrl.resources.deviceName = null;
-          }
-          SimSetupCtrl.setPackets();
+          SimSetupCtrl.checkSwitch();
+          SimSetupCtrl.checkPackets();
         }
       });
     }
-  };
-
-  this.removeResources = function(){
-    _(SimSetupCtrl.trace.events).each(function(evt, idx){
-      if(!_(SimSetupCtrl.resources.packets).contains(evt.packet.name)){
-        SimSetupCtrl.trace.events.splice(idx, 1);
-      }
-    });
   };
 
   this.delTrace = function(name){

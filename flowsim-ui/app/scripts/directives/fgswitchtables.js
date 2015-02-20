@@ -11,7 +11,7 @@ angular.module('flowsimUiApp')
     return {
       templateUrl: 'views/switch/tables.html',
       restrict: 'E',
-      replace: false,
+      replace: true,
       controller: 'SwitchTableCtrl'
     };
   });

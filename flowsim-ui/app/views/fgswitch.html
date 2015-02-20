@@ -1,10 +1,10 @@
 <div ng-show="device">
   <tabset>
-    <tab heading="Datapath"><fg-switch-dp/></tab>
-    <tab heading="Ports"><fg-switch-ports/></tab>
-    <tab heading="Tables"><fg-switch-tables/></tab>
-    <tab heading="Groups"></tab>
-    <tab heading="Meters"></tab>
+    <tab active="tabs.datapath.active" ui-sref="switch.editor.datapath" heading="Datapath"></tab>
+    <tab active="tabs.ports.active" ui-sref="switch.editor.ports" heading="Ports"></tab>
+    <tab active="tabs.tables.active" ui-sref="switch.editor.tables" heading="Tables"></tab>
+    <tab active="tabs.groups.active" heading="Groups"></tab>
+    <tab active="tabs.meters.active" heading="Meters"></tab>
   </tabset>
   <ui-view/>
 </div>

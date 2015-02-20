@@ -13,6 +13,7 @@ angular.module('flowsimUiApp')
     var post    = {};     // (base,UI) ready for HTTP POST
     var update  = {};     // (base,UI) ready for HTTP UPDATE
     var _delete = {};     // base ready for HTTP DELETE
+    var names   = {};
 
     /* get - retrieve a list of names from the cahce or server */
     function get(type, name, service, callback) {
@@ -20,12 +21,15 @@ angular.module('flowsimUiApp')
       // Initialize the retrievable caches
       if(!(type in post))   { post[type] = {}; }
       if(!(type in update)) { update[type] = {}; }
+      if(!(type in _delete)){ _delete[type] = {}; }
 
       //  Return the object if local or get from server
       if(name in post[type]) {
         callback(null, post[type][name]);
       } else if(name in update[type]) {
         callback(null, update[type][name]);
+      } else if(name in _delete[type]){
+        callback(name + ' has been staged to be deleted');
       } else {
         Subscriber.httpGet('/api/'+type+'/'+name, {}, function(err, result) {
           if(err) {
@@ -43,16 +47,22 @@ angular.module('flowsimUiApp')
       // initialize the cache
       if(!(type in post))   { post[type]   = {}; }
       if(!(type in update)) { update[type] = {}; }
+      if(!(type in _delete)){ _delete[type] = {}; }
+      if(!(type in names))  { names[type]  = []; }
 
-      if(Object.keys(update[type]).length) {
-        result = Object.keys(post[type]);
-        callback(null, result.concat(Object.keys(update[type])));
+      if(Object.keys(post[type]).length || Object.keys(_delete[type]).length) {
+        names[type] = _.union(names[type], Object.keys(post[type]))
+        names[type] = _.reject(names[type], function(name){
+          return name in Object.keys(_delete[type]);
+        });
+        callback(null, names[type]);
       } else {
         Subscriber.httpGet('/api/'+type, {}, function(err, result) {
           if(err) {
-            callback(null, Object.keys(post[type]));
+            callback(null, names[type]);
           } else {
-            callback(null, Object.keys(post[type]).concat(result.names));
+            names[type] = _.union(names[type], result.names);
+            callback(null, names[type]);
            }
         });
       }
@@ -82,8 +92,8 @@ angular.module('flowsimUiApp')
       } else {
         _delete[type][name] = true;
       }
+      $rootScope.$broadcast('dirtyCache');
       $rootScope.$broadcast('assetUpdate');
-
     }
 
     function isDirty() {

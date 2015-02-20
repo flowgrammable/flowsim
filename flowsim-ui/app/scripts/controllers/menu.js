@@ -13,7 +13,6 @@ angular.module('flowsimUiApp')
     //$scope.authenticated = Subscriber.authenticated();
     $scope.dirty = false;
     $scope.prev_host = '';
-
     $rootScope.$on('subscriberAuth', function() {
       $scope.authenticated = true;
     });

@@ -14,8 +14,10 @@ angular.module('flowsimUiApp')
     $scope.device = null;
     $scope.getSwitches = function(callback) {
       console.log('switchlist:', switchList);
+      _(switchList).each(function(swi){
+        $scope.names[swi] = true;
+      });
       callback(null, switchList);
-      //fgCache.getNames('switch', callback);
     };
 
     $scope.addSwitch = function(name, callback) {
@@ -67,18 +69,27 @@ angular.module('flowsimUiApp')
     $scope.setSwitch = function(name) {
       if(name === undefined) {
         $scope.device = null;
-        //$scope.$broadcast('setSwitch', null);
+        $scope.$broadcast('setSwitch', null);
       } else {
         fgCache.get('switch', name, Switch, function(err, result) {
           if(err) {
             console.log(err.details);
           } else {
-            //$state.go('switch.datapath');
             $scope.device = result;
-            //$scope.$broadcast('setSwitch');
+            $scope.tabs.datapath.active = true;
+            $state.go('switch.editor.datapath');
+            $scope.$broadcast('setSwitch');
           }
         });
       }
+    };
+
+    $scope.tabs = {
+      datapath: { active: false },
+      ports: {active: false},
+      tables: {active: false},
+      groups: {active: false},
+      meters: {active: false}
     };
 
     $scope.setDirty = function() {

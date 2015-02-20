@@ -14,7 +14,7 @@ angular.module('flowsimUiApp')
     this.stages = Simulation.Stages;
     this.transitions = Simulation.Transitions;
     this.traceName = '';
-    this.traces = '';
+    this.traces = [];
     this.view = {};
 
     this.getTraces = function(){
@@ -48,7 +48,7 @@ angular.module('flowsimUiApp')
     };
 
     this.loadTrace = function() {
-      if(SimCtrl.traceName === undefined) {
+      if(!SimCtrl.traceName) {
         SimCtrl.trace = null;
       } else {
         fgCache.get('trace', SimCtrl.traceName, Trace, function(err, result) {
@@ -72,6 +72,8 @@ angular.module('flowsimUiApp')
   $scope.$on('$destroy', function(){
     SimCtrl.simulation.stop();
   });
+  if(!SimCtrl.simulation.active){
+    $state.go('simulation.stages.setup');
+  }
 
-  $state.go('simulation.stages.setup');
 });
