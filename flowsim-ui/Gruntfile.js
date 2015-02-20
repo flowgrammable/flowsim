@@ -29,6 +29,8 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    proxyhost: 'localhost',
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -69,9 +71,9 @@ module.exports = function (grunt) {
     connect: {
       proxies:[{
         context: '/api',
-        host: 'localhost',
-        port: 8080,
-        https: false,
+        host: '<%= proxyhost %>',
+        port: 80,
+        https: true,
         changeOrigin: false
       }],
       options: {
@@ -377,6 +379,9 @@ module.exports = function (grunt) {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
     }
 
+    if(grunt.option('devproxy')){
+      grunt.config.set('proxyhost', 'dev.flowsim.flowgrammable.org');
+    };
     grunt.task.run([
       'clean:server',
       'wiredep',

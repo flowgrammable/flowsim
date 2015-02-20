@@ -76,9 +76,6 @@ angular
       .when('/simulation', {
         templateUrl: 'views/simulation.html',
         controller: 'SimulationCtrl'
-      }) .when('/test', {
-        templateUrl: 'views/simulation/extraction.html',
-        controller: 'TestCtrl'
       })
       .otherwise({
         redirectTo: '/'
