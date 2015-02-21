@@ -182,6 +182,8 @@
   is initialized with some internal data about how the packet arrived. The
   context is initialized with table and buffer processing information.
 
+![Image of Arrival](http://flowgrammable.org/static/media/uploads/arrival.png )
+
   The extraction stage is where a packet is decoded and the packet key is built
   up to contain a larger set of protocol fields. Each protocol header in the 
   packet is decoded in a single step and a subset of the protocol header is 
@@ -189,16 +191,22 @@
   and deferred to later in the pipeline. The only absolute ordering is imposed
   by attempting to match or set a protocol field. Flowsim performs a complete 
   packet decode at the front of the pipeline for clarity.
-
+  
+![Image of Extraction](http://flowgrammable.org/static/media/uploads/extraction.png)
+  
   The choice stage is quite simple and uses the table identifier from the packet
   context to select a single table from the collection of tables. Because the
   pipeline allows for control flow between tables, this stage is the meet point 
   for going to another table.
 
+![Image of Choice](http://flowgrammable.org/static/media/uploads/choice.png)
+
   The selection stage takes a packet key and a table index and selects the 
   highest priority flow that matches. This flow is added to the context for
   subsequent processing. A packet key does not have to match any flow in the 
   table.
+
+![Image of Selection](http://flowgrammable.org/static/media/uploads/selection.png)
 
   The execution stage is one of the most interesting stages in the pipeline. In 
   this stage a user can single-step the simulation and see exactly:
@@ -208,6 +216,8 @@
   - how write actions merge into the context's action set
   - how the table identifier is updated
   - how the context will complete table processing or proceed to another table
+
+![Image of Execution](http://flowgrammable.org/static/media/uploads/execution.png)
 
   The groups stage displays group processing of a packet (all, indirect, select,
   and fast failover). Group processing is currently not supported in Flowsim.
