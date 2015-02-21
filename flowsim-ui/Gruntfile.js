@@ -109,8 +109,8 @@ module.exports = function (grunt) {
             open: true,
             middleware: function (connect) {
               return [
-                proxySnippet,
                 mockRequests(),
+                proxySnippet,
                 connect.static('.tmp'),
 
                 connect().use(
