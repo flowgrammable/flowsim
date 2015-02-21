@@ -33,7 +33,7 @@ describe('profile page', function () {
     it('should delete  profile profile2', function () {
       page.deleteProfile(1);
       expect(page.profileList.count()).toEqual(1);
-      expect(page.profileAt(0)).toEqual('profile');
+      expect(page.profileAt(0)).toEqual('profile1');
     });
 
   });
