@@ -7,6 +7,7 @@
 
     ```
     (function(){
+     'use strict';
       ...
     })();
     ```
@@ -76,7 +77,8 @@
 
 ##7. Object closures
   - use the variable `that` for `this` closures
-  - initialize `that` immediately 
+  - initialize `that` immediately
+  - or if using underscore, pass in the this variable
 
   ```
   SomeObject.prototype.methodX = function() {
@@ -84,11 +86,15 @@
     // that - user defined closure variable for 'this'
     var that = this;
 
-    // now we use an inner function that forgets about 'this'
-    _.each(this.list, function(item) {
-      // now we can safely refer to the object
-      that.add(item);
-    });
-  };
+    return function(x) {
+      return that.foo(x);
+    };
+  };   
+
+  // now we use an inner function that forgets about 'this'
+  _.each(this.list, function(item) {
+    // now we can safely refer to the object
+    this.add(item);
+  }, this);
   ```
 

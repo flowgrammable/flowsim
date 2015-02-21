@@ -6,9 +6,9 @@
 
 (/** @lends module:mailer */function(){
 
-var mailgun  = require('mailgun-js');
 var fmt = require('../utils/formatter');
 var s   = require('./storage');
+var sendgrid = require('sendgrid');
 var name = 'mailer';
 
 /**
@@ -19,15 +19,18 @@ var name = 'mailer';
  * @param {Object} logger        - a logger object
  *
  */
-function Mailer(config, logger) {
+function Mailer(config, logger, db) {
   // Grab a configuration if present ...
   // ... otherwise throw an error
   this.config = config[name];
   if(!this.config) {
     throw new Error('Mailer: missing config');
   }
-  if(!this.config.apiKey){
-    throw new Error('Mailer: missing config.apiKey');
+  if(!this.config.api_user){
+    throw new Error('Mailer: missing config.api_user');
+  }
+  if(!this.config.api_password){
+    throw new Error('Mailer: missing config.api_password');
   }
   if(!this.config.domain){
     throw new Error('Mailer: missing config.domain');
@@ -37,13 +40,10 @@ function Mailer(config, logger) {
   }
 
   this.logger = logger.addLog(name);
-  this.storage = new s.Storage(db, this.logger);
+  this.storage = s.Storage(db, this.logger);
 
   // construct the mailer
-  this.mailer = mailgun({
-    apiKey: this.config.apiKey,
-    domain: this.config.domain
-  });
+  this.mailer = sendgrid(this.config.api_user, this.config.api_password);
 
 }
 exports.Mailer = Mailer;
@@ -79,22 +79,21 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
   var that = this;
   var e;
   var logString = sub + ' message sent to: ' + dst;
-  this.mailer.messages().send({
-      from: this.config.user,
-      to: dst,
-      subject: sub,
-      html: body
-    }, function(err, result){
-      if(err) {
-        e = MailerError('send', err, that.config);
-        that.logger.error(e);
-        callback(e);
-      } else {
-        that.logger.info(logString);
-        callback(null, result);
-      }
+  this.mailer.send({
+    to: dst,
+    from: this.config.user,
+    subject: sub,
+    html: body
+  }, function(err, json){
+    if(err){
+      that.logger.error(err);
+      callback(err);
+    } else {
+      that.logger.info(json);
+      console.log(json);
+      callback(null, result);
+    }
   });
-
 };
 
 /**

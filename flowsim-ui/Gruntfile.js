@@ -7,6 +7,8 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 module.exports = function (grunt) {
 
   // Load grunt tasks automatically
@@ -15,7 +17,7 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
-  // Configurable paths for the application
+    // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
     dist: 'dist'
@@ -65,6 +67,13 @@ module.exports = function (grunt) {
 
     // The actual grunt server settings
     connect: {
+      proxies:[{
+        context: '/api',
+        host: 'localhost',
+        port: 8080,
+        https: false,
+        changeOrigin: false
+      }],
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
@@ -76,6 +85,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             return [
+              proxySnippet,
               connect.static('.tmp'),
               connect().use(
                 '/bower_components',
@@ -372,6 +382,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'autoprefixer',
+      'configureProxies',
       'connect:livereload',
       'watch'
     ]);
@@ -389,7 +400,7 @@ module.exports = function (grunt) {
     'connect:test',
     'karma'
   ]);
-  
+
   grunt.registerTask('build', [
     'clean:dist',
     'wiredep',

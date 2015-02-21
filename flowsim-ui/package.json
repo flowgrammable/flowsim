@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "description": "UI for Flowsim",
   "scripts": {
-    "postinstall": "bower cache clean && bower install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -16,11 +15,13 @@
     "url": "https://github.com/flowgrammable/flowsim/issues"
   },
   "homepage": "https://github.com/flowgrammable/flowsim",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",
     "grunt-concurrent": "^0.5.0",
+    "grunt-connect-proxy": "0.1.11",
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-concat": "^0.4.0",
     "grunt-contrib-connect": "^0.7.1",
@@ -48,8 +49,5 @@
   },
   "engines": {
     "node": ">=0.10.0"
-  },
-  "scripts": {
-    "test": "grunt test"
   }
 }

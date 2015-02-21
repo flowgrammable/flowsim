@@ -6,6 +6,7 @@ function Storage(db, log){
   this.database = db;
   this.logger = log.child({component:'storage'});
 }
+exports.Storage = Storage;
 
 Storage.prototype.insertMailerSubscriber = function(fname, 
   lname, email, company, subToken, callback){
