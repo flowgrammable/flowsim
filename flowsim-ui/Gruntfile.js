@@ -81,10 +81,10 @@ module.exports = function(grunt) {
                 ]
             }
           //,
-          //  protractor: {
-          //      files: ['app/scripts/**/*.js', 'test/e2e/**/*.js'],
-          //      tasks: ['protractor:auto']
-          //  }
+          //protractor: {
+          //files: ['app/scripts/**/*.js', 'test/e2e/**/*.js'],
+          //tasks: ['protractor:auto']
+          //}
         },
 
         // The actual grunt server settings
@@ -142,7 +142,10 @@ module.exports = function(grunt) {
           saucelabs:{
             configFile: './test/protractor.saucelabs.conf.js'
           },
-            singlerun: {},
+            singlerun: {
+              keepAlive: true,
+              configFile: './test/protractor.conf.js'
+              },
             auto: {
                 keepAlive: true,
                 options: {
@@ -424,7 +427,7 @@ module.exports = function(grunt) {
         grunt.task.run(['serve:' + target]);
     });
 
-    grunt.registerTask('test:e2e', ['connect:test', 'protractor:singlerun']);
+    grunt.registerTask('test:e2e', ['clean:server','connect:test', 'shell:selenium', 'protractor:singlerun']);
     grunt.registerTask('test:e2e-sl', ['connect:test', 'protractor:saucelabs']);
 
    // grunt.registerTask('autotest:e2e', ['connect:test', 'shell:selenium', 'watch:protractor']);
