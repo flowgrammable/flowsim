@@ -44,7 +44,10 @@ module.exports = function(grunt) {
             },
             npm_install: {
                 command: 'npm install'
-            }
+            },
+            seleniumstop: {
+                command: 'node ./node_modules/protractor/bin/webdriver-manager stop'
+                          }
         },
         // Watches files for changes and runs tasks based on the changed files
         watch: {
@@ -427,7 +430,8 @@ module.exports = function(grunt) {
         grunt.task.run(['serve:' + target]);
     });
 
-    grunt.registerTask('test:e2e', ['clean:server','connect:test', 'shell:selenium', 'protractor:singlerun']);
+    grunt.registerTask('test:e2e', ['clean:server','connect:test', 
+          'protractor:singlerun']);
     grunt.registerTask('test:e2e-sl', ['connect:test', 'protractor:saucelabs']);
 
    // grunt.registerTask('autotest:e2e', ['connect:test', 'shell:selenium', 'watch:protractor']);
