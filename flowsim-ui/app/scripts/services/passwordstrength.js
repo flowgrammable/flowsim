@@ -37,8 +37,8 @@ angular.module('flowsimUiApp')
 
       return _force;
 
-    }
+    };
     this.validatePassword = function(password) {
       return this.mesureStrength(password)>10;
-    }
+    };
   });
