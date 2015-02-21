@@ -14,12 +14,14 @@ angular
     'ngRoute',
     'ngAnimate',
     'ngSanitize',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'hc.marked'
   ])
-  .config(function ($routeProvider, $tooltipProvider) {
+  .config(function ($routeProvider, $tooltipProvider, markedProvider) {
     $tooltipProvider.options({
       popupDelay: 800
     });
+    markedProvider.setOptions({gfm: true});
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -76,6 +78,10 @@ angular
       .when('/simulation', {
         templateUrl: 'views/simulation.html',
         controller: 'SimulationCtrl'
+      }) 
+      .when('/documentation', {
+        templateUrl: 'views/documentation.html',
+        controller: 'DocumentationCtrl'
       })
       .otherwise({
         redirectTo: '/'
