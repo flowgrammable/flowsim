@@ -59,6 +59,7 @@ Extractor.prototype.isDone = function(){
   if(this.clonedPacket.protocols.length){
     return false;
   } else {
+    this.clonedPacket = false;
     return true;
   }
 };
