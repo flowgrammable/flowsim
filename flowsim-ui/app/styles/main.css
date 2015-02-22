@@ -63,6 +63,11 @@ div.error { color: red; font-weight: bold; }
   background: white;
 }
 
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
 /*
  * Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {

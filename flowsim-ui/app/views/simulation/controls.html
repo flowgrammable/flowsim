@@ -1,14 +1,6 @@
 <div class="row">
   <div class="col-md-2">
-
-    <!-- Primary simulator controls -->
-    <div class="row input-group" style="margin-bottom: 10px;">
-      <span class="input-group-addon">Trace</span>
-      <select ng-click="getTraces()" class="form-control" ng-model="SimCtrl.traceName" ng-disabled="SimCtrl.simulation.active">
-        <option ng-selected="SimCtrl.traceName" ng-repeat="name in SimCtrl.traces">{{name}}</option>
-      </select>
-    </div>
-    <div class="row" style="text-align:center; margin-bottom: 10px;">
+    <div class="row" style="text-align:center; margin-bottom: 10px; margin-top: 15px;">
       <div class="btn-group btn-group-justified">
       	<div class="btn-group">
         <button type="button" class="btn btn-default" ng-click="SimCtrl.stop()"

@@ -20,7 +20,7 @@ angular
     'angulartics.google.analytics',
     'ct.ui.router.extras'
   ])
-  .config(function ($tooltipProvider, $stateProvider, $stickyStateProvider) {
+  .config(function ($tooltipProvider, $stateProvider) {
     $tooltipProvider.options({
       popupDelay: 800
     });
@@ -41,7 +41,7 @@ angular
           switchList: function(fgStore){
             return fgStore.get('switch').then(function(names){
               return names;
-            })
+            });
           }
         },
         views: {
@@ -99,17 +99,17 @@ angular
           traceList: function(fgStore){
             return fgStore.get('trace').then(function(names){
               return names;
-            })
+            });
           },
           packetList: function(fgStore){
             return fgStore.get('packet').then(function(names){
               return names;
-            })
+            });
           },
           switchList: function(fgStore){
             return fgStore.get('switch').then(function(names){
               return names;
-            })
+            });
           }
         },
         templateUrl: 'views/simulation/setup.html',

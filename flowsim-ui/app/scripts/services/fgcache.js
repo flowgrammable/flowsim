@@ -43,7 +43,6 @@ angular.module('flowsimUiApp')
     }
 
     function getNames(type, callback) {
-      var result;
       // initialize the cache
       if(!(type in post))   { post[type]   = {}; }
       if(!(type in update)) { update[type] = {}; }
@@ -51,7 +50,7 @@ angular.module('flowsimUiApp')
       if(!(type in names))  { names[type]  = []; }
 
       if(Object.keys(post[type]).length || Object.keys(_delete[type]).length) {
-        names[type] = _.union(names[type], Object.keys(post[type]))
+        names[type] = _.union(names[type], Object.keys(post[type]));
         names[type] = _.reject(names[type], function(name){
           return name in Object.keys(_delete[type]);
         });

@@ -13,7 +13,6 @@ angular.module('flowsimUiApp')
     $scope.names = {};
     $scope.device = null;
     $scope.getSwitches = function(callback) {
-      console.log('switchlist:', switchList);
       _(switchList).each(function(swi){
         $scope.names[swi] = true;
       });

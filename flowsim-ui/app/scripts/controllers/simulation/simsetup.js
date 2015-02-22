@@ -5,11 +5,13 @@
  * @name flowsimUiApp.controller:SimsetupCtrl
  * @description
  * # SimsetupCtrl
- * Controller of the flowsimUiApp
+ * SimSetupCtrl is responsible for building traces. A trace is composed of a
+ * switch and a list of events. An event is a packet and which port the packet
+ * will enter.
  */
 angular.module('flowsimUiApp')
-  .controller('SimSetupCtrl', function ($scope, $rootScope, traceList, packetList, switchList, 
-  fgCache, fgStore, Trace, Switch, Packet, Regex) {
+  .controller('SimSetupCtrl', function ($scope, $rootScope, traceList, 
+    packetList, switchList, fgCache, fgStore, Trace, Switch, Packet, Regex) {
   var SimSetupCtrl = this;
 
   this.initState = function(){
@@ -137,6 +139,8 @@ angular.module('flowsimUiApp')
           SimSetupCtrl.trace = result;
           SimSetupCtrl.checkSwitch();
           SimSetupCtrl.checkPackets();
+          // alert SimCtrl that trace has been set
+          $rootScope.$emit('setTrace', SimSetupCtrl.trace.name);
         }
       });
     }

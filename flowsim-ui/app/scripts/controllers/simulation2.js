@@ -4,25 +4,27 @@
  * @ngdoc function
  * @name flowsimUiApp.controller:Simulation2Ctrl
  * @description
- * # Simulation2Ctrl
- * Controller of the flowsimUiApp
+ * # SimulationCtrl
+ * SimulationCtrl is responsible for control of the dataplane simulation and 
+ * triggering visualizations. There are two visualizations to be aware of: 
+ *  * Stage Transitions - arrival -> extraction -> ... -> execution
+ *  * Stage steps - for instance extraction stage has a step visualization
+ *  for each header in the packet 
+ * 
+ * Play - tell simulation service to play a trace
+ * Step - tell simulation service to step
+ * Stop - stop the simulation
+ * 
  */
 angular.module('flowsimUiApp')
-  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, fgCache, fgStore, Trace, Simulation) {
+  .controller('Simulation2Ctrl', function ($scope, $state, $rootScope, 
+    fgCache, fgStore, Trace, Simulation) {
     var SimCtrl = this;
     this.simulation = Simulation.Simulation;
     this.stages = Simulation.Stages;
     this.transitions = Simulation.Transitions;
     this.traceName = '';
-    this.traces = [];
     this.view = {};
-
-    this.getTraces = function(){
-      fgStore.get('trace').then(function(names){
-        SimCtrl.traces = names;
-      });
-    };
-    this.getTraces();
 
     this.play = function (){
       this.makeTransition = {to: SimCtrl.simulation.stage };
@@ -30,13 +32,16 @@ angular.module('flowsimUiApp')
     };
 
     this.step = function(){
+      var state = '';
       this.simulation.step();
       this.view = this.simulation.view;
       if(this.simulation.isDone()){
         this.stop();
       } else {
         this.makeTransition = {to: SimCtrl.simulation.stage };
-        $state.go('simulation.stages.'+this.simulation.dataplane.state.toLowerCase());
+        state = this.simulation.dataplane.state.toLowerCase();
+        $state.go('simulation.stages.'+state);
+        //broadcast to stage directives that a step has occured
         $rootScope.$broadcast('stageStep');
       }
 
@@ -61,17 +66,16 @@ angular.module('flowsimUiApp')
       }
     };
 
-  $scope.$watch('SimCtrl.traceName', function(){
+  //Load trace once it is set
+  $rootScope.$on('setTrace', function(event, data){
+    SimCtrl.traceName = data;
     SimCtrl.loadTrace();
-  });
-
-  $rootScope.$on('assetUpdate', function(){
-    SimCtrl.getTraces();
   });
 
   $scope.$on('$destroy', function(){
     SimCtrl.simulation.stop();
   });
+
   if(!SimCtrl.simulation.active){
     $state.go('simulation.stages.setup');
   }

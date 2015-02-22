@@ -17,9 +17,6 @@ angular.module('flowsimUiApp')
       		tests: Switch.TESTS,
       		ranges: Switch.RANGES
     		};
-      },
-      link: function postLink(scope, element, attrs) {
-
       }
     };
   });
