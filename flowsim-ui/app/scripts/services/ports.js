@@ -45,7 +45,7 @@ var defMedium = _copper;
 var _mediums = [_copper, _fiber];
 
 var _10Mbps  = '10 Mbps';
-var _100Mbps = '100 Mbs';
+var _100Mbps = '100 Mbps';
 var _1Gbps   = '1 Gbps';
 var _10Gbps  = '10 Gbps';
 var _40Gbps  = '40 Gbps';
