@@ -49,7 +49,7 @@ function login(view) {
     } else if(!req.body.password) {
       responder(msg.missingPassword());
     } else {
-      view.controller.login(req.body.email, req.body.password, function(err, succ) {
+      view.controller.login(req.body.email.toLowerCase(), req.body.password, function(err, succ) {
         responder(err, {"x-access-token": succ});
       });
     }
@@ -89,7 +89,7 @@ function register(view) {
     } else if(!isValidPassword(req.body.password)) {
       responder(msg.malformedPassword());
     } else {
-      view.controller.register(req.body.email, req.body.password,
+      view.controller.register(req.body.email.toLowerCase(), req.body.password,
         req.connection.remoteAddress, responder);
     }
   };

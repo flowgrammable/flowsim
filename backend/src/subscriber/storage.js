@@ -66,7 +66,7 @@ function errHandler(callback, err, table) {
       callback(msg.unknownError(err));
       break;
     case '23505':
-      if(table === 'subscriber') {
+      if(table === 'subscriber' || table === 'mailinglist') {
         callback(msg.existingEmail());
       } else {
         callback(msg.unknownError());
