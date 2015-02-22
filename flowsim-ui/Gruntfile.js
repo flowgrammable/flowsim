@@ -8,7 +8,8 @@
 // 'test/spec/**/*.js'
 
 module.exports = function(grunt) {
-
+  var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+  var mockRequests = require('mock-rest-request');
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
 
@@ -92,6 +93,26 @@ module.exports = function(grunt) {
 
         // The actual grunt server settings
         connect: {
+          localserver: {
+            proxies: [
+              {
+                context: '/api',
+                host: 'localhost',
+                port: '8080',
+                https: false
+              }
+            ]
+          },
+          devserver: {
+            proxies: [
+              {
+                context: '/api',
+                host: 'dev.flowsim.flowgrammable.org',
+                port: '443',
+                https: true,
+                rejectUnauthorized: false
+              }]
+          },
             options: {
                 port: 9000,
                 // Change this to '0.0.0.0' to access the server from outside.
@@ -103,6 +124,8 @@ module.exports = function(grunt) {
                     open: true,
                     middleware: function(connect) {
                         return [
+                          mockRequests(),
+                          proxySnippet,
                             connect.static('.tmp'),
                             connect().use(
                                 '/bower_components',
@@ -430,9 +453,32 @@ module.exports = function(grunt) {
         grunt.task.run(['serve:' + target]);
     });
 
-    grunt.registerTask('test:e2e', ['clean:server','connect:test', 
+  grunt.registerTask('test:e2e', ['clean:server', 'connect:test',
           'protractor:singlerun']);
     grunt.registerTask('test:e2e-sl', ['connect:test', 'protractor:saucelabs']);
+
+  grunt.registerTask('serve:local', [
+
+    'clean:server',
+    'wiredep',
+    'concurrent:server',
+    'autoprefixer',
+    'configureProxies:localserver',
+    'connect:livereload',
+    'watch'
+
+  ]);
+  grunt.registerTask('serve:dev', [
+
+    'clean:server',
+    'wiredep',
+    'concurrent:server',
+    'autoprefixer',
+    'configureProxies:devserver',
+    'connect:livereload',
+    'watch'
+
+  ]);
 
    // grunt.registerTask('autotest:e2e', ['connect:test', 'shell:selenium', 'watch:protractor']);
 

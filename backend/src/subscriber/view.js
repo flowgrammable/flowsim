@@ -48,8 +48,6 @@ function login(view) {
       responder(msg.malformedEmail());
     } else if(!req.body.password) {
       responder(msg.missingPassword());
-    } else if(!isValidPassword(req.body.password)) {
-      responder(msg.malformedPassword());
     } else {
       view.controller.login(req.body.email, req.body.password, function(err, succ) {
         responder(err, {"x-access-token": succ});
