@@ -7,15 +7,7 @@
  * # fgSwitch
  */
 angular.module('flowsimUiApp')
-  .directive('fgSwitch', function (Switch) {
-    return {
-      templateUrl: 'views/fgswitch.html',
-      restrict: 'E',
-      scope: {
-      	device: '=',
-      	setDirty: '&'
-      },
-      controller: function($scope) {
+  .controller('DpCtrl', function (Switch, $scope) {
         $scope.metadata = {
       		tips: Switch.TIPS,
       		tests: Switch.TESTS,
@@ -24,6 +16,4 @@ angular.module('flowsimUiApp')
 	    $scope.$watch('device.name', function(){
 	    	$scope.$broadcast('initDevice');
 	    });
-      }
-    };
-  });
+});

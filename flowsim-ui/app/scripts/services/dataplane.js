@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('flowsimUiApp')
-  .factory('Dataplane', function(Context, UInt, Extraction, Instruction) {
+  .factory('Dataplane', function(Context, UInt, Extraction, Instruction, $rootScope) {
 
 var ARRIVAL    = 'Arrival';
 var EXTRACTION = 'Extraction';
@@ -90,6 +90,7 @@ Dataplane.prototype.selection = function() {
     this.ctx.flow = flow;
     this.ctx.setInstructions(flow.ins.clone());
   } else {
+    this.ctx.flow = null;
     // could not find flow
     // TODO: alert user
   }
@@ -97,6 +98,10 @@ Dataplane.prototype.selection = function() {
 
 Dataplane.prototype.execution = function() {
   this.ctx.instructionSet.step(this, this.ctx);
+  if(this.ctx.output){
+    $rootScope.$broadcast('forwardPacketClone');
+    this.ctx.output = '';
+  }
 };
 
 Dataplane.prototype.output = function(pkt, id) {
@@ -126,6 +131,15 @@ Dataplane.prototype.execGroups = function() {
 
 Dataplane.prototype.egress = function() {
   this.ctx.actionSet.step(this, this.ctx);
+  if(this.ctx.actionSet.isEmpty()){
+    if(!this.ctx.output){
+      $rootScope.$broadcast('dropPacket');
+    } else {
+      $rootScope.$broadcast('forwardPacket');
+      this.ctx.output = '';
+    }
+      this.ctx.packet = null;
+  }
 };
 
 Dataplane.prototype.transition = function(state) {
@@ -150,7 +164,6 @@ Dataplane.prototype.step = function() {
 
   if(!this.currEvent) {
     this.currEvent = this.inputQ[0];
-    console.log('currevent', this.currEvent);
     this.inputQ.splice(0, 1);
   }
 
@@ -208,13 +221,7 @@ Dataplane.prototype.step = function() {
           this.transition(ARRIVAL);
           this.currEvent = 0;
         } else {
-          if(this.ctx.output){
-            console.log('forward packet');
-          } else {
-            console.log('drop packet');
-          }
           this.transition(FINAL);
-          console.log('done with sim');
         }
       }
       break;

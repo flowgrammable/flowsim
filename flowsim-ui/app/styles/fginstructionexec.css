@@ -73,8 +73,8 @@
     width: 75%;
     margin: 0 auto;
 
-    -webkit-transition: all ease-out .5s;
-            transition: all ease-out .5s;
+    -webkit-transition: height ease-out .5s;
+            transition: height ease-out .5s;
 
     border: 2px solid #c0224e;
     border-width: 0 0 2px 2px;

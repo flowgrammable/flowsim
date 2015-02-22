@@ -3,8 +3,8 @@
     "apiKey": "fake key",
     "domain": "flowgrammable.org",
     "user": "admin@flowgrammable.org",
-    "api_user":" ",
-    "api_password":" "
+    "api_user":"fakeuser",
+    "api_password":"fakepassword"
   },
   "server": {
     "address": "127.0.0.1",

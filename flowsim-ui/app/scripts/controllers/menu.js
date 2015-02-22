@@ -9,11 +9,10 @@
  */
 angular.module('flowsimUiApp')
   .controller('MenuCtrl', function ($scope, $rootScope, $location, Subscriber, fgCache) {
-    //$scope.authenticated = true;
-    $scope.authenticated = Subscriber.authenticated();
+    $scope.authenticated = true;
+    //$scope.authenticated = Subscriber.authenticated();
     $scope.dirty = false;
     $scope.prev_host = '';
-
     $rootScope.$on('subscriberAuth', function() {
       $scope.authenticated = true;
     });
@@ -47,6 +46,7 @@ angular.module('flowsimUiApp')
       $location.url('/#');
       $scope.authenticated = false;
       fgCache.clear();
+      $scope.dirty = false;
       Subscriber.logout(function(err) {
         if(err) {
           console.log(err.details);

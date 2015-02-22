@@ -1,53 +1,6 @@
-
 <div class="row">
-  <div class="col-md-2">
-
-    <!-- Primary simulator controls -->
-    <div style="text-align:center">
-      <div class="btn-group">
-        <button type="button" class="btn btn-default" ng-click="stop()"
-                ng-disabled="!simulation.active">
-          <span class="glyphicon glyphicon-stop"></span>
-        </button>
-        <button type="button" class="btn btn-default" 
-                ng-click="play()"
-                ng-disabled="simulation.active || !trace.events.length">
-          <span class="glyphicon glyphicon-play"></span>
-        </button>
-        <button type="button" class="btn btn-default" ng-click="step()"
-                ng-disabled="!simulation.active">
-          <span class="glyphicon glyphicon-step-forward"></span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Dataplane Overivew Animation -->
-  <div class="col-md-8">
-    <div style="text-align: center">
-      <fg-simulation-view stages="stages" transitions="transitions" 
-                          make-transition="makeTransition" 
-                          animation-duration="600">
-      </fg-simulation-view>
-    </div>
-  </div>
-
+<div ui-view="controls"></div>
 </div>
-
-<!-- Setup and Dataplane Stage Views -->
-<tabset>
-  <tab heading="Setup" disabled=true active="!simulation.active" fg-tab-helper>
-    <ng-include src="'views/simulation/setup.html'"></ng-include>
-  </tab>
-  <tab ng-repeat="stage in simulation.stages" heading="{{stage}}" fg-tab-helper
-       active="simulation.active && simulation.stage === $index" select="stageInit()">
-    <ng-include src="'views/simulation/'+stage.toLowerCase()+'.html'">
-    </ng-include>
-  </tab>
-</tabset>
-
-<!--
-<hr>
-<command-trace>blah</command-trace>
--->
-
+<div class="row">
+<div ui-view="stages"></div>
+</div>

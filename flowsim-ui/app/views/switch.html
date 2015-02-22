@@ -2,7 +2,7 @@
 <div class="row">
 
   <div class="col-md-2">
-    <fg-list on-add="addSwitch" on-del="delSwitch" on-set="setSwitch"
+    <fg-list category="switch" on-add="addSwitch" on-del="delSwitch" on-set="setSwitch"
              on-init="getSwitches">
       Switches
       <div class="error" ng-show="errorMsg.length">
@@ -12,7 +12,7 @@
   </div>
 
   <div class="col-md-10">
-    <fg-switch device="device" set-dirty="setDirty()"/>
+    <div ui-view="config"></div>
   </div>
 
 </div>

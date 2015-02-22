@@ -3,7 +3,7 @@
 
   <!-- Use the List Widget to manage packet names -->
   <div class="col-md-2">
-    <fg-list on-add="addPacket" on-del="delPacket" on-set="setPacket"
+    <fg-list category="packet" on-add="addPacket" on-del="delPacket" on-set="setPacket"
              on-init="getPackets">
       Packets
     </fg-list>
@@ -16,9 +16,7 @@
   <div class="col-md-5">
     <h4 ng-show="packet.protocols.length">Packet View</h4>
         <fg-packet-view packet="packet" width="100%"></fg-packet-view>
-    </img>
   </div>
-  
   <!-- Use the Stack Widget to manage packet payloads -->
   <div class="col-md-4 col-md-offset-1">
     <fg-packet packet="packet" set-dirty="setDirty">Packet</fg-packet>

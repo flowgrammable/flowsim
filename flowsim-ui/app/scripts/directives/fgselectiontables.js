@@ -7,13 +7,18 @@
  * # fgSelectionTables
  */
 angular.module('flowsimUiApp')
-    .directive('fgSelectionTables', function () {
+    .directive('fgSelectionTables', function ($rootScope, Simulation) {
         return {
             templateUrl: 'views/fgselectiontables.html',
             restrict: 'E',
             scope: {
-                data: '=',
-                table: '='
+            },
+            controller: function($scope){
+                //init table data
+                $scope.table = Simulation.Simulation.toView().table;
+                $rootScope.$on('stageStep', function(){
+                    $scope.data = Simulation.Simulation.toView();
+                });
             },
             link: function postLink(scope, element, attrs) {
                 var animationDuration = parseInt(attrs.animationDuration) || 500;
@@ -48,7 +53,6 @@ angular.module('flowsimUiApp')
 
                 };
                 scope.$watch('data', function () {
-
                     if (!_.isUndefined(scope.data) && !_.isNull(scope.data) && !_.isUndefined(scope.data.flow) && !_.isNull(scope.data.flow) && scope.data.flow !== '') {
                         scope.matchString = scope.parseMatches();
                         scope.instructionsString = scope.parseInstructions();

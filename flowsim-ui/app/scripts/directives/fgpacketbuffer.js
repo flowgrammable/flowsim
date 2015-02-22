@@ -15,6 +15,9 @@ angular.module('flowsimUiApp')
             scope: {
                 name: '='
             },
+            controller: function($scope){
+                $scope.name = '';
+            },
             link: function postLink(scope, element, attrs) {
                 //directive attributes with defaults
                 var width = parseInt(attrs.width) || 370,

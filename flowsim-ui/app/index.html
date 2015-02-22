@@ -29,36 +29,37 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-controller="MainCtrl">
-
+    <div class="container">
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation"
         ng-controller="MenuCtrl">
         <div class="container">
+
           <div class="navbar-header">
             <a class="navbar-brand" href="#">
               <img style="Max-height: 25px;" src="images/logo.png"
                    alt="Flowgrammable">
             </a>
           </div>
+
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li ng-show="authenticated">
-                <a href="#packet">Packet</a>
+                <a ui-sref="packet">Packet</a>
               </li>
               <li ng-show="authenticated">
-                <a href="#profile">Profile</a>
+                <a ui-sref="profile">Profile</a>
               </li>
               <li ng-show="authenticated">
-                <a href="#switch">Switch</a>
+                <a ui-sref="switch">Switch</a>
               </li>
               <li ng-show="authenticated">
-                <a href="#simulation">Simulation</a>
+                <a ui-sref="simulation">Simulation</a>
               </li>
               <li ng-show="authenticated">
                 <a href="#subscriber/update">Account</a>
               </li>
               <li>
-                <a href="#documentation">Documentation</a>
+                <a ui-sref="documentation">Documentation</a>
               </li>
             </ul>
             <form class="navbar-form navbar-right" role="form"
@@ -67,7 +68,8 @@
                          ng-click="save()">
                 Save
               </a>
-              <a class="btn btn-success" ng-click="logout()">
+              <a analytics-on="click" analytics-category="subscriber" analytics-event="logout"
+              class="btn btn-success" ng-click="logout()">
                 Logout
               </a>
             </form>
@@ -81,11 +83,9 @@
               </a>
             </form>
           </div>
-        </div>
+          </div>
       </div>
-
-      <div ng-view=""></div>
-
+      <div ui-view></div>
       <hr>
       <footer>
         <p class="pull-right">&copy; Flowgrammable 2015</p>
@@ -112,10 +112,7 @@
        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-       ga('create', 'UA-54747655-1');
-       ga('require', 'displayfeatures');
-       ga('require', 'linkid', 'linkid.js');
-       ga('send', 'pageview');
+       ga('create', 'UA-54747655-2', 'flowsim.flowgrammable.org');
     </script>
 
     <!-- build:js(.) scripts/oldieshim.js -->
@@ -139,6 +136,12 @@
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/marked/lib/marked.js"></script>
     <script src="bower_components/angular-marked/angular-marked.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/waypoints/waypoints.js"></script>
+    <script src="bower_components/SHA-1/sha1.js"></script>
+    <script src="bower_components/angulartics/src/angulartics.js"></script>
+    <script src="bower_components/angulartics/src/angulartics-ga.js"></script>
+    <script src="bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -250,6 +253,9 @@
         <script src="scripts/controllers/documentation.js"></script>
         <script src="scripts/directives/passwordstrengthbar.js"></script>
         <script src="scripts/services/passwordstrength.js"></script>
+        <script src="scripts/controllers/simulation/simsetup.js"></script>
+        <script src="scripts/services/fgstore.js"></script>
+        <script src="scripts/directives/fgswitchdp.js"></script>
         <!-- endbuild -->
 </body>
 </html>

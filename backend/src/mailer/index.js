@@ -7,7 +7,6 @@
 (/** @lends module:mailer */function(){
 
 var fmt = require('../utils/formatter');
-var s   = require('./storage');
 var sendgrid = require('sendgrid');
 var name = 'mailer';
 
@@ -90,7 +89,6 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
       callback(err);
     } else {
       that.logger.info(json);
-      console.log(json);
       callback(null, result);
     }
   });

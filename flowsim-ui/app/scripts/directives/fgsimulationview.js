@@ -7,7 +7,7 @@
  * # fgsimulationview
  */
 angular.module('flowsimUiApp')
-    .directive('fgSimulationView', function() {
+    .directive('fgSimulationView', function($rootScope) {
 
         return {
             restrict: 'E',
@@ -19,6 +19,7 @@ angular.module('flowsimUiApp')
             },
             link: function postLink(scope, element, attrs) {
                 //directive attributes with defaults
+
                 var width = parseInt(attrs.width) || 870,
                     height = parseInt(attrs.height) || 100,
                     stageWidth = parseInt(attrs.stageWidth) || 90,
@@ -73,6 +74,44 @@ angular.module('flowsimUiApp')
                     scope.transition(newData, currentStage);
                     currentStage = (_.isUndefined(newData.to)) ? -1 : newData.to;
                 }, false);
+
+
+                $rootScope.$on('dropPacket', function(){
+                    svg.selectAll('.sim-packet')
+                        .transition()
+                        .duration(350)
+                        .style('opacity', '0')
+                        .transition()
+                        .remove();
+                });
+
+                $rootScope.$on('forwardPacket', function(){
+                    svg.selectAll('.sim-packet')
+                        .style('opacity', '.5')
+                        .transition()
+                        .style('display', 'block')
+                        .duration(animationDuration)
+                        .attr('x', 7 * (stageWidth + stagePadding) + margin - 5)
+                        .remove();
+                });
+
+                $rootScope.$on('forwardPacketClone', function(){
+                        svg.select('#packets')
+                            .append('rect')
+                            .attr('class', 'sim-packet-copy')
+                            .attr('height', stageHeight + 10)
+                            .attr('width', stageWidth + 10)
+                            .attr('x', 4 * (stageWidth + stagePadding) + margin - 5)
+                            .attr('y', margin / 2 - 5)
+                            .attr('ry', 10)
+                            .attr('stage', 7) //set the stage ID
+                            .transition()
+                            .duration(animationDuration)
+                            .attr('x', 7 * (stageWidth + stagePadding) + margin - 5)
+                            .remove();
+                });
+
+
                 /**
                  * Transition function allows to make transitions of the current packet by providing {to:<stage>}.
                  * If clonePacket: true is provided and to: value equals current position, another packet will be created and transitioned to stage indicated in cloneTo attribute
@@ -83,13 +122,13 @@ angular.module('flowsimUiApp')
                  * @return {[type]}
                  */
                 scope.transition = function(trans, currentStage) {
-                   console.log('Transition:' + JSON.stringify(trans));
-                   console.log('CurrentStage:' + currentStage);
                    if(!trans){
                     return;
                    }
-                   if(trans.to === 0 && currentStage === -1){
+                   if(svg.selectAll('.sim-packet')[0].length === 0){
                     scope.attachPacket();
+                   }
+                   if(trans.to === 0 && currentStage === -1 || currentStage === 0){
                     svg.selectAll('.sim-packet')
                         .style('opacity', '.5')
                         .transition()

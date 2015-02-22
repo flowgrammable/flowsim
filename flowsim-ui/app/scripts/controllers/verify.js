@@ -8,14 +8,14 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('VerifyCtrl', function ($scope, $routeParams, Subscriber) {
+  .controller('VerifyCtrl', function ($scope, $stateParams, Subscriber) {
 
     function clearErrors() {
       $scope.errorMsg = '';
     }
     clearErrors();
 
-    Subscriber.verify($routeParams.token, function(err) {
+    Subscriber.verify($stateParams.token, function(err) {
       if(err) {
         $scope.errorMsg = err.message;
         console.log(err.details);

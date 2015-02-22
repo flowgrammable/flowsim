@@ -51,7 +51,7 @@ angular.module('flowsimUiApp')
         // directive runs before controller,
         // using $scope.loaded to determine if ctrl has run
         // need to rework
-        if($scope.loaded){
+        if($scope.packet && $scope.loaded){
           $scope.calcPayloadBytes();
         }
         if($scope.packet){
