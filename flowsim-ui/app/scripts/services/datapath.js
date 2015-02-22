@@ -133,6 +133,10 @@ function Datapath(datapath, profile) {
   }
 }
 
+Datapath.prototype.clone = function(){
+  return new Datapath(this);
+};
+
 Datapath.prototype.toBase = function(){
   return {
     capabilities: this.capabilities,

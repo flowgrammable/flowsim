@@ -28,7 +28,7 @@ function Dataplane(device) {
     this.currEvent = null;
     this.inputQ    = [];
 
-    this.datapath = device.datapath;
+    this.datapath = device.datapath.clone();
     this.ports    = device.ports;
     this.tables   = device.tables;
     this.groups   = device.groups;
@@ -138,7 +138,8 @@ Dataplane.prototype.egress = function() {
       $rootScope.$broadcast('forwardPacket');
       this.ctx.output = '';
     }
-      this.ctx.packet = null;
+    this.datapath.bufAllocator.release(this.ctx.buffer);
+    this.ctx.packet = null;
   }
 };
 
