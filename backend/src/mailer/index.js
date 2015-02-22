@@ -9,6 +9,7 @@
 var fmt = require('../utils/formatter');
 var sendgrid = require('sendgrid');
 var name = 'mailer';
+var s = require('./storage.js');
 
 /**
  * Wraps a mailgun object
@@ -39,7 +40,7 @@ function Mailer(config, logger, db) {
   }
 
   this.logger = logger.addLog(name);
-  this.storage = s.Storage(db, this.logger);
+  this.storage = new s.Storage(db, this.logger);
 
   // construct the mailer
   this.mailer = sendgrid(this.config.api_user, this.config.api_password);
