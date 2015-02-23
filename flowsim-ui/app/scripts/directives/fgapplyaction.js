@@ -41,6 +41,8 @@ angular.module('flowsimUiApp')
             function(profile) {
               return profile.protocol === 'Internal' || 
                      profile.protocol === 'Ethernet' ||
+             (profile.protocol === 'VLAN' && profile.field === 'tag') ||
+             (profile.protocol === 'MPLS' && profile.field === 'tag') ||
                      _($scope.match).some(function(_match) {
                        var candidate = Protocols.Graph(_match.protocol, 
                                                        _match.field, 

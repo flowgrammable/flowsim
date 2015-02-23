@@ -196,11 +196,14 @@ function pushVLAN(packet, actVTags){
   var vlanTag;
   if(actVTags){
     vlanTag = packet.protocols[1].clone();
+    vlanTag.setField('Type','0x8100');
     packet.insertProtocol(vlanTag, 1);
   } else {
     vlanTag = createProtocol('VLAN');
     // set vlan tag type value
-    vlanTag.setField('Type',packet.protocols[0].fields[2].value);
+    if(packet.protocols.length > 1){
+      vlanTag.setField('Type',packet.protocols[0].fields[2].value.clone());
+    }
     // set eth to vlan value
     packet.protocols[0].fields[2].setValue('0x8100');
     packet.insertProtocol(vlanTag, 1);

@@ -51,7 +51,9 @@ angular.module('flowsimUiApp')
           $scope.availableProfiles =_($scope.enabledProfiles).filter(
             function(profile) {
               return ((profile.protocol === 'Internal' ||
-                       profile.protocol === 'Ethernet') &&
+                       profile.protocol === 'Ethernet' ||
+              (profile.protocol === 'VLAN' && profile.field === 'tag') ||
+              (profile.protocol === 'MPLS' && profile.field === 'tag')) &&
                      _($scope.usedProfiles).find(function(_profile) {
                       return profile.protocol === _profile.protocol &&
                              profile.field === _profile.field &&
@@ -94,7 +96,6 @@ angular.module('flowsimUiApp')
               });
           // Add to usedProfiles
           $scope.usedProfiles.push(profile);
-          console.log('used profiles', $scope.usedProfiles);
           // Locate any new profiles
           $scope.updateProtocols();
         };
