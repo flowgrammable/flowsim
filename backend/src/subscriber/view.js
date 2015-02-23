@@ -3,12 +3,14 @@
 
 var validator = require('validator');
 
+var pass = require('../utils/password');
+
 var util      = require('../server/utils');
 var msg       = require('./msg');
 
 function isValidPassword(p) {
-  var pat = /[0-9a-zA-Z_\(\){\}\[\]\^\$\.\+\-\*\/\|\!\\:;?<>='"`~@#%&,]{8,}/;
-  return pat.test(p);
+  //var pat = /[0-9a-zA-Z_\(\){\}\[\]\^\$\.\+\-\*\/\|\!\\:;?<>='"`~@#%&,]{8,}/;
+  return pass.validate(p);
 }
 
 function authorize(view) {
@@ -46,8 +48,6 @@ function login(view) {
       responder(msg.malformedEmail());
     } else if(!req.body.password) {
       responder(msg.missingPassword());
-    } else if(!isValidPassword(req.body.password)) {
-      responder(msg.malformedPassword());
     } else {
       view.controller.login(req.body.email, req.body.password, function(err, succ) {
         responder(err, {"x-access-token": succ});

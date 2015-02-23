@@ -110,6 +110,21 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
   });
 };
 
+Storage.prototype.addToMailer = function(email, date, callback) {
+  var that = this;
+  this.database.insert('mailinglist', {
+    email: email,
+    date: date
+  }, function(err, result) {
+    if(err) {
+      that.logger.error(err);
+      errHandler(callback, err, 'mailinglist');
+    } else {
+      callback(null, result[0]);
+    }
+  });
+};
+
 /**
  * Retrieve a subscriber row by the verification token.
  *

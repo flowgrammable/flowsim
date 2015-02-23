@@ -94,11 +94,15 @@ angular.module('flowsimUiApp')
               });
           // Add to usedProfiles
           $scope.usedProfiles.push(profile);
+          console.log('used profiles', $scope.usedProfiles);
           // Locate any new profiles
           $scope.updateProtocols();
         };
+        _($scope.actionset.actions).each(function(action){
+          $scope.use(action);
+        });
 
-        // Update our book keeping for freeing a profile
+        // Update our book keeping for freeing an action
         $scope.free = function(profile) {
           // Remove from usedProfiles
           $scope.usedProfiles = _($scope.usedProfiles).reject(
@@ -107,8 +111,12 @@ angular.module('flowsimUiApp')
                      profile.field === _profile.field &&
                      profile.op === _profile.op;
               });
+          var newProfile = _($scope.enabledProfiles).findWhere({
+            protocol: profile.protocol,
+            field: profile.field,
+            op: profile.op });
           // Add to availableProfiles
-          $scope.availableProfiles.push(profile);
+          $scope.availableProfiles.push(newProfile);
           // Update availabe list
           $scope.updateProtocols();
         };

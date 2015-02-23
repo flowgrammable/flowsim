@@ -26,7 +26,7 @@ angular.module('flowsimUiApp')
     $scope.login = function() {
       clearErrors();
       $scope.emailMsg    = Subscriber.validateEmail($scope.email);
-      $scope.passwordMsg = Subscriber.validatePassword($scope.password);
+      //$scope.passwordMsg = Subscriber.validatePassword($scope.password);
       if(!$scope.emailMsg.length && !$scope.passwordMsg.length) {
         Subscriber.login($scope.email, $scope.password, function(err) {
           if(err) {

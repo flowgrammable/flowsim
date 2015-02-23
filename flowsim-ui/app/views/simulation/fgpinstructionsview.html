@@ -27,9 +27,9 @@
                 </div>
             </div>
         </div>
-        <div ng-style="{'height': 17 + (6 - insSetListApplyIdx )* 25  , 'border-width' : view.insList.length > 0 && applyActionList ? '0 0 2 2':'0'}"
+        <div ng-style="{'height': 17 + (6 - insSetListApplyIdx )* 25  , 'border-width' : view.insList.length > 0 && (applyActionList && applyActionList.actions.length>0) ? '0 0 2 2':'0'}"
              class="sim-exec-connection">
-            <div ng-style="{'height': 17 + (6 - insSetListWriteIdx )* 25,'width':'35%','border-width' : view.insList.length > 0 && writeActionSet ? '0 0 2 2':'0'}"
+            <div ng-style="{'height': 17 + (6 - insSetListWriteIdx )* 25,'width':'35%','border-width' : view.insList.length > 0 && (writeActionSet && writeActionSet.actions.length>0 )? '0 0 2 2':'0'}"
                  class="sim-exec-connection"></div>
         </div>
     </div>

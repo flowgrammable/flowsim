@@ -21,13 +21,13 @@ angular.module('flowsimUiApp')
           $scope.packet.pushProtocol($scope.nodeType);
           $scope.nodeType = '';
           $scope.setOptions();
-          $scope.setDirty();
+          $scope.setDirty()();
        };
 
        $scope.popProtocol = function() {
           $scope.packet.popProtocol();
           $scope.setOptions();
-          $scope.setDirty();
+          $scope.setDirty()();
        };
 
        $scope.setOptions = function() {

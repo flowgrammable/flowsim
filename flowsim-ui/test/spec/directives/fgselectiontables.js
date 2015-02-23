@@ -12,9 +12,4 @@ describe('Directive: fgSelectionTables', function () {
     scope = $rootScope.$new();
   }));
 
-  it('should make hidden element visible', inject(function ($compile) {
-    element = angular.element('<fg-selection-tables></fg-selection-tables>');
-    element = $compile(element)(scope);
-    expect(element.text()).toBe('this is the fgSelectionTables directive');
-  }));
 });

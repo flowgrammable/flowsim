@@ -8,11 +8,11 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .service('Subscriber', function Subscriber(Backend) {
+  .service('Subscriber', function Subscriber(Backend,PasswordStrength) {
 
 
     var validEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    var validPassword = /[a-zA-Z0-9_]{8,}/;
+    //var validPassword = /[a-zA-Z0-9_]{8,}/;
 
     this.validateEmail = function(email) {
       if(!validEmail.test(email)) {
@@ -23,7 +23,7 @@ angular.module('flowsimUiApp')
     };
 
     this.validatePassword = function(password) {
-      if(!validPassword.test(password)) {
+      if(!PasswordStrength.validatePassword(password)) {
         return 'Invalid password';
       } else {
         return '';
@@ -96,6 +96,10 @@ angular.module('flowsimUiApp')
         oldPassword: oldPassword,
         newPassword: password
       }, callback);
+    };
+
+    this.authenticated = function(){
+      return Backend.isAuthorized();
     };
 
   });

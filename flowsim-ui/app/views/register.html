@@ -11,7 +11,7 @@
       <hr>
 
       <form ng-submit="register()" name="regForm" novalidate role="form">
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error' : isInValidInput(regForm.email), 'has-success': isValidInput(regForm.email) }">
           <label for="email">Email Address</label>
           <input name="email" type="email" class="form-control"
             id="email" placeholder="Enter email" ng-model="email"
@@ -20,7 +20,7 @@
             <span>{{emailMsg}}</span>
           </div>
         </div>
-      <div class="form-group">
+      <div class="form-group" ng-class="{'has-error' : isInValidInput(regForm.password1), 'has-success': isValidInput(regForm.password1) }">
         <label for="password1">Password</label>
         <input name="password1" type="password" class="form-control"
                id="password1" placeholder="Password" ng-model="password1"
@@ -29,14 +29,15 @@
           <span>{{password1Msg}}</span>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" ng-class="{'has-error' : isInValidInput(regForm.password2), 'has-success': isValidInput(regForm.password2) }">
         <label for="password2">Retype Password</label>
         <input name="password2" type="password" class="form-control"
                id="password2" placeholder="Retype Password" ng-model="password2"
                required>
         <div class="error" ng-show="password2Msg.length">
-          <span>{{password2Msg}}</span>
-        </div>
+          <span>{{password2Msg}}</span></div>
+        <password-strength-bar password-to-check="password1"></password-strength-bar><span>Password must be at least 6 characters long and contain any combination of upper case, lower case letters, symbols or numbers.</span>
+
       </div>
       <button type="submit" class="btn btn-default">Register</button>
       </form>
