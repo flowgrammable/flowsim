@@ -61,7 +61,7 @@ angular.module('flowsimUiApp')
                             '' : 'Passwords do not match';
       if(!$scope.emailMsg.length && !$scope.password1Msg.length &&
          !$scope.password2Msg.length) {
-        Subscriber.register($scope.email, $scope.password1,
+        Subscriber.register($scope.email.toLowerCase(), $scope.password1,
           function(err) {
             if(err) {
               $scope.errorMsg = err.message;

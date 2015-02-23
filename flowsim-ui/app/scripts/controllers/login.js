@@ -28,7 +28,8 @@ angular.module('flowsimUiApp')
       $scope.emailMsg    = Subscriber.validateEmail($scope.email);
       //$scope.passwordMsg = Subscriber.validatePassword($scope.password);
       if(!$scope.emailMsg.length && !$scope.passwordMsg.length) {
-        Subscriber.login($scope.email, $scope.password, function(err) {
+        Subscriber.login($scope.email.toLowerCase(), 
+          $scope.password, function(err) {
           if(err) {
             $scope.errorMsg = err.message;
             console.log(err.details);
