@@ -93,6 +93,7 @@ angular.module('flowsimUiApp')
                      profile.field === _profile.field;
             });
           // Add to availableProfiles
+          
           $scope.availableProfiles.push(profile);
           // Remove any available protocols that are dependencies of profile
           $scope.availableProfiles = _($scope.availableProfiles).reject(
@@ -106,7 +107,12 @@ angular.module('flowsimUiApp')
         
         // Go through each active match and 
         _($scope.matches).each(function(match) {
-          $scope.use(match, match.value);
+          _($scope.enabledProfiles).each(function(ep){
+            if(match.protocol === ep.protocol &&
+               match.field === ep.field){
+              $scope.use(ep, match.value);
+            }
+          });
         });
 
         // Provide a unique array of strings for display
@@ -129,7 +135,6 @@ angular.module('flowsimUiApp')
             })).map(function(profile) {
               return profile.field;
             });
-
           // Clear the dependent properties
           $scope.active.field = '';
           $scope.active.value = '';
@@ -145,7 +150,6 @@ angular.module('flowsimUiApp')
               return profile.protocol === $scope.active.protocol &&
                      profile.field === $scope.active.field;
             });
-
           // Clear the dependent properties
           $scope.active.value = '';
           $scope.active.mask  = '';

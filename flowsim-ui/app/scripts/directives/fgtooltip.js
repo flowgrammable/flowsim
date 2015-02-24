@@ -9,10 +9,15 @@
 angular.module('flowsimUiApp')
   .directive('fgTooltip', function () {
     return {
-      template: '<span tooltip="test" tooltip-delay="0" tooltip-placement="right" tooltip-trigger="click"'+
-       'style="padding-left: 5px;" class="glyphicon glyphicon-question-sign"></span>',
+      template: '',
       restrict: 'E',
+      scope: {
+        show: '=',
+        msg: '='
+      },
       link: function postLink(scope, element, attrs) {
+              scope.tip = scope.msg;
+              scope.disp = scope.show;
       }
     };
   });

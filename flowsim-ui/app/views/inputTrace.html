@@ -62,8 +62,8 @@
     <tr ng-repeat="ev in pktEvents">
       <td>{{$index+1}}</td>
       <td>{{ev.packet.name}}</td>
-      <td>{{ev.in_port}}</td>
-      <td>{{ev.in_phy_port ? ev.in_phy_port : '-n/a-'}}</td>
+      <td>{{ev.in_port.toString()}}</td>
+      <td>{{ev.in_phy_port ? ev.in_phy_port.toString() : '-n/a-'}}</td>
       <td>{{ev.tunnel ? ev.tunnel : '--'}}</td>
       <td>
         <span class="glyphicon glyphicon-minus-sign" 
