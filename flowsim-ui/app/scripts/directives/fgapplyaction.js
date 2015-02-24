@@ -29,7 +29,8 @@ angular.module('flowsimUiApp')
           value:     '',
           type:      null
         };
-
+        var defSafe = new Protocols.ActionProfiles();
+        defSafe = defSafe.defSafe();
         // Build a top-level list of enabled actions
         $scope.enabledProfiles = _($scope.toplevel).filter(function(profile) {
           return profile.enabled;
@@ -37,13 +38,12 @@ angular.module('flowsimUiApp')
 
         // Filter out all protocols that are not present in match
         $scope.updateProfiles = function() {
-          $scope.availableProfiles = _($scope.enabledProfiles).filter(
+          $scope.availableProfiles= _($scope.enabledProfiles).filter(
             function(profile) {
-              return profile.protocol === 'Internal' || 
-                     profile.protocol === 'Ethernet' ||
-             (profile.protocol === 'VLAN' && profile.field === 'tag') ||
-             (profile.protocol === 'MPLS' && profile.field === 'tag') ||
-                     _($scope.match).some(function(_match) {
+                return (profile.protocol === 'Internal') ||
+                (profile.protocol === 'Ethernet') ||
+                (profile.op === 'push') || 
+                _($scope.match).some(function(_match) {
                        var candidate = Protocols.Graph(_match.protocol, 
                                                        _match.field, 
                                                        _match.value);
@@ -56,8 +56,7 @@ angular.module('flowsimUiApp')
         // Build a top-level list of avaiable apply action names
         $scope.updateProtocols = function() {
           $scope.active.protocols = _(_($scope.availableProfiles).map(
-            function(profile) {
-              return profile.protocol;
+            function(profile) {   return profile.protocol;
             })).unique();
         };
         $scope.updateProtocols();
@@ -68,8 +67,19 @@ angular.module('flowsimUiApp')
             return _($scope.active.protocols).some(function(proto){
               return proto === action.protocol;
             });
-          });
+          }); 
+          $scope.actions = _($scope.actions).filter(function(act){
+            return _($scope.match).some(function(_mat){
+              var cand = Protocols.Graph(_mat.protocol,
+                                         _mat.field,
+                                         _mat.value);
+              return cand === act.protocol;
+            }) || _(defSafe).some(function(sact){
+              return sact.field === act.field && sact.op === act.op;
+            });
+          }); 
         };
+        $scope.updateActiveActions();
 
         // Re-run on changes to the underlying match set ... new protocols may
         // be available upon more matches

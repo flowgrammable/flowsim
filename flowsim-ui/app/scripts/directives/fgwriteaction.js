@@ -30,6 +30,9 @@ angular.module('flowsimUiApp')
           type:      null
         };
 
+        var defSafe = new Protocols.ActionProfiles();
+        defSafe = defSafe.defSafe();
+        
         // Build a top-level list of enabled actions
         $scope.enabledProfiles = _($scope.toplevel).filter(function(profile) {
           return profile.enabled;

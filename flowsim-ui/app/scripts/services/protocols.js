@@ -154,6 +154,12 @@ ActionProfiles.prototype.toBase = function() {
   };
 };
 
+ActionProfiles.prototype.defSafe = function() {
+  return _(this.profiles).filter(function(ap){
+    return ap.protocol === 'Internal' || ap.protocol === 'Ethernet' ||
+      ap.op === 'push';
+  });
+};
 
 // Dependency graph
 var _Graph = {
