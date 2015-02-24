@@ -1,6 +1,6 @@
 
 <h3>Switch</h3>
-  <switch-view data="profile.ports"></switch-view>
+<switch-view data="profile.ports"></switch-view>
 <br>
 
 <div class="row">
@@ -21,8 +21,7 @@
 </div>
 
 <div class="row">
-
-  <div class="col-md-5">
+  <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Capabilities</h3>
@@ -40,68 +39,30 @@
             Port Blocked
           </label>
         </div>
-      </div>
+     </div>
     </div>
   </div>
-  <div class="col-md-5">
+  <div class="col-md-8">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Virtual Ports</h3>
       </div>
       <div class="panel-body">
-        <div class="row">
-          <div class="col-md-5">
-            <div class="checkbox">
+          <dl class="fg-dl-horizontal text-overflow">
+          <div class="fg-dl-row" ng-repeat="vport in profile.ports.vports">
+            <dt class="pull-left">
               <label>
-                <input type="checkbox" ng-model="profile.ports.vports.in_port">
-                Ingress Port
+              <input type="checkbox" ng-model="vport.enabled">
+                {{vport.name}}
               </label>
+            </dt>
+            <dd class="text-muted"><small>{{vport.tip}}</small></dd>
             </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.table">
-                Table
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.normal">
-                Normal
-              </label>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.flood">
-                Flood
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.all">
-                All
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.controller">
-                Controller
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="profile.ports.vports.local">
-                Local
-              </label>
-            </div>
-          </div>
-        </div>
+          </dl>
       </div>
     </div>
   </div>
 </div>
-
 <h3>Port Properties</h3>
 <hr>
 
@@ -115,7 +76,7 @@
   </thead>
   <tbody>
   <tr ng-repeat="port in profile.ports.ports">
-     <td>{{port.id}}</td>
+     <td>{{port.id.toString()}}</td>
     <td>
       <div class="input-group" ng-class="{'has-error': !metadata.tests.Ports.mac(port.mac)}">
       <input class="form-control" type="text" ng-model="port.mac"
