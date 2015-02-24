@@ -69,6 +69,12 @@ angular
       .state('switch.editor.tables', {
         template: '<fg-switch-tables/>'
       })
+      .state('switch.editor.groups', {
+        templateUrl: 'views/switch/groups.html'
+      })
+      .state('switch.editor.meters', {
+        templateUrl: 'views/switch/meters.html'
+      })
       .state('simulation', {
         deepStateRedirect: true,
         sticky: true,
