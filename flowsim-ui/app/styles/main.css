@@ -68,6 +68,14 @@ div.error { color: red; font-weight: bold; }
     align-items: center;
 }
 
+.fgglyph {
+  font-size: .75 em;
+} 
+
+.fgtip {
+  font-size: .45 em;
+  font-style: italic;
+}
 /*
  * Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {

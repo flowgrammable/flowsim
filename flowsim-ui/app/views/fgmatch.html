@@ -39,9 +39,14 @@
       <td>
         <div ng-class="{'has-error': active.value.length > 0 &&
                             !active.type.valueTest(active.value)}">
-          <input type="text" class="form-control" ng-model="active.value"
+                 <input ng-show='active.field !== "In_Port"'
+                 type="text" class="form-control" ng-model="active.value"
                  tooltip="{{active.type.valueTip}}"
                  ng-disabled="!active.field">
+                 <select ng-show='active.protocol && active.field === "In_Port"'
+                 class="form-control" ng-model="active.value">
+                </select>
+                 
         </div> 
       </td>
       <td>

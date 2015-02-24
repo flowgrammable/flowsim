@@ -13,6 +13,51 @@ var VPort = {
   FLOOD:      0xfffffffb
 };
 
+var VPorts = [
+  {
+    name: 'ALL',
+    id: new UInt.UInt(null, 0xfffffffc, 4),
+    tip: 'All physical ports except ingress port',
+    ingress: false,
+    egress: true
+  },{
+    name: 'Controller',
+    id: new UInt.UInt(null, 0xfffffffd, 4),
+    tip: 'Port to controller',
+    ingress: true,
+    egress: true
+  },{
+    name: 'Table',
+    id: new UInt.UInt(null, 0xfffffffe, 4),
+    tip: 'May only be specified as a output port in packetout action set',
+    ingress: false,
+    egress: false
+  },{
+    name: 'In_Port',
+    id: new UInt.UInt(null, 0xfffffff9, 4),
+    tip: 'Packet ingress port',
+    ingress: false,
+    egress: true
+  },{
+    name: 'Local',
+    id: new UInt.UInt(null, 0xfffffff8, 4),
+    tip: 'Port to non-openflow dataplane',
+    ingress: true,
+    egress: true
+  },{
+    name: 'Normal',
+    id: new UInt.UInt(null, 0xfffffffa, 4),
+    tip: 'Port to process packet with normal l2/l3 switching',
+    ingress: false,
+    egress: true
+  },{
+    name: 'Flood',
+    id: new UInt.UInt(null, 0xfffffffb, 4),
+    tip: 'Non-openflow dataplane flood',
+    ingress: false,
+    egress: true
+}];
+
 var defPortCount   = 24;
 var defNamePrefix  = 'eth';
 var defPortStats   = true;
@@ -74,15 +119,48 @@ var _procedures = {
 };
 var defProcedures = {};
 
-var defVirtualPorts = {
-  in_port:    true,  // mandatory in 1.0+
-  table:      true,  // mandatory in 1.0+
-  controller: true,  // mandatory in 1.0+
-  all:        true,  // mandatory in 1.0+
-  local:      true,  // mandatory in 1.0, optional in 1.1+
-  normal:     true,  // optional in 1.0-1.4
-  flood:      true,  // optional in 1.0-1.4
+var defVirtualPorts = {               //   Match? Egress?
+  in_port:    true,  // mandatory in 1.0+    no    yes 
+  table:      true,  // mandatory in 1.0+    no    no
+  controller: true,  // mandatory in 1.0+    yes   yes
+  all:        true,  // mandatory in 1.0+    no    yes
+  local:      true,  // mandatory in 1.0,    yes   yes  non-openflow dp 
+  normal:     true,  // optional in 1.0-1.4  no    yes
+  flood:      true,  // optional in 1.0-1.4  no    yes  hybrid openflow dp
 };
+
+function VirtualPortProfile(vp,name,id,tip){
+  if(_.isObject(vp)) {
+    this.enabled = vp.enabled;
+    this.name = vp.name;
+  } else {
+    this.enabled = true;
+    this.name = name;
+  }
+  this.tip = _(VPorts).findWhere({name: this.name}).tip;
+}
+
+VirtualPortProfile.prototype.toBase = function(){
+  return {
+    name: this.name,
+    enabled: this.enabled
+  }
+};
+
+var virtualPortsProfiles = _(VPorts).map(function(port){
+  return new VirtualPortProfile(null, port.name);
+});
+
+function VirtualPort(vport, vportProfile){
+  if(_.isObject(vport)){
+    this.enabled = vport.enabled;
+    this.name = vport.name;
+  } else {
+    this.enabled = vportProfile.enabled;
+    this.name = vportProfile.name;
+  }
+  this.id = _(VPorts).findWhere({name: this.name}).id;
+}
 
 function Port(port, portProfile) {
   if(_.isObject(port)) {
@@ -186,6 +264,9 @@ function Ports(ports, profile) {
     this.ports = _(ports.ports).map(function(port) {
       return new Port(port);
     });
+    this.vports = _(ports.vports).map(function(vport){
+      return new VirtualPort(vport);
+    });
   } else {
     this.capabilities = {
       macPrefix: profile.macPrefix,
@@ -195,6 +276,9 @@ function Ports(ports, profile) {
     };
     this.ports = _(profile.ports).map(function(portProfile) {
       return new Port(null, portProfile);
+    });
+    this.vports = (profile.vports).map(function(vportProfile){
+      return new VirtualPort(null, vportProfile);
     });
   }
 }
@@ -223,10 +307,11 @@ Ports.prototype.toBase = function(){
 function PortProfile(portProfile, id, mac) {
   if(_.isObject(portProfile)) {
     _.extend(this, portProfile);
+    this.id = new UInt.UInt(portProfile.id);
     this.ethernet = _.clone(portProfile.ethernet);
     this.optical  = _.clone(portProfile.optical);
   } else if(_.isNumber(id) && _.isString(mac)) {
-    this.id = id;
+    this.id = new UInt.UInt(null, id, 4); 
     this.mac = mac;
     this.name = defNamePrefix+id;
     this.state = {
@@ -277,7 +362,7 @@ PortProfile.prototype.clone = function() {
 };
 
 PortProfile.prototype.toString = function(){
-  return 'id: '+this.id+'\n'+
+  return 'id: '+this.id.toString()+'\n'+
          'mac: '+this.mac+'\n'+
          'name: '+this.name+'\n'+
          'state:\n'+
@@ -314,7 +399,7 @@ function Profile(profile, macPrefix) {
     });
     this.port_stats   = defPortStats;
     this.port_blocked = defPortBlocked;
-    this.vports = defVirtualPorts;
+    this.vports = virtualPortsProfiles;
   } else {
     throw 'PortsProfile expected macPrefix';
   }

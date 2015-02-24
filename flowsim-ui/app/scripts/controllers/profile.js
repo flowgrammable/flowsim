@@ -18,7 +18,7 @@ angular.module('flowsimUiApp')
       tests: Profile.TESTS,
       ranges: Profile.RANGES
     };
-
+    $scope.showTips = false;
     $scope.versions = [
       'OpenFlow 1.0',
       'OpenFlow 1.1',
