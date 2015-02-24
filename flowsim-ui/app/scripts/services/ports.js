@@ -307,11 +307,11 @@ Ports.prototype.toBase = function(){
 function PortProfile(portProfile, id, mac) {
   if(_.isObject(portProfile)) {
     _.extend(this, portProfile);
-    this.id = new UInt.UInt(portProfile.id);
+    this.id = portProfile.id;
     this.ethernet = _.clone(portProfile.ethernet);
     this.optical  = _.clone(portProfile.optical);
   } else if(_.isNumber(id) && _.isString(mac)) {
-    this.id = new UInt.UInt(null, id, 4); 
+    this.id = id;
     this.mac = mac;
     this.name = defNamePrefix+id;
     this.state = {
@@ -390,7 +390,13 @@ function Profile(profile, macPrefix) {
     this.ports = _(profile.ports).map(function(port) {
       return new PortProfile(port);
     });
-    this.vports = _.clone(profile.vports);
+    if(profile.vports.in_port){
+      this.vports = virtualPortsProfiles;
+    } else {
+      this.vports = _(profile.vports).map(function(vport){
+        return new VirtualPortProfile(vport);
+      });
+    }
   } else if(_.isString(macPrefix)) {
     this.n_ports = defPortCount;
     this.macPrefix    = macPrefix;
