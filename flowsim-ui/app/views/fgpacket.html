@@ -9,16 +9,16 @@
 <div ng-show="packet">
 
   <accordion close-others="true">
-    <accordion-group ng-repeat="protocol in packet.protocols">
+    <accordion-group ng-repeat="protocol in packet.protocols" is-open="$last">
 
       <!-- Print the heading and delete button if last element -->
       <accordion-heading>
         {{protocol.name}}
         <span ng-if="$last && $index!==0"
-              class="glyphicon glyphicon-minus-sign pull-right" 
+              class="glyphicon glyphicon-minus-sign pull-right"
               ng-click="popProtocol()"></span>
       </accordion-heading>
-  
+
       <!-- Print a label and input box for each field -->
       <div ng-repeat="field in protocol.fields">
         <fg-noproto-field set-dirty="setDirty()" field="field"/>
@@ -28,7 +28,7 @@
   </accordion>
 
   <div class="input-group">
-    <select class="form-control" ng-model="nodeType" 
+    <select class="form-control" ng-model="nodeType"
       ng-options="key as value for (key, value) in options">
     </select>
     <span class="input-group-btn">
@@ -37,8 +37,8 @@
       </button>
     </span>
   </div>
-  
+
   <br>
- 
+
 </div>
 

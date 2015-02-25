@@ -73,7 +73,7 @@ div.error { color: red; font-weight: bold; }
 
 .fgglyph {
   font-size: .75 em;
-} 
+}
 
 .fgtip {
   font-size: .45 em;
@@ -120,3 +120,4 @@ ul#strength {
   width:20px;
 }
 /* end Password strength bar style */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
