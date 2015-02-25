@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "UI for Flowsim",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "bower install"
   },
   "repository": {
     "type": "git",
