@@ -34,8 +34,8 @@
         <input name="password2" type="password" class="form-control"
                id="password2" placeholder="Retype Password" ng-model="password2"
                required>
-        <div class="error" ng-show="password2Msg.length">
-          <span>{{password2Msg}}</span></div>
+        <div class="error" ng-show="password1 !== password2 && password2.length">
+          <span>Passwords do not match </span></div>
         <password-strength-bar password-to-check="password1"></password-strength-bar><span>Password must be at least 6 characters long and contain any combination of upper case, lower case letters, symbols or numbers.</span>
 
       </div>

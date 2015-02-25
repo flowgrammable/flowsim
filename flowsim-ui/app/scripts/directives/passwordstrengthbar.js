@@ -48,6 +48,8 @@ angular.module('flowsimUiApp')
               .css({ 'background': '#DDD' })
               .slice(0, c.idx)
               .css({ 'background': c.col });
+          } else {
+            iElement.addClass('ng-hide');
           }
         });
       }
