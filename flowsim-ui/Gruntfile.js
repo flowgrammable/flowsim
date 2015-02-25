@@ -48,7 +48,14 @@ module.exports = function(grunt) {
             },
             seleniumstop: {
                 command: 'node ./node_modules/protractor/bin/webdriver-manager stop'
-                          }
+                          },
+            auth: {
+              command: 'curl -X POST \
+                          -H "mock-method: POST" \
+                          -H "Content-type: application/json" \
+                          -d \'{"value":{"x-access-token":"51e870c8-8520-43fd-b9a2-db6863b2fec6"}}\' http://localhost:9000/mock/api/subscriber/login'
+            }
+
         },
         // Watches files for changes and runs tasks based on the changed files
         watch: {
@@ -116,7 +123,7 @@ module.exports = function(grunt) {
             options: {
                 port: 9000,
                 // Change this to '0.0.0.0' to access the server from outside.
-                hostname: 'localhost',
+                hostname: '0.0.0.0',
                 livereload: 35729
             },
             livereload: {
@@ -445,6 +452,7 @@ module.exports = function(grunt) {
             'concurrent:server',
             'autoprefixer',
             'connect:livereload',
+            'shell:auth',
             'watch'
         ]);
     });
