@@ -139,7 +139,6 @@ Dataplane.prototype.egress = function() {
       this.ctx.output = '';
     }
     this.datapath.bufAllocator.release(this.ctx.buffer);
-    this.ctx.packet = null;
   }
 };
 
@@ -155,6 +154,7 @@ Dataplane.prototype.step = function() {
     this.pause = false;
     if(this.nextState === 'Final'){
       this.currEvent = null;
+      this.ctx.packet = null;
     }
     for(i=0; i<State.length; i++) {
       if(State[i].toLowerCase() === this.state.toLowerCase()) {
@@ -223,6 +223,7 @@ Dataplane.prototype.step = function() {
           this.currEvent = 0;
         } else {
           this.transition(FINAL);
+          return 6;
         }
       }
       break;

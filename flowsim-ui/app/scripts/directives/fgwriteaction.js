@@ -55,8 +55,7 @@ angular.module('flowsimUiApp')
             function(profile) {
               return ((profile.protocol === 'Internal' ||
                        profile.protocol === 'Ethernet' ||
-              (profile.protocol === 'VLAN' && profile.field === 'tag') ||
-              (profile.protocol === 'MPLS' && profile.field === 'tag')) &&
+              (profile.op === 'push' && profile.field === 'tag')) &&
                      _($scope.usedProfiles).find(function(_profile) {
                       return profile.protocol === _profile.protocol &&
                              profile.field === _profile.field &&
@@ -125,11 +124,31 @@ angular.module('flowsimUiApp')
           $scope.updateProtocols();
         };
 
+        $scope.updateActions = function(){
+          $scope.actionset.actions = _($scope.actionset.actions)
+            .filter(function(act){
+              return _($scope.match).some(function(_mat){
+              var cand = Protocols.Graph(_mat.protocol,
+                                         _mat.field,
+                                         _mat.value);
+              return cand === act.protocol;
+              }) || _(defSafe).some(function(safeAct){
+                return safeAct.field === act.field &&
+                       safeAct.op === act.op;
+              });
+            });
+        };
+
+
         // Re-run on changes to the underlying match set ... new protocols may
         // be available upon more matches
         $scope.$watch('match', function() {
           $scope.updateProfiles();
           $scope.updateProtocols();
+          $scope.updateActions();
+          $scope.updateProtocol();
+          $scope.updateField();
+          $scope.updateOp(); 
         }, true);
 
         // Update the depdendent drop boxes
