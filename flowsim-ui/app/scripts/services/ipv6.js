@@ -70,7 +70,7 @@ function consIPv6Address(string){
 
 function dispIPv6Address(val){
   return _(val).map(function(oct2){
-    return UInt.padZeros(oct2.toString(16), 0);
+      return oct2.toString(16);
   }).join(':');
 }
 
@@ -97,7 +97,7 @@ var IPv6 = {
     bitwidth: 128,
     setable: true,
     matchable: true,
-    test: isIPv6,
+    testStr: isIPv6,
     consStr: consIPv6Address,
     dispStr: dispIPv6Address,
     tip: 'Destination address'

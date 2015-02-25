@@ -144,7 +144,7 @@ VirtualPortProfile.prototype.toBase = function(){
   return {
     name: this.name,
     enabled: this.enabled
-  }
+  };
 };
 
 var virtualPortsProfiles = _(VPorts).map(function(port){
