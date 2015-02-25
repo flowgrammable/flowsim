@@ -22,16 +22,22 @@ angular.module('flowsimUiApp')
           $scope.nodeType = '';
           $scope.setOptions();
           $scope.setDirty()();
+
+
        };
 
        $scope.popProtocol = function() {
           $scope.packet.popProtocol();
           $scope.setOptions();
           $scope.setDirty()();
+
        };
+
+       $scope.isOpen = [true];
 
        $scope.setOptions = function() {
         $scope.options = _.values(Protocols.Payloads[$scope.packet.protocols[$scope.packet.protocols.length - 1].name])[0];
+
        };
 
       //FIXME ... this belongs else where
@@ -57,9 +63,21 @@ angular.module('flowsimUiApp')
         if($scope.packet){
           $scope.loaded = true;
           $scope.setOptions();
+          $scope.isOpen = [];
+          _($scope.packet.protocols).each(function(proto, i){
+            $scope.isOpen.push(i===0);
+          });
         }
       }, true);
+        $scope.$watch('packet.protocols', function() {
 
+          if($scope.packet){
+            $scope.isOpen = [];
+            _($scope.packet.protocols).each(function(proto, i , list){
+              $scope.isOpen.push(i+1 === list.length);
+            });
+          }
+        }, true);
       }
     };
   });
