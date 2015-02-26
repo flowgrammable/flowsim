@@ -19,6 +19,7 @@ angular.module('flowsimUiApp')
 
        $scope.addProtocol = function() {
           $scope.packet.pushProtocol($scope.nodeType);
+          _.last($scope.packet.protocols).isOpen = true;
           $scope.nodeType = '';
           $scope.setOptions();
           $scope.setDirty()();
@@ -28,12 +29,12 @@ angular.module('flowsimUiApp')
 
        $scope.popProtocol = function() {
           $scope.packet.popProtocol();
+          _.last($scope.packet.protocols).isOpen = true;
           $scope.setOptions();
           $scope.setDirty()();
 
        };
 
-       $scope.isOpen = [true];
 
        $scope.setOptions = function() {
         $scope.options = _.values(Protocols.Payloads[$scope.packet.protocols[$scope.packet.protocols.length - 1].name])[0];
@@ -63,21 +64,14 @@ angular.module('flowsimUiApp')
         if($scope.packet){
           $scope.loaded = true;
           $scope.setOptions();
-          $scope.isOpen = [];
-          _($scope.packet.protocols).each(function(proto, i){
-            $scope.isOpen.push(i===0);
-          });
-        }
-      }, true);
-        $scope.$watch('packet.protocols', function() {
-
-          if($scope.packet){
-            $scope.isOpen = [];
-            _($scope.packet.protocols).each(function(proto, i , list){
-              $scope.isOpen.push(i+1 === list.length);
-            });
+          if(_.isUndefined(_.last($scope.packet.protocols).isOpen)){
+            _.last($scope.packet.protocols).isOpen =true;
           }
-        }, true);
+
+
+        }
+      }, false);
+
       }
     };
   });
