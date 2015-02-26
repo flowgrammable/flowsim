@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var PacketPage = require('./pages/packet.js');
+var PacketPage = require('../pages/packet.js');
 
 describe('packet page', function () {
   var page = new PacketPage();

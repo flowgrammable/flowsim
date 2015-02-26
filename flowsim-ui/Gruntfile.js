@@ -148,6 +148,7 @@ module.exports = function(grunt) {
                   //  port: 9001,
                     middleware: function(connect) {
                         return [
+                          mockRequests(),
                             connect.static('.tmp'),
                             connect.static('test'),
                             connect().use(
@@ -462,9 +463,9 @@ module.exports = function(grunt) {
         grunt.task.run(['serve:' + target]);
     });
 
-  grunt.registerTask('test:e2e', ['clean:server', 'connect:test',
+  grunt.registerTask('test:e2e', ['clean:server', 'connect:test','shell:auth',
           'protractor:singlerun']);
-    grunt.registerTask('test:e2e-sl', ['connect:test', 'protractor:saucelabs']);
+  grunt.registerTask('test:e2e-sl', ['connect:test', 'protractor:saucelabs']);
 
   grunt.registerTask('serve:local', [
 
