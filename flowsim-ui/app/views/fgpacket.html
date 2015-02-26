@@ -9,7 +9,7 @@
 <div ng-show="packet">
 
   <accordion close-others="true">
-    <accordion-group ng-repeat="protocol in packet.protocols" is-open="isOpen[$index]">
+    <accordion-group ng-repeat="protocol in packet.protocols" is-open="protocol.isOpen">
 
       <!-- Print the heading and delete button if last element -->
       <accordion-heading>
