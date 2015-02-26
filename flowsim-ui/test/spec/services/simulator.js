@@ -35,7 +35,7 @@ describe('Service: simulator', function () {
     expect(!!Simulator).toBe(true);
     var prof = new Profile.create('test profile name');
     var swi = Switch.create(null, prof);
-    var s = new Simulator.Simulation();
+    var s = Simulator.Simulation;
     var pkt = new Packet.Packet('testpacket');
     var t = new Trace.Trace('trace1');
     t.device = swi;
@@ -45,7 +45,6 @@ describe('Service: simulator', function () {
     expect(s.active).toBe(true);
     expect(s.stage).toBe(0);
     expect(s.dataplane.state).toBe('Arrival');
-    expect(s.view).toBe(undefined);
     s.step();
     expect(s.dataplane.state).toBe('Arrival');
     expect(s.dataplane.nextState).toBe('Extraction');

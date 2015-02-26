@@ -82,7 +82,8 @@ return {
   createUI: createUI,
   TIPS: TIPS,
   TESTS: TESTS,
-  RANGES: RANGES
+  RANGES: RANGES,
+  Switch: Switch
 };
 
 });

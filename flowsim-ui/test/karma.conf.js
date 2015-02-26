@@ -22,6 +22,8 @@ module.exports = function(config) {
       'bower_components/bootstrap/dist/js/bootstrap.js',
       'bower_components/underscore/underscore.js',
       'bower_components/angular/angular.js',
+      'bower_components/angulartics/src/angulartics.js',
+      'bower_components/angulartics/src/angulartics-ga.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-resource/angular-resource.js',
@@ -30,10 +32,13 @@ module.exports = function(config) {
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-ui-router/release/angular-ui-router.min.js',
       'bower_components/d3/d3.js',
+      'bower_components/marked/marked.min.js',
+      'bower_components/angular-marked/angular-marked.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js',
-      'app/views/**/*.html'
+      'app/views/**/*.html',
+      'bower_components/ui-router-extras/release/ct-ui-router-extras.js'
     ],
 
     // list of files / patterns to exclude

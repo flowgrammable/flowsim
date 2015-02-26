@@ -86,7 +86,6 @@ function Buffer(buffer, limit) {
     _.extend(this, buffer);
     this.alloc = {};
     this.limit = buffer.limit;
-    console.log('buff,', this);
   } else {
     this.alloc = {};
     this.limit = limit;
