@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .controller('ProfileCtrl', function($scope, fgCache, Profile, $rootScope,
-                                      $modal) {
+                                      $modal, Regex) {
 
     $scope.names = {};
     $scope.profile = null;
@@ -54,7 +54,7 @@ angular.module('flowsimUiApp')
         callback('Name exists');
       } else if(name.length === 0) {
         callback('Invalid name');
-      } else if(!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
+      } else if(!Regex.Identifier.test(name)) {
         callback('Invalid name');
       } else {
         $scope.profile = fgCache.create('profile', name, Profile);

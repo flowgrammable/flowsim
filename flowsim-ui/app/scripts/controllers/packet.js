@@ -9,9 +9,8 @@
  * Controller of the flowsimUiApp
  */
 angular.module('flowsimUiApp')
-  .controller('PacketCtrl', function ($scope, fgCache, Packet, $rootScope) {
-    // Method to add a new packet
-    var packetName = /[a-zA-Z_][a-zA-Z_0-9]*/;
+  .controller('PacketCtrl', function ($scope, fgCache, Packet, Regex, 
+        $rootScope) {
 
     $scope.names = {};
     $scope.packet   = null;
@@ -25,7 +24,7 @@ angular.module('flowsimUiApp')
 
     // function for constructing a new packet
     $scope.addPacket = function(name, callback) {
-      if(!packetName.test(name)) {
+      if(!Regex.Identifier.test(name)) {
         callback('Bad name');
       } else if(name in $scope.names) {
         callback('Name exists');
