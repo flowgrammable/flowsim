@@ -63,6 +63,9 @@ angular.module('flowsimUiApp')
             if(pos === $scope.focus && pos === $scope.items.length) {
               $scope.shiftFocus($scope.focus-1);
             }
+            if(pos === $scope.focus){
+              $scope.shiftFocus($scope.focus);
+            }
             $scope.onDel()(item);
             $scope.clearState();
           }
