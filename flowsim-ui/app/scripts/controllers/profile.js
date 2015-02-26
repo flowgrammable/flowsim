@@ -9,7 +9,7 @@
  */
 angular.module('flowsimUiApp')
   .controller('ProfileCtrl', function($scope, fgCache, Profile, $rootScope,
-                                      $modal, Regex) {
+                                      $modal, $state, Regex, profileList) {
 
     $scope.names = {};
     $scope.profile = null;
@@ -45,7 +45,7 @@ angular.module('flowsimUiApp')
     };
 
     $scope.getProfiles = function(callback) {
-      fgCache.getNames('profile', callback);
+      callback(null, profileList);
     };
 
 
@@ -95,6 +95,8 @@ angular.module('flowsimUiApp')
           } else {
             $scope.profile = result;
             $scope.$broadcast('setProfile', $scope.profile);
+            $state.go('profile.editor.datapath');
+            $scope.tabs.datapath.active = true;
           }
         });
       }
@@ -174,7 +176,6 @@ angular.module('flowsimUiApp')
     };
 
     $scope.$watch('profile', function(newValue, oldValue){
-
       if($scope.profile){ // watch for change if profile is loaded
         if($scope.profile.dirty){
           $scope.setDirty();
@@ -184,4 +185,11 @@ angular.module('flowsimUiApp')
       }
     },true);
 
+    $scope.tabs = {
+      datapath: { active: false },
+      ports: {active: false},
+      tables: {active: false},
+      groups: {active: false},
+      meters: {active: false}
+    };
   });
