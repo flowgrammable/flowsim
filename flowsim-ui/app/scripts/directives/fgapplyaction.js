@@ -87,6 +87,9 @@ angular.module('flowsimUiApp')
           $scope.updateProfiles(); 
           $scope.updateProtocols();
           $scope.updateActiveActions();
+          $scope.updateProtocol();
+          $scope.updateField();
+          $scope.updateOp();
         }, true);
 
         // Update the depdendent drop boxes
