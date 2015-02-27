@@ -20,10 +20,11 @@ Getting Started
 Before you can begin testing you must complete all steps in the
 doc/INSTALL.md instructions. To record and execute tests you will
 need to install the following dependencies: 
+- Selenium server 2.45.0
 - Chrome browser
 - Firefox browser
-- Firefox selnium IDE plugin 2.8.0
-- Firefox selnium builder 2.3
+- Firefox selenium IDE plugin 2.8.0
+- Firefox selenium builder 2.3
 
 Test Suite Structure
 --------------------
