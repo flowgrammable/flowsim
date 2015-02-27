@@ -1,0 +1,4 @@
+FROM node:0.10.36-onbuild
+
+EXPOSE 8080
+EXPOSE 8081

@@ -31,6 +31,7 @@ prog
 
 // Initialize the configuration
 var config = require(prog.config);
+process.title = "flowsim-server";
 if(prog.dir) {
   if(config.server.static) {
     config.server.static.directory = prog.dir;

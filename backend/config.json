@@ -7,7 +7,7 @@
     "api_password":"fakepassword"
   },
   "server": {
-    "address": "127.0.0.1",
+    "address": "0.0.0.0",
     "hostname": "localhost",
     "open_port": 8080,
     "secure_port": 8081,

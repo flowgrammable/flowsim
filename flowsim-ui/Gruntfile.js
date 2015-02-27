@@ -219,6 +219,7 @@ module.exports = function(grunt) {
                         '.tmp',
                         '<%= yeoman.dist %>/{,*/}*',
                         '!<%= yeoman.dist %>/.git*'
+
                     ]
                 }]
             },
@@ -414,7 +415,18 @@ module.exports = function(grunt) {
                 cwd: '<%= yeoman.app %>/styles',
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
-            }
+            },
+          toback: {
+
+
+              expand: true,
+              dot: true,
+              cwd: '<%= yeoman.dist %>',  // set working folder / root to copy
+              src: '**/*',           // copy all files and subfolders
+              dest: '../backend/ui/'    // destination folder
+                      // required when using cwd
+
+          }
         },
 
         // Run some tasks in parallel to speed up the build process
@@ -514,7 +526,8 @@ module.exports = function(grunt) {
         'uglify',
         'filerev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'copy:toback'
     ]);
 
     grunt.registerTask('default', [

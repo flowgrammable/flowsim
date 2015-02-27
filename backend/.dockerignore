@@ -1,0 +1,11 @@
+.git
+data
+node_modules
+sql
+.dockerignore
+.gitignore
+Dockerfile
+flyway_env
+Gruntfile.js
+log*
+npm-debug.log
