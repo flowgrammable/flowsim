@@ -13,7 +13,7 @@ There are two options:
 
 Start backend server 
 
-    node src/index -c /home/sasha/git/flowsim/config.json -d /home/sasha/git/flowsim/flowsim-ui/dist 
+    npm start
   
   Back server will start listening on port 8080
   
