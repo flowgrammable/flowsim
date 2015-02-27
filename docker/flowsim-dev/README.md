@@ -91,7 +91,7 @@ By default image runs sshd server so we can connect to this image from multiple 
 
 Pull the Flowsim Docker image:
 
-    sudo docker pull sashajo/flowsim-dev
+    sudo docker pull flowgrammable/flowsim-dev
 
 Create a "flowsim" folder in your home directory:
 
