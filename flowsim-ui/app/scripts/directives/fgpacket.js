@@ -70,7 +70,7 @@ angular.module('flowsimUiApp')
 
 
         }
-      }, false);
+      }, true);
 
       }
     };
