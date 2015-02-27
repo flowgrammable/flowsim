@@ -7,7 +7,7 @@ http://en.wikipedia.org/wiki/Document_Object_Model
 GUI tests are specified by feature use case. For example 'Clicking the
 logout button should return the user to the home screen'. In this case, on
 a technical level, we are testing that DOM will be updated to display the 
-home screen <div> once a user submits the logout <form>.
+home screen div once a user submits the logout form.
 
 The framework used to execute these tests is Protractor. 
 https://www.npmjs.com/package/protractor
