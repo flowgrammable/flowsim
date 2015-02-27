@@ -46,28 +46,28 @@ Writing tests
 Individual tests are recorded with the Firefox Selenium builder plugin. Lets
 walk through writing the simple test case of logging into flowsim.
 
-1) Write the test case as a story. 'GUI should display logout button
+1. Write the test case as a story. 'GUI should display logout button
 once a user has logged in'
 
-2) Start a development instance of flowsim with the following command: 
+2. Start a development instance of flowsim with the following command: 
 ```grunt serve```
 
-3) Open up Firefox browser to localhost:9000
+3. Open up Firefox browser to localhost:9000
 
-4) Launch the firefox selenium builder plugin by going to 
+4. Launch the firefox selenium builder plugin by going to 
 Tools -> Web developer -> Launch selenium builder. Select 'Selenium 2'
 
-5) Click record
+5. Click record
 
-6) Click login button, enter credentials, and click login.
+6. Click login button, enter credentials, and click login.
 
-7) Verify the logout button is presented by clicking 'Record a verification', 
+7. Verify the logout button is presented by clicking 'Record a verification', 
 then click the logout button.
 
-8) Click 'Stop recording'
+8. Click 'Stop recording'
 
-9) Verify the test is running correctly by clicking 'Run -> Run test locally'
+9. Verify the test is running correctly by clicking 'Run -> Run test locally'
 
-10) Once you are happy with the test go to 
+10. Once you are happy with the test go to 
 'File -> Export -> Node.JS Protractor' and save the file to the 
 flowsim/flowsim-ui/test/e2e folder
