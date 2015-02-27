@@ -34,8 +34,41 @@ angular
       })
       .state('profile', {
         url: '/profile',
-        templateUrl: 'views/profile.html',
-        controller: 'ProfileCtrl'
+        resolve: {
+          profileList: function(fgStore){
+            return fgStore.get('profile').then(function(names){
+              return names;
+            });
+          }
+        },
+        views: {
+          '': {
+            templateUrl: 'views/profile.html',
+            controller: 'ProfileCtrl'
+          },
+          'config@profile': {
+            template: '<ui-view/>'
+          }
+        }
+      })
+      .state('profile.editor', {
+        abstract: true,
+        template: '<ui-view/>'
+      })
+      .state('profile.editor.datapath', {
+        templateUrl: 'views/profile/datapath.html'
+      })
+      .state('profile.editor.ports', {
+        templateUrl: 'views/profile/ports.html'
+      })
+      .state('profile.editor.tables', {
+        templateUrl: 'views/profile/tables.html'
+      })
+      .state('profile.editor.meters', {
+        templateUrl: 'views/profile/meters.html'
+      })
+      .state('profile.editor.groups', {
+        templateUrl: 'views/profile/groups.html'
       })
       .state('switch', {
         url: '/switch',

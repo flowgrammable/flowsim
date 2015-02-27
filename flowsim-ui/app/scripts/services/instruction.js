@@ -392,7 +392,7 @@ Metadata.prototype.toBase = function(){
 };
 
 Metadata.prototype.isValid = function(){
-  return this.enabled;
+  return this.enabled && this.value && this.mask;
 };
 
 function Goto(goto_){

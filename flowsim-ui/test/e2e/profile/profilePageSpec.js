@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var ProfilePage = require('./pages/profile.js');
+var ProfilePage = require('../pages/profile.js');
 
 describe('profile page', function () {
   var page = new ProfilePage();

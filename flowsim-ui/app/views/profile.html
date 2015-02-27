@@ -27,22 +27,13 @@
     <br>
 
       <tabset>
-        <tab heading="Datapath">
-          <ng-include src="'views/profile/datapath.html'"></ng-include>
-        </tab>
-        <tab heading="Ports">
-          <ng-include src="'views/profile/ports.html'"></ng-include>
-        </tab>
-        <tab heading="Tables">
-          <ng-include src="'views/profile/tables.html'"></ng-include>
-        </tab>
-        <tab heading="Groups">
-          <ng-include src="'views/profile/groups.html'"></ng-include>
-        </tab>
-        <tab heading="Meters">
-          <ng-include src="'views/profile/meters.html'"></ng-include>
-        </tab>
-    </tabset>
+        <tab active="tabs.datapath.active" ui-sref="profile.editor.datapath" heading="Datapath"></tab>
+        <tab active="tabs.ports.active" ui-sref="profile.editor.ports" heading="Ports"></tab>
+        <tab active="tabs.tables.active" ui-sref="profile.editor.tables" heading="Tables"></tab>
+        <tab active="tabs.groups.active" ui-sref="profile.editor.groups" heading="Groups"></tab>
+        <tab active="tabs.meters.active" ui-sref="profile.editor.meters" heading="Meters"></tab>
+      </tabset>
+    <div ui-view="config"></div>
     </div>
 
   </div>

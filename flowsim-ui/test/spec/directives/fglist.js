@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('Directive: fgList', function () {
+describe('Directive: fgList', function () {
 
   // load the directive's module
   beforeEach(function(){
@@ -28,27 +28,6 @@ ddescribe('Directive: fgList', function () {
 
   it('list init',function () {
     expect(element.find('tr').length).toBe(0);
-  });
-
-  it('list add item', function () {
-    dscope = element.isolateScope();
-    dscope.itemName = 'a';
-    expect(dscope.itemName).toBe('a');
-    element.find('form').submit();
-    expect(element.find('tr').length).toBe(1);
-    expect(dscope.focus).toBe(0);
-  });
-
-  it('list add item shift focus', function () {
-    expect(element.find('tr').length).toBe(0);
-    dscope = element.isolateScope();
-    dscope.itemName = 'a';
-    element.find('form').submit();
-    
-    dscope.itemName = 'b';
-    element.find('form').submit();
-    expect(element.find('tr').length).toBe(2);
-    expect(dscope.focus).toBe(1);
   });
 
   it('list item shift focus', function() {

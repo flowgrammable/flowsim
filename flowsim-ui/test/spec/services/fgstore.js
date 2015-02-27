@@ -6,13 +6,13 @@ describe('Service: fgstore', function () {
   beforeEach(module('flowsimUiApp'));
 
   // instantiate service
-  var fgstore;
-  beforeEach(inject(function (_fgstore_) {
-    fgstore = _fgstore_;
+  var fgStore;
+  beforeEach(inject(function (_fgStore_) {
+    fgStore = _fgStore_;
   }));
 
   it('should do something', function () {
-    expect(!!fgstore).toBe(true);
+    expect(!!fgStore).toBe(true);
   });
 
 });

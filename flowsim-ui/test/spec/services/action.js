@@ -524,7 +524,9 @@ describe('Service: action', function () {
   });
 
   it('Action Set add and step group', function(){
-    var dp = new Dataplane.Dataplane({group: 0});
+    var prof = new Profile.Profile('test');
+    var sw = new Switch.Switch('testsw', prof);    
+    var dp = new Dataplane.Dataplane(sw);
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
     var context = {packet: pack};
@@ -536,7 +538,9 @@ describe('Service: action', function () {
   });
 
   it('Action Set add and step output', function(){
-    var dp = new Dataplane.Dataplane({ports: {egress: function egress(){return true;}}});
+    var prof = new Profile.Profile('test');
+    var sw = new Switch.Switch('sw', prof);
+    var dp = new Dataplane.Dataplane(sw);
     var as = new Action.Set();
     var pack = new Packet.Packet('pack');
     var context = {packet: pack};
