@@ -35,8 +35,6 @@ apt-get -y install vim git sudo zip bzip2 fontconfig curl
 #install build-esential
 apt-get install -y build-essential
 
-apt-get install -y postgresql
-sudo -u postgres bash -c "psql -c \"create user flogdev with password 'flogdev';\""
 SCRIPT
 
 Vagrant.configure(2) do |config|
