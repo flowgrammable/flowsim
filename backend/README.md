@@ -23,3 +23,20 @@ NOTES
 =====
 - sometimes curl will not try IPv4 address of 127.0.0.1 on localhost
   to resolve use the option '-ipv4'
+
+DOCKER
+======
+
+- Posgres container sets following env variables on linked node.
+POSTGRES_ENV_POSTGRES_USER=flowsim
+POSTGRES_PORT=tcp://172.17.0.33:5432
+POSTGRES_ENV_POSTGRES_PASSWORD=flowsim
+POSTGRES_ENV_LANG=en_US.utf8
+POSTGRES_ENV_PG_MAJOR=9.4
+POSTGRES_PORT_5432_TCP_PORT=5432
+POSTGRES_PORT_5432_TCP_ADDR=172.17.0.33
+POSTGRES_ENV_PGDATA=/var/lib/postgresql/data
+POSTGRES_NAME=/flowsim-node/postgres
+POSTGRES_PORT_5432_TCP=tcp://172.17.0.33:5432
+POSTGRES_PORT_5432_TCP_PROTO=tcp
+POSTGRES_ENV_PG_VERSION=9.4.1-1.pgdg70+1

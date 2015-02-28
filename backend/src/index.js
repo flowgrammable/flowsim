@@ -41,6 +41,17 @@ if(prog.dir) {
     };
   }
 }
+var DB_USER = 'POSTGRES_ENV_POSTGRES_USER',
+    DB_PASS = 'POSTGRES_ENV_POSTGRES_PASSWORD',
+    DB_HOST = 'POSTGRES_PORT_5432_TCP_ADDR';
+
+    //Override db config
+    var dbconf = config['database'];
+    if(process.env[DB_USER]) {dbconf.user = dbconf.database = process.env[DB_USER]}
+
+    if(process.env[DB_PASS]) {dbconf.pwd = process.env[DB_PASS]}
+
+    if(process.env[DB_HOST]) {dbconf.host = process.env[DB_HOST]}
 
 // Initialze global objects
 var logger     = new log.Logger(config);
