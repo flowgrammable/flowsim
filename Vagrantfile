@@ -36,15 +36,14 @@ apt-get -y install vim git sudo zip bzip2 fontconfig curl
 apt-get install -y build-essential
 
 #postgres docker install
-apt-get install -y docker.io
+set +x
 CONTAINER_NAME=flowsim-dev
 DB_USER=flowsim
 DB_USER_PASSWORD=flowsim
 sudo docker run --name $CONTAINER_NAME-data --entrypoint /bin/echo postgres Data-only container for Flowsim
 sudo docker run --name $CONTAINER_NAME-postgres -p 5432:5432 -e POSTGRES_USER=$DB_USER --volumes-from $CONTAINER_NAME-data -d postgres
 SQL_FILE=/tmp/V1__subscriber.sql
-sudo docker run -it --link $CONTAINER_NAME-postgres:postgres --rm -v /vagrant/backend/sql:/tmp postgres sh -c 'exec psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U '$DB_USER' -d '$DB_USER' -a -f '$SQL_FILE
-
+sudo docker run -it --link $CONTAINER_NAME-postgres:postgres --rm -v /vagrant/backend/sql:/tmp postgres sh -c 'exec psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U '$DB_USER' -d '$DB_USER' -a -f '$SQL_FILE''
 SCRIPT
 
 Vagrant.configure(2) do |config|
@@ -88,6 +87,7 @@ Vagrant.configure(2) do |config|
   # config.push.define "atlas" do |push|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
+  config.vm.provision "docker"
   config.vm.provision "shell", inline: $script
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the

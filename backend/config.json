@@ -24,8 +24,8 @@
   "database": {
     "database": "flowsim",
     "host": "localhost",
-    "user": "flogdev",
-    "pwd": "flogdev"
+    "user": "flowsim",
+    "pwd": "flowsim"
   },
   "logger": {
     "name": "flowsim",
@@ -35,6 +35,7 @@
     "count": 4
   },
   "slackbot": {
+    "enabled":"false",
     "slackUrl":"",
     "icon": "",
     "username": "flowsim"

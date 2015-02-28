@@ -45,11 +45,13 @@ function mailerMsg(args){
 }
 
 function postToSlack(config){
+	if(this.config.enabled){
 	request(config, function(error, response, body){
 		if(err){
 			console.log('could not post to slackbot', err);
 		}
 	});
+	}
 }
 
 })();
