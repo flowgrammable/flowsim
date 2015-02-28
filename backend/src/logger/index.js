@@ -40,7 +40,7 @@ Logger.prototype.addLog =function(name){
     streams: [{
       type: 'rotating-file',
       level: 'info',
-      path: 'log_' + name + '.txt',
+      path: 'logs/' + name + '.log',
       period: this.config.period,
       count: this.config.count
     }]

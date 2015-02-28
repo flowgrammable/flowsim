@@ -1,3 +1,5 @@
 node_modules/
 doc/
 ui/
+npm-debug.log
+

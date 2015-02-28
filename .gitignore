@@ -4,5 +4,6 @@ bower_components/*
 .DS_store
 .config.json
 running.json
-log*
 backend/flowsimdb
+npm-debug.log
+

@@ -7,5 +7,5 @@ sql
 Dockerfile
 flyway_env
 Gruntfile.js
-log*
+logs/*.log
 npm-debug.log
