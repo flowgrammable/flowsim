@@ -21,6 +21,7 @@ Before you can begin testing you must complete all steps in the
 doc/INSTALL.md instructions. To record and execute tests you will
 need to install the following dependencies: 
 - Selenium server 2.45.0
+- Python 2.7
 - Chrome browser
 - Firefox browser
 - Firefox selenium IDE plugin 2.8.0
