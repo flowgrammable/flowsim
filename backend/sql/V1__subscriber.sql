@@ -24,15 +24,11 @@ CREATE TYPE MAILER_STATUS AS ENUM (
   'UNSUBSCRIBE'
 );
 
-CREATE TABLE flogmailer
+CREATE TABLE mailinglist 
 (
   id SERIAL PRIMARY KEY , -- internal mailer id
-  firstname varchar(30) NOT NULL, 
-  lastname varchar(30) NOT NULL,
-  company varchar(60),
   email varchar(128) NOT NULL,
-  subscribe_token CHAR(36) NOT NULL UNIQUE,
-  status MAILER_STATUS NOT NULL
+  date TIMESTAMP WITH TIME ZONE NOT NULL
 );
   
 -- create a session table

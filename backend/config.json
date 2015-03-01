@@ -1,4 +1,5 @@
-{
+{ 
+  "development":"true",
   "mailer": {
     "apiKey": "fake key",
     "domain": "flowgrammable.org",

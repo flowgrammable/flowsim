@@ -1,4 +1,23 @@
-##Global Dependencies
+#Overview
+There are two methods for installing all necessary dependencies for flowsim
+development: manual and vagrant. 
+
+##Vagrant Install
+The easiest way to install flowsim is through Vagrant. You will need
+to download Vagrant from http://vagrantup.com. Once vagrant is installed
+change into the flowsim root directory and run the following commands from
+your terminal.
+```vagrant up```
+```vagrant ssh```
+```cd /vagrant/```
+```./install-dev.sh```
+You are not ready to start flowsim. To start flowsim run the following commands
+inside of vagrant:
+```cd /vagrant/flowsim-ui```
+```grunt serve:local```
+
+## Manual Install
+###Global Dependencies
 
 This project has a minimal number of external dependencies. You must ensure
 these dependencies are present before attempting the installation process.
@@ -14,7 +33,7 @@ the cURL command line utility. In which case now is the time to install it.This
 set of dependencies you must manually install before proceeding with the
 installation procedure.
 
-##Installation
+###Installation
 
 The following is a set of procedures to finalize the installation of all
 necessary global and local node and bower dependencies. One important point to
@@ -22,7 +41,7 @@ note is that if a step does not explicitly tell you to use the sudo command, do
 not use the sudo command. With few exceptions all steps should be taken as your
 development user.
 
-###Setup Procedure
+####Setup Procedure
 
 Before installing either the frontend or backend you need a few node development
 tools; grunt-cli, and bower. Our first step is to install these as global npm
@@ -39,7 +58,7 @@ package management configuration files are owned properly. Execute the following
 command:
 - sudo chown -R \`whoami\` ~/.npm
 
-###Backend Procedure
+####Backend Procedure
 
 The node packages for the backend install using the typical node process. Just
 change to the backend directory, use the node package manager (npm) to install
@@ -147,8 +166,5 @@ the static resources to server. Finally, the database component specifies the
 database connection information and credentials.
 
 ###Starting the backend service
-You can run either the debug or release version of the frontend. Remember the
-PEM pass phrase is 'flowsim'.
--debug: .. i'm not surehow to do this yet
--release: ./backend/src/index.js -c \`pwd\`/config.json -d \`pwd\`/flowsim-ui/dist
-
+```cd /flowsim/backend```
+```npm start```

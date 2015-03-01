@@ -90,7 +90,7 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
       callback(err);
     } else {
       that.logger.info(json);
-      callback(null, result);
+      callback(null, json);
     }
   });
 };
