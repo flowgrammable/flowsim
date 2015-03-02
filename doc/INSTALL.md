@@ -19,10 +19,11 @@ install-dev.sh
 You are now ready to start flowsim. To start flowsim run the following commands
 inside of vagrant:
 ```
-cd /vagrant/flowsim-ui
+cd /vagrant/backend
 
-grunt serve:local
+npm start
 ```
+Point your browser to localhost:8080 and you should see the flowsim landing page. 
 
 ## Manual Install
 ###Global Dependencies
