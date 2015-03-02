@@ -7,14 +7,22 @@ The easiest way to install flowsim is through Vagrant. You will need
 to download Vagrant from http://vagrantup.com. Once vagrant is installed
 change into the flowsim root directory and run the following commands from
 your terminal.
-```vagrant up```
-```vagrant ssh```
-```cd /vagrant/```
-```./install-dev.sh```
-You are not ready to start flowsim. To start flowsim run the following commands
+```
+vagrant up
+
+vagrant ssh
+
+cd /vagrant
+
+install-dev.sh
+```
+You are now ready to start flowsim. To start flowsim run the following commands
 inside of vagrant:
-```cd /vagrant/flowsim-ui```
-```grunt serve:local```
+```
+cd /vagrant/flowsim-ui
+
+grunt serve:local
+```
 
 ## Manual Install
 ###Global Dependencies
@@ -166,5 +174,8 @@ the static resources to server. Finally, the database component specifies the
 database connection information and credentials.
 
 ###Starting the backend service
-```cd /flowsim/backend```
-```npm start```
+```
+cd /flowsim/backend
+
+npm start
+```
