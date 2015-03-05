@@ -204,24 +204,24 @@ function Profile(profile) {
     this.all = {
       enabled: true,
       actionProfiles: new Protocols.ActionProfiles(),
-      max: defGroups
+      maxGroups: defGroups
     };
     this.select = {
       enabled: true,
       actionProfiles: new Protocols.ActionProfiles(),
-      max: defGroups,
+      maxGroups: defGroups,
       weight: true,
       liveness: true
     };
     this.indirect = {
       enabled: true,
       actionProfiles: new Protocols.ActionProfiles(),
-      max: defGroups
+      maxGroups: defGroups
     };
     this.fastFailover = {
       enabled: true,
       actionProfiles: new Protocols.ActionProfiles(),
-      max: defGroups
+      maxGroups: defGroups
     };
     // Capabilities
     // select_weight, select_liveness, chaining, chaining_checks
@@ -238,24 +238,24 @@ Profile.prototype.toBase = function(){
   return {
     all: {
         enabled: this.all.enabled,
-        max: this.all.max,
+        maxGroups: this.all.maxGroups,
         actionProfiles: this.all.actionProfiles.toBase()
     },
     select: {
         enabled: this.select.enabled,
-        max: this.select.max,
+        maxGroups: this.select.maxGroups,
         weight: this.select.weight,
         liveness: this.select.liveness,
         actionProfiles: this.select.actionProfiles.toBase()
     },
     indirect: {
         enabled: this.indirect.enabled,
-        max: this.indirect.max,
+        maxGroups: this.indirect.maxGroups,
         actionProfiles: this.indirect.actionProfiles.toBase()
     },
     fastFailover: {
         enabled: this.fastFailover.enabled,
-        max: this.fastFailover.max,
+        maxGroups: this.fastFailover.maxGroups,
         actionProfiles: this.fastFailover.actionProfiles.toBase()
     },
     chaining: this.chaining,

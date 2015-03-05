@@ -1,15 +1,12 @@
-<br>
+<h3>Capabilities</h3>
 <div class="row">
-  <div class="col-md-5">
-        <div class="input-group">
+  <div class="col-md-12">
+        <div class="checkbox-inline">
           <label tooltip="{{tips.Groups.stats}}">
             <input type="checkbox" ng-model="profile.groups.stats">
             Group Stats
           </label>
         </div>
-  </div>
-        <br>
-        <h3>Capabilities</h3>
         <div class="checkbox-inline">
           <label tooltip="{{tips.Groups.chaining}}">
             <input type="checkbox" ng-model="profile.groups.chaining"
@@ -24,36 +21,40 @@
             Chaining Checks
           </label>
         </div>
+  </div>
 </div>
 <br>
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">All</h3>
       </div>
       <div class="panel-body">
-       <div class="row">
-        <div class="checkbox-inline">
-          <label tooltip="{{profile.groups.all.tip}}">
-            <input type="checkbox" ng-model="profile.groups.all.enabled">
-            Enabled 
-          </label>
-        </div>
-        <div class="input-group">
-            <div class="input-group-addon" tooltip="{{tips.Groups.max_groups}}">
-              Max Groups:
+        <div class="row">
+          <div class="col-md-12">
+            <div class="checkbox-inline">
+              <label tooltip="{{profile.groups.all.tip}}">
+                <input type="checkbox" ng-model="profile.groups.all.enabled">
+                Enabled 
+              </label>
             </div>
-            <input class="form-control" type="text" style="max-width:100px"
-                  ng-model="profile.groups.all.maxgroups">
-                </div>
-      </div>
-      <div class="row">
-            <div ng-repeat="row in allRows">
-              <div class="row">
+            <div class="input-group">
+              <div class="input-group-addon" tooltip="{{tips.Groups.max_groups}}">
+                Max Groups:
+              </div>
+              <input class="form-control" type="text" style="max-width:100px"
+                  ng-model="profile.groups.all.maxGroups">
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div ng-repeat="row in allRows">
+            <div class="row">
+              <div class="col-md-12">
                 <div ng-repeat="col in row">
                   <div class="col-sm-4">
-
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4>{{col[0].protocol}}</h4>
@@ -77,92 +78,98 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Select</h3>
       </div>
       <div class="panel-body">
-       <div class="row">
-        <div class="checkbox-inline">
-          <label tooltip="{{profile.groups.select.tip}}">
-            <input type="checkbox" ng-model="profile.groups.select.enabled">
-            Enabled 
-          </label>
+        <div class="row">
+        <div class="col-md-12">
+          <div class="checkbox-inline">
+            <label tooltip="{{profile.groups.select.tip}}">
+              <input type="checkbox" ng-model="profile.groups.select.enabled">
+              Enabled 
+            </label>
+          </div>
+          <div class="checkbox-inline">
+            <label tooltip="{{tips.Groups.select_weight}}">
+              <input type="checkbox"
+              ng-model="profile.groups.select.weight"
+                ng-disabled="!profile.groups.select">
+              Select Weight
+            </label>
+          </div>
+          <div class="checkbox-inline">
+            <label tooltip="{{tips.Groups.select_liveness}}">
+              <input type="checkbox" ng-model="profile.groups.select.liveness"
+                ng-disabled="!profile.groups.select">
+              Select Liveness
+            </label>
+          </div>
+          <div class="input-group">
+              <div class="input-group-addon" tooltip="{{tips.Groups.max_groups}}">
+                Max Groups:
+              </div>
+              <input class="form-control" type="text" style="max-width:100px"
+                    ng-model="profile.groups.select.maxGroups">
+          </div>
         </div>
-        <div class="input-group">
-            <div class="input-group-addon" tooltip="{{tips.Groups.max_groups}}">
-              Max Groups:
-            </div>
-            <input class="form-control" type="text" style="max-width:100px"
-                  ng-model="profile.groups.select.maxgroups">
-                </div>
-         <br>
-         <h3>Capabilities</h3>
-        <div class="checkbox-inline">
-          <label tooltip="{{tips.Groups.select_weight}}">
-            <input type="checkbox"
-            ng-model="profile.groups.select.weight"
-              ng-disabled="!profile.groups.select">
-            Select Weight
-          </label>
         </div>
-        <div class="checkbox-inline">
-          <label tooltip="{{tips.Groups.select_liveness}}">
-            <input type="checkbox" ng-model="profile.groups.select.liveness"
-              ng-disabled="!profile.groups.select">
-            Select Liveness
-          </label>
-        </div>
-      </div>
-      <div class="row">
-            <div ng-repeat="row in selectRows">
-              <div class="row">
+        <br>
+        <div class="row">
+          <div ng-repeat="row in selectRows">
+            <div class="row">
+              <div class="col-md-12">
                 <div ng-repeat="col in row">
                   <div class="col-sm-4">
-
                     <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <h4>{{col[0].protocol}}</h4>
-                      </div>
-                      <table class="table table-striped table-hover">
-                        <tr ng-repeat="type in col">
-                          <td>{{type.field}}</td>
-                          <td>{{type.op}}</td>
-                          <td>
+                        <div class="panel-heading">
+                              <h4>{{col[0].protocol}}</h4>
+                        </div>
+                        <table class="table table-striped table-hover">
+                          <tr ng-repeat="type in col">
+                            <td>{{type.field}}</td>
+                            <td>{{type.op}}</td>
+                            <td>
                             <button class="btn btn-xs btn-default"
                                     tooltip="{{type.enabledTip}}"
                                     ng-click="type.enabled = !type.enabled"
                                     ng-class="{'btn-primary': type.enabled}">
                               {{type.enabled ? 'Enabled' : 'Disabled'}}
                             </button>
-                          </td>
-                        </tr>
-                      </table>
+                            </td>
+                          </tr>
+                        </table>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <br>
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Indirect</h3>
       </div>
       <div class="panel-body">
        <div class="row">
+       <div class="col-md-12">
         <div class="checkbox-inline">
           <label tooltip="{{profile.groups.indirect.tip}}">
             <input type="checkbox" ng-model="profile.groups.indirect.enabled">
@@ -174,15 +181,17 @@
               Max Groups:
             </div>
             <input class="form-control" type="text" style="max-width:100px"
-                  ng-model="profile.groups.indirect.maxgroups">
-                </div>
+                  ng-model="profile.groups.indirect.maxGroups">
+        </div>
       </div>
+      </div>
+      <br>
       <div class="row">
             <div ng-repeat="row in indirectRows">
               <div class="row">
+              <div class="col-md-12">
                 <div ng-repeat="col in row">
                   <div class="col-sm-4">
-
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4>{{col[0].protocol}}</h4>
@@ -206,19 +215,22 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <br>
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Fast Failover</h3>
       </div>
       <div class="panel-body">
        <div class="row">
+       <div class="col-md-12">
         <div class="checkbox-inline">
           <label tooltip="{{profile.groups.fastFailover.tip}}">
             <input type="checkbox" ng-model="profile.groups.fastFailover.enabled">
@@ -230,15 +242,17 @@
               Max Groups:
             </div>
             <input class="form-control" type="text" style="max-width:100px"
-                  ng-model="profile.groups.fastFailover.maxgroups">
-                </div>
+                  ng-model="profile.groups.fastFailover.maxGroups">
+        </div>
       </div>
+      </div>
+      <br>
       <div class="row">
             <div ng-repeat="row in fastFailoverRows">
               <div class="row">
+              <div class="col-md-12">
                 <div ng-repeat="col in row">
                   <div class="col-sm-4">
-
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4>{{col[0].protocol}}</h4>
@@ -262,7 +276,7 @@
                 </div>
               </div>
             </div>
+          </div>
       </div>
-    </div>
   </div>
 </div>
