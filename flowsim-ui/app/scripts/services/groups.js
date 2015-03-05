@@ -8,7 +8,7 @@
  * Service in the flowsimUiApp.
  */
 angular.module('flowsimUiApp')
-  .factory('Groups', function(fgConstraints) {
+  .factory('Groups', function(fgConstraints, Protocols) {
 
 var defGroups = 10;
 
@@ -20,7 +20,7 @@ var TIPS = {
   select: 'Execute one bucket in the group',
   indirect: 'Execute the one defined bucket in a group. '+
             'This group type supports only a single bucket.',
-  fastfailover: 'This group type executes the first live bucket',
+  fastFailover: 'This group type executes the first live bucket',
   // Group Capabilities
   select_weight: 'Support weight for select type groups',
   select_liveness: 'Support liveness for select type groups',
@@ -194,9 +194,74 @@ Groups.prototype.clone = function() {
 
 function Profile(profile) {
   if(_.isObject(profile)) {
+    _.extend(this, profile);
+    this.all.actionProfiles = new Protocols.ActionProfiles(profile.all.actionProfiles);
+    this.select.actionProfiles = new Protocols.ActionProfiles(profile.select.actionProfiles);
+    this.indirect.actionProfiles = new Protocols.ActionProfiles(profile.indirect.actionProfiles);
+    this.fastFailover.actionProfiles = new Protocols.ActionProfiles(profile.fastFailover.actionProfiles);
   } else {
+    // Types
+    this.all = {
+      enabled: true,
+      actionProfiles: new Protocols.ActionProfiles(),
+      max: defGroups
+    };
+    this.select = {
+      enabled: true,
+      actionProfiles: new Protocols.ActionProfiles(),
+      max: defGroups,
+      weight: true,
+      liveness: true
+    };
+    this.indirect = {
+      enabled: true,
+      actionProfiles: new Protocols.ActionProfiles(),
+      max: defGroups
+    };
+    this.fastFailover = {
+      enabled: true,
+      actionProfiles: new Protocols.ActionProfiles(),
+      max: defGroups
+    };
+    // Capabilities
+    // select_weight, select_liveness, chaining, chaining_checks
+    this.chaining = true;
+    this.chaining_checks = true;
   }
+  this.all.tip = TIPS.all;
+  this.select.tip = TIPS.select;
+  this.indirect.tip = TIPS.indirect;
+  this.fastFailover.tip = TIPS.fastFailover;
 }
+
+Profile.prototype.toBase = function(){
+  return {
+    all: {
+        enabled: this.all.enabled,
+        max: this.all.max,
+        actionProfiles: this.all.actionProfiles.toBase()
+    },
+    select: {
+        enabled: this.select.enabled,
+        max: this.select.max,
+        weight: this.select.weight,
+        liveness: this.select.liveness,
+        actionProfiles: this.select.actionProfiles.toBase()
+    },
+    indirect: {
+        enabled: this.indirect.enabled,
+        max: this.indirect.max,
+        actionProfiles: this.indirect.actionProfiles.toBase()
+    },
+    fastFailover: {
+        enabled: this.fastFailover.enabled,
+        max: this.fastFailover.max,
+        actionProfiles: this.fastFailover.actionProfiles.toBase()
+    },
+    chaining: this.chaining,
+    chaining_checks: this.chaining_checks
+  };
+};
 
 Profile.prototype.clone = function() {
   return new Profile(this);

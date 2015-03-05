@@ -94,6 +94,11 @@ angular.module('flowsimUiApp')
             console.log(err.details);
           } else {
             $scope.profile = result;
+    $scope.allRows= orderProfiles($scope.profile.groups.all.actionProfiles.profiles);
+    $scope.selectRows= orderProfiles($scope.profile.groups.select.actionProfiles.profiles);
+    $scope.indirectRows= orderProfiles($scope.profile.groups.indirect.actionProfiles.profiles);
+    $scope.fastFailoverRows= orderProfiles($scope.profile.groups.fastFailover.actionProfiles.profiles);
+    console.log('apply rows', $scope.applyRows);
             $scope.$broadcast('setProfile', $scope.profile);
             $state.go('profile.editor.datapath');
             $scope.tabs.datapath.active = true;
@@ -185,6 +190,7 @@ angular.module('flowsimUiApp')
       }
     },true);
 
+    
     $scope.tabs = {
       datapath: { active: false },
       ports: {active: false},

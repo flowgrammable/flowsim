@@ -74,7 +74,7 @@ ProfileUI.prototype.toBase = function(){
     datapath: this.datapath,
     ports: this.ports,
     tables: this.tables.toBase(),
-    groups: this.groups,
+    groups: this.groups.toBase(),
     meters: this.meters
   };
 };
