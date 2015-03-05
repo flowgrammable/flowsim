@@ -6,4 +6,8 @@ bower_components/*
 running.json
 backend/flowsimdb
 npm-debug.log
-
+.vimrc
+.viminfo
+backend/logs/*
+.bashhistory
+.cache/*
