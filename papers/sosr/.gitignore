@@ -1,3 +1,6 @@
 *.aux
 *.log
+*.bbl
+*.blg
+main.pdf
 
