@@ -1,0 +1,10 @@
+
+learn:
+  0 | * ->
+    apply: output(CONTROLLER);
+    goto fwd;
+
+fwd:
+  0 | * ->
+    write: output(ALL);
+
