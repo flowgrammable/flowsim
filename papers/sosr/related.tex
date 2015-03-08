@@ -12,3 +12,42 @@ Protocol Oblivious Forwarding\cite{pof}
 
 %%bristol_sim\cite{}
 
+Viz
+------
+There has been work [x,y,z] regarding network simulators, but this prior work focuses on observing packets at the topology level. Network simulators x, y, z visualize the forwarding path of a packet as it traverses a network topology. Visualzing a packet that is forwarded out the wrong port of a router, an observer could infer an incorrect routing table. As traditional network devices are replaced by programmable dataplanes, packet path visualizations at the topology level become less helpful.
+
+Level of observation
+---------------------
+The ability to observe the functionality of a programmable dataplane is 
+critical to ensuring the correctness of a sdn application. 
+Recent tools [x, y, z] give users the ability to observe software defined
+networks, but only at the topology level....  
+
+[x, y, z] utilize linux containers to emulate multiple network 
+nodes on a single host. Linux namespace provides os level virtualization 
+of resources such as CPU, I/O, Network stacks, etc. Because each node is 
+just a virtualized OS users are able to experiment with real 
+implementations of network stacks, dataplanes, and controllers. While 
+the ability to bring any software implementation is great... not all
+programmable dataplanes are implemented in software... 
+The most common software dataplane used is OpenVSwitch. 
+OpenVSwitch does not support enabling and disabling of dataplane capabilities.
+There is not a tool for simulating dataplanes with varying capabilities.
+
+Mininet eliminates the burden of dealing with network namespaces 
+by providing an API for orchestrating the configuration of a topology, and 
+modeling their namespace configuration in terms of network elements (hosts, 
+switches, links, controllers). 
+
+Sim tools today:
+ - observes packets at the topology level 
+ - Estinet
+   - focused on link simulation (latency, bandwidth)
+   - stepped by time packet arrival/leave from node
+   - bring your own network stack 
+ - Mininet
+   - Emulator
+   - bring your own network stack 
+ - onf/AIR?
+Flowsim:
+ - observe packets at the dataplane level
