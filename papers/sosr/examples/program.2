@@ -1,0 +1,93 @@
+
+def rep: (x: T | T::typename > BitRegion(c)) -> BitRegion(c) = {
+  return view(&x, c);
+}
+
+def (&): (lhs: BitRegion(c), rhs: BitRegion(c)) -> BitRegion(c) = {
+  return logical_and(lhs, rhs, c);
+}
+
+def (==): (lhs: BitRegion(c), rhs: BitRegion(c)) -> BitRegion(c) = {
+  return bitwise_compare(lhs, rhs, c);
+}
+
+def MatchType:: typename = enum {
+  exact,          // match (0|1){N} precisesly
+  all,            // match any (0|1){N}
+  all_or_exact,   // match (0|1){N} precisely or any (0|1){N}
+  prefix,         // match using mask 1{J}0{K} where J+K=N
+  mask            // match using mask (0|1){N}
+};
+
+// Implement match-type lattice operations
+def (*)(lhs: MatchType, rhs: MatchType) -> MatchType = {
+}
+
+// A classifier is valid if 
+// ... it classifies some kind of unsigned integer
+// ... and it uses a well defined match type
+
+def Classifier:: (T:: typename | T > UInt(c), 
+                  mt: MatchType) -> typename = 
+  record {
+    value: T,
+    mask: T,
+    matchType: MatchType
+  };
+
+def matches: (input: T::typename, classifier: Classifier(T)) -> Bool = {
+  return (input & classifier.mask) == classifier.value; 
+};
+
+def Meet:: ([Classifier])
+  case x of ->
+    [] -> exact
+    exact: tail ->
+    all: tail ->
+    all_or_exact: tail ->
+    prefix: tail ->
+    mask: tail -> mask
+
+def MatchSet:: (Classifiers:: [Classifier]) -> typename = 
+  record {
+    set: Classifiers,
+    matchType: Meet(Classifiers)
+  };
+
+def match: (input: [T] | T > UInt(c),
+            matchSet: MatchSet([T]) -> Bool = {
+  return (rep(input) & rep(matchset.mask)) ==
+    rep(matchSet.value);
+};
+
+def Table:: (entries: Nat, 
+             matchSet:: MatchSet) -> typename = 
+  record {
+    name: String,
+    id: Nat,
+    flows: [matchSet] = [],
+    maxEntries: entries
+  };
+
+def lookup: (input: T | T > UInt(c),
+             table: Table(entries, matchSet)) -> Bool = {
+  case table.flows of ->
+    head: tail -> if match(input, head)
+                    then true
+                    else lookup(input, tail)
+    [] -> false
+};
+
+// Construct the Learn Table Type
+def LearnTable:: typename = Table( 
+  MatchSet([
+    Classifier(InPort, exact), 
+    Classifier(Ethernet.src, exact)
+  ]);
+
+// Instantiale the learn table
+def learn: LearnTable = LearnTable {
+  name: 'learn',
+  id: 0
+};
+

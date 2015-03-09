@@ -1,0 +1,25 @@
+
+def DatapathId:: typename = UInt(128, msbf);
+
+def FragBehavior:: (canReassemble: Bool) -> typename = enum {
+  NORMAL,
+  DROP,
+  REASSEMBLE if canReassemble
+};
+
+def Datapath:: (canReas: Bool, maxBufs: Nat) -> typename = 
+  record {
+    maxBuffers:    const Nat  = maxBufs,
+    canReassemble: const Bool = canReas,
+    datapathId:    DatpathId  = 0,
+    fragBehavior:  FragBehavior(canReassemble) = FragBehavior::NORMAL
+  };
+
+// Defining a profile
+def Corsa:: typename = Datapath(true, 1024);
+
+// Configurating a switch
+
+def sw1: Corsa = Corsa{};
+
+sw1.fragBehavior = FragBehavior::REASSEMBLE;  // generates error if invalid 

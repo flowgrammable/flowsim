@@ -1,0 +1,62 @@
+
+def PortId:: (controller: Bool, all: Bool, any: Bool, local: Bool, normal: Bool,
+              table: Bool, inport: Bool) -> typename = 
+  enum(UInt(32, msbf)) {
+    0..((1<<32)-1),
+    CONTROLLER = X if controller,
+    ALL        = X if all,
+    ANY        = X if any,
+    LOCAL      = X if local,
+    NORMAL     = X if normal,
+    TABLE      = X if table,
+    INPORT     = X if inport,
+  };
+
+def GroupId:: typename = 
+  enum(Uint(32, msbf)) {
+    0..((1<<32)-1)
+  };
+
+def P1_PortId:: typename = PortId(true, true, true, true, ..);
+
+def Output:: typename = P1_PortId;
+def Group:: typename  = P1_GroupId;
+def Queue:: typename  = UInt(32, mbsf);
+:
+
+
+def Action:: () -> typename =
+  record {
+  };
+
+def Instruciton:: typename = variant {
+  Meter UInt(32, msbf),
+  Apply [Action],
+  Clear,
+  Write [Action],
+  Metadata UInt(64, msbf),
+  Goto UInt(8)
+};
+
+def InstructionSet:: typename = 
+  record {
+    meter: Maybe Meter,
+    apply: Maybe Apply,
+    clear: Maybe Clear,
+    write: Maybe Write,
+    meta: Maybe Metadata,
+    goto: Maybe Goto
+  };
+
+def drop: InstructionSet = 
+  InstructionSet {
+    clear: Clear {}
+  };
+
+def remark: InstructionSet = 
+  InstructionSet {
+    apply: Apply [
+      set(Ethernet, dst, x),
+      output(CONTROLLER)
+    ]
+

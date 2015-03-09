@@ -1,0 +1,34 @@
+
+def Medium:: typename = enum {
+  COPPER,
+  FIBER
+};
+
+def Speed:: typename = enum {
+  _10MB, _100MB,
+  _1GB, _10GB, _40GB, _100GB,
+  _1TB
+};
+
+def VirtualPort:: (controller: Bool, : all: Bool, normal: Bool, local: Bool,
+                   table: Bool, inport: Bool, any: Bool) -> typename = 
+  enum {
+    CONTROLLER if controller,
+    ALL        if all,
+    NORMAL     if normal,
+    LOCAL      if local,
+    TABLE      if table,
+    INPORT     if inport,
+    ANY        if any
+  };
+
+def Port:: (medium: Medium, speed: Speed) -> typename = 
+  record {
+    rx_bytes: Nat,
+    tx_bytes: Nat,
+    rx_pkts: Nat,
+    tx_pkts: Nat
+  };
+
+def Ports:: (ports:: [Port]) -> typename = [Port];
+
