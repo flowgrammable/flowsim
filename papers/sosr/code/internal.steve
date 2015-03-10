@@ -1,6 +1,6 @@
 def Internal: typename = record {
-  in_port:     PortId,
-  in_phy_port: PortId,
+  in_port:     UInt(32),
+  in_phy_port: UInt(32),
   tunnel_id:   UInt(32),
   metadata:    UInt(64)
 };

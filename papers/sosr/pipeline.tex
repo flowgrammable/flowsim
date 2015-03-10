@@ -1,5 +1,22 @@
 \section{Parametric Pipeline}
 
+% pipeline is like a directed graph 
+% - composes of stages (nodes)
+%   - stage is like a function
+%   - operates over one or more inputs and returns and output
+%   - datatype is a Context
+% - control flow connections (directed edges)
+%   - data flows from the output of a stage to the input of another stage
+%   - when there are more than one input there is implicit queuing in a stage
+
+% there are two types of dynamic scopings
+% - context scope
+%   - this is the scope of an event the pipeline is processing
+%   - lifetime of variables
+% - pipeline scope
+%   - this is the scope of the pipeline organization
+%   - lifetime of variables 
+
 A pipeline is a collection of stages and control flow edges. Each stage can be
 thought of as a function that operates over one or more inputs and returns an 
 output. The datatype that flows between stages is called the Context.
