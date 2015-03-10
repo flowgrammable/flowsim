@@ -1,0 +1,10 @@
+def Context: typename = record {
+  packet:    Packet,
+  key:       Key,
+  actionSet: Vector(Action),
+  portId:    UInt(32),
+  queueId:   UInt(32),
+  tableId:   UInt(8),
+  groupId:   UInt(32),
+  meterId:   UInt(32)
+};
