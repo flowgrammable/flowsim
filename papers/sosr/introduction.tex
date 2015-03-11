@@ -1,0 +1,81 @@
+
+\section{introduction}
+\label{sec:ref}
+
+A promise of Software Defined Networking is the programmatic, rather
+than manual, configuration and control control of network flows, thus
+bringing a far greater degree of intelligence to the management and
+orchestration of diverse, heterogeneous network elements within an
+area network. The primary mechanism for delivering on this promise is
+the OpenFlow model, which provides a rich and powerful set of packet 
+processing primitives.
+
+% FIXME: Does this seem legit?
+
+OpenFlow supports the ability to write programs that react to
+network events by dynamically configuring switching tables on
+network elements. These programs are hosted and executed by a central
+OpenFlow controller, but the primitives of those programs are
+defined in term's of a switch's data plane. For example, a program
+could cause the installation rules in the tables of an edge router
+that encapsulate all traffic originating from a wireless access
+point in a virtual LAN. That program would be required to specify
+the fields of each packet that needed to be matched by the switch, and 
+the actions to manipulate the packet before its egress from the
+switch.
+
+While promising, OpenFlow can be seen as inaccessible to newcomers to the 
+technology. There are a number of reasons for this.
+First, OpenFlow is not a single specification. there are many different
+versions of the model and its accompanying protocol, and they have not
+evolved in a strictly additive way. Newer versions of the protocol revise,
+replace, and change the semantics of previously established ideas.
+Second, the OpenFlow model is defined by a set of abstractions with
+complex and interdependent behaviors, which can make it difficult to 
+understand precisely how packets flow through the system.
+Third, the existing tools to experiment and debug OpenFlow programs are 
+largely limited in feature support, and provide limited visibility into the 
+internals of the OpenFlow packet processing machine.
+
+In this paper, we present a re-thinking of the OpenFlow model for
+packet processing, and present in a way that clearly delineates the
+the complex web of behaviors of the primitives defined by OpenFlow.
+In particular, we define a switch as a parametric (highly configurable)
+pipeline with loosely coupled packet processing stages that correspond
+to the primary abstractions in OpenFlow.
+To support learning and experimentation with this model, we have 
+implemented FlowSim, a visual debugging tool that allows users to
+define and their own processing pipelines and step through the
+various processing stages as packets flow through it. To help support
+experimentation, FlowSim supports matching on and modification of arbitrary 
+protocol fields matching.
+By rephrasing the OpenFlow model in this way, and providing a visual
+tool that exposes the programming primitives, we have been successful
+at dramatically lowering entry barrier for network developers and
+operators to write OpenFlow programs.
+
+% OpenFlow Experimentation & Debugging
+% How to make it easy?
+%   What makes it hard?
+% How to make it useful?
+%   Why is it not useful in current state?
+
+\textbf{Contributions.} This paper makes the following contributions:
+\begin{itemize}
+  \item \textbf{Parametric pipeline} - The overall pipeline abstraction is
+        highly configurable allowing configurations that model OpenFlow 
+        versions 1.0, 1.1, 1.2, 1.3, 1.4, and beyond.
+  \item \textbf{Definable protocols} - Protocol abstractions are defined 
+        independent of the pipeline. Table match and protocol modification are
+        built-in operations and synthesized for any well defined protocol.
+  \item \textbf{Table types and constraints} - Flow tables carry types and
+        constraints on flow entries that prevent users from creating certain
+        unsafe behaviors. The types and constraints can also be used to model
+        specific vendor implementations of the OpenFlow pipeline.
+  \item \textbf{Single step simulation} - A pipeline execution can be simulated
+        against a trace of input packets A single step correlates to OpenFlow
+        actions.
+  \item \textbf{Abstraction visualization} - There are graphical representations
+        of most of the abstractions of the system. This provides a more intuitive
+        view of the system than blah.
+\end{itemize}
