@@ -21,7 +21,11 @@ rules in a wireless access point that quarantine all unauthenticated clients,
 isolates all authenticated guests, and provides multiple levels of QoS to
 authenticated home clients. That program would partition traffic into classes of
 service by selecting flows and providing the appropriate treatments: police,
-shape, discard, deliver, etc.
+shape, discard, deliver, etc. 
+Those policies are defined by matching fields in the various protocols 
+comprising each packet and taking appropriate actions such as modifying 
+protocol fields, inserting or removing virtual network layers, or simply
+dropping packets.
 
 %For example, a program
 %could cause the installation rules in the flow tables of an edge router
@@ -63,24 +67,24 @@ write OpenFlow programs.
 % How to make it useful?
 %   Why is it not useful in current state?
 
-\textbf{Contributions.} This paper makes the following contributions:
+\textbf{Contributions.} We make the following contribution
 \begin{itemize}
-  \item \textbf{Parametric pipeline} - The overall pipeline abstraction is
+  \item \textbf{Parametric pipeline} --- The overall pipeline abstraction is
         highly configurable allowing configurations that model OpenFlow 
         versions 1.0, 1.1, 1.2, 1.3, 1.4, and beyond.
   \item \textbf{Definable protocols} - Protocol abstractions are defined 
         independent of the pipeline. Table match and protocol modification are
         built-in operations and synthesized for any well defined protocol.
-  \item \textbf{Table types and constraints} - Flow tables carry types and
+  \item \textbf{Table types and constraints} --- Flow tables carry types and
         constraints on flow entries that prevent users from creating certain
         unsafe behaviors. The types and constraints can also be used to model
         specific vendor implementations of the OpenFlow pipeline.
-  \item \textbf{Single step simulation} - A pipeline execution can be simulated
+  \item \textbf{Single step simulation} --- A pipeline execution can be simulated
         against a trace of input packets A single step correlates to OpenFlow
         actions.
-  \item \textbf{Abstraction visualization} - There are graphical representations
+  \item \textbf{Abstraction visualization} --- There are graphical representations
         of most of the abstractions of the system. This provides a more intuitive
         view of the system than blah.
 \end{itemize}
 
-This paper is organized as follows:
+This paper is organized as follows: \textbf{TODO: Write me! (if needed)}.
