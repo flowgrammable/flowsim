@@ -44,21 +44,18 @@ largely limited in feature support, and provide limited visibility into the
 internals of the OpenFlow packet processing machine.
 
 In this paper, we present a re-imagined model of OpenFlow for
-packet processing, and present in a way that clearly delineates the
-the complex web of behaviors of the primitives defined by OpenFlow.
-In particular, we define a switch as a parametric (highly configurable)
-pipeline with loosely coupled packet processing stages that correspond
-to the primary abstractions in OpenFlow.
-To support learning and experimentation with this model, we have 
-implemented FlowSim, a visual debugging tool that allows users to
-define and their own processing pipelines and step through the
-various processing stages as packets flow through it. To help support
-experimentation, FlowSim supports matching on and modification of arbitrary 
-protocol fields matching.
-By rephrasing the OpenFlow model in this way, and providing a visual
-tool that exposes the programming primitives, we have been successful
-at dramatically lowering entry barrier for network developers and
-operators to write OpenFlow programs.
+packet processing, in a way that clearly delineates the complex web of behaviors
+defined by OpenFlow. In particular, we define a switch as a parametric (highly 
+configurable) pipeline with loosely coupled packet processing stages that 
+correspond to the primary abstractions in OpenFlow. To support learning and 
+experimentation with this model, we have implemented FlowSim, a visual debugging
+tool that allows users to define their own processing pipelines and step through
+various processing stages following the packet flow. To help support 
+experimentation, FlowSim supports matching and modification of arbitrary 
+protocol fields. By rephrasing the OpenFlow model in this way, and providing a 
+visual tool that exposes the programming primitives, we have been successful
+at dramatically lowering entry barrier for network developers and operators to 
+write OpenFlow programs.
 
 % OpenFlow Experimentation & Debugging
 % How to make it easy?
