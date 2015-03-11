@@ -6,7 +6,7 @@ A promise of Software Defined Networking is the programmatic, rather
 than manual, configuration and control control of network devices and packet 
 flows, thus bringing a far greater degree of intelligence to the management and
 orchestration of diverse, heterogeneous network elements within a
-network. The primary mechanism for delivering on this promise is
+network. One of the key mechanisms for delivering on this promise is
 the OpenFlow model, which provides a rich and powerful set of packet 
 processing primitives.
 
@@ -16,23 +16,29 @@ OpenFlow supports the ability to write programs that establish an initial
 network state and then react to network events by dynamically configuring 
 switching tables on network elements. These programs are hosted and executed by 
 an OpenFlow controller, but the primitives of those programs are
-defined in term's of a switch's data plane. For example, a program
-could cause the installation rules in the flow tables of an edge router
-that encapsulate all traffic originating from a wireless access
-point in a virtual LAN. That program would be required to specify
-the fields of each packet that needed to be matched by the switch, and 
-the actions to manipulate the packet before its egress from the
-switch.
+defined in term's of a switch's data plane. For example, a program could install
+rules in a wireless access point that quarantine all unauthenticated clients, 
+isolates all authenticated guests, and provides multiple levels of QoS to
+authenticated home clients. That program would partition traffic into classes of
+service by selecting flows and providing the appropriate treatments: police,
+shape, discard, deliver, etc.
+
+%For example, a program
+%could cause the installation rules in the flow tables of an edge router
+%that encapsulate all traffic originating from a wireless access
+%point in a virtual LAN. That program would be required to specify
+%the fields of each packet that needed to be matched by the switch, and 
+%the actions to manipulate the packet before its egress from the
+%switch.
 
 While promising, OpenFlow can be seen as inaccessible to newcomers to the 
-technology. There are a number of reasons for this.
-First, OpenFlow is not a single specification. there are many different
-versions of the model and its accompanying protocol, and they have not
-evolved in a strictly additive way. Newer versions of the protocol revise,
-replace, and change the semantics of previously established ideas.
-Second, the OpenFlow model is defined by a set of abstractions with
-complex and interdependent behaviors, which can make it difficult to 
-understand precisely how packets flow through the system.
+technology. There are a number of reasons for this. First, OpenFlow is not a 
+single specification. there are many different versions of the model and its 
+accompanying protocol, and they have not evolved in a strictly additive way. 
+Newer versions of the protocol revise, replace, and change the semantics of 
+previously established ideas. Second, the OpenFlow model is defined by a set of 
+abstractions with complex and interdependent behaviors, which can make it 
+difficult to understand precisely how packets flow through the system.
 Third, the existing tools to experiment and debug OpenFlow programs are 
 largely limited in feature support, and provide limited visibility into the 
 internals of the OpenFlow packet processing machine.
