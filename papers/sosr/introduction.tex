@@ -27,13 +27,17 @@ comprising each packet and taking appropriate actions such as modifying
 protocol fields, inserting or removing virtual network layers, or simply
 dropping packets.
 
-%For example, a program
-%could cause the installation rules in the flow tables of an edge router
-%that encapsulate all traffic originating from a wireless access
-%point in a virtual LAN. That program would be required to specify
-%the fields of each packet that needed to be matched by the switch, and 
-%the actions to manipulate the packet before its egress from the
-%switch.
+These programs, once written are deployed to network elements through the
+OpenFlow protocol's state modification messages (e.g., modifying a flow
+by installing new matching and processing rules). However, there are no
+guarantees that the network element is capable of enacting those changes.
+For example, a new processing rule may require flow tables backed by
+TCAM to support efficient wildcard matches. Not all devices are equipped
+with hardware capable of delivering that functionality. The problem is
+partially addressed by the Open Networking Foundation (ONF's) work on
+Table Type Patterns (TTPs) to specify the capabilities of network elements.
+These can be used by the controller to determine if an OpenFlow program
+can be executed by the network elements in the area network.
 
 While promising, OpenFlow can be seen as inaccessible to newcomers to the 
 technology. There are a number of reasons for this. First, OpenFlow is not a 
