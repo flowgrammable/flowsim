@@ -1,9 +1,13 @@
-\section{Parametric Pipeline}
+\section{Packet Processing Pipeline}
+% primary value of this section
+% - flexible - can emulate a wide variety of OF and non-OF systems
+% - 
 
-% pipeline is like a directed graph 
+% the pipeline is like a directed graph 
 % - composes of stages (nodes)
-%   - stage is like a function
-%   - operates over one or more inputs and returns and output
+%   - stage is like an object with a step method
+%   - parametric construction supports a wide range of behaviors
+%   - step operates over one or more inputs and returns and output
 %   - datatype is a Context
 % - control flow connections (directed edges)
 %   - data flows from the output of a stage to the input of another stage
@@ -16,6 +20,16 @@
 % - pipeline scope
 %   - this is the scope of the pipeline organization
 %   - lifetime of variables 
+
+% simulation is composed of ...
+% - pipeline
+% - packet trace
+
+% terms ::= pipeline | stage | context | lifetime | lifecycle | trace
+
+FlowSim provides a packet processing pipeline that can be configured to emulate
+a wide range of differing OpenFlow pipelines an non-OpenFlow packet processing
+behaviors.
 
 A pipeline is a collection of stages and control flow edges. Each stage can be
 thought of as a function that operates over one or more inputs and returns an 
