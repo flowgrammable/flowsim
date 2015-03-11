@@ -12,12 +12,12 @@ processing primitives.
 
 % FIXME: Does this seem legit?
 
-OpenFlow supports the ability to write programs that react to
-network events by dynamically configuring switching tables on
-network elements. These programs are hosted and executed by a central
-OpenFlow controller, but the primitives of those programs are
+OpenFlow supports the ability to write programs that establish an initial
+network state and then react to network events by dynamically configuring 
+switching tables on network elements. These programs are hosted and executed by 
+an OpenFlow controller, but the primitives of those programs are
 defined in term's of a switch's data plane. For example, a program
-could cause the installation rules in the tables of an edge router
+could cause the installation rules in the flow tables of an edge router
 that encapsulate all traffic originating from a wireless access
 point in a virtual LAN. That program would be required to specify
 the fields of each packet that needed to be matched by the switch, and 
@@ -79,3 +79,5 @@ operators to write OpenFlow programs.
         of most of the abstractions of the system. This provides a more intuitive
         view of the system than blah.
 \end{itemize}
+
+This paper is organized as follows:
