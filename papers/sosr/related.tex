@@ -2,28 +2,51 @@
 
 % Can we start categorizing the related work into:
 % - parametric pipelines
+%   - click
+%   - pof?
 % - types and constraints over pipeline abstractions
+%   - p4
+%   - concurrent netcore
+%   - netkat?
 % - pipeline emulators/simulators
+%   - dp verification 
 % - pipeline visualization
 
-Click \cite{click} is an architecture for a reconfigurable dataplane pipeline.
+\textbf{Parametric Pipelines} - Click \cite{click} is language and architecture 
+for building a parametric packet processing pipeline. A Click pipeline is 
+composed of many individual packet processing stages. Click uses a single 
+abstraction, an 'element', to define the behavior of each stage in the pipeline.
+Click provides a declarative configuration language that is used to define
+how pipeline elements are connected together. The configuration of a click
+pipline as a whole can be analyzed to ensure systemwide properties are
+satisfied. Individual elements must be analyzed manually as their semantics
+are not clear. 
+
+\textbf{Types and Constraints}
+Generally all packet processors must be able to do the 
+following: extract headers from packet data, select a table based on extracted 
+headers, and perform actions associated with a table entry. P4\cite{p4} is a 
+high level dataplane configuration language which aims to
+achieve protocol and platform independence by generalizing a dataplane 
+forwarding model and defining a set of types common to packet processors that 
+each stage in a pipeline can operate on: headers, parsers, tables, actions, and
+control programs. The header type specifys the structural and semantic 
+constraints of a valid protocol header message format. Parsers define a valid 
+sequence of header types. The tables type specifys what header types to match 
+on and what actions to perform on the packet associated with the matched header.
 
 NetKat\cite{netkat}
-
 Concurrent NetCore\cite{cnetcore}
-
-P4\cite{p4} offers a high level
-
 Protocol Oblivious Forwarding\cite{pof}
-
 Wripe \cite{wripe}
-
 TinyNBI \cite{tinynbi}
 
+\textbf{Pipeline Simulators & Emulators} -
+Dataplane verification
+
+
 Mininet\cite{mininet}
-
 Visual Network Description \cite{vnd}
-
 NCTUns \cite{nctuns}
 
 Viz
