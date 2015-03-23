@@ -1,4 +1,11 @@
 \section{Packet Processing Pipeline}
+
+The OpenFlow specifications imply 
+
+% problem - how to simulate many different pipelines
+%  - openflow presents many versions
+%  - even within a version there is a great degree of optionality allowed
+%  - there are non-openflow pipelines that we would like to simulate
 % primary value of this section
 % - flexible - can emulate a wide variety of OF and non-OF systems
 % - 
@@ -41,7 +48,6 @@ by moving a generic data structure, called the Context, between
 The pipeline is composed of seven stages: Arrival, Extraction, Choice, 
 Selection, Execution, Group, and Egress. Stages are connected together to
 form a directed graph
-
 
 \begin{figure}[h]
   \includegraphics[width=\linewidth]{figures/pipeline.pdf}
