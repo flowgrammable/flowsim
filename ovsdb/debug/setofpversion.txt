@@ -1,0 +1,15 @@
+2015-04-05T22:37:19Z|00002|reconnect|DBG|unix:/var/run/openvswitch/db.sock: entering BACKOFF
+2015-04-05T22:37:19Z|00003|hmap|DBG|../lib/shash.c:112: 6 nodes in bucket (16 nodes, 8 buckets)
+2015-04-05T22:37:19Z|00004|reconnect|INFO|unix:/var/run/openvswitch/db.sock: connecting...
+2015-04-05T22:37:19Z|00005|reconnect|DBG|unix:/var/run/openvswitch/db.sock: entering CONNECTING
+2015-04-05T22:37:19Z|00006|poll_loop|DBG|wakeup due to [POLLOUT] on fd 4 (<->/var/run/openvswitch/db.sock) at ../lib/stream-fd.c:120
+2015-04-05T22:37:19Z|00007|reconnect|INFO|unix:/var/run/openvswitch/db.sock: connected
+2015-04-05T22:37:19Z|00008|reconnect|DBG|unix:/var/run/openvswitch/db.sock: entering ACTIVE
+2015-04-05T22:37:19Z|00009|jsonrpc|DBG|unix:/var/run/openvswitch/db.sock: send request, method="monitor", params=["Open_vSwitch",null,{"Bridge":{"columns":["name","protocols"]},"Open_vSwitch":{"columns":["cur_cfg"]},"Flow_Sample_Collector_Set":{"columns":["bridge"]}}], id=0
+2015-04-05T22:37:19Z|00010|poll_loop|DBG|wakeup due to [POLLIN] on fd 4 (<->/var/run/openvswitch/db.sock) at ../lib/stream-fd.c:124
+2015-04-05T22:37:19Z|00011|jsonrpc|DBG|unix:/var/run/openvswitch/db.sock: received reply, result={"Bridge":{"78dd76e2-404d-4ade-bbda-a9865019665b":{"new":{"name":"br0","protocols":["set",[]]}}},"Open_vSwitch":{"fa82dde0-1675-4b31-a1f7-e1214967ddad":{"new":{"cur_cfg":3}}}}, id=0
+2015-04-05T22:37:19Z|00012|jsonrpc|DBG|unix:/var/run/openvswitch/db.sock: send request, method="transact", params=["Open_vSwitch",{"row":{"protocols":["set",["OpenFlow10","OpenFlow13"]]},"table":"Bridge","where":[["_uuid","==",["uuid","78dd76e2-404d-4ade-bbda-a9865019665b"]]],"op":"update"},{"mutations":[["next_cfg","+=",1]],"table":"Open_vSwitch","where":[["_uuid","==",["uuid","fa82dde0-1675-4b31-a1f7-e1214967ddad"]]],"op":"mutate"},{"columns":["next_cfg"],"table":"Open_vSwitch","where":[["_uuid","==",["uuid","fa82dde0-1675-4b31-a1f7-e1214967ddad"]]],"op":"select"},{"comment":"ovs-vsctl: ovs-vsctl -v set bridge br0 protocols=OpenFlow10,OpenFlow13","op":"comment"}], id=1
+2015-04-05T22:37:19Z|00013|jsonrpc|DBG|unix:/var/run/openvswitch/db.sock: received notification, method="update", params=[null,{"Bridge":{"78dd76e2-404d-4ade-bbda-a9865019665b":{"old":{"protocols":["set",[]]},"new":{"name":"br0","protocols":["set",["OpenFlow10","OpenFlow13"]]}}}}]
+2015-04-05T22:37:19Z|00014|jsonrpc|DBG|unix:/var/run/openvswitch/db.sock: received reply, result=[{"count":1},{"count":1},{"rows":[{"next_cfg":4}]},{}], id=1
+2015-04-05T22:37:19Z|00015|jsonrpc|DBG|unix:/var/run/openvswitch/db.sock: received notification, method="update", params=[null,{"Open_vSwitch":{"fa82dde0-1675-4b31-a1f7-e1214967ddad":{"old":{"cur_cfg":3},"new":{"cur_cfg":4}}}}]
+2015-04-05T22:37:19Z|00016|poll_loop|DBG|wakeup due to 0-ms timeout at ../lib/ovsdb-idl.c:1341
