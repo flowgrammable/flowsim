@@ -11,7 +11,9 @@ send request
 received reply 
   result = { 
     "Port": { 
+      -- row uuid
       "c126c2a3-3dbe-4b32-a3c2-72e545c47ad3": { 
+      -- initial | insert | modify ...
         "new": { 
           "name": "br0",
           "fake_bridge": false,
@@ -21,14 +23,18 @@ received reply
       }
     },
     "Interface": { 
+      -- roow uuid
       "ee422d89-d456-45e2-baf8-1c5c7073fef8": {
+         -- initial | insert | modify ...
         "new": {
           "name": "br0"
         }
       }
     },
     "Bridge": { 
+      -- row uuid
       "78dd76e2-404d-4ade-bbda-a9865019665b": {
+         -- initial | insert | modify ...
         "new": { 
           "fail_mode": ["set",[]],
           "name":"br0",
@@ -38,7 +44,9 @@ received reply
       }
     },
     "Open_vSwitch": {
+      -- row uuid
       "fa82dde0-1675-4b31-a1f7-e1214967ddad": {
+         -- initial | insert | modify ...
         "new": {
           "bridges": ["uuid","78dd76e2-404d-4ade-bbda-a9865019665b"],
           "cur_cfg": 1
@@ -50,41 +58,50 @@ received reply
 send request
   method="transact", 
   params=[ "Open_vSwitch", {
+    -- ensure our knowledge of bridge set is still valid
     "rows": [ {
       "bridges": ["uuid","78dd76e2-404d-4ade-bbda-a9865019665b"]
     }],
+    -- only interested in bridges column
     "columns": [ "bridges"],
     "table": "Open_vSwitch",
     "until": "==",
+    -- select the row based on row-uuid "_uuid"
     "where": [["_uuid","==",["uuid","fa82dde0-1675-4b31-a1f7-e1214967ddad"]]],
     "timeout": 0,
     "op": "wait"
   }, {
+    -- ensure our knowledge of ports set is still valid
     "rows": [{
       "ports": ["uuid","c126c2a3-3dbe-4b32-a3c2-72e545c47ad3"]
     }],
     "columns": ["ports"],
     "table": "Bridge",
     "until": "==",
+    -- select the row based on row-uuid "_uuid"
     "where": [["_uuid","==",["uuid","78dd76e2-404d-4ade-bbda-a9865019665b"]]],
     "timeout": 0,
     "op": "wait"
   }, {
+    -- ensure our knowledge of interfaces set is still valid
     "rows": [{
       "interfaces": ["uuid","ee422d89-d456-45e2-baf8-1c5c7073fef8"]
     }],
     "columns": ["interfaces"],
     "table": "Port",
     "until": "==",
+    -- select the row based on row-uuid "_uuid"
     "where": [["_uuid","==",["uuid","c126c2a3-3dbe-4b32-a3c2-72e545c47ad3"]]],
     "timeout": 0,
     "op": "wait"
   }, {
     "row": {
       "name": "eth1",
+      -- strong reference to interface, created in next step
       "interfaces": ["named-uuid","row0a171f11_2c23_43fc_b291_e2c85f764e94"]
     },
     "table":"Port",
+    -- user supplied row _uuid value
     "uuid-name": "row806d7f6c_9a78_4c58_83ba_406b12f240ef",
     "op": "insert"
   }, {
@@ -92,27 +109,37 @@ send request
       "name": "eth1"
     },
     "table": "Interface",
+    -- user supplied row _uuid value
     "uuid-name": "row0a171f11_2c23_43fc_b291_e2c85f764e94",
     "op": "insert"
   }, {
     "row": {
-      "ports": ["set",[["named-uuid","row806d7f6c_9a78_4c58_83ba_406b12f240ef"],
-      ["uuid","c126c2a3-3dbe-4b32-a3c2-72e545c47ad3"]]]
+      "ports": ["set",[
+        -- new port created 2 steps ago
+        [ "named-uuid", "row806d7f6c_9a78_4c58_83ba_406b12f240ef"],
+        -- existing port of br0
+        [ "uuid", "c126c2a3-3dbe-4b32-a3c2-72e545c47ad3"]
+      ]]
     },
     "table": "Bridge",
+    -- ensure we modify br0 from previous monitor
     "where": [["_uuid", "==", ["uuid", "78dd76e2-404d-4ade-bbda-a9865019665b"]]],
     "op": "update"
   }, {
+    -- bump the configuration version
     "mutations": [["next_cfg","+=",1]],
     "table": "Open_vSwitch",
+    -- ensure we modify the proper row
     "where": [["_uuid","==",["uuid","fa82dde0-1675-4b31-a1f7-e1214967ddad"]]],
     "op": "mutate"
   }, {
+    // validate the configuration request
     "columns": ["next_cfg"],
     "table": "Open_vSwitch",
     "where": [["_uuid","==",["uuid","fa82dde0-1675-4b31-a1f7-e1214967ddad"]]],
     "op": "select"
   }, {
+    -- leave a comment for auditors
     "comment": "ovs-vsctl: ovs-vsctl -v add-port br0 eth1",
     "op": "comment"
   }], id=1
@@ -157,22 +184,27 @@ received notification
 
 received reply 
   result=[ 
-    {},
-    {},
-    {},
+    {},     -- wait
+    {},     -- wait
+    {},     -- wait
     {
+            -- insert
       "uuid": ["uuid","a1c5ab86-0d20-4274-bd54-70a8476ee29c"]
     }, {
+            -- insert
       "uuid": ["uuid","1c5674bd-a28e-44bc-b335-9c257e0464e1"] 
     }, {
+            -- update
       "count": 1
     }, {
+            -- mutate
       "count": 1
     }, {
+            -- select
       "rows": [ {
         "next_cfg": 2
       }]
-    }, {}
+    }, {}   -- comment
   ], id=1
 
 received notification 
