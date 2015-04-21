@@ -66,7 +66,15 @@ Controller.prototype.authorize = function(token, callback) {
       delete err.detail.err;
       callback(err);
     } else {
-    callback(null, { subscriber_id: sess.subscriber_id, session_id: sess.id });
+      that.storage.getSubscriberById(sess.subscriber_id, function(err, res){
+        if(err) { callback(err); }
+        else { callback(null, {
+          subscriber_id: sess.subscriber_id, 
+          session_id: sess.id,
+          organization_id: res.organization_id
+          });
+        }
+      });
     }
   });
 };
@@ -112,6 +120,58 @@ Controller.prototype.login = function(email, pwd, callback) {
       } else if(sub.status == 'RESET'){
         callback(msg.subscriberReset(email));
       }
+    }
+  });
+};
+
+Controller.prototype.createOrganization = function(subscriber_id, organizationName, cb)
+{
+  var that = this;
+  // Check if organization name already exists for subscriber
+  this.storage.createOrganization(subscriber_id, organizationName,
+    function(err, organization) {
+      if(err) {
+        that.logger.error(err);
+        cb(err);
+      } else {
+        that.storage.addSubToOrg(subscriber_id, organization.id, 'ADMIN',
+          function(err, res){
+            if(err){
+              cb(err);
+            } else {
+            cb(null, msg.success());
+            }
+          });
+      }
+  });
+};
+
+Controller.prototype.inviteSubToOrg = function(orgId, email, cb){
+  var that = this;
+  var subject, body;
+  this.storage.getOrgById(orgId, function(err, res){
+    if(err){
+      that.logger.error(err);
+      cb(err);
+    } else {
+      subject = 'Organization Invitation';
+      body = that.template.render('organizationInvitation', {
+        baseUrl: that.server.baseUrl(),
+        organization: res.name,
+        token: res.uuid
+      });
+      that.mailer.send(email, subject, body);
+    }
+  });
+};
+
+Controller.prototype.joinOrgFromToken = function(subscriber_id, token, cb){
+  var that = this;
+  this.storage.addSubToOrg(subscriber_id, token, function(err, res){
+    if(err){
+      cb(err);
+    } else {
+      cb(null, msg.success());
     }
   });
 };
@@ -169,35 +229,35 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
       that.logger.error(err);
     }
   });
-  this.storage.createSubscriber(email, hash, current.toISOString(), srcIp,
-                                token, function(err, sub) {
-    var subject, body;
-    if(err) {
-      that.logger.error(err);
-      delete err.detail.err;
-      callback(err);
-    } else {
-      subject = 'Flowsim - Verify Email Address';
-      body = that.template.render('verification', {
-        baseUrl: that.server.baseUrl(),
-        token: token
-      });
-      if(!that.config.development){
-        that.mailer.send(email, subject, body);
-        that.slackBot.postEvent('registration', {email: email});
-        callback(null, msg.success());
-      } else {
-        that.storage.verifySubscriber(sub.verification_token, function(err, sub){
-          if(err){
-            that.logger.error(err);
-            callback(err);
-          } else {
+      this.storage.createSubscriber( email, hash, current.toISOString(), srcIp,
+                                   token, function(err, sub) {
+        var subject, body;
+        if(err) {
+          that.logger.error(err);
+          delete err.detail.err;
+          callback(err);
+        } else {
+          subject = 'Flowsim - Verify Email Address';
+          body = that.template.render('verification', {
+          baseUrl: that.server.baseUrl(),
+          token: token
+          });
+         if(!that.config.development){
+            that.mailer.send(email, subject, body);
+            that.slackBot.postEvent('registration', {email: email});
             callback(null, msg.success());
+          } else {
+            that.storage.verifySubscriber(sub.verification_token, function(err, sub){
+              if(err){
+                that.logger.error(err);
+                callback(err);
+              } else {
+                callback(null, msg.success());
+              }
+            });
           }
-        });
-      }
-    }
-  });
+        }
+     });
 };
 
 /**

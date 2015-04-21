@@ -5,6 +5,26 @@ exports.success = function() {
   return '';
 };
 
+exports.alreadyInOrganization = function() {
+  return {
+    message: 'You have already joined an organization',
+    detail: {
+      system: 'subscriber/view',
+      type: 'organization'
+    }
+  };
+};
+
+exports.missingOrganizationName = function() {
+  return {
+    message: 'You must provide an organization name',
+    detail: {
+      system: 'subscriber/view',
+      type: 'missingOrganizationName'
+    }
+  };
+};
+
 exports.missingEmail = function() {
   return {
     message: 'Email address is required',

@@ -21,7 +21,6 @@ var log = require('./logger');
 var slk = require('./slackbot');
 
 
-
 // Process the command line
 prog
   .version(process.env.SERVER_VERSION)

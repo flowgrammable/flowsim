@@ -110,6 +110,7 @@ Storage.prototype.createSubscriber = function(email, password, date, ip, token,
   });
 };
 
+
 Storage.prototype.addToMailer = function(email, date, callback) {
   var that = this;
   this.database.insert('mailinglist', {
@@ -408,6 +409,61 @@ Storage.prototype.deleteStaleSession = function(time, callback) {
     if(err) {
       that.logger.error(err);
       errHandler(callback, err, 'session');
+    } else {
+      callback(null, msg.success());
+    }
+  });
+};
+
+/**
+ * Create a new row in the organization table.
+ *
+ * @param {Integer} subscriber_id - subscriber id
+ * @param {String} organization - organization json string
+ * @param {storageCallback} - callback function to use
+ */
+Storage.prototype.createOrganization = function(subscriber_id, organization,
+                                              callback) {
+  var that = this;
+  var current = new Date();
+  var uuid = uuid.v4();
+  this.database.insert('organization', {
+    name: organization,
+    reg_date: current.toISOString()
+  }, function(err, result) {
+    if(err) {
+      that.logger.error(err);
+      errHandler(callback, err, 'organization');
+    } else {
+      callback(null, result[0]);
+    }
+  });
+};
+
+Storage.prototype.getOrgById = function(orgId, callback){
+  var that = this;
+  this.database.select('organization', {
+    id: { '=' : orgId }
+  }, function(err, res){
+    if(err){
+      that.logger.error(err);
+      errHandler(callback, err, 'organization');
+    } else {
+      callback(null, result[0]);
+    }
+  });
+};
+
+Storage.prototype.addSubToOrg = function(subscriber_id, org_id, member_role, callback){
+  var that = this;
+  this.database.insert('organization_member', { 
+    organization_id: org_id,
+    member_id: subscriber_id,
+    role: member_role  
+  }, function(err, res){
+    if(err){
+      that.logger.error(err);
+      errHandler(callback, err, 'organization');
     } else {
       callback(null, msg.success());
     }

@@ -152,6 +152,46 @@ function update(view) {
   };
 }
 
+function createOrganization(view){
+  return function(req, res, next){
+    var responder = util.Responder(res, next);
+    if(!req.body.organizationName){
+      responder(msg.missingOrganizationName());
+    } else if(req.organization_id){
+      responder(msg.alreadyInOrganization());
+    } else {
+      view.controller.createOrganization(req.subscriber_id, 
+          req.body.organizationName, responder);
+    }
+  };
+}
+
+function inviteSubToOrg(view){
+  return function(req, res, next){
+    var responder = util.Responder(res, next);
+    if(!req.body.email){
+      responder(msg.missingEmail());
+    } else if(!req.body.organizationId){
+      responder(msg.missingOrganizationName());
+    } else {
+      view.controller.inviteSubToOrg(req.body.organizationId,
+          req.body.email, responder);
+    }
+  };
+}
+
+function joinOrgFromToken(view){
+  return function(req, res, next){
+    var responder = util.Responder(res, next);
+    if(!req.params.token){
+      responder(msg.missingToken());
+    } else {
+      view.controller.joinOrgFromToken(req.params.token, responder);
+    }
+  };
+}
+
+
 function View(c, subscriberLogger) {
 
   this.controller = c;
@@ -195,6 +235,18 @@ function View(c, subscriberLogger) {
       method: 'post',
       path: 'mailersignup',
       handler: mailerSignup(this)
+    }, {
+      method: 'post',
+      path: 'createorganization',
+      handler: util.requiresAuth(createOrganization(this))
+    }, {
+      method: 'post',
+      path: 'invite',
+      handler: util.requiresAuth(inviteSubToOrg(this))
+    }, {
+      method: 'post',
+      path: 'joinorganization',
+      handler: util.requiresAuth(joinOrgFromToken(this))
     }
   ];
 }
