@@ -226,6 +226,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
   that = this;
   this.storage.addToMailer(email, current.toISOString(), function(err, sub){ 
     if(err) {
+      console.log('mailer error: ', err);
       that.logger.error(err);
     }
   });
@@ -233,6 +234,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
                                    token, function(err, sub) {
         var subject, body;
         if(err) {
+          console.log('storage error:', err);
           that.logger.error(err);
           delete err.detail.err;
           callback(err);

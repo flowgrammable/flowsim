@@ -1,0 +1,44 @@
+{ 
+  "development":"true",
+  "mailer": {
+    "apiKey": "fake key",
+    "domain": "flowgrammable.org",
+    "user": "admin@flowgrammable.org",
+    "api_user":"fakeuser",
+    "api_password":"fakepassword"
+  },
+  "server": {
+    "address": "0.0.0.0",
+    "hostname": "localhost",
+    "open_port": 8080,
+    "secure_port": 8081,
+    "root": "/api",
+    "https": {
+      "key": "keys/dev.key",
+      "cert": "keys/localhost.crt"
+    },
+    "static": {
+      "mount": "/",
+      "directory": "frontend/"
+    }
+  },
+  "database": {
+    "database": "flowsim",
+    "host": "localhost",
+    "user": "flowsim",
+    "pwd": "flowsim"
+  },
+  "logger": {
+    "name": "flowsim",
+    "logLevel": "info",
+    "logPath": "log.txt",
+    "period" : "1w",
+    "count": 4
+  },
+  "slackbot": {
+    "enabled":"false",
+    "slackUrl":"",
+    "icon": "",
+    "username": "flowsim"
+  }
+}
