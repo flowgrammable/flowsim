@@ -7,13 +7,15 @@ nginx:
   command: /run.sh 
 node:
   image: flowsim-dev-node
+  links:
+   - postgres
   ports:
    - "8080:8080"
    - "2222:22"
   command: /run.sh
-pg:
-  links:
-   - node
+postgres:
   ports:
    - "5432:5432"
   image: flowsim-dev-postgres
+  volumes_from:
+   - flowsim-dev-data

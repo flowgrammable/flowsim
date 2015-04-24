@@ -19,6 +19,42 @@ CREATE TABLE subscriber
   status SUBSCRIBERS_STATUS NOT NULL           -- current sub disposition
 );
 
+CREATE TYPE ROLE_TYPE AS ENUM (
+  'ADMIN',
+  'MEMBER'
+);
+
+CREATE TABLE organization
+(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(128) NOT NULL UNIQUE,
+  reg_date TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
+CREATE TABLE organization_member 
+(
+  id SERIAL PRIMARY KEY,
+  organization_id INTEGER references organization(id),
+  member_id INTEGER references subscriber(id),
+  role ROLE_TYPE NOT NULL
+); 
+
+CREATE TABLE team
+( 
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(128) NOT NULL, 
+  org INTEGER references organization(id) NOT NULL,
+  created TIMESTAMP WITH TIME ZONE NOT NULL,
+  unique(name, org)
+);
+
+CREATE TABLE team_member
+(
+  id INTEGER references team(id) NOT NULL, 
+  member INTEGER references subscriber(id) NOT NULL,
+  role ROLE_TYPE NOT NULL
+);
+
 CREATE TYPE MAILER_STATUS AS ENUM (
   'SUBSCRIBED',
   'UNSUBSCRIBE'

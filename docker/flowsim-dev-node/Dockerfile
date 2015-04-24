@@ -26,6 +26,8 @@ RUN cd /home/flowsim && git clone http://github.com/flowgrammable/flowsim --bran
 RUN rm /home/flowsim/flowsim/backend/config.json
 ADD config.json /home/flowsim/flowsim/backend/
 RUN cd /home/flowsim/flowsim/backend && npm install
+ADD run.sh /
+RUN chmod +x run.sh
 # expose the working directory, the Back port, the Grunt server port, the SSHD port, and run SSHD
 VOLUME ["/home/flowsim/flowsim"]
 EXPOSE 8080
