@@ -1,0 +1,21 @@
+nginx:
+  links:
+   - node
+  ports:
+   - "80:80" 
+  image: flowgrammable/flowsim-dev-nginx
+  command: /run.sh 
+node:
+  image: flowgrammable/flowsim-dev-node
+  command: sh -c "cd /home/flowsim && npm start"
+  links:
+   - postgres
+  ports:
+   - "8080:8080"
+   - "2222:22"
+postgres:
+  ports:
+   - "5432:5432"
+  image: flowgrammable/flowsim-dev-postgres
+  volumes_from:
+   - flowsim-dev-data

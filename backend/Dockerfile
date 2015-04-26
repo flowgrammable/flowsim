@@ -21,16 +21,12 @@ RUN groupadd flowsim && useradd flowsim -s /bin/bash -m -g flowsim -G flowsim &&
 RUN echo 'flowsim:flowsim' |chpasswd
 
 RUN sudo npm install -g npm
-CMD cd /home && chown -R flowsim:flowsim /home/flowsim 
-RUN cd /home/flowsim && git clone http://github.com/flowgrammable/flowsim --branch organizations-teams 
-RUN rm /home/flowsim/flowsim/backend/config.json
-ADD config.json /home/flowsim/flowsim/backend/
-RUN cd /home/flowsim/flowsim/backend && npm install
-ADD run.sh /
-RUN chmod +x run.sh
+RUN cd /home && chown -R flowsim:flowsim /home/flowsim 
+ADD . /home/flowsim
+RUN cd /home/flowsim && npm install
 # expose the working directory, the Back port, the Grunt server port, the SSHD port, and run SSHD
-VOLUME ["/home/flowsim/flowsim"]
+VOLUME ["/home/flowsim/"]
 EXPOSE 8080
+EXPOSE 8081
 EXPOSE 9000
-EXPOSE 22
-CMD ["/home/flowsim/flowsim/backend/npm", "start"]
+CMD ["cd", "/home/flowsim/","&&", "npm", "start"]

@@ -10,8 +10,8 @@ var log = new logger.Logger();
 var utils = require('../../test/utils');
 
 var db = new pg.Database({database:{
-  user: 'flogdev',
-  pwd: 'flogdev',
+  user: 'flowsim',
+  pwd: 'flowsim',
   host: 'localhost',
   database: 'flowsim'
 }}, log);

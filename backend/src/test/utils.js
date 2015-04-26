@@ -3,8 +3,8 @@ var logger = require('../logger/loggerStub');
 var log = new logger.Logger();
 
 var db = new pg.Database({database:{
-  user: 'flogdev',
-  pwd: 'flogdev',
+  user: 'flowsim',
+  pwd: 'flowsim',
   host: 'localhost',
   database: 'flowsim'
 }}, log);
