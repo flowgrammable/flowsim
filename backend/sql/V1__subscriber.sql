@@ -1,7 +1,4 @@
-
--- create an enumerated type for the account status
-CREATE TYPE SUBSCRIBERS_STATUS AS ENUM (
-  'CREATED',  -- registered but not verified, logins should not be possible
+-- create an enumerated type for the account status CREATE TYPE SUBSCRIBERS_STATUS AS ENUM ( 'CREATED',  -- registered but not verified, logins should not be possible
   'ACTIVE',   -- verified and can actively login
   'RESET',    -- password reset, no logins possible only pwd reset procedure
   'CLOSED'    -- closed, no functionality is supported against this state
@@ -17,6 +14,16 @@ CREATE TABLE subscriber
   reg_ip INET NOT NULL,                        -- ip used for registration
   verification_token CHAR(36) NOT NULL UNIQUE, -- verification token
   status SUBSCRIBERS_STATUS NOT NULL           -- current sub disposition
+);
+
+CREATE TABLE subprofile
+(
+  id SERIAL PRIMARY KEY,
+  subscriber_id INTEGER references subscriber(id) ON DELETE CASCADE,
+  name VARCHAR(128),
+  website VARCHAR(128),
+  company VARCHAR(128),
+  geography VARCHAR(128)
 );
 
 CREATE TYPE ROLE_TYPE AS ENUM (
@@ -71,8 +78,8 @@ CREATE TABLE mailinglist
 CREATE TABLE session
 (
   id SERIAL PRIMARY KEY,                            -- internal sesison id
-  subscriber_id INTEGER references subscriber(id) ON DELETE CASCADE, -- reference to sub
-  key CHAR(36) NOT NULL UNIQUE,                     -- session key for API
+  subscriber_id INTEGER references subscriber(id) ON DELETE CASCADE, -- reference to sub 
+  key CHAR(36) NOT NULL UNIQUE,                     -- session key for API 
   timeout TIMESTAMP WITH TIME ZONE NOT NULL         -- date/time for session to end
   -- ip INET NOT NULL                               -- ip used for session
 );

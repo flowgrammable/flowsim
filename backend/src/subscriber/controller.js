@@ -124,6 +124,31 @@ Controller.prototype.login = function(email, pwd, callback) {
   });
 };
 
+Controller.prototype.getProfile = function(subscriber_id, cb) {
+  var that = this;
+  this.storage.getProfile(subscriber_id, function(err, prof){
+    if(err){
+      that.logger.error(err);
+      cb(err);
+    } else {
+      cb(null, prof);
+    }
+  });
+};
+
+Controller.prototype.updateProfile = function(subscriber_id, name, website, company, geography, cb)
+{
+  var that = this;
+  this.storage.updateProfile(subscriber_id, name, website, company, geography, function(err, profile){
+   if(err) {
+    that.logger.error(err);
+    cb(err);
+   } else {
+    cb(null, msg.success());
+   }
+  });
+};
+
 Controller.prototype.createOrganization = function(subscriber_id, organizationName, cb)
 {
   var that = this;
@@ -244,6 +269,7 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
           baseUrl: that.server.baseUrl(),
           token: token
           });
+          that.storage.insertBlankProfile(sub.id);
           that.mailer.send(email, subject, body);
           if(process.env.FLOWSIM_SLACKBOT){
           that.slackBot.postEvent('registration', {email: email});

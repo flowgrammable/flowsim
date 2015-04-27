@@ -152,6 +152,27 @@ function update(view) {
   };
 }
 
+function updateProfile(view) {
+  return function(req, res, next) {
+    var responder = util.Responder(res, next);
+    if(!req.body.name || !req.body.website || 
+        !req.body.company || !req.body.geography){
+      responder(msg.missingProfile());
+    } else {
+      view.controller.updateProfile(req.subscriber_id,
+          req.body.name, req.body.website, req.body.company,
+          req.body.geography, responder);
+    }
+  };
+}
+
+function getProfile(view) {
+  return function(req, res, next) {
+    var responder = util.Responder(res, next);
+    view.controller.getProfile(req.subscriber_id, responder);
+  };
+}
+
 function createOrganization(view){
   return function(req, res, next){
     var responder = util.Responder(res, next);
@@ -231,6 +252,14 @@ function View(c, subscriberLogger) {
       method: 'post',
       path: 'update',
       handler: util.requiresAuth(update(this))
+    }, {
+      method: 'post',
+      path: 'profile',
+      handler: util.requiresAuth(updateProfile(this))
+    },{
+      method: 'get',
+      path: 'profile',
+      handler: util.requiresAuth(getProfile(this))
     }, {
       method: 'post',
       path: 'mailersignup',

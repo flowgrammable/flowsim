@@ -150,6 +150,55 @@ Storage.prototype.getSubscriberByToken = function(token, callback) {
   });
 };
 
+Storage.prototype.updateProfile = function(subscriber_id, subname, site, co, geo, cb)
+{
+  var that = this;
+  this.database.update('subprofile', {
+    name: subname,
+    website: site,
+    company: co,
+    geography: geo
+  }, { subscriber_id: { '=' : subscriber_id } },
+  function(err, result) {
+    if(err) {
+      that.logger.error(err);
+      errHandler(callback, err, 'subscriber');
+    } else {
+      callback(null, result[0]);
+    }
+  });
+};
+
+
+Storage.prototype.getProfile = function(subscriber_id, cb)
+{
+  var that = this;
+  this.database.select('subprofile',  { subscriber_id: { '=' : subscriber_id } },
+  function(err, result) {
+    if(err) {
+      that.logger.error(err);
+      errHandler(callback, err, 'subscriber');
+    } else {
+      callback(null, result[0]);
+    }
+  });
+};
+
+
+Storage.prototype.insertBlankProfile = function(subscriber_id)
+{
+  var that = this;
+  this.database.insert('subprofile',
+      { name: '', website: '', company: '', geography: '' },
+      { subscriber_id: { '=' : subscriber_id } },
+  function(err, result) {
+    if(err) {
+      that.logger.error(err);
+    } 
+  });
+};
+
+
 /**
  * Retrieve a subscriber row by subscriber_id.
  *

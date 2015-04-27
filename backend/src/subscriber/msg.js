@@ -15,6 +15,16 @@ exports.alreadyInOrganization = function() {
   };
 };
 
+exports.missingProfile = function() {
+  return {
+    message: 'Malformed profile update',
+    detail: {
+      system: 'subscriber/view',
+      type: 'missingProfile'
+    }
+  };
+};
+
 exports.missingOrganizationName = function() {
   return {
     message: 'You must provide an organization name',
