@@ -433,6 +433,19 @@ var passResetToken;
     });
   });
 
+  it('should return msg.success() on password reset step 1 (email)', function(done){
+    var resetBody = { email: testEmail };
+    client.query('subscriber/forgot', 'POST', {}, resetBody, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert(body.value);
+        done();
+      }
+    });
+  });
+      
+
 });
 
 describe('/update', function(){
