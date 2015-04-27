@@ -22,6 +22,7 @@ var s = require('./storage.js');
 function Mailer(config, logger, db) {
   // Grab a configuration if present ...
   // ... otherwise throw an error
+  console.log('Mailer: '+ process.env.FLOWSIM_MAILER)
   this.config = config[name];
   if(!this.config) {
     throw new Error('Mailer: missing config');
@@ -79,7 +80,10 @@ Mailer.prototype.send = function(dst, sub, body) {
   var that = this;
   var e;
   var logString = sub + ' message sent to: ' + dst;
-  if(!process.env.FLOWSIM_MAILER){
+  console.log(logString);
+  console.log(process.env.FLOWSIM_MAILER);
+  if(process.env.FLOWSIM_MAILER === 'false'){
+    console.log(body);
     that.logger.info(logString);
   } else {
   this.mailer.send({

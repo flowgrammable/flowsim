@@ -3,19 +3,25 @@ nginx:
    - node
   ports:
    - "80:80" 
-  image: flowsim-dev-nginx
+  image: flowgrammable/flowsim-dev-nginx
   command: /run.sh 
 node:
-  image: flowsim-dev-node
+  image: flowgrammable/flowsim-dev-node
+  command: sh -c "cd /home/flowsim && npm start"
+  volumes:
+   - /vagrant/backend/:/home/flowsim
   links:
    - postgres
   ports:
    - "8080:8080"
    - "2222:22"
-  command: /run.sh
+  environment:
+   - FLOWSIM_MAILER=false
+   - FLOWSIM_SLACKBOT=false
+   - FLOWSIM_LOG_LEVEL='debug'
 postgres:
   ports:
    - "5432:5432"
-  image: flowsim-dev-postgres
+  image: flowgrammable/flowsim-dev-postgres
   volumes_from:
    - flowsim-dev-data

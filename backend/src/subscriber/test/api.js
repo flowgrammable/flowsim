@@ -436,14 +436,13 @@ var passResetToken;
 });
 
 describe('/update', function(){
-  this.timeout(5000);
   before(function(done){
     testUtils.clearTables(['trace','switch','profile','packet', 'session', 'subscriber'],
       function(err, result){
         if(err){
           console.log(err);
         } else {
-          var subscriber = {email:testEmail, password: 'testpass'};
+          var subscriber = {email:testEmail, password: 'TestPass1!'};
           client.query('subscriber/register', 'POST', {}, subscriber, function(err, res, body){
             if(err){
               console.log(err);
@@ -455,7 +454,7 @@ describe('/update', function(){
                 if(err){
                   console.log(err);
                 } else {
-                  var login = {email: testEmail, password: 'testpass'};
+                  var login = {email: testEmail, password: 'TestPass1!'};
                   client.query('subscriber/login', 'POST', {}, login, function(err, res, body){
                     if(err){
                       console.log(err);
@@ -474,7 +473,7 @@ describe('/update', function(){
       });
   });
   it('successful update should result in msg.success()', function(done){
-    var update = {oldPassword: 'testpass', newPassword: 'newpassword'};
+    var update = {oldPassword: 'TestPass1!', newPassword: 'TestPass2!'};
     client.query('subscriber/update', 'POST', {'x-access-token': accessToken}, update, function(err, res, body){
       if(err){
         console.log(err);
@@ -509,7 +508,7 @@ describe('/update', function(){
   });
   
   it('should return error when no new password is present', function(done){
-    var update = {oldPassword: 'testpass', newPassword: ''};
+    var update = {oldPassword: 'TestPass1!'};
     client.query('subscriber/update', 'POST', {'x-access-token': accessToken}, update, function(err, res, body){
       if(err){
         console.log(err);

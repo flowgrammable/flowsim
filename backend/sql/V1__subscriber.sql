@@ -71,7 +71,7 @@ CREATE TABLE mailinglist
 CREATE TABLE session
 (
   id SERIAL PRIMARY KEY,                            -- internal sesison id
-  subscriber_id INTEGER references subscriber(id) NOT NULL, -- reference to sub
+  subscriber_id INTEGER references subscriber(id) ON DELETE CASCADE, -- reference to sub
   key CHAR(36) NOT NULL UNIQUE,                     -- session key for API
   timeout TIMESTAMP WITH TIME ZONE NOT NULL         -- date/time for session to end
   -- ip INET NOT NULL                               -- ip used for session

@@ -9,6 +9,7 @@ var bunyan  = require('bunyan');
 var fmt = require('../utils/formatter');
 
 var name = 'logger';
+console.log('Logger: '+process.env.FLOWSIM_LOG_LEVEL);
 /**
  * Constructs a bunyan based logger.
  *
@@ -43,9 +44,11 @@ Logger.prototype.addLog =function(name){
       path: 'logs/' + name + '.log',
       period: this.config.period,
       count: this.config.count
+    },{
+      stream: process.stdout,
+      level: process.env.FLOWSIM_LOG_LEVEL
     }]
   });
   return this.log;
 };
-
 })();
