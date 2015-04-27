@@ -171,7 +171,7 @@ Storage.prototype.removePacket = function(subscriber_id, packetName, callback){
   }, function(err, packet){
     if(err){
       that.logger.error(err);
-      errHandler(callback, err, 'packet')
+      errHandler(callback, err, 'packet');
     } else {
       callback(null, packet);
     }

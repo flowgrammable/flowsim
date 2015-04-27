@@ -10,5 +10,5 @@ docker create -v /var/lib/postgresql/data --name flowsim-dev-data postgres
 # start all flowsim containers and display logs
 docker-compose up -d
 ./create_schema.sh
-docker-compose logs
+#docker-compose logs
 

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "src/index.js -c ../config.json",
+    "start": "src/index.js -c ../config.json",
     "stop": "pkill --signal SIGINT flowsim-server"
   },
   "repository": {
@@ -67,9 +67,12 @@
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "^0.10.0",
+    "grunt-exec": "^0.4.6",
     "grunt-jsdoc": "^0.5.7",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-shell": "^1.1.2",
     "jshint": "^2.5.5",
-    "mocha": "^2.0.1",
+    "mocha": "^2.2.4",
     "request": "^2.44.0"
   }
 }
