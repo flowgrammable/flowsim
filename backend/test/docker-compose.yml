@@ -12,7 +12,9 @@ node:
    - postgres
   ports:
    - "8080:8080"
-   - "2222:22"
+  environment:
+   - FLOWSIM_EMAIL=false
+   - FLOWSIM_SLACKBOT=false
 postgres:
   ports:
    - "5432:5432"

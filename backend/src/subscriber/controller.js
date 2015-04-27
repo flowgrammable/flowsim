@@ -244,20 +244,11 @@ Controller.prototype.register = function(email, pwd, srcIp, callback) {
           baseUrl: that.server.baseUrl(),
           token: token
           });
-         if(!that.config.development){
-            that.mailer.send(email, subject, body);
-            that.slackBot.postEvent('registration', {email: email});
-            callback(null, msg.success());
-          } else {
-            that.storage.verifySubscriber(sub.verification_token, function(err, sub){
-              if(err){
-                that.logger.error(err);
-                callback(err);
-              } else {
-                callback(null, msg.success());
-              }
-            });
+          that.mailer.send(email, subject, body);
+          if(process.env.FLOWSIM_SLACKBOT){
+          that.slackBot.postEvent('registration', {email: email});
           }
+          callback(null, msg.success());
         }
      });
 };

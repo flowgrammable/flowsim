@@ -75,10 +75,13 @@ function MailerError(method, err, config){
  * @param {genericCallback} callback - a generic callback for mail results
  *
  */
-Mailer.prototype.send = function(dst, sub, body, callback) {
+Mailer.prototype.send = function(dst, sub, body) {
   var that = this;
   var e;
   var logString = sub + ' message sent to: ' + dst;
+  if(!process.env.FLOWSIM_MAILER){
+    that.logger.info(logString);
+  } else {
   this.mailer.send({
     to: dst,
     from: this.config.user,
@@ -87,12 +90,11 @@ Mailer.prototype.send = function(dst, sub, body, callback) {
   }, function(err, json){
     if(err){
       that.logger.error(err);
-      callback(err);
     } else {
       that.logger.info(json);
-      callback(null, json);
     }
   });
+  }
 };
 
 /**
