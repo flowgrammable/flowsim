@@ -131,7 +131,12 @@ Controller.prototype.getProfile = function(subscriber_id, cb) {
       that.logger.error(err);
       cb(err);
     } else {
-      cb(null, prof);
+      cb(null, {
+        name: prof.name,
+        website: prof.website,
+        company: prof.company,
+        geography: prof.geography
+      });
     }
   });
 };

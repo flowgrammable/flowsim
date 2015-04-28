@@ -1,4 +1,6 @@
--- create an enumerated type for the account status CREATE TYPE SUBSCRIBERS_STATUS AS ENUM ( 'CREATED',  -- registered but not verified, logins should not be possible
+-- create an enumerated type for the account status 
+CREATE TYPE SUBSCRIBERS_STATUS AS ENUM ( 
+  'CREATED',  -- registered but not verified, logins should not be possible
   'ACTIVE',   -- verified and can actively login
   'RESET',    -- password reset, no logins possible only pwd reset procedure
   'CLOSED'    -- closed, no functionality is supported against this state

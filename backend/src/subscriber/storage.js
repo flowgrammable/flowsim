@@ -162,9 +162,9 @@ Storage.prototype.updateProfile = function(subscriber_id, subname, site, co, geo
   function(err, result) {
     if(err) {
       that.logger.error(err);
-      errHandler(callback, err, 'subscriber');
+      errHandler(cb, err, 'subscriber');
     } else {
-      callback(null, result[0]);
+      cb(null, result[0]);
     }
   });
 };
@@ -177,9 +177,9 @@ Storage.prototype.getProfile = function(subscriber_id, cb)
   function(err, result) {
     if(err) {
       that.logger.error(err);
-      errHandler(callback, err, 'subscriber');
+      errHandler(cb, err, 'subscriber');
     } else {
-      callback(null, result[0]);
+      cb(null, result[0]);
     }
   });
 };
@@ -189,8 +189,11 @@ Storage.prototype.insertBlankProfile = function(subscriber_id)
 {
   var that = this;
   this.database.insert('subprofile',
-      { name: '', website: '', company: '', geography: '' },
-      { subscriber_id: { '=' : subscriber_id } },
+      { name: '', 
+        subscriber_id: subscriber_id, 
+        website: '', 
+        company: '', 
+        geography: '' },
   function(err, result) {
     if(err) {
       that.logger.error(err);

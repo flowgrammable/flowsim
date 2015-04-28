@@ -253,13 +253,13 @@ function View(c, subscriberLogger) {
       path: 'update',
       handler: util.requiresAuth(update(this))
     }, {
-      method: 'post',
-      path: 'profile',
-      handler: util.requiresAuth(updateProfile(this))
-    },{
       method: 'get',
       path: 'profile',
       handler: util.requiresAuth(getProfile(this))
+    }, {
+      method: 'post',
+      path: 'profile',
+      handler: util.requiresAuth(updateProfile(this))
     }, {
       method: 'post',
       path: 'mailersignup',

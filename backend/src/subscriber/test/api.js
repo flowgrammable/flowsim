@@ -546,4 +546,87 @@ describe('/update', function(){
   
 });
 
+describe('/api/subscriber/profile', function(){
+  before(function(done){
+    testUtils.clearTables(['subprofile', 'trace','switch','profile','packet', 'session', 'subscriber'],
+      function(err, result){
+        if(err){
+          console.log(err);
+        } else {
+          var subscriber = {email:testEmail, password: 'TestPass1!'};
+          client.query('subscriber/register', 'POST', {}, subscriber, function(err, res, body){
+            if(err){
+              console.log(err);
+            } else {
+              store.getSubscriberByEmail(testEmail, function(err, result){
+              var verificationToken = result.verification_token;
+              var token = {token: verificationToken};
+              client.query('subscriber/verify', 'POST', {}, token, function(err, res, body){
+                if(err){
+                  console.log(err);
+                } else {
+                  var login = {email: testEmail, password: 'TestPass1!'};
+                  client.query('subscriber/login', 'POST', {}, login, function(err, res, body){
+                    if(err){
+                      console.log(err);
+                    } else {
+                      assert(body.value['x-access-token']);
+                      accessToken = body.value['x-access-token'];
+                      done();
+                    }
+                  });
+                }
+              });
+              });
+            }
+          });
+        }
+      });
+  });
+  it('should return empty profile after registration', function(done){
+    client.query('subscriber/profile', 'GET', {'x-access-token': accessToken}, {}, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert.equal(body.value.name,'');
+        assert.equal(body.value.company,'');
+        assert.equal(body.value.geography,'');
+        assert.equal(body.value.website,'');
+        done();
+      }
+    });
+  });
+
+  it('should update complete profile', function(done){
+    client.query('subscriber/profile', 'POST', {'x-access-token': accessToken}, 
+      {
+        name: 'jeff lebowski',
+        website: 'google.com',
+        company: 'rubiks cube',
+        geography: 'us-west'
+      }, function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        assert(body.value);
+        done();
+      }
+    });
+  });
+  it('should retrieve complete profile', function(done){
+    client.query('subscriber/profile', 'GET', {'x-access-token': accessToken}, {},
+      function(err, res, body){
+      if(err){
+        console.log(err);
+      } else {
+        console.log(body);
+        assert.equal(body.value.name,'jeff lebowski');
+        assert.equal(body.value.website,'google.com');
+        assert.equal(body.value.company,'rubiks cube');
+        assert.equal(body.value.geography,'us-west');
+        done();
+      }
+    });
+  });
+});
 });
