@@ -14,14 +14,13 @@ vagrant ssh
 
 cd /vagrant
 
-install-dev.sh
 ```
 You are now ready to start flowsim. To start flowsim run the following commands
-inside of vagrant:
+inside of /vagrant/docker:
 ```
-cd /vagrant/backend
+cd /vagrant/docker
 
-npm start
+./run.sh
 ```
 Point your browser to localhost:8080 and you should see the flowsim landing page. 
 
