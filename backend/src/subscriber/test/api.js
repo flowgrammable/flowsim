@@ -619,7 +619,6 @@ describe('/api/subscriber/profile', function(){
       if(err){
         console.log(err);
       } else {
-        console.log(body);
         assert.equal(body.value.name,'jeff lebowski');
         assert.equal(body.value.website,'google.com');
         assert.equal(body.value.company,'rubiks cube');

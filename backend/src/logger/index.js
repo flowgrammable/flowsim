@@ -24,6 +24,7 @@ console.log('Logger: '+process.env.FLOWSIM_LOG_LEVEL);
 function Logger(config) {
   // get our module configuration
   this.config = config[name];
+  this.logLevel = process.env.FLOWSIM_LOG_LEVEL;
 
 }
 exports.Logger = Logger;
@@ -36,17 +37,18 @@ exports.Logger = Logger;
  * @param {String} name - name of log file
  */
 Logger.prototype.addLog =function(name){
+  var that = this;
   this.log = bunyan.createLogger({
     name: name,
     streams: [{
       type: 'rotating-file',
-      level: 'info',
+      level: that.logLevel,
       path: 'logs/' + name + '.log',
       period: this.config.period,
       count: this.config.count
     },{
       stream: process.stdout,
-      level: process.env.FLOWSIM_LOG_LEVEL
+      level: that.logLevel
     }]
   });
   return this.log;

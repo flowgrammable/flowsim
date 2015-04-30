@@ -8,6 +8,8 @@ nginx:
 node:
   image: flowgrammable/flowsim-dev-node
   command: sh -c "cd /home/flowsim && npm start"
+  volumes:
+   - /vagrant/backend/:/home/flowsim
   links:
    - postgres
   ports:
@@ -15,6 +17,7 @@ node:
   environment:
    - FLOWSIM_EMAIL=false
    - FLOWSIM_SLACKBOT=false
+   - FLOWSIM_LOG_LEVEL=fatal
 postgres:
   ports:
    - "5432:5432"
