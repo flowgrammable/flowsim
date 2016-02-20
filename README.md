@@ -18,11 +18,11 @@ of minutes with only a few button clicks.
 
 Another key design goal is to visualize the OpenFlow pipeline, and all the
 internals of packet processing. We want to let users play with different
-OpenFlow abstrations, change configuration, and see how packets flow through
+OpenFlow abstractions, change configuration, and see how packets flow through
 the system. 
 
 Flowsim appeals to a diverse group of people: network engineers, system
-adminstrators, software developers, and hardware engineers. By learning the 
+administrators, software developers, and hardware engineers. By learning the 
 foundational abstractions of OpenFlow, users are better prepared to write 
 applications, troubleshoot networks, and even implement the OpenFlow 
 specification.
@@ -57,7 +57,7 @@ The RESTful API for the service is located in the 'backend' directory. This is
 an HTTP/S server using the Restify JavaScript framework to modularly serve
 RESTful API services. This is our persistence layer for Flowsim.
 
-The bulk of the application runs in a modern JavaScript capable broswer and the
+The bulk of the application runs in a modern JavaScript capable browser and the
 code is located in the 'flowsim-ui' directory. The frontend relies on the
 angularjs UI framework and the bootstrap css styling library.
 
